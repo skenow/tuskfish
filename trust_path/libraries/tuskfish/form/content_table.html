@@ -1,0 +1,34 @@
+<h1><?php echo TFISH_CURRENT_CONTENT; ?></h1>
+<form>
+	<input type="hidden" name="op" value="add">
+    <button class="btn btn-primary pull-left" type="submit" formaction="admin.php"><?php echo TFISH_ADD_CONTENT; ?></button>
+</form>
+<table class="table table-striped text-left">
+	<thead>
+		<tr>
+			<th><?php echo TFISH_ID; ?></th>
+			<th><?php echo TFISH_TYPE; ?></th>
+			<th><?php echo TFISH_TITLE; ?></th>
+			<th><?php echo TFISH_SUBMISSION_TIME; ?></th>
+			<th><?php echo TFISH_COUNTER; ?></th>
+			<th><?php echo TFISH_ONLINE_STATUS; ?></th>
+			<th colspan="2"><?php echo TFISH_ACTION; ?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($rows as $row) { ?>
+			<tr>
+				<td><?php echo TfishFilter::escape($row['id']); ?></td>
+				<td><?php echo $typelist[$row['type']]; ?></td>
+				<td><?php echo TfishFilter::escape($row['title']); ?></td>
+				<td><?php echo TfishFilter::escape($row['submission_time']); ?></td>
+				<td><?php echo TfishFilter::escape($row['counter']); ?></td>
+				<td><?php echo TfishFilter::escape($row['online']); ?></td>
+				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=edit">
+						<?php echo TFISH_EDIT; ?></a></td>
+				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=confirm">
+						<?php echo TFISH_DELETE; ?></a></td>
+			</tr>
+		<?php } ?>
+	</tbody>
+</table>

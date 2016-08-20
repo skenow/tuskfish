@@ -1,0 +1,15 @@
+<h1><?php echo TFISH_CONFIRM_DELETE; ?></h1>
+<div class="alert alert-danger">
+	<p><strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($content->title)) { echo $content->escape('title'); } ?></p>
+</div>
+<form class="form-horizontal" action="admin.php" method="post">
+    <div class="form-group">
+        <div class="col-xs-offset-5 col-xs-1">
+			<input name="id" value="<?php echo $clean_id; ?>" type="hidden">
+            <button name="op" value="delete" type="submit" class="btn btn-primary pull-left"><?php echo TFISH_YES; ?></button>
+		<div>
+		<div class="col-xs-1">
+			<button name="op" value="" type="submit" class="btn btn-primary pull-left"><?php echo TFISH_NO; ?></button>
+        </div>
+    </div>
+</form>

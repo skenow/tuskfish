@@ -1,0 +1,117 @@
+<?php
+
+/**
+* Tuskfish user class
+*
+* @copyright	Simon Wilkinson (Crushdepth) 2013
+* @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
+* @since		1.0
+* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+* @package		core
+*/
+class TfishUser
+{
+	// Permitted properties of this object. Child classes should extend this list (not replace it).
+	protected $__data = array(
+		'id',
+		'admin_email',
+		'password_hash',
+		'user_salt',
+		'user_group',
+		);
+	
+	/**
+	 * Generic constructor
+	 */
+	function __construct()
+	{
+		
+	}
+	
+	/**
+	 * Access an existing object property
+	 * 
+	 * @param string $property
+	 * @return mixed
+	 */
+	public function __get($property)
+	{
+		if (isset($this->__data[$property])) {
+			return $this->__data[$property];
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Set an existing object property
+	 * 
+	 * @param mixed $property
+	 * @param mixed $value
+	 */
+	public function __set($property, $value)
+	{
+		if (isset($this->__data[$property])) {
+			$this->__data[$property] = $value;
+		} else {
+			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+		}
+	}
+	
+	/**
+	 * Intercept isset() calls to correctly read object properties
+	 * 
+	 * @param type $property
+	 * @return type 
+	 */
+	public function __isset($property)
+	{
+		if (isset($this->__data[$property])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Intercept unset() calls to correctly unset object properties
+	 * 
+	 * @param type $property
+	 * @return type 
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+		} else {
+			return false;
+		}
+	}
+	
+	public static function get($id)
+	{
+	}
+	
+	public static function insert($user)
+	{		
+	}
+	
+	public static function delete($user)
+	{	
+	}
+	
+	public static function getObjects()
+	{
+	}
+	
+	public static function getCount()
+	{	
+	}
+	public static function deleteAll()
+	{	
+	}
+	
+	public static function updateAll()
+	{	
+	}
+}

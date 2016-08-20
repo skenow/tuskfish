@@ -1,0 +1,22 @@
+DEV STATUS
+==========
+The purpose of this file is so I can keep track of what I was last working on, and what I need to do.
+
+WHERE I LEFT OFF
+================
+* Data edit form: How to handle editing of file uploads?
+  - Image/media fields should display the file name of any existing file.
+* Detail the data entry form
+  - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
+  - Data entry form should show/hide fields as relevant when the content type is selected.
+* Create a search function.
+* Take all the logic out of the forms; build it in the script and just pass in values.
+* Consider creating a controller class that can handle the basic add/edit/update/confirm/delete operations and standard views (single, newsfeed, grid).
+* Preferences: Add a preference editing script; need to add DB update functionality to the TfishPreference class.
+
+THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
+==============================================
+* Set UTF-8 as the default charset in php.ini.
+* Logger needs echoing of error messages to screen commented out.
+* Logger needs to return FALSE otherwise trigger_error() will not stop script execution (in dev mode, it's handy to let the script keep going to get context).
+* TfishFilter::connect() needs the error mode PDO::ERRMODE_EXCEPTION changed to silent or warning (stop throwing exceptions!). This could be a preference setting.

@@ -1,0 +1,23 @@
+<?php
+
+/**
+* Admin index redirector
+*
+* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+* @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
+* @since		1.0
+* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+* @package		core
+*/
+
+// Need to start a session in order to use session variables
+require_once "../mainfile.php";
+require_once TFISH_PATH . "tfish_header.php";
+
+if (TfishSession::isAdmin()) {
+	header('location: ' . TFISH_ADMIN_URL . 'admin.php');
+	exit;
+} else {
+	TfishSession::logout();
+	exit;
+}
