@@ -154,6 +154,18 @@ class TfishPreference
 		}
 	}
 	
+	public function escape($property) {
+		if (isset($this->__data[$property])) {
+			switch($property) {			
+				default:
+					return htmlspecialchars($this->__data[$property], ENT_QUOTES, 'UTF-8');
+				break;
+			}
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * Returns an array of known mimetypes
 	 * Based on ImpressCMS function (attribute copyright)

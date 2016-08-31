@@ -18,13 +18,32 @@ define("TFISH_PASSWORD", "Password");
 define("TFISH_EMAIL", "Email");
 define("TFISH_ACTION", "Action");
 
-// Admin
+// Admin.
 define("TFISH_CURRENT_CONTENT", "Current content");
 define("TFISH_ADD_CONTENT", "Add content");
 define("TFISH_EDIT_CONTENT", "Edit content");
 define("TFISH_META_TAGS", "Meta tags");
 define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");
+
+// Preferences.
+define("TFISH_PREFERENCES", "Preferences");
+define("TFISH_PREFERENCE", "Preference");
+define("TFISH_PREFERENCE_EDIT_PREFERENCES", "Edit preferences");
+define("TFISH_PREFERENCE_VALUE", "Value");
+define("TFISH_PREFERENCE_SITE_NAME", "Site name");
+define("TFISH_PREFERENCE_SITE_EMAIL", "Site email");
+define("TFISH_PREFERENCE_CLOSE_SITE", "Close site");
+define("TFISH_PREFERENCE_SERVER_TIMEZONE", "Server timezone");
+define("TFISH_PREFERENCE_SITE_TIMEZONE", "Site timezone");
+define("TFISH_PREFERENCE_MIN_SEARCH_LENGTH", "Minimum search length");
+define("TFISH_PREFERENCE_SEARCH_PAGINATION", "Search pagination");
+define("TFISH_PREFERENCE_ADMIN_PAGINATION", "Admin pagination");
+define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
+define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout (minutes)");
+define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");
+define("TFISH_PREFERENCE_DEFAULT_LANGUAGE", "Default language");
+define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see <a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>.");
 
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
@@ -68,7 +87,7 @@ define("TFISH_META_TITLE", "Title");
 define("TFISH_META_DESCRIPTION", "Description");
 define("TFISH_SEO", "SEO");
 
-// Base intellectual property licenses
+// Base intellectual property licenses.
 define("TFISH_RIGHTS_COPYRIGHT", "Copyright, all rights reserved");
 define("TFISH_RIGHTS_ATTRIBUTION", "Creative Commons Attribution");
 define("TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE", "Creative Commons Attribution-ShareAlike");
@@ -80,7 +99,7 @@ define("TFISH_RIGHTS_GPL2", "GNU General Public License Version 2");
 define("TFISH_RIGHTS_GPL3", "GNU General Public License Version 3");
 define("TFISH_RIGHTS_PUBLIC_DOMAIN", "Public domain");
 
-// Confirmation messages
+// Confirmation messages.
 define("TFISH_SUBMIT", "Submit");
 define("TFISH_UPDATE", "Update");
 define("TFISH_CONFIRM_DELETE", "Are you sure?");
@@ -98,7 +117,7 @@ define("TFISH_OBJECT_DELETION_FAILED", "Object deletion failed");
 define("TFISH_OBJECT_WAS_UPDATED", "The object was successfully updated.");
 define("TFISH_OBJECT_UPDATE_FAILED", "Object update failed.");
 
-// ERROR MESSAGES
+// ERROR MESSAGES.
 define("TFISH_ERROR_NO_SUCH_OBJECT", "Object does not exist.");
 define("TFISH_ERROR_NO_SUCH_PROPERTY", "Trying to set value of non-existant property");
 define("TFISH_ERROR_NO_RESULT", "Database query did not return a statement; query failed.");

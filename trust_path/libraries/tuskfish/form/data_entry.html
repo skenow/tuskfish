@@ -1,6 +1,8 @@
 <h1><?php echo TFISH_ADD_CONTENT; ?></h1>
 <form class="form-horizontal" action="admin.php" method="post" enctype="multipart/form-data" role="form">
 	<div class="form-group">
+		
+		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="type" id="type" required>
@@ -9,14 +11,20 @@
 				} ?>
             </select>
 		</div>
+		
+		<!-- Date -->
 		<label for="date" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="date" class="form-control" name="date" id="date"></div>
+		
+		<!-- Rights -->
 		<label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="rights" id="rights" required>
 				<?php foreach ($rights as $key => $right) {echo '<option value="' . $key . '">' . $right . '</option>';} ?>
 			</select>
 		</div>
+		
+		<!-- Online -->
 		<label for="online" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<label for="online" class="radio-inline">
@@ -26,26 +34,42 @@
 				<input type="radio" name="online" value="0" id="online"><?php echo TFISH_OFFLINE; ?>
 			</label>
 		</div>
+		
 	</div>
+	
+	<!-- Title -->
 	<div class="form-group">
 		<label for="title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TITLE; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="title" id="title" required></div>
 	</div>
+	
+	<!-- Teaser -->
 	<div class="form-group">
 		<label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><textarea class="form-control" name="teaser" id="teaser" required></textarea></div>
 	</div>
+	
+	<!-- Description -->
 	<div class="form-group">
 		<label for="description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><textarea class="form-control" name="description" id="description" required></textarea></div>
 	</div>
+	
 	<div class="form-group">
+		
+		<!-- Creator -->
 		<label for="creator" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator"></div>
+		
+		<!-- Publisher -->
 		<label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher"></div>
+		
+		<!-- Parent -->
 		<label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="number" min="0" class="form-control" name="parent" id="parent"></div>
+		
+		<!-- Language -->
 		<label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="language" id="language" required>
@@ -60,10 +84,15 @@
 				?>
 			</select>
 		</div>
+		
 	</div>
 	<div class="form-group">
+		
+		<!-- Caption -->
 		<label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
 		<div class="col-lg-5 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="caption" id="caption"></div>
+		
+		<!-- Image -->
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
@@ -71,25 +100,36 @@
 		</label>
 		<input type="file" name="image" id="image" class="form-control-file" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
 		</div>
+		
+		<!-- Media -->
 		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
 			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedUploadMimetypes(); ?>" style="display: none;">
 		</label>
 		</div>
+		
 	</div>
 	<div class="col-md-12"><hr></div>
 	<div class="col-md-12"><h2><?php echo TFISH_META_TAGS; ?><h2></div>
 	<div class="form-group">
+		
+		<!-- Meta title -->
 		<label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
 		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title"></div>
+		
+		<!-- SEO -->
 		<label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
 		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo"></div>
+		
 	</div>
+	
+	<!-- Meta description -->
 	<div class="form-group">
 		<label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
 	</div>
+	
 	<button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
 	<button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
 </form>
