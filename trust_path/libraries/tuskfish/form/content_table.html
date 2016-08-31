@@ -16,7 +16,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach($rows as $row) { ?>
+		<?php foreach($rows as &$row) { ?>
 			<tr>
 				<td><?php echo TfishFilter::escape($row['id']); ?></td>
 				<td><?php echo $typelist[$row['type']]; ?></td>
@@ -28,6 +28,7 @@
 						<?php echo TFISH_EDIT; ?></a></td>
 				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=confirm">
 						<?php echo TFISH_DELETE; ?></a></td>
+				<?php unset($row); ?>
 			</tr>
 		<?php } ?>
 	</tbody>
