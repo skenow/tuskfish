@@ -40,10 +40,10 @@ define("TFISH_PREFERENCE_MIN_SEARCH_LENGTH", "Minimum search length");
 define("TFISH_PREFERENCE_SEARCH_PAGINATION", "Search pagination");
 define("TFISH_PREFERENCE_ADMIN_PAGINATION", "Admin pagination");
 define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
-define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout (minutes)");
+define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout (seconds)");
 define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");
 define("TFISH_PREFERENCE_DEFAULT_LANGUAGE", "Default language");
-define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see <a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>.");
+define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see <a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>");
 
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
@@ -116,6 +116,8 @@ define("TFISH_OBJECT_WAS_DELETED", "The object was successfully deleted.");
 define("TFISH_OBJECT_DELETION_FAILED", "Object deletion failed");
 define("TFISH_OBJECT_WAS_UPDATED", "The object was successfully updated.");
 define("TFISH_OBJECT_UPDATE_FAILED", "Object update failed.");
+define("TFISH_PREFERENCES_WERE_UPDATED", "Preferences were successfully updated.");
+define("TFISH_PREFERENCES_UPDATE_FAILED", "Preference update failed.");
 
 // ERROR MESSAGES.
 define("TFISH_ERROR_NO_SUCH_OBJECT", "Object does not exist.");

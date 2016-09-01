@@ -59,6 +59,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 						$title = TFISH_FAILED;
 						$message = TFISH_OBJECT_DELETION_FAILED;
 					}
+					$back_url = 'admin.php';
 					$tfish_form = TFISH_FORM_PATH . "response.html";
 				} else {
 					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -125,6 +126,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 				$title = TFISH_FAILED;
 				$message = TFISH_OBJECT_INSERTION_FAILED;
 			}
+			$back_url = 'admin.php';
 			$tfish_form = TFISH_FORM_PATH . "response.html";
 		break;
 		
@@ -155,6 +157,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 				$title = TFISH_FAILED;
 				$message = TFISH_OBJECT_UPDATE_FAILED;
 			}
+			$back_url = 'admin.php';
 			$tfish_form = TFISH_FORM_PATH . "response.html";
 			
 		break;
@@ -193,7 +196,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
  * Override page template and metadata here (otherwise default site metadata will display).
  */
 $tfish_metadata->template = 'admin.html';
-// $tfish_metadata->title = '';
+$tfish_metadata->title = $tfish_preference->escape('site_name');
 // $tfish_metadata->description = '';
 // $tfish_metadata->author = '';
 // $tfish_metadata->copyright = '';

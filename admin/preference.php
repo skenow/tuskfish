@@ -22,17 +22,39 @@ if (in_array($op, array('edit', 'update', false))) {
 		// Edit: Display a data entry form containing the preference settings.
 		case "edit":
 			$preferences = TfishPreference::readPreferences();
+			$languages = TfishContentHandler::getLanguages();
+			$timezones = TfishUtils::getTimezones();
 			$tfish_form = TFISH_FORM_PATH . "preference_edit.html";
 		break;
 		
 		// Update: Submit the modified object and update the corresponding database row.
 		case "update":
-			//$tfish_form = TFISH_FORM_PATH . "something.html";
+			$tfish_preference->updatePreferences($_REQUEST);
+			
+			// Update the database row and display a response.
+			$result = TfishPreferenceHandler::updatePreferences($tfish_preference);
+			if ($result) {
+				$alert_class = 'alert-success';
+				$title = TFISH_SUCCESS;
+				$message = TFISH_PREFERENCES_WERE_UPDATED;
+			} else {
+				$alert_class = 'alert-danger';
+				$title = TFISH_FAILED;
+				$message = TFISH_PREFERENCES_UPDATE_FAILED;
+			}
+			$back_url = 'preference.php';
+			$tfish_form = TFISH_FORM_PATH . "response.html";
 		break;
 		
 		// Default: Display a table of existing preferences.
 		default:
 			$preferences = TfishPreference::readPreferences();
+			$languages = TfishContentHandler::getLanguages();
+			$preferences['default_language'] = $languages[$preferences['default_language']];
+			$timezones = TfishUtils::getTimezones();
+			$preferences['server_timezone'] = $timezones[$preferences['server_timezone']];
+			$preferences['site_timezone'] = $timezones[$preferences['site_timezone']];
+			$preferences['close_site'] = empty($preferences['close_site']) ? TFISH_NO : TFISH_YES;
 			$tfish_form = TFISH_FORM_PATH . "preference_table.html";
 		break;
 	}
@@ -45,7 +67,7 @@ if (in_array($op, array('edit', 'update', false))) {
  * Override page template and metadata here (otherwise default site metadata will display).
  */
 $tfish_metadata->template = 'admin.html';
-// $tfish_metadata->title = '';
+$tfish_metadata->title = $tfish_preference->escape('site_name');
 // $tfish_metadata->description = '';
 // $tfish_metadata->author = '';
 // $tfish_metadata->copyright = '';

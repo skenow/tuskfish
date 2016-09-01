@@ -161,6 +161,26 @@ class TfishDatabase
 	}
 	
 	/**
+	 * Execute a prepared statement within a transaction.
+	 * 
+	 * @param obj $statement
+	 * @return boolean
+	 */
+	public static function executeTransaction($statement)
+	{
+		try {
+			self::$_db->beginTransaction();
+			$statement->execute();
+			self::$_db->commit();
+		} catch (PDOException $e) {
+			self::$_db->rollBack();
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Insert single row in table.
 	 * 
 	 * @param string $table
@@ -262,8 +282,45 @@ class TfishDatabase
 			$clean_criteria = self::validateCriteriaObject($criteria);
 		} else {
 			$clean_criteria = false;
-		}		
+		}
 		return self::_updateAll($clean_table, $clean_criteria, $clean_keys);
+	}
+	
+	/**
+	 * Helper method to set appropriate PDO predefined constants in bindValue() and bindParam().
+	 * 
+	 * Do not use this method for arrays, objects or resources. Note that if you pass in an
+	 * unexpected data type (ie. one that clashes with a column type definition) PDO will throw
+	 * an error.
+	 * 
+	 * @param type $data
+	 * @return type
+	 */
+	public static function setType($data)
+	{
+		$type = gettype($data);
+		switch ($type) {
+			case "boolean":
+				return PDO::PARAM_BOOL;
+			break;
+		
+			case "integer":
+				return PDO::PARAM_INT;
+			break;
+		
+			case "NULL":
+				return PDO::PARAM_NULL;
+			break;
+		
+			case "string":
+			case "double":
+				return PDO::PARAM_STR;
+			break;
+
+			default: // array, object, resource, "unknown type"
+				trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+				exit;
+		}
 	}
 	
 	/**
@@ -437,7 +494,7 @@ class TfishDatabase
 			if ($criteria) {
 				if (!empty($pdo_placeholders)) {
 					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::_setType($value));
+						$statement->bindValue($placeholder, $value, self::setType($value));
 						unset($placeholder);
 					}
 				}
@@ -452,26 +509,6 @@ class TfishDatabase
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		return self::executeTransaction($statement);
-	}
-	
-	/**
-	 * Execute a prepared statement within a transaction.
-	 * 
-	 * @param obj $statement
-	 * @return boolean
-	 */
-	private static function executeTransaction($statement)
-	{
-		try {
-			self::$_db->beginTransaction();
-			$statement->execute();
-			self::$_db->commit();
-		} catch (PDOException $e) {
-			self::$_db->rollBack();
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
-		}
-		return true;
 	}
 	
 	/**
@@ -499,7 +536,7 @@ class TfishDatabase
 		try {
 			$statement = self::$_db->prepare($sql);
 			foreach ($key_values as $key => $value) {
-				$statement->bindValue(":" . $key, $value, self::_setType($value));
+				$statement->bindValue(":" . $key, $value, self::setType($value));
 				unset($key, $value);
 			}
 		} catch (PDOException $e) {
@@ -507,43 +544,6 @@ class TfishDatabase
 			return false;
 		}
 		return self::executeTransaction($statement);
-	}
-	
-	/**
-	 * Helper method to set appropriate PDO predefined constants in bindValue() and bindParam().
-	 * 
-	 * Do not use this method for arrays, objects or resources. Note that if you pass in an
-	 * unexpected data type (ie. one that clashes with a column type definition) PDO will throw
-	 * an error.
-	 * 
-	 * @param type $data
-	 * @return type
-	 */
-	private static function _setType($data)
-	{
-		$type = gettype($data);
-		switch ($type) {
-			case "boolean":
-				return PDO::PARAM_BOOL;
-			break;
-		
-			case "integer":
-				return PDO::PARAM_INT;
-			break;
-		
-			case "NULL":
-				return PDO::PARAM_NULL;
-			break;
-		
-			case "string":
-			case "double":
-				return PDO::PARAM_STR;
-			break;
-
-			default: // array, object, resource, "unknown type"
-				trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
-				exit;
-		}
 	}
 
 	/**
@@ -639,7 +639,7 @@ class TfishDatabase
 			if ($criteria && $statement) {
 				if (!empty($pdo_placeholders)) {
 					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::_setType($value));
+						$statement->bindValue($placeholder, $value, self::setType($value));
 						unset($placeholder);
 					}
 				}
@@ -718,7 +718,7 @@ class TfishDatabase
 			if ($criteria && $statement) {
 				if (!empty($pdo_placeholders)) {
 					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::_setType($value));
+						$statement->bindValue($placeholder, $value, self::setType($value));
 						unset($placeholder);
 					}
 				}
@@ -820,7 +820,7 @@ class TfishDatabase
 			if ($criteria && $statement) {
 				if (!empty($pdo_placeholders)) {
 					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::_setType($value));
+						$statement->bindValue($placeholder, $value, self::setType($value));
 						unset($placeholder);
 					}
 				}
@@ -861,7 +861,7 @@ class TfishDatabase
 				$statement->bindValue(":id", $id, PDO::PARAM_INT);
 				foreach($key_values as $key => $value) {
 					$type = gettype($value);
-					$statement->bindValue(":" . $key, $value, self::_setType($type));
+					$statement->bindValue(":" . $key, $value, self::setType($type));
 					unset($type);
 				}
 			} else {
@@ -913,17 +913,18 @@ class TfishDatabase
 				exit;
 			}
 		}
+		
 		// Prepare the statement and bind the values.
 		try {
 			$statement = self::preparedStatement($sql);
 			foreach ($key_values as $key => $value) {
-				$statement->bindValue(':' . $key, $value, self::_setType($value));
+				$statement->bindValue(':' . $key, $value, self::setType($value));
 				unset($key, $value);
 			}
 			if ($criteria) {
 				if (!empty($pdo_placeholders)) {
 					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::_setType($value));
+						$statement->bindValue($placeholder, $value, self::setType($value));
 						unset($placeholder);
 					}
 				}

@@ -189,29 +189,6 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
-	 * Converts the object to an array suitable for insert/update calls to the database.
-	 * 
-	 * Note that the returned array observes the PARENT object's getPropertyWhitelist() as a 
-	 * restriction on the setting of keys. This whitelist explicitly excludes the handler, 
-	 * emplate and module properties as these are part of the class definition and are not stored
-	 * in the database. Calling the parent's property whitelist ensures that properties that are
-	 * unset by child classes are zeroed (this is important when an object is changed to a
-	 * different subclass, as the properties used may differ).
-	 * 
-	 * @param object $obj
-	 * @return array
-	 */
-	public function toArray()
-	{	
-		$key_values = array();
-		$properties = $this->getPropertyWhitelist();
-		foreach ($properties as $key => $value) {
-			$key_values[$key] = $this->__data[$key];
-		}
-		return $key_values;
-	}
-	
-	/**
 	 * Access an existing object property
 	 * 
 	 * @param string $property

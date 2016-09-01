@@ -11,31 +11,40 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
-class TfishPreference
+class TfishPreference extends TfishAncestralObject
 {	
-	// Permitted properties
-	protected $__data = array(
-		'admin_pagination' => '',
-		'allowed_mimetypes' => array(),
-		'close_site' => '',
-		'date_format' => '',
-		'default_language' => '',
-		'min_search_length' => '',
-		'search_pagination' => '',	
-		'server_timezone' => '',
-		'site_name' => '',
-		'session_domain' => '',
-		'session_name' => '',
-		'session_timeout' => '',
-		'site_email' => '',
-		'site_timezone' => '',
-	);
+	/**
+	 * Whitelist of official properties and datatypes.
+	 */
 	
 	/**
 	 * Generic constructor. Reads preferences from database and assigns whitelisted properties
 	 */
 	function __construct()
-	{		
+	{
+		/**
+		 * Set the permitted properties of this object.
+		 */
+		$this->__properties['admin_pagination'] = 'int';
+		$this->__properties['allowed_mimetypes'] = 'string';
+		$this->__properties['close_site'] = 'int';
+		$this->__properties['date_format'] = 'string';
+		$this->__properties['default_language'] = 'alpha';
+		$this->__properties['min_search_length'] = 'int';
+		$this->__properties['search_pagination'] = 'int';
+		$this->__properties['server_timezone'] = 'string';
+		$this->__properties['site_timezone'] = 'string';
+		$this->__properties['site_name'] = 'string';
+		$this->__properties['session_domain'] = 'string';
+		$this->__properties['session_name'] = 'alnumunder';
+		$this->__properties['session_timeout'] = 'int';
+		$this->__properties['site_email'] = 'email';
+		
+		// Instantiate whitelisted fields in the protected $__data property.
+		foreach ($this->__properties as $key => $value) {
+			$this->__data[$key] = '';
+		}
+		
 		$preferences = self::readPreferences();
 		foreach ($preferences as $key => $value) {
 			if (isset($this->__data[$key])) {
@@ -59,6 +68,29 @@ class TfishPreference
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		return $preferences;
+	}
+	
+	/**
+	 * Update the preference object using $_REQUEST data
+	 * 
+	 * @param array $request
+	 */
+	public function updatePreferences($dirty_input)
+	{
+		if (!TfishFilter::isArray($dirty_input)) {
+			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+		}	
+		
+		// Obtain a whitelist of permitted fields.
+		$whitelist = $this->getPropertyWhitelist();
+		
+		// Iterate through the whitelist validating supplied parameters.
+		foreach ($whitelist as $key => $type) {
+			if (array_key_exists($key, $dirty_input)) {
+				$this->__set($key, $dirty_input[$key]);
+			}
+			unset($key, $type);
+		}
 	}
 	
 	/**
@@ -94,61 +126,141 @@ class TfishPreference
 	public function __set($property, $value)
 	{
 		if (isset($this->__data[$property])) {
-			// Check that values match expected types. Values that fail validation (false) are not set
-			switch ($property) {
-				case "site_name":
-				case "server_timezone":
-				case "site_timezone":
-				case "session_name":
-				case "session_domain":
-					$value = TfishFilter::filter_text($value);
-					$this->__data[$property] = $value;
-					break;
-					
-				case "site_email":
-					$value = TfishFilter::trimString($email);
+			
+			// Validate $value against expected data type and business rules.
+			$type = $this->__properties[$property];
+			switch ($type) {
+				case "alpha":
+					$value = TfishFilter::trimString($value);
+					if ($property == "language") {
+						$language_whitelist = TfishContentHandler::getLanguages();
+						if (!array_key_exists($value, $language_whitelist)) {
+							trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+						}
+					}
+					if (TfishFilter::isAlpha($value)) {
+						$this->__data[$property] = $value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+					}
+				break;
+			
+				case "alnum":
+					$value = TfishFilter::trimString($value);
+					if (TfishFilter::isAlnum($value)) {
+						$this->__data[$property] = $value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
+					}
+				break;
+			
+				case "alnumunder":
+					$value = TfishFilter::trimString($value);
+					if (TfishFilter::isAlnumUnderscore($value)) {
+						$this->__data[$property] = $value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+					}
+				break;
+			
+				case "bool":
+					if (TfishFilter::isBool($value)) {
+						$this->__data[$property] = (bool)$value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_BOOL, E_USER_ERROR);
+					}
+				break;
+			
+				case "email":
+					$value = TfishFilter::trimString($value);
 					if (TfishFilter::isEmail($value)) {
 						$this->__data[$property] = $value;
 					} else {
 						trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
 					}
-					break;
-				
-				case "session_timeout":
-				case "min_search_length":
-				case "search_pagination":
-					if (TfishFilter::isInt($value, 0)) {
-						$this->__data[$property] = (int)$value;
+				break;
+			
+				case "digit":
+					$value = TfishFilter::trimString($value);
+					if (TfishFilter::isDigit($value)) {
+						$this->__data[$property] = $value;
 					} else {
-						trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+						trigger_error(TFISH_ERROR_NOT_DIGIT, E_USER_ERROR);
 					}
-					break;
-				
-				case "close_site":
-					if (TfishFilter::isInt($value, 0, 1)) {
-						$this->__data[$property] = (int)$value;
+				break;
+			
+				case "float":
+					if (TfishFilter::isFloat($value)) {
+						$this->__data[$property] = $value;
 					} else {
-						trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+						trigger_error(TFISH_ERROR_NOT_FLOAT, E_USER_ERROR);
 					}
-					break;
-				
-				case "allowed_mimetypes":
-					if (TfishFilter::isArray($value)) {
-						$clean_mimetypes = array();
-						foreach ($value as $key => $val) {
-							if (array_key_exists($key, self::knownMimeTypes()) && in_array($val, self::knownMimeTypes())) {
-								$clean_mimetypes[$key] = $val;
+				break;
+			
+				case "html":
+					$value = TfishFilter::trimString($value);
+					$this->__data[$property] = (string)TfishFilter::filterHtml($value);
+				break;
+			
+				case "int":
+					$value = (int)$value;					
+					switch ($property) {
+						
+						// 0 or 1.
+						case "close_site":
+							if (TfishFilter::isInt($value, 0, 1)) {
+								$this->__data[$property] = (int)$value;
 							} else {
-								trigger_error(TFISH_ERROR_UNKNOWN_MIMETYPE, E_USER_ERROR);
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 							}
-						}
-						$this->__data[$property] = $clean_mimetypes;
-					} else {
-						trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+						break;
+						
+						// Minimum value 0.
+						case "admin_pagination":
+						case "search_pagination":
+						case "session_timeout":
+							if (TfishFilter::isInt($value, 0)) {
+								$this->__data[$property] = (int)$value;
+							} else {
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}
+						break;
+					
+						/* Minimum value 1.
+						case "":
+							if (TfishFilter::isInt($value, 1)) {
+								$this->__data[$property] = (int)$value;
+							} else {
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}
+						break;
+						*/
 					}
-					break;
+				break;
+				
+				case "ip":
+					$value = TfishFilter::trimString($value);
+					if ($value == "" || TfishFilter::isIp($value)) {
+						$this->__data[$property] = $value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_IP, E_USER_ERROR);
+					}
+				break;
+			
+				case "string":
+					$this->__data[$property] = TfishFilter::trimString($value);
+				break;
+			
+				case "url":
+					$value = TfishFilter::trimString($value);
+					if ($value == "" || TfishFilter::isUrl($value)) {
+						$this->__data[$property] = $value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+					}
+				break;
 			}
-			return self::writePreferences();
+			return true;
 		} else {
 			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
 		}

@@ -38,9 +38,33 @@ class TfishPreferenceHandler
 		}
 	}
 	
-	public static function setPreference($pref)
+	/**
+	 * Updates the site preferences in the database.
+	 * 
+	 * @param object $obj
+	 * @return boolean
+	 */
+	public static function updatePreferences($obj)
 	{
+		// Convert object to array of key => values.
+		$key_values = $obj->toArray();
 		
+		foreach ($key_values as $key => $value) {
+			$sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
+			try {
+				$statement = TfishDatabase::preparedStatement($sql);
+				$statement->bindValue(':title', $key, TfishDatabase::setType($key));
+				$statement->bindValue(':value', $value, TfishDatabase::setType($value));
+			} catch (PDOException $e) {
+				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			}
+			unset($sql, $key, $value);
+			$result = TfishDatabase::executeTransaction($statement);
+			if (!$result) {
+				trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
+				return false;
+			}
+		}
+		return true;
 	}
-	
 }

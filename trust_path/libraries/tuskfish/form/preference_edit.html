@@ -9,7 +9,7 @@
 		</div>
 		
 		<!-- Site email -->
-		<label for="site_email" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SITE_EMAIL; ?>:</label>
+		<label for="site_email" maxlength="254" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SITE_EMAIL; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
 			<input type="text" class="form-control" name="site_email" id="title" <?php if (isset($preferences['site_email'])) { echo 'value="' . TfishFilter::escape($preferences['site_email']) . '"'; } ?> required>
 		</div>
@@ -17,37 +17,64 @@
 		<!-- Close site -->
 		<label for="close_site" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_CLOSE_SITE; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="close_site" id="title" <?php if (isset($preferences['close_site'])) { echo 'value="' . TfishFilter::escape($preferences['close_site']) . '"'; } ?> required>
+			<label class="radio-inline pull-left">
+				<input class="pull-left" type="radio" name="close_site" value="1" id="close_site" <?php if ($preferences['close_site'] == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
+			</label>
+			<label for="online" class="radio-inline pull-left">
+				<input type="radio" name="close_site" value="0" id="close_site" <?php if ($preferences['close_site'] == 0) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
+			</label>
 		</div>
 		
 		<!-- Server timezone -->
 		<label for="sever_timezone" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SERVER_TIMEZONE; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="server_timezone" id="title" <?php if (isset($preferences['server_timezone'])) { echo 'value="' . TfishFilter::escape($preferences['server_timezone']) . '"'; } ?> required>
+			<select class="form-control" name="server_timezone" id="server_timezone" required>
+				<?php
+					foreach ($timezones as $key => $value) {
+						if ($preferences['server_timezone'] == $key) {
+							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+						} else {
+							echo '<option value="' . $key . '">' . $value . '</option>';
+						}
+						unset ($key, $value);
+					}
+				?>
+			</select>
 		</div>
 		
 		<!-- Site timezone -->
 		<label for="site_timezone" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SITE_TIMEZONE; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="site_timezone" id="title" <?php if (isset($preferences['site_timezone'])) { echo 'value="' . TfishFilter::escape($preferences['site_timezone']) . '"'; } ?> required>
+			<select class="form-control" name="site_timezone" id="site_timezone" required>
+				<?php
+					foreach ($timezones as $key => $value) {
+						if ($preferences['site_timezone'] == $key) {
+							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+						} else {
+							echo '<option value="' . $key . '">' . $value . '</option>';
+						}
+						unset ($key, $value);
+					}
+				?>
+			</select>
 		</div>
 		
 		<!-- Minimum search length -->
 		<label for="min_search_length" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_MIN_SEARCH_LENGTH; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="min_search_length" id="title" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . TfishFilter::escape($preferences['min_search_length']) . '"'; } ?> required>
+			<input type="number" min="2" class="form-control" name="min_search_length" id="title" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . TfishFilter::escape($preferences['min_search_length']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Search pagination -->
 		<label for="search_pagination" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SEARCH_PAGINATION; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="search_pagination" id="title" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['search_pagination']) . '"'; } ?> required>
+			<input type="number" min="0" class="form-control" name="search_pagination" id="title" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['search_pagination']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Admin pagination -->
 		<label for="admin_pagination" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_ADMIN_PAGINATION; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="admin_pagination" id="title" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['admin_pagination']) . '"'; } ?> required>
+			<input type="number" min="0" class="form-control" name="admin_pagination" id="title" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['admin_pagination']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Session name -->
@@ -59,19 +86,29 @@
 		<!-- Session timeout -->
 		<label for="session_timeout" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SESSION_TIMEOUT; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="session_timeout" id="title" <?php if (isset($preferences['session_timeout'])) { echo 'value="' . TfishFilter::escape($preferences['session_timeout']) . '"'; } ?> required>
+			<input type="number" min="0" class="form-control" name="session_timeout" id="title" <?php if (isset($preferences['session_timeout'])) { echo 'value="' . TfishFilter::escape($preferences['session_timeout']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Session domain -->
 		<label for="session_domain" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_SESSION_DOMAIN; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="session_domain" id="title" <?php if (isset($preferences['session_domain'])) { echo 'value="' . TfishFilter::escape($preferences['session_domain']) . '"'; } ?> required>
+			<input type="text" minlength="1" class="form-control" name="session_domain" id="title" <?php if (isset($preferences['session_domain'])) { echo 'value="' . TfishFilter::escape($preferences['session_domain']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Default language -->
 		<label for="default_language" class="control-label col-lg-3 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PREFERENCE_DEFAULT_LANGUAGE; ?>:</label>
 		<div class="control-label col-lg-9 col-md-10 col-sm-9 col-xs-9">
-			<input type="text" class="form-control" name="default_language" id="title" <?php if (isset($preferences['default_language'])) { echo 'value="' . TfishFilter::escape($preferences['default_language']) . '"'; } ?> required>
+			<select class="form-control" name="default_language" id="default_language" required>
+				<?php
+					foreach ($languages as $key => $value) {
+						if ($tfish_preference->default_language == $key) {
+							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+						} else {
+							echo '<option value="' . $key . '">' . $value . '</option>';
+						}
+					}
+				?>
+			</select>
 		</div>
 		
 		<!-- Date format -->
