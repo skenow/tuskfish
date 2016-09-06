@@ -20,8 +20,3 @@ if (!TfishSession::isAdmin()) {
 	TfishSession::logout(TFISH_ADMIN_URL . "login.php");
 	exit;
 }
-
-// HTMLPurifier library is used to validate the teaser and description fields of objects.
-// It is only available in the admin section of the site. Note that the HTMLPurifier autoloader
-// must be registered AFTER the Tfish autoloader - so the tfish_header.php must be included FIRST.
-require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';

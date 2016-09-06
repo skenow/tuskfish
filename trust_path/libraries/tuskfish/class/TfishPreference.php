@@ -39,6 +39,7 @@ class TfishPreference extends TfishAncestralObject
 		$this->__properties['session_name'] = 'alnumunder';
 		$this->__properties['session_timeout'] = 'int';
 		$this->__properties['site_email'] = 'email';
+		$this->__properties['user_pagination'] = 'int';
 		
 		// Instantiate whitelisted fields in the protected $__data property.
 		foreach ($this->__properties as $key => $value) {
@@ -48,8 +49,13 @@ class TfishPreference extends TfishAncestralObject
 		$preferences = self::readPreferences();
 		foreach ($preferences as $key => $value) {
 			if (isset($this->__data[$key])) {
-				$this->__data[$key] = $value;
+				if ($this->__properties[$key] == 'int') {
+					$this->__set($key, (int)$value);
+				} else {
+					$this->__set($key, $value);
+				}
 			}
+			unset($key, $value);
 		}
 	}
 	
@@ -216,7 +222,6 @@ class TfishPreference extends TfishAncestralObject
 						break;
 						
 						// Minimum value 0.
-						case "admin_pagination":
 						case "search_pagination":
 						case "session_timeout":
 							if (TfishFilter::isInt($value, 0)) {
@@ -225,16 +230,25 @@ class TfishPreference extends TfishAncestralObject
 								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 							}
 						break;
-					
-						/* Minimum value 1.
-						case "":
+						
+						// Minimum value 1.
+						case "admin_pagination":
+						case "user_pagination":
 							if (TfishFilter::isInt($value, 1)) {
 								$this->__data[$property] = (int)$value;
 							} else {
 								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 							}
 						break;
-						*/
+					
+						// Minimum value 3.
+						case "min_search_length":
+							if (TfishFilter::isInt($value, 3)) {
+								$this->__data[$property] = (int)$value;
+							} else {
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}
+						break;
 					}
 				break;
 				

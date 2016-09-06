@@ -10,6 +10,6 @@
 * @package		core
 */
 
-if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "UQcNkSHg0bUPasVta14k76tse2Xx2KGVHXeIzwAfyMGTy2z9MYQCPxWEG8JFQpLT");
-if (!defined("TFISH_KEY")) define("TFISH_KEY", "d7V9pMqcJuTOsS3bPMp6GEPF6QtKVPRC7110ptq34MXIDH4yLCq0Wzy0cSj1Wft");
-if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "/home/isengard/public_html/tuskfish/trust_path/database/1043647_tuskfish.db");
+if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "YN1j+i/CnV933fNii0lycDYvQ+HfpGEiK4NB6jk/7sUnfV0SEfEURa3y1ZaAkxd2");
+if (!defined("TFISH_KEY")) define("TFISH_KEY", "vkOgkkp2vl27riArGxK486Ei1M2sak4D0neezxJjBYr0Q4LQpdlEXKLZoSno2nK");
+if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "/home/isengard/public_html/tuskfish/trust_path/database/244542853_tfish11.db");

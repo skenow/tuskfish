@@ -115,12 +115,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					array('title' => 'site_timezone', 'value' => '0'),
 					array('title' => 'min_search_length', 'value' => '3'),
 					array('title' => 'search_pagination', 'value' => '20'),
-					array('title' => 'admin_pagination', 'value' => '30'),
+					array('title' => 'admin_pagination', 'value' => '20'),
 					array('title' => 'session_name', 'value' => 'tfish_session'),
 					array('title' => 'session_timeout', 'value' => '0'),
 					array('title' => 'session_domain', 'value' => '/'),
 					array('title' => 'default_language', 'value' => 'en'),
-					array('title' => 'date_format', 'value' => 'j F Y')
+					array('title' => 'date_format', 'value' => 'j F Y'),
+					array('title' => 'user_pagination', 'value' => '10'),
+					array('title' => 'pagination_elements', 'value' => '5')
 				);
 				foreach ($preference_data as $preference) {
 					TfishDatabase::insert('preference', $preference, 'id');
@@ -134,10 +136,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				);
 				TfishDatabase::createTable('session', $session_columns, 'id');	
 
-				// Create content object table
+				// Create content object table. Note that the type must be first column to enable
+				// the PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE functionality, which automatically
+				// pulls DB rows into an instance of a class, based on the first column.
 				$content_columns = array(
-					"id" => "INTEGER", // Auto-increment => , set by database.
 					"type" => "TEXT", // article => , image => , podcast => , etc.
+					"id" => "INTEGER", // Auto-increment => , set by database.
 					"title" => "TEXT", // The headline or name of this content.
 					"teaser" => "TEXT", // A short (one paragraph) summary or abstract for this content.
 					"description" => "TEXT", // The full article or description of the content.

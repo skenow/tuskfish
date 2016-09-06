@@ -96,5 +96,92 @@ class TfishMetadata
 		} else {
 			return false;
 		}
-	}	
+	}
+	
+	/**
+	 * Creates a pagination control designed for use with the Bootstrap framework.
+	 * 
+	 * If you want to create pagination controls for other presentation-side libraries add
+	 * additional methods to this class.
+	 * 
+	 * @param int $count
+	 * @param int $limit
+	 * @param int $start
+	 * @param string $url
+	 * @param string $tag (not currently in use)
+	 * @return string
+	 */
+	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = false)
+	{
+		// Sanitise parameters.
+		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
+		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
+		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : false;
+		$clean_url = TfishFilter::isUrl($url) ? TfishFilter::escape($url) : false;
+		$clean_tag = TfishFilter::isAlnum($tag) ? TfishFilter::escape($tag) : false;
+		
+		// If any parameter fails a range check throw an error.
+		if ($clean_count === false || $clean_limit === false || $clean_url === false) {
+			trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
+		}
+		
+		$control = $this->_getNavigationControl($clean_count, $clean_limit, $clean_url,
+				$clean_start, $clean_tag);
+
+		return $control;
+	}
+	
+	private function _getNavigationControl($count, $limit, $url, $start, $tag)
+	{
+		// Calculate number of pages, page number of start object and adjust for remainders.
+		$page_count = (int)(($count / $limit));
+		$current_page = (int)(($start / $limit));
+		$remainder = $count % $limit;
+		if ($remainder) {
+			$page_count += 1;
+		}
+		if ($remainder || $current_page == 0) {
+			$current_page += 1;
+		}
+		
+		// No need for pagination control if only one page.
+		if ($page_count == 1) {
+			return false;
+		}
+		
+		// Handling pagination for multiple pages.
+		$page_slots = array();
+		$number_of_slots = 5;
+		$page_slots[$current_page] = $current_page;
+		for ($i = 1; $i < $number_of_slots; $i++) {
+			$page_slots[$current_page - $i] = $current_page - $i;
+			$page_slots[$current_page + $i] = $current_page + $i;
+		}
+		ksort($page_slots);
+		$page_range = range(1, $page_count);
+		$page_slots = array_intersect($page_slots, $page_range);
+		$page_slots[1] = TFISH_PAGINATION_FIRST;
+		if ($page_count > count($page_slots)) {
+			array_pop($page_slots);
+			$page_slots[$page_count] = TFISH_PAGINATION_LAST;
+		}
+
+		// Construct a HTML pagination control.
+		if ($tag) {
+			$tag = '&amp;' . $tag;
+		}
+		$control = '<ul class="pagination">';
+		foreach ($page_slots as $key => $slot) {
+			if ($key == $current_page) {
+				$control .= '<li class="active"><a href="' . $url . '?start=' 
+						. (($key - 1) * $limit) .  $tag . '">' . $slot . '</a></li>';
+			} else {
+				$control .= '<li><a href="' . $url . '?start=' 
+						. (($key - 1) * $limit) .  $tag . '">' . $slot . '</a></li>';
+			}
+		}
+		$control .= '</ul>';
+		
+		return $control;
+	}
 }

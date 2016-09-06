@@ -4,6 +4,7 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
+* Pagination: Add a preference to set the number of pagination slots.
 * Data edit form: How to handle editing of file uploads?
   - Image/media fields should display the file name of any existing file.
 * Detail the data entry form

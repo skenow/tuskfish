@@ -15,9 +15,6 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Insert page content here
-
-
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */

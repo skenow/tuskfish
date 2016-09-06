@@ -15,8 +15,20 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Insert page content here
 
+$clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+$article_handler = new TfishArticleHandler();
+$articles = $article_handler->getObjects();
+$tfish_content['output'] = '<ul>';
+foreach ($articles as $article) {
+	$tfish_content['output'] .= '<li>' . $article->title . '</li>';
+}
+$tfish_content['output'] .= '<ul>';
+$count = count($articles);
+
+// Assign template variables.
+$page_title = 'Articles';
+$pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, TFISH_URL);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).

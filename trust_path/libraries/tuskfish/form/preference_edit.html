@@ -64,37 +64,37 @@
 		<!-- Minimum search length -->
 		<label for="min_search_length" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_MIN_SEARCH_LENGTH; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="number" min="2" class="form-control" name="min_search_length" id="title" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . TfishFilter::escape($preferences['min_search_length']) . '"'; } ?> required>
+			<input type="number" min="3" class="form-control" name="min_search_length" id="min_search_length" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . TfishFilter::escape($preferences['min_search_length']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Search pagination -->
 		<label for="search_pagination" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SEARCH_PAGINATION; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="number" min="0" class="form-control" name="search_pagination" id="title" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['search_pagination']) . '"'; } ?> required>
+			<input type="number" min="0" class="form-control" name="search_pagination" id="search_pagination" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['search_pagination']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Admin pagination -->
 		<label for="admin_pagination" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_ADMIN_PAGINATION; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="number" min="0" class="form-control" name="admin_pagination" id="title" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['admin_pagination']) . '"'; } ?> required>
+			<input type="number" min="0" class="form-control" name="admin_pagination" id="admin_pagination" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . TfishFilter::escape($preferences['admin_pagination']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Session name -->
 		<label for="session_name" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_NAME; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="text" class="form-control" name="session_name" id="title" <?php if (isset($preferences['session_name'])) { echo 'value="' . TfishFilter::escape($preferences['session_name']) . '"'; } ?> required>
+			<input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . TfishFilter::escape($preferences['session_name']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Session timeout -->
 		<label for="session_timeout" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_TIMEOUT; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="number" min="0" class="form-control" name="session_timeout" id="title" <?php if (isset($preferences['session_timeout'])) { echo 'value="' . TfishFilter::escape($preferences['session_timeout']) . '"'; } ?> required>
+			<input type="number" min="0" class="form-control" name="session_timeout" id="session_timeout" <?php if (isset($preferences['session_timeout'])) { echo 'value="' . TfishFilter::escape($preferences['session_timeout']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Session domain -->
 		<label for="session_domain" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_DOMAIN; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="text" minlength="1" class="form-control" name="session_domain" id="title" <?php if (isset($preferences['session_domain'])) { echo 'value="' . TfishFilter::escape($preferences['session_domain']) . '"'; } ?> required>
+			<input type="text" minlength="1" class="form-control" name="session_domain" id="session_domain" <?php if (isset($preferences['session_domain'])) { echo 'value="' . TfishFilter::escape($preferences['session_domain']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Default language -->
@@ -116,7 +116,7 @@
 		<!-- Date format -->
 		<label for="date_format" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_DATE_FORMAT; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="text" class="form-control" name="date_format" id="title" <?php if (isset($preferences['date_format'])) { echo 'value="' . TfishFilter::escape($preferences['date_format']) . '"'; } ?> required>
+			<input type="text" class="form-control" name="date_format" id="date_format" <?php if (isset($preferences['date_format'])) { echo 'value="' . TfishFilter::escape($preferences['date_format']) . '"'; } ?> required>
 		</div>
 	</div>
 	<button name="op" value="update" type="submit" class="btn btn-primary"><?php echo TFISH_UPDATE; ?></button>

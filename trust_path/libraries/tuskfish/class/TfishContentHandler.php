@@ -46,10 +46,18 @@ class TfishContentHandler
 	
 	public function getObjects($criteria = false)
 	{
+		$objects = array();
 		$result = TfishDatabase::select('content', $criteria);
 		if ($result) {
-			// Iterate through the statement object pulling the rows into classes.
-			// Do this by using PDO::FETCH_COLUMN with the fetch_argument parameter..
+			try {
+				// Fetch rows into the appropriate class type, as determined by the first column.
+				$result->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
+				while ($object = $result->fetch()) {
+					$objects[$object->id] = $object;
+				}
+			} catch (PDOException $e) {
+				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			}
 		} else {
 			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 		}

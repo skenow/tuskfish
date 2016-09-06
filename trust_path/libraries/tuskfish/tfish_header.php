@@ -21,6 +21,14 @@ function tfish_autoload($classname) {
 }
 spl_autoload_register('tfish_autoload');
 
+// HTMLPurifier library is used to validate the teaser and description fields of objects.
+// Note that the HTMLPurifier autoloader must be registered AFTER the Tfish autoloader.
+// Ideally, it would be best if this library was only included on the admin side. However, the
+// description and teaser fields currently force filtering every time they are set, and so the
+// library is also required on the user side. There isn't really a need to filter these fields
+// when they are being set based on input from the database (which was filtered on the way in).
+require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
+
 // Set error reporting levels and custom error handler.
 error_reporting(E_ALL & ~E_NOTICE);
 set_error_handler("TfishLogger::logErrors");

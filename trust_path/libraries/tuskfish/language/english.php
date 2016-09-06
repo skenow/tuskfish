@@ -38,12 +38,14 @@ define("TFISH_PREFERENCE_SERVER_TIMEZONE", "Server timezone");
 define("TFISH_PREFERENCE_SITE_TIMEZONE", "Site timezone");
 define("TFISH_PREFERENCE_MIN_SEARCH_LENGTH", "Min. search length");
 define("TFISH_PREFERENCE_SEARCH_PAGINATION", "Search pagination");
-define("TFISH_PREFERENCE_ADMIN_PAGINATION", "Admin pagination");
+define("TFISH_PREFERENCE_ADMIN_PAGINATION", "Admin-side pagination");
 define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
 define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout");
 define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");
 define("TFISH_PREFERENCE_DEFAULT_LANGUAGE", "Default language");
 define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see <a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>");
+define("TFISH_PREFERENCE_PAGINATION_ELEMENTS", "Pagination elements");
+define("TFISH_PREFERENCE_USER_PAGINATION", "User-side pagination");
 
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
@@ -59,6 +61,10 @@ define("TFISH_TYPE_QUOTE", "Quote");
 define("TFISH_TYPE_STATIC", "Static");
 define("TFISH_TYPE_TAG", "Tag");
 define("TFISH_TYPE_VIDEO", "Video");
+
+// Pagination controls
+define("TFISH_PAGINATION_FIRST", "First");
+define("TFISH_PAGINATION_LAST", "Last");
 
 // Base content object properties.
 define("TFISH_ID", "ID");
@@ -153,7 +159,8 @@ define("TFISH_ERROR_MEDIA_UPLOAD_FAILED", "Media file upload failed.");
 define("TFISH_ERROR_FAILED_TO_APPEND_FILE", "Failed to append to file.");
 define("TFISH_ERROR_FAILED_TO_SEND_DOWNLOAD", "Failed to initiate download stream.");
 define("TFISH_ERROR_BAD_PATH", "Bad file path.");
-define("TFISH_ERROR_NOT_AN_UPLOADED_FILE", "Not an uploaded file, possible upload attack");
+define("TFISH_ERROR_NOT_AN_UPLOADED_FILE", "Not an uploaded file, possible upload attack.");
+define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter error.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini size.");
