@@ -125,13 +125,13 @@ class TfishMetadata
 			trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
 		}
 		
-		$control = $this->_getNavigationControl($clean_count, $clean_limit, $clean_url,
+		$control = $this->_getPavigationControl($clean_count, $clean_limit, $clean_url,
 				$clean_start, $clean_tag);
 
 		return $control;
 	}
 	
-	private function _getNavigationControl($count, $limit, $url, $start, $tag)
+	private function _getPavigationControl($count, $limit, $url, $start, $tag)
 	{
 		// Calculate number of pages, page number of start object and adjust for remainders.
 		$page_count = (int)(($count / $limit));
@@ -150,8 +150,9 @@ class TfishMetadata
 		}
 		
 		// Handling pagination for multiple pages.
+		global $tfish_preference;		
+		$number_of_slots = (int)$tfish_preference->pagination_elements;
 		$page_slots = array();
-		$number_of_slots = 5;
 		$page_slots[$current_page] = $current_page;
 		for ($i = 1; $i < $number_of_slots; $i++) {
 			$page_slots[$current_page - $i] = $current_page - $i;

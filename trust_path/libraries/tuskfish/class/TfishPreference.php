@@ -25,21 +25,22 @@ class TfishPreference extends TfishAncestralObject
 		/**
 		 * Set the permitted properties of this object.
 		 */
-		$this->__properties['admin_pagination'] = 'int';
-		$this->__properties['allowed_mimetypes'] = 'string';
+		$this->__properties['site_name'] = 'string';
+		$this->__properties['site_email'] = 'email';
 		$this->__properties['close_site'] = 'int';
-		$this->__properties['date_format'] = 'string';
-		$this->__properties['default_language'] = 'alpha';
-		$this->__properties['min_search_length'] = 'int';
-		$this->__properties['search_pagination'] = 'int';
 		$this->__properties['server_timezone'] = 'string';
 		$this->__properties['site_timezone'] = 'string';
-		$this->__properties['site_name'] = 'string';
-		$this->__properties['session_domain'] = 'string';
+		$this->__properties['min_search_length'] = 'int';
+		$this->__properties['search_pagination'] = 'int';
+		$this->__properties['user_pagination'] = 'int';
+		$this->__properties['admin_pagination'] = 'int';
+		$this->__properties['pagination_elements'] = 'int';
 		$this->__properties['session_name'] = 'alnumunder';
 		$this->__properties['session_timeout'] = 'int';
-		$this->__properties['site_email'] = 'email';
-		$this->__properties['user_pagination'] = 'int';
+		$this->__properties['session_domain'] = 'string';
+		$this->__properties['default_language'] = 'alpha';
+		$this->__properties['date_format'] = 'string';
+		//$this->__properties['allowed_mimetypes'] = 'string';		
 		
 		// Instantiate whitelisted fields in the protected $__data property.
 		foreach ($this->__properties as $key => $value) {
@@ -233,6 +234,7 @@ class TfishPreference extends TfishAncestralObject
 						
 						// Minimum value 1.
 						case "admin_pagination":
+						case "pagination_elements":
 						case "user_pagination":
 							if (TfishFilter::isInt($value, 1)) {
 								$this->__data[$property] = (int)$value;

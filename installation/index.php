@@ -115,14 +115,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					array('title' => 'site_timezone', 'value' => '0'),
 					array('title' => 'min_search_length', 'value' => '3'),
 					array('title' => 'search_pagination', 'value' => '20'),
+					array('title' => 'user_pagination', 'value' => '10'),
 					array('title' => 'admin_pagination', 'value' => '20'),
+					array('title' => 'pagination_elements', 'value' => '5'),
 					array('title' => 'session_name', 'value' => 'tfish_session'),
 					array('title' => 'session_timeout', 'value' => '0'),
 					array('title' => 'session_domain', 'value' => '/'),
 					array('title' => 'default_language', 'value' => 'en'),
 					array('title' => 'date_format', 'value' => 'j F Y'),
-					array('title' => 'user_pagination', 'value' => '10'),
-					array('title' => 'pagination_elements', 'value' => '5')
 				);
 				foreach ($preference_data as $preference) {
 					TfishDatabase::insert('preference', $preference, 'id');
