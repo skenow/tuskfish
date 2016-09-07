@@ -4,16 +4,26 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
-* Pagination: Add a preference to set the number of pagination slots.
+* Detail the data entry form
+  - Take the select boxes out of the form (build them in the class files).
+  - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
+  - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
+* Create a search function + advanced search page.
 * Data edit form: How to handle editing of file uploads?
   - Image/media fields should display the file name of any existing file.
-* Detail the data entry form
-  - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
-  - Data entry form should show/hide fields as relevant when the content type is selected.
-* Create a search function.
-* Take all the logic out of the forms; build it in the script and just pass in values.
 * Consider creating a controller class that can handle the basic add/edit/update/confirm/delete operations and standard views (single, newsfeed, grid).
-* Preferences: Add a preference editing script; need to add DB update functionality to the TfishPreference class.
+  1. Listen for whitelisted script parameters
+  2. Validate the data (whitelists, type) but leave it to objects internal security to validate in detail.
+  3. Define key standard actions:
+     - Add
+     - Edit
+     - Submit
+     - Confirm
+     - Delete
+     - View (index table, single object, multiple objects, grid view).
+  4. Issues
+     - Parameters would be i) parameter whitelist, ii) action whitelist, iii) templates and forms for admin actions, iv) templates for different views.
+     - How to accommodate the logic for different actions? It will vary by page, object etc.
 
 THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 ==============================================
