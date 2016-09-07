@@ -15,7 +15,6 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $article_handler = new TfishArticleHandler();
 $articles = $article_handler->getObjects();
