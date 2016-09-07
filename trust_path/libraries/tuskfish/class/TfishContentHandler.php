@@ -163,12 +163,100 @@ class TfishContentHandler
 	}
 	
 	/**
+	 * Provides global search functionality for content objects.
+	 *
+	 * @param array $queryarray
+	 * @param string $andor
+	 * @param int $limit
+	 * @param int $offset
+	 * @param int $userid
+	 * @return array 
+	 */
+	public function searchContent($queryarray, $andor, $limit, $offset)
+	{
+		// Filter search terms and parameters. They MUST be placed as bound values within a prepared statement (PDO).
+		// Search type: All (and), any (or), exact match.
+		// Advise that search terms less than [preference] characters will be ignored.
+		// Set the fields that will be searched:
+		
+		/**
+		 * CORE (free text search)
+		 * title
+		 * teaser
+		 * description
+		 * creator
+		 * publisher
+		 * caption
+
+		 * MANDATORY
+		 * online (on - actually this can be an optional parameter defaulting to on)
+
+		 * OPTIONS - do later
+		 * type (allows filtering by object type, equivalent to the old 'modules' thing)
+		 */
+		
+		// Build the criteria and away you go!
+		
+		
+		$count = $results = '';
+		$criteria = new icms_db_criteria_Compo();
+
+		if ($userid != 0) {
+			$criteria->add(new icms_db_criteria_Item('submitter', $userid));
+		}
+		
+		if ($queryarray) {
+			$criteriaKeywords = new icms_db_criteria_Compo();
+			for ($i = 0; $i < count($queryarray); $i++) {
+				$criteriaKeyword = new icms_db_criteria_Compo();
+				$criteriaKeyword->add(new icms_db_criteria_Item('title', '%' . $queryarray[$i] . '%',
+					'LIKE'), 'OR');
+				$criteriaKeyword->add(new icms_db_criteria_Item('description', '%' . $queryarray[$i]
+					. '%', 'LIKE'), 'OR');
+				$criteriaKeyword->add(new icms_db_criteria_Item('extended_text', '%' . $queryarray[$i]
+					. '%', 'LIKE'), 'OR');
+				$criteriaKeyword->add(new icms_db_criteria_Item('creator', '%' . $queryarray[$i]
+					. '%', 'LIKE'), 'OR');
+				$criteriaKeywords->add($criteriaKeyword, $andor);
+				unset ($criteriaKeyword);
+			}
+			$criteria->add($criteriaKeywords);
+		}
+		
+		$criteria->add(new icms_db_criteria_Item('online_status', TRUE));
+		$criteria->add(new icms_db_criteria_Item('date', time(), '<'));
+		
+		$criteria->setStart($offset);
+		$criteria->setSort('date');
+		$criteria->setOrder('DESC');
+		
+		// Count the number of search results WITHOUT actually retrieving the objects
+		$count = $this->getCount($criteria);
+		
+		// Retrieve the subset of results that are actually required
+		if (!$limit) {
+			global $icmsConfigSearch;
+			$limit = $icmsConfigSearch['search_per_page'];
+		}
+		
+		$criteria->setLimit($limit);
+		$results = $this->getObjects($criteria, FALSE, TRUE);
+		
+		// Pad the results array out to the counted length to preserve 'hits' and pagination controls.
+		// This approach is not ideal, but it greatly reduces the load for queries with large result sets
+		$results = array_pad($results, $count, 1);
+		
+		return $results;
+	}
+	
+	/**
 	 * Convert a database content row to a corresponding content object.
 	 * 
 	 * @param type $row
 	 * @return boolean
 	 */
-	public static function toObject($row) {
+	public static function toObject($row)
+	{
 		if (empty($row) || !TfishFilter::isArray($row)) {
 			trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY);
 		}

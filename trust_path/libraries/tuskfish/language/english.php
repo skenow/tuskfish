@@ -51,6 +51,10 @@ define("TFISH_PREFERENCE_SITE_DESCRIPTION", "Site description");
 define("TFISH_PREFERENCE_SITE_AUTHOR", "Site author / publisher");
 define("TFISH_PREFERENCE_SITE_COPYRIGHT", "Site copyright");
 
+// Search
+define("TFISH_SEARCH", "Search");
+define("TFISH_SEARCH_DESCRIPTION", "Search the contents of this website");
+
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
 define("TFISH_TYPE_AUDIO", "Audio");
