@@ -8,10 +8,28 @@
 			<input type="text" class="form-control" name="site_name" id="title" <?php if (isset($preferences['site_name'])) { echo 'value="' . TfishFilter::escape($preferences['site_name']) . '"'; } ?> required>
 		</div>
 		
+		<!-- Site description -->
+		<label for="site_description" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SITE_DESCRIPTION; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<input type="text" class="form-control" name="site_description" id="title" <?php if (isset($preferences['site_description'])) { echo 'value="' . TfishFilter::escape($preferences['site_description']) . '"'; } ?> required>
+		</div>
+		
+		<!-- Site author -->
+		<label for="site_author" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SITE_AUTHOR; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<input type="text" class="form-control" name="site_author" id="title" <?php if (isset($preferences['site_author'])) { echo 'value="' . TfishFilter::escape($preferences['site_author']) . '"'; } ?> required>
+		</div>
+		
 		<!-- Site email -->
 		<label for="site_email" maxlength="254" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SITE_EMAIL; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
 			<input type="text" class="form-control" name="site_email" id="title" <?php if (isset($preferences['site_email'])) { echo 'value="' . TfishFilter::escape($preferences['site_email']) . '"'; } ?> required>
+		</div>
+		
+		<!-- Site copyright -->
+		<label for="site_copyright" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SITE_COPYRIGHT; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<input type="text" class="form-control" name="site_copyright" id="title" <?php if (isset($preferences['site_copyright'])) { echo 'value="' . TfishFilter::escape($preferences['site_copyright']) . '"'; } ?> required>
 		</div>
 		
 		<!-- Close site -->

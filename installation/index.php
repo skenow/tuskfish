@@ -109,7 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				// Insert default preferences to database
 				$preference_data = array(
 					array('title' => 'site_name', 'value' => 'Tuskfish CMS'),
+					array('title' => 'site_description', 'value' => 'A cutting edge micro CMS'),
+					array('title' => 'site_author', 'value' => ''),
 					array('title' => 'site_email', 'value' => $clean_vars['admin_email']),
+					array('title' => 'site_copyright', 'value' => 'Copyright all rights reserved'),
 					array('title' => 'close_site', 'value' => '0'),
 					array('title' => 'server_timezone', 'value' => '0'),
 					array('title' => 'site_timezone', 'value' => '0'),

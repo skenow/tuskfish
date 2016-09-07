@@ -26,7 +26,10 @@ class TfishPreference extends TfishAncestralObject
 		 * Set the permitted properties of this object.
 		 */
 		$this->__properties['site_name'] = 'string';
+		$this->__properties['site_description'] = 'string';
+		$this->__properties['site_author'] = 'string';
 		$this->__properties['site_email'] = 'email';
+		$this->__properties['site_copyright'] = 'string';
 		$this->__properties['close_site'] = 'int';
 		$this->__properties['server_timezone'] = 'string';
 		$this->__properties['site_timezone'] = 'string';

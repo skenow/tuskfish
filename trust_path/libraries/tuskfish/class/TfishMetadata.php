@@ -11,6 +11,7 @@
 */
 class TfishMetadata
 {	
+	private $preference;
 	protected $__data = array(
 		'template' => '',
 		'title' => '',
@@ -19,21 +20,23 @@ class TfishMetadata
 		'copyright' => '',
 		'generator' => '',
 		'seo' => '',
-		'robots' => '');
+		'robots' => '',
+		'pagination_elements' => '');
 	
 	/**
 	 * Generic constructor
 	 */
-	function __construct()
-	{
+	function __construct($preference)
+	{		
 		$this->template = 'default.html';
-		$this->title = 'Tuskfish CMS';
-		$this->description = 'A cutting-edge single user micro CMS.';
-		$this->author = 'Isengard.biz';
-		$this->copyright = 'Copyright 2013-2016 Isengard.biz.';
+		$this->title = $preference->site_name;
+		$this->description = $preference->site_description;
+		$this->author = $preference->site_author;
+		$this->copyright = $preference->site_copyright;
 		$this->generator = 'Tuskfish CMS';
 		$this->seo = '';
 		$this->robots = 'index,follow';
+		$this->pagination_elements = $preference->pagination_elements;
 	}
 	
 	/**
@@ -113,10 +116,10 @@ class TfishMetadata
 	 */
 	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = false)
 	{
-		// Sanitise parameters.
+		// Filter parameters.
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
-		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : false;
+		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : 0;
 		$clean_url = TfishFilter::isUrl($url) ? TfishFilter::escape($url) : false;
 		$clean_tag = TfishFilter::isAlnum($tag) ? TfishFilter::escape($tag) : false;
 		
@@ -149,12 +152,10 @@ class TfishMetadata
 			return false;
 		}
 		
-		// Handling pagination for multiple pages.
-		global $tfish_preference;		
-		$number_of_slots = (int)$tfish_preference->pagination_elements;
+		// Handling pagination for multiple pages.	
 		$page_slots = array();
 		$page_slots[$current_page] = $current_page;
-		for ($i = 1; $i < $number_of_slots; $i++) {
+		for ($i = 1; $i < $this->pagination_elements; $i++) {
 			$page_slots[$current_page - $i] = $current_page - $i;
 			$page_slots[$current_page + $i] = $current_page + $i;
 		}

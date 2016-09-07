@@ -13,6 +13,7 @@ define("TFISH_WELCOME", "Welcome to Tuskfish CMS");
 
 // admin/login.php
 define("TFISH_LOGIN", "Login");
+define("TFISH_LOGIN_DESCRIPTION", "Login to the administrative interface of Tuskfish.");
 define("TFISH_LOGOUT", "Logout");
 define("TFISH_PASSWORD", "Password");
 define("TFISH_EMAIL", "Email");
@@ -46,6 +47,9 @@ define("TFISH_PREFERENCE_DEFAULT_LANGUAGE", "Default language");
 define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see <a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>");
 define("TFISH_PREFERENCE_PAGINATION_ELEMENTS", "Max. pagination elements");
 define("TFISH_PREFERENCE_USER_PAGINATION", "User-side pagination");
+define("TFISH_PREFERENCE_SITE_DESCRIPTION", "Site description");
+define("TFISH_PREFERENCE_SITE_AUTHOR", "Site author / publisher");
+define("TFISH_PREFERENCE_SITE_COPYRIGHT", "Site copyright");
 
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");

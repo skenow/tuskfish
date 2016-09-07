@@ -58,7 +58,11 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
  * Override page template and metadata here (otherwise default site metadata will display).
  */
 $tfish_metadata->title = TFISH_LOGIN;
-$tfish_metadata->description = 'Login to the administrative interface of Tuskfish.';
+$tfish_metadata->description = TFISH_LOGIN_DESCRIPTION;
+// $tfish_metadata->author = '';
+// $tfish_metadata->copyright = '';
+// $tfish_metadata->generator = '';
+// $tfish_metadata->seo = '';
 $tfish_metadata->robots = 'noindex,nofollow';
 $tfish_metadata->template = 'admin.html';
 
