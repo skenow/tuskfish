@@ -10,7 +10,7 @@
 * @package		core
 */
 
-class TfishCriteriaItem
+class TfishCriteriaItem extends TfishCriteriaElement
 {
 	protected $__data = array(
 		'column' => false,
@@ -35,8 +35,8 @@ class TfishCriteriaItem
 	public function permittedOperators()
 	{
 		return array(
-			'=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'BETWEEN', 'IS', 'IS NOT'
-		);
+			'=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'BETWEEN', 'IS', 'IS NOT',
+			'LIKE');
 	}
 	
 	/**
@@ -87,13 +87,13 @@ class TfishCriteriaItem
 						
 					
 						// Types that can't be validated further in the current context.
+						case "array":
 						case "boolean":
 						case "integer":
 						case "double":
 							$clean_value = $value;
 						break;
 							
-						case "array":
 						case "object":
 						case "resource":
 						case "NULL":

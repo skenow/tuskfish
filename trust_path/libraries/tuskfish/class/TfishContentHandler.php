@@ -172,80 +172,101 @@ class TfishContentHandler
 	 * @param int $userid
 	 * @return array 
 	 */
-	public function searchContent($queryarray, $andor, $limit, $offset)
+	public function searchContent($search_terms, $andor, $limit, $offset)
 	{
-		// Filter search terms and parameters. They MUST be placed as bound values within a prepared statement (PDO).
-		// Search type: All (and), any (or), exact match.
-		// Advise that search terms less than [preference] characters will be ignored.
-		// Set the fields that will be searched:
+		global $tfish_preference;
+		$clean_search_terms = array();
+		$search_terms = explode(" ", $search_terms);
 		
-		/**
-		 * CORE (free text search)
-		 * title
-		 * teaser
-		 * description
-		 * creator
-		 * publisher
-		 * caption
-
-		 * MANDATORY
-		 * online (on - actually this can be an optional parameter defaulting to on)
-
-		 * OPTIONS - do later
-		 * type (allows filtering by object type, equivalent to the old 'modules' thing)
-		 */
-		
-		// Build the criteria and away you go!
-		
-		
-		$count = $results = '';
-		$criteria = new icms_db_criteria_Compo();
-
-		if ($userid != 0) {
-			$criteria->add(new icms_db_criteria_Item('submitter', $userid));
-		}
-		
-		if ($queryarray) {
-			$criteriaKeywords = new icms_db_criteria_Compo();
-			for ($i = 0; $i < count($queryarray); $i++) {
-				$criteriaKeyword = new icms_db_criteria_Compo();
-				$criteriaKeyword->add(new icms_db_criteria_Item('title', '%' . $queryarray[$i] . '%',
-					'LIKE'), 'OR');
-				$criteriaKeyword->add(new icms_db_criteria_Item('description', '%' . $queryarray[$i]
-					. '%', 'LIKE'), 'OR');
-				$criteriaKeyword->add(new icms_db_criteria_Item('extended_text', '%' . $queryarray[$i]
-					. '%', 'LIKE'), 'OR');
-				$criteriaKeyword->add(new icms_db_criteria_Item('creator', '%' . $queryarray[$i]
-					. '%', 'LIKE'), 'OR');
-				$criteriaKeywords->add($criteriaKeyword, $andor);
-				unset ($criteriaKeyword);
+		foreach($search_terms as $term) {
+			$term = TfishFilter::TrimString($term);
+			if (!empty($term) && mb_strlen($term, 'UTF-8') > $tfish_preference->min_search_length) {
+				$clean_search_terms[] = (string)$term; 
 			}
-			$criteria->add($criteriaKeywords);
 		}
+		$clean_andor = in_array($andor, array('AND', 'OR', 'exact')) ? TfishFilter::trimString($andor) : 'AND';
+		$clean_limit = (int)$limit;
+		$clean_offset = (int)$offset;
+		$results = $this->_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
 		
-		$criteria->add(new icms_db_criteria_Item('online_status', TRUE));
-		$criteria->add(new icms_db_criteria_Item('date', time(), '<'));
+		return $results;
+	}
+	
+	private function _searchContent($search_terms, $andor, $limit, $offset)
+	{		
+		$sql = $count = $results = '';
+		$search_term_placeholders = array();
 		
-		$criteria->setStart($offset);
-		$criteria->setSort('date');
-		$criteria->setOrder('DESC');
+		$sql = "SELECT * FROM `content` ";		
+		$count = count($search_terms);
+		if ($count) {
+			$sql .= "WHERE ";
+			for ($i = 0; $i < $count; $i++) {
+				$search_term_placeholders[$i] = ':search_term' . (string)$i;
+				$sql .= "(";
+				$sql .= "`title` LIKE " . $search_term_placeholders[$i] . " OR ";
+				$sql .= "`teaser` LIKE " . $search_term_placeholders[$i] . " OR ";
+				$sql .= "`description` LIKE " . $search_term_placeholders[$i] . " OR ";
+				$sql .= "`caption` LIKE " . $search_term_placeholders[$i] . " OR ";
+				$sql .= "`creator` LIKE " . $search_term_placeholders[$i] . " OR ";
+				$sql .= "`publisher` LIKE " . $search_term_placeholders[$i];
+				$sql .= ")";
+				if ($i != ($count - 1)) {
+					$sql .= " " . $andor . " ";
+				}
+			}
+		}
+		$sql .= " AND `online` = '1' ORDER BY `date` DESC ";
+		
+		// Bind the search term values and execute the statement.
+		echo $sql;
+		try {
+			$statement = TfishDatabase::preparedStatement($sql);
+			if ($statement) {
+				for ($i = 0; $i < $count; $i++) {
+					$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
+				}
+			} else {
+				return false;
+			}
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
+		//return self::executeTransaction($statement);
 		
 		// Count the number of search results WITHOUT actually retrieving the objects
-		$count = $this->getCount($criteria);
+
 		
-		// Retrieve the subset of results that are actually required
+		// Set limit and offset. As this involves adding additional parameters, the statement must
+		// be prepared again, using the copy of the SQL.
 		if (!$limit) {
-			global $icmsConfigSearch;
-			$limit = $icmsConfigSearch['search_per_page'];
+			global $tfish_preference;
+			$limit = $tfish_preference->search_pagination;
 		}
-		
-		$criteria->setLimit($limit);
-		$results = $this->getObjects($criteria, FALSE, TRUE);
-		
-		// Pad the results array out to the counted length to preserve 'hits' and pagination controls.
-		// This approach is not ideal, but it greatly reduces the load for queries with large result sets
-		$results = array_pad($results, $count, 1);
-		
+		$sql .= "LIMIT :limit ";
+		if ($offset) {
+			$sql .= "OFFSET :offset ";
+		}
+		echo '<br />' . $sql;
+		try {
+			$statement = TfishDatabase::preparedStatement($sql);
+			if ($statement) {
+				for ($i = 0; $i < $count; $i++) {
+					$statement->bindValue($search_term_placeholders[$i], $search_terms[$i], PDO::PARAM_STR);
+					$statement->bindValue(":limit", (int)$limit, PDO::PARAM_INT);
+					if ($offset) {
+						$statement->bindValue(":offset", (int)$offset, PDO::PARAM_INT);
+					}
+				}
+			} else {
+				return false;
+			}
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
+		//return self::executeTransaction($statement);
+		//$results = $this->getObjects($criteria, FALSE, TRUE);
+
 		return $results;
 	}
 	

@@ -98,7 +98,7 @@ class TfishDatabase
 		if (TfishFilter::isArray($columns) && !empty($columns)) {
 			$type_whitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
 			foreach ($columns as $key => $value) {
-				$key = TfishFilter::trimString($key);
+				$key = self::escapeIdentifier($key);
 				if (!TfishFilter::isAlnumUnderscore($key)) {
 					trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
 					exit;
@@ -114,9 +114,11 @@ class TfishDatabase
 			trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
 			exit;
 		}		
-		if ($primary_key && array_key_exists($primary_key, $clean_columns)) {
-			$primary_key = TfishFilter::trimString($primary_key);
-			$clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key) ? $primary_key : false;
+		if ($primary_key) {
+			$primary_key = self::escapeIdentifier($primary_key);
+			if (array_key_exists($primary_key, $clean_columns)) {
+				$clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key) ? $primary_key : false;
+			}
 			if (!$clean_primary_key) {
 				trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
 				exit;
@@ -158,6 +160,38 @@ class TfishDatabase
 		$clean_table = self::validateTableName($table);
 		$clean_criteria = self::validateCriteriaObject($criteria);
 		return self::_deleteAll($clean_table, $clean_criteria);
+	}
+	
+		/**
+	 * Escape delimiters for identifiers (table and column names).
+	 * 
+	 * SQLite supports three styles of identifier delimitation:
+	 * 
+	 * 1. Standard SQL double quotes: "
+	 * 2. MySQL style grave accents: `
+	 * 3. MS SQL style square brackets: []
+	 * 
+	 * Escaping of delimiters where they are used as part of a table or column name is done by
+	 * doubling them, eg ` becomes ``. In order to safely escape table and column names ALL
+	 * three delimiter types must be escaped.
+	 * 
+	 * Tuskfish policy is that table names can only contain alphanumeric characters (and column
+	 * names can only contain alphanumeric plus underscore characters) so delimiters should never
+	 * get into a query as part of an identifier anyway. But just because we are paranoid they are
+	 * escaped here anyway.
+	 * 
+	 * @param string $identfier
+	 * @return string
+	 */
+	public static function escapeIdentifier($identifier)
+	{
+		$clean_identifier = '';
+		$identifier = TfishFilter::trimString($identifier);
+		$identifier = str_replace('"', '""', $identifier);
+		$identifier = str_replace('`', '``', $identifier);
+		$identifier = str_replace('[', '[[', $identifier);
+		$clean_identifier = str_replace(']', ']]', $identifier);
+		return $clean_identifier;
 	}
 	
 	/**
@@ -220,7 +254,7 @@ class TfishDatabase
 		$clean_table = self::validateTableName($table);
 		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
 		if ($column) {
-			$column = TfishFilter::trimString($column);
+			$column = self::escapeIdentifier($column);
 			if (TfishFilter::isAlnumUnderscore($column)) {
 				$clean_column = $column;
 			} else {
@@ -452,30 +486,15 @@ class TfishDatabase
 	{
 		$sql = "DELETE FROM " . self::addBackticks($table) . " WHERE ";
 		$pdo_placeholders = array();
-		$items = $criteria->item;
-		$conditions = $criteria->condition;
 		
-		/**
-		 * Loop through the criteria items building a list of PDO placeholders together
-		 * with the SQL. These will be used to bind the values in the statement to prevent
-		 * SQL injection. Note that values are NOT inserted into the SQL directly.
-		 * 
-		 * Enclose column identifiers in backticks to escape them.
-		 * 
-		 * Link criteria items with AND/OR except on the last iteration ($count-1).
-		 */
-		$count = count($items);
-		for ($i = 0; $i < $count; $i++) {
-			$pdo_placeholders[":" . $items[$i]->column] = $items[$i]->value;
-			$sql .= self::addBackticks($items[$i]->column) . " " . $items[$i]->operator . " :" . $items[$i]->column;
-			if ($i < ($count-1)) {
-				$sql .= " " . $conditions[$i] . " ";
-			}
+		if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+			$sql .= $criteria->renderSQL();
+			$pdo_placeholders = $criteria->renderPDO();
 		}
 
 		// Set the order (sort) column.
 		if ($criteria->order) {
-			$sql .= " ORDER BY " . self::addBackticks($criteria->order);
+			$sql .= " ORDER BY " . self::addBackticks(self::escapeIdentifier(self::$criteria->order));
 
 			// Set the sort order (default is ascending).
 			$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
@@ -589,39 +608,19 @@ class TfishDatabase
 		// Set WHERE criteria.
 		if ($criteria) {
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-				$sql .= " WHERE (";
 				$pdo_placeholders = array();
-				$items = $criteria->item;
-				$conditions = $criteria->condition;
-				
-				/**
-				 * Loop through the criteria items building a list of PDO placeholders together
-				 * with the SQL. These will be used to bind the values in the statement to prevent
-				 * SQL injection. Note that values are NOT inserted into the SQL directly.
-				 * 
-				 * Enclose column identifiers in backticks to escape them.
-				 * 
-				 * Link criteria items with AND/OR except on the last iteration ($count-1).
-				 */
-				$count = count($items);
-				for ($i = 0; $i < $count; $i++) {
-					$pdo_placeholders[":" . $items[$i]->column] = $items[$i]->value;
-					$sql .= self::addBackticks($items[$i]->column) . " " . $items[$i]->operator . " :" . $items[$i]->column;
-					if ($i < ($count-1)) {
-						$sql .= " " . $conditions[$i] . " ";
-					}
-				}
-				$sql .= ")";
+				$sql .= $criteria->renderSQL();
+				$pdo_placeholders = $criteria->renderPDO();
 			}
 			
 			// Set GROUP BY.
 			if ($criteria->groupby) {
-				$sql .= " GROUP BY " . self::addBackticks($criteria->groupby);
+				$sql .= " GROUP BY " . self::addBackticks(self::escapeIdentifier($criteria->groupby));
 			}
 			
 			// Set the order (sort) column and order (default is ascending).
 			if ($criteria->order) {
-				$sql .= " ORDER BY " . self::addBackticks($criteria->order) . " ";
+				$sql .= " ORDER BY " . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 
@@ -678,29 +677,11 @@ class TfishDatabase
 		// Set WHERE conditions.
 		if ($criteria) {
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-				$sql .= " WHERE (";
-				$pdo_placeholders = array();
-				$items = $criteria->item;
-				$conditions = $criteria->condition;
-				
-				/**
-				 * Loop through the criteria items building a list of PDO placeholders together
-				 * with the SQL. These will be used to bind the values in the statement to prevent
-				 * SQL injection. Note that values are NOT inserted into the SQL directly.
-				 * 
-				 * Enclose column identifiers in backticks to escape them.
-				 * 
-				 * Link criteria items with AND/OR except on the last iteration ($count-1).
-				 */
-				$count = count($items);
-				for ($i = 0; $i < $count; $i++) {
-					$pdo_placeholders[":" . $items[$i]->column] = $items[$i]->value;
-					$sql .= self::addBackticks($items[$i]->column) . " " . $items[$i]->operator . " :" . $items[$i]->column;
-					if ($i < ($count-1)) {
-						$sql .= " " . $conditions[$i] . " ";
-					}
+				if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+					$pdo_placeholders = array();
+					$sql .= $criteria->renderSQL();
+					$pdo_placeholders = $criteria->renderPDO();
 				}
-				$sql .= ")";
 			} else {
 				trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
 				exit;
@@ -708,7 +689,7 @@ class TfishDatabase
 			
 			// Set GROUP BY.
 			if ($criteria->groupby) {
-				$sql .= " GROUP BY " . self::addBackticks($criteria->groupby);
+				$sql .= " GROUP BY " . self::addBackticks(self::escapeIdentifier($criteria->groupby));
 			}
 		}
 
@@ -767,29 +748,11 @@ class TfishDatabase
 		// Set parameters.
 		if ($criteria) {
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-				$sql .= " WHERE (";
-				$pdo_placeholders = array();
-				$items = $criteria->item;
-				$conditions = $criteria->condition;
-				
-				/**
-				 * Loop through the criteria items building a list of PDO placeholders together
-				 * with the SQL. These will be used to bind the values in the statement to prevent
-				 * SQL injection. Note that values are NOT inserted into the SQL directly.
-				 * 
-				 * Enclose column identifiers in backticks to escape them.
-				 * 
-				 * Link criteria items with AND/OR except on the last iteration ($count-1).
-				 */
-				$count = count($items);
-				for ($i = 0; $i < $count; $i++) {
-					$pdo_placeholders[":" . $items[$i]->column] = $items[$i]->value;
-					$sql .= self::addBackticks($items[$i]->column) . " " . $items[$i]->operator . " :" . $items[$i]->column;
-					if ($i < ($count-1)) {
-						$sql .= " " . $conditions[$i] . " ";
-					}
+				if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+					$pdo_placeholders = array();
+					$sql .= $criteria->renderSQL();
+					$pdo_placeholders = $criteria->renderPDO();
 				}
-				$sql .= ")";
 			} else {
 				trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
 				exit;
@@ -797,12 +760,12 @@ class TfishDatabase
 			
 			// Set GROUP BY.
 			if ($criteria->groupby) {
-				$sql .= " GROUP BY " . self::addBackticks($criteria->groupby);
+				$sql .= " GROUP BY " . self::addBackticks(self::escapeIdentifier($criteria->groupby));
 			}
 			
 			// Set the order (sort) column and type (default is ascending)
 			if ($criteria->order) {
-				$sql .= " ORDER BY " . self::addBackticks($criteria->order);
+				$sql .= " ORDER BY " . self::addBackticks(self::escapeIdentifier($criteria->order));
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 
@@ -885,29 +848,11 @@ class TfishDatabase
 		// Set WHERE conditions
 		if ($criteria) {
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-				$sql .= " WHERE (";
-				$pdo_placeholders = array();
-				$items = $criteria->item;
-				$conditions = $criteria->condition;
-				
-				/**
-				* Loop through the criteria items building a list of PDO placeholders together
-				* with the SQL. These will be used to bind the values in the statement to prevent
-				* SQL injection. Note that values are NOT inserted into the SQL directly.
-				* 
-				* Enclose column identifiers in backticks to escape them.
-				* 
-				* Link criteria items with AND/OR except on the last iteration ($count-1).
-				*/
-				$count = count($items);
-				for ($i = 0; $i < $count; $i++) {
-					$pdo_placeholders[":" . $items[$i]->column] = $items[$i]->value;
-					$sql .= self::addBackticks($items[$i]->column) . " " . $items[$i]->operator . " :" . $items[$i]->column;
-					if ($i < ($count-1)) {
-						$sql .= " " . $conditions[$i] . " ";
-					}
+				if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+					$pdo_placeholders = array();
+					$sql .= $criteria->renderSQL();
+					$pdo_placeholders = $criteria->renderPDO();
 				}
-				$sql .= ")";
 			} else {
 				trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
 				exit;
@@ -1008,7 +953,7 @@ class TfishDatabase
 		$clean_columns = array();
 		if (TfishFilter::isArray($columns) && !empty($columns)) {
 			foreach ($columns as $column) {
-				$column = TfishFilter::trimString($column);
+				$column = self::escapeIdentifier($column);
 				if (TfishFilter::isAlnumUnderscore($column)) {
 					$clean_columns[] = $column;
 				} else {
@@ -1046,7 +991,7 @@ class TfishDatabase
 		$clean_keys = array();
 		if (TfishFilter::isArray($key_values) && !empty($key_values)) {
 			foreach ($key_values as $key => $value) {
-				$key = TfishFilter::trimString($key);
+				$key = self::escapeIdentifier($key);
 				if (TfishFilter::isAlnumUnderscore($key)) {
 					$clean_keys[$key] = $value;
 				} else {
@@ -1064,7 +1009,7 @@ class TfishDatabase
 	
 	private static function validateTableName($table_name)
 	{
-		$table_name = TfishFilter::trimString($table_name);
+		$table_name = self::escapeIdentifier($table_name);
 		if (TfishFilter::isAlnum($table_name)) {
 			return $table_name;
 		} else {

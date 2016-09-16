@@ -15,18 +15,32 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Validate data and separate the search terms.
+$clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
+$terms = isset($_REQUEST['search_terms']) ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
+$type = isset($_REQUEST['search_type']) ? TfishFilter::trimString($_REQUEST['search_type']) : false;
+$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
+
+// Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
+if ($clean_op && $terms && $type) {
+	$content_handler = new TfishContentHandler();
+	//$results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
+	if ($results) {
+		echo TFISH_SEARCH_RESULTS_FOUND;
+	} else {
+		echo TFISH_SEARCH_NO_RESULTS;
+	}
+}
+
 // Assign template variables.
-$page_title = 'Search';
-// $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->search_pagination, TFISH_URL);
-
-// Include an advanced search form
+$page_title = TFISH_SEARCH;
 $tfish_form = TFISH_FORM_PATH . 'search.html';
-
-// So...where should the search functionality reside? Handler?
+// $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->search_pagination, TFISH_URL);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
+$pagetitle = TFISH_SEARCH;
 $tfish_metadata->title = TFISH_SEARCH;
 $tfish_metadata->description = TFISH_SEARCH_DESCRIPTION;
 // $tfish_metadata->author = '';
