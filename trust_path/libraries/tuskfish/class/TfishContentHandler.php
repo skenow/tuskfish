@@ -178,9 +178,10 @@ class TfishContentHandler
 		$clean_search_terms = array();
 		$search_terms = explode(" ", $search_terms);
 		
+		// Trim search terms and discard any that are less than the minimum search length characters.
 		foreach($search_terms as $term) {
 			$term = TfishFilter::TrimString($term);
-			if (!empty($term) && mb_strlen($term, 'UTF-8') > $tfish_preference->min_search_length) {
+			if (!empty($term) && mb_strlen($term, 'UTF-8') >= $tfish_preference->min_search_length) {
 				$clean_search_terms[] = (string)$term; 
 			}
 		}
@@ -197,7 +198,7 @@ class TfishContentHandler
 		$sql = $count = $results = '';
 		$search_term_placeholders = array();
 		
-		$sql = "SELECT * FROM `content` ";		
+		$sql = "SELECT count(*) FROM `content` ";		
 		$count = count($search_terms);
 		if ($count) {
 			$sql .= "WHERE ";
@@ -219,7 +220,6 @@ class TfishContentHandler
 		$sql .= " AND `online` = '1' ORDER BY `date` DESC ";
 		
 		// Bind the search term values and execute the statement.
-		echo $sql;
 		try {
 			$statement = TfishDatabase::preparedStatement($sql);
 			if ($statement) {
@@ -232,11 +232,19 @@ class TfishContentHandler
 		} catch (PDOException $e) {
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
-		//return self::executeTransaction($statement);
 		
-		// Count the number of search results WITHOUT actually retrieving the objects
-
+		// Execute the statement.
+		try {
+			$statement->execute();
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
 		
+		$result_count = $statement->fetch(PDO::FETCH_NUM);
+		return reset($result_count);
+		// return TfishDatabase::executeTransaction($statement);
+		
+		// Count the number of search results WITHOUT actually retrieving the objects		
 		// Set limit and offset. As this involves adding additional parameters, the statement must
 		// be prepared again, using the copy of the SQL.
 		if (!$limit) {
@@ -247,7 +255,6 @@ class TfishContentHandler
 		if ($offset) {
 			$sql .= "OFFSET :offset ";
 		}
-		echo '<br />' . $sql;
 		try {
 			$statement = TfishDatabase::preparedStatement($sql);
 			if ($statement) {

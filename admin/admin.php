@@ -172,7 +172,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			$criteria = new TfishCriteria;
 			$criteria->order = 'submission_time';
 			$criteria->ordertype = 'DESC';
-			$criteria->limit = 10; // Preference
+			$criteria->limit = $tfish_preference->admin_pagination;
 			$columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
 			$result = TfishDatabase::select('content', $criteria, $columns);
 			if ($result) {

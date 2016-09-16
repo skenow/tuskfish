@@ -24,9 +24,9 @@ $start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $terms && $type) {
 	$content_handler = new TfishContentHandler();
-	//$results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
+	$results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
 	if ($results) {
-		echo TFISH_SEARCH_RESULTS_FOUND;
+		echo TFISH_SEARCH_RESULTS_FOUND . ': ' . $results;
 	} else {
 		echo TFISH_SEARCH_NO_RESULTS;
 	}

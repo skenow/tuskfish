@@ -27,7 +27,7 @@ $count = count($articles);
 
 // Assign template variables.
 $page_title = 'Articles';
-$pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, TFISH_URL);
+$pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
