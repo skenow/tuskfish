@@ -189,6 +189,19 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
+	 * Returns an array of base object properties that are not used by this subclass.
+	 * 
+	 * This list is also used in update calls to the database to ensure that unused columns are
+	 * cleared and reset with default values.
+	 * 
+	 * @return array
+	 */
+	public function zeroedProperties()
+	{
+		return array();
+	}
+	
+	/**
 	 * Access an existing object property
 	 * 
 	 * @param string $property
@@ -351,13 +364,19 @@ class TfishContentObject extends TfishAncestralObject
 				break;
 			}
 		} else {
-			// Do nothing. Ideally a warning should be thrown, but this interferes with creating
-			// objects directly from rows in PDO, as objects that lack a certain field will throw
-			// an error when trying to set the value from the common row data. Another way to do it
-			// is to create a blank object first, unset the uneeded columns and inflate the object
-			// from the remaining row data. But it's just not as cool and adds a fair bit of
-			// overhead.
-			//trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
+			/**
+			 * If try to set an property that was explicitly unset by a subclass, do nothing.
+			 * This does happen when trying to pull rows directly into content subclass objects
+			 * using PDO (basically the constructor unsets uneeded fields, then PDO tries to set
+			 * them because each row has the full set of columns). Since this functionality is
+			 * extremely convenient, we can live without throwing errors on this case. 
+			 *  
+			 * If try to set some other random property (which probably means a typo has been made)
+			 * throw an error to help catch bugs.
+			 */
+			if(!in_array($property, $this->zeroedProperties())) {
+				trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
+			}
 		}
 	}
 }
