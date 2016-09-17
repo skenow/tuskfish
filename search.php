@@ -31,7 +31,8 @@ if ($clean_op && $terms && $type) {
 		// Get a count of search results; this is used to build the pagination control.
 		$results_count = (int)array_shift($results);
 		foreach ($results as $key => $object) {
-			echo $object->title . ': ' . $object->type . '<br />';
+			echo '<h3>' . $object->title . '</h3>';
+			echo $object->teaser;
 		}
 	} else {
 		echo TFISH_SEARCH_NO_RESULTS;

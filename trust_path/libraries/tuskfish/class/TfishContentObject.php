@@ -351,7 +351,13 @@ class TfishContentObject extends TfishAncestralObject
 				break;
 			}
 		} else {
-			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+			// Do nothing. Ideally a warning should be thrown, but this interferes with creating
+			// objects directly from rows in PDO, as objects that lack a certain field will throw
+			// an error when trying to set the value from the common row data. Another way to do it
+			// is to create a blank object first, unset the uneeded columns and inflate the object
+			// from the remaining row data. But it's just not as cool and adds a fair bit of
+			// overhead.
+			//trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
 		}
 	}
 }
