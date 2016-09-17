@@ -13,7 +13,7 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
-class TfishCriteria extends TfishCriteriaElement
+class TfishCriteria
 {
 	protected $__data = array(
 		'item' => array(), // Array of TfishCriteriaItem

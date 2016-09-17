@@ -25,8 +25,14 @@ $start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 if ($clean_op && $terms && $type) {
 	$content_handler = new TfishContentHandler();
 	$results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
-	if ($results) {
-		echo TFISH_SEARCH_RESULTS_FOUND . ': ' . $results;
+	if ($results && $results[0] > 0) {
+		echo '<h2>' . TFISH_SEARCH_RESULTS_FOUND . '</h2>';
+		
+		// Get a count of search results; this is used to build the pagination control.
+		$results_count = (int)array_shift($results);
+		foreach ($results as $key => $object) {
+			echo $object->title . ': ' . $object->type . '<br />';
+		}
 	} else {
 		echo TFISH_SEARCH_NO_RESULTS;
 	}

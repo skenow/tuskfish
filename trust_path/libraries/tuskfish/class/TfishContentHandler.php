@@ -172,11 +172,19 @@ class TfishContentHandler
 	 * @param int $userid
 	 * @return array 
 	 */
-	public function searchContent($search_terms, $andor, $limit, $offset)
+	public function searchContent($search_terms, $andor, $limit, $offset = 0)
 	{
 		global $tfish_preference;
 		$clean_search_terms = array();
-		$search_terms = explode(" ", $search_terms);
+		$clean_andor = in_array($andor, array('AND', 'OR', 'exact')) ? TfishFilter::trimString($andor) : 'AND';
+		$clean_limit = (int)$limit;
+		$clean_offset = (int)$offset;
+		
+		if ($clean_andor == 'AND' || $clean_andor == 'OR') {
+			$search_terms = explode(" ", $search_terms);
+		} else {
+			$search_terms = array($search_terms);
+		}
 		
 		// Trim search terms and discard any that are less than the minimum search length characters.
 		foreach($search_terms as $term) {
@@ -185,20 +193,20 @@ class TfishContentHandler
 				$clean_search_terms[] = (string)$term; 
 			}
 		}
-		$clean_andor = in_array($andor, array('AND', 'OR', 'exact')) ? TfishFilter::trimString($andor) : 'AND';
-		$clean_limit = (int)$limit;
-		$clean_offset = (int)$offset;
 		$results = $this->_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
 		
 		return $results;
 	}
 	
 	private function _searchContent($search_terms, $andor, $limit, $offset)
-	{		
-		$sql = $count = $results = '';
-		$search_term_placeholders = array();
+	{
+		$sql = $count = '';
+		$search_term_placeholders = $results = array();
+		$sql_count = "SELECT count(*) ";
+		$sql_search = "SELECT * ";
+		$result = array();
 		
-		$sql = "SELECT count(*) FROM `content` ";		
+		$sql = "FROM `content` ";		
 		$count = count($search_terms);
 		if ($count) {
 			$sql .= "WHERE ";
@@ -218,10 +226,11 @@ class TfishContentHandler
 			}
 		}
 		$sql .= " AND `online` = '1' ORDER BY `date` DESC ";
+		$sql_count .= $sql;
 		
 		// Bind the search term values and execute the statement.
 		try {
-			$statement = TfishDatabase::preparedStatement($sql);
+			$statement = TfishDatabase::preparedStatement($sql_count);
 			if ($statement) {
 				for ($i = 0; $i < $count; $i++) {
 					$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
@@ -240,13 +249,11 @@ class TfishContentHandler
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		
-		$result_count = $statement->fetch(PDO::FETCH_NUM);
-		return reset($result_count);
-		// return TfishDatabase::executeTransaction($statement);
+		$row = $statement->fetch(PDO::FETCH_NUM);
+		$result[0] = reset($row);
+		unset($statement);
 		
-		// Count the number of search results WITHOUT actually retrieving the objects		
-		// Set limit and offset. As this involves adding additional parameters, the statement must
-		// be prepared again, using the copy of the SQL.
+		// Retrieve the subset of objects actually required.
 		if (!$limit) {
 			global $tfish_preference;
 			$limit = $tfish_preference->search_pagination;
@@ -255,11 +262,12 @@ class TfishContentHandler
 		if ($offset) {
 			$sql .= "OFFSET :offset ";
 		}
+		$sql_search .= $sql;
 		try {
-			$statement = TfishDatabase::preparedStatement($sql);
+			$statement = TfishDatabase::preparedStatement($sql_search);
 			if ($statement) {
 				for ($i = 0; $i < $count; $i++) {
-					$statement->bindValue($search_term_placeholders[$i], $search_terms[$i], PDO::PARAM_STR);
+					$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
 					$statement->bindValue(":limit", (int)$limit, PDO::PARAM_INT);
 					if ($offset) {
 						$statement->bindValue(":offset", (int)$offset, PDO::PARAM_INT);
@@ -271,10 +279,19 @@ class TfishContentHandler
 		} catch (PDOException $e) {
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
-		//return self::executeTransaction($statement);
-		//$results = $this->getObjects($criteria, FALSE, TRUE);
 
-		return $results;
+		// Execute the statement, fetch rows into the appropriate class type as determined by the
+		// first column of the table.
+		try {
+			$statement->execute();
+			$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
+			while ($object = $statement->fetch()) {
+				$result[$object->id] = $object;
+			}
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
+		return $result;
 	}
 	
 	/**

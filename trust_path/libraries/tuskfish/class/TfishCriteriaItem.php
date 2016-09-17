@@ -10,7 +10,7 @@
 * @package		core
 */
 
-class TfishCriteriaItem extends TfishCriteriaElement
+class TfishCriteriaItem
 {
 	protected $__data = array(
 		'column' => false,
