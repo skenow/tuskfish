@@ -19,7 +19,7 @@
  */
 define("TFISH_ROOT_PATH", "/home/isengard/public_html/tuskfish/");
 define("TFISH_TRUST_PATH", "/home/isengard/public_html/tuskfish/trust_path/");
-define("TFISH_URL", "https://www.tuskfish.biz/");
+define("TFISH_URL", "https://tuskfish.biz/");
 
 // Include critical files
 require_once(TFISH_TRUST_PATH . "masterfile.php");

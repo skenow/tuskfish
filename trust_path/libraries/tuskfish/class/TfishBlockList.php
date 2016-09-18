@@ -14,47 +14,51 @@ class TfishBlockList extends TfishBlock
 	/**
 	 * Generic constructor
 	 */
-	function __construct()
+	function __construct($title, $limit)
 	{
 		parent::__construct();
+		
+		/**
+		 * Set default values of permitted properties.
+		 */
+		$this->__set('title', $title); // String: Title of the block (blank for no title).
+		$this->__set('limit', $limit); // Int: Number of objects to be displayed.
+		// $this->__set('type', $type): Alpha: Class name for this block type.
+		// $this->__set('online', 1); // Int: Toggle object on (1) or offline (0).
+		// $this->__set('handler', $handler); // String: Handler for this object.
+		$this->__set('template', 'blocklist.html'); // String: The template that should be used to display this block.
+
 	}
 	
 	/**
+	 * Generates HTML code to display the block.
 	 * 
-	 * @param type $title
-	 * @param type $limit
-	 * @param type $criteria
-	 * @return type
+	 * @param object $criteria
+	 * @return string
 	 */
-	public function render($title, $limit, $criteria = false)
+	public function render($criteria = false)
 	{
-		$clean_title = TfishFilter::trimString($title);
-		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : 5;
 		if ($criteria) {
-			$clean_criteria = TfishDatabase::validateCriteriaObject();
+			$clean_criteria = TfishDatabase::validateCriteriaObject($criteria);
 		} else {
-			$clean_criteria = false;
+			$clean_criteria = new TfishCriteria();
 		}
-		$template = 'TfishBlockList.html';
 
-		return $this->_render($clean_title, $clean_limit, $clean_criteria);		
+		return $this->_render($clean_criteria);		
 	}
 	
-	private function _render($title, $limit, $criteria)
+	private function _render($criteria)
 	{
-		$block = array('title' => '<h2>' . TfishFilter::escape($title) . '</h2>');
+		$block = array('title' => '<h2>' . TfishFilter::escape($this->title) . '</h2>');
 		
 		$statement = '';
 		$sql = "SELECT `id`, `title` FROM `content` ";
 		
-		if ($criteria == false) {
-			$criteria = new TfishCriteria();
-		}
 		// Set some defaults; these can be overriden by setting $criteria, except for $limit.
 		// The manual limit parameter overrides any set through $criteria. Basically, this is
 		// so you can set up blocks easily without having to set criteria all the time, ie.
 		// just by passing in the title and limit.
-		$criteria->limit = $limit;
+		$criteria->limit = $this->limit;
 		$criteria->order = !empty($criteria->order) ? $criteria->order : 'submission_time';
 		$criteria->ordertype = !empty($criteria->ordertype) ? $criteria->ordertype : 'DESC';
 

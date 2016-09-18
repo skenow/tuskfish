@@ -66,7 +66,7 @@ class TfishContentObject extends TfishAncestralObject
 		$this->__properties['meta_title'] = 'string'; // Set a custom page title for this content.
 		$this->__properties['meta_description'] = 'string'; // Set a custom page meta description for this content.
 		$this->__properties['seo'] = 'string'; // SEO-friendly string; it will be appended to the URL for this content.
-		$this->__properties['handler'] = 'string'; // Handler for this object.
+		$this->__properties['handler'] = 'alpha'; // Handler for this object.
 		$this->__properties['template'] = 'string'; // The template that should be used to display this object.
 		$this->__properties['module'] = 'string'; // The module that handles this content type
 

@@ -880,7 +880,7 @@ class TfishDatabase
 		return self::executeTransaction($statement);
 	}
 	
-	private static function validateCriteriaObject($criteria)
+	public static function validateCriteriaObject($criteria)
 	{
 		if (!is_a($criteria, 'TfishCriteria')) {
 			trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
@@ -948,7 +948,7 @@ class TfishDatabase
 		return $criteria;
 	}
 	
-	private static function validateColumns($columns)
+	public static function validateColumns($columns)
 	{
 		$clean_columns = array();
 		if (TfishFilter::isArray($columns) && !empty($columns)) {
@@ -969,7 +969,7 @@ class TfishDatabase
 		}
 	}
 	
-	private static function validateId($id)
+	public static function validateId($id)
 	{
 		$clean_id = TfishFilter::isInt($id) ? (int)$id : null;
 		if (isset($clean_id) && $clean_id > 0) {
@@ -986,7 +986,7 @@ class TfishDatabase
 	 * @param array $key_values
 	 * @return array
 	 */
-	private static function validateKeys($key_values)
+	public static function validateKeys($key_values)
 	{
 		$clean_keys = array();
 		if (TfishFilter::isArray($key_values) && !empty($key_values)) {
@@ -1007,7 +1007,7 @@ class TfishDatabase
 		}
 	}
 	
-	private static function validateTableName($table_name)
+	public static function validateTableName($table_name)
 	{
 		$table_name = self::escapeIdentifier($table_name);
 		if (TfishFilter::isAlnum($table_name)) {

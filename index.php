@@ -29,8 +29,10 @@ $count = count($articles);
 $page_title = 'Articles';
 $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL);
 
-$block = new TfishBlockList();
-echo $block->render('Testing', 3);
+$block = new TfishBlockList('Testing the block', 5);
+$criteria = new TfishCriteria();
+$criteria->add(new TfishCriteriaItem('type', 'TfishPodcast'));
+echo $block->render($criteria);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
