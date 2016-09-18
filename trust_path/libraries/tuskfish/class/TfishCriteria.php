@@ -158,18 +158,22 @@ class TfishCriteria
 	 */
 	public function renderSQL()
 	{
-		$sql = " WHERE (";
+		$sql = '';
+		
 		$count = count($this->item);
-		for ($i = 0; $i < $count; $i++) {
-			$pdo_placeholders[":" . $this->item[$i]->column] = $this->item[$i]->value;
-			$sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
-					. $this->item[$i]->operator
-					. " :" . TfishDatabase::escapeIdentifier($this->item[$i]->column);
-			if ($i < ($count-1)) {
-				$sql .= " " . $this->condition[$i] . " ";
+		if ($count) {
+			$sql = " WHERE (";
+				for ($i = 0; $i < $count; $i++) {
+				$pdo_placeholders[":" . $this->item[$i]->column] = $this->item[$i]->value;
+				$sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
+						. $this->item[$i]->operator
+						. " :" . TfishDatabase::escapeIdentifier($this->item[$i]->column);
+				if ($i < ($count-1)) {
+					$sql .= " " . $this->condition[$i] . " ";
+				}
 			}
+			$sql .= ")";
 		}
-		$sql .= ")";
 		
 		return $sql;
 	}

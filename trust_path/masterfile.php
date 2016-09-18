@@ -20,6 +20,7 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_ADMIN_PATH", TFISH_ROOT_PATH . "admin/");
 	define("TFISH_CACHE_PATH", TFISH_ROOT_PATH . "cache/");
 	define("TFISH_TEMPLATES_PATH", TFISH_ROOT_PATH . "templates/");
+	define("TFISH_TEMPLATES_BLOCK_PATH", TFISH_ROOT_PATH . "templates/block/");
 	
 	// Constants that make use of the trust path (which is a derivative of the physical path).
 	define("TFISH_PATH", TFISH_TRUST_PATH . "libraries/tuskfish/");
@@ -43,7 +44,6 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	/*
 	 * Preferences
 	 */
-	
 	// Language: Specify the file name of the default language file
 	define("TFISH_LANGUAGE_PATH", TFISH_PATH . "language/");
 	define("TFISH_DEFAULT_LANGUAGE", TFISH_LANGUAGE_PATH . "english.php");

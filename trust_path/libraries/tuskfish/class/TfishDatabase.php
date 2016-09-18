@@ -928,11 +928,11 @@ class TfishDatabase
 			trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
 			exit;
 		}
-		if ($criteria->limit && !TfishFilter::isInt($criteria->limit)) {
+		if ($criteria->limit && !TfishFilter::isInt($criteria->limit, 1)) {
 			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			exit;
 		}
-		if ($criteria->offset && !TfishFilter::isInt($criteria->offset)) {
+		if ($criteria->offset && !TfishFilter::isInt($criteria->offset, 0)) {
 			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			exit;
 		}
