@@ -151,6 +151,9 @@ class TfishDatabase
 	 * Delete multiple rows from a table according to criteria.
 	 * 
 	 * For safety reasons criteria are required; the function will not unconditionally empty a table.
+	 * Note that SQLite does not support DELETE with INNER JOIN or table alias. Therefore, you
+	 * cannot use tags as a criteria in deleteAll() (they will simply be ingored). It may be
+	 * possible to get around this restriction with a loop or subquery.
 	 * 
 	 * @param string $table
 	 * @param obj $criteria
@@ -162,7 +165,7 @@ class TfishDatabase
 		return self::_deleteAll($clean_table, $clean_criteria);
 	}
 	
-		/**
+	/**
 	 * Escape delimiters for identifiers (table and column names).
 	 * 
 	 * SQLite supports three styles of identifier delimitation:
@@ -304,11 +307,16 @@ class TfishDatabase
 	/**
 	 * Update multiple rows in a table according to criteria.
 	 * 
+	 * Note that SQLite does not support INNER JOIN or table aliases in UPDATE; therefore it is
+	 * not possible to use tags as a criteria in updateAll() at present. It may be possible to get
+	 * around this limitation with a subquery. But given that the use case would be unusual /
+	 * marginal it is probaly just easier to work around it.
+	 * 
 	 * @param string $table
 	 * @param array $key_values
 	 * @param obj $criteria
 	 */
-	public static function updateAll($table, $criteria = false, $key_values)
+	public static function updateAll($table, $key_values, $criteria = false)
 	{
 		$clean_table = self::validateTableName($table);
 		$clean_keys = self::validateKeys($key_values);
@@ -317,7 +325,7 @@ class TfishDatabase
 		} else {
 			$clean_criteria = false;
 		}
-		return self::_updateAll($clean_table, $clean_criteria, $clean_keys);
+		return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
 	}
 	
 	/**
@@ -484,29 +492,36 @@ class TfishDatabase
 	
 	private static function _deleteAll($table, $criteria)
 	{
-		$sql = "DELETE FROM " . self::addBackticks($table) . " WHERE ";
-		$pdo_placeholders = array();
+		// Set table.
+		$sql = "DELETE FROM " . self::addBackticks($table) . " ";
 		
-		if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-			$sql .= $criteria->renderSQL();
-			$pdo_placeholders = $criteria->renderPDO();
+		// Set WHERE criteria.
+		if ($criteria) {
+			
+			if (!empty($criteria->item)) {
+				$sql .= "WHERE ";
+			}
+			
+			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+				$pdo_placeholders = array();
+				$sql .= $criteria->renderSQL();
+				$pdo_placeholders = $criteria->renderPDO();
+			}
+			
+			// Set the order (sort) column and order (default is ascending).
+			if ($criteria->order) {
+				$sql .= "ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+			}
+
+			// Set the LIMIT and OFFSET.
+			if ($criteria->offset && $criteria->limit) {
+				$sql .= " LIMIT :limit OFFSET :offset";
+			} elseif ($criteria->limit) {
+				$sql .= " LIMIT :limit";
+			}
 		}
 
-		// Set the order (sort) column.
-		if ($criteria->order) {
-			$sql .= " ORDER BY " . self::addBackticks(self::escapeIdentifier(self::$criteria->order));
-
-			// Set the sort order (default is ascending).
-			$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
-		}
-
-		// Set the LIMIT and OFFSET.
-		if ($criteria->offset && $criteria->limit) {
-			$sql .= " LIMIT :limit OFFSET :offset";
-		} elseif ($criteria->limit) {
-			$sql .= " LIMIT :limit";
-		}
-		
 		// Prepare the statement and bind the values.
 		try {
 			$statement = self::preparedStatement($sql);
@@ -578,6 +593,21 @@ class TfishDatabase
 	}
 	
 	/**
+	 * Renders a JOIN component of an SQL query for tagged content.
+	 * 
+	 * If the $criteria for a query include tag(s), the object table must have a JOIN to the
+	 * taglinks table in order to sort the content.
+	 * 
+	 * @param string $table
+	 * @return string $sql
+	 */
+	private static function _renderTagJoin($table) {
+		$sql = "INNER JOIN `taglink` ON `t1`.`id` = `taglink`.`content_id` ";
+		
+		return $sql;
+	}
+	
+	/**
 	 * Prepare and execute a select query.
 	 * 
 	 * Returns a PDO statement object, from which results can be extracted with standard PDO calls.
@@ -591,36 +621,56 @@ class TfishDatabase
 	{		
 		// Specify operation
 		$sql = "SELECT ";
-			
+		
 		// Select columns.
 		if ($columns) {
 			foreach ($columns as $column) {
-				$sql .= self::addBackticks($column) . ", ";
+				$sql .= '`t1`.' . self::addBackticks($column) . ", ";
 			}
-			$sql = rtrim($sql, ", ");
+			$sql = rtrim($sql, ", ") . " ";
 		} else {
-			$sql .= "*";
+			$sql .= "`t1`.* ";
 		}
 		
 		// Set table.
-		$sql .= " FROM " . self::addBackticks($table);
+		$sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
+		
+		// Check if a tag filter has been applied (JOIN is required).
+		if ($criteria && !empty($criteria->tag)) {
+			$sql .= self::_renderTagJoin($table);
+		}
 		
 		// Set WHERE criteria.
 		if ($criteria) {
+			
+			if (!empty($criteria->item) || !empty($criteria->tag)) {
+				$sql .= "WHERE ";
+			}
+			
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
 				$pdo_placeholders = $criteria->renderPDO();
 			}
 			
+			if (!empty($criteria->item) && !empty($criteria->tag)) {
+				$sql .= "AND ";
+			}
+			
+			// Set tag(s).
+			if (!empty($criteria->tag)) {
+				$sql .= $criteria->renderTagSQL();
+				$tag_placeholders = $criteria->renderTagPDO();
+			}
+			
 			// Set GROUP BY.
 			if ($criteria->groupby) {
-				$sql .= " GROUP BY " . self::addBackticks(self::escapeIdentifier($criteria->groupby));
+				$sql .= " GROUP BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->groupby));
 			}
 			
 			// Set the order (sort) column and order (default is ascending).
 			if ($criteria->order) {
-				$sql .= " ORDER BY " . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+				$sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 
@@ -631,7 +681,7 @@ class TfishDatabase
 				$sql .= " LIMIT :limit";
 			}
 		}
-
+		
 		// Prepare the statement and bind the values.
 		try {
 			$statement = self::preparedStatement($sql);
@@ -642,6 +692,14 @@ class TfishDatabase
 						unset($placeholder);
 					}
 				}
+				
+				if (isset($tag_placeholders) && !empty($tag_placeholders)) {
+					foreach ($tag_placeholders as $tag_placeholder => $value) {
+						$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+						unset($placeholder);
+					}
+				}
+				
 				if ($criteria->limit && $criteria->offset) {
 					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
 					$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
@@ -672,24 +730,37 @@ class TfishDatabase
 		$sql .= ")";
 		
 		// Set table.
-		$sql .= " FROM " . self::addBackticks($table);
+		$sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
 		
-		// Set WHERE conditions.
+		// Check if a tag filter has been applied (JOIN is required).
+		if ($criteria && !empty($criteria->tag)) {
+			$sql .= self::_renderTagJoin($table);
+		}
+		
+		// Set WHERE criteria.
 		if ($criteria) {
+			
+			if (!empty($criteria->item) || !empty($criteria->tag)) {
+				$sql .= "WHERE ";
+			}
+			
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-				if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-					$pdo_placeholders = array();
-					$sql .= $criteria->renderSQL();
-					$pdo_placeholders = $criteria->renderPDO();
-				}
+				$pdo_placeholders = array();
+				$sql .= $criteria->renderSQL();
+				$pdo_placeholders = $criteria->renderPDO();
 			} else {
 				trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
 				exit;
 			}
 			
-			// Set GROUP BY.
-			if ($criteria->groupby) {
-				$sql .= " GROUP BY " . self::addBackticks(self::escapeIdentifier($criteria->groupby));
+			if (!empty($criteria->item) && !empty($criteria->tag)) {
+				$sql .= "AND ";
+			}
+			
+			// Set tag(s).
+			if (!empty($criteria->tag)) {
+				$sql .= $criteria->renderTagSQL();
+				$tag_placeholders = $criteria->renderTagPDO();
 			}
 		}
 
@@ -702,6 +773,12 @@ class TfishDatabase
 						$statement->bindValue($placeholder, $value, self::setType($value));
 						unset($placeholder);
 					}
+				}
+			}
+			if (isset($tag_placeholders) && !empty($tag_placeholders)) {
+				foreach ($tag_placeholders as $tag_placeholder => $value) {
+					$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+					unset($placeholder);
 				}
 			}
 		} catch (PDOException $e) {
@@ -738,12 +815,12 @@ class TfishDatabase
 		
 		// Select columns.
 		foreach ($columns as $column) {
-			$sql .= self::addBackticks($column) . ", ";
+			$sql .= '`t1`.' . self::addBackticks($column) . ", ";
 		}
-		$sql = rtrim($sql, ", ");
+		$sql = rtrim($sql, ", ") . " ";
 		
 		// Set table.
-		$sql .= " FROM " . self::addBackticks($table);
+		$sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
 		
 		// Set parameters.
 		if ($criteria) {
@@ -758,14 +835,34 @@ class TfishDatabase
 				exit;
 			}
 			
+			if (!empty($criteria->item) || !empty($criteria->tag)) {
+				$sql .= "WHERE ";
+			}
+			
+			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+				$pdo_placeholders = array();
+				$sql .= $criteria->renderSQL();
+				$pdo_placeholders = $criteria->renderPDO();
+			}
+			
+			if (!empty($criteria->item) && !empty($criteria->tag)) {
+				$sql .= "AND ";
+			}
+			
+			// Set tag(s).
+			if (!empty($criteria->tag)) {
+				$sql .= $criteria->renderTagSQL();
+				$tag_placeholders = $criteria->renderTagPDO();
+			}
+			
 			// Set GROUP BY.
 			if ($criteria->groupby) {
-				$sql .= " GROUP BY " . self::addBackticks(self::escapeIdentifier($criteria->groupby));
+				$sql .= " GROUP BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->groupby));
 			}
 			
 			// Set the order (sort) column and type (default is ascending)
 			if ($criteria->order) {
-				$sql .= " ORDER BY " . self::addBackticks(self::escapeIdentifier($criteria->order));
+				$sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order));
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 
@@ -794,6 +891,12 @@ class TfishDatabase
 					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
 				}
 			}
+			if (isset($tag_placeholders) && !empty($tag_placeholders)) {
+				foreach ($tag_placeholders as $tag_placeholder => $value) {
+					$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+					unset($placeholder);
+				}
+			}
 			$statement->execute();
 		} catch (PDOException $e) {
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
@@ -808,7 +911,7 @@ class TfishDatabase
 	 * @param type $key_values
 	 */
 	private static function _update($table, $id, $key_values)
-	{		
+	{
 		// Prepare the statement
 		$sql = "UPDATE " . self::addBackticks($table) . " SET ";
 		foreach ($key_values as $key => $value) {
@@ -816,7 +919,7 @@ class TfishDatabase
 		}
 		$sql = trim($sql, ", ");
 		$sql .= " WHERE `id` = :id";
-		
+
 		// Prepare the statement and bind the values.
 		try {
 			$statement = self::preparedStatement($sql);
@@ -836,23 +939,28 @@ class TfishDatabase
 		return self::executeTransaction($statement);	
 	}
 	
-	private static function _updateAll($table, $criteria, $key_values)
+	private static function _updateAll($table, $key_values, $criteria)
 	{
-		// Prepare the query.
+		// Set table.
 		$sql = "UPDATE " . self::addBackticks($table) . " SET ";
+		
+		// Set key values.
 		foreach ($key_values as $key => $value) {
 			$sql .= self::addBackticks($key) . " = :" . $key . ", ";
 		}
-		$sql = rtrim($sql, ", ");
+		$sql = rtrim($sql, ", ") . " ";
 		
-		// Set WHERE conditions
+		// Set WHERE criteria.
 		if ($criteria) {
+			
+			if (!empty($criteria->item)) {
+				$sql .= "WHERE ";
+			}
+
 			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-				if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
-					$pdo_placeholders = array();
-					$sql .= $criteria->renderSQL();
-					$pdo_placeholders = $criteria->renderPDO();
-				}
+				$pdo_placeholders = array();
+				$sql .= $criteria->renderSQL();
+				$pdo_placeholders = $criteria->renderPDO();
 			} else {
 				trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
 				exit;

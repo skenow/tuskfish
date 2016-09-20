@@ -48,86 +48,25 @@ class TfishBlockList extends TfishBlock
 	}
 	
 	private function _render($criteria)
-	{
-		$block = array('title' => '<h2>' . TfishFilter::escape($this->title) . '</h2>');
-		
-		$statement = '';
-		$sql = "SELECT `id`, `title` FROM `content` ";
-		
-		// Set some defaults; these can be overriden by setting $criteria, except for $limit.
-		// The manual limit parameter overrides any set through $criteria. Basically, this is
-		// so you can set up blocks easily without having to set criteria all the time, ie.
-		// just by passing in the title and limit.
-		$criteria->limit = $this->limit;
-		$criteria->order = !empty($criteria->order) ? $criteria->order : 'submission_time';
-		$criteria->ordertype = !empty($criteria->ordertype) ? $criteria->ordertype : 'DESC';
-
-		// Generate the WHERE clause with PDO / bound values.
-		$pdo_placeholders = array();
-		$sql .= $criteria->renderSQL();
-		$pdo_placeholders = $criteria->renderPDO();
-		
-		// Set GROUP BY.
-		if ($criteria->groupby) {
-			$sql .= " GROUP BY " . TfishDatabase::addBackticks(TfishDatabase::escapeIdentifier($criteria->groupby));
-		}
-
-		// Set the order (sort) column and order (default is ascending).
-		if ($criteria->order) {
-			$sql .= " ORDER BY " . TfishDatabase::addBackticks(TfishDatabase::escapeIdentifier($criteria->order)) . " ";
-			$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
-		}
-
-		// Set the LIMIT and OFFSET.
-		if ($criteria->offset && $criteria->limit) {
-			$sql .= " LIMIT :limit OFFSET :offset";
-		} elseif ($criteria->limit) {
-			$sql .= " LIMIT :limit";
-		}
-		
-		// Prepare the statement and bind the values.
-		try {
-			$statement = TfishDatabase::preparedStatement($sql);
-			if ($criteria && $statement) {
-				if (!empty($pdo_placeholders)) {
-					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, TfishDatabase::setType($value));
-						unset($placeholder);
-					}
-				}
-				if ($criteria->limit && $criteria->offset) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
-					$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
-				} elseif ($criteria->limit) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
-				}
+	{	
+		$content_handler = new TfishContentHandler();
+		$content_objects = $content_handler->getObjects($criteria);
+		if (!empty($content_objects)) {
+			$block = array('title' => TfishFilter::escape($this->title));
+			foreach ($content_objects as $object) {
+				$block['content'][TfishFilter::escape($object->id)] =  TfishFilter::escape($object->title);
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		} else {
+			return false;
 		}
 		
-		// Execute the statement.
-		try {
-			$statement->execute();
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		// Template should be handled here...somehow.
+		$output = '<h3>' . $block['title'] . '</h3>';
+		$output .= '<ul>';
+		foreach ($block['content'] as $id => $title) {
+			$output .= '<li><a href="' . TFISH_URL . '?id=' . $id . '">' . $title . '</a></li>';
 		}
-		
-		if ($statement) {
-				$rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-			} else {
-				trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-			}
-			foreach ($rows as &$row) {
-				$block['content'][] = '<li><a href="' . TFISH_URL . '?id=' . $row['id'] . '">' . TfishFilter::escape($row['title']) . '</li></a>';
-			}
-		
-			$output = $block['title'];
-			$output .= '<ul>';
-			foreach ($block['content'] as $item) {
-				$output .= $item;
-			}
-			$output .= '</ul>';
+		$output .= '</ul>';
 			
 		return $output;
 	}

@@ -22,7 +22,8 @@ class TfishCriteria
 		'limit' => 0,
 		'offset' => 0,
 		'order' => false,
-		'ordertype' => "ASC"
+		'ordertype' => "ASC",
+		'tag' => array() // Array of tag IDs
 		);
 	
 	/**
@@ -107,6 +108,23 @@ class TfishCriteria
 						$this->__data['ordertype'] = "ASC";
 					}
 				break;
+				
+				case "tag":
+					if (TfishFilter::isArray($value)) {
+						$clean_tags = array();
+						foreach ($value as $val) {
+							if (TfishFilter::isInt($val, 1)) {
+								$clean_tags[] = (int)$val;
+							} else {
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}
+							unset($val);
+						}
+						$this->__data['tag'] = $clean_tags;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+					}
+				break;
 			}
 			return true;
 		} else {
@@ -156,15 +174,14 @@ class TfishCriteria
 	 * 
 	 * @return string $sql query
 	 */
-	public function renderSQL()
+	/*public function renderSQL()
 	{
 		$sql = '';
 		
 		$count = count($this->item);
 		if ($count) {
-			$sql = " WHERE (";
+			$sql = "(";
 				for ($i = 0; $i < $count; $i++) {
-				$pdo_placeholders[":" . $this->item[$i]->column] = $this->item[$i]->value;
 				$sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
 						. $this->item[$i]->operator
 						. " :" . TfishDatabase::escapeIdentifier($this->item[$i]->column);
@@ -172,7 +189,26 @@ class TfishCriteria
 					$sql .= " " . $this->condition[$i] . " ";
 				}
 			}
-			$sql .= ")";
+			$sql .= ") ";
+		}
+		
+		return $sql;
+	}*/
+	
+	public function renderSQL()
+	{
+		$sql = '';
+		$count = count($this->item);
+		if ($count) {
+			$sql = "(";
+				for ($i = 0; $i < $count; $i++) {
+				$sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
+						. $this->item[$i]->operator . " :placeholder" . (string)$i;
+				if ($i < ($count-1)) {
+					$sql .= " " . $this->condition[$i] . " ";
+				}
+			}
+			$sql .= ") ";
 		}
 		
 		return $sql;
@@ -187,7 +223,7 @@ class TfishCriteria
 	 * 
 	 * @return string $sql query
 	 */
-	public function renderPDO() {
+	/*public function renderPDO() {
 		$pdo_placeholders = array();
 		$count = count($this->item);
 		for ($i = 0; $i < $count; $i++) {
@@ -195,5 +231,40 @@ class TfishCriteria
 		}
 		
 		return $pdo_placeholders;
+	}*/
+	
+	public function renderPDO() {
+		$pdo_placeholders = array();
+		$count = count($this->item);
+		for ($i = 0; $i < $count; $i++) {
+			$pdo_placeholders[":placeholder" . (string)$i] = $this->item[$i]->value;
+		}
+		
+		return $pdo_placeholders;
 	}
+	
+	public function renderTagSQL() {
+		$sql = '';
+		$count = count($this->tag);
+		if ($count == 1) {
+			$sql .= "`taglink`.`tag_id` = :tag0 ";
+		} elseif ($count > 1) {
+			$sql .= "`taglink`.`tag_id` IN (";
+			for($i = 0; $i < count($this->tag); $i++) {
+				$sql .= ':tag' . (string)$i . ',';
+			}
+		$sql = rtrim($sql, ',');
+			$sql .= ") ";
+		}
+		return $sql;
+	}
+	
+	public function renderTagPDO() {
+		$tag_placeholders = array();
+		for($i = 0; $i < count($this->tag); $i++) {
+			$tag_placeholders[":tag" . (string)$i] = (int)$this->tag[$i];
+		}
+		return $tag_placeholders;
+	}
+	
 }

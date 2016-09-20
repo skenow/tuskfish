@@ -111,11 +111,10 @@ class TfishMetadata
 	 * @param int $limit
 	 * @param int $start
 	 * @param string $url
-	 * @param string $tag (not currently in use)
 	 * @return string
 	 */
 	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = false)
-	{
+	{		
 		// Filter parameters.
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
@@ -123,8 +122,13 @@ class TfishMetadata
 		$clean_url = TfishFilter::isUrl($url) ? TfishFilter::escape($url) : false;
 		$clean_tag = TfishFilter::isAlnum($tag) ? TfishFilter::escape($tag) : false;
 		
+		// If the count is zero there is no need for a pagination control.
+		if ($clean_count == 0) {
+			return false;
+		}
+		
 		// If any parameter fails a range check throw an error.
-		if ($clean_count === false || $clean_limit === false || $clean_url === false) {
+		if ($clean_limit === false || $clean_url === false) {
 			trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
 		}
 		
