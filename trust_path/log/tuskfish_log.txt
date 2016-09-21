@@ -1,2 +1,0 @@
-2016-09-01, 02:35:24: [ERROR][HY000][SQLSTATE[HY000]: General error: 1 no such column: admin_pagination][/home/isengard/public_html/tuskfish/trust_path/libraries/tuskfish/class/TfishDatabase.php:558]
-2016-09-01, 02:35:24: [ERROR][8][Undefined variable: statement][/home/isengard/public_html/tuskfish/trust_path/libraries/tuskfish/class/TfishDatabase.php:943]

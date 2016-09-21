@@ -231,6 +231,23 @@ class TfishDatabase
 		return self::_insert($clean_table, $clean_keys);
 	}
 	
+	/**
+	 * Retrieves the ID of the last row inserted into the database.
+	 * 
+	 * Used primarily to grab the ID of newly created content objects so that their accompanying
+	 * taglinks can be correctly associated to them.
+	 * 
+	 * @return mixed
+	 */
+	public static function lastInsertId()
+	{
+		if (self::$_db->lastInsertId()) {
+			return (int)self::$_db->lastInsertId();
+		} else {
+			return false;
+		}
+	}
+	
 	public static function preparedStatement($sql) // Finished
 	{
 		return self::_preparedStatement($sql);
@@ -1079,8 +1096,8 @@ class TfishDatabase
 	
 	public static function validateId($id)
 	{
-		$clean_id = TfishFilter::isInt($id) ? (int)$id : null;
-		if (isset($clean_id) && $clean_id > 0) {
+		$clean_id = (int)$id;
+		if (TfishFilter::isInt($clean_id, 1)) {
 			return $clean_id;
 		} else {
 			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);

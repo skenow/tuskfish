@@ -187,9 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					"id" => "INTEGER",
 					"tag_id" => "INTEGER",
 					"type" => "TEXT",
-					"content_id" => "INTEGER",
-					"module_id" => "INTEGER",
-				);
+					"content_id" => "INTEGER");
 				TfishDatabase::createTable('taglink', $taglink_columns, 'id');
 
 				// Close database

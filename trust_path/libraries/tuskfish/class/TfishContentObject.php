@@ -60,6 +60,7 @@ class TfishContentObject extends TfishAncestralObject
 		$this->__properties['language'] = 'string'; // English (future proofing).
 		$this->__properties['rights'] = 'int'; // Intellectual property rights scheme or license under which the work is distributed.
 		$this->__properties['publisher'] = 'string'; // The entity responsible for distributing this work.
+		$this->__properties['tags'] = 'array'; // Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
 		$this->__properties['online'] = 'int'; // Toggle object on or offline.
 		$this->__properties['submission_time'] = 'int'; // Timestamp representing submission time.
 		$this->__properties['counter'] = 'int'; // Number of times this content was viewed or downloaded.
@@ -86,6 +87,7 @@ class TfishContentObject extends TfishAncestralObject
 		$this->__data['rights'] = 1; // Change to be from preferences
 		$this->__data['online'] = 1;
 		$this->__data['counter'] = 0;
+		$this->__data['tags'] = array();
 	}
 	
 	/**
@@ -256,6 +258,25 @@ class TfishContentObject extends TfishAncestralObject
 						$this->__data[$property] = $value;
 					} else {
 						trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+					}
+				break;
+				
+				// Only array field is tags, contents must all be integers.
+				case "array":
+					if (TfishFilter::isArray($value)) {
+						$clean_tags = array();
+						foreach ($value as $val) {
+							$clean_val = (int)$val;
+							if (TfishFilter::isInt($clean_val, 1)) {
+								$clean_tags[] = $clean_val;
+							} else {
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}
+							unset($clean_val);
+						}
+						$this->__data[$property] = $clean_tags;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
 					}
 				break;
 			

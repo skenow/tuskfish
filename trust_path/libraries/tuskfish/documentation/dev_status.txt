@@ -4,25 +4,12 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
+* Tags: Add insert(), update() and delete() methods to TfishTaglinkHandler class.
 * Detail the data entry form
+  - Consider using this Boostrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
   - Take the select boxes out of the form (build them in the class files).
   - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
   - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
-* Create a search function + advanced search page.
-	ICMS way:
-	=========
-	- Abstract parent class, Element
-	- Two child classes, Item (single) and Compo (collection)
-	- Both Item and Compo implement render(), but differently.
-	- The render() method of the Compo object calls render() on each criteria element
-	- If the element is an Item object, it just renders directly.
-	- If the element is another Compo object, it triggers a Compo->render() recursively.
-
-	Tfish way:
-	==========
-	- Item and Criteria classes do not have render methods (procedural).
-	- Could add them, although more than a single layer of recursion seems unecessary.
-	- Will require overhaul of the DB classes, yuck.
 * Data edit form: How to handle editing of file uploads?
   - Image/media fields should display the file name of any existing file.
 * Consider creating a controller class that can handle the basic add/edit/update/confirm/delete operations and standard views (single, newsfeed, grid).

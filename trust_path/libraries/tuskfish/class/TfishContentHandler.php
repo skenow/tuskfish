@@ -44,7 +44,7 @@ class TfishContentHandler
 	// 1. Have to manually inspect the 'type' and build the handler / object names + instantiate a handler just to make an object (bad).
 	// 2. If 'type' and 'handler' values were class names it would be easier to instantiate objects.
 	
-	public function getObjects($criteria = false)
+	public static function getObjects($criteria = false)
 	{
 		$objects = array();
 		$result = TfishDatabase::select('content', $criteria);
@@ -64,11 +64,11 @@ class TfishContentHandler
 		return $objects;
 	}
 	
-	public function getList($criteria = false)
+	public static function getList($criteria = false)
 	{
 	}
 	
-	public function getCount($criteria = false)
+	public static function getCount($criteria = false)
 	{
 	}
 	
@@ -98,7 +98,8 @@ class TfishContentHandler
 	 * 
 	 * @return array
 	 */
-	public static function getRights() {
+	public static function getRights()
+	{
 		return array(
 			'1' => TFISH_RIGHTS_COPYRIGHT,
 			'2' => TFISH_RIGHTS_ATTRIBUTION,
@@ -120,7 +121,8 @@ class TfishContentHandler
 	 * 
 	 * @return array
 	 */
-	public static function getTypes() {
+	public static function getTypes()
+	{
 		return array(
 			'TfishArticle' => TFISH_TYPE_ARTICLE,
 			'TfishAudio' => TFISH_TYPE_AUDIO,
@@ -134,7 +136,47 @@ class TfishContentHandler
 		);
 	}
 	
-	public function updateCounter()
+	
+	public static function getTagList()
+	{
+		//$tags = array(0 => TFISH_SELECT_TAGS);
+		$tags = array();
+		$criteria = new TfishCriteria();
+		$columns = array('id', 'title');
+		$statement = false;
+		
+		$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+		$statement = TfishDatabase::select('content', $criteria, $columns);
+		if ($statement) {
+			try {
+				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+					$tags[$row['id']] = $row['title'];
+				}
+			} catch (PDOException $e) {
+				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			}
+		} else {
+			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+		}
+		
+		return $tags;
+	}
+	
+	/**
+	 * Returns a list of tag objects.
+	 * 
+	 * @return array tag objects
+	 */
+	public static function getTags()
+	{
+		$tags = array();
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+		$tags = self::getObjects($criteria);
+		return $tags;
+	}
+	
+	public static function updateCounter()
 	{
 	}
 	
@@ -149,17 +191,66 @@ class TfishContentHandler
 	 * @param object $obj
 	 * @return boolean
 	 */
-	public function insert($obj)
+	public static function insert($obj)
 	{
 		$key_values = $obj->toArray();
 		$key_values['submission_time'] = time(); // Automatically set submission time.
 		unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
+		unset($key_values['tags']);
+		
+		// Insert the object into the database.
 		$result = TfishDatabase::insert('content', $key_values);
 		if (!$result) {
 			trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
+			return false;
 		} else {
-			return true;
+			$content_id = TfishDatabase::lastInsertId();
 		}
+		unset($key_values, $result);
+		
+		// Tags are stored separately in the taglinks table. Tags are assembled in one batch before
+		// proceeding to insertion; so if one fails a range check all should fail.
+		if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
+			
+			// Set type and content_id (from the last insert ID).
+			$typeList = self::getTypes();
+			if (isset($obj->type) && TfishFilter::isAlpha($obj->type) && array_key_exists($obj->type, $typeList)) {
+				$type = TfishFilter::trimString($obj->type);
+			} else {
+				trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+				exit;
+			}
+
+			// If the lastInsertId could not be retrieved, then halt execution becuase this data
+			// is necessary in order to correctly assign taglinks to content objects.
+			if (!$content_id) {
+				trigger_error(TFISH_ERROR_NO_LAST_INSERT_ID, E_USER_ERROR);
+				exit;
+			}
+			
+			$tags = array();
+			foreach ($obj->tags as $tag_id) {
+				if (TfishFilter::isInt($tag_id, 1)) {
+					$tag['tag_id'] = (int)$tag_id;
+				} else {
+					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+				}
+				$tag['content_id'] = $content_id;
+				$tag['type'] = $type;
+				$tags[] = $tag;
+				unset($tag);
+			}
+			if ($tags) {
+				foreach ($tags as $tag) {
+					$result = TfishDatabase::insert('taglink', $tag);
+					if (!$result) {
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -172,7 +263,7 @@ class TfishContentHandler
 	 * @param int $userid
 	 * @return array 
 	 */
-	public function searchContent($search_terms, $andor, $limit, $offset = 0)
+	public static function searchContent($search_terms, $andor, $limit, $offset = 0)
 	{
 		global $tfish_preference;
 		$clean_search_terms = array();
@@ -193,7 +284,7 @@ class TfishContentHandler
 				$clean_search_terms[] = (string)$term; 
 			}
 		}
-		$results = $this->_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
+		$results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
 		
 		return $results;
 	}
@@ -317,8 +408,30 @@ class TfishContentHandler
 		// Populate the object from the $row using whitelisted properties.
 		if ($content_object) {
 			$content_object->loadProperties($row);
+			
+			// Populate the tag property.
+			if (isset($content_object->tags) && !empty($content_object->id)) {
+				$tags = array();
+				$criteria = new TfishCriteria();
+				$criteria->add(new TfishCriteriaItem('content_id', (int)$content_object->id ));
+				$statement = TfishDatabase::select('taglink', $criteria, array('tag_id'));
+				if ($statement) {
+					try {
+						while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+							$tags[] = $row['tag_id'];
+						}
+						$content_object->tags = $tags;
+					} catch (PDOException $e) {
+						TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+					}
+				} else {
+					trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+				}
+			}
+			
 			return $content_object;
 		}
+		
 		return false;
 	}
 	
@@ -328,27 +441,102 @@ class TfishContentHandler
 	 * @param object $obj
 	 * @return boolean
 	 */
-	public function update($obj)
+	public static function update($obj)
 	{
+		if (TfishFilter::isInt($obj->id, 1)) {
+			$clean_id = (int)$obj->id;
+		}
 		$key_values = $obj->toArray();
 		unset($key_values['submission_time']); // Submission time should not be overwritten.
 		$zeroed_properties = $obj->zeroedProperties();
 		foreach ($zeroed_properties as $property) {
 			$key_values[$property] = null;
 		}
-		$result = TfishDatabase::update('content', $obj->id, $key_values);
+		// Tags are stored in a separate table and must be handled in a separate query.
+		unset($key_values['tags']);
+
+		// Update the content object.
+		$result = TfishDatabase::update('content', $clean_id, $key_values);
 		if (!$result) {
 			trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
-		} else {
-			return true;
 		}
-	}
-
-	public function updateAll()
-	{
+		unset($result);
+		
+		// Update tags by i) deleting the old ones and ii) reinserting the new ones.
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('content_id', $clean_id));
+		$result = TfishDatabase::deleteAll('taglink', $criteria);
+		if (!$result) {
+			return false;
+		}
+		unset($result);
+		
+		if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
+			
+			// Set taglink key values.
+			$typeList = self::getTypes();
+			if (isset($obj->type) && TfishFilter::isAlpha($obj->type) && array_key_exists($obj->type, $typeList)) {
+				$type = TfishFilter::trimString($obj->type);
+			} else {
+				trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+				exit;
+			}
+			
+			$tags = array();
+			foreach ($obj->tags as $tag_id) {
+				if (TfishFilter::isInt($tag_id, 1)) {
+					$tag['tag_id'] = (int)$tag_id;
+				} else {
+					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+				}
+				$tag['content_id'] = $clean_id;
+				$tag['type'] = $type;
+				$tags[] = $tag;
+				unset($tag);
+			}
+			
+			// Insert the new taglinks.
+			if ($tags) {
+				foreach ($tags as $tag) {
+					$result = TfishDatabase::insert('taglink', $tag);
+					if (!$result) {
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;		
 	}
 	
-	public function delete()
+	/**
+	 * Delete a single object from the content table.
+	 * 
+	 * @param int $id
+	 * @return boolean
+	 */
+	public static function delete($id)
 	{
+		$clean_id = (int)$id;
+		if (TfishFilter::isInt($clean_id, 1)) {
+			$result = TfishDatabase::delete('content', $clean_id);
+			if (!$result) {
+				return false;
+			}
+		} else {
+			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+			return false;
+		}
+		unset($result);
+		
+		// Tags are stored separately in the taglinks table.
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('content_id', $clean_id));
+		$result = TfishDatabase::deleteAll('taglink', $criteria);
+		if (!$result) {
+			return false;
+		}
+		
+		return true;		
 	}
 }

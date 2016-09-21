@@ -26,6 +26,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			$content_types = TfishContentHandler::getTypes();
 			$rights = TfishContentHandler::getRights();
 			$languages = TfishContentHandler::getLanguages();
+			$tags = TfishContentHandler::getTagList();
 			$tfish_form = TFISH_FORM_PATH . "data_entry.html";
 		break;
 		
@@ -48,22 +49,18 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 		case "delete":
 			if (isset($_REQUEST['id'])) {
 				$clean_id = (int)$_REQUEST['id'];
-				if (TfishFilter::isInt($clean_id, 1)) {
-					$result = TfishDatabase::delete('content', $clean_id);
-					if ($result) {
-						$alert_class = 'alert-success';
-						$title = TFISH_SUCCESS;
-						$message = TFISH_OBJECT_WAS_DELETED;
-					} else {
-						$alert_class = 'alert-danger';
-						$title = TFISH_FAILED;
-						$message = TFISH_OBJECT_DELETION_FAILED;
-					}
-					$back_url = 'admin.php';
-					$tfish_form = TFISH_FORM_PATH . "response.html";
+				$result = TfishContentHandler::delete($clean_id);
+				if ($result) {
+					$alert_class = 'alert-success';
+					$title = TFISH_SUCCESS;
+					$message = TFISH_OBJECT_WAS_DELETED;
 				} else {
-					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+					$alert_class = 'alert-danger';
+					$title = TFISH_FAILED;
+					$message = TFISH_OBJECT_DELETION_FAILED;
 				}
+				$back_url = 'admin.php';
+				$tfish_form = TFISH_FORM_PATH . "response.html";
 			} else {
 				trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
 			}
@@ -86,6 +83,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 					$content_types = TfishContentHandler::getTypes();
 					$rights = TfishContentHandler::getRights();
 					$languages = TfishContentHandler::getLanguages();
+					$tags = TfishContentHandler::getTagList();
 					$tfish_form = TFISH_FORM_PATH . "data_edit.html";
 				} else {
 					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -105,6 +103,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
 				exit;
 			}
+			
 			$type = TfishFilter::trimString($_REQUEST['type']);
 			$type_whitelist =  TfishContentHandler::getTypes();
 			if (!array_key_exists($type, $type_whitelist)) {
@@ -113,10 +112,9 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			}
 			$content_object = new $type;
 			$content_object->loadProperties($_REQUEST);
-			$content_handler = new $content_object->handler;
 			
 			// Insert the object
-			$result = $content_handler->insert($content_object);
+			$result = TfishContentHandler::insert($content_object);
 			if ($result) {
 				$alert_class = 'alert-success';
 				$title = TFISH_SUCCESS;
@@ -144,10 +142,9 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			}
 			$content_object = new $type;
 			$content_object->loadProperties($_REQUEST);
-			$content_handler = new $content_object->handler;
 			
 			// Update the database row and display a response.
-			$result = $content_handler->update($content_object);
+			$result = TfishContentHandler::update($content_object);
 			if ($result) {
 				$alert_class = 'alert-success';
 				$title = TFISH_SUCCESS;

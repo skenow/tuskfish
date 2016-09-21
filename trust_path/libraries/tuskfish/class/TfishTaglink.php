@@ -17,15 +17,14 @@ class TfishTaglink
 		'tag_id', // ID of the tag object
 		'type', // Type of content object
 		'content_id', // ID of the content object
-		'module_id', // Module the content object belongs to.
 		'handler'); // The handler for taglink objects
 	
 	/**
 	 * Generic constructor and object definition - unset any properties not required by this content subclass
 	 */
-	function __construct(&$handler)
+	function __construct()
 	{
-		$this->handler = $handler;
+		$this->__data['handler'] = $this->__data['type'] . 'Handler';
 	}
 	
 	/**
