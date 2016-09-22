@@ -4,7 +4,6 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
-* Tags: Add insert(), update() and delete() methods to TfishTaglinkHandler class.
 * Detail the data entry form
   - Consider using this Boostrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
   - Take the select boxes out of the form (build them in the class files).
