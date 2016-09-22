@@ -38,14 +38,6 @@ class TfishCriteria
 		self::__set('condition', $condition);
 	}
 	
-	public function setType($type)
-	{
-		foreach ($this->__data['item'] as $key => &$item) {
-			unset($this->__data['item'][$key]);
-			$this->__data['item'][$key] = new TfishCriteriaItem('type', $type);
-		}
-	}
-	
 	/**
 	 * Access an existing object property
 	 * 

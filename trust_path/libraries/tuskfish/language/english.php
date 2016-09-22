@@ -176,6 +176,7 @@ define("TFISH_ERROR_FAILED_TO_APPEND_FILE", "Failed to append to file.");
 define("TFISH_ERROR_FAILED_TO_SEND_DOWNLOAD", "Failed to initiate download stream.");
 define("TFISH_ERROR_BAD_PATH", "Bad file path.");
 define("TFISH_ERROR_NOT_AN_UPLOADED_FILE", "Not an uploaded file, possible upload attack.");
+define("TFISH_ERROR_NOT_TEMPLATE_OBJECT", "Not a template object.");
 define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter error.");
 
 // File upload error messages.

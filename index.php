@@ -20,9 +20,10 @@ $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 // Get a count for the pagination control. Actually, it might be possible to just pass in the
 $criteria = new TfishCriteria();
 $criteria->limit = $tfish_preference->user_pagination;
+$criteria->add(new TfishCriteriaItem('type', 'TfishArticle'));
 
-$count = TfishContentHandler::getCount($criteria);
-$articles = TfishContentHandler::getObjects($criteria);
+$count = TfishArticleHandler::getCount($criteria);
+$articles = TfishArticleHandler::getObjects($criteria);
 $tfish_content['output'] = '<ul>';
 foreach ($articles as $article) {
 	$tfish_content['output'] .= '<li>' . $article->title . '</li>';
@@ -34,6 +35,11 @@ echo $block->render($criteria);
 // Assign template variables.
 $page_title = 'Articles';
 $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL);
+
+// Experimental template system.
+$firstArticle = array_shift($articles);
+$articleTpl = new TfishArticleTemplate($firstArticle);
+$tfish_content['output'] .= $articleTpl->render();
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
