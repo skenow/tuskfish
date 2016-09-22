@@ -519,7 +519,7 @@ class TfishDatabase
 				$sql .= "WHERE ";
 			}
 			
-			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+			if (TfishFilter::isArray($criteria->item) && !empty($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
 				$pdo_placeholders = $criteria->renderPDO();
@@ -664,7 +664,7 @@ class TfishDatabase
 				$sql .= "WHERE ";
 			}
 			
-			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+			if (TfishFilter::isArray($criteria->item) && !empty($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
 				$pdo_placeholders = $criteria->renderPDO();
@@ -761,7 +761,7 @@ class TfishDatabase
 				$sql .= "WHERE ";
 			}
 
-			if (TfishFilter::isArray($criteria->item)) {
+			if (TfishFilter::isArray($criteria->item) && !empty($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
 				$pdo_placeholders = $criteria->renderPDO();
@@ -841,7 +841,7 @@ class TfishDatabase
 		
 		// Set parameters.
 		if ($criteria) {
-			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+			if (TfishFilter::isArray($criteria->item) && !empty($criteria->item)) {
 				if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
 					$pdo_placeholders = array();
 					$sql .= $criteria->renderSQL();
@@ -974,7 +974,7 @@ class TfishDatabase
 				$sql .= "WHERE ";
 			}
 
-			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+			if (TfishFilter::isArray($criteria->item) && !empty($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
 				$pdo_placeholders = $criteria->renderPDO();
