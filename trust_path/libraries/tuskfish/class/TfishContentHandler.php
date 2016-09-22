@@ -68,8 +68,22 @@ class TfishContentHandler
 	{
 	}
 	
+	/**
+	 * Counts the number of content objects matching the criteria (without the limit).
+	 * 
+	 * Main use is for constructing the pagination control.
+	 * 
+	 * @param obj $criteria
+	 * @return int
+	 */
 	public static function getCount($criteria = false)
 	{
+		if ($criteria && !empty($criteria->limit)) {
+			unset($criteria->limit);
+		}
+		$count = TfishDatabase::selectCount('content', $criteria);
+		
+		return $count;
 	}
 	
 	/**

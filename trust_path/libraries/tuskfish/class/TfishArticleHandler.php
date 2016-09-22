@@ -17,4 +17,26 @@ class TfishArticleHandler extends TfishContentHandler
 		// Must call parent constructor first.
 		parent::__construct();
 	}
+	
+	public static function getObjects($criteria = false)
+	{
+		if (!$criteria) {
+			$criteria = new TfishCriteria();
+		}
+		$criteria->setType('TfishArticle');
+		$objects = parent::getObjects($criteria);
+		
+		return $objects;
+	}
+	
+	public static function getCount($criteria = false)
+	{
+		if (!$criteria) {
+			$criteria = new TfishCriteria();
+		}
+		$criteria->setType('TfishArticle');
+		$count = parent::getcount($criteria);
+		
+		return $count;
+	}
 }

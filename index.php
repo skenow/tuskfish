@@ -16,23 +16,25 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-$article_handler = new TfishArticleHandler();
-$articles = $article_handler->getObjects();
+
+// Get a count for the pagination control. Actually, it might be possible to just pass in the
+$criteria = new TfishCriteria();
+$criteria->limit = $tfish_preference->user_pagination;
+$criteria->add(new TfishCriteriaItem('type', 'TfishImage'));
+
+$count = TfishArticleHandler::getCount($criteria);
+$articles = TfishArticleHandler::getObjects($criteria);
 $tfish_content['output'] = '<ul>';
 foreach ($articles as $article) {
 	$tfish_content['output'] .= '<li>' . $article->title . '</li>';
 }
 $tfish_content['output'] .= '<ul>';
-$count = count($articles);
+$block = new TfishBlockList('Testing the block', 5);
+echo $block->render($criteria);
 
 // Assign template variables.
 $page_title = 'Articles';
 $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL);
-
-$block = new TfishBlockList('Testing the block', 5);
-$criteria = new TfishCriteria();
-$criteria->add(new TfishCriteriaItem('type', 'TfishPodcast'));
-echo $block->render($criteria);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).

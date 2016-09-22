@@ -744,7 +744,7 @@ class TfishDatabase
 		// Specify operation and column
 		$sql = "SELECT COUNT(";
 		$sql .= $column = "*" ? $column : self::addBackticks($column);
-		$sql .= ")";
+		$sql .= ") ";
 		
 		// Set table.
 		$sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
@@ -760,8 +760,8 @@ class TfishDatabase
 			if (!empty($criteria->item) || !empty($criteria->tag)) {
 				$sql .= "WHERE ";
 			}
-			
-			if (!empty($criteria->item) && TfishFilter::isArray($criteria->item)) {
+
+			if (TfishFilter::isArray($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
 				$pdo_placeholders = $criteria->renderPDO();
