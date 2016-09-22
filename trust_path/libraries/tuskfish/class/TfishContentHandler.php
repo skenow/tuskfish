@@ -211,15 +211,6 @@ class TfishContentHandler
 		// Tags are stored separately in the taglinks table. Tags are assembled in one batch before
 		// proceeding to insertion; so if one fails a range check all should fail.
 		if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
-			
-			// Set type and content_id (from the last insert ID).
-			$typeList = self::getTypes();
-			if (isset($obj->type) && TfishFilter::isAlpha($obj->type) && array_key_exists($obj->type, $typeList)) {
-				$type = TfishFilter::trimString($obj->type);
-			} else {
-				trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-				exit;
-			}
 
 			// If the lastInsertId could not be retrieved, then halt execution becuase this data
 			// is necessary in order to correctly assign taglinks to content objects.
@@ -228,25 +219,9 @@ class TfishContentHandler
 				exit;
 			}
 			
-			$tags = array();
-			foreach ($obj->tags as $tag_id) {
-				if (TfishFilter::isInt($tag_id, 1)) {
-					$tag['tag_id'] = (int)$tag_id;
-				} else {
-					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-				}
-				$tag['content_id'] = $content_id;
-				$tag['type'] = $type;
-				$tags[] = $tag;
-				unset($tag);
-			}
-			if ($tags) {
-				foreach ($tags as $tag) {
-					$result = TfishDatabase::insert('taglink', $tag);
-					if (!$result) {
-						return false;
-					}
-				}
+			$result = TfishTaglinkHandler::insertTaglinks($content_id, $obj->type, $obj->tags);
+			if (!$result) {
+				return false;
 			}
 		}
 		
@@ -462,48 +437,11 @@ class TfishContentHandler
 		}
 		unset($result);
 		
-		// Update tags by i) deleting the old ones and ii) reinserting the new ones.
-		$criteria = new TfishCriteria();
-		$criteria->add(new TfishCriteriaItem('content_id', $clean_id));
-		$result = TfishDatabase::deleteAll('taglink', $criteria);
+		// Update tags.
+		$result = TfishTaglinkHandler::updateTaglinks($clean_id, $obj->type, $obj->tags);
 		if (!$result) {
+			trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
 			return false;
-		}
-		unset($result);
-		
-		if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
-			
-			// Set taglink key values.
-			$typeList = self::getTypes();
-			if (isset($obj->type) && TfishFilter::isAlpha($obj->type) && array_key_exists($obj->type, $typeList)) {
-				$type = TfishFilter::trimString($obj->type);
-			} else {
-				trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-				exit;
-			}
-			
-			$tags = array();
-			foreach ($obj->tags as $tag_id) {
-				if (TfishFilter::isInt($tag_id, 1)) {
-					$tag['tag_id'] = (int)$tag_id;
-				} else {
-					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-				}
-				$tag['content_id'] = $clean_id;
-				$tag['type'] = $type;
-				$tags[] = $tag;
-				unset($tag);
-			}
-			
-			// Insert the new taglinks.
-			if ($tags) {
-				foreach ($tags as $tag) {
-					$result = TfishDatabase::insert('taglink', $tag);
-					if (!$result) {
-						return false;
-					}
-				}
-			}
 		}
 		
 		return true;		
@@ -527,12 +465,9 @@ class TfishContentHandler
 			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			return false;
 		}
-		unset($result);
 		
-		// Tags are stored separately in the taglinks table.
-		$criteria = new TfishCriteria();
-		$criteria->add(new TfishCriteriaItem('content_id', $clean_id));
-		$result = TfishDatabase::deleteAll('taglink', $criteria);
+		// Delete associated taglinks.
+		$result = TfishTaglinkHandler::deleteTaglinks($clean_id);
 		if (!$result) {
 			return false;
 		}
