@@ -1,0 +1,19 @@
+TEMPLATES
+=========
+* Theme-level templates can be dynamically assigned to pages by overriding the default.
+* Theme-level CSS can (and are) changed on the fly according to theme. This allows control over
+  most things but not the *layout* of individual content objects.
+* Object-level templates can be dynamically assigned by overriding the default.
+* Template rendering can be done generically by the TfishTemplate class, or more specifically by
+  using an object-specific template class.
+* At present, the template engine can't handle arrays, it only works with string output.
+* Template rendering is currently handled by the TfishTemplate object.
+* Template concatenation is currently handled by the TfishTemplate object.
+* Scenario: Have an array of different kinds of content objects. How to render them all with the
+  appropriate templates?
+
+$ouput = '';
+foreach ($contentObj as $content) {
+	$content_template_handler = new $content->type . 'Template' . ($content);
+	$rendered_content = $content_template_handler->render($content);
+}

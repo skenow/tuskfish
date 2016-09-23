@@ -47,20 +47,54 @@ class TfishContentHandler
 	public static function getObjects($criteria = false)
 	{
 		$objects = array();
-		$result = TfishDatabase::select('content', $criteria);
-		if ($result) {
+		$statement = TfishDatabase::select('content', $criteria);
+		if ($statement) {
 			try {
 				// Fetch rows into the appropriate class type, as determined by the first column.
-				$result->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
-				while ($object = $result->fetch()) {
+				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
+				while ($object = $statement->fetch()) {
 					$objects[$object->id] = $object;
 				}
+				unset($statement);
 			} catch (PDOException $e) {
 				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 			}
 		} else {
 			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 		}
+		
+		// Get the tags for these objects.
+		if (!empty($objects)) {
+			$taglinks = array();
+			$object_ids = array_keys($objects);
+			
+			$criteria = new TfishCriteria();
+			foreach ($object_ids as $id) {
+				$criteria->add(new TfishCriteriaItem('content_id', (int)$id), "OR");
+				unset($id);
+			}
+			
+			$statement = TfishDatabase::select('taglink', $criteria);
+			if ($statement) {
+				try {
+					// Sort tag into multi-dimensional array indexed by content_id.
+					while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+						$taglinks[$row['content_id']][] = $row['tag_id'];
+					}
+				} catch (PDOException $e) {
+					TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+				}
+				
+				// Assign the sorted tags to correct content objects.
+				foreach ($taglinks as $content_id => $tags) {
+					$objects[$content_id]->tags = $tags;
+					unset($tags);
+				}
+			} else {
+				trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+			}
+		}
+		
 		return $objects;
 	}
 	
@@ -153,7 +187,6 @@ class TfishContentHandler
 	
 	public static function getTagList()
 	{
-		//$tags = array(0 => TFISH_SELECT_TAGS);
 		$tags = array();
 		$criteria = new TfishCriteria();
 		$columns = array('id', 'title');

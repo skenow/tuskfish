@@ -731,7 +731,7 @@ class TfishDatabase
 		} catch (PDOException $e) {
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
-		
+
 		// Execute the statement.
 		try {
 			$statement->execute();

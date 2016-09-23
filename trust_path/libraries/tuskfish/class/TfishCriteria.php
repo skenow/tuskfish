@@ -39,6 +39,25 @@ class TfishCriteria
 	}
 	
 	/**
+	 * Content object handler subclasses use this function to unset existing object type criteria.
+	 * 
+	 * @param type $key
+	 */
+	public function killType($key)
+	{
+		$key = (int)$key;
+		
+		if (isset($this->__data['item'][$key])) {
+			unset($this->__data['item'][$key]);
+			unset($this->__data['condition'][$key]);
+		}
+		
+		// Reindex the arrays.
+		$this->__data['item'] = array_values($this->__data['item']);
+		$this->__data['condition'] = array_values($this->__data['condition']);
+	}
+	
+	/**
 	 * Access an existing object property
 	 * 
 	 * @param string $property
@@ -173,28 +192,7 @@ class TfishCriteria
 	 * except on the last iteration ($count-1).
 	 * 
 	 * @return string $sql query
-	 */
-	/*public function renderSQL()
-	{
-		$sql = '';
-		
-		$count = count($this->item);
-		if ($count) {
-			$sql = "(";
-				for ($i = 0; $i < $count; $i++) {
-				$sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
-						. $this->item[$i]->operator
-						. " :" . TfishDatabase::escapeIdentifier($this->item[$i]->column);
-				if ($i < ($count-1)) {
-					$sql .= " " . $this->condition[$i] . " ";
-				}
-			}
-			$sql .= ") ";
-		}
-		
-		return $sql;
-	}*/
-	
+	 */	
 	public function renderSQL()
 	{
 		$sql = '';
@@ -222,17 +220,7 @@ class TfishCriteria
 	 * and renderPDO() to get a list of the named placeholders so that you can bind values to them.
 	 * 
 	 * @return string $sql query
-	 */
-	/*public function renderPDO() {
-		$pdo_placeholders = array();
-		$count = count($this->item);
-		for ($i = 0; $i < $count; $i++) {
-			$pdo_placeholders[":" . TfishDatabase::escapeIdentifier($this->item[$i]->column)] = $this->item[$i]->value;
-		}
-		
-		return $pdo_placeholders;
-	}*/
-	
+	 */	
 	public function renderPDO() {
 		$pdo_placeholders = array();
 		$count = count($this->item);

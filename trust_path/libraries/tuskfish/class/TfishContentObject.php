@@ -116,6 +116,15 @@ class TfishContentObject extends TfishAncestralObject
 					return htmlspecialchars($date, ENT_QUOTES, 'UTF-8');
 				break;
 			
+				case "tags":
+					$tags = array();
+					foreach ($this->__data[$property] as $value) {
+						$tags[] = (int)$value;
+						unset($value);
+					}
+					return $tags;
+				break;
+			
 				default:
 					return htmlspecialchars($this->__data[$property], ENT_QUOTES, 'UTF-8');
 				break;
