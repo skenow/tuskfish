@@ -26,7 +26,7 @@ class TfishBlockList extends TfishBlock
 		// $this->__set('type', $type): Alpha: Class name for this block type.
 		// $this->__set('online', 1); // Int: Toggle object on (1) or offline (0).
 		// $this->__set('handler', $handler); // String: Handler for this object.
-		$this->__set('template', 'blocklist.html'); // String: The template that should be used to display this block.
+		$this->__set('template', 'blocklist'); // String: The template that should be used to display this block.
 
 	}
 	

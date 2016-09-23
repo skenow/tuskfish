@@ -22,7 +22,7 @@ class TfishArticle extends TfishContentObject
 		
 		// Declare the type, template and module for this this class
 		$this->__data['type'] = "TfishArticle";
-		$this->__data['template'] = "article.html";
+		$this->__data['template'] = "article";
 		$this->__data['module'] = "articles";
 		
 		// Object definition - unset any properties unused in this subclass.

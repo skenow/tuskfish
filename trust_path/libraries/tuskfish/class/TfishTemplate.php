@@ -32,7 +32,7 @@ class TfishTemplate {
 	public function render()
 	{
 		if (!file_exists($this->file)) {
-			$output = file_get_contents(TFISH_TEMPLATES_OBJECT_PATH . $this->file);
+			$output = file_get_contents(TFISH_TEMPLATES_OBJECT_PATH . $this->file . '.html');
 		}
 		
 		$properties = $this->content->getPropertyWhitelist();

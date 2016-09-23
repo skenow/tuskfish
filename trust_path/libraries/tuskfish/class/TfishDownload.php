@@ -22,7 +22,7 @@ class TfishDownload extends TfishContentObject
 		
 		// Declare the type, template and module for this this class
 		$this->__data['type'] = "download";
-		$this->__data['template'] = "download.html";
+		$this->__data['template'] = "download";
 		$this->__data['module'] = "downloads";
 		
 		// Object definition - unset any properties unused in this subclass.

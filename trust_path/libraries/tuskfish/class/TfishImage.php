@@ -22,7 +22,7 @@ class TfishImage extends TfishContentObject
 		
 		// Declare the type, template and module for this this class
 		$this->__data['type'] = "TfishImage";
-		$this->__data['template'] = "image.html";
+		$this->__data['template'] = "image";
 		$this->__data['module'] = "images";
 		
 		// Object definition - unset any properties unused in this subclass.

@@ -22,7 +22,7 @@ class TfishVideo extends TfishContentObject
 		
 		// Declare the type, template and module for this this class
 		$this->__data['type'] = "TfishVideo";
-		$this->__data['template'] = "video.html";
+		$this->__data['template'] = "video";
 		$this->__data['module'] = "videos";
 		
 		// Object definition - unset any properties unused in this subclass.

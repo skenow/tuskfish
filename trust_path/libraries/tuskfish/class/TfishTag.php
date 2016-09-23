@@ -22,7 +22,7 @@ class TfishTag extends TfishContentObject
 		
 		// Declare the type, template and module for this this class.
 		$this->__data['type'] = "TfishTag";
-		$this->__data['template'] = "tag.html";
+		$this->__data['template'] = "tag";
 		$this->__data['module'] = "tags";
 		
 		// Object definition - unset any properties unused in this subclass.

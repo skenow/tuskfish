@@ -68,7 +68,7 @@ class TfishContentObject extends TfishAncestralObject
 		$this->__properties['meta_description'] = 'string'; // Set a custom page meta description for this content.
 		$this->__properties['seo'] = 'string'; // SEO-friendly string; it will be appended to the URL for this content.
 		$this->__properties['handler'] = 'alpha'; // Handler for this object.
-		$this->__properties['template'] = 'string'; // The template that should be used to display this object.
+		$this->__properties['template'] = 'alnum'; // The template that should be used to display this object.
 		$this->__properties['module'] = 'string'; // The module that handles this content type
 
 		/**
@@ -82,7 +82,7 @@ class TfishContentObject extends TfishAncestralObject
 		 * Set default values of permitted properties.
 		 */
 		$this->__data['type'] = get_class($this);
-		$this->__data['template'] = 'default.html';
+		$this->__data['template'] = 'default';
 		$this->__data['handler'] = $this->__data['type'] . 'Handler';
 		$this->__data['rights'] = 1; // Change to be from preferences
 		$this->__data['online'] = 1;

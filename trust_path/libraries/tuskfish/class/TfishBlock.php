@@ -27,7 +27,7 @@ class TfishBlock  extends TfishAncestralObject
 		$this->__properties['type'] = 'alpha'; // Class name (alphabetical characters only).
 		$this->__properties['online'] = 'int'; // Toggle object on or offline.
 		$this->__properties['handler'] = 'alpha'; // Handler for this object.
-		$this->__properties['template'] = 'string'; // The template that should be used to display this object.
+		$this->__properties['template'] = 'alnum'; // The template that should be used to display this object.
 
 		/**
 		 * Set the permitted properties of this object.
@@ -43,7 +43,7 @@ class TfishBlock  extends TfishAncestralObject
 		$this->__data['limit'] = 5; // Arbitrary.
 		$this->__data['handler'] = get_class($this) . 'Handler';
 		$this->__data['online'] = 1;
-		$this->__data['template'] = 'default.html';
+		$this->__data['template'] = 'default';
 	}
 	
 	public function render($criteria)

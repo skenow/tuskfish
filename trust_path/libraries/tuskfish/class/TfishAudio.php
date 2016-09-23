@@ -22,7 +22,7 @@ class TfishAudio extends TfishContentObject
 		
 		// Declare the type, template and module for this this class
 		$this->__data['type'] = "audio";
-		$this->__data['template'] = "audio.html";
+		$this->__data['template'] = "audio";
 		$this->__data['module'] = "soundtracks";
 		
 		// Object definition - unset any properties unused in this subclass.
