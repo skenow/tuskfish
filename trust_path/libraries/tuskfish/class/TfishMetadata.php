@@ -147,7 +147,7 @@ class TfishMetadata
 		if ($remainder) {
 			$page_count += 1;
 		}
-		if ($remainder || $current_page == 0) {
+		if (!$remainder || $current_page == 0) {
 			$current_page += 1;
 		}
 		

@@ -33,7 +33,7 @@ if ($clean_id) {
 	$article = TfishArticleHandler::getObject($clean_id);
 	if (is_object($article)) {
 		$tfish_template->article = $article;
-		$tfish_template->main_content = $tfish_template->render('article');
+		$tfish_template->tfish_main_content = $tfish_template->render('article');
 	} else {
 		$tfish_template->error = TFISH_ERROR_NO_SUCH_CONTENT;
 	}

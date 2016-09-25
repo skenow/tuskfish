@@ -4,6 +4,7 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
+* Convert the pagination control to use of templates, and then nest it within the main.html template to prove nesting works.
 * Detail the data entry form
   - Consider using this Boostrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
   - Take the select boxes out of the form (build them in the class files).
@@ -11,19 +12,6 @@ WHERE I LEFT OFF
   - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
 * Data edit form: How to handle editing of file uploads?
   - Image/media fields should display the file name of any existing file.
-* Consider creating a controller class that can handle the basic add/edit/update/confirm/delete operations and standard views (single, newsfeed, grid).
-  1. Listen for whitelisted script parameters
-  2. Validate the data (whitelists, type) but leave it to objects internal security to validate in detail.
-  3. Define key standard actions:
-     - Add
-     - Edit
-     - Submit
-     - Confirm
-     - Delete
-     - View (index table, single object, multiple objects, grid view).
-  4. Issues
-     - Parameters would be i) parameter whitelist, ii) action whitelist, iii) templates and forms for admin actions, iv) templates for different views.
-     - How to accommodate the logic for different actions? It will vary by page, object etc.
 
 THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 ==============================================
@@ -31,3 +19,4 @@ THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 * Logger needs echoing of error messages to screen commented out.
 * Logger needs to return FALSE otherwise trigger_error() will not stop script execution (in dev mode, it's handy to let the script keep going to get context).
 * TfishFilter::connect() needs the error mode PDO::ERRMODE_EXCEPTION changed to silent or warning (stop throwing exceptions!). This could be a preference setting.
+* Uncomment the section of the installation script that deletes the installation script.
