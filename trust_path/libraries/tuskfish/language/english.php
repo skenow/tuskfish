@@ -89,7 +89,7 @@ define("TFISH_TEASER", "Teaser");
 define("TFISH_DESCRIPTION", "Description");
 define("TFISH_FORMAT", "Format");
 define("TFISH_FILE_SIZE", "Bytes");
-define("TFISH_CREATOR", "Creator");
+define("TFISH_CREATOR", "Author");
 define("TFISH_IMAGE", "Image");
 define("TFISH_CAPTION", "Caption");
 define("TFISH_MEDIA", "Media");
@@ -105,6 +105,7 @@ define("TFISH_ONLINE", "Online");
 define("TFISH_OFFLINE", "Offline");
 define("TFISH_SUBMISSION_TIME", "Submitted");
 define("TFISH_COUNTER", "Counter");
+define("TFISH_VIEWS", "views"); // Alternative representation of counter, which may be more approppriate in some contexts.
 define("TFISH_META_TITLE", "Title");
 define("TFISH_META_DESCRIPTION", "Description");
 define("TFISH_SEO", "SEO");
@@ -178,6 +179,7 @@ define("TFISH_ERROR_BAD_PATH", "Bad file path.");
 define("TFISH_ERROR_NOT_AN_UPLOADED_FILE", "Not an uploaded file, possible upload attack.");
 define("TFISH_ERROR_NOT_TEMPLATE_OBJECT", "Not a template object.");
 define("TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST", "Template file does not exist.");
+define("TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE", "Cannot overwrite template variable.");
 define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter error.");
 
 // File upload error messages.

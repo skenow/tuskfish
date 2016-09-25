@@ -60,9 +60,9 @@
     <div class="container">
 		<div class="starter-template">
 		<?php
-			if (isset($page_title)) echo '<h1>' . $page_title . '</h1>';
+			if (isset($page_title)) echo '<h1 class="display-1">' . $page_title . '</h1>';
 			if (isset($pagination)) echo $pagination;
-			if ($tfish_content['output']) echo $tfish_content['output'];
+			if ($content) echo $content;
 			if (!empty($tfish_form)) require $tfish_form;
 		?>
       </div>

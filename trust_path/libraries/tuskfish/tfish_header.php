@@ -49,6 +49,5 @@ TfishSession::sessionStart();
 $tfish_metadata = new TfishMetadata($tfish_preference);
 
 // Set an array to hold page-genenerated content and provide a consistent mechanism for accessing it. 
-$tfish_content = array('output' => '');
 
 // echo '<p>Header included.</p>';

@@ -9,75 +9,43 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
-class TfishTemplate {
-	protected $file;
-	protected $content;
+
+class TfishTemplate
+{	
+	protected $__data = array();
 	
-	public function __construct() {}
+	public function __construct()
+	{}
 	
-	/**
-	 * Concatenates an array of templates in preparation for display.
-	 * 
-	 * Note that data must be passed to this method pre-escaped for output to display. 
-	 * 
-	 * @param array $templates
-	 * 
-	 * @return string $output
-	 */
-	public function concatenate($templates)
+	public function __get($property)
 	{
-		$output = "";
-		
-		foreach ($templates as $template) {
-			if (!is_a($template, 'TfishTemplate')) {
-				trigger_error(TFISH_ERROR_NOT_TEMPLATE_OBJECT, E_USER_ERROR);
-			}
-			$output .= $content . 'n';
+		if (isset($this->__data[$property])) {
+			return $this->__data[$property];
+		} else {
+			return null;
 		}
-		
-		return $output;
 	}
 	
-	/**
-	 * Prepares object data for display (converts to human readable) and renders the template
-	 * using the properties to replace placeholder tags.
-	 * 
-	 * @return string
-	 */
-	public function render()
+	public function __set($property, $value)
 	{
-		if (file_exists(TFISH_TEMPLATES_OBJECT_PATH . $this->file . '.html')) {
-			$output = file_get_contents(TFISH_TEMPLATES_OBJECT_PATH . $this->file . '.html');
+		if ($property == 'template') {
+			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
+		}
+		$this->__data[$property] = $value;
+	}
+	
+	public function render($template)
+	{
+		if (array_key_exists('template', $this->__data)) {
+			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
+		}
+		extract($this->__data);
+		if (file_exists(TFISH_TEMPLATES_OBJECT_PATH . $template . '.html')) {
+			ob_start();
+			include TFISH_TEMPLATES_OBJECT_PATH . $template . '.html';
+			return ob_get_clean();
 		} else {
 			trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
 		}
-		
-		$properties = $this->content->getPropertyWhitelist();
-		$tag_list = TfishContentHandler::getTagList();
-		foreach ($properties as $key => $value) {
-			$placeholder = '{' . $key . '}';
-			if ($key == 'tags') {
-				$tags = implode(", ", $this->content->tags);
-				$output = str_replace('{tags}', $tags, $output);
-			} else {
-				$output = str_replace($placeholder, $this->content->escape($key), $output);
-			}
-			unset($key, $value, $placeholder);
-		}
-		
-		return $output;
-	}
-	
-	/**
-	 * Set a template variable.
-	 * 
-	 * Note that data must be passed to this method pre-escaped for output to display. 
-	 * 
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public function set($key, $value)
-	{
-		$this->content[$key] = $value;
 	}
 }

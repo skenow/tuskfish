@@ -17,3 +17,10 @@ foreach ($contentObj as $content) {
 	$content_template_handler = new $content->type . 'Template' . ($content);
 	$rendered_content = $content_template_handler->render($content);
 }
+
+The current template system has two problems:
+  - Can't evaluate PHP in a HTML template retrieved with file_get_contents(), as a result of which
+  - Can't turn off empty elements and their HTML containers. Maybe it could be done with Javascript, but that is too horrible to think about.
+
+Old Skool - use a combined PHP/HTML template and do not use file_get_contents() (and this is why Smarty templates have logic in them).
+  - Keep the template objects and render() function, which will still accept an object for presentation and load the template.

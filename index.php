@@ -24,10 +24,10 @@ $criteria->limit = $tfish_preference->user_pagination;
 $count = TfishArticleHandler::getCount($criteria);
 $articles = TfishArticleHandler::getObjects($criteria);
 $tfish_content['output'] = '<ul>';
-foreach ($articles as $article) {
+/*foreach ($articles as $article) {
 	$tfish_content['output'] .= '<li>' . $article->title . '</li>';
 }
-$tfish_content['output'] .= '<ul>';
+$tfish_content['output'] .= '<ul>';*/
 
 //$block = new TfishBlockList('Testing the block', 5);
 //echo $block->render($criteria);
@@ -36,10 +36,22 @@ $tfish_content['output'] .= '<ul>';
 $page_title = 'Articles';
 $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL);
 
-// Experimental template system.
-$firstArticle = array_shift($articles);
-$articleTpl = new TfishArticleTemplate($firstArticle);
-$tfish_content['output'] .= $articleTpl->render();
+/**
+ * Experimental template system. 
+ * 
+ * At this stage, it will *only* deal with the actual content of the page, not the metadata,
+ * header or footer. If it works out, the top level theme may be switched to the same mechanism.
+ */
+$view = new TfishTemplate();
+$view->title = "A new template system";
+
+// Display multiple articles (teasers) as per a traditional index page.
+$view->articles = $articles;
+$content = $view->render('articles');
+
+// Display a single article (description) as per a traditional single object view.
+// $view->article = array_shift($articles);
+// $content = $view->render('article');
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
@@ -51,7 +63,7 @@ $tfish_content['output'] .= $articleTpl->render();
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-// $tfish_metadata->template = '';
+// $tfish_metadata->template = 'jumbotron.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

@@ -223,7 +223,7 @@ class TfishContentObject extends TfishAncestralObject
 		if (isset($this->__data[$property])) {
 			return $this->__data[$property];
 		} else {
-			return false;
+			return null;
 		}
 	}
 	
