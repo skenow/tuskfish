@@ -1,8 +1,7 @@
 <!-- Display a single article object -->
-
 <?php if ($article): ?>
 	<div class="container text-left">
-		<?php if ($article->title) echo '<h2>' . $article->title . '</h2>'; ?>
+		<?php echo '<h2>' . $article->title . '</h2>'; ?>
 		<?php if ($article->author || $article->counter || $article->tags): ?>
 			<p><em>
 				<?php

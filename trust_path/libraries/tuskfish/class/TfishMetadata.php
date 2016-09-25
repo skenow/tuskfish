@@ -114,7 +114,7 @@ class TfishMetadata
 	 * @return string
 	 */
 	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = false)
-	{		
+	{
 		// Filter parameters.
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;

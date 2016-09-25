@@ -113,10 +113,14 @@ class TfishContentHandler
 	public static function getCount($criteria = false)
 	{
 		if ($criteria && !empty($criteria->limit)) {
-			unset($criteria->limit);
+			$limit = $criteria->limit;
+			$criteria->limit = 0;
 		}
 		$count = TfishDatabase::selectCount('content', $criteria);
-		
+		if (isset($limit)) {
+			$criteria->limit = (int)$limit;
+		}
+
 		return $count;
 	}
 	

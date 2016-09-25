@@ -71,7 +71,7 @@ class TfishArticleHandler extends TfishContentHandler
 		// Set new type criteria specific to this object.
 		$criteria->add(new TfishCriteriaItem('type', 'TfishArticle'));
 		$count = parent::getcount($criteria);
-		
+
 		return $count;
 	}
 	

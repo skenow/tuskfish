@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish basic page template script
+* Tuskfish basic page template script.
+* 
+* Site preferences can be accessed via $tfish_preference->key.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -11,47 +13,47 @@
 */
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
-// Site preferences can be accessed via $tfish_preference->key;
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Page title.
+$tfish_template->page_title = 'Articles';
+
+// Validate input parameters.
+$clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-
-// Get a count for the pagination control. Actually, it might be possible to just pass in the
-$criteria = new TfishCriteria();
-$criteria->limit = $tfish_preference->user_pagination;
-
-$count = TfishArticleHandler::getCount($criteria);
-$articles = TfishArticleHandler::getObjects($criteria);
-$tfish_content['output'] = '<ul>';
-/*foreach ($articles as $article) {
-	$tfish_content['output'] .= '<li>' . $article->title . '</li>';
-}
-$tfish_content['output'] .= '<ul>';*/
-
-//$block = new TfishBlockList('Testing the block', 5);
-//echo $block->render($criteria);
-
-// Assign template variables.
-$page_title = 'Articles';
-$pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL);
+$clean_tag = isset($_GET['tag']) ? (int)$_GET['tag'] : 0;
 
 /**
- * Experimental template system. 
- * 
- * At this stage, it will *only* deal with the actual content of the page, not the metadata,
- * header or footer. If it works out, the top level theme may be switched to the same mechanism.
+ * Controller logic.
  */
-$view = new TfishTemplate();
-$view->title = "A new template system";
 
-// Display multiple articles (teasers) as per a traditional index page.
-$view->articles = $articles;
-$content = $view->render('articles');
-
-// Display a single article (description) as per a traditional single object view.
-// $view->article = array_shift($articles);
-// $content = $view->render('article');
+// View single object description.
+if ($clean_id) {
+	$article = TfishArticleHandler::getObject($clean_id);
+	if (is_object($article)) {
+		$tfish_template->article = $article;
+		$tfish_template->main_content = $tfish_template->render('article');
+	} else {
+		$tfish_template->error = TFISH_ERROR_NO_SUCH_CONTENT;
+	}
+	
+// View index page of multiple objects (teasers).
+} else {
+	// Set criteria for selecting content objects.
+	$criteria = new TfishCriteria();
+	if ($clean_start) $criteria->offset = $clean_start;
+	$criteria->limit = $tfish_preference->user_pagination;
+	
+	// Prepare pagination control.
+	$count = TfishArticleHandler::getCount($criteria);
+	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start);
+	
+	// Retrieve content objects and assign to template.
+	$articles = TfishArticleHandler::getObjects($criteria);
+	$tfish_template->articles = $articles;
+	$tfish_template->tfish_main_content = $tfish_template->render('articles');
+}
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).

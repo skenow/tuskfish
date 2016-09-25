@@ -48,6 +48,7 @@ TfishSession::sessionStart();
 // Set default page-level metadata values for essential template variables (overwrite as required).
 $tfish_metadata = new TfishMetadata($tfish_preference);
 
-// Set an array to hold page-genenerated content and provide a consistent mechanism for accessing it. 
+// Instantiate the template object so that it will be available globally.
+$tfish_template = new TfishTemplate();
 
 // echo '<p>Header included.</p>';

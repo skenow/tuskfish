@@ -637,8 +637,8 @@ class TfishDatabase
 	 * @return object PDO statement
 	 */
 	private static function _select($table, $criteria, $columns)
-	{		
-		// Specify operation
+	{
+		// Specify operation.
 		$sql = "SELECT ";
 		
 		// Select columns.
@@ -661,7 +661,6 @@ class TfishDatabase
 		
 		// Set WHERE criteria.
 		if ($criteria) {
-			
 			if (!empty($criteria->item) || !empty($criteria->tag)) {
 				$sql .= "WHERE ";
 			}
@@ -702,7 +701,7 @@ class TfishDatabase
 				$sql .= " LIMIT :limit";
 			}
 		}
-		
+
 		// Prepare the statement and bind the values.
 		try {
 			$statement = self::preparedStatement($sql);
@@ -805,7 +804,7 @@ class TfishDatabase
 		} catch (PDOException $e) {
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
-		
+
 		// Execute the statement.
 		try {
 			$statement->execute();
@@ -819,7 +818,8 @@ class TfishDatabase
 		} catch (PDOException $e) {
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
-		return reset($count);
+
+		return (int)reset($count);
 	}
 	
 	/**
