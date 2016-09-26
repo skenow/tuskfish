@@ -209,7 +209,7 @@ class TfishContentHandler
 		} else {
 			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 		}
-		
+
 		return $tags;
 	}
 	
@@ -277,6 +277,41 @@ class TfishContentHandler
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Converts an array of tag_ids into an array of tag links with an arbitrary local target file.
+	 * 
+	 * Note that the filename may only consist of alphanumeric characters and underscores. Do not
+	 * include the file extension (eg. use 'article' instead of 'article.php'. The base URL of the
+	 * site will be prepended and .php plus the tag_id will be appended.
+	 * 
+	 * @param arrray $tags
+	 * @param type $target_url
+	 * 
+	 * @return array
+	 */
+	public static function makeTagLinks($tags, $target_filename)
+	{
+		if (!TfishFilter::isArray($tags)) {
+			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+		}
+		if (empty($target_filename) || !TfishFilter::isAlnumUnderscore($target_filename)) {
+			trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+		}
+		$target_filename = TfishFilter::trimString($target_filename);
+		$clean_filename = TFISH_URL . TfishFilter::escape($target_filename) . '.php?tag_id=';
+		
+		$tag_list = self::getTagList();
+		$tag_links = array();
+		foreach ($tags as $tag) {
+			if (TfishFilter::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
+				$tag_links[$tag] = '<a href="' . $clean_filename . $tag . '">' . TfishFilter::escape($tag_list[$tag]) . '</a>';
+			}
+			unset($tag);
+		}			
+
+		return $tag_links;
 	}
 	
 	/**
@@ -413,6 +448,12 @@ class TfishContentHandler
 	
 	/**
 	 * Convert a database content row to a corresponding content object.
+	 * 
+	 * Only use this function to convert single objects, as it does a seperate query to look up
+	 * the associated taglinks. Running it through a loop will therefore consume a lot of resources.
+	 * To convert multiple objects, load them directly into the relevant class files using
+	 * PDO::FETCH_CLASS, prepare a buffer of tags using getTags() and loop through the objects
+	 * referring to the buffer rather than hitting the database every time.
 	 * 
 	 * @param type $row
 	 * @return boolean

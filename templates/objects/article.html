@@ -2,12 +2,12 @@
 <?php if ($article): ?>
 	<div class="container text-left">
 		<?php echo '<h2>' . $article->title . '</h2>'; ?>
-		<?php if ($article->author || $article->counter || $article->tags): ?>
+		<?php if ($article->author || $article->counter || $tags): ?>
 			<p><em>
 				<?php
 					if ($article->creator) echo $article->creator . ' | ';
 					if ($article->counter) echo $article->counter . ' ' . TFISH_VIEWS . ' | ';
-					if ($article->tags) echo TFISH_TAGS . ': ' . implode(", ", $article->tags); ?>
+					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
 			</em></p>
 		<?php endif; ?>
 		<?php if ($article->description) echo $article->description; ?>

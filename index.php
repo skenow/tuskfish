@@ -32,6 +32,7 @@ $clean_tag = isset($_GET['tag']) ? (int)$_GET['tag'] : 0;
 if ($clean_id) {
 	$article = TfishArticleHandler::getObject($clean_id);
 	if (is_object($article)) {
+		$tfish_template->tags = TfishArticleHandler::makeTagLinks($article->tags, 'articles');
 		$tfish_template->article = $article;
 		$tfish_template->tfish_main_content = $tfish_template->render('article');
 	} else {

@@ -21,7 +21,7 @@
  * 
  * Traditionally, most CMS create a separate database table for every type of content with
  * duplicate column names. And it works just fine until you want to publish a single content stream
- * containing different kinds of content objects. Then, suddenly, you queries are full of complex
+ * containing different kinds of content objects. Then, suddenly, your queries are full of complex
  * joins and other rubbish and it becomes very painful to work with.
  * 
  * By using a single table for content objects with common field names our queries become very

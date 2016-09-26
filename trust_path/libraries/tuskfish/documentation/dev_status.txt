@@ -4,6 +4,7 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
+* Templates should call escape() on data for display.
 * Convert the pagination control to use of templates, and then nest it within the main.html template to prove nesting works.
 * Detail the data entry form
   - Consider using this Boostrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
