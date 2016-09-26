@@ -291,16 +291,22 @@ class TfishContentHandler
 	 * 
 	 * @return array
 	 */
-	public static function makeTagLinks($tags, $target_filename)
+	public static function makeTagLinks($tags, $target_filename = false)
 	{
 		if (!TfishFilter::isArray($tags)) {
 			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
 		}
-		if (empty($target_filename) || !TfishFilter::isAlnumUnderscore($target_filename)) {
-			trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+		
+		if (empty($target_filename)) {
+			$clean_filename = TFISH_URL . '?tag_id=';
+		} else {
+			if (!TfishFilter::isAlnumUnderscore($target_filename)) {
+				trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+			} else {
+				$target_filename = TfishFilter::trimString($target_filename);
+				$clean_filename = TFISH_URL . TfishFilter::escape($target_filename) . '.php?tag_id=';
+			}
 		}
-		$target_filename = TfishFilter::trimString($target_filename);
-		$clean_filename = TFISH_URL . TfishFilter::escape($target_filename) . '.php?tag_id=';
 		
 		$tag_list = self::getTagList();
 		$tag_links = array();

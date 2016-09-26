@@ -174,7 +174,7 @@ class TfishMetadata
 
 		// Construct a HTML pagination control.
 		if ($tag) {
-			$tag = '&amp;' . $tag;
+			$tag = '&amp;tag_id=' . $tag;
 		}
 		$control = '<ul class="pagination">';
 		foreach ($page_slots as $key => $slot) {
