@@ -19,7 +19,7 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	// Constants that make use of the physical path.
 	define("TFISH_ADMIN_PATH", TFISH_ROOT_PATH . "admin/");
 	define("TFISH_CACHE_PATH", TFISH_ROOT_PATH . "cache/");
-	define("TFISH_TEMPLATES_PATH", TFISH_ROOT_PATH . "templates/");
+	define("TFISH_TEMPLATES_PATH", TFISH_ROOT_PATH . "templates/layouts/");
 	define("TFISH_TEMPLATES_BLOCK_PATH", TFISH_ROOT_PATH . "templates/blocks/");
 	define("TFISH_TEMPLATES_OBJECT_PATH", TFISH_ROOT_PATH . "templates/objects/");
 	
