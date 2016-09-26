@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$taglink_columns = array(
 					"id" => "INTEGER",
 					"tag_id" => "INTEGER",
-					"type" => "TEXT",
+					"content_type" => "TEXT",
 					"content_id" => "INTEGER");
 				TfishDatabase::createTable('taglink', $taglink_columns, 'id');
 

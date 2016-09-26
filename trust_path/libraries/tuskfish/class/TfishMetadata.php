@@ -113,20 +113,19 @@ class TfishMetadata
 	 * @param string $url
 	 * @return string
 	 */
-	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = false)
+	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0)
 	{
 		// Filter parameters.
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
 		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : 0;
 		$clean_url = TfishFilter::isUrl($url) ? TfishFilter::escape($url) : false;
-		$clean_tag = TfishFilter::isAlnum($tag) ? TfishFilter::escape($tag) : false;
+		$clean_tag = TfishFilter::isInt($tag) ? (int)$tag : 0;
 		
 		// If the count is zero there is no need for a pagination control.
 		if ($clean_count == 0) {
 			return false;
 		}
-		
 		// If any parameter fails a range check throw an error.
 		if ($clean_limit === false || $clean_url === false) {
 			trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
@@ -142,15 +141,12 @@ class TfishMetadata
 	{
 		// Calculate number of pages, page number of start object and adjust for remainders.
 		$page_count = (int)(($count / $limit));
-		$current_page = (int)(($start / $limit));
+		$current_page = (int)(($start / $limit) + 1);
 		$remainder = $count % $limit;
 		if ($remainder) {
 			$page_count += 1;
 		}
-		if (!$remainder || $current_page == 0) {
-			$current_page += 1;
-		}
-		
+
 		// No need for pagination control if only one page.
 		if ($page_count == 1) {
 			return false;
@@ -173,18 +169,22 @@ class TfishMetadata
 		}
 
 		// Construct a HTML pagination control.
-		if ($tag) {
-			$tag = '&amp;tag_id=' . $tag;
-		}
 		$control = '<ul class="pagination">';
+		
+		// Prepare the query string.
+		$query = $start_arg = $tag_arg = '';	
 		foreach ($page_slots as $key => $slot) {
+			$start = (int)(($key - 1) * $limit);
+			$query = ($start || $tag) ? '?' : '';
+			$start_arg = !empty($start) ? 'start=' . $start : '';
+			$separator = (!empty($start) && !empty($tag)) ? '&amp;' : '';
+			$tag_arg = !empty($tag) ? 'tag_id=' . $tag : '';
 			if ($key == $current_page) {
-				$control .= '<li class="active"><a href="' . $url . '?start=' 
-						. (($key - 1) * $limit) .  $tag . '">' . $slot . '</a></li>';
+				$control .= '<li class="active"><a href="' . $url . $query . $start_arg . $separator . $tag_arg . '">' . $slot . '</a></li>';
 			} else {
-				$control .= '<li><a href="' . $url . '?start=' 
-						. (($key - 1) * $limit) .  $tag . '">' . $slot . '</a></li>';
+				$control .= '<li><a href="' . $url . $query . $start_arg . $separator . $tag_arg . '">' . $slot . '</a></li>';
 			}
+			unset($query, $separator, $start_arg, $tag_arg, $key, $slot);
 		}
 		$control .= '</ul>';
 		

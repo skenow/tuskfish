@@ -134,8 +134,23 @@ class TfishContentObject extends TfishAncestralObject
 		}
 	}
 	
-	public function getItemLink($urlOnly = false)
-	{	
+	/**
+	 * Generates a URL to access this object in single view mode, either relative to home page or
+	 * to the subclass-specific page.
+	 * 
+	 * @return string
+	 */
+	public function getURL($use_subclass_page = false)
+	{
+		$url = TFISH_URL;
+		if (!$use_subclass_page) {
+			$url .= self::escape($this->module) . 'php';
+		}
+		$url .= '?id=' . (int)$this->id;
+		if ($this->seo) {
+			$url .= '&amp;title=' . self::escape('seo');
+		}
+		return $url;
 	}
 	
 	public function getEditLink($urlOnly = false)

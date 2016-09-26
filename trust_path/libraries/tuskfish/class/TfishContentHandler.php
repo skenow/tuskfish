@@ -13,8 +13,8 @@ class TfishContentHandler
 {
 	function __construct()
 	{
-	}
-	
+	}	
+
 	/**
 	 * Retrieves a single content object based on its ID.
 	 * 

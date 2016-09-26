@@ -15,7 +15,7 @@ class TfishTaglink
 	protected $__data = array(
 		'id', // ID of this taglink object
 		'tag_id', // ID of the tag object
-		'type', // Type of content object
+		'content_type', // Type of content object
 		'content_id', // ID of the content object
 		'handler'); // The handler for taglink objects
 	
@@ -24,7 +24,7 @@ class TfishTaglink
 	 */
 	function __construct()
 	{
-		$this->__data['handler'] = $this->__data['type'] . 'Handler';
+		$this->__data['type'] = "TfishTaglink";
 	}
 	
 	/**

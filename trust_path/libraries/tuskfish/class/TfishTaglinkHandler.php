@@ -44,7 +44,7 @@ class TfishTaglinkHandler extends TfishContentHandler
 				trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			}
 			$tag['content_id'] = $clean_content_id;
-			$tag['type'] = $clean_type;
+			$tag['content_type'] = $clean_type;
 			$clean_tags[] = $tag;
 			unset($tag);
 		}
@@ -119,7 +119,7 @@ class TfishTaglinkHandler extends TfishContentHandler
 				trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			}
 			$tag['content_id'] = $clean_id;
-			$tag['type'] = $type;
+			$tag['content_type'] = $type;
 			$clean_tags[] = $tag;
 			unset($tag);
 		}

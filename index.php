@@ -23,7 +23,6 @@ $tfish_template->page_title = 'Articles';
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
-
 /**
  * Controller logic.
  */
@@ -45,16 +44,11 @@ if ($clean_id) {
 	$criteria = new TfishCriteria();
 	if ($clean_start) $criteria->offset = $clean_start;
 	$criteria->limit = $tfish_preference->user_pagination;
-	if ($clean_tag) {
-		echo 'clean tag ' . $clean_tag;
-		$criteria->tag = array($clean_tag);
-	} else {
-		echo 'no tag';
-	}
+	if ($clean_tag) $criteria->tag = array($clean_tag);
 	
 	// Prepare pagination control.
 	$count = TfishArticleHandler::getCount($criteria);
-	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start);
+	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 	
 	// Retrieve content objects and assign to template.
 	$articles = TfishArticleHandler::getObjects($criteria);
