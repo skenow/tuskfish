@@ -81,12 +81,13 @@ class TfishArticleHandler extends TfishContentHandler
 	 * @param array $criteria_items
 	 * @return mixed
 	 */
-	private static function getTypeIndex($criteria_items) {
-			foreach ($criteria_items as $key => $item) {
-				if ($item->column == 'type') {
-					return $key;
-				}
+	private static function getTypeIndex($criteria_items)
+	{
+		foreach ($criteria_items as $key => $item) {
+			if ($item->column == 'type') {
+				return $key;
 			}
-			return null;
-		 }
+		}
+		return null;
+	}
 }

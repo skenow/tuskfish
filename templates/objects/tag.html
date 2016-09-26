@@ -1,15 +1,15 @@
-<!-- Display tags for a single article object -->
-<?php if ($article): ?>
+<!-- Display a single tag object -->
+<?php if ($content): ?>
 	<div class="container text-left">
-		<?php echo '<h2>' . $article->title . '</h2>'; ?>
-		<?php if ($article->author || $article->counter || $article->tags): ?>
+		<?php echo '<h2>' . $content->title . '</h2>'; ?>
+		<?php if ($content->author || $content->counter || $tags): ?>
 			<p><em>
 				<?php
-					if ($article->creator) echo $article->creator . ' | ';
-					if ($article->counter) echo $article->counter . ' ' . TFISH_VIEWS . ' | ';
-					if ($article->tags) echo TFISH_TAGS . ': ' . implode(", ", $article->tags); ?>
+					if ($content->creator) echo $content->creator . ' | ';
+					if ($content->counter) echo $content->counter . ' ' . TFISH_VIEWS . ' | ';
+					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
 			</em></p>
 		<?php endif; ?>
-		<?php if ($article->description) echo $article->description; ?>
+		<?php if ($content->description) echo $content->description; ?>
 	</div>
 <?php endif; ?>

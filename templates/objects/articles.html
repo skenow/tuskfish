@@ -1,9 +1,9 @@
 <!-- Display a list of articles in teaser view -->
-<?php if ($articles): ?>
-	<?php foreach ($articles as $article): ?>
+<?php if ($content_objects): ?>
+	<?php foreach ($content_objects as $content): ?>
 		<div class="container text-left">
-			<?php echo '<h3><a href="' . $article->getURL(true) . '">' . $article->escape('title') . '</a></h3>'; ?>
-			<?php echo $article->escape('teaser'); ?>
+			<?php echo '<h3><a href="' . $content->getURL(true) . '">' . $content->escape('title') . '</a></h3>'; ?>
+			<?php echo $content->escape('teaser'); ?>
 		</div>
 	<?php endforeach; ?>
 </ul><?php endif; ?>

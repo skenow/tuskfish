@@ -77,6 +77,21 @@ define("TFISH_TYPE_STATIC", "Static");
 define("TFISH_TYPE_TAG", "Tag");
 define("TFISH_TYPE_VIDEO", "Video");
 
+// Plural terms
+define("TFISH_TYPE_ARTICLES", "Articles");
+define("TFISH_TYPE_AUDIO _FILES", "Audio files");
+define("TFISH_TYPE_COLLECTIONS", "Collections");
+define("TFISH_TYPE_DOWNLOADS", "Downloads");
+define("TFISH_TYPE_EVENTS", "Events");
+define("TFISH_TYPE_IMAGES", "Images");
+define("TFISH_TYPE_PARTNERS", "Partners");
+define("TFISH_TYPE_PODCASTS", "Podcasts");
+define("TFISH_TYPE_PROJECTS", "Projects");
+define("TFISH_TYPE_QUOTES", "Quotes");
+define("TFISH_TYPE_STATIC_PAGES", "Static pages");
+define("TFISH_TYPE_TAGS", "Tags");
+define("TFISH_TYPE_VIDEOS", "Videos");
+
 // Pagination controls
 define("TFISH_PAGINATION_FIRST", "First");
 define("TFISH_PAGINATION_LAST", "Last");

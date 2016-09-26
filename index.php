@@ -16,24 +16,33 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+/**
+ * CONVENTIONS:
+ * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
+ * 2. Specify the name of the template for the index page, eg. 'articles'.
+ */
+$content_handler = 'TfishArticleHandler';
+$index_template = 'articles';
+
 // Page title.
-$tfish_template->page_title = 'Articles';
+$tfish_template->page_title = TFISH_TYPE_ARTICLES;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
+
 /**
  * Controller logic.
  */
 
 // View single object description.
 if ($clean_id) {
-	$article = TfishArticleHandler::getObject($clean_id);
-	if (is_object($article)) {
-		$tfish_template->tags = TfishArticleHandler::makeTagLinks($article->tags, 'index');
-		$tfish_template->article = $article;
-		$tfish_template->tfish_main_content = $tfish_template->render('article');
+	$content = $content_handler::getObject($clean_id);
+	if (is_object($content)) {
+		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, 'index'); // For a content type-specific page use $content->tags, $content->template
+		$tfish_template->content = $content;
+		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
 		$tfish_template->error = TFISH_ERROR_NO_SUCH_CONTENT;
 	}
@@ -47,13 +56,13 @@ if ($clean_id) {
 	if ($clean_tag) $criteria->tag = array($clean_tag);
 	
 	// Prepare pagination control.
-	$count = TfishArticleHandler::getCount($criteria);
+	$count = $content_handler::getCount($criteria);
 	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 	
 	// Retrieve content objects and assign to template.
-	$articles = TfishArticleHandler::getObjects($criteria);
-	$tfish_template->articles = $articles;
-	$tfish_template->tfish_main_content = $tfish_template->render('articles');
+	$content_objects = $content_handler::getObjects($criteria);
+	$tfish_template->content_objects = $content_objects;
+	$tfish_template->tfish_main_content = $tfish_template->render($index_template);
 }
 
 /**

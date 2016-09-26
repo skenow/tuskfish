@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Tuskfish articles script.
+* Tuskfish audio file script.
 * 
 * Site preferences can be accessed via $tfish_preference->key.
 *
@@ -21,11 +21,11 @@ require_once TFISH_PATH . "tfish_header.php";
  * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
  * 2. Specify the name of the template for the index page, eg. 'articles'.
  */
-$content_handler = 'TfishArticleHandler';
-$index_template = 'articles';
+$content_handler = 'TfishAudioHandler';
+$index_template = 'soundtracks';
 
 // Page title.
-$tfish_template->page_title = TFISH_TYPE_ARTICLES;
+$tfish_template->page_title = TFISH_TYPE_AUDIO_FILES;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
