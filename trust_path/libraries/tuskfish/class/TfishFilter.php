@@ -4,7 +4,7 @@
 * Tuskfish data filter class
 * 
 * NOTE WELL!!!
-* ===============
+* ============
 * The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE SAFETY. 
 * They are intended for EXCLUSIVE use with PREPARED STATEMENTS and BOUND VALUES to mitigate SQL
 * injection.
@@ -26,8 +26,7 @@
 class TfishFilter
 {
 	/**
-	 * Sanitises untrusted input data, removing unwanted tags and junk. Forcibly casts to expected
-	 * datatype; as html form input always arrives as strings.
+	 * Forcibly casts to expected datatype; as html form input always arrives as strings.
 	 * 
 	 * Use this function to screen user-side input. If data passes validation it will be handed
 	 * back with minimalist sanitisation (control characters and trailing whitespace removed); if
@@ -302,19 +301,9 @@ class TfishFilter
 	 * CAUTION! THIS METHOD DOES NOT RETURN DATABASE SAFE DATA!!!
 	 * 
 	 * All this method does is to remove trailing whitespace and control characters (ASCII < 32).
-	 * The data returned by this function REQUIRES escaping at the point of use (this is Tuskfish 
-	 * policy; since you don't know the context in which data will be used in the future you should
-	 * apply relevant escaping when you actually need to use it). For example:
+	 * The data returned by this function REQUIRES escaping at the point of use.
 	 * 
-	 * 1. To prepare data for use in database queries such as insertion in the database, use it as 
-	 * bound values/parameters in prepared statements (PDO). This will mitigate SQL injection
-	 * attacks.
-	 * 
-	 * 2. To prepare data for display in a webpage (including when you retrieve it from the 
-	 * database) pass it through escape(). This will mitigate XSS attacks.
-	 * 
-	 * This function is used to treat ALL TfishContentObject fields that are of STRING type. Do not
-	 * apply it to non-string types (int, float, bool, object, resource, null, array, etc).
+	 * Do not apply it to non-string types (int, float, bool, object, resource, null, array, etc).
 	 * 
 	 * @param string $dirty_text
 	 * @return string

@@ -31,7 +31,9 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_ERROR_LOG_PATH", TFISH_TRUST_PATH . "log/tuskfish_log.txt");
 	define("TFISH_FORM_PATH", TFISH_PATH . "form/");
 	define("TFISH_LIBRARIES_PATH", TFISH_TRUST_PATH . "libraries/");
+	define("TFISH_UPLOADS_PATH", TFISH_TRUST_PATH . "uploads/");
 	define("TFISH_MEDIA_PATH", TFISH_TRUST_PATH . "media/");
+	define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');
 	
 	// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL
 	define("TFISH_ADMIN_URL", TFISH_URL . "admin/");

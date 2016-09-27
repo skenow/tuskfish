@@ -119,7 +119,7 @@ class TfishMetadata
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
 		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : 0;
-		$clean_url = TfishFilter::isUrl($url) ? TfishFilter::escape($url) : false;
+		$clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::escape($url) . '.php' : TFISH_URL;
 		$clean_tag = TfishFilter::isInt($tag) ? (int)$tag : 0;
 		
 		// If the count is zero there is no need for a pagination control.

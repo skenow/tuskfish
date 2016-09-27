@@ -23,6 +23,7 @@ require_once TFISH_PATH . "tfish_header.php";
  */
 $content_handler = 'TfishCollectionHandler';
 $index_template = 'collections';
+$target_file_name = 'collections';
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_COLLECTIONS;
@@ -40,7 +41,7 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content)) {
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, 'index'); // For a content type-specific page use $content->tags, $content->template
+		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
 		$tfish_template->content = $content;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
@@ -57,7 +58,8 @@ if ($clean_id) {
 	
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);
-	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
+	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
+			$tfish_preference->user_pagination, $target_file_name, $clean_start, $clean_tag);
 	
 	// Retrieve content objects and assign to template.
 	$content_objects = $content_handler::getObjects($criteria);

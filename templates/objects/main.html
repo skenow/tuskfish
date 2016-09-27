@@ -1,7 +1,16 @@
 <div class="container">
 	<div class="starter-template">
-		<?php if (isset($pagination)) echo $pagination; ?>
 		<?php if (isset($page_title)) echo '<h1>' . $page_title  . '</h1>'; ?>
+		<?php if (isset($pagination)): ?>
+			<div class="container text-right">
+				<?php echo $pagination; ?>
+			</div>
+		<?php endif; ?>
 		<?php if (isset($tfish_main_content)) echo $tfish_main_content; ?>
+		<?php if (isset($pagination)): ?>
+			<div class="container text-right">
+				<?php echo $pagination; ?>
+			</div>
+		<?php endif; ?>
 	</div>
 </div>

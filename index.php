@@ -20,6 +20,9 @@ require_once TFISH_PATH . "tfish_header.php";
  * CONVENTIONS:
  * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
  * 2. Specify the name of the template for the index page, eg. 'articles'.
+ * 3. (In type-specific pages) the name of this file (without extension) should be the same as the 
+ *    value of the object's 'module' field. If you want to change the file name, change the module
+ *    value in the object class as well.
  */
 $content_handler = 'TfishArticleHandler';
 $index_template = 'articles';
@@ -40,7 +43,8 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content)) {
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, 'index'); // For a content type-specific page use $content->tags, $content->template
+		// For a content type-specific page specify the file name (without extension) or use $content->template if it is the same as your file name.
+		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
 		$tfish_template->content = $content;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {

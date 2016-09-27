@@ -228,11 +228,10 @@ class TfishFileHandler
 	 * Upload a file to the media directory.
 	 * 
 	 * @param string $file Filename.
-	 * @param string $fieldname Name of form field associated with this upload.
-	 * @param string $type Type of content object this file is associated with (media subdirectory).
+	 * @param string $fieldname Name of form field associated with this upload (media subdirectory).
 	 * @return mixed string $filename on success or false on failure.
 	 */
-	public static function uploadFile($filename, $fieldname, $type)
+	public static function uploadFile($filename, $fieldname)
 	{		
 		$filename = TfishFilter::trimString($filename);
 		$clean_filename = pathinfo($filename, PATHINFO_FILENAME);
@@ -240,16 +239,12 @@ class TfishFileHandler
 		$fieldname = TfishFilter::trimString($fieldname);
 		$clean_fieldname = TfishFilter::isAlnum($fieldname) ? $fieldname : false ;
 		
-		$type = TfishFilter::trimString($type);
-		$type_list = TfishContentHandler::getTypes();
-		$clean_type = array_key_exists($type, $type_list) ? $type : false;
-		
 		$mimetype_list = self::getPermittedUploadMimetypes();
 		$mimetype = pathinfo($filename, PATHINFO_EXTENSION);
 		$clean_mimetype = in_array($mimetype, $mimetype_list) ? $mimetype : false;
 		
-		if ($clean_filename && $clean_fieldname && $clean_mimetype && $clean_type) {
-			return self::_uploadFile($clean_filename, $clean_fieldname, $clean_type, $clean_mimetype);
+		if ($clean_filename && $clean_fieldname && $clean_mimetype) {
+			return self::_uploadFile($clean_filename, $clean_fieldname, $clean_mimetype);
 		}
 		trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
 		return false;
@@ -358,8 +353,8 @@ class TfishFileHandler
 			$path = rtrim($path, '/');
 			
 			// Construct the full path and verify that it lies within the data_file directory.
-			$resolved_path = realpath(TFISH_MEDIA_PATH . $path);
-			if ($resolved_path == TFISH_MEDIA_PATH . $path) {
+			$resolved_path = realpath(TFISH_UPLOADS_PATH . $path);
+			if ($resolved_path == TFISH_UPLOADS_PATH . $path) {
 				return $resolved_path; // Path is good.
 			} else {
 				trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
@@ -449,7 +444,7 @@ class TfishFileHandler
 			$media = isset($content->media) ? $content->media : false;
 			if ($media) {
 				ob_start();
-				$file_path = TFISH_MEDIA_PATH . $content->type . '/' . $content->media;
+				$file_path = TFISH_MEDIA_PATH . $content->media;
 				$filename = empty($filename) ? pathinfo($file_path, PATHINFO_FILENAME) : $filename;
 				$file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
 				$mimetype_list = TfishUtils::getMimetypes();
@@ -486,10 +481,10 @@ class TfishFileHandler
 	 * @param string $mimetype
 	 * @return mixed string $filename on success bool false on failure
 	 */
-	private static function _uploadFile($filename, $fieldname, $type, $mimetype)
+	private static function _uploadFile($filename, $fieldname, $mimetype)
 	{		
 		$filename = time() . '_' . $filename;
-		$upload_path = TFISH_MEDIA_PATH . $type . '/' . $filename . '.' . $mimetype;
+		$upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $mimetype;
 		if ($_FILES[$fieldname]["error"]) {
 			switch ($_FILES[$fieldname]["error"]) {
 				case 1: // UPLOAD_ERR_INI_SIZE

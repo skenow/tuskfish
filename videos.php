@@ -17,12 +17,15 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 /**
- * CONVENTIONS:
- * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
- * 2. Specify the name of the template for the index page, eg. 'articles'.
+ * CONFIGURATION:
+ * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishVideoHandler'.
+ * 2. Specify the name of the template for the index page, eg. 'videos'.
+ * 3. The name of this file (without extension) should be the same as the value of the object's 'module' field.
+ *    If you want to change the file name, change the module value in the object class as well.
  */
 $content_handler = 'TfishVideoHandler';
 $index_template = 'videos';
+$target_file_name = 'videos';
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_VIDEOS;
@@ -40,7 +43,7 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content)) {
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $content->template);
+		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $content->module);
 		$tfish_template->content = $content;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
@@ -57,7 +60,8 @@ if ($clean_id) {
 	
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);
-	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
+	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
+			$tfish_preference->user_pagination, $target_file_name, $clean_start, $clean_tag);
 	
 	// Retrieve content objects and assign to template.
 	$content_objects = $content_handler::getObjects($criteria);
