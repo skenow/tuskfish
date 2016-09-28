@@ -20,10 +20,17 @@
         </div>
     </div>
 </form>
-<?php if ($search_results): ?>
-<h2><?php echo TFISH_SEARCH_RESULTS_FOUND; ?></h2>
-	<?php foreach ($search_results as $key => $object): ?>
-		<h3><?php echo $object->title; ?></h3>
-		<?php echo $object->teaser; ?>
-	<?php endforeach; ?>
+<?php if (isset($search_results)): ?>
+	<hr>
+	<div class="text-left">
+		<?php if (!empty($search_results)): ?>
+			<h2><?php echo $results_count . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
+				<?php foreach ($search_results as $key => $object): ?>
+					<h3><?php echo $object->title; ?></h3>
+					<?php echo $object->teaser; ?>
+				<?php endforeach; ?>
+		<?php else: ?>
+		<h2><?php echo TFISH_SEARCH_NO_RESULTS; ?></h2><hr>
+		<?php endif; ?>
+	</div>
 <?php endif; ?>

@@ -356,7 +356,7 @@ class TfishContentHandler
 		return $results;
 	}
 	
-	private function _searchContent($search_terms, $andor, $limit, $offset)
+	private static function _searchContent($search_terms, $andor, $limit, $offset)
 	{
 		$sql = $count = '';
 		$search_term_placeholders = $results = array();
@@ -420,6 +420,7 @@ class TfishContentHandler
 		if ($offset) {
 			$sql .= "OFFSET :offset ";
 		}
+		
 		$sql_search .= $sql;
 		try {
 			$statement = TfishDatabase::preparedStatement($sql_search);

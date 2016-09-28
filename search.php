@@ -24,16 +24,16 @@ $start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $terms && $type) {
 	$content_handler = new TfishContentHandler();
-	$results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
-	if ($results && $results[0] > 0) {
+	$search_results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
+	if ($search_results && $search_results[0] > 0) {
 		// Get a count of search results; this is used to build the pagination control.
-		$results_count = (int)array_shift($results);
-		foreach ($results as $key => $object) {
-			echo '<h3>' . $object->title . '</h3>';
-			echo $object->teaser;
-		}
+		$results_count = (int)array_shift($search_results);
+		$tfish_template->results_count = $results_count;
+		$tfish_template->search_results = $search_results;
+		$tfish_template->pagination = $tfish_metadata->getPaginationControl($results_count, 
+				$tfish_preference->search_pagination, 'search', $start);
 	} else {
-		echo TFISH_SEARCH_NO_RESULTS;
+		$tfish_template->search_results = false;
 	}
 }
 
@@ -41,7 +41,6 @@ if ($clean_op && $terms && $type) {
 $tfish_template->page_title = TFISH_SEARCH;
 $tfish_template->form = TFISH_FORM_PATH . 'search.html';
 $tfish_template->tfish_main_content = $tfish_template->render('form');
-// $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->search_pagination, TFISH_URL);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
