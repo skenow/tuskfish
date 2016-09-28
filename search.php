@@ -26,8 +26,6 @@ if ($clean_op && $terms && $type) {
 	$content_handler = new TfishContentHandler();
 	$results = $content_handler->searchContent($terms, $type, $tfish_preference->search_pagination, $start);
 	if ($results && $results[0] > 0) {
-		echo '<h2>' . TFISH_SEARCH_RESULTS_FOUND . '</h2>';
-		
 		// Get a count of search results; this is used to build the pagination control.
 		$results_count = (int)array_shift($results);
 		foreach ($results as $key => $object) {
@@ -40,14 +38,14 @@ if ($clean_op && $terms && $type) {
 }
 
 // Assign template variables.
-$page_title = TFISH_SEARCH;
-$tfish_form = TFISH_FORM_PATH . 'search.html';
+$tfish_template->page_title = TFISH_SEARCH;
+$tfish_template->form = TFISH_FORM_PATH . 'search.html';
+$tfish_template->tfish_main_content = $tfish_template->render('form');
 // $pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->search_pagination, TFISH_URL);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
-$pagetitle = TFISH_SEARCH;
 $tfish_metadata->title = TFISH_SEARCH;
 $tfish_metadata->description = TFISH_SEARCH_DESCRIPTION;
 // $tfish_metadata->author = '';

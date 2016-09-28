@@ -21,10 +21,12 @@ if (in_array($op, array('edit', 'update', false))) {
 
 		// Edit: Display a data entry form containing the preference settings.
 		case "edit":
-			$preferences = TfishPreference::readPreferences();
-			$languages = TfishContentHandler::getLanguages();
-			$timezones = TfishUtils::getTimezones();
-			$tfish_form = TFISH_FORM_PATH . "preference_edit.html";
+			$tfish_template->page_title = TFISH_PREFERENCE_EDIT_PREFERENCES;
+			$tfish_template->preferences = TfishPreference::readPreferences();
+			$tfish_template->languages = TfishContentHandler::getLanguages();
+			$tfish_template->timezones = TfishUtils::getTimezones();
+			$tfish_template->form = TFISH_FORM_PATH . "preference_edit.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 		
 		// Update: Submit the modified object and update the corresponding database row.
@@ -34,20 +36,22 @@ if (in_array($op, array('edit', 'update', false))) {
 			// Update the database row and display a response.
 			$result = TfishPreferenceHandler::updatePreferences($tfish_preference);
 			if ($result) {
-				$alert_class = 'alert-success';
-				$title = TFISH_SUCCESS;
-				$message = TFISH_PREFERENCES_WERE_UPDATED;
+				$tfish_template->page_title = TFISH_SUCCESS;
+				$tfish_template->alert_class = 'alert-success';
+				$tfish_template->message = TFISH_PREFERENCES_WERE_UPDATED;
 			} else {
-				$alert_class = 'alert-danger';
-				$title = TFISH_FAILED;
-				$message = TFISH_PREFERENCES_UPDATE_FAILED;
+				$tfish_template->page_title = TFISH_FAILED;
+				$tfish_template->alert_class = 'alert-danger';
+				$tfish_template->message = TFISH_PREFERENCES_UPDATE_FAILED;
 			}
-			$back_url = 'preference.php';
-			$tfish_form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->back_url = 'preference.php';
+			$tfish_template->form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 		
 		// Default: Display a table of existing preferences.
 		default:
+			$tfish_template->page_title = TFISH_PREFERENCES;
 			$preferences = TfishPreference::readPreferences();
 			$languages = TfishContentHandler::getLanguages();
 			$preferences['default_language'] = $languages[$preferences['default_language']];
@@ -55,7 +59,9 @@ if (in_array($op, array('edit', 'update', false))) {
 			$preferences['server_timezone'] = $timezones[$preferences['server_timezone']];
 			$preferences['site_timezone'] = $timezones[$preferences['site_timezone']];
 			$preferences['close_site'] = empty($preferences['close_site']) ? TFISH_NO : TFISH_YES;
-			$tfish_form = TFISH_FORM_PATH . "preference_table.html";
+			$tfish_template->preferences = $preferences;
+			$tfish_template->form = TFISH_FORM_PATH . "preference_table.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 	}
 } else {
@@ -73,7 +79,7 @@ if (in_array($op, array('edit', 'update', false))) {
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-$tfish_metadata->template = 'admin.html';
+// $tfish_metadata->template = 'admin.html';
 $tfish_metadata->robots = 'noindex,nofollow';
 
 // Include page template and flush buffer

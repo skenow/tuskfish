@@ -13,6 +13,9 @@
 require_once "../mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Page title.
+$tfish_template->page_title = TFISH_LOGIN;
+
 // Initialise and whitelist allowed parameters
 $clean_op = $clean_email = $dirty_password = false;
 $allowed_options = array("login", "logout", "");
@@ -43,15 +46,12 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
 
 		// Display the login form or a logout link, depending on whether the user is signed in or not
 		default:
-			if (TfishSession::isAdmin()) {
-				echo '<p><a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">Logout</a></p>';
-			} else {
-				$tfish_form = TFISH_FORM_PATH . "login.html"; 
-			}
+			$tfish_template->tfish_main_content = $tfish_template->render('login');
 		break;
 	}
 } else {
 	// Bad input, do nothing
+	exit;
 }
 
 /**
@@ -64,7 +64,7 @@ $tfish_metadata->description = TFISH_LOGIN_DESCRIPTION;
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 $tfish_metadata->robots = 'noindex,nofollow';
-$tfish_metadata->template = 'admin.html';
+//$tfish_metadata->template = 'admin.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

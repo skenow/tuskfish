@@ -23,11 +23,13 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 		
 		// Add: Display an empty content object submission form.
 		case "add":
-			$content_types = TfishContentHandler::getTypes();
-			$rights = TfishContentHandler::getRights();
-			$languages = TfishContentHandler::getLanguages();
-			$tags = TfishContentHandler::getTagList();
-			$tfish_form = TFISH_FORM_PATH . "data_entry.html";
+			$tfish_template->page_title = TFISH_ADD_CONTENT;
+			$tfish_template->content_types = TfishContentHandler::getTypes();
+			$tfish_template->rights = TfishContentHandler::getRights();
+			$tfish_template->languages = TfishContentHandler::getLanguages();
+			$tfish_template->tags = TfishContentHandler::getTagList();
+			$tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 		
 		// Confirm: Confirm deletion of a content object.
@@ -35,8 +37,10 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			if (isset($_REQUEST['id'])) {
 				$clean_id = (int)$_REQUEST['id'];
 				if (TfishFilter::isInt($clean_id, 1)) {
-					$content = TfishContentHandler::getObject($clean_id);
-					$tfish_form = TFISH_FORM_PATH . "confirm_delete.html";
+					$tfish_template->page_title = TFISH_CONFIRM_DELETE;
+					$tfish_template->content = TfishContentHandler::getObject($clean_id);
+					$tfish_template->form = TFISH_FORM_PATH . "confirm_delete.html";
+					$tfish_template->tfish_main_content = $tfish_template->render('form');
 				} else {
 					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 				}
@@ -51,16 +55,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 				$clean_id = (int)$_REQUEST['id'];
 				$result = TfishContentHandler::delete($clean_id);
 				if ($result) {
-					$alert_class = 'alert-success';
-					$title = TFISH_SUCCESS;
-					$message = TFISH_OBJECT_WAS_DELETED;
+					$tfish_template->page_title = TFISH_SUCCESS;
+					$tfish_template->alert_class = 'alert-success';
+					$tfish_template->message = TFISH_OBJECT_WAS_DELETED;
 				} else {
-					$alert_class = 'alert-danger';
-					$title = TFISH_FAILED;
-					$message = TFISH_OBJECT_DELETION_FAILED;
+					$tfish_template->page_title = TFISH_FAILED;
+					$tfish_template->alert_class = 'alert-danger';
+					$tfish_template->message = TFISH_OBJECT_DELETION_FAILED;
 				}
-				$back_url = 'admin.php';
-				$tfish_form = TFISH_FORM_PATH . "response.html";
+				$tfish_template->back_url = 'admin.php';
+				$tfish_template->form = TFISH_FORM_PATH . "response.html";
+				$tfish_template->tfish_main_content = $tfish_template->render('form');
 			} else {
 				trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
 			}
@@ -79,12 +84,16 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 						header("Location: admin.php");
 					}
 					$row = $statement->fetch(PDO::FETCH_ASSOC);
-					$content = TfishContentHandler::toObject($row);
-					$content_types = TfishContentHandler::getTypes();
-					$rights = TfishContentHandler::getRights();
-					$languages = TfishContentHandler::getLanguages();
-					$tags = TfishContentHandler::getTagList();
-					$tfish_form = TFISH_FORM_PATH . "data_edit.html";
+					
+					// Assign to template.
+					$tfish_template->page_title = TFISH_EDIT_CONTENT;
+					$tfish_template->content = TfishContentHandler::toObject($row);
+					$tfish_template->content_types = TfishContentHandler::getTypes();
+					$tfish_template->rights = TfishContentHandler::getRights();
+					$tfish_template->languages = TfishContentHandler::getLanguages();
+					$tfish_template->tags = TfishContentHandler::getTagList();
+					$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
+					$tfish_template->tfish_main_content = $tfish_template->render('form');
 				} else {
 					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 				}
@@ -116,23 +125,24 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			// Insert the object
 			$result = TfishContentHandler::insert($content_object);
 			if ($result) {
-				$alert_class = 'alert-success';
-				$title = TFISH_SUCCESS;
-				$message = TFISH_OBJECT_WAS_INSERTED;
+				$tfish_template->page_title = TFISH_SUCCESS;
+				$tfish_template->alert_class = 'alert-success';
+				$tfish_template->message = TFISH_OBJECT_WAS_INSERTED;
 			} else {
-				$alert_class = 'alert-danger';
-				$title = TFISH_FAILED;
-				$message = TFISH_OBJECT_INSERTION_FAILED;
+				$tfish_template->title = TFISH_FAILED;
+				$tfish_template->alert_class = 'alert-danger';
+				$tfish_template->message = TFISH_OBJECT_INSERTION_FAILED;
 			}
-			$back_url = 'admin.php';
-			$tfish_form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->back_url = 'admin.php';
+			$tfish_template->form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 		
 		// Update: Submit the modified object and update the corresponding database row.
 		case "update":
 			if (empty($_REQUEST['type'])) {
 				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				exit;				
+				exit;
 			}
 			$type = TfishFilter::trimString($_REQUEST['type']);
 			$type_whitelist =  TfishContentHandler::getTypes();
@@ -146,17 +156,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 			// Update the database row and display a response.
 			$result = TfishContentHandler::update($content_object);
 			if ($result) {
-				$alert_class = 'alert-success';
-				$title = TFISH_SUCCESS;
-				$message = TFISH_OBJECT_WAS_UPDATED;
+				$tfish_template->page_title = TFISH_SUCCESS;
+				$tfish_template->alert_class = 'alert-success';
+				$tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
 			} else {
-				$alert_class = 'alert-danger';
-				$title = TFISH_FAILED;
-				$message = TFISH_OBJECT_UPDATE_FAILED;
+				$tfish_template->page_title = TFISH_FAILED;
+				$tfish_template->alert_class = 'alert-danger';
+				$tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
 			}
-			$back_url = 'admin.php';
-			$tfish_form = TFISH_FORM_PATH . "response.html";
-			
+			$tfish_template->back_url = 'admin.php';
+			$tfish_template->form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');			
 		break;
 	
 		// View: Display a content object.
@@ -181,7 +191,14 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 				$row['submission_time'] = date($tfish_preference->date_format, $row['submission_time']);
 			}
 			$typelist = TfishContentHandler::getTypes();
+			
+			// Assign to template
+			$tfish_template->page_title = TFISH_CURRENT_CONTENT;
 			$tfish_form = TFISH_FORM_PATH . "content_table.html";
+			$tfish_template->rows = $rows;
+			$tfish_template->typelist = TfishContentHandler::getTypes();
+			$tfish_template->form = TFISH_FORM_PATH . "content_table.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form'); 
 		break;
 	}
 } else {
@@ -199,7 +216,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 $tfish_metadata->robots = 'noindex,nofollow';
-$tfish_metadata->template = 'admin.html';
+//$tfish_metadata->template = 'admin.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";
