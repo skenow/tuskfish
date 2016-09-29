@@ -1,0 +1,8 @@
+<?php if ($block_zone->title) echo TfishFilter::escape($block_zone->title); ?>
+<?php if ($block_zone->content): ?>
+<ul>
+<?php foreach ($block_zone->content as $id => $object): ?>
+<li><a href="<?php echo TFISH_URL . $object->module . '.php?id=' . $object->id; ?>"><?php echo $object->escape('title'); ?></a></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>

@@ -63,6 +63,10 @@ if ($clean_id) {
 	$count = $content_handler::getCount($criteria);
 	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 	
+	// Prepare any blocks you wish to display.
+	$list_block = new TfishBlockList('Test block', 5);
+	$tfish_template->block_zone = $tfish_template->render('list_block');
+		
 	// Retrieve content objects and assign to template.
 	$content_objects = $content_handler::getObjects($criteria);
 	$tfish_template->content_objects = $content_objects;

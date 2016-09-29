@@ -9,3 +9,12 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
+
+class TfishArticle extends TfishContentObject
+{	
+	public function __construct()
+	{
+	}
+	
+	
+}

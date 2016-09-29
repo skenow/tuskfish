@@ -14,6 +14,8 @@ class TfishBlockList extends TfishBlock
 	/**
 	 * Generic constructor
 	 */
+	// Note that while you can set limit via $criteria, you can also pass it via the constructor
+	// as a convenience. Setting it manually will override any existing limit in the $criteria.
 	function __construct($title, $limit)
 	{
 		parent::__construct();
@@ -42,6 +44,9 @@ class TfishBlockList extends TfishBlock
 			$clean_criteria = TfishDatabase::validateCriteriaObject($criteria);
 		} else {
 			$clean_criteria = new TfishCriteria();
+		}
+		if ($this->limit) {
+			$clean_criteria->limit = $this->limit;
 		}
 
 		return $this->_render($clean_criteria);		
