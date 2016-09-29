@@ -1,15 +1,21 @@
 <form class="form-horizontal" action="search.php" method="post" role="form">
     <div class="form-group">
         <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <input type="text" class="form-control" name="search_terms" id="search_terms" placeholder="<?php echo TFISH_SEARCH_ENTER_TERMS; ?>" required>
+            <input type="text" class="form-control" name="search_terms" id="search_terms"
+				<?php if (isset($terms) && !empty($terms)): ?>
+					value="<?php echo TfishFilter::escape($terms); ?>"
+				<?php else: ?>
+					placeholder="<?php echo TFISH_SEARCH_ENTER_TERMS; ?>" 
+				<?php endif; ?>				   
+				required>
         </div>
     </div>
     <div class="form-group">
         <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
 			<select class="form-control" name="search_type" id="search_type" required>
-				<option value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
-				<option value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
-				<option value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>
+				<option <?php if (isset($type) && $type == "AND") echo "selected"; ?> value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
+				<option <?php if (isset($type) && $type == "OR") echo "selected"; ?> value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
+				<option <?php if (isset($type) && $type == "exact") echo "selected"; ?> value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>	
             </select>
         </div>
     </div>
@@ -26,7 +32,7 @@
 		<?php if (!empty($search_results)): ?>
 			<h2><?php echo $results_count . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
 				<?php foreach ($search_results as $key => $object): ?>
-					<h3><?php echo $object->title; ?></h3>
+				<h3><a href="<?php echo $object->getURL(true); ?>"><?php echo $object->title; ?></a></h3>
 					<?php echo $object->teaser; ?>
 				<?php endforeach; ?>
 		<?php else: ?>

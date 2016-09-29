@@ -104,23 +104,35 @@ class TfishMetadata
 	/**
 	 * Creates a pagination control designed for use with the Bootstrap framework.
 	 * 
+	 * $query is an array of arbitrary query string parameters.
+	 * 
 	 * If you want to create pagination controls for other presentation-side libraries add
 	 * additional methods to this class.
 	 * 
 	 * @param int $count
 	 * @param int $limit
-	 * @param int $start
 	 * @param string $url
+	 * @param int $start
+	 * @param array $query
+	 * 
 	 * @return string
 	 */
-	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0)
+	public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array())
 	{
 		// Filter parameters.
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
 		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : 0;
-		$clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::escape($url) . '.php' : TFISH_URL;
+		$clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::escape(TfishFilter::trimString($url)) . '.php' : TFISH_URL;
 		$clean_tag = TfishFilter::isInt($tag) ? (int)$tag : 0;
+		$clean_extra_params = '';
+		foreach($extra_params as $key => $value) {
+			$key = TfishFilter::escape(TfishFilter::trimString($key));
+			$value = rawurlencode(TfishFilter::trimString($value));
+			$clean_extra_params[] = $key . '=' . $value;
+			unset($key, $value);
+		}
+		$clean_extra_params = implode("&amp;", $clean_extra_params);
 		
 		// If the count is zero there is no need for a pagination control.
 		if ($clean_count == 0) {
@@ -130,14 +142,13 @@ class TfishMetadata
 		if ($clean_limit === false || $clean_url === false) {
 			trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
 		}
-		
 		$control = $this->_getPavigationControl($clean_count, $clean_limit, $clean_url,
-				$clean_start, $clean_tag);
+				$clean_start, $clean_tag, $clean_extra_params);
 
 		return $control;
 	}
 	
-	private function _getPavigationControl($count, $limit, $url, $start, $tag)
+	private function _getPavigationControl($count, $limit, $url, $start, $tag, $extra_params)
 	{
 		// Calculate number of pages, page number of start object and adjust for remainders.
 		$page_count = (int)(($count / $limit));
@@ -175,16 +186,28 @@ class TfishMetadata
 		$query = $start_arg = $tag_arg = '';	
 		foreach ($page_slots as $key => $slot) {
 			$start = (int)(($key - 1) * $limit);
-			$query = ($start || $tag) ? '?' : '';
-			$start_arg = !empty($start) ? 'start=' . $start : '';
-			$separator = (!empty($start) && !empty($tag)) ? '&amp;' : '';
-			$tag_arg = !empty($tag) ? 'tag_id=' . $tag : '';
-			if ($key == $current_page) {
-				$control .= '<li class="active"><a href="' . $url . $query . $start_arg . $separator . $tag_arg . '">' . $slot . '</a></li>';
-			} else {
-				$control .= '<li><a href="' . $url . $query . $start_arg . $separator . $tag_arg . '">' . $slot . '</a></li>';
+			
+			// Set the arguments.
+			if ($start || $tag || $extra_params) {
+				$arg_array = array();
+				if (!empty($start)) {
+					$arg_array[] = 'start=' . $start;
+				}
+				if (!empty($tag)) {
+					$arg_array[] = 'tag=' . $tag;
+				}
+				if (!empty($extra_params)) {
+					$arg_array[] = $extra_params;
+				}
+				$query = '?' . implode('&amp;', $arg_array);
 			}
-			unset($query, $separator, $start_arg, $tag_arg, $key, $slot);
+			
+			if ($key == $current_page) {
+				$control .= '<li class="active"><a href="' . $url . $query . '">' . $slot . '</a></li>';
+			} else {
+				$control .= '<li><a href="' . $url . $query . '">' . $slot . '</a></li>';
+			}
+			unset($query, $clean_query, $key, $slot);
 		}
 		$control .= '</ul>';
 		
