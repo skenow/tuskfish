@@ -351,7 +351,11 @@ class TfishContentHandler
 				$clean_search_terms[] = (string)$term; 
 			}
 		}
-		$results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
+		if (!empty($clean_search_terms)) {
+			$results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
+		} else {
+			$results = false;
+		}
 		
 		return $results;
 	}
