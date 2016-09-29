@@ -1,0 +1,28 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title><?php echo TfishFilter::escape($rss->title); ?></title>
+<link><?php echo TfishFilter::escape($rss->link); ?></link>
+<description><?php echo $rss->description; ?></description>
+<generator><?php echo TfishFilter::escape($rss->generator); ?></generator>
+<managingEditor><?php echo TfishFilter::escape($rss->managingEditor); ?></managingEditor>
+<webMaster><?php echo TfishFilter::escape($rss->webMaster); ?></webMaster>
+<atom:link href="<?php echo TFISH_RSS_URL; ?>" rel="self" type="application/rss+xml" />
+<?php if (isset($items) && !empty($items)): ?>
+<?php foreach ($items as $item): ?>
+<?php if ($item->title): ?>
+<title><?php echo $item->escape('title'); ?></title>
+<?php endif; ?>
+<link><?php echo $item->getURL(true); ?></link>
+<?php if ($item->teaser): ?>
+<description><?php echo $item->escape('teaser'); ?></description>
+<?php endif; ?>
+<?php if ($item->media): ?>
+<enclosure><?php echo $item->media; ?></enclosure>
+<?php endif; ?>
+<?php if ($submission_time): ?>
+<pubDate><?php echo $item->submission_time; ?></pubDate>
+<?php endif; ?>
+<?php endforeach; ?>
+<?php endif; ?>
+</channel>
+</rss>
