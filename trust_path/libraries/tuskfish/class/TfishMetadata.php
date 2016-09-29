@@ -132,7 +132,7 @@ class TfishMetadata
 			$clean_extra_params[] = $key . '=' . $value;
 			unset($key, $value);
 		}
-		$clean_extra_params = implode("&amp;", $clean_extra_params);
+		$clean_extra_params = !empty($clean_extra_params) ? implode("&amp;", $clean_extra_params) : '';
 		
 		// If the count is zero there is no need for a pagination control.
 		if ($clean_count == 0) {
