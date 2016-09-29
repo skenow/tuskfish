@@ -51,6 +51,10 @@
             <li class="active"><a href="<?php echo TFISH_URL; ?>">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
+			<?php if (TfishSession::isAdmin()): ?>
+			<li><a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
+			<li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
+			<?php endif; ?>
 			<li><?php echo TfishSession::loginLink(); ?></li>
           </ul>
         </div><!--/.nav-collapse -->

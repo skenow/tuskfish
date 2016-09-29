@@ -21,6 +21,7 @@ define("TFISH_ACTION", "Action");
 define("TFISH_YOU_ARE_ALREADY_LOGGED_IN", "You are already logged in.");
 
 // Admin.
+define("TFISH_ADMIN", "Admin");
 define("TFISH_CURRENT_CONTENT", "Current content");
 define("TFISH_ADD_CONTENT", "Add content");
 define("TFISH_EDIT_CONTENT", "Edit content");
