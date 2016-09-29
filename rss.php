@@ -17,7 +17,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 header('Content-Type: application/rss+xml');
-$rss = new TfishRSS();
+$rss = new TfishRss();
 $tfish_template->rss = $rss;
 $tfish_template->tfish_main_content = $tfish_template->render('rss');
 
