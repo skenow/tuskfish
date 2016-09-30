@@ -15,7 +15,7 @@
 <?php endif; ?>
       <link><?php echo $item->getURL(true); ?></link>
 <?php if ($item->teaser): ?>
-      <description><?php echo TfishFilter::escape($item->teaser); ?></description>
+      <description><![CDATA[<?php echo $item->teaser; ?>]]></description>
 <?php endif; ?>
 <?php if (($item->media) && is_readable(TFISH_MEDIA_PATH . $item->media)):
 $length = filesize(TFISH_MEDIA_PATH . $item->media);
