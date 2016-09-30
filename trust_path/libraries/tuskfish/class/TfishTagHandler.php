@@ -17,4 +17,29 @@ class TfishTagHandler extends TfishContentHandler
 		// Must call parent constructor first.
 		parent::__construct();
 	}
+	
+	/**
+	 * Generates a tag slect box, optionally with an item selected.
+	 * 
+	 * @param int $selected
+	 * @return boolean|string
+	 */
+	public static function getTagSelectBox($selected = false)
+	{
+		$select_box = '';
+		$tag_list = array();
+		$clean_selected = (int)$selected;
+		
+		$tag_list = array(0 => TFISH_TAGS_SELECT_TAG) + TfishTagHandler::getTagList();
+		if (!empty($tag_list)) {
+			$select_box = '<select>';
+			foreach($tag_list as $key => $value) {
+				$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+			}
+			$select_box .= '</select>';
+			return $select_box;
+		} else {
+			return false;
+		}
+	}	
 }

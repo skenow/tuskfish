@@ -1,8 +1,9 @@
 <?php if (isset($page_title)) echo '<h1>' . $page_title  . '</h1>'; ?>
 <?php if (isset($pagination)): ?>
-	<div class="text-right">
-		<?php echo $pagination; ?>
-	</div>
+    <div class="text-right">
+        <?php echo $pagination; ?>
+   </div>
+<div class="text-center"><?php if (isset($tag_select_box)) echo $tag_select_box; ?>
 <?php endif; ?>
 <?php if (isset($tfish_main_content)) echo $tfish_main_content; ?>
 <?php if (isset($pagination)): ?>

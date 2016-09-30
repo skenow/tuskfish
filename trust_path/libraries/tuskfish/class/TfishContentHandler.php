@@ -102,6 +102,11 @@ class TfishContentHandler
 	{
 	}
 	
+	private static function _getList($criteria)
+	{
+		//$list = TfishDatabase::select('content', $criteria, array('id', 'title'));
+	}
+	
 	/**
 	 * Counts the number of content objects matching the criteria (without the limit).
 	 * 

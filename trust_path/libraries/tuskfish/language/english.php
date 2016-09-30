@@ -70,6 +70,9 @@ define("TFISH_RSS", "RSS");
 // Permalinks
 define("TFISH_TYPE_PERMALINKS", "Permalinks");
 
+// Tags
+define("TFISH_TAGS_SELECT_TAG", "-- Select tag --");
+
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
 define("TFISH_TYPE_AUDIO", "Audio");

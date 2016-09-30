@@ -68,6 +68,9 @@ if ($clean_id) {
 	$tfish_template->content_objects = $content_objects;
 	$tfish_template->tfish_main_content = $tfish_template->render($index_template);
 	
+	// Prepare tag select box.
+	$tfish_template->tag_select_box = TfishTagHandler::getTagSelectBox();
+	
 	// Prepare blocks you wish to display.
 	$block_array = array();
 	$criteria = new TfishCriteria();
