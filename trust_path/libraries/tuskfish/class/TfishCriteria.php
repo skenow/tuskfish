@@ -22,7 +22,7 @@ class TfishCriteria
 		'limit' => 0,
 		'offset' => 0,
 		'order' => false,
-		'ordertype' => "ASC",
+		'ordertype' => "DESC",
 		'tag' => array() // Array of tag IDs
 		);
 	

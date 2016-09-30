@@ -23,6 +23,8 @@ class TfishBlock  extends TfishAncestralObject
 		 */
 		$this->__properties['id'] = 'int'; // Auto-increment, set by database.
 		$this->__properties['title'] = 'string'; // The headline or name of this content.
+		$this->__properties['description'] = 'string'; // Content of this block (singular).
+		$this->__properties['items'] = 'array'; // Content of this block (array of objects).
 		$this->__properties['limit'] = 'int'; // How many items to be dispayed in the block.
 		$this->__properties['type'] = 'alpha'; // Class name (alphabetical characters only).
 		$this->__properties['online'] = 'int'; // Toggle object on or offline.
@@ -40,6 +42,8 @@ class TfishBlock  extends TfishAncestralObject
 		 * Set default values of permitted properties.
 		 */
 		$this->__data['title'] = '';
+		$this->__data['description'] = '';
+		$this->__data['items'] = array();
 		$this->__data['limit'] = 5; // Arbitrary.
 		$this->__data['handler'] = get_class($this) . 'Handler';
 		$this->__data['online'] = 1;
@@ -72,8 +76,17 @@ class TfishBlock  extends TfishAncestralObject
 				break;
 			
 				case "title":
+				case "description":
 				case "template":
 					$this->__data[$property] = TfishFilter::trimString($value);
+				break;
+			
+				case "items":
+					if (TfishFilter::isArray($value)) {
+						$this->__data[$property] = $value;
+					} else {
+						trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+					}
 				break;
 			
 				case "type":

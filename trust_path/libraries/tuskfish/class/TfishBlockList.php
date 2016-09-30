@@ -11,24 +11,15 @@
 */
 class TfishBlockList extends TfishBlock
 {	
-	/**
-	 * Generic constructor
-	 */
-	// Note that while you can set limit via $criteria, you can also pass it via the constructor
-	// as a convenience. Setting it manually will override any existing limit in the $criteria.
-	function __construct($title, $limit)
+	function __construct($title)
 	{
 		parent::__construct();
 		
-		/**
-		 * Set default values of permitted properties.
-		 */
 		$this->__set('title', $title); // String: Title of the block (blank for no title).
-		$this->__set('limit', $limit); // Int: Number of objects to be displayed.
 		// $this->__set('type', $type): Alpha: Class name for this block type.
 		// $this->__set('online', 1); // Int: Toggle object on (1) or offline (0).
 		// $this->__set('handler', $handler); // String: Handler for this object.
-		$this->__set('template', 'blocklist'); // String: The template that should be used to display this block.
+		$this->__set('template', 'block_list'); // String: The template that should be used to display this block.
 
 	}
 	
@@ -38,41 +29,34 @@ class TfishBlockList extends TfishBlock
 	 * @param object $criteria
 	 * @return string
 	 */
-	public function render($criteria = false)
+	public function build($criteria = false)
 	{
 		if ($criteria) {
 			$clean_criteria = TfishDatabase::validateCriteriaObject($criteria);
 		} else {
 			$clean_criteria = new TfishCriteria();
 		}
-		if ($this->limit) {
-			$clean_criteria->limit = $this->limit;
+		
+		// Set some sensible defaults.
+		if (empty($clean_criteria->limit)) {
+			$clean_criteria->limit = 5;
+		}
+		if (empty($clean_criteria->order)) {
+			$clean_criteria->order = 'submission_time';
 		}
 
-		return $this->_render($clean_criteria);		
+		return $this->_build($clean_criteria);		
 	}
 	
-	private function _render($criteria)
+	private function _build($criteria)
 	{	
 		$content_handler = new TfishContentHandler();
 		$content_objects = $content_handler->getObjects($criteria);
 		if (!empty($content_objects)) {
-			$block = array('title' => TfishFilter::escape($this->title));
-			foreach ($content_objects as $object) {
-				$block['content'][TfishFilter::escape($object->id)] =  TfishFilter::escape($object->title);
-			}
+			$this->items = $content_objects;
+			return true;
 		} else {
 			return false;
 		}
-		
-		// Template should be handled here...somehow.
-		$output = '<h3>' . $block['title'] . '</h3>';
-		$output .= '<ul>';
-		foreach ($block['content'] as $id => $title) {
-			$output .= '<li><a href="' . TFISH_URL . '?id=' . $id . '">' . $title . '</a></li>';
-		}
-		$output .= '</ul>';
-			
-		return $output;
 	}
 }

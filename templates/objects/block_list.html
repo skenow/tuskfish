@@ -1,0 +1,12 @@
+<?php if (isset($block_list)): ?>
+  <?php if ($block_list->title && $block_list->items): ?>
+    <h3><?php echo TfishFilter::escape($block_list->title);?></h3>
+      <?php if ($block_list->items): ?>
+        <ul>
+        <?php foreach ($block_list->items as $item): ?>
+	      <li><a href="<?php echo $item->getURL(true); ?>"><?php echo TfishFilter::escape($item->title); ?></a></li>
+        <?php endforeach; ?>
+        </ul>
+	  <?php endif; ?>
+  <?php endif; ?>
+<?php endif; ?>

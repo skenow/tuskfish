@@ -65,7 +65,12 @@
 	<!-- Main content of page -->
     <div class="container">
         <div class="starter-template">
-            <?php echo $tfish_template->render('main'); ?>
+			
+			<!-- Top centre blocks -->
+			<div><?php echo $tfish_template->render('block_list'); ?></div>
+			
+			<!-- Centre page -->
+			<div><?php echo $tfish_template->render('main'); ?></div>
         </div>
     </div>
 
