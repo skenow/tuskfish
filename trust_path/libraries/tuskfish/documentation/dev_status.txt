@@ -4,15 +4,15 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
-* Templates should call escape() on data for display.
-* Convert the pagination control to use of templates, and then nest it within the main.html template to prove nesting works.
 * Detail the data entry form
+  - Add drop down selectors to filter the table.
+  - Convert table fields to human readable.
   - Consider using this Boostrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
   - Take the select boxes out of the form (build them in the class files).
   - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
   - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
 * Data edit form: How to handle editing of file uploads?
-  - Image/media fields should display the file name of any existing file.
+* Convert the pagination control to use of templates, and then nest it within the main.html.
 
 THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 ==============================================
