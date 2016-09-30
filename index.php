@@ -62,18 +62,25 @@ if ($clean_id) {
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);
 	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
-	
-	// Prepare any blocks you wish to display.
-	$block_list = new TfishBlockList('My test block');
-	$criteria = new TfishCriteria();
-	$block_list->build($criteria);
-	$tfish_template->block_list = $block_list;
-	$tfish_template->render('block_list');
-		
+
 	// Retrieve content objects and assign to template.
 	$content_objects = $content_handler::getObjects($criteria);
 	$tfish_template->content_objects = $content_objects;
 	$tfish_template->tfish_main_content = $tfish_template->render($index_template);
+	
+	// Prepare blocks you wish to display.
+	$block_array = array();
+	$criteria = new TfishCriteria();
+	$block_list = new TfishBlockList('My test block');
+	$block_list->build($criteria);
+	$block_array[] = $block_list->render();
+	
+	$block_list2 = new TfishBlockList('My second test block');
+	$criteria->ordertype = 'ASC';
+	$block_list2->build($criteria);
+	$block_array[] = $block_list2->render();	
+	
+	$tfish_template->centre_top_blocks = $block_array;
 }
 
 /**

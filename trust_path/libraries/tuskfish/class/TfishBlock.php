@@ -50,10 +50,6 @@ class TfishBlock  extends TfishAncestralObject
 		$this->__data['template'] = 'default';
 	}
 	
-	public function render($criteria)
-	{
-	}
-	
 	/**
 	 * Set an existing object property
 	 * 
