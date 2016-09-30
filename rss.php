@@ -17,7 +17,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Check if a tag-specific feed has been requested.
-$clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
+$clean_tag_id = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 
 // Initialise RSS object.
 header('Content-Type: application/rss+xml');
@@ -32,8 +32,8 @@ $criteria->order = 'submission_time';
 $criteria->ordertype = 'DESC';
 $criteria->offset = 0;
 $criteria->limit = $tfish_preference->user_pagination;
-if ($clean_tag) {
-	$criteria->tag = array($clean_tag);
+if ($clean_tag_id) {
+	$criteria->tag = array($clean_tag_id);
 }
 $content_objects = TfishContentHandler::getObjects($criteria);
 
@@ -41,6 +41,7 @@ $content_objects = TfishContentHandler::getObjects($criteria);
 $tfish_template->rss = $rss;
 $tfish_template->items = $content_objects;
 $tfish_template->mimetype_list = $mimetype_list;
+$tfish_template->tag_id = !empty($clean_tag_id) ? '?tag_id=' . (string)$clean_tag_id : '';
 $tfish_template->tfish_main_content = $tfish_template->render('rss');
 
 /**
