@@ -64,6 +64,12 @@ define("TFISH_SEARCH_EXACT", "Exact match");
 define("TFISH_SEARCH_NO_RESULTS", "No results.");
 define("TFISH_SEARCH_RESULTS", "results");
 
+// RSS
+define("TFISH_RSS", "RSS");
+
+// Permalinks
+define("TFISH_TYPE_PERMALINKS", "Permalinks");
+
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
 define("TFISH_TYPE_AUDIO", "Audio");

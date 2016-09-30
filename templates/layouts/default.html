@@ -50,6 +50,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="<?php echo TFISH_URL; ?>">Home</a></li>
             <li><a href="<?php echo TFISH_URL . 'search.php'; ?>"><?php echo TFISH_SEARCH; ?></a></li>
+			<li><a href="<?php echo TFISH_URL . 'rss.php'; ?>"><?php echo TFISH_RSS; ?></a></li>
 			<?php if (TfishSession::isAdmin()): ?>
 			<li><a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
 			<li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>

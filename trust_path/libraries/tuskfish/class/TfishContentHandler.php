@@ -472,7 +472,7 @@ class TfishContentHandler
 	public static function toObject($row)
 	{
 		if (empty($row) || !TfishFilter::isArray($row)) {
-			trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY);
+			return false;
 		}
 		
 		// Check the content type is whitelisted.

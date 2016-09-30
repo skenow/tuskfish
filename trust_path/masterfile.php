@@ -32,7 +32,7 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_FORM_PATH", TFISH_PATH . "form/");
 	define("TFISH_LIBRARIES_PATH", TFISH_TRUST_PATH . "libraries/");
 	define("TFISH_UPLOADS_PATH", TFISH_TRUST_PATH . "uploads/");
-	define("TFISH_MEDIA_PATH", TFISH_TRUST_PATH . "media/");
+	define("TFISH_MEDIA_PATH", TFISH_UPLOADS_PATH . "media/");
 	define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');
 	
 	// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL
@@ -40,6 +40,14 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_ASSETS_URL", TFISH_URL . "assets/");
 	define("TFISH_TEMPLATES_URL", TFISH_URL . "templates/");
 	define("TFISH_RSS_URL", TFISH_URL . "rss.php");
+	define("TFISH_PERMALINK_URL", TFISH_URL . "permalink.php?id=");
+	
+	// RSS enclosure URL - the spec requires that the URL use http protocol, as https will invalidate feed.
+	if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
+		define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST) . "/enclosure.php?id=");
+	} else {
+		define("TFISH_ENCLOSURE_URL", TFISH_URL . "enclosure.php?id=");
+	}
 	
 	// Include DB credentials and salt
 	include TFISH_CONFIGURATION_PATH;

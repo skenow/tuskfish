@@ -121,10 +121,10 @@ class TfishCriteria
 				break;
 				
 				case "ordertype": // ASC or DESC
-					if ($value == "DESC") {
-						$this->__data['ordertype'] = "DESC";
-					} else {
+					if ($value == "ASC") {
 						$this->__data['ordertype'] = "ASC";
+					} else {
+						$this->__data['ordertype'] = "DESC";
 					}
 				break;
 				

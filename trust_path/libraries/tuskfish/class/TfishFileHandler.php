@@ -442,11 +442,12 @@ class TfishFileHandler
 		$content = TfishContentHandler::toObject($row);
 		if ($content) {
 			$media = isset($content->media) ? $content->media : false;
-			if ($media) {
+			if ($media && is_readable(TFISH_MEDIA_PATH . $content->media)) {
 				ob_start();
 				$file_path = TFISH_MEDIA_PATH . $content->media;
 				$filename = empty($filename) ? pathinfo($file_path, PATHINFO_FILENAME) : $filename;
 				$file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
+				$file_size = filesize(TFISH_MEDIA_PATH . $content->media);
 				$mimetype_list = TfishUtils::getMimetypes();
 				$mimetype = $mimetype_list[$file_extension];
 
@@ -459,7 +460,7 @@ class TfishFileHandler
 				header("Expires: 0"); 
 				header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
 				header("Pragma: public");
-				header("Content-Length: " . $content->file_size);
+				header("Content-Length: " . $file_size);
 				header('Content-Description: File Transfer');
 				ob_clean();
 				flush();
