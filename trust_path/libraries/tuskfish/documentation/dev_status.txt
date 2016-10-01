@@ -4,9 +4,17 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
+* Dynamic resizing and caching of images!
+  - Add a resizeAndCache() function to TfishContentObject.
+  - In object templates, can call $object->resizeAndCache($width, height) with whatever values are convenient for the theme.
+  - resizeAndCache() will check for the existence of a corresponding image/dimensions in the cache folder.
+  - If a cached image is found the URL will be returned.
+  - If a cached image is not found, a new one will be generated and the URL returned.
+  - If multiple versions of template files are in use on a site, override the object template as required with different dimensions.
+  - Alternatively, set global variables $tfish_template->thumb_width and $tfish_template->thumb_height and resize dynamically.
 * Detail the data entry form
+  - Add pagination controls to the default table.
   - Add drop down selectors to filter the table.
-  - Convert table fields to human readable.
   - Consider using this Boostrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
   - Take the select boxes out of the form (build them in the class files).
   - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).

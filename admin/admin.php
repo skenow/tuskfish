@@ -16,8 +16,12 @@
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
-// Set view option
+// Validate input parameters.
+$clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+$clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
+
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
 	switch ($op) {
 		
@@ -196,9 +200,10 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 		// Default: Display a table of existing content objects and pagination controls.
 		default:
 			$criteria = new TfishCriteria;
+			$criteria->offset = $clean_start;
+			$criteria->limit = $tfish_preference->admin_pagination;
 			$criteria->order = 'submission_time';
 			$criteria->ordertype = 'DESC';
-			$criteria->limit = $tfish_preference->admin_pagination;
 			$columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
 			$result = TfishDatabase::select('content', $criteria, $columns);
 			if ($result) {
@@ -211,7 +216,11 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			}
 			$typelist = TfishContentHandler::getTypes();
 			
-			// Assign to template
+			// Pagination control.
+			$count = TfishDatabase::selectCount('content', $criteria);
+			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag);
+			
+			// Assign to template.
 			$tfish_template->page_title = TFISH_CURRENT_CONTENT;
 			$tfish_form = TFISH_FORM_PATH . "content_table.html";
 			$tfish_template->rows = $rows;
