@@ -39,12 +39,12 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 // View single object description.
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
-	if (is_object($content)) {
+	if (is_object($content) && $content->online) {
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
 		$tfish_template->content = $content;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
-		$tfish_template->error = TFISH_ERROR_NO_SUCH_CONTENT;
+		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
 	}
 	
 // View index page of multiple objects (teasers).
@@ -54,6 +54,7 @@ if ($clean_id) {
 	if ($clean_start) $criteria->offset = $clean_start;
 	$criteria->limit = $tfish_preference->user_pagination;
 	if ($clean_tag) $criteria->tag = array($clean_tag);
+	$criteria->add(new TfishCriteriaItem('online', 1));
 	
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);

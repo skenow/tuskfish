@@ -42,13 +42,13 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 // View single object description.
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
-	if (is_object($content)) {
+	if (is_object($content) && $content->online) {
 		// For a content type-specific page specify the file name (without extension) or use $content->template if it is the same as your file name.
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
 		$tfish_template->content = $content;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
-		$tfish_template->error = TFISH_ERROR_NO_SUCH_CONTENT;
+		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
 	}
 	
 // View index page of multiple objects (teasers).
@@ -58,6 +58,7 @@ if ($clean_id) {
 	if ($clean_start) $criteria->offset = $clean_start;
 	$criteria->limit = $tfish_preference->user_pagination;
 	if ($clean_tag) $criteria->tag = array($clean_tag);
+	$criteria->add(new TfishCriteriaItem('online', 1));
 	
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);
@@ -72,9 +73,13 @@ if ($clean_id) {
 	//action = false, $selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS
 	$tfish_template->tag_select_box = TfishTagHandler::getTagSelectBox('index', $clean_tag);
 	
-	// Prepare blocks for centre-top-zone.
-	$centre_top_blocks = array();
+	// Prepare new $criteria for blocks. Let's try dynamic tagging.
 	$criteria = new TfishCriteria();
+	if ($clean_tag) $criteria->tag = array($clean_tag);
+	$criteria->add(new TfishCriteriaItem('online', 1));
+	
+	// Prepare blocks for centre-top-zone.
+	$centre_top_blocks = array();	
 	$block_list = new TfishBlockList('Top left block');
 	$block_list->build($criteria);
 	$centre_top_blocks[] = $block_list->render();
@@ -92,7 +97,6 @@ if ($clean_id) {
 	
 	// Prepare blocks for centre-bottom-zone.	
 	$centre_bottom_blocks = array();
-	$criteria = new TfishCriteria();
 	$block_list = new TfishBlockList('Bottom left block');
 	$block_list->build($criteria);
 	$centre_bottom_blocks[] = $block_list->render();

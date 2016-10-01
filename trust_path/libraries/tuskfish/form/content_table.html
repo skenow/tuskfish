@@ -22,7 +22,11 @@
 				<td><?php echo TfishFilter::escape($row['title']); ?></td>
 				<td><?php echo TfishFilter::escape($row['submission_time']); ?></td>
 				<td><?php echo TfishFilter::escape($row['counter']); ?></td>
-				<td><?php echo TfishFilter::escape($row['online']); ?></td>
+                <?php if ($row['online']): ?>
+                    <td class="text-success"><?php echo TFISH_ONLINE; ?></td>
+                <?php else: ?>
+                    <td class="text-danger"><b><?php echo TFISH_OFFLINE; ?></b></td>
+                <?php endif; ?>
 				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=edit">
 						<?php echo TFISH_EDIT; ?></a></td>
 				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=confirm">

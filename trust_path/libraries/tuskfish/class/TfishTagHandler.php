@@ -38,8 +38,7 @@ class TfishTagHandler extends TfishContentHandler
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 		$clean_type = TfishContentHandler::isSanctionedType($type) ? TfishFilter::trimString($type) : null;  // Used to filter tags relevant to a specific content subclass, eg. TfishArticle.
 		
-		
-		$tag_list = TfishTagHandler::getActiveTagList($clean_type);
+		$tag_list = TfishContentHandler::getActiveTagList($clean_type);
 		asort($tag_list);
 		$tag_list = array(0 => $clean_zero_option) + $tag_list;
 		if (!empty($tag_list)) {

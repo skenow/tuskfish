@@ -35,6 +35,7 @@ $criteria->limit = $tfish_preference->user_pagination;
 if ($clean_tag_id) {
 	$criteria->tag = array($clean_tag_id);
 }
+$criteria->add(new TfishCriteriaItem('online', 1));
 $content_objects = TfishContentHandler::getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.
