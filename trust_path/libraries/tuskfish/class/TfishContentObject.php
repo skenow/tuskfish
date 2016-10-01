@@ -210,6 +210,46 @@ class TfishContentObject extends TfishAncestralObject
 		}
 	}
 	
+	/**
+	 * Check if a copy of the image with specific dimensions exists in the cache, generates one if not.
+	 * 
+	 * Returns the URL of the cached copy.
+	 * 
+	 * @param int $width
+	 * @param int $height
+	 * @return string $url
+	 */
+	public function resizeAndCache($width = 0, $height = 0)
+	{
+		$clean_width = (int)$width;
+		$clean_height = (int)$height;
+		if (!TfishFilter::isInt($clean_width, 0) || !TfishFilter::isInt($clean_height, 0)) {
+			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+		}
+		
+		// 1. Check that this object actually has an image file, if not, exit.
+		// 1. Check that either width or height have been supplied.
+		// 2. If both were supplied, the larger dimension will take precedence and be used for 
+		//    scaling, as image proportions are always conserved.
+		// 3. Check if an existing image with the relevant dimensions exists in the cache. This will
+		//    be achieved by looking for the same filename with pixel dimension appendix, for example
+		//    myimage_320x240.jpg.
+		// 4. If there is an existing cached image, return the URL.
+		// 5. If there is not an existing cached image, generate a resized copy in the cache and
+		//    return the URL.
+		// 6. Seems suspiciously simple, doesn't it?
+		
+		$this->_resizeAndCache($clean_width, $clean_height);
+		
+		return $url;
+	}
+	
+	private function _resizeAndCache($width, $height)
+	{
+		
+		return $url;
+	}
+	
 	public function setErrors()
 	{	
 	}
