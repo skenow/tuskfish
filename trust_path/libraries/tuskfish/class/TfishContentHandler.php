@@ -47,6 +47,14 @@ class TfishContentHandler
 	public static function getObjects($criteria = false)
 	{
 		$objects = array();
+		
+		// Set default sorting order by submission time descending.
+		if (!$criteria) {
+			$criteria = new TfishCriteria;
+		}
+		if (!$criteria->order) {
+			$criteria->order = 'submission_time';
+		}
 		$statement = TfishDatabase::select('content', $criteria);
 		if ($statement) {
 			try {
