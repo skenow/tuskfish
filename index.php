@@ -31,9 +31,9 @@ $index_template = 'articles';
 $tfish_template->page_title = TFISH_TYPE_ARTICLES;
 
 // Validate input parameters.
-$clean_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
-$clean_start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
-$clean_tag = isset($_REQUEST['tag_id']) ? (int)$_REQUEST['tag_id'] : 0;
+$clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+$clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 
 /**
  * Controller logic.
@@ -72,19 +72,41 @@ if ($clean_id) {
 	//action = false, $selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS
 	$tfish_template->tag_select_box = TfishTagHandler::getTagSelectBox('index', $clean_tag);
 	
-	// Prepare blocks you wish to display.
-	$block_array = array();
+	// Prepare blocks for centre-top-zone.
+	$centre_top_blocks = array();
 	$criteria = new TfishCriteria();
-	$block_list = new TfishBlockList('My test block');
+	$block_list = new TfishBlockList('Top left block');
 	$block_list->build($criteria);
-	$block_array[] = $block_list->render();
+	$centre_top_blocks[] = $block_list->render();
 	
-	$block_list2 = new TfishBlockList('My second test block');
+	$block_list2 = new TfishBlockList('Top centre block');
 	$criteria->ordertype = 'ASC';
 	$block_list2->build($criteria);
-	$block_array[] = $block_list2->render();	
+	$centre_top_blocks[] = $block_list2->render();
 	
-	$tfish_template->centre_top_blocks = $block_array;
+	$block_list3 = new TfishBlockList('Top right block');
+	$block_list3->build($criteria);
+	$centre_top_blocks[] = $block_list3->render();	
+	
+	$tfish_template->centre_top_blocks = $centre_top_blocks;
+	
+	// Prepare blocks for centre-bottom-zone.	
+	$centre_bottom_blocks = array();
+	$criteria = new TfishCriteria();
+	$block_list = new TfishBlockList('Bottom left block');
+	$block_list->build($criteria);
+	$centre_bottom_blocks[] = $block_list->render();
+	
+	$block_list2 = new TfishBlockList('Bottom centre block');
+	$criteria->ordertype = 'ASC';
+	$block_list2->build($criteria);
+	$centre_bottom_blocks[] = $block_list2->render();
+	
+	$block_list3 = new TfishBlockList('Bottom right block');
+	$block_list3->build($criteria);
+	$centre_bottom_blocks[] = $block_list3->render();
+	
+	$tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
 }
 
 /**
