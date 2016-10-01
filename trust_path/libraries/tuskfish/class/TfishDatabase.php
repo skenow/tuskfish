@@ -845,6 +845,11 @@ class TfishDatabase
 		
 		// Set parameters.
 		if ($criteria) {
+			
+			if (!empty($criteria->item) || !empty($criteria->tag)) {
+				$sql .= "WHERE ";
+			}
+			
 			if (TfishFilter::isArray($criteria->item)) {
 				$pdo_placeholders = array();
 				$sql .= $criteria->renderSQL();
@@ -852,10 +857,6 @@ class TfishDatabase
 			} else {
 				trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
 				exit;
-			}
-			
-			if (!empty($criteria->item) || !empty($criteria->tag)) {
-				$sql .= "WHERE ";
 			}
 			
 			if (!empty($criteria->item) && !empty($criteria->tag)) {

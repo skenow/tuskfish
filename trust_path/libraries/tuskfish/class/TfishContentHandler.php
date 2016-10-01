@@ -193,15 +193,79 @@ class TfishContentHandler
 		);
 	}
 	
+	/**
+	 * Checks if a class name is a sanctioned subclass of content object.
+	 * 
+	 * @param string $type
+	 * @return boolean
+	 */
+	public static function isSanctionedType($type)
+	{
+		$type = TfishFilter::trimString($type);
+		$sanctioned_types = self::getTypes();
+		if (array_key_exists($type, $sanctioned_types)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	/**
+	 * Get a list of tags actually in use by other content objects, optionally filtered by content type.
+	 * 
+	 * Used primarily to build select box controls.
+	 * 
+	 * @param string $type
+	 * 
+	 * @return boolean
+	 */
+	public static function getActiveTagList($type = null)
+	{
+		$tags = $distinct_tags = array();
+		
+		$tags = self::getTagList();
+		if (empty($tags)) {
+			return false;
+		}
+		
+		// Restrict tag list to those actually in use.
+		$clean_type = (isset($type) && self::isSanctionedType($type)) ? TfishFilter::trimString($type) : null;
+		
+		if (isset($clean_type)) {
+			$criteria = new TfishCriteria();
+			$criteria->add(new TfishCriteriaItem('content_type', $clean_type));
+		} else {
+			$criteria = false;
+		}
+		
+		$statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
+		if ($statement) {
+			try {
+				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+					$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
+				}
+			} catch (PDOException $e) {
+				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			}
+		}
+
+		return $distinct_tags;
+	}
+	
+	/**
+	 * Get a list of all tag objects as $id => $title
+	 * 
+	 * @return array
+	 */
 	public static function getTagList()
 	{
 		$tags = array();
-		$criteria = new TfishCriteria();
-		$columns = array('id', 'title');
 		$statement = false;
-		
+
+		$columns = array('id', 'title');
+		$criteria = new TfishCriteria();
 		$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+		
 		$statement = TfishDatabase::select('content', $criteria, $columns);
 		if ($statement) {
 			try {
@@ -211,6 +275,7 @@ class TfishContentHandler
 			} catch (PDOException $e) {
 				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 			}
+			unset($statement);
 		} else {
 			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 		}

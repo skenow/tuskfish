@@ -24,7 +24,7 @@ require_once TFISH_PATH . "tfish_header.php";
  *    value of the object's 'module' field. If you want to change the file name, change the module
  *    value in the object class as well.
  */
-$content_handler = 'TfishArticleHandler';
+$content_handler = 'TfishContentHandler';
 $index_template = 'articles';
 
 // Page title.
@@ -69,7 +69,8 @@ if ($clean_id) {
 	$tfish_template->tfish_main_content = $tfish_template->render($index_template);
 	
 	// Prepare tag select box.
-	$tfish_template->tag_select_box = TfishTagHandler::getTagSelectBox();
+	//action = false, $selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS
+	$tfish_template->tag_select_box = TfishTagHandler::getTagSelectBox('index', $clean_tag);
 	
 	// Prepare blocks you wish to display.
 	$block_array = array();

@@ -25,7 +25,7 @@ define("TFISH_ADMIN", "Admin");
 define("TFISH_CURRENT_CONTENT", "Current content");
 define("TFISH_ADD_CONTENT", "Add content");
 define("TFISH_EDIT_CONTENT", "Edit content");
-define("TFISH_SELECT_TAGS", "--- Select tags ---");
+define("TFISH_SELECT_TAGS", "- Select tag -");
 define("TFISH_META_TAGS", "Meta tags");
 define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");
@@ -69,9 +69,6 @@ define("TFISH_RSS", "RSS");
 
 // Permalinks
 define("TFISH_TYPE_PERMALINKS", "Permalinks");
-
-// Tags
-define("TFISH_TAGS_SELECT_TAG", "-- Select tag --");
 
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
