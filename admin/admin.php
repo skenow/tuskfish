@@ -18,7 +18,7 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Set view option
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
-if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 'view', false))) {
+if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
 	switch ($op) {
 		
 		// Add: Display an empty content object submission form.
@@ -132,6 +132,25 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'update', 
 				$tfish_template->title = TFISH_FAILED;
 				$tfish_template->alert_class = 'alert-danger';
 				$tfish_template->message = TFISH_OBJECT_INSERTION_FAILED;
+			}
+			$tfish_template->back_url = 'admin.php';
+			$tfish_template->form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
+		break;
+		
+		// Toggle the online status of a particular object.
+		case "toggle":
+			$id = (int)$_REQUEST['id'];
+			$clean_id = TfishFilter::isInt($id, 1) ? $id : 0;
+			$result = TfishContentHandler::toggleOnlineStatus($clean_id);
+			if ($result) {
+				$tfish_template->page_title = TFISH_SUCCESS;
+				$tfish_template->alert_class = 'alert-success';
+				$tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
+			} else {
+				$tfish_template->page_title = TFISH_FAILED;
+				$tfish_template->alert_class = 'alert-danger';
+				$tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
 			}
 			$tfish_template->back_url = 'admin.php';
 			$tfish_template->form = TFISH_FORM_PATH . "response.html";

@@ -307,6 +307,25 @@ class TfishDatabase
 	}
 	
 	/**
+	 * Toggle the online status of a column between 0 and 1, use for columns representing booleans.
+	 * 
+	 * Note that the $id MUST represent a column called ID for whatever table you want to run it on.
+	 * 
+	 * @param string $table
+	 * @param int $id of the row to update.
+	 * @param string $column to update
+	 * @return boolean
+	 */
+	public static function toggleBoolean($table, $id, $column)
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_id = self::validateId($id);
+		$clean_column = self::validateColumns(array($column));
+		$clean_column = reset($clean_column);
+		return self::_toggleBoolean($clean_table, $clean_id, $clean_column);
+	}
+	
+	/**
 	 * Update a single row
 	 * 
 	 * @param string $table
@@ -918,6 +937,26 @@ class TfishDatabase
 		return $statement;
 	}
 	
+	private static function _toggleBoolean($table, $id, $column)
+	{
+		$sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column) 
+				. " = CASE WHEN " . self::addBackticks($column) 
+				. " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
+
+		// Prepare the statement and bind the ID value.
+		try {
+			$statement = TfishDatabase::preparedStatement($sql);
+			if ($statement) {
+				$statement->bindValue(":id", $id, PDO::PARAM_INT);
+			}
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
+		
+		
+		return self::executeTransaction($statement);
+	}
+	
 	/**
 	 * Updates row(s) in the database within a transaction
 	 * 
@@ -1137,6 +1176,6 @@ class TfishDatabase
 		} else {
 			trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
 			exit;
-		}		
+		}
 	}
 }

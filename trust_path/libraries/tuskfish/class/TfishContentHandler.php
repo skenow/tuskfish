@@ -13,8 +13,20 @@ class TfishContentHandler
 {
 	function __construct()
 	{
-	}	
+	}
 
+	/**
+	 * Toggle the online status of a content object.
+	 * 
+	 * @param int $id
+	 * @return boolean
+	 */
+	public static function toggleOnlineStatus($id)
+	{
+		$clean_id = (int)$id;
+		return TfishDatabase::toggleBoolean('content', $clean_id, 'online');
+	}
+	
 	/**
 	 * Retrieves a single content object based on its ID.
 	 * 

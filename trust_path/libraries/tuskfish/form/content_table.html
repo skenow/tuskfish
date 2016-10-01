@@ -23,9 +23,9 @@
 				<td><?php echo TfishFilter::escape($row['submission_time']); ?></td>
 				<td><?php echo TfishFilter::escape($row['counter']); ?></td>
                 <?php if ($row['online']): ?>
-                    <td class="text-success"><?php echo TFISH_ONLINE; ?></td>
+                <td><a class="text-success" href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=toggle"><?php echo TFISH_ONLINE; ?></a></td>
                 <?php else: ?>
-                    <td class="text-danger"><b><?php echo TFISH_OFFLINE; ?></b></td>
+                <td><a class="text-danger" href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=toggle"><b><?php echo TFISH_OFFLINE; ?></b></a></td>
                 <?php endif; ?>
 				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=edit">
 						<?php echo TFISH_EDIT; ?></a></td>
