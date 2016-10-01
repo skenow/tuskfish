@@ -55,6 +55,7 @@ class TfishContentHandler
 		if (!$criteria->order) {
 			$criteria->order = 'submission_time';
 		}
+		
 		$statement = TfishDatabase::select('content', $criteria);
 		if ($statement) {
 			try {
