@@ -31,9 +31,9 @@ $index_template = 'articles';
 $tfish_template->page_title = TFISH_TYPE_ARTICLES;
 
 // Validate input parameters.
-$clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-$clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
+$clean_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
+$clean_start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
+$clean_tag = isset($_REQUEST['tag_id']) ? (int)$_REQUEST['tag_id'] : 0;
 
 /**
  * Controller logic.
