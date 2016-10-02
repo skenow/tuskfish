@@ -21,7 +21,7 @@ $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
-$clean_type = isset($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
+$clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
@@ -211,6 +211,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			if ($clean_type) {
 				if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
 					$criteria->add(new TfishCriteriaItem('type', $clean_type));
+				} else {
+					trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
 				}
 			}
 			
@@ -233,7 +235,13 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			
 			// Pagination control.
 			$count = TfishDatabase::selectCount('content', $criteria);
-			$extra_params = isset($clean_online) ? array('online' => $clean_online) : array();
+			$extra_params = array();
+			if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+				$extra_params['online'] = $clean_online;
+			}
+			if (isset($clean_type)) {
+				$extra_params['type'] = $clean_type;
+			}
 			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
 					$tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
 			

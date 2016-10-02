@@ -287,12 +287,19 @@ class TfishContentHandler
 		$clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int)$selected : null; // Offline (0) or online (1)
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 		
-		$options = array(3 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
+		$options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
 		$select_box = !empty($clean_action) ? '<form name="online_select_form" action="' . $clean_action . '" method="get">' : '';
 		$select_box .= '<select name="online" id="online" onchange="this.form.submit()">';
-		foreach($options as $key => $value) {
-			$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+		if (isset($clean_selected)) {
+			foreach($options as $key => $value) {
+				$select_box .= ($key == $clean_selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+			}
+		} else { // Nothing selected
+			$select_box .= '<option value="2" selected>' . TFISH_SELECT_STATUS . '</option>';
+			$select_box .= '<option value="1">' . TFISH_ONLINE . '</option>';
+			$select_box .= '<option value="0">' . TFISH_OFFLINE . '</option>';
 		}
+		
 		$select_box .= '</select>';
 		$select_box .= !empty($clean_action) ? '</form>' : '';
 
