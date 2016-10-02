@@ -463,7 +463,7 @@ class TfishContentHandler
 		$tag_links = array();
 		foreach ($tags as $tag) {
 			if (TfishFilter::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
-				$tag_links[$tag] = '<a href="' . $clean_filename . $tag . '">' . TfishFilter::escape($tag_list[$tag]) . '</a>';
+				$tag_links[$tag] = '<a href="' . TfishFilter::escape($clean_filename . $tag) . '">' . TfishFilter::escape($tag_list[$tag]) . '</a>';
 			}
 			unset($tag);
 		}			
