@@ -27,7 +27,7 @@ class TfishTagHandler extends TfishContentHandler
 	 * @param int $selected
 	 * @return boolean|string
 	 */
-	public static function getTagSelectBox($action = false, $selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS)
+	public static function getTagSelectBox($selected = null, $action = false, $type = null, $zero_option = TFISH_SELECT_TAGS)
 	{
 		$action = TfishFilter::trimString($action);
 		$select_box = '';

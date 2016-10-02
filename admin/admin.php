@@ -238,9 +238,9 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 					$tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
 			
 			// Prepare select filters.
-			$tag_select_box = TfishTagHandler::getTagSelectBox('', $clean_tag);
-			$type_select_box = TfishContentHandler::getTypeSelectBox('', $clean_type);
-			$status_select_box = TfishContentHandler::getOnlineSelectBox('', $clean_status);
+			$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
+			$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
+			$status_select_box = TfishContentHandler::getOnlineSelectBox($clean_status);
 			$tfish_template->select_action = 'admin.php';
 			$tfish_template->select_filters = $tag_select_box . ' ' . $type_select_box . ' ' . $status_select_box;
 			$tfish_template->select_filters_form = $tfish_template->render('select_filters');

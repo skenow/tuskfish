@@ -281,7 +281,7 @@ class TfishContentHandler
 	 * @param int $selected
 	 * @return string
 	 */
-	public static function getOnlineSelectBox($action = false, $selected = null, $zero_option = TFISH_ONLINE_STATUS)
+	public static function getOnlineSelectBox($selected = null, $action = false, $zero_option = TFISH_ONLINE_STATUS)
 	{
 		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
 		$clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int)$selected : null; // Offline (0) or online (1)
@@ -344,7 +344,7 @@ class TfishContentHandler
 		return $tags;
 	}
 	
-	public static function getTypeSelectBox($action = false, $selected = null, $zero_option = TFISH_TYPE)
+	public static function getTypeSelectBox($selected = null, $action = false, $zero_option = TFISH_TYPE)
 	{
 		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
