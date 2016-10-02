@@ -4,3 +4,19 @@
 	<li>Wrap code lines after 150 characters. We now live in a world with wide-screen monitors.</li>
     <li>Thou shalt only use alphabetical characters for class names.</li>
 </ul>
+
+<h2>Names and character restrictions</h2>
+<p>As a second-line security measure, character restrictions apply to some things. This is
+    basically so that in the event that a mistake has been made in escaping data the system is
+    still difficult to abuse. The general idea is that, for certain kinds of attack, there's not
+    much you can do if you are restricted to alphanumeric characters.</p>
+<p>While you can actually create legitimate database columns in SQLite that include identifier
+    delimiters as part of their names and you can use them safely (for example), this sort of thing
+    is not consistent with a risk reduction approach. Current restrictions are:</p>
+<ul>
+    <li>Database names: Alphanumeric and underscore characters, only.</li>
+    <li>Database table names: Alphanumeric characters only.</li>
+    <li>Database column names: Alphanumeric and underscore characters only.</li>
+    <li>Class names: Alphabetical characters only, which must also be whitelisted in
+        TfishContentHandler::getTypes().</li>
+</ul>

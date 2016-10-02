@@ -194,7 +194,7 @@ class TfishMetadata
 					$arg_array[] = 'start=' . $start;
 				}
 				if (!empty($tag)) {
-					$arg_array[] = 'tag=' . $tag;
+					$arg_array[] = 'tag_id=' . $tag;
 				}
 				if (!empty($extra_params)) {
 					$arg_array[] = $extra_params;

@@ -273,6 +273,32 @@ class TfishContentHandler
 		return $distinct_tags;
 	}
 	
+	
+	/**
+	 * Generates an online/offline select box.
+	 * 
+	 * @param string $action
+	 * @param int $selected
+	 * @return string
+	 */
+	public static function getOnlineSelectBox($action = false, $selected = null, $zero_option = TFISH_ONLINE_STATUS)
+	{
+		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
+		$clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int)$selected : null; // Offline (0) or online (1)
+		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
+		
+		$options = array(3 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
+		$select_box = !empty($clean_action) ? '<form name="status_select_form" action="' . $clean_action . '" method="get">' : '';
+		$select_box .= '<select name="status" id="status" onchange="this.form.submit()">';
+		foreach($options as $key => $value) {
+			$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+		}
+		$select_box .= '</select>';
+		$select_box .= !empty($clean_action) ? '</form>' : '';
+
+		return $select_box;
+	}
+	
 	/**
 	 * Get a list of all tag objects as $id => $title
 	 * 
@@ -316,6 +342,33 @@ class TfishContentHandler
 		$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
 		$tags = self::getObjects($criteria);
 		return $tags;
+	}
+	
+	public static function getTypeSelectBox($action = false, $selected = null, $zero_option = TFISH_TYPE)
+	{
+		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
+		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
+		$clean_selected = '';
+		$type_list = self::getTypes();
+		
+		if (isset($selected) && TfishFilter::isAlnumUnderscore($selected)) {
+			if (array_key_exists($selected, $type_list)) {
+				$clean_selected = TfishFilter::trimString($selected);
+			}
+		}
+		
+		$options = array(0 => TFISH_SELECT_TYPE) + $type_list;
+		$select_box = !empty($clean_action) ? '<form name="type_select_form" action="' . $clean_action . '" method="get">' : '';
+		$select_box .= '<select name="type" id="type" onchange="this.form.submit()">';
+		foreach($options as $key => $value) {
+			$select_box .= ($key == $selected) 
+					? '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>'
+					: '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
+		}
+		$select_box .= '</select>';
+		$select_box .= !empty($clean_action) ? '</form>' : '';
+		
+		return $select_box;
 	}
 	
 	public static function updateCounter()

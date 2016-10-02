@@ -20,6 +20,8 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
+$clean_status = isset($_GET['status']) ? (int)$_GET['status'] : null;
+$clean_type = isset($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
@@ -200,6 +202,19 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 		// Default: Display a table of existing content objects and pagination controls.
 		default:
 			$criteria = new TfishCriteria;
+			
+			// Select box filter input.
+			if ($clean_tag) $criteria->tag = array($clean_tag);
+			if (TfishFilter::isInt($clean_status, 0, 1)) {
+				$criteria->add(new TfishCriteriaItem('online', $clean_status));
+			}
+			if ($clean_type) {
+				if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+					$criteria->add(new TfishCriteriaItem('type', $clean_type));
+				}
+			}
+			
+			// Other criteria.
 			$criteria->offset = $clean_start;
 			$criteria->limit = $tfish_preference->admin_pagination;
 			$criteria->order = 'submission_time';
@@ -219,6 +234,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			// Pagination control.
 			$count = TfishDatabase::selectCount('content', $criteria);
 			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag);
+			
+			// Prepare select filters.
+			$tag_select_box = TfishTagHandler::getTagSelectBox('', $clean_tag);
+			$status_select_box = TfishContentHandler::getOnlineSelectBox('', $clean_status);
+			$type_select_box = TfishContentHandler::getTypeSelectBox('', $clean_type);
+			$select_filters = '<form name="select_filters" action="admin.php" method="get">';
+			$select_filters .= $tag_select_box;
+			$select_filters .= $status_select_box;
+			$select_filters .= $type_select_box;
+			$select_filters .= '</form>';
+			$tfish_template->select_filters = $select_filters;
 			
 			// Assign to template.
 			$tfish_template->page_title = TFISH_CURRENT_CONTENT;

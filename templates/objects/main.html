@@ -3,7 +3,9 @@
     <div class="text-right">
         <?php echo $pagination; ?>
    </div>
-<div class="text-center"><?php if (isset($tag_select_box)) echo $tag_select_box; ?>
+<?php if (isset($select_filters)): ?>
+<div class="text-center"><?php echo $select_filters; ?></div>
+<?php endif; ?>
 <?php endif; ?>
 <?php if (isset($tfish_main_content)) echo $tfish_main_content; ?>
 <?php if (isset($pagination)): ?>

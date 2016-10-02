@@ -71,7 +71,7 @@ if ($clean_id) {
 	
 	// Prepare tag select box.
 	//action = false, $selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS
-	$tfish_template->tag_select_box = TfishTagHandler::getTagSelectBox('index', $clean_tag);
+	$tfish_template->select_filters = TfishTagHandler::getTagSelectBox('index', $clean_tag);
 	
 	// Prepare new $criteria for blocks. Let's try dynamic tagging.
 	$criteria = new TfishCriteria();
