@@ -233,18 +233,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			
 			// Pagination control.
 			$count = TfishDatabase::selectCount('content', $criteria);
-			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag);
+			$extra_params = isset($clean_status) ? array('status' => $clean_status) : array();
+			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
+					$tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
 			
 			// Prepare select filters.
 			$tag_select_box = TfishTagHandler::getTagSelectBox('', $clean_tag);
-			$status_select_box = TfishContentHandler::getOnlineSelectBox('', $clean_status);
 			$type_select_box = TfishContentHandler::getTypeSelectBox('', $clean_type);
-			$select_filters = '<form name="select_filters" action="admin.php" method="get">';
-			$select_filters .= $tag_select_box;
-			$select_filters .= $status_select_box;
-			$select_filters .= $type_select_box;
-			$select_filters .= '</form>';
-			$tfish_template->select_filters = $select_filters;
+			$status_select_box = TfishContentHandler::getOnlineSelectBox('', $clean_status);
+			$tfish_template->select_action = 'admin.php';
+			$tfish_template->select_filters = $tag_select_box . ' ' . $type_select_box . ' ' . $status_select_box;
+			$tfish_template->select_filters_form = $tfish_template->render('select_filters');
 			
 			// Assign to template.
 			$tfish_template->page_title = TFISH_CURRENT_CONTENT;

@@ -1,0 +1,6 @@
+<!-- Select filters should be assigned to template variable $select_filters -->
+<?php if(isset($select_filters)): ?>
+<form name="select_filters" action="<?php echo isset($action) ? $action : null; ?>" method="get">
+<?php echo $select_filters; ?>
+</form>
+<?php endif; ?>
