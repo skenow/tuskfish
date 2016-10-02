@@ -20,7 +20,7 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
-$clean_status = isset($_GET['status']) ? (int)$_GET['status'] : null;
+$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
 $clean_type = isset($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
@@ -205,8 +205,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			
 			// Select box filter input.
 			if ($clean_tag) $criteria->tag = array($clean_tag);
-			if (TfishFilter::isInt($clean_status, 0, 1)) {
-				$criteria->add(new TfishCriteriaItem('online', $clean_status));
+			if (TfishFilter::isInt($clean_online, 0, 1)) {
+				$criteria->add(new TfishCriteriaItem('online', $clean_online));
 			}
 			if ($clean_type) {
 				if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
@@ -233,16 +233,16 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			
 			// Pagination control.
 			$count = TfishDatabase::selectCount('content', $criteria);
-			$extra_params = isset($clean_status) ? array('status' => $clean_status) : array();
+			$extra_params = isset($clean_online) ? array('online' => $clean_online) : array();
 			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
 					$tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
 			
 			// Prepare select filters.
 			$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
 			$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
-			$status_select_box = TfishContentHandler::getOnlineSelectBox($clean_status);
+			$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
 			$tfish_template->select_action = 'admin.php';
-			$tfish_template->select_filters = $tag_select_box . ' ' . $type_select_box . ' ' . $status_select_box;
+			$tfish_template->select_filters = $tag_select_box . ' ' . $type_select_box . ' ' . $online_select_box;
 			$tfish_template->select_filters_form = $tfish_template->render('select_filters');
 			
 			// Assign to template.

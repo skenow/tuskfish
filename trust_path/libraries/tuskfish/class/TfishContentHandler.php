@@ -288,8 +288,8 @@ class TfishContentHandler
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 		
 		$options = array(3 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
-		$select_box = !empty($clean_action) ? '<form name="status_select_form" action="' . $clean_action . '" method="get">' : '';
-		$select_box .= '<select name="status" id="status" onchange="this.form.submit()">';
+		$select_box = !empty($clean_action) ? '<form name="online_select_form" action="' . $clean_action . '" method="get">' : '';
+		$select_box .= '<select name="online" id="online" onchange="this.form.submit()">';
 		foreach($options as $key => $value) {
 			$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
 		}
