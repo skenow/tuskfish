@@ -17,24 +17,22 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Validate data and separate the search terms.
 $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
-if (isset($_REQUEST['query'])) { // Search terms passed in from a pagination control link.
-	$terms = rawurldecode($_REQUEST['query']);
-	$terms = TfishFilter::trimString($terms);
+// Search terms passed in from a pagination control link, in which case it has been previously
+// i) encoded and ii) escaped. This process needs to be reversed.
+if (isset($_REQUEST['query'])) {
+	$terms = TfishFilter::trimString($_REQUEST['query']);
+	$terms = rawurldecode($terms);
+	$clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
-	$terms = isset($_REQUEST['search_terms']) ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
+	$clean_terms = isset($_REQUEST['search_terms']) ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
 }
 $type = isset($_REQUEST['search_type']) ? TfishFilter::trimString($_REQUEST['search_type']) : false;
 $start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
-if ($clean_op && $terms && $type) {
+if ($clean_op && $clean_terms && $type) {
 	$content_handler = new TfishContentHandler();
-	
-	// Need to run htmlspecialchars_decode in case someone entered a term that included entities.
-	// This is because $terms are re-displayed to the user, so they must be escaped for display,
-	// but entities break searches, so they must be decoded to run the actual query on the DB.
-	$decoded_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
-	$search_results = $content_handler->searchContent($decoded_terms, $type, $tfish_preference->search_pagination, $start);
+	$search_results = $content_handler->searchContent($clean_terms, $type, $tfish_preference->search_pagination, $start);
 	if ($search_results && $search_results[0] > 0) {
 		// Get a count of search results; this is used to build the pagination control.
 		$results_count = (int)array_shift($search_results);
@@ -45,7 +43,7 @@ if ($clean_op && $terms && $type) {
 		$query_parameters = array(
 			'op' => 'search',
 			'search_type' => $type,
-			'query' => $terms);
+			'query' => $clean_terms);
 		$tfish_template->pagination = $tfish_metadata->getPaginationControl($results_count, 
 				$tfish_preference->search_pagination, 'search', $start, false, $query_parameters);
 	} else {
@@ -55,7 +53,7 @@ if ($clean_op && $terms && $type) {
 
 // Assign template variables.
 $tfish_template->page_title = TFISH_SEARCH;
-$tfish_template->terms = $terms;
+$tfish_template->terms = $clean_terms;
 $tfish_template->type = $type;
 $tfish_template->form = TFISH_FORM_PATH . 'search.html';
 $tfish_template->tfish_main_content = $tfish_template->render('form');

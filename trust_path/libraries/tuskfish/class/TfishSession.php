@@ -94,10 +94,9 @@ class TfishSession
 	public static function logout($url_redirect = false)
 	{
 		if ($url_redirect) {
-			$url_redirect = TfishFilter::trimString($url_redirect);
-			$clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
+			$clean_url = TfishFilter::isUrl($url_redirect) ? TfishFilter::encodeEscapeUrl($url_redirect) : false;
 		}
-		self::_logout($url_redirect);
+		self::_logout($clean_redirect);
 	}
 	
 	/*

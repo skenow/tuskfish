@@ -466,6 +466,11 @@ class TfishContentHandler
 	
 	/**
 	 * Provides global search functionality for content objects.
+	 * 
+	 * Search terms are passed through to the database query without modification. Escaping is
+	 * handled through use of a PDO prepared statement with named placeholders; search terms are
+	 * inserted indirectly by binding them to the placeholders. Search terms must NEVER be inserted
+	 * into a query directly, otherwise you may as well do us all a favour and go shoot yourself now.
 	 *
 	 * @param array $queryarray
 	 * @param string $andor

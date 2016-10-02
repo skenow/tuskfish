@@ -10,7 +10,7 @@
 			$lang = "TFISH_PREFERENCE_" . strtoupper($key);
 		?>
 			<tr>
-				<td><?php echo constant($lang) ?></td>
+				<td><?php echo constant($lang); ?></td>
 				<td><?php echo TfishFilter::escape($value); ?></td>
 				<?php unset($key, $value, $lang); ?>
 			</tr>

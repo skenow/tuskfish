@@ -51,9 +51,9 @@
 				<?php
 					foreach ($timezones as $key => $value) {
 						if ($preferences['server_timezone'] == $key) {
-							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
 						}
 						unset ($key, $value);
 					}
@@ -68,9 +68,9 @@
 				<?php
 					foreach ($timezones as $key => $value) {
 						if ($preferences['site_timezone'] == $key) {
-							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
 						}
 						unset ($key, $value);
 					}
@@ -133,9 +133,9 @@
 				<?php
 					foreach ($languages as $key => $value) {
 						if ($tfish_preference->default_language == $key) {
-							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
 						}
 					}
 				?>

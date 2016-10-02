@@ -6,7 +6,7 @@
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="type" id="type" required>
 				<?php foreach ($content_types as $key => $type) {
-					echo '<option value="' . $key . '">' . $type . '</option>';
+					echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($type) . '</option>';
 				} ?>
             </select>
 		</div>
@@ -19,7 +19,7 @@
 		<label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="rights" id="rights" required>
-				<?php foreach ($rights as $key => $right) {echo '<option value="' . $key . '">' . $right . '</option>';} ?>
+				<?php foreach ($rights as $key => $right) {echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
 			</select>
 		</div>
 		
@@ -29,7 +29,7 @@
 			<select multiple size="5" class="form-control" name="tags[]" id="tags">
 				<?php
 					foreach ($tags as $tag_id => $tag_title) {
-							echo '<option value="' . $tag_id . '">' . $tag_title . '</option>';
+							echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
 					}
 				?>
             </select>
@@ -76,9 +76,9 @@
 				<?php
 					foreach ($languages as $key => $value) {
 						if ($tfish_preference->default_language == $key) {
-							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
 						}
 					}
 				?>
@@ -96,16 +96,16 @@
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
-			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="image" id="image" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
+			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="image" id="image" accept="<?php echo TfishFilter::escape(TfishFileHandler::getPermittedMediaMimetypes()); ?>" style="display: none;">
 		</label>
-		<input type="file" name="image" id="image" class="form-control-file" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
+		<input type="file" name="image" id="image" class="form-control-file" accept="<?php echo TfishFilter::escape(TfishFileHandler::getPermittedMediaMimetypes()); ?>" style="display: none;">
 		</div>
 		
 		<!-- Media -->
 		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
-			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedUploadMimetypes(); ?>" style="display: none;">
+			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFilter::escape(TfishFileHandler::getPermittedUploadMimetypes()); ?>" style="display: none;">
 		</label>
 		</div>
 		

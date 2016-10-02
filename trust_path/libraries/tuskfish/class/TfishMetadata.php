@@ -104,7 +104,9 @@ class TfishMetadata
 	/**
 	 * Creates a pagination control designed for use with the Bootstrap framework.
 	 * 
-	 * $query is an array of arbitrary query string parameters.
+	 * $query is an array of arbitrary query string parameters. Note that these need to be passed
+	 * in as an array of key => value pairs, and you should build this yourself using known and
+	 * whitelisted values. Do not pass through random query strings someone gave you on the internetz.
 	 * 
 	 * If you want to create pagination controls for other presentation-side libraries add
 	 * additional methods to this class.
@@ -123,17 +125,23 @@ class TfishMetadata
 		$clean_count = TfishFilter::isInt($count, 1) ? (int)$count : false;
 		$clean_limit = TfishFilter::isInt($limit, 1) ? (int)$limit : false;
 		$clean_start = TfishFilter::isInt($start, 0) ? (int)$start : 0;
-		$clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::escape(TfishFilter::trimString($url)) . '.php' : TFISH_URL;
+		$clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::trimString($url) . '.php' : TFISH_URL;
 		$clean_tag = TfishFilter::isInt($tag) ? (int)$tag : 0;
-		$clean_extra_params = '';
+		
+		// $extra_params is a potential XSS attack vector.
+		// The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
+		// avoid messing up the query and avoid unecessary decoding it is possible to maintain
+		// manual control over the operators. (Basically, input requiring encoding or escaping is
+		// absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
+		// actually *want* to use such input you will need to decode it prior to use on the
+		// landing page.
+		$clean_extra_params = array();
 		foreach($extra_params as $key => $value) {
-			$key = TfishFilter::escape(TfishFilter::trimString($key));
-			$value = rawurlencode(TfishFilter::trimString($value));
-			$clean_extra_params[] = $key . '=' . $value;
+			$clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '=' . TfishFilter::encodeEscapeUrl($value);
 			unset($key, $value);
 		}
-		$clean_extra_params = !empty($clean_extra_params) ? implode("&amp;", $clean_extra_params) : '';
-		
+		$clean_extra_params = !empty($clean_extra_params) ? TfishFilter::escape(implode("&", $clean_extra_params)) : '';
+
 		// If the count is zero there is no need for a pagination control.
 		if ($clean_count == 0) {
 			return false;
@@ -207,7 +215,7 @@ class TfishMetadata
 			} else {
 				$control .= '<li><a href="' . $url . $query . '">' . $slot . '</a></li>';
 			}
-			unset($query, $clean_query, $key, $slot);
+			unset($query, $key, $slot);
 		}
 		$control .= '</ul>';
 		

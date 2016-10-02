@@ -1,15 +1,15 @@
 <!-- Display a single article object -->
 <?php if ($content): ?>
-	<div class="text-left">
-		<?php echo '<h2>' . $content->title . '</h2>'; ?>
+	<div class="container text-left">
+		<?php echo '<h2>' . $content->escape('title') . '</h2>'; ?>
 		<?php if ($content->author || $content->counter || $tags): ?>
 			<p><em>
 				<?php
-					if ($content->creator) echo $content->creator . ' | ';
-					if ($content->counter) echo $content->counter . ' ' . TFISH_VIEWS . ' | ';
+					if ($content->creator) echo $content->escape('creator') . ' | ';
+					if ($content->counter) echo $content->escape('counter') . ' ' . TFISH_VIEWS . ' | ';
 					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
 			</em></p>
 		<?php endif; ?>
-		<?php if ($content->description) echo $content->description; ?>
+		<?php if ($content->description) echo $content->escape('description'); ?>
 	</div>
 <?php endif; ?>

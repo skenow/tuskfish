@@ -1,15 +1,15 @@
 <!-- Display a single soundtrack object -->
-<?php if ($article): ?>
+<?php if ($content): ?>
 	<div class="container text-left">
-		<?php echo '<h2>' . $article->title . '</h2>'; ?>
-		<?php if ($article->author || $article->counter || $tags): ?>
+		<?php echo '<h2>' . $content->escape('title') . '</h2>'; ?>
+		<?php if ($content->author || $content->counter || $tags): ?>
 			<p><em>
 				<?php
-					if ($article->creator) echo $article->creator . ' | ';
-					if ($article->counter) echo $article->counter . ' ' . TFISH_VIEWS . ' | ';
+					if ($content->creator) echo $content->escape('creator') . ' | ';
+					if ($content->counter) echo $content->escape('counter') . ' ' . TFISH_VIEWS . ' | ';
 					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
 			</em></p>
 		<?php endif; ?>
-		<?php if ($article->description) echo $article->description; ?>
+		<?php if ($content->description) echo $content->escape('description'); ?>
 	</div>
 <?php endif; ?>

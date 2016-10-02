@@ -144,12 +144,13 @@ class TfishContentObject extends TfishAncestralObject
 	{
 		$url = TFISH_URL;
 		if ($use_subclass_page) {
-			$url .= self::escape('module') . '.php';
+			$url .= $this->module . '.php';
 		}
 		$url .= '?id=' . (int)$this->id;
 		if ($this->seo) {
-			$url .= '&amp;title=' . self::escape('seo');
+			$url .= '&amp;title=' . TfishFilter::encodeEscapeUrl($this->seo);
 		}
+		
 		return $url;
 	}
 	

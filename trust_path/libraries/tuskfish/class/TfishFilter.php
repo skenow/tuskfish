@@ -126,6 +126,15 @@ class TfishFilter
 		return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
 	}
 	
+	public static function encodeEscapeUrl($url)
+	{
+		$url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
+		$url = rawurlencode($url); // Encode characters to make them URL safe.
+		$clean_url = self::escape($url); // Encode entities with htmlspecialchars()
+		
+		return $clean_url;
+	}
+	
 	/**
 	 * Check that a string is comprised soley of alphabetical characters.
 	 *
@@ -352,8 +361,8 @@ class TfishFilter
 	}
 	
 	/**
-	 * Sanitise and validate url. Only accepts http:// protocol and ASCII characters.
-	 * Other protocols and internationalised domain names (limitation of filter) will fail validation.
+	 * Validate url. Only accepts http:// protocol and ASCII characters. Other protocols and
+	 * internationalised domain names (limitation of filter) will fail validation.
 	 *
 	 * @param string $dirty_url
 	 * @return mixed

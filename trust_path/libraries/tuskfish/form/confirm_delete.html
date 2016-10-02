@@ -4,7 +4,7 @@
 <form class="form-horizontal" action="admin.php" method="post">
     <div class="form-group">
         <div class="col-xs-offset-5 col-xs-1">
-			<input name="id" value="<?php echo $content->id; ?>" type="hidden">
+			<input name="id" value="<?php echo $content->escape('id'); ?>" type="hidden">
             <button name="op" value="delete" type="submit" class="btn btn-primary pull-left"><?php echo TFISH_YES; ?></button>
 		<div>
 		<div class="col-xs-1">

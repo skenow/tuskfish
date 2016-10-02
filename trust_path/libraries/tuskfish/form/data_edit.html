@@ -1,5 +1,5 @@
 <form class="form-horizontal" action="admin.php" method="post" enctype="multipart/form-data" role="form">
-	<input type="hidden" name="id" value="<?php echo $content->id; ?>">
+	<input type="hidden" name="id" value="<?php echo $content->escape('id'); ?>">
 	<div class="form-group">
 		
 		<!-- Type -->
@@ -9,9 +9,9 @@
 				<?php
 					foreach ($content_types as $key => $type) {
 						if ($content->type == $key) {
-							echo '<option value="' . $key . '" selected>' . $type . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($type) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $type . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($type) . '</option>';
 						}
 					}
 				?>
@@ -29,9 +29,9 @@
 				<?php
 					foreach ($rights as $key => $right) {
 						if ($content->rights == $key) {
-							echo '<option value="' . $key . '" selected>' . $right . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($right) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $right . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';
 						}
 					}
 				?>
@@ -45,9 +45,9 @@
 				<?php
 					foreach ($tags as $tag_id => $tag_title) {
 						if (in_array($tag_id, $content->tags)) {
-							echo '<option value="' . $tag_id . '" selected>' . $tag_title . '</option>';
+							echo '<option value="' . TfishFilter::escape($tag_id) . '" selected>' . TfishFilter::escape($tag_title) . '</option>';
 						} else {
-							echo '<option value="' . $tag_id . '">' . $tag_title . '</option>';
+							echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
 						}
 					}
 				?>
@@ -99,9 +99,9 @@
 				<?php
 					foreach ($languages as $key => $value) {
 						if (isset($content->language) && $content->escape('language') == $key) {
-							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
 						} else {
-							echo '<option value="' . $key . '">' . $value . '</option>';
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
 						}
 					}
 				?>
@@ -154,18 +154,18 @@
 		
 		<!-- Meta title -->
 		<label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->meta_title . '"'; } ?>></div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
 		
 		<!-- Meta SEO -->
 		<label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
-		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->seo . '"'; } ?>></div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->escape('seo') . '"'; } ?>></div>
 	
 	</div>
 	<div class="form-group">
 		
 		<!-- Meta description -->
 		<label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
-		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->meta_description . '"'; } ?>></div>
+		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
 	
 	</div>
 				

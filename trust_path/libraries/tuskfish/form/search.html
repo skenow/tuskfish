@@ -30,10 +30,10 @@
 	<hr>
 	<div class="text-left">
 		<?php if (!empty($search_results)): ?>
-			<h2><?php echo $results_count . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
+			<h2><?php echo TfishFilter::escape($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
 				<?php foreach ($search_results as $key => $object): ?>
-				<h3><a href="<?php echo $object->getURL(true); ?>"><?php echo $object->title; ?></a></h3>
-					<?php echo $object->teaser; ?>
+				<h3><a href="<?php echo $object->getURL(true); ?>"><?php echo $object->escape('title'); ?></a></h3>
+					<?php echo $object->escape('teaser'); ?>
 				<?php endforeach; ?>
 		<?php else: ?>
 		<h2><?php echo TFISH_SEARCH_NO_RESULTS; ?></h2><hr>

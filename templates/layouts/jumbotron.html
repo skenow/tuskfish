@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="<?php echo $tfish_preference->default_language; ?>">
+<html lang="<?php echo TfishFilter::escape($tfish_preference->default_language); ?>">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="<?php echo $tfish_metadata->description; ?>">
-    <meta name="author" content="<?php echo $tfish_metadata->author; ?>">
-    <meta name="generator" content="<?php echo $tfish_metadata->generator; ?>">
-    <meta name="robots" content="<?php echo $tfish_metadata->robots; ?>">
+    <meta name="description" content="<?php echo TfishFilter::escape($tfish_metadata->description); ?>">
+    <meta name="author" content="<?php echo TfishFilter::escape($tfish_metadata->author); ?>">
+    <meta name="generator" content="<?php echo TfishFilter::escape($tfish_metadata->generator); ?>">
+    <meta name="robots" content="<?php echo TfishFilter::escape($tfish_metadata->robots); ?>">
     <link rel="icon" href="../../favicon.ico">
 
-    <title><?php echo $tfish_metadata->title; ?></title>
+    <title><?php echo TfishFilter::escape($tfish_metadata->title); ?></title>
 
     <!-- Bootstrap core CSS -->
 	<link href="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/css/bootstrap.min.css'; ?>" rel="stylesheet">
@@ -93,7 +93,7 @@
       <hr>
 
       <footer>
-        <p><?php echo $tfish_metadata->copyright; ?></p>
+        <p><?php echo TfishFilter::escape($tfish_metadata->copyright); ?></p>
       </footer>
     </div> <!-- /container -->
 
