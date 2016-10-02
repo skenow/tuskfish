@@ -101,6 +101,7 @@ class TfishContentObject extends TfishAncestralObject
 	 * with the HTMLPurifier library, and so *should* be safe.
 	 * 
 	 * @param string $property
+	 * 
 	 * @return string
 	 */	
 	public function escape($property) {
@@ -108,6 +109,7 @@ class TfishContentObject extends TfishAncestralObject
 			switch($property) {
 				case "description":
 				case "teaser":
+					//return (string)TfishFilter::filterHtml($this->__data[$property]); // Output filtering
 					return $this->__data[$property];
 				break;
 			
@@ -381,7 +383,8 @@ class TfishContentObject extends TfishAncestralObject
 			
 				case "html":
 					$value = TfishFilter::trimString($value);
-					$this->__data[$property] = (string)TfishFilter::filterHtml($value);
+					$this->__data[$property] = (string)TfishFilter::filterHtml($value); // Enable HTMLPurifier
+					//$this->__data[$property] = (string)TfishFilter::trimString($value); // Disable HTMLPurifier
 				break;
 			
 				case "int":

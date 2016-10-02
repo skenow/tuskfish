@@ -4,6 +4,13 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 WHERE I LEFT OFF
 ================
+* Input filtering with HTMLPurifier results in encoding of & < > and breaks related searches.
+  - Output filtering performance impact is not exhaustive, but appears to add about 20ms to page
+    load time, which in the big scheme of things, is Fuck All. Complicates round trip encoding/decoding
+    of HTML fields though.
+  - For a single user system where the user IS the admin, input filtering of HTML should not be
+    necessary. Unless the user is a complete tool.
+  - Removing input filtering fixes searches.
 * Dynamic resizing and caching of images!
   - Add a resizeAndCache() function to TfishContentObject.
   - In object templates, can call $object->resizeAndCache($width, height) with whatever values are convenient for the theme.
