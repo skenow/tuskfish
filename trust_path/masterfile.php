@@ -38,6 +38,7 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL
 	define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
 	define("TFISH_ASSETS_URL", TFISH_URL . "assets/");
+	define("TFISH_CACHE_URL" , TFISH_URL . "cache/");
 	define("TFISH_TEMPLATES_URL", TFISH_URL . "templates/");
 	define("TFISH_RSS_URL", TFISH_URL . "rss.php");
 	define("TFISH_PERMALINK_URL", TFISH_URL . "permalink.php?id=");

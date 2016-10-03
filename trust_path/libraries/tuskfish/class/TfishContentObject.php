@@ -91,8 +91,7 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
-	 * Escapes object properties for output to browser (except for teaser and description) and
-	 * formats it as human readable (where necessary).
+	 * Escapes object properties for output to browser and formats it as human readable (where necessary).
 	 * 
 	 * Use this method to retrieve object properties when you want to send them to the browser.
 	 * They will be automatically escaped with htmlspecialchars to mitigate cross-site scripting
@@ -110,7 +109,7 @@ class TfishContentObject extends TfishAncestralObject
 				case "description":
 				case "teaser":
 					return (string)TfishFilter::filterHtml($this->__data[$property]); // Output filtering
-					//return $this->__data[$property];
+					//return $this->__data[$property]; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
 				break;
 			
 				case "submission_time":
@@ -133,6 +132,121 @@ class TfishContentObject extends TfishAncestralObject
 			}
 		} else {
 			return null;
+		}
+	}
+	
+	/**
+	 * Returns a URL to a resized and cached copy of the image property.
+	 * 
+	 * Allows arbitrary sized thumbnails to be produced from the object's image property. These are
+	 * saved in the cache for future lookups. Image proportions are always preserved, so if both
+	 * width and height are specified, the larger dimension will take precedence for resizing and
+	 * the other will be ignored.
+	 * 
+	 * Usually, you want to produce an image of a specific width or (less commonly) height to meet
+	 * a template/presentation requirement.
+	 * 
+	 * @return string $url
+	 */
+	public function getCachedImage($width = 0, $height = 0)
+	{
+		// Validate parameters; and at least one must be set.
+		$clean_width = TfishFilter::isInt($width, 1) ? (int)$width : 0;
+		$clean_height = TfishFilter::isInt($height, 1) ? (int)$height : 0;
+		if (!$clean_width && !$clean_height) {
+			return false;
+		}
+		
+		// Check if this object actually has an associated image, and that it is readable.
+		if (!$this->image || !is_readable(TFISH_IMAGE_PATH . $this->image)) {
+			return false;
+		}
+		
+		// Check if a cached copy of the requested dimensions already exists in the cache and return URL.
+		// CONVENTION: Thumbnail name should follow the pattern: image_file_name . '-' . $width . 'x' . $height
+		$filename = pathinfo($this->image, PATHINFO_FILENAME);
+		$extension = '.' . pathinfo($this->image, PATHINFO_EXTENSION);
+		$cached_path = TFISH_CACHE_PATH . $filename . '-';
+		$cached_url = TFISH_CACHE_URL . $filename . '-';
+		$original_path = TFISH_IMAGE_PATH . $filename . $extension;
+		if ($clean_width > $clean_height) {
+			$cached_path .= $clean_width . 'w' . $extension;
+			$cached_url .=  $clean_width . 'w' . $extension;
+		} else {
+			$cached_path .= $clean_height . 'h' . $extension;
+			$cached_url .=  $clean_height . 'h' . $extension;
+		}
+		
+		// Security check - is the cached_path actually pointing at the cache directory? Because
+		// if it isn't, then we don't want to cooperate by returning anything.
+		if (is_readable($cached_path)) {
+			return $cached_url;
+		} else {
+			
+			// Get the size. Note that:
+			// $properties['mime'] holds the mimetype, eg. 'image/jpeg'.
+			// $properties[0] = width, [1] = height, [2] = width = "x" height = "y" which is useful for outputting size attribute.
+			$properties = getimagesize($original_path);
+			if (!$properties) {
+				return false;
+			}
+
+			/**
+			 * Resizing with GD installed.
+			 */
+			
+			// In order to preserve proportions, need to calculate the size of the other dimension.
+			if ($clean_width > $clean_height) {
+				$destination_width = $clean_width;
+				$destination_height = (int)(($clean_width/$properties[0]) * $properties[1]);
+			} else {
+				$destination_width = (int)(($clean_height/$properties[1]) * $properties[0]);
+				$destination_height = $clean_height;
+			}
+
+			// Get a reference to a new image resource.
+			$thumbnail = imagecreatetruecolor($destination_width, $destination_height); // Creates a blank (black) image RESOURCE of the specified size.
+			
+			// Different image types require different handling. JPEg and PNG support optional quality parameter (TODO: Create a preference).
+			$result = false;
+			switch($properties['mime']) {
+				case "image/jpeg":
+					$original = imagecreatefromjpeg($original_path);
+					imagecopyresized($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
+					$result = imagejpeg($thumbnail, $cached_path); // Optional third quality argument 0-99, higher is better quality.
+				break;
+			
+				case "image/png": // May need additional work to support transparency.
+					$original = imagecreatefrompng($original_path);
+					imagecopyresized($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
+					$result = imagepng($thumbnail, $cached_path); // Optional third quality argument 0-9, lower is better quality.
+				break;
+			
+				case "image/gif": // May need additional work to support transparency.
+					$original = imagecreatefromgif($original_path);
+					imagecopyresized($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
+					$result = imagegif($thumbnail, $cached_path);
+				break;
+			
+				// Anything else, no can do.
+				default:
+				return false;
+			}
+			if ($result) {
+				imagedestroy($thumbnail); // Free memory.
+				return $cached_url; // Return the URL to the cached file.
+			} else {
+				return false;
+			}
+			
+			/**
+			 * Resizing with Imagick installed, preserves aspect ratio.	
+			 */
+			// $thumbnail = new Imagick($original_path);
+			// $thumbnail->thumbnailImage($clean_width, $clean_height);
+			// $thumbnail->writeImage($cached_path);
+			
+			return $cached_url;
 		}
 	}
 	
@@ -383,8 +497,8 @@ class TfishContentObject extends TfishAncestralObject
 			
 				case "html":
 					$value = TfishFilter::trimString($value);
-					//$this->__data[$property] = (string)TfishFilter::filterHtml($value); // Enable HTMLPurifier
-					$this->__data[$property] = (string)TfishFilter::trimString($value); // Disable HTMLPurifier
+					//$this->__data[$property] = (string)TfishFilter::filterHtml($value); // Enable input filtering with HTMLPurifier.
+					$this->__data[$property] = (string)TfishFilter::trimString($value); // Disable input filtering with HTMLPurifier (only do this if output filtering is enabled in escape()).
 				break;
 			
 				case "int":
