@@ -22,9 +22,10 @@ $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
+$clean_changedField = isset($_POST['changedField']) ? TfishFilter::trimString($_POST['changedField']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
-if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
+if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
 	switch ($op) {
 		
 		// Add: Display an empty content object submission form.
@@ -36,6 +37,45 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$tfish_template->tags = TfishContentHandler::getTagList();
 			$tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
 			$tfish_template->tfish_main_content = $tfish_template->render('form');
+		break;
+	
+		// Change: Update the object to reflect a change in type, media or image fields.
+		case "changedField":
+			
+			switch($clean_changedField) {
+				case "type":
+					// Reload the object from $_POST data.
+					$clean_type = TfishFilter::trimString($_REQUEST['type']);
+					$type_whitelist =  TfishContentHandler::getTypes();
+					if (!array_key_exists($clean_type, $type_whitelist)) {
+						trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+						exit;
+					}
+					$content_object = new $clean_type;
+					$content_object->loadProperties($_REQUEST);
+					
+					// Assign to template.
+					if($clean_id) {
+						$tfish_template->page_title = TFISH_EDIT_CONTENT;
+					} else {
+						$tfish_template->page_title = TFISH_ADD_CONTENT;
+					}
+					$tfish_template->content = $content_object;
+					$tfish_template->content_types = TfishContentHandler::getTypes();
+					$tfish_template->rights = TfishContentHandler::getRights();
+					$tfish_template->languages = TfishContentHandler::getLanguages();
+					$tfish_template->tags = TfishContentHandler::getTagList();
+					$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
+					$tfish_template->tfish_main_content = $tfish_template->render('form');
+				break;
+			
+				case "media":
+				break;
+			
+				case "image":
+				break;
+			}
+			
 		break;
 		
 		// Confirm: Confirm deletion of a content object.
@@ -119,13 +159,13 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 				exit;
 			}
 			
-			$type = TfishFilter::trimString($_REQUEST['type']);
+			$clean_type = TfishFilter::trimString($_REQUEST['type']);
 			$type_whitelist =  TfishContentHandler::getTypes();
-			if (!array_key_exists($type, $type_whitelist)) {
+			if (!array_key_exists($clean_type, $type_whitelist)) {
 				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
 				exit;
 			}
-			$content_object = new $type;
+			$content_object = new $clean_type;
 			$content_object->loadProperties($_REQUEST);
 			
 			// Insert the object

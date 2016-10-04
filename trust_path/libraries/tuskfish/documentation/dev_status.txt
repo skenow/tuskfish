@@ -5,6 +5,7 @@ The purpose of this file is so I can keep track of what I was last working on, a
 WHERE I LEFT OFF
 ================
 * Add site-wide quality preference for jpeg and png images.
+* Implement site closed preference.
 * Detail the data entry form
   - Add pagination controls to the default table.
   - Add drop down selectors to filter the table.
@@ -13,6 +14,23 @@ WHERE I LEFT OFF
   - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
   - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
 * Data edit form: How to handle editing of file uploads?
+
+OPTIMISATION / CONSOLIDATION
+============================
+* Rationalise file paths, especially for templates.
+* Final security audit on the code.
+  - Check file path constraints.
+* Reorder methods so that public/private are paired.
+
+POLISH
+======
+The following things need to be added to make it attractive to the great unwashed public:
+* Minimalist WYSIWYG editor. Have another go at trumbowyg?
+* Shiny AJAXified file uploader.
+* Data entry/edit forms improve spacing of elements, especially on folding the layout.
+* Teaser block.
+* Spotlight block.
+* Image block.
 
 THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 ==============================================

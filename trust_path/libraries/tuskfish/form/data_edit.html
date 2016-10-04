@@ -5,7 +5,7 @@
 		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="type" id="type" required>
+			<select class="form-control" name="type" id="type" required onchange="this.form.elements.changedField.value='type'; this.form.elements.op.value='changedField'; submit()">
 				<?php
 					foreach ($content_types as $key => $type) {
 						if ($content->type == $key) {
@@ -119,7 +119,7 @@
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
-			<?php if ($content->image) { echo $content->image; } else { echo TFISH_SELECT_FILE; } ?><input type="file" name="image" id="image" accept=".jpg,.png,.gif" style="display: none;">
+			<?php if ($content->image) { echo $content->image; } else { echo TFISH_SELECT_FILE; } ?><input type="file" name="image" id="image" accept="<?php echo TfishFileHandler::getPermittedImageMimetypes(); ?>" style="display: none;">
 		</label>
 		</div>
 		
@@ -128,7 +128,7 @@
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
 			<?php if ($content->media) { echo $content->media; } else { echo TFISH_SELECT_FILE; } ?>
-			<input type="file" name="media" id="media" accept=".jpg,.png,.gif,.mp3.,.doc,.docx.,.pdf,.zip" style="display: none;">
+			<input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
 		</label>
 		</div>
 		
@@ -161,13 +161,16 @@
 		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->escape('seo') . '"'; } ?>></div>
 	
 	</div>
-	<div class="form-group">
-		
-		<!-- Meta description -->
+	
+	<!-- Meta description -->
+	<div class="form-group">	
 		<label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
-	
 	</div>
+				
+	<!-- Changed field -->
+	<input type="hidden" name="changedField" id="changedField" value="" />
+	<input type="hidden" name="op" id="op" value="" />
 				
 	<!-- Action buttons -->
 	<button name="op" value="update" type="submit" class="btn btn-primary"><?php echo TFISH_UPDATE; ?></button>

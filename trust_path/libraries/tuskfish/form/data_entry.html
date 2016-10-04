@@ -4,7 +4,7 @@
 		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="type" id="type" required>
+			<select class="form-control" name="type" id="type" onchange="this.form.elements.changedField.value='type'; this.form.elements.op.value='changedField'; submit()">
 				<?php foreach ($content_types as $key => $type) {
 					echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($type) . '</option>';
 				} ?>
@@ -19,7 +19,7 @@
 		<label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="rights" id="rights" required>
-				<?php foreach ($rights as $key => $right) {echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
+				<?php foreach ($rights as $key => $right) { echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
 			</select>
 		</div>
 		
@@ -74,6 +74,7 @@
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="language" id="language" required>
 				<?php
+					global $tfish_preference;
 					foreach ($languages as $key => $value) {
 						if ($tfish_preference->default_language == $key) {
 							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
@@ -96,16 +97,15 @@
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
-			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="image" id="image" accept="<?php echo TfishFilter::escape(TfishFileHandler::getPermittedMediaMimetypes()); ?>" style="display: none;">
+			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="image" id="image" accept="<?php echo TfishFileHandler::getPermittedImageMimetypes(); ?>" style="display: none;">
 		</label>
-		<input type="file" name="image" id="image" class="form-control-file" accept="<?php echo TfishFilter::escape(TfishFileHandler::getPermittedMediaMimetypes()); ?>" style="display: none;">
 		</div>
 		
 		<!-- Media -->
 		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
-			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFilter::escape(TfishFileHandler::getPermittedUploadMimetypes()); ?>" style="display: none;">
+			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
 		</label>
 		</div>
 		
@@ -147,7 +147,11 @@
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
 	</div>
 	
+	<!-- Changed field -->
+	<input type="hidden" name="changedField" id="changedField" value="" />
+	<input type="hidden" name="op" id="op" value="" />
+	
 	<!-- Action buttons -->
-	<button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
-	<button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+	<button type="submit" class="btn btn-primary" onclick="this.form.elements.op.value='submit'; this.form.submit()"><?php echo TFISH_SUBMIT; ?></button>
+	<button type="submit" class="btn btn-primary" formnovalidate onclick="history.go(-1)"><?php echo TFISH_CANCEL; ?></button>
 </form>
