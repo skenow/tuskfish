@@ -27,11 +27,23 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     
-    <!-- Trumbowyg -->
-    <link rel="stylesheet" href="<?php echo TFISH_TEMPLATES_URL . '/trumbowyg/dist/ui/trumbowyg.min.css'; ?>">
+    <!-- TinyMCE -->
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+        selector:'textarea',
+        plugins: "anchor,paste,searchreplace,lists,link,image,media,table,hr,code,fullscreen",
+        toolbar: "anchor,paste,searchreplace,link,image,media,table,code,fullscreen",
+        menubar: "insert,edit,view,table",
+        image_list: [
+            {title: 'My image 1', value: 'http://www.tinymce.com/my1.gif'},
+            {title: 'My image 2', value: 'http://www.moxiecode.com/my2.gif'}
+          ]
+    });
+    </script>
     
     <!-- Fontawesome -->
-    <script src="https://use.fontawesome.com/866cec4234.js"></script>
+    <!--<script src="https://use.fontawesome.com/866cec4234.js"></script>-->
     
   </head>
 
@@ -70,14 +82,15 @@
             <h2>Testing the editor</h2>
             
             <!-- Prepare the editor -->
-            <div id="teaser"></div>
-            <div id="description"></div>
+            <div id="teaser" class="text-left"></div>
+            <div><textarea id="description" name="description"></textarea></div>
+            
             <!-- Wait until page is loaded before executing jQuery -->
             <script>
                 window.onload = function() {
-                $('#teaser').trumbowyg();
-                $('#description').trumbowyg();
-            };
+                $('#teaser').froala();
+                
+            }
             </script>
         </div>
     </div>
@@ -90,9 +103,7 @@
     <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/js/bootstrap.min.js'; ?>"></script>
 	<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/docs/assets/js/ie10-viewport-bug-workaround.js'; ?>"></script>    
-    <!-- Trumbowyg editor -->
-    <script src="<?php echo TFISH_TEMPLATES_URL . '/trumbowyg/dist/trumbowyg.min.js'; ?>"></script>
+    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/docs/assets/js/ie10-viewport-bug-workaround.js'; ?>"></script>
     
   </body>
 </html>
