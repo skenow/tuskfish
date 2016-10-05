@@ -48,7 +48,7 @@
 		<label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><textarea rows="5" class="form-control" name="teaser" id="teaser" required></textarea></div>
 	</div>
-	
+    
 	<!-- Description -->
 	<div class="form-group">
 		<label for="description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
@@ -155,3 +155,11 @@
 	<button type="submit" class="btn btn-primary" onclick="this.form.elements.op.value='submit'; this.form.submit()"><?php echo TFISH_SUBMIT; ?></button>
 	<button type="submit" class="btn btn-primary" formnovalidate onclick="history.go(-1)"><?php echo TFISH_CANCEL; ?></button>
 </form>
+
+<!-- Ready the editor -->
+<script>
+    window.onload = function() {
+        $('#teaser').trumbowyg();
+        $('#description').trumbowyg();
+    };
+</script>
