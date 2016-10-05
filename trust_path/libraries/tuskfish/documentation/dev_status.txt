@@ -2,18 +2,26 @@ DEV STATUS
 ==========
 The purpose of this file is so I can keep track of what I was last working on, and what I need to do.
 
+MINIMUM FUNCTIONALITY
+=====================
+* Round trip the data entry/editing form when change object type.
+  - Grey out read-only sections of the form.
+* Test PNG and GIF handling.
+  - Add support for transparency.
+* Robust solution for file uploads (editing, delinking).
+* Front end object templates (with scalable images).
+* Document all functions.
+* Write a simple manual.
+
 WHERE I LEFT OFF
 ================
+* Data edit form: How to handle editing of file uploads?
 * Add site-wide quality preference for jpeg and png images.
 * Implement site closed preference.
 * Detail the data entry form
-  - Add pagination controls to the default table.
-  - Add drop down selectors to filter the table.
   - Consider using this Bootstrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
-  - Take the select boxes out of the form (build them in the class files).
   - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
   - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
-* Data edit form: How to handle editing of file uploads?
 
 OPTIMISATION / CONSOLIDATION
 ============================
@@ -25,12 +33,17 @@ OPTIMISATION / CONSOLIDATION
 POLISH
 ======
 The following things need to be added to make it attractive to the great unwashed public:
-* Minimalist WYSIWYG editor. Have another go at trumbowyg?
 * Shiny AJAXified file uploader.
 * Data entry/edit forms improve spacing of elements, especially on folding the layout.
 * Teaser block.
 * Spotlight block.
 * Image block.
+* "Module" pages
+  - News archive
+  - Podcasts
+  - Events
+  - Galleries
+  - Soundtracks / videos (HTML5 player)
 
 THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 ==============================================
