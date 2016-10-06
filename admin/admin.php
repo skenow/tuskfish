@@ -317,7 +317,7 @@ if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'sub
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 $tfish_metadata->robots = 'noindex,nofollow';
-//$tfish_metadata->template = 'admin.html';
+$tfish_metadata->template = 'admin.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

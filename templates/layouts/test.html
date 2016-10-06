@@ -14,10 +14,15 @@
 
     <title><?php echo TfishFilter::escape($tfish_metadata->title); ?></title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>  
+    
+    <!-- Bootstrap -->
+    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/js/bootstrap.min.js'; ?>"></script>
 	<link href="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/css/bootstrap.min.css'; ?>" rel="stylesheet">
 	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-    
+       
     <!-- Custom styles for this template -->
     <link href="<?php echo TFISH_TEMPLATES_URL . 'layouts/default.css'; ?>" rel="stylesheet">
 
@@ -27,83 +32,47 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     
-    <!-- TinyMCE -->
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>
-        tinymce.init({
-        selector:'textarea',
-        plugins: "anchor,paste,searchreplace,lists,link,image,media,table,hr,code,fullscreen",
-        toolbar: "anchor,paste,searchreplace,link,image,media,table,code,fullscreen",
-        menubar: "insert,edit,view,table",
-        image_list: [
-            {title: 'My image 1', value: 'http://www.tinymce.com/my1.gif'},
-            {title: 'My image 2', value: 'http://www.moxiecode.com/my2.gif'}
-          ]
+    <!-- Fontawesome -->
+    <script src="https://use.fontawesome.com/866cec4234.js"></script>
+    
+    <!-- TinyMCE editor -->
+	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({
+        selector: "textarea",
+        plugins: "code,anchor,link,charmap,codesample,image,media,emoticons,visualblocks,table,hr,wordcount,lists,autosave,fullscreen",
+        menubar: "view,insert,table",
+        toolbar: "code | undo redo | styleselect | bold italic removeformat | bullist numlist | link unlink | image media codesample | alignleft aligncenter alignright | table | superscript subscript charmap hr | emoticons visualblocks fullscreen",
+        image_caption: true
     });
     </script>
     
-    <!-- Fontawesome -->
-    <!--<script src="https://use.fontawesome.com/866cec4234.js"></script>-->
+    <!-- Bootstrap-fileinput -->
+    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap-fileinput/js/fileinput.min.js'; ?>"></script>
+    <link href="<?php echo TFISH_TEMPLATES_URL . 'bootstrap-fileinput/css/fileinput.min.css'; ?>">
+    <script>$("#input-id").fileinput();</script>
+
+
     
   </head>
 
   <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="<?php echo TFISH_URL; ?>">Tuskfish CMS</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="<?php echo TFISH_URL; ?>">Home</a></li>
-            <li><a href="<?php echo TFISH_URL . 'search.php'; ?>"><?php echo TFISH_SEARCH; ?></a></li>
-			<li><a href="<?php echo TFISH_URL . 'rss.php'; ?>"><?php echo TFISH_RSS; ?></a></li>
-			<?php if (TfishSession::isAdmin()): ?>
-			<li><a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
-			<li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
-			<?php endif; ?>
-			<li><?php echo TfishSession::loginLink(); ?></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div><!-- /.container -->
-    </nav>
 	  
 	<!-- Main content of page -->
     <div class="container">
-        <div class="starter-template">
+        
+        <label>Brochure File</label>
+        <input id="somefile" name="file" type="file" />
             
-            <h2>Testing the editor</h2>
-            
-            <!-- Prepare the editor -->
-            <div id="teaser" class="text-left"></div>
-            <div><textarea id="description" name="description"></textarea></div>
-            
-            <!-- Wait until page is loaded before executing jQuery -->
-            <script>
-                window.onload = function() {
-                $('#teaser').froala();
-                
-            }
-            </script>
-        </div>
+
     </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/js/bootstrap.min.js'; ?>"></script>
+    <!-- Placed at the end of the document so the pages load faster -->  
+    
 	<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/docs/assets/js/ie10-viewport-bug-workaround.js'; ?>"></script>
-    
+	
   </body>
 </html>
