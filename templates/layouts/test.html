@@ -9,6 +9,11 @@
 
     <!-- Bootstrap CSS -->
 	<link href="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/css/bootstrap.min.css'; ?>" rel="stylesheet">
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/js/bootstrap.min.js'; ?>"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,49 +21,100 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-    $('#pdffile').change(function(){
-     $('#subfile').val($(this).val());
-     });</script>
+    
+    
+    <!-- Bootstrap-fileinput uploader -->
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="<?php echo TFISH_TEMPLATES_URL . 'bootstrap-fileinput/css/fileinput.min.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+    <!-- the main fileinput plugin file -->
+    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap-fileinput/js/fileinput.min.js'; ?>"></script>
+    <!-- bootstrap.js below is needed if you wish to zoom and view file content 
+         in a larger detailed modal dialog -->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script>-->
+    <!-- initialize with defaults -->
+    <script>$("#input-id").fileinput();</script>
+
   </head>
   
   <body>
-      <div class="container">
-          
-        <div class="alert alert-info">
-
-      	<input type="file" name="file" style="visibility:hidden;" id="pdffile" />
-		<label>Choose A File</label>
-		<div class="input-append">
-			<!-- This input is here purely for cosmetic reasons. The actual file is uploaded from the hidden input box !-->
-			<input type="text" id="subfile" class="input-xlarge">
-			<a class="btn" onclick="$('#pdffile').click();">Browse</a>
-		</div>
-		<br/>
-
-		<button id="showHidden" class="btn btn-warning">Show/Hide Input Field</button>
-     </div>
-        
-      </div>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+  <div class="container" style="margin-top: 20px;">
     
+    <h2>Testing Bootstrap-fileinput</h2>
+    <div>
+        <input id="input-id" type="file" class="file" data-preview-file-type="text" >
+    </div>
+    
+    <h2>Testing whipping file inputs into shape</h2>
+
+    <div class="col-lg-6 col-sm-6 col-12">
+        <h4>Standard Button</h4>
+        <label class="btn btn-primary">
+            Browse&hellip; <input type="file" style="display: none;">
+        </label>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-12">
+        <h4>Block-level Button
+        <label class="btn btn-block btn-primary">
+            Browse&hellip; <input type="file" style="display: none;">
+        </label>
+    </div>
+
+    <div class="col-lg-6 col-sm-6 col-12">
+        <h4>Button Groups</h4>
+        <div class="btn-group">
+            <a href="#" class="btn btn-default">Action 1</a>
+            <a href="#" class="btn btn-default">Action 2</a>
+            <label class="btn btn-primary">
+                Browse&hellip; <input type="file" style="display: none;">
+            </label>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 col-12">
+        <h4>Input Groups</h4>
+        <div class="input-group">
+            <label class="input-group-btn">
+                <span class="btn btn-primary">
+                    Browse&hellip; <input type="file" style="display: none;" multiple>
+                </span>
+            </label>
+            <input type="text" class="form-control" readonly>
+        </div>
+        <span class="help-block">
+            Try selecting one or more files and watch the feedback
+        </span>
+    </div>
+    
+    <!-- Javascript to run the button interactivity -->
     <script>
- 	$(document).ready(function(){
- 		// This is the simple bit of jquery to duplicate the hidden field to subfile
- 		$('#pdffile').change(function(){
-			$('#subfile').val($(this).val());
-		});
+    $(function() {
 
-		// This bit of jquery will show the actual file input box
-		$('#showHidden').click(function(){
-			$('#pdffile').css('visibility','visible');
-		});
- 	});
- 	</script>
-    
-  </body>
+      // We can attach the `fileselect` event to all file inputs on the page
+      $(document).on('change', ':file', function() {
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
+      });
+
+      // We can watch for our custom `fileselect` event like this
+      $(document).ready( function() {
+          $(':file').on('fileselect', function(event, numFiles, label) {
+
+              var input = $(this).parents('.input-group').find(':text'),
+                  log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+              if( input.length ) {
+                  input.val(log);
+              } else {
+                  if( log ) alert(log);
+              }
+
+          });
+      });
+
+    });
+    </script>
+        
+</div>
+</body>
 </html>
