@@ -299,26 +299,34 @@ class TfishContentObject extends TfishAncestralObject
 			unset($key, $type);
 		}
 		
-		// Handle image and media file upload.
-		// If this is associated with an UPDATE then check if file names are different.
-		if (!empty($_FILES['image']['name']) || !empty($_FILES['media']['name'])) {
-			$type_list = TfishContentHandler::getTypes();
-			$clean_type = array_key_exists($dirty_input['type'], $type_list) ? TfishFilter::trimString($dirty_input['type']) : false;
-		}
+		/**
+		 * Handle image and media file upload. Note that old files should be cleaned up by the
+		 * controller prior to uploading these ones, just to keep the file system clean.
+		 */
 		
+		/** 
+		 * Issue: When does the $_FILES global get populated? If a file control is set, will the
+		 * file be uploaded every time the form is posted? Or only the first time? Because it seems
+		 * that the file *name* gets carried over by the $_POST but the actual file upload isn't
+		 * happening except on the $_POST directly after a file has been chosen with the selector
+		 * button.
+		 */
+		
+		/**
+		 * Upload handling needs to be moved into the TfishContentHandler::insert/update/delete methods.
+		 */
+
 		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
 			$filename = TfishFilter::trimString($_FILES['image']['name']);
-			$clean_filename = TfishFileHandler::uploadFile($filename, 'image', $clean_type);
+			$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
 			if ($clean_filename) {
 				$this->__set('image', $clean_filename);
-				$this->__set('format', pathinfo($clean_filename, PATHINFO_EXTENSION));
-				$this->__set('file_size', $_FILES['image']['size']);
 			}
 		}
 
 		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
 			$filename = TfishFilter::trimString($_FILES['media']['name']);
-			$clean_filename = TfishFileHandler::uploadFile($filename, 'media', $clean_type);
+			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
 			if ($clean_filename) {
 				$this->__set('media', $clean_filename);
 				$this->__set('format', pathinfo($clean_filename, PATHINFO_EXTENSION));

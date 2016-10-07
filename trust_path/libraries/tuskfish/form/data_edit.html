@@ -5,7 +5,7 @@
 		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="type" id="type" required onchange="this.form.elements.changedField.value='type'; this.form.elements.op.value='changedField'; submit()">
+			<select class="form-control" name="type" id="type" required onchange="this.form.elements.op.value='changedField'; submit()">
 				<?php
 					foreach ($content_types as $key => $type) {
 						if ($content->type == $key) {
@@ -69,9 +69,9 @@
 		<label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <!-- Trumbowyg editor field -->
-            <div name="teaser" id="teaser" class="text-left"><?php if (isset($content->teaser)) { echo $content->teaser; } ?></div>
-            <!-- If you want a vanilla text area instead of the Trumbowyg editor, replace the line above with the line below -->
-            <!--<textarea rows="5" class="form-control" name="teaser" id="teaser" required><?php if (isset($content->teaser)) { echo $content->teaser; } ?></textarea>-->
+            <!--<div name="teaser" id="teaser" class="text-left"><?php if (isset($content->teaser)) { echo $content->teaser; } ?></div>-->
+            <!-- <!-- TinyMCE editor field -->
+            <textarea name="teaser" id="teaser" class="form-control text-left" required><?php if (isset($content->teaser)) { echo $content->teaser; } ?></textarea>
         </div>
 	</div>
 	
@@ -80,9 +80,9 @@
 		<label for="description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <!-- Trumbowyg editor field -->
-			<div name="description" id="description" class="text-left"><?php if (isset($content->description)) { echo $content->description; } ?></div>
-            <!-- If you want a vanilla text area instead of the Trumbowyg editor, replace the line above with the line below -->
-            <!--<textarea rows="8" class="form-control" name="description" id="description" required><?php if (isset($content->description)) { echo $content->description; } ?></textarea>-->
+			<!--<div name="description" id="description" class="text-left"><?php if (isset($content->description)) { echo $content->description; } ?></div>-->
+            <!-- TinyMCE editor field -->
+            <textarea name="description" id="description" class="form-control text-left" required><?php if (isset($content->description)) { echo $content->description; } ?></textarea>
 		</div>
 	</div>
 	
@@ -175,20 +175,12 @@
 		<label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
 	</div>
-				
-	<!-- Changed field -->
-	<input type="hidden" name="changedField" id="changedField" value="" />
-	<input type="hidden" name="op" id="op" value="" />
-				
+	
 	<!-- Action buttons -->
-	<button name="op" value="update" type="submit" class="btn btn-primary"><?php echo TFISH_UPDATE; ?></button>
-	<button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+	<button class="btn btn-primary" onclick="this.form.elements.op.value='<?php echo $op; ?>'; submit()"><?php echo $action; ?></button>
+	<button class="btn btn-primary" onclick="this.form.elements.op.value=''; submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+	
+	<!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
+	<input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />	
+	
 </form>
-
-<!-- Ready the editor -->
-<script>
-    window.onload = function() {
-        $('#teaser').trumbowyg();
-        $('#description').trumbowyg();
-    };
-</script>

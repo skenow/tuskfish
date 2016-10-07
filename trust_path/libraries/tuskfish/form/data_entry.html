@@ -4,7 +4,7 @@
 		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="type" id="type" onchange="this.form.elements.changedField.value='type'; this.form.elements.op.value='changedField'; submit()">
+			<select class="form-control" name="type" id="type" onchange="this.form.elements.op.value='changedField'; submit()">
 				<?php foreach ($content_types as $key => $type) {
 					echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($type) . '</option>';
 				} ?>
@@ -113,31 +113,14 @@
 		</div>
 		
 		<!-- Media -->
-		<!--<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
+		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 		<label class="btn btn-primary btn-file pull-left">
 			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
 		</label>
-		</div>-->
+		</div>
 		
 	</div>
-    
-    <div class="form-group">
-        <label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
-        <div class="col-lg-11 col-md-10 col-sm-9 col-xs-9">
-            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                <div id="media" name="media" class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-                <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
-                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-            </div>
-        </div>
-    </div>
-    
-      <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-        <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-        <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file"></span>
-        <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-      </div>
 	
 	<div class="form-group">
 		
@@ -153,8 +136,7 @@
 		</div>
 		
 	</div>
-		
-		
+
 	<div class="col-md-12"><hr></div>
 	<div class="col-md-12"><h2><?php echo TFISH_META_TAGS; ?><h2></div>
 	<div class="form-group">
@@ -175,18 +157,11 @@
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
 	</div>
 	
-	<!-- Changed field -->
-	<input type="hidden" name="changedField" id="changedField" value="" />
-	<input type="hidden" name="op" id="op" value="" />
-	
 	<!-- Action buttons -->
-	<button type="submit" class="btn btn-primary" onclick="this.form.elements.op.value='submit'; this.form.submit()"><?php echo TFISH_SUBMIT; ?></button>
-	<button type="submit" class="btn btn-primary" formnovalidate onclick="history.go(-1)"><?php echo TFISH_CANCEL; ?></button>
+	<button class="btn btn-primary" onclick="this.form.elements.op.value='submit'; submit()"><?php echo TFISH_SUBMIT; ?></button>
+	<button class="btn btn-primary" onclick="this.form.elements.op.value=''; submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+	
+	<!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
+	<input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
+
 </form>
-<!-- Ready the Trumbowyg editor -->
-<!--<script>
-    window.onload = function() {
-        $('#teaser').trumbowyg();
-        $('#description').trumbowyg();
-    };
-</script>-->

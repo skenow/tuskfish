@@ -17,20 +17,21 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Validate input parameters.
-$clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$clean_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
-$clean_changedField = isset($_POST['changedField']) ? TfishFilter::trimString($_POST['changedField']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
+
 	switch ($op) {
 		
 		// Add: Display an empty content object submission form.
 		case "add":
 			$tfish_template->page_title = TFISH_ADD_CONTENT;
+			$tfish_template->op = 'submit'; // Critical to launch correct form submission action.
 			$tfish_template->content_types = TfishContentHandler::getTypes();
 			$tfish_template->rights = TfishContentHandler::getRights();
 			$tfish_template->languages = TfishContentHandler::getLanguages();
@@ -39,43 +40,33 @@ if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'sub
 			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 	
-		// Change: Update the object to reflect a change in type, media or image fields.
+		// ChangedField: Essentially, reload the object and display the edit version of the form.
+		// Might not actually need this method? Go straight to editing?
 		case "changedField":
-			
-			switch($clean_changedField) {
-				case "type":
-					// Reload the object from $_POST data.
-					$clean_type = TfishFilter::trimString($_REQUEST['type']);
-					$type_whitelist =  TfishContentHandler::getTypes();
-					if (!array_key_exists($clean_type, $type_whitelist)) {
-						trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-						exit;
-					}
-					$content_object = new $clean_type;
-					$content_object->loadProperties($_REQUEST);
-					
-					// Assign to template.
-					if($clean_id) {
-						$tfish_template->page_title = TFISH_EDIT_CONTENT;
-					} else {
-						$tfish_template->page_title = TFISH_ADD_CONTENT;
-					}
-					$tfish_template->content = $content_object;
-					$tfish_template->content_types = TfishContentHandler::getTypes();
-					$tfish_template->rights = TfishContentHandler::getRights();
-					$tfish_template->languages = TfishContentHandler::getLanguages();
-					$tfish_template->tags = TfishContentHandler::getTagList();
-					$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
-					$tfish_template->tfish_main_content = $tfish_template->render('form');
-				break;
-			
-				case "media":
-				break;
-			
-				case "image":
-				break;
+			$clean_type = TfishFilter::trimString($_REQUEST['type']);
+			$type_whitelist =  TfishContentHandler::getTypes();
+			if (!array_key_exists($clean_type, $type_whitelist)) {
+				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+				exit;
 			}
-			
+			$content_object = new $clean_type;
+			$content_object->loadProperties($_REQUEST);
+			if(empty($clean_id)) { // Editing a new object.
+				$tfish_template->page_title = TFISH_ADD_CONTENT;
+				$tfish_template->action = TFISH_SUBMIT;
+				$tfish_template->op = 'submit';
+			} else { // Editing an existing object.
+				$tfish_template->page_title = TFISH_EDIT_CONTENT;
+				$tfish_template->action = TFISH_UPDATE;
+				$tfish_template->op = 'update';
+			}
+			$tfish_template->content = $content_object;
+			$tfish_template->content_types = TfishContentHandler::getTypes();
+			$tfish_template->rights = TfishContentHandler::getRights();
+			$tfish_template->languages = TfishContentHandler::getLanguages();
+			$tfish_template->tags = TfishContentHandler::getTagList();
+			$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
 		
 		// Confirm: Confirm deletion of a content object.
@@ -133,6 +124,8 @@ if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'sub
 					
 					// Assign to template.
 					$tfish_template->page_title = TFISH_EDIT_CONTENT;
+					$tfish_template->op = 'update'; // Critical to launch correct submission action.
+					$tfish_template->action = TFISH_UPDATE;
 					$tfish_template->content = TfishContentHandler::toObject($row);
 					$tfish_template->content_types = TfishContentHandler::getTypes();
 					$tfish_template->rights = TfishContentHandler::getRights();

@@ -16,15 +16,27 @@ class TfishContentHandler
 	}
 
 	/**
-	 * Toggle the online status of a content object.
+	 * Check if an existing object has an associated image file upload.
 	 * 
-	 * @param int $id
-	 * @return boolean
+	 * @param type $id
+	 * @return array
 	 */
-	public static function toggleOnlineStatus($id)
+	public static function checkImage($id)
 	{
-		$clean_id = (int)$id;
-		return TfishDatabase::toggleBoolean('content', $clean_id, 'online');
+		$image_info = array();
+		return $image_info;
+	}
+	
+	/**
+	 * Chec if an existing object has an associated media file upload.
+	 * 
+	 * @param type $id
+	 * @return array
+	 */
+	public static function checkMedia($id)
+	{
+		$media_info = array();
+		return $media_info;
 	}
 	
 	/**
@@ -376,6 +388,18 @@ class TfishContentHandler
 		$select_box .= !empty($clean_action) ? '</form>' : '';
 		
 		return $select_box;
+	}
+	
+	/**
+	 * Toggle the online status of a content object.
+	 * 
+	 * @param int $id
+	 * @return boolean
+	 */
+	public static function toggleOnlineStatus($id)
+	{
+		$clean_id = (int)$id;
+		return TfishDatabase::toggleBoolean('content', $clean_id, 'online');
 	}
 	
 	public static function updateCounter()
