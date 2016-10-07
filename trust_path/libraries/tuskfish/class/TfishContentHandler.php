@@ -28,7 +28,7 @@ class TfishContentHandler
 	}
 	
 	/**
-	 * Chec if an existing object has an associated media file upload.
+	 * Check if an existing object has an associated media file upload.
 	 * 
 	 * @param type $id
 	 * @return array
@@ -37,6 +37,52 @@ class TfishContentHandler
 	{
 		$media_info = array();
 		return $media_info;
+	}
+	
+	/**
+	 * Deletes an uploaded image file associated with a content object.
+	 * 
+	 * @param type $id
+	 * @return boolean
+	 */
+	public static function deleteImage($id)
+	{
+		return true;
+	}
+	
+	/**
+	 * Deletes an uploaded media file associated with a content object.
+	 * 
+	 * @param type $id
+	 * @return boolean
+	 */
+	public static function deleteMedia($id)
+	{
+		return true;
+	}
+	
+	public static function uploadImage()
+	{
+		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
+			$filename = TfishFilter::trimString($_FILES['image']['name']);
+			$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+			if ($clean_filename) {
+				$this->__set('image', $clean_filename);
+			}
+		}
+	}
+	
+	public static function uploadMedia()
+	{
+		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
+			$filename = TfishFilter::trimString($_FILES['media']['name']);
+			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+			if ($clean_filename) {
+				$this->__set('media', $clean_filename);
+				$this->__set('format', pathinfo($clean_filename, PATHINFO_EXTENSION));
+				$this->__set('file_size', $_FILES['media']['size']);
+			}
+		}
 	}
 	
 	/**
@@ -424,6 +470,26 @@ class TfishContentHandler
 		unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
 		unset($key_values['tags']);
 		
+		// Process image and media files before inserting the object, as related fields must be set.
+		$property_whitelist = $obj->getPropertyWhitelist();
+		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
+			$filename = TfishFilter::trimString($_FILES['image']['name']);
+			$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+			if ($clean_filename) {
+				$key_values['image'] = $clean_filename;
+			}
+		}
+	
+		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
+			$filename = TfishFilter::trimString($_FILES['media']['name']);
+			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+			if ($clean_filename) {
+				$key_values['media'] = $clean_filename;
+				$key_values['format'] = pathinfo($clean_filename, PATHINFO_EXTENSION);
+				$key_values['file_size'] = $_FILES['media']['size'];
+			}
+		}
+		
 		// Insert the object into the database.
 		$result = TfishDatabase::insert('content', $key_values);
 		if (!$result) {
@@ -739,18 +805,30 @@ class TfishContentHandler
 	public static function delete($id)
 	{
 		$clean_id = (int)$id;
-		if (TfishFilter::isInt($clean_id, 1)) {
-			$result = TfishDatabase::delete('content', $clean_id);
-			if (!$result) {
-				return false;
-			}
-		} else {
+		if (!TfishFilter::isInt($clean_id, 1)) {
 			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			return false;
 		}
 		
+		// Delete associated files.
+		$obj = self::getObject($id);
+		if (TfishFilter::isObject($obj)) {
+			if ($obj->image) {
+				TfishFileHandler::deleteFile('image/' . $obj->image);
+			}
+			if ($obj->media) {
+				TfishFileHandler::deleteFile('media/' . $obj->media);
+			}
+		}
+		
 		// Delete associated taglinks.
 		$result = TfishTaglinkHandler::deleteTaglinks($clean_id);
+		if (!$result) {
+			return false;
+		}
+		
+		// Delete the object.
+		$result = TfishDatabase::delete('content', $clean_id);
 		if (!$result) {
 			return false;
 		}

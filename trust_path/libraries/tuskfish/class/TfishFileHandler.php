@@ -256,8 +256,7 @@ class TfishFileHandler
 	}
 	
 	/**
-	 * Deletes the contents of a specific directory, subdirectories are unaffected
-	
+	 * Deletes the contents of a specific directory, subdirectories are unaffected.
 	 * 
 	 * @param string $directory_path
 	 * @return bool
@@ -352,7 +351,7 @@ class TfishFileHandler
 		if (mb_strlen($path, 'UTF-8') > 0) {
 			$path = rtrim($path, '/');
 			
-			// Construct the full path and verify that it lies within the data_file directory.
+			// Construct the full path and verify that it lies within the data_file directory.			
 			$resolved_path = realpath(TFISH_UPLOADS_PATH . $path);
 			if ($resolved_path == TFISH_UPLOADS_PATH . $path) {
 				return $resolved_path; // Path is good.
@@ -413,6 +412,8 @@ class TfishFileHandler
 			trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
 			return false;
 		}
+		
+		return true;
 	}
 	
 	/**

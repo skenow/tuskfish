@@ -290,7 +290,7 @@ class TfishContentObject extends TfishAncestralObject
 		if (!TfishFilter::isArray($dirty_input)) {
 			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
 		}		
-		
+
 		$property_whitelist = $this->getPropertyWhitelist();
 		foreach ($property_whitelist as $key => $type) {
 			if (array_key_exists($key, $dirty_input)) {
@@ -299,34 +299,15 @@ class TfishContentObject extends TfishAncestralObject
 			unset($key, $type);
 		}
 		
-		/**
-		 * Handle image and media file upload. Note that old files should be cleaned up by the
-		 * controller prior to uploading these ones, just to keep the file system clean.
-		 */
-		
-		/** 
-		 * Issue: When does the $_FILES global get populated? If a file control is set, will the
-		 * file be uploaded every time the form is posted? Or only the first time? Because it seems
-		 * that the file *name* gets carried over by the $_POST but the actual file upload isn't
-		 * happening except on the $_POST directly after a file has been chosen with the selector
-		 * button.
-		 */
-		
-		/**
-		 * Upload handling needs to be moved into the TfishContentHandler::insert/update/delete methods.
-		 */
-
 		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
-			$filename = TfishFilter::trimString($_FILES['image']['name']);
-			$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+			$clean_filename = TfishFilter::trimString($_FILES['image']['name']);
 			if ($clean_filename) {
 				$this->__set('image', $clean_filename);
 			}
 		}
 
 		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
-			$filename = TfishFilter::trimString($_FILES['media']['name']);
-			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+			$clean_filename = TfishFilter::trimString($_FILES['media']['name']);
 			if ($clean_filename) {
 				$this->__set('media', $clean_filename);
 				$this->__set('format', pathinfo($clean_filename, PATHINFO_EXTENSION));

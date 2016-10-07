@@ -199,6 +199,7 @@ define("TFISH_ERROR_FILE_UPLOAD_FAILED", "File upload failed.");
 define("TFISH_ERROR_IMAGE_UPLOAD_FAILED", "Image file upload failed.");
 define("TFISH_ERROR_MEDIA_UPLOAD_FAILED", "Media file upload failed.");
 define("TFISH_ERROR_FAILED_TO_APPEND_FILE", "Failed to append to file.");
+define("TFISH_ERROR_FAILED_TO_DELETE_FILE", "Failed to delete file.");
 define("TFISH_ERROR_FAILED_TO_SEND_DOWNLOAD", "Failed to initiate download stream.");
 define("TFISH_ERROR_BAD_PATH", "Bad file path.");
 define("TFISH_ERROR_NOT_AN_UPLOADED_FILE", "Not an uploaded file, possible upload attack.");
