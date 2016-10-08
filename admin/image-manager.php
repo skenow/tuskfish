@@ -13,7 +13,7 @@
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 // Site preferences can be accessed via $tfish_preference->key;
 require_once "mainfile.php";
-require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
+require_once TFISH_PATH . "tfish_header.php";
 
 /**
  * CONVENTIONS:
@@ -54,7 +54,6 @@ if ($clean_id) {
 	if ($clean_start) $criteria->offset = $clean_start;
 	$criteria->limit = $tfish_preference->user_pagination;
 	if ($clean_tag) $criteria->tag = array($clean_tag);
-	$criteria->add(new TfishCriteriaItem('online', 1));
 	
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);
@@ -70,7 +69,7 @@ if ($clean_id) {
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
-// $tfish_metadata->template = '';
+$tfish_metadata->template = 'admin.html';
 // $tfish_metadata->title = '';
 // $tfish_metadata->description = '';
 // $tfish_metadata->author = '';

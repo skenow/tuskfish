@@ -79,7 +79,7 @@ if (in_array($op, array('edit', 'update', false))) {
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-// $tfish_metadata->template = 'admin.html';
+$tfish_metadata->template = 'admin.html';
 $tfish_metadata->robots = 'noindex,nofollow';
 
 // Include page template and flush buffer
