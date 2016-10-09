@@ -4,7 +4,7 @@
 		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="type" id="type" onchange="this.form.elements.op.value='changedField'; submit()">
+			<select class="form-control" name="type" id="type" required>
 				<?php foreach ($content_types as $key => $type) {
 					echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($type) . '</option>';
 				} ?>
@@ -98,29 +98,33 @@
 		
 	</div>
     
-	<div class="form-group">
-		
-		<!-- Caption -->
+    <div class="form-group">
+        
+        <!-- Image -->
+        <label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <input id="image" name="image" type="file" class="file" data-preview-file-type="text" >
+        </div>
+        
+    </div>
+    
+    <div class="form-group">
+        
+        <!-- Caption -->
 		<label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
-		<div class="col-lg-5 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="caption" id="caption"></div>
-		
-		<!-- Image -->
-		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-		<label class="btn btn-primary btn-file pull-left">
-			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="image" id="image" accept="<?php echo TfishFileHandler::getPermittedImageMimetypes(); ?>" style="display: none;">
-		</label>
-		</div>
-		
-		<!-- Media -->
-		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-		<label class="btn btn-primary btn-file pull-left">
-			<?php echo TFISH_SELECT_FILE; ?><input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
-		</label>
-		</div>
-		
-	</div>
+		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="caption" id="caption"></div>
+        
+    </div>
+    
+    <div class="form-group">
+        
+        <!-- Image -->
+        <label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <input id="media" name="media" type="file" class="file" data-preview-file-type="text" >
+        </div>
+        
+    </div>
 	
 	<div class="form-group">
 		

@@ -5,7 +5,7 @@
 		<!-- Type -->
 		<label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="type" id="type" required onchange="this.form.elements.op.value='changedField'; submit()">
+			<select class="form-control" name="type" id="type" required>
 				<?php
 					foreach ($content_types as $key => $type) {
 						if ($content->type == $key) {

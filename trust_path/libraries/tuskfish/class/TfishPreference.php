@@ -237,7 +237,6 @@ class TfishPreference extends TfishAncestralObject
 						
 						// Minimum value 1.
 						case "admin_pagination":
-						case "pagination_elements":
 						case "user_pagination":
 							if (TfishFilter::isInt($value, 1)) {
 								$this->__data[$property] = (int)$value;
@@ -248,6 +247,7 @@ class TfishPreference extends TfishAncestralObject
 					
 						// Minimum value 3.
 						case "min_search_length":
+							case "pagination_elements":
 							if (TfishFilter::isInt($value, 3)) {
 								$this->__data[$property] = (int)$value;
 							} else {

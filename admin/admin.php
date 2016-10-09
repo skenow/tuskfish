@@ -24,7 +24,7 @@ $clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
-if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
+if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
 
 	switch ($op) {
 		
@@ -39,36 +39,7 @@ if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'sub
 			$tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
 			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
-	
-		// ChangedField: Essentially, reload the object and display the edit version of the form.
-		// Might not actually need this method? Go straight to editing?
-		case "changedField":
-			$clean_type = TfishFilter::trimString($_REQUEST['type']);
-			$type_whitelist =  TfishContentHandler::getTypes();
-			if (!array_key_exists($clean_type, $type_whitelist)) {
-				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				exit;
-			}
-			$content_object = new $clean_type;
-			$content_object->loadProperties($_REQUEST);
-			if(empty($clean_id)) { // Editing a new object.
-				$tfish_template->page_title = TFISH_ADD_CONTENT;
-				$tfish_template->action = TFISH_SUBMIT;
-				$tfish_template->op = 'submit';
-			} else { // Editing an existing object.
-				$tfish_template->page_title = TFISH_EDIT_CONTENT;
-				$tfish_template->action = TFISH_UPDATE;
-				$tfish_template->op = 'update';
-			}
-			$tfish_template->content = $content_object;
-			$tfish_template->content_types = TfishContentHandler::getTypes();
-			$tfish_template->rights = TfishContentHandler::getRights();
-			$tfish_template->languages = TfishContentHandler::getLanguages();
-			$tfish_template->tags = TfishContentHandler::getTagList();
-			$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form');
-		break;
-		
+
 		// Confirm: Confirm deletion of a content object.
 		case "confirm":
 			if (isset($_REQUEST['id'])) {
@@ -144,9 +115,6 @@ if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'sub
 		// Submit: Determine object type, instantiate, validate input, populate properties  and and
 		// insert a new content object.
 		case "submit":
-			// Determine the type of object. This is not a great way to do it, there needs to be
-			// a config file somewhere, or perhaps it could just check that the class is available
-			// (but then it would need to be restricted to content types).
 			if (empty($_REQUEST['type'])) {
 				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
 				exit;
@@ -229,7 +197,14 @@ if (in_array($op, array('add', 'changedField', 'confirm', 'delete', 'edit', 'sub
 	
 		// View: Display a content object.
 		case "view":
-			echo 'View';
+			$content = TfishContentHandler::getObject($clean_id);
+			if (is_object($content)) {
+				$tfish_template->tags = TfishContentHandler::makeTagLinks($content->tags, false);
+				$tfish_template->content = $content;
+				$tfish_template->tfish_main_content = $tfish_template->render($content->template);
+			} else {
+				$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+			}
 		break;
 		
 		// Default: Display a table of existing content objects and pagination controls.

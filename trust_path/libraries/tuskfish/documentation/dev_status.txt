@@ -4,7 +4,8 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Decision: TinyMCE editor, with Trumbowyg as backup option. The 'lightweight' options aren't that much smaller than TinyMCE, and they are way more flaky.
+* Pagination control is broken (calculation of slots is wrong).
+* Minor validation bug in the selection boxes (online?)
 * Round trip the data entry/editing form when change object type.
   - Grey out read-only sections of the form.
 * Test PNG and GIF handling.

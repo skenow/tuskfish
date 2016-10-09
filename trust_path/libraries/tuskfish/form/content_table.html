@@ -19,7 +19,7 @@
 			<tr>
 				<td><?php echo TfishFilter::escape($row['id']); ?></td>
 				<td><?php echo TfishFilter::escape($typelist[$row['type']]); ?></td>
-				<td><?php echo TfishFilter::escape($row['title']); ?></td>
+                <td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=view"><?php echo TfishFilter::escape($row['title']); ?></a></td>
 				<td><?php echo TfishFilter::escape($row['submission_time']); ?></td>
 				<td><?php echo TfishFilter::escape($row['counter']); ?></td>
                 <?php if ($row['online']): ?>
