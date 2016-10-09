@@ -54,3 +54,15 @@ THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 * Logger needs to return FALSE otherwise trigger_error() will not stop script execution (in dev mode, it's handy to let the script keep going to get context).
 * TfishFilter::connect() needs the error mode PDO::ERRMODE_EXCEPTION changed to silent or warning (stop throwing exceptions!). This could be a preference setting.
 * Uncomment the section of the installation script that deletes the installation script.
+* Bootstrap-fileinput library needs to have the 'showUpload' button config option set to FALSE to hide the unused upload button. Do this by editing:
+
+$.fn.fileinput.defaults = {
+    language: 'en',
+    showCaption: true,
+    showPreview: true,
+    showRemove: true,
+    showUpload: false, // <------ just set this from true to false
+    showCancel: true,
+    showUploadedThumbs: true,
+    // many more below
+};
