@@ -1,7 +1,10 @@
 <?php
 
 /**
-* Tuskfish ancestral object handler class
+* Tuskfish parent content object handler class.
+* 
+* Provides base content handler methods that are inherited or overridden by subclass-specific
+* content handlers. 
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

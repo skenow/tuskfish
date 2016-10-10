@@ -1,11 +1,10 @@
 <?php
 
 /**
-* Tuskfish file handler class
+* Tuskfish file handler class.
 *
-* All file operations are conducted relative to the TFISH_MEDIA_PATH directory, which is the 
-* only place where files are allowed to be uploaded to. It exists outside the web root, in the
-* trust path directory.
+* Provides methods for handling common file operations. In some cases, sensitive operations are
+* restricted to a particular directory (for example, file uploads).
 * 
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

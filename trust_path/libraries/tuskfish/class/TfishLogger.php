@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Tuskfish error logger class
+* Tuskfish custom error logger class.
 * 
 * Custom error handler functions such as this one should return FALSE; otherwise calls to 
 * trigger_error($msg, E_USER_ERROR) will not cause a script to stop execution!

@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish article object class
+* Tuskfish article object class.
+* 
+* Represents a text article such as a new story or blog entry.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

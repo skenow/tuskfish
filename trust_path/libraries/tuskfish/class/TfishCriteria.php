@@ -3,9 +3,9 @@
 /**
 * Tuskfish query composer class for SQLite database.
 * 
-* Individual conditions are held within the item property, as TfishCriteriaItem objects.
-* Criteria holds the basic query parameters and controls how TfishCriteriaItem are chained
-* together (eg. with "AND", "OR". 
+* Use this class to set parameters on database-related actions. Individual conditions are held within
+* the item property, as TfishCriteriaItem objects. Criteria holds the basic query parameters and
+* controls how TfishCriteriaItem are chained together (eg. with "AND", "OR"). 
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

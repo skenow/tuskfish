@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish static content object class
+* Tuskfish static content object class.
+* 
+* Represents a static content object (a static content page).
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

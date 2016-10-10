@@ -1,7 +1,10 @@
 <?php
 
 /**
-* Tuskfish block object class
+* Tuskfish block list class.
+* 
+* Generates a traditional 'headline list' style of block, consisting of a block heading and a list
+* of content titles/links. 
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

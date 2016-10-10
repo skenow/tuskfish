@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish download object class
+* Tuskfish download object class.
+* 
+* Represents a downloadable file, for example a publication or software archive.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

@@ -1,11 +1,10 @@
 <?php
 
 /**
-* Tuskfish data filter class
+* Tuskfish data filter class.
 * 
-* NOTE WELL!!!
-* ============
-* The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE SAFETY. 
+* Provides methods to validate different data types and to conduct range checks. 
+* WARNING: The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE SAFETY. 
 * They are intended for EXCLUSIVE use with PREPARED STATEMENTS and BOUND VALUES to mitigate SQL
 * injection.
 

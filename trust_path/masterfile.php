@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Tuskfish masterfile script
+* Tuskfish masterfile script.
 *
-* Sets useful path constants, includes the database credentials and reads site preferences 
+* Sets useful path constants, includes the database credentials and reads site preferences.
 * 
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -12,7 +12,6 @@
 * @package		core
 */
 
-//echo '<p>Masterfile included.</p>';
 if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_MASTERFILE_INCLUDED", 1); 
 
@@ -37,7 +36,6 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	
 	// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL
 	define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
-	define("TFISH_ASSETS_URL", TFISH_URL . "assets/");
 	define("TFISH_CACHE_URL" , TFISH_URL . "cache/");
 	define("TFISH_TEMPLATES_URL", TFISH_URL . "templates/");
 	define("TFISH_RSS_URL", TFISH_URL . "rss.php");

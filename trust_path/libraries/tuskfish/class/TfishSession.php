@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish session security class
+* Tuskfish session security class.
+* 
+* Provides functions for managing sessions in a secure manner. 
 *
 * @copyright	http://blog.teamtreehouse.com/how-to-create-bulletproof-sessions
 * @package		core

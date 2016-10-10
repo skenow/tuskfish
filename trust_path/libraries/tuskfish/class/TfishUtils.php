@@ -1,6 +1,6 @@
 <?php
 /**
- * Different utilities used by the core
+ * Provides a variety of utility functions used by the core (lists of timezones, mimetypes etc).
  *
  * @copyright	The ImpressCMS Project http://www.impresscms.org/
  * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)

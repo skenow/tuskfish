@@ -1,7 +1,10 @@
 <?php
 
 /**
-* Tuskfish user class
+* Tuskfish user class.
+* 
+* Represents a user. Since Tuskfish is a single-user system, this class will probably be deprecated
+* in due course.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

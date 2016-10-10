@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish footer script, must be included on every page
+* Tuskfish footer script, must be included on every page.
+* 
+* Includes the main layout template, kills the database connection and flushes the output buffer.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -9,8 +11,6 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
-
-// echo '<p>Footer included.</p>';
 
 // Include the relevant page template, or the default if not set.
 if ($tfish_metadata && $tfish_metadata->template) {

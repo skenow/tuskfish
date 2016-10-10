@@ -1,7 +1,11 @@
 <?php
 
 /**
-* Tuskfish core language constants (English)
+* Tuskfish core language constants (English).
+* 
+* Translate this file to convert Tuskfish to another language. To actually use a translated language
+* file, edit /trust_path/masterfile.php and change the TFISH_DEFAULT_LANGUAGE constant to point at
+* your translated language file.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

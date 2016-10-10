@@ -1,7 +1,14 @@
 <?php
 
 /**
-* Tuskfish collection object class
+* Tuskfish collection object class.
+* 
+* Represents a collection of content objects. For example, a magazine produced at regular intervals.
+* Collections can be nested by assigning another collection as a parent object. In this way,
+* collections can effectively serve as categories and you can construct independent category trees.
+* For example, if you wanted to create a "publications" category you would just create a publications
+* collection object and assign it as the parent of your publications content objects. Collections
+* are searchable content objects, so provide them with a nice description and image/screenshot! 
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

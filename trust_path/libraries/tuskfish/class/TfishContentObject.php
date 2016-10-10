@@ -1,36 +1,30 @@
 <?php
 
 /**
-* Tuskfish content object class
+* Tuskfish parent content object class, represents a single content object.
 *
+* There is only one 'archtype' of content object in Tuskfish; it uses standard Dublin Core metadata
+* fields plus a few more that are common to most content objects. Why? If you look at most common
+* content types - articles, photos, downloads etc. - you will see that for the most part they all
+* use the same fields. For example, everything has a title, everything has a description, 
+* everything has an author, everything has a hit counter.
+* 
+* Traditionally, most CMS create a separate database table for every type of content with
+* duplicate column names. And it works just fine until you want to publish a single content stream
+* containing different kinds of content objects. Then, suddenly, your queries are full of complex
+* joins and other rubbish and it becomes very painful to work with.
+* 
+* By using a single table for content objects with common field names our queries become very
+* simple and much redundancy is avoided. Of course, some types of content might not require a few
+* particular properties; and so subclassed content types simply unset() any properties that they 
+* don't need in their constructor.
+* 
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
 * @since		1.0
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
-
-/**
- * How the TfishContentObject works
- * 
- * There is only one type of content object in Tuskfish; it uses standard Dublin Core metadata
- * fields plus a few more that are common to most content objects. Why? If you look at most common
- * content types - articles, photos, downloads etc. - you will see that for the most part they all
- * use the same fields. For example, everything has a title, everything has a description, 
- * everything has an author, everything has a hit counter.
- * 
- * Traditionally, most CMS create a separate database table for every type of content with
- * duplicate column names. And it works just fine until you want to publish a single content stream
- * containing different kinds of content objects. Then, suddenly, your queries are full of complex
- * joins and other rubbish and it becomes very painful to work with.
- * 
- * By using a single table for content objects with common field names our queries become very
- * simple and much redundancy is avoided. Of course, some types of content might not require a few
- * particular properties; and so subclassed content types simply unset() any properties that they 
- * don't need in their constructor.
- * 
- * Too easy!
- */
 
 class TfishContentObject extends TfishAncestralObject
 {

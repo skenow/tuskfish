@@ -1,7 +1,11 @@
 <?php
 
 /**
-* Installation script for Tuskfish CMS. Delete after use
+* Installation script for Tuskfish CMS.
+* 
+* Directory should auto-delete after use. If not, you MUST delete it manually to prevent people
+* from re-installing Tuskfish and thereby taking over management of your site (which is not fatal,
+* as your own database will not be affected, but it could be embarassing).
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) Version 3 or higher

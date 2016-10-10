@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Language file for Tuskfish installer script
+* Language file for Tuskfish installer script.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

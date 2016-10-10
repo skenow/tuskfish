@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish video object class
+* Tuskfish video object class.
+* 
+* Represents a video object.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

@@ -132,7 +132,7 @@
 			<select class="form-control" name="default_language" id="default_language" required>
 				<?php
 					foreach ($languages as $key => $value) {
-						if ($tfish_preference->default_language == $key) {
+						if (isset($preferences['default_language']) && $preferences['default_language'] == $key) {
 							echo '<option value="' . $key . '" selected>' . $value . '</option>';
 						} else {
 							echo '<option value="' . $key . '">' . $value . '</option>';

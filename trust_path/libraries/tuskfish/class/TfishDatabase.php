@@ -1,16 +1,15 @@
 <?php
 
 /**
-* Tuskfish database handler class
+* Tuskfish database handler class.
 * 
 * Implements PDO and makes exclusive use of prepared statements with bound values to mitigate SQL
-* injection attacks. Note that if other parts of queries are build up using unescaped input then
-* SQL injection is still possible. So DON'T DO THAT, RIGHT?
+* injection attacks. Table and column identifiers are also escaped.
 * 
 * It is expected that by the time data trickles down to this class it will have ALREADY BEEN
-* THOROUGHLY VALIDATED by both i) user-facing control scripts and ii) internal object checks. As the
-* validation conducted by this class is the last line of defense any failures will trigger
-* FATAL ERRORS.   
+* THOROUGHLY VALIDATED AND RANGE CHECKED by user-facing control scripts and internal object checks.
+* As the validation conducted by this class is the last line of defense any failures will trigger
+* FATAL ERRORS and angry log entries.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

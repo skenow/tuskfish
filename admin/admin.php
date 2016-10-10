@@ -2,9 +2,9 @@
 
 /**
 * Tuskfish content management script. Add, edit or delete content objects as required.
-* 
-* Site preferences can be accessed via $tfish_preference->key;
 *
+* This is the core of the administrative system.
+* 
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
 * @since		1.0

@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish audio object class
+* Tuskfish audio object class.
+* 
+* Represents and audio recording.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

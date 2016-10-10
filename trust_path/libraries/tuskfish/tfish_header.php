@@ -1,7 +1,11 @@
 <?php
 
 /**
-* Tuskfish header script, must be included on every page
+* Tuskfish header script, must be included on every page.
+* 
+* Establishes connection with database, sets up preference and template objects, error logging,
+* class autoloading, includes language constants, HTMLPufifier and starts the session and compressed
+* output buffer.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -12,8 +16,6 @@
 
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
-// Enabling gzip compression breaks file downloads via headers. Don't know why - clash in php.ini setting?
-//ob_start();
 
 // Autoload core Tuskfish classes, spl_autoload_register() avoids namespace clashes.
 function tfish_autoload($classname) {
@@ -50,5 +52,3 @@ $tfish_metadata = new TfishMetadata($tfish_preference);
 
 // Instantiate the template object so that it will be available globally.
 $tfish_template = new TfishTemplate();
-
-// echo '<p>Header included.</p>';

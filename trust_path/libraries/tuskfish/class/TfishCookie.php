@@ -1,10 +1,10 @@
 <?php
 
 /**
-* Tuskfish cookie security class
+* Tuskfish cookie security class.
 * 
-* Note that session cookie parameters must be set before calling session_start(). By default, 
-* cookies are only deployed in the admin section of Tuskfish, although this can be overriden.
+* Session cookie parameters must be set before calling session_start(). Cookies will be REMOVED
+* from the public-facing areas of Tuskfish in due course.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

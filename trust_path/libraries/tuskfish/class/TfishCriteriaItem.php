@@ -2,6 +2,10 @@
 
 /**
 * Tuskfish query composer class for SQLite database
+* 
+* Represents a single clause in the WHERE component of a database query. Add TfishCriteriaItem to
+* TfishCriteria to build your queries. Please see the Tuskfish manual for a full explanation and
+* examples.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

@@ -1,7 +1,10 @@
 <?php
 
 /**
-* Tuskfish base template object.
+* Tuskfish template object.
+* 
+* Used to hold template variables and to render templates for display. A template object is
+* automatically made available on every page via tfish_header.php.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

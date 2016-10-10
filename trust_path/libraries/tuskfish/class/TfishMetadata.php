@@ -1,7 +1,13 @@
 <?php
 
 /**
-* Tuskfish page-level metadata class
+* Tuskfish page-level metadata class.
+* 
+* Generates metadata for the page and pagination control. User-facing controller scripts can
+* override the site-level defaults by uncommenting the options at the bottom of each file. A good
+* example of this is when viewing a single content object; if it has the meta_title and
+* meta_description fields set you can assign those to this object in order to customise the page
+* title and description to the object, thereby improving your SEO.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
