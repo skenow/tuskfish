@@ -50,7 +50,7 @@
             <!-- Trumbowyg editor field -->
             <!--<div name="teaser" id="teaser" class="text-left"></div>-->
             <!-- TinyMCE editor field -->
-            <textarea id="teaser" name="teaser" class="text-left" required></textarea>
+            <textarea id="teaser" name="teaser" class="text-left"></textarea>
         </div>
 	</div>
     
@@ -61,7 +61,7 @@
             <!-- Trumbowyg editor field -->
             <!--<div name="description" id="description" class="text-left"></div>-->
             <!-- TinyMCE editor field -->
-            <textarea id="description" name="description" class="text-left" required></textarea>
+            <textarea id="description" name="description" class="text-left"></textarea>
         </div>        
 	</div>
 	
@@ -162,10 +162,7 @@
 	</div>
 	
 	<!-- Action buttons -->
-	<button class="btn btn-primary" onclick="this.form.elements.op.value='submit'; submit()"><?php echo TFISH_SUBMIT; ?></button>
-	<button class="btn btn-primary" onclick="this.form.elements.op.value=''; submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
-	
-	<!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
-	<input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
+	<button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
+	<button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
 
 </form>
