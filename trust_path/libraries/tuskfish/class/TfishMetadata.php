@@ -184,42 +184,34 @@ class TfishMetadata
 		
 		// 2. Calculate current page.
 		$current_page = (int)(($start / $limit) + 1);
-		echo 'current page: ' . $current_page . '<br />';
 
 		// 3. Calculate length of pagination control (number of slots).
 		$elements = ($this->pagination_elements > $page_count) ? $page_count : $this->pagination_elements;
-		echo 'elements: ' . $elements . '<br />';
+		echo 'elements ' . $elements;
 		
 		// 4. Calculate the fore offset and initial (pre-adjustment) starting position.
 		$offset_int = (int)(($elements - 1) / 2);
 		$offset_float = ($elements - 1) / 2;
-		echo 'offset: ' . $offset_int . '<br />';
-		echo 'offset float ' . $offset_float . '<br />';
 		$page_start = $current_page - $offset_int;
-		echo 'page start initial: ' . $page_start . '<br />';
 		
 		// 5. Check if fore exceeds bounds. If so, set start = 1 and extract the range.
 		// 6. Check if aft exceeds bounds. If so set start = $page_count - length.
 		$fore_boundcheck = $current_page - $offset_int;
 		$aft_boundcheck = ($current_page + $offset_float) + 1;
-		echo 'fore boundcheck: ' . $fore_boundcheck . '<br />';
-		if ($fore_boundcheck < 1) {
-			echo 'fore bound triggered<br />';
+		
+		// This is the tricky bit - slicing a variable region out of the range.
+		if (count($page_slots == $elements)) {
+			$page_slots = $page_range;
+		} elseif ($fore_boundcheck < 1) {
 			$page_start = 1;
 			$page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
 		} elseif ($aft_boundcheck >= $page_count) {
-			echo 'aft bound triggered<br />';
 			$page_start = $page_count - ($elements + 1);
 			$page_slots = array_slice($page_range, $page_start, $elements, true);
 		} else {
-			$page_slots = array_slice($page_range, $page_start, $elements, true);
+			$page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
 		}
-		
-		
-		echo 'page_start: ' . $page_start . '<br />';
-		echo 'before ';
-		print_r($page_slots);
-		
+				
 		// 7. Substitute in the 'first' and 'last' page elements and sort the array back into numerical order.
 		end($page_slots);
 		unset($page_slots[key($page_slots)]);
@@ -228,9 +220,6 @@ class TfishMetadata
 		unset($page_slots[key($page_slots)]);
 		$page_slots[0] = TFISH_PAGINATION_FIRST;
 		ksort($page_slots);
-		
-		echo '<br />after ';
-		print_r($page_slots);
 
 		// Construct a HTML pagination control.
 		$control = '<ul class="pagination">';

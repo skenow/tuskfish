@@ -39,9 +39,9 @@ class TfishTagHandler extends TfishContentHandler
 		$clean_type = TfishContentHandler::isSanctionedType($type) ? TfishFilter::trimString($type) : null;  // Used to filter tags relevant to a specific content subclass, eg. TfishArticle.
 		
 		$tag_list = TfishContentHandler::getActiveTagList($clean_type);
-		asort($tag_list);
-		$tag_list = array(0 => $clean_zero_option) + $tag_list;
 		if (!empty($tag_list)) {
+			asort($tag_list);
+			$tag_list = array(0 => $clean_zero_option) + $tag_list;
 			$select_box = !empty($clean_action) ? '<form name="tag_select_form" action="' . $clean_action . '" method="get">' : '';
 			$select_box .= '<select name="tag_id" id="tag_id" onchange="this.form.submit()">';
 			foreach($tag_list as $key => $value) {
