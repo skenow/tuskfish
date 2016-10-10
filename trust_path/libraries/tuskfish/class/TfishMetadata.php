@@ -187,7 +187,6 @@ class TfishMetadata
 
 		// 3. Calculate length of pagination control (number of slots).
 		$elements = ($this->pagination_elements > $page_count) ? $page_count : $this->pagination_elements;
-		echo 'elements ' . $elements;
 		
 		// 4. Calculate the fore offset and initial (pre-adjustment) starting position.
 		$offset_int = (int)(($elements - 1) / 2);
