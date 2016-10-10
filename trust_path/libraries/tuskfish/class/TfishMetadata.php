@@ -191,17 +191,13 @@ class TfishMetadata
 		// This is the tricky bit - slicing a variable region out of the range.
 		if ($page_count == $elements) {
 			$page_slots = $page_range;
-			echo 'equal';
 		} elseif ($fore_boundcheck < 1) {
 			$page_slots = array_slice($page_range, 0, $elements, true);
-			echo 'fore';
 		} elseif ($aft_boundcheck >= $page_count) {
 			$page_start = $page_count - $elements;
 			$page_slots = array_slice($page_range, $page_start, $elements, true);
-			echo 'aft';
 		} else {
 			$page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
-			echo 'none';
 		}
 				
 		// 7. Substitute in the 'first' and 'last' page elements and sort the array back into numerical order.
