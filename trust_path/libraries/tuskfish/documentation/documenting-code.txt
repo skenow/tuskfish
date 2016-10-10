@@ -1,0 +1,67 @@
+DOCUMENTING CODE
+================
+1. Do the file-level docblocks.
+2. Do the class-level docblocks (including magic methods).
+3. Do the method-level docblocks (including magic methods).
+
+* Use type hinting on method parameters WHERE APPROPRIATE, ie. where it is a fixed class. Can't use
+inheritance here.
+* Better remove DocBlock style comments unless actually want them. DocBlock contains three basic 
+segments in this order:
+  - Short description (terminated with blank line or period).
+  - Long description
+  - Tags
+* Page-level DocBlock is the first one in the file and contains a @package tag.
+* Useful DocBlock tags:
+  @author author name <author@email>
+  @copyright date name
+  @deprecated documents a method as deprecated
+  @global type $globalvarname
+  @license documents license information
+  @package name of a package; documents a group of related classes and functions
+  @param type [$varname] description - documents a function parameter
+  @return type description
+  @since version documents when a method was added to a class
+  @static documents a static class or method
+  @staticvar type documents a static variable's use in a function or class
+  @throws Documents an exception thrown by a method
+  @todo Documents things that need to be done to the code at a later date
+  @var type a data type for a class variable
+  @version provides the version number of a class or method
+ 
+General use DocBlock template for Tuskfish:
+
+/**
+* Short description
+* 
+* Long description
+*
+* @copyright	2013-2016 Simon Wilkinson (Crushdepth)
+* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+* @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version  
+* @since		1.0
+* @package		core
+*/
+
+General use method template for Tuskfish:
+
+/**
+ * Short description.
+ *
+ * Long description.
+ *
+ * @global [Type] [name] @global [Type] [description]
+ * @param type [$varname] description
+ * @return type description
+ * @throws type description
+ * @static
+ */
+
+General use class template for Tuskfish:
+/**
+* @property [Type] [name] [<description>] [this is to document properties accessible by magic methods]
+* @method [return type] [name]([[type] [parameter]<, ...>]) [<description>] [this is to document magic methods]
+*
+*/
+
+https://phpdoc.org/docs/latest/references/phpdoc/tags/var.html

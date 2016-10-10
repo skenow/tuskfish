@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Tuskfish video script.
+* Tuskfish video display script.
 * 
-* Site preferences can be accessed via $tfish_preference->key.
+* User-facing controller script for presenting video content.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -45,6 +45,8 @@ if ($clean_id) {
 	if (is_object($content)) {
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $content->module);
 		$tfish_template->content = $content;
+		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
+		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
 		$tfish_template->error = TFISH_ERROR_NO_SUCH_CONTENT;

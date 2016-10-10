@@ -1,7 +1,10 @@
 <?php
 
 /**
-* Tuskfish podcast script
+* Tuskfish podcast display script.
+* 
+* User-facing controller script for presenting podcast content as collections of audio and
+* video files.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -42,6 +45,8 @@ if ($clean_id) {
 	if (is_object($content) && $content->online) {
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
 		$tfish_template->content = $content;
+		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
+		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
 		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;

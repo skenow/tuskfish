@@ -1,7 +1,10 @@
 <?php
 
 /**
-* Tuskfish search script
+* Tuskfish site search script.
+* 
+* Free text search of all content objects with ALL OR EXACT options for search terms. The fields
+* searched are title, teaser, description, caption, creator, publisher.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

@@ -3,7 +3,7 @@
 /**
 * Tuskfish permalink script.
 * 
-* Site preferences can be accessed via $tfish_preference->key.
+* Provides a permalink lookup service for all content objects. Simply supply the ID of the content.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -38,6 +38,8 @@ if ($clean_id) {
 	if (isset($content) && is_object($content)) {
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
 		$tfish_template->content = $content;
+		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
+		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
 		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
@@ -49,7 +51,7 @@ if ($clean_id) {
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
-// $tfish_metadata->title = '';
+$tfish_metadata->title = TFISH_TYPE_PERMALINKS;
 // $tfish_metadata->description = '';
 // $tfish_metadata->author = '';
 // $tfish_metadata->copyright = '';

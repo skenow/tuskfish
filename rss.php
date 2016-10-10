@@ -3,13 +3,14 @@
 /**
 * Tuskfish RSS feed generator script.
 * 
-* Site preferences can be accessed via $tfish_preference->key.
+* Generates a valid RSS feed for the site, optionally for a specific tag.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
 * @since		1.0
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
+* @todo			Enable RSS feeds for collection objects 
 */
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.

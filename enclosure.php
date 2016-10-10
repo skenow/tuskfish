@@ -4,7 +4,8 @@
 * Tuskfish enclosure retrieval script.
 * 
 * Provides an enclosure (media file) retrieval service for RSS feeds to hook into, as the actual
-* files are stored outside of the web root, so direct access is not possible.
+* files are stored outside of the web root, so direct access is not possible. Simply supply the ID
+* of a content object with a downloadable media attachment in order to retrieve the file.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version

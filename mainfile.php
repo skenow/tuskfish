@@ -1,7 +1,9 @@
 <?php
 
 /**
-* Tuskfish mainfile script, must be included in all pages
+* Tuskfish mainfile script.
+* 
+* Includes critical files. Must be included in ALL pages as first order of business.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
@@ -9,8 +11,6 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
-
-//echo '<p>Mainfile included.</p>';
 
 /**
  * Access trust path, DB credentials and read preferences.
