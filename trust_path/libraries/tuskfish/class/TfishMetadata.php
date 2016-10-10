@@ -157,17 +157,7 @@ class TfishMetadata
 	}
 	
 	private function _getPavigationControl($count, $limit, $url, $start, $tag, $extra_params)
-	{
-		/**
-		 * 1. Calculate number of pages.
-		 * 2. Calculate current page.
-		 * 3. Calculate length of pagination control (number of slots).
-		 * 4. Calculate the fore offset.
-		 * 5. Check if fore exceeds bounds. If so, set start = 1 and extract.
-		 * 6. Check if aft exceeds bounds. If so set start = $page_count - length.
-		 * 7. Sub in the 'first' and 'last' elements.
-		 */
-		
+	{		
 		// 1. Calculate number of pages, page number of start object and adjust for remainders.
 		$page_slots = array();
 		$page_count = (int)(($count / $limit));
@@ -196,19 +186,22 @@ class TfishMetadata
 		// 5. Check if fore exceeds bounds. If so, set start = 1 and extract the range.
 		// 6. Check if aft exceeds bounds. If so set start = $page_count - length.
 		$fore_boundcheck = $current_page - $offset_int;
-		$aft_boundcheck = ($current_page + $offset_float) + 1;
+		$aft_boundcheck = ($current_page + $offset_float);
 		
 		// This is the tricky bit - slicing a variable region out of the range.
-		if (count($page_slots == $elements)) {
+		if ($page_count == $elements) {
 			$page_slots = $page_range;
+			echo 'equal';
 		} elseif ($fore_boundcheck < 1) {
-			$page_start = 1;
-			$page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
+			$page_slots = array_slice($page_range, 0, $elements, true);
+			echo 'fore';
 		} elseif ($aft_boundcheck >= $page_count) {
-			$page_start = $page_count - ($elements + 1);
+			$page_start = $page_count - $elements;
 			$page_slots = array_slice($page_range, $page_start, $elements, true);
+			echo 'aft';
 		} else {
 			$page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
+			echo 'none';
 		}
 				
 		// 7. Substitute in the 'first' and 'last' page elements and sort the array back into numerical order.
