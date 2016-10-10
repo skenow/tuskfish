@@ -158,34 +158,79 @@ class TfishMetadata
 	
 	private function _getPavigationControl($count, $limit, $url, $start, $tag, $extra_params)
 	{
-		// Calculate number of pages, page number of start object and adjust for remainders.
+		/**
+		 * 1. Calculate number of pages.
+		 * 2. Calculate current page.
+		 * 3. Calculate length of pagination control (number of slots).
+		 * 4. Calculate the fore offset.
+		 * 5. Check if fore exceeds bounds. If so, set start = 1 and extract.
+		 * 6. Check if aft exceeds bounds. If so set start = $page_count - length.
+		 * 7. Sub in the 'first' and 'last' elements.
+		 */
+		
+		// 1. Calculate number of pages, page number of start object and adjust for remainders.
+		$page_slots = array();
 		$page_count = (int)(($count / $limit));
-		$current_page = (int)(($start / $limit) + 1);
 		$remainder = $count % $limit;
 		if ($remainder) {
 			$page_count += 1;
 		}
-
+		$page_range = range(1, $page_count);
+		
 		// No need for pagination control if only one page.
 		if ($page_count == 1) {
 			return false;
 		}
 		
-		// Handling pagination for multiple pages.	
-		$page_slots = array();
-		$page_slots[$current_page] = $current_page;
-		for ($i = 1; $i < $this->pagination_elements; $i++) {
-			$page_slots[$current_page - $i] = $current_page - $i;
-			$page_slots[$current_page + $i] = $current_page + $i;
+		// 2. Calculate current page.
+		$current_page = (int)(($start / $limit) + 1);
+		echo 'current page: ' . $current_page . '<br />';
+
+		// 3. Calculate length of pagination control (number of slots).
+		$elements = ($this->pagination_elements > $page_count) ? $page_count : $this->pagination_elements;
+		echo 'elements: ' . $elements . '<br />';
+		
+		// 4. Calculate the fore offset and initial (pre-adjustment) starting position.
+		$offset_int = (int)(($elements - 1) / 2);
+		$offset_float = ($elements - 1) / 2;
+		echo 'offset: ' . $offset_int . '<br />';
+		echo 'offset float ' . $offset_float . '<br />';
+		$page_start = $current_page - $offset_int;
+		echo 'page start initial: ' . $page_start . '<br />';
+		
+		// 5. Check if fore exceeds bounds. If so, set start = 1 and extract the range.
+		// 6. Check if aft exceeds bounds. If so set start = $page_count - length.
+		$fore_boundcheck = $current_page - $offset_int;
+		$aft_boundcheck = ($current_page + $offset_float) + 1;
+		echo 'fore boundcheck: ' . $fore_boundcheck . '<br />';
+		if ($fore_boundcheck < 1) {
+			echo 'fore bound triggered<br />';
+			$page_start = 1;
+			$page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
+		} elseif ($aft_boundcheck >= $page_count) {
+			echo 'aft bound triggered<br />';
+			$page_start = $page_count - ($elements + 1);
+			$page_slots = array_slice($page_range, $page_start, $elements, true);
+		} else {
+			$page_slots = array_slice($page_range, $page_start, $elements, true);
 		}
+		
+		
+		echo 'page_start: ' . $page_start . '<br />';
+		echo 'before ';
+		print_r($page_slots);
+		
+		// 7. Substitute in the 'first' and 'last' page elements and sort the array back into numerical order.
+		end($page_slots);
+		unset($page_slots[key($page_slots)]);
+		$page_slots[($page_count - 1)] = TFISH_PAGINATION_LAST;
+		reset($page_slots);
+		unset($page_slots[key($page_slots)]);
+		$page_slots[0] = TFISH_PAGINATION_FIRST;
 		ksort($page_slots);
-		$page_range = range(1, $page_count);
-		$page_slots = array_intersect($page_slots, $page_range);
-		$page_slots[1] = TFISH_PAGINATION_FIRST;
-		if ($page_count > count($page_slots)) {
-			array_pop($page_slots);
-			$page_slots[$page_count] = TFISH_PAGINATION_LAST;
-		}
+		
+		echo '<br />after ';
+		print_r($page_slots);
 
 		// Construct a HTML pagination control.
 		$control = '<ul class="pagination">';
@@ -193,7 +238,7 @@ class TfishMetadata
 		// Prepare the query string.
 		$query = $start_arg = $tag_arg = '';	
 		foreach ($page_slots as $key => $slot) {
-			$start = (int)(($key - 1) * $limit);
+			$start = (int)($key * $limit);
 			
 			// Set the arguments.
 			if ($start || $tag || $extra_params) {
@@ -210,7 +255,7 @@ class TfishMetadata
 				$query = '?' . implode('&amp;', $arg_array);
 			}
 			
-			if ($key == $current_page) {
+			if (($key + 1) == $current_page) {
 				$control .= '<li class="active"><a href="' . $url . $query . '">' . $slot . '</a></li>';
 			} else {
 				$control .= '<li><a href="' . $url . $query . '">' . $slot . '</a></li>';
