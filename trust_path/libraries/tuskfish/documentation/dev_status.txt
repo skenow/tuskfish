@@ -4,11 +4,11 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Robust solution for file uploads (editing, delinking).
-* Minor validation bug in the selection boxes (online?)
-* Grey out read-only sections of the form when changing object type.
+* Robust solution for file uploads (editing, delinking cases).
 * Test PNG and GIF handling.
   - Add support for transparency.
+* Minor validation bug in the selection boxes (online?)
+* Grey out read-only sections of the form when changing object type.
 * Front end object templates (with scalable images).
 * Add an admin-side image gallery script (just needs template, code is already there).
 * Document all functions.

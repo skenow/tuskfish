@@ -1,12 +1,10 @@
 DOCUMENTING CODE
 ================
-1. Do the file-level docblocks.
-2. Do the class-level docblocks (including magic methods).
 3. Do the method-level docblocks (including magic methods).
 
 * Use type hinting on method parameters WHERE APPROPRIATE, ie. where it is a fixed class. Can't use
 inheritance here.
-* Better remove DocBlock style comments unless actually want them. DocBlock contains three basic 
+* DocBlock contains three basic 
 segments in this order:
   - Short description (terminated with blank line or period).
   - Long description
