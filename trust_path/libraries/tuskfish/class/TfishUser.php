@@ -23,16 +23,10 @@ class TfishUser
 		'user_group',
 		);
 	
-	/**
-	 * Generic constructor
-	 */
-	function __construct()
-	{
-		
-	}
+	function __construct() {}
 	
 	/**
-	 * Access an existing object property
+	 * Access an existing object property; intercepts direct external calls to read the value.
 	 * 
 	 * @param string $property
 	 * @return mixed
@@ -47,7 +41,7 @@ class TfishUser
 	}
 	
 	/**
-	 * Set an existing object property
+	 * Set an existing object property; intercepts direct external calls to set the value.
 	 * 
 	 * @param mixed $property
 	 * @param mixed $value
@@ -62,7 +56,7 @@ class TfishUser
 	}
 	
 	/**
-	 * Intercept isset() calls to correctly read object properties
+	 * Intercept external isset() calls to correctly read object properties.
 	 * 
 	 * @param type $property
 	 * @return type 
@@ -77,7 +71,7 @@ class TfishUser
 	}
 	
 	/**
-	 * Intercept unset() calls to correctly unset object properties
+	 * Intercept external unset() calls to correctly unset object properties
 	 * 
 	 * @param type $property
 	 * @return type 
@@ -89,32 +83,5 @@ class TfishUser
 		} else {
 			return false;
 		}
-	}
-	
-	public static function get($id)
-	{
-	}
-	
-	public static function insert($user)
-	{		
-	}
-	
-	public static function delete($user)
-	{	
-	}
-	
-	public static function getObjects()
-	{
-	}
-	
-	public static function getCount()
-	{	
-	}
-	public static function deleteAll()
-	{	
-	}
-	
-	public static function updateAll()
-	{	
 	}
 }

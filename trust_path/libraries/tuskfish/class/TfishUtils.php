@@ -12,7 +12,11 @@
 
 class TfishUtils
 {
-	
+	/**
+	 * Provide a list of timezone offsets.
+	 * 
+	 * @return array of timezone offsets
+	 */
 	public static function getTimezones() {
 		return array(
 			'-12' => 'UTC-12:00',
@@ -52,6 +56,19 @@ class TfishUtils
 			'12' => 'UTC+12:00',
 		);
 	}
+	
+	/**
+	 * Return a list of mimetypes.
+	 * 
+	 * This list is not exhaustive, but it does cover most things that a sane person would want.
+	 * Feel free to add more if you wish, but do NOT use this as a whitelist of permitted mimetypes,
+	 * it is just a reference.
+	 * 
+	 * @return array of mimetypes with extension as key.
+	 * @copyright	The ImpressCMS Project http://www.impresscms.org/
+	 * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
+	 * @author		marcan <marcan@impresscms.org>
+	 */	
 	
 	public static function getMimetypes()
 	{

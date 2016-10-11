@@ -44,24 +44,65 @@ class TfishDatabase
 		return '`' . $identifier . '`';
 	}
 	
-	public static function close() // Finished
+	/**
+	 * Close the connection to the database.
+	 * 
+	 * @return boolean true on success false on failure
+	 */
+	public static function close()
 	{
 		return self::_close();
 	}
 	
+	private static function _close() 
+	{
+		try {
+			self::$_db = null;
+			return true;
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			return false;
+		}
+	}
+	
+	/**
+	 * Establish a connection to the database.
+	 * 
+	 * Connection is deliberately non-persistent (persistance can break things if scripts terminate unexpectedly).
+	 * 
+	 * @return boolean true on success, false on failure
+	 */
 	public static function connect() // Finished
 	{
 		return self::_connect();
 	}
 	
+	private static function _connect()
+	{
+		try {
+			// SQLite just expects a file name, which was defined as a constant during create()
+			self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
+			if (self::$_db) {
+				// Set PDO to throw exceptions every time it encounters an error.
+				// On production sites it may be best to change the second argument to 
+				// PDO::ERRMODE_SILENT OR PDO::ERRMODE_WARNING
+				self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				return true;
+			}
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			return false;
+		}
+	}
+	
 	/**
-	 * Create an SQLite databse.
+	 * Create an SQLite databse with random prefix and creates a language constant for it.
 	 * 
 	 * Database name must be alphanumeric and underscore characters only. The database will
 	 * automatically be appended with the suffix .db
 	 * 
 	 * @param string $db_name
-	 * @return mixed
+	 * @return string|boolean path to database file on success, false on failure
 	 */
 	public static function create($db_name) // Finished
 	{
@@ -75,17 +116,41 @@ class TfishDatabase
 		}	
 	}
 	
+	private static function _create($db_name)
+	{
+		// Generate a random prefix for the database filename to make it unpredictable.
+		$prefix = mt_rand();
+		
+		// Create database file and append a constant with the database path to config.php
+		try {
+			$db_path = TFISH_DATABASE_PATH . $prefix . '_' . $db_name;
+			self::$_db = new PDO('sqlite:' . $db_path);
+			$db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "' 
+				. $db_path . '");';
+			$result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $db_constant);
+			if (!$result) {
+				trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
+				return false;
+			}
+			return $db_path;
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			return false;
+		}
+	}
+	
 	/**
 	 * Create a table in the database.
 	 * 
-	 * Table names may only be alphanumeric characters. Column names may only be alphanumeric or
-	 * underscores.
+	 * Table names may only be alphanumeric characters. Column names are also alphanumeric but may
+	 * also contain underscores.
 	 * 
-	 * @param string (alphanumeric) $table_name
-	 * @param array $columns
-	 * @param string $primary_key
-	 * @return type
+	 * @param string $table_name (alphanumeric) 
+	 * @param array $columns as column names (keys) and types (values)
+	 * @param string $primary_key name of field to be used as primary key
+	 * @return boolean true on success, false on failure
 	 */
+	
 	public static function createTable($table, $columns, $primary_key = null) // Finished
 	{
 		// Initialise
@@ -132,355 +197,6 @@ class TfishDatabase
 		}
 	}
 	
-	/**
-	 * Delete single row from table based on its ID.
-	 * 
-	 * @param string $table
-	 * @param int $id
-	 * @return bool
-	 */
-	public static function delete($table, $id) // Finished
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_id = self::validateId($id);
-		return self::_delete($clean_table, $clean_id);
-	}
-	
-	/**
-	 * Delete multiple rows from a table according to criteria.
-	 * 
-	 * For safety reasons criteria are required; the function will not unconditionally empty a table.
-	 * Note that SQLite does not support DELETE with INNER JOIN or table alias. Therefore, you
-	 * cannot use tags as a criteria in deleteAll() (they will simply be ingored). It may be
-	 * possible to get around this restriction with a loop or subquery.
-	 * 
-	 * @param string $table
-	 * @param obj $criteria
-	 */
-	public static function deleteAll($table, $criteria)
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_criteria = self::validateCriteriaObject($criteria);
-		return self::_deleteAll($clean_table, $clean_criteria);
-	}
-	
-	/**
-	 * Escape delimiters for identifiers (table and column names).
-	 * 
-	 * SQLite supports three styles of identifier delimitation:
-	 * 
-	 * 1. Standard SQL double quotes: "
-	 * 2. MySQL style grave accents: `
-	 * 3. MS SQL style square brackets: []
-	 * 
-	 * Escaping of delimiters where they are used as part of a table or column name is done by
-	 * doubling them, eg ` becomes ``. In order to safely escape table and column names ALL
-	 * three delimiter types must be escaped.
-	 * 
-	 * Tuskfish policy is that table names can only contain alphanumeric characters (and column
-	 * names can only contain alphanumeric plus underscore characters) so delimiters should never
-	 * get into a query as part of an identifier anyway. But just because we are paranoid they are
-	 * escaped here anyway.
-	 * 
-	 * @param string $identfier
-	 * @return string
-	 */
-	public static function escapeIdentifier($identifier)
-	{
-		$clean_identifier = '';
-		$identifier = TfishFilter::trimString($identifier);
-		$identifier = str_replace('"', '""', $identifier);
-		$identifier = str_replace('`', '``', $identifier);
-		$identifier = str_replace('[', '[[', $identifier);
-		$clean_identifier = str_replace(']', ']]', $identifier);
-		return $clean_identifier;
-	}
-	
-	/**
-	 * Execute a prepared statement within a transaction.
-	 * 
-	 * @param obj $statement
-	 * @return boolean
-	 */
-	public static function executeTransaction($statement)
-	{
-		try {
-			self::$_db->beginTransaction();
-			$statement->execute();
-			self::$_db->commit();
-		} catch (PDOException $e) {
-			self::$_db->rollBack();
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Insert single row in table.
-	 * 
-	 * @param string $table
-	 * @param mixed $key_values
-	 * @return bool
-	 */
-	public static function insert($table, $key_values) // Finished
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_keys = self::validateKeys($key_values);
-		return self::_insert($clean_table, $clean_keys);
-	}
-	
-	/**
-	 * Retrieves the ID of the last row inserted into the database.
-	 * 
-	 * Used primarily to grab the ID of newly created content objects so that their accompanying
-	 * taglinks can be correctly associated to them.
-	 * 
-	 * @return mixed
-	 */
-	public static function lastInsertId()
-	{
-		if (self::$_db->lastInsertId()) {
-			return (int)self::$_db->lastInsertId();
-		} else {
-			return false;
-		}
-	}
-	
-	public static function preparedStatement($sql) // Finished
-	{
-		return self::_preparedStatement($sql);
-	}
-	
-	public static function select($table, $criteria = false, $columns = false)
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
-		$clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
-		return self::_select($clean_table, $clean_criteria, $clean_columns);
-	}
-	
-	/**
-	 * Count the number of rows matching a set of conditions.
-	 * 
-	 * @param string $table
-	 * @param obj $criteria
-	 * @param string $column
-	 * @return int
-	 */
-	public static function selectCount($table, $criteria = false, $column = false)
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
-		if ($column) {
-			$column = self::escapeIdentifier($column);
-			if (TfishFilter::isAlnumUnderscore($column)) {
-				$clean_column = $column;
-			} else {
-				trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-				exit;
-			}
-		} else {
-			$clean_column = "*";
-		}	
-		return self::_selectCount($clean_table, $clean_criteria, $clean_column);
-	}
-	
-	/**
-	 * Select results from the database but remove duplicates.
-	 * 
-	 * Use the $columns array to specify which fields you want to filter the results by.
-	 * 
-	 * @param string $table
-	 * @param obj $criteria
-	 * @param array $columns
-	 * @return mixed
-	 */
-	public static function selectDistinct($table, $criteria = false, $columns)
-	{
-		// Validate the tablename (alphanumeric characters only).
-		$clean_table = self::validateTableName($table);
-		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
-		$clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
-		return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
-	}
-	
-	/**
-	 * Toggle the online status of a column between 0 and 1, use for columns representing booleans.
-	 * 
-	 * Note that the $id MUST represent a column called ID for whatever table you want to run it on.
-	 * 
-	 * @param string $table
-	 * @param int $id of the row to update.
-	 * @param string $column to update
-	 * @return boolean
-	 */
-	public static function toggleBoolean($table, $id, $column)
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_id = self::validateId($id);
-		$clean_column = self::validateColumns(array($column));
-		$clean_column = reset($clean_column);
-		return self::_toggleBoolean($clean_table, $clean_id, $clean_column);
-	}
-	
-	/**
-	 * Update a single row
-	 * 
-	 * @param string $table
-	 * @param array $key_values
-	 * @return bool
-	 */
-	public static function update($table, $id, $key_values) // Finished
-	{
-		$clean_table = self::validateTableName($table);	
-		$clean_id = self::validateId($id);
-		$clean_keys = self::validateKeys($key_values);
-		return self::_update($clean_table, $clean_id, $clean_keys);
-	}
-	
-	/**
-	 * Update multiple rows in a table according to criteria.
-	 * 
-	 * Note that SQLite does not support INNER JOIN or table aliases in UPDATE; therefore it is
-	 * not possible to use tags as a criteria in updateAll() at present. It may be possible to get
-	 * around this limitation with a subquery. But given that the use case would be unusual /
-	 * marginal it is probaly just easier to work around it.
-	 * 
-	 * @param string $table
-	 * @param array $key_values
-	 * @param obj $criteria
-	 */
-	public static function updateAll($table, $key_values, $criteria = false)
-	{
-		$clean_table = self::validateTableName($table);
-		$clean_keys = self::validateKeys($key_values);
-		if ($criteria) {
-			$clean_criteria = self::validateCriteriaObject($criteria);
-		} else {
-			$clean_criteria = false;
-		}
-		return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
-	}
-	
-	/**
-	 * Helper method to set appropriate PDO predefined constants in bindValue() and bindParam().
-	 * 
-	 * Do not use this method for arrays, objects or resources. Note that if you pass in an
-	 * unexpected data type (ie. one that clashes with a column type definition) PDO will throw
-	 * an error.
-	 * 
-	 * @param type $data
-	 * @return type
-	 */
-	public static function setType($data)
-	{
-		$type = gettype($data);
-		switch ($type) {
-			case "boolean":
-				return PDO::PARAM_BOOL;
-			break;
-		
-			case "integer":
-				return PDO::PARAM_INT;
-			break;
-		
-			case "NULL":
-				return PDO::PARAM_NULL;
-			break;
-		
-			case "string":
-			case "double":
-				return PDO::PARAM_STR;
-			break;
-
-			default: // array, object, resource, "unknown type"
-				trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
-				exit;
-		}
-	}
-	
-	/**
-	 * Close the connection to the database
-	 * 
-	 * @return bool
-	 */
-	private static function _close() 
-	{
-		try {
-			self::$_db = null;
-			return true;
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
-		}
-	}
-	
-	/**
-	 * Open a connection to the database.
-	 * 
-	 * Connection is deliberately non-persistent (persistance can break things if scripts terminate unexpectedly).
-	 * 
-	 * @return bool
-	 */
-	private static function _connect()
-	{
-		try {
-			// SQLite just expects a file name, which was defined as a constant during create()
-			self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
-			if (self::$_db) {
-				// Set PDO to throw exceptions every time it encounters an error.
-				// On production sites it may be best to change the second argument to 
-				// PDO::ERRMODE_SILENT OR PDO::ERRMODE_WARNING
-				self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				return true;
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
-		}
-	}
-	
-	/**
-	 * Creates an SQLite database with random prefix and creates a language constant for it.
-	 * 
-	 * @param string $db_name
-	 * @return bool
-	 */
-	private static function _create($db_name)
-	{
-		// Generate a random prefix for the database filename to make it unpredictable.
-		$prefix = mt_rand();
-		
-		// Create database file and append a constant with the database path to config.php
-		try {
-			$db_path = TFISH_DATABASE_PATH . $prefix . '_' . $db_name;
-			self::$_db = new PDO('sqlite:' . $db_path);
-			$db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "' 
-				. $db_path . '");';
-			$result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $db_constant);
-			if (!$result) {
-				trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
-				return false;
-			}
-			return $db_path;
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
-		}
-	}
-	
-	/**
-	 * Create a SQLite table in the database.
-	 * 
-	 * Note that table names may only be alphanumeric; column names are also alphanumeric but may
-	 * also contain underscores.
-	 * 
-	 * @param string $table_name - name of the table
-	 * @param array $columns - column names (keys) and types (values)
-	 * @param string $primary_key - field to be used as the primary key
-	 * @return bool
-	 */
 	private static function _createTable($table_name, $columns, $primary_key = null)
 	{
 		if (mb_strlen($table_name, 'UTF-8') > 0 && is_array($columns)) {
@@ -509,6 +225,20 @@ class TfishDatabase
 		}
 	}
 	
+	/**
+	 * Delete single row from table based on its ID.
+	 * 
+	 * @param string $table name
+	 * @param int $id of row to be deleted
+	 * @return boolean true on success false on failure
+	 */
+	public static function delete($table, $id) // Finished
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_id = self::validateId($id);
+		return self::_delete($clean_table, $clean_id);
+	}
+	
 	private static function _delete($table, $id)
 	{
 		$sql = "DELETE FROM " . self::addBackticks($table) . " WHERE `id` = :id";
@@ -523,6 +253,25 @@ class TfishDatabase
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		return self::executeTransaction($statement);
+	}
+	
+	/**
+	 * Delete multiple rows from a table according to criteria.
+	 * 
+	 * For safety reasons criteria are required; the function will not unconditionally empty a table.
+	 * Note that SQLite does not support DELETE with INNER JOIN or table alias. Therefore, you
+	 * cannot use tags as a criteria in deleteAll() (they will simply be ignored). It may be
+	 * possible to get around this restriction with a loop or subquery.
+	 * 
+	 * @param string $table name
+	 * @param obj $criteria TfishCriteria object
+	 * @return boolean true on success, false on failure
+	 */
+	public static function deleteAll($table, $criteria)
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_criteria = self::validateCriteriaObject($criteria);
+		return self::_deleteAll($clean_table, $clean_criteria);
 	}
 	
 	private static function _deleteAll($table, $criteria)
@@ -583,12 +332,75 @@ class TfishDatabase
 	}
 	
 	/**
+	 * Escape delimiters for identifiers (table and column names).
+	 * 
+	 * SQLite supports three styles of identifier delimitation:
+	 * 
+	 * 1. Standard SQL double quotes: "
+	 * 2. MySQL style grave accents: `
+	 * 3. MS SQL style square brackets: []
+	 * 
+	 * Escaping of delimiters where they are used as part of a table or column name is done by
+	 * doubling them, eg ` becomes ``. In order to safely escape table and column names ALL
+	 * three delimiter types must be escaped.
+	 * 
+	 * Tuskfish policy is that table names can only contain alphanumeric characters (and column
+	 * names can only contain alphanumeric plus underscore characters) so delimiters should never
+	 * get into a query as part of an identifier. But just because we are paranoid they are
+	 * escaped here anyway.
+	 * 
+	 * @param string $identfier
+	 * @return string
+	 */
+	public static function escapeIdentifier($identifier)
+	{
+		$clean_identifier = '';
+		$identifier = TfishFilter::trimString($identifier);
+		$identifier = str_replace('"', '""', $identifier);
+		$identifier = str_replace('`', '``', $identifier);
+		$identifier = str_replace('[', '[[', $identifier);
+		$clean_identifier = str_replace(']', ']]', $identifier);
+		return $clean_identifier;
+	}
+	
+	/**
+	 * Execute a prepared statement within a transaction.
+	 * 
+	 * The $statement parameter should be a prepared statement obtained via preparedStatement($sql).
+	 * Note that statement execution is within a transaction and rollback will occur if it fails.
+	 * This method should be used with database write operations (INSERT, UPDATE, DELETE).
+	 * 
+	 * @param obj $statement
+	 * @return boolean true on success, false on failure
+	 */
+	public static function executeTransaction($statement)
+	{
+		try {
+			self::$_db->beginTransaction();
+			$statement->execute();
+			self::$_db->commit();
+		} catch (PDOException $e) {
+			self::$_db->rollBack();
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Insert a single row into the database within a transaction.
 	 * 
-	 * @param string $table
-	 * @param array $key_values
-	 * @return bool
+	 * @param string $table name
+	 * @param array $key_values column names and values to be inserted
+	 * @return boolean true on success, false on failure
 	 */
+	public static function insert($table, $key_values) // Finished
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_keys = self::validateKeys($key_values);
+		return self::_insert($clean_table, $clean_keys);
+	}
+	
 	private static function _insert($table, $key_values)
 	{
 		$pdo_placeholders = '';
@@ -603,6 +415,7 @@ class TfishDatabase
 		$pdo_placeholders = trim($pdo_placeholders, ', ');
 		$sql = trim($sql, ', ');
 		$sql .= ") VALUES (" . $pdo_placeholders . ")";
+		
 		// Prepare the statement and bind the values.
 		try {
 			$statement = self::$_db->prepare($sql);
@@ -616,32 +429,39 @@ class TfishDatabase
 		}
 		return self::executeTransaction($statement);
 	}
-
+	
 	/**
-	 * Return a statement object that can be used to bind parameters and execute queries, thereby
-	 * mitigating direct SQL injection attacks.
+	 * Retrieves the ID of the last row inserted into the database.
 	 * 
-	 * @param string $sql
-	 * @return object
+	 * Used primarily to grab the ID of newly created content objects so that their accompanying
+	 * taglinks can be correctly associated to them.
+	 * 
+	 * @return int|boolean row ID on success, false on failure
 	 */
-	private static function _preparedStatement($sql)
+	public static function lastInsertId()
 	{
-		return self::$_db->prepare($sql);
+		if (self::$_db->lastInsertId()) {
+			return (int)self::$_db->lastInsertId();
+		} else {
+			return false;
+		}
 	}
 	
 	/**
-	 * Renders a JOIN component of an SQL query for tagged content.
+	 * Return a PDO statement object that can be used to bind values or parameters and execute
+	 * queries, thereby mitigating direct SQL injection attacks.
 	 * 
-	 * If the $criteria for a query include tag(s), the object table must have a JOIN to the
-	 * taglinks table in order to sort the content.
-	 * 
-	 * @param string $table
-	 * @return string $sql
+	 * @param string $sql
+	 * @return object PDOStatement object on success PDOException object on failure
 	 */
-	private static function _renderTagJoin($table) {
-		$sql = "INNER JOIN `taglink` ON `t1`.`id` = `taglink`.`content_id` ";
-		
-		return $sql;
+	public static function preparedStatement($sql)
+	{
+		return self::_preparedStatement($sql);
+	}
+	
+	private static function _preparedStatement($sql)
+	{
+		return self::$_db->prepare($sql);
 	}
 	
 	/**
@@ -649,11 +469,18 @@ class TfishDatabase
 	 * 
 	 * Returns a PDO statement object, from which results can be extracted with standard PDO calls.
 	 * 
-	 * @param string $table
-	 * @param obj $criteria
-	 * 
-	 * @return object PDO statement
+	 * @param string $table name
+	 * @param object $criteria TfishCriteria object
+	 * @return object PDOStatement object on success PDOException on failure
 	 */
+	public static function select($table, $criteria = false, $columns = false)
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
+		$clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
+		return self::_select($clean_table, $clean_criteria, $clean_columns);
+	}
+
 	private static function _select($table, $criteria, $columns)
 	{
 		// Specify operation.
@@ -760,6 +587,32 @@ class TfishDatabase
 		return $statement;
 	}
 	
+	/**
+	 * Count the number of rows matching a set of conditions.
+	 * 
+	 * @param string $table name
+	 * @param object $criteria TfishCriteria object
+	 * @param string $column name
+	 * @return int|object row count on success PDOException object on failure
+	 */
+	public static function selectCount($table, $criteria = false, $column = false)
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
+		if ($column) {
+			$column = self::escapeIdentifier($column);
+			if (TfishFilter::isAlnumUnderscore($column)) {
+				$clean_column = $column;
+			} else {
+				trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+				exit;
+			}
+		} else {
+			$clean_column = "*";
+		}	
+		return self::_selectCount($clean_table, $clean_criteria, $clean_column);
+	}
+	
 	private static function _selectCount($table, $criteria, $column)
 	{
 		// Specify operation and column
@@ -841,12 +694,24 @@ class TfishDatabase
 	}
 	
 	/**
-	 * Prepare and execute a select query returning distinct rows.
+	 * Select results from the database but remove duplicate rows.
 	 * 
-	 * @param string $table
-	 * @param obj $criteria
-	 * @param array $columns 
+	 * Use the $columns array to specify which fields you want to filter the results by.
+	 * 
+	 * @param string $table name
+	 * @param obj $criteria TfishCriteria object
+	 * @param array $columns names to filter results by
+	 * @return object PDOStatement on success, PDOException on failure
 	 */
+	public static function selectDistinct($table, $criteria = false, $columns)
+	{
+		// Validate the tablename (alphanumeric characters only).
+		$clean_table = self::validateTableName($table);
+		$clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
+		$clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
+		return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
+	}
+	
 	private static function _selectDistinct($table, $criteria, $columns)
 	{		
 		// Specify operation
@@ -936,6 +801,25 @@ class TfishDatabase
 		return $statement;
 	}
 	
+	/**
+	 * Toggle the online status of a column between 0 and 1, use for columns representing booleans.
+	 * 
+	 * Note that the $id MUST represent a column called ID for whatever table you want to run it on.
+	 * 
+	 * @param string $table name
+	 * @param int $id of the row to update.
+	 * @param string $column to update
+	 * @return boolean true on success, false on failure
+	 */
+	public static function toggleBoolean($table, $id, $column)
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_id = self::validateId($id);
+		$clean_column = self::validateColumns(array($column));
+		$clean_column = reset($clean_column);
+		return self::_toggleBoolean($clean_table, $clean_id, $clean_column);
+	}
+	
 	private static function _toggleBoolean($table, $id, $column)
 	{
 		$sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column) 
@@ -952,16 +836,24 @@ class TfishDatabase
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		
-		
 		return self::executeTransaction($statement);
 	}
 	
 	/**
-	 * Updates row(s) in the database within a transaction
+	 * Update a single row in the database.
 	 * 
-	 * @param type $table
-	 * @param type $key_values
+	 * @param string $table name
+	 * @param array $key_values to update
+	 * @return boolean true on success, false on failure
 	 */
+	public static function update($table, $id, $key_values) // Finished
+	{
+		$clean_table = self::validateTableName($table);	
+		$clean_id = self::validateId($id);
+		$clean_keys = self::validateKeys($key_values);
+		return self::_update($clean_table, $clean_id, $clean_keys);
+	}
+	
 	private static function _update($table, $id, $key_values)
 	{
 		// Prepare the statement
@@ -989,6 +881,30 @@ class TfishDatabase
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		return self::executeTransaction($statement);	
+	}
+	
+	/**
+	 * Update multiple rows in a table according to criteria.
+	 * 
+	 * Note that SQLite does not support INNER JOIN or table aliases in UPDATE; therefore it is
+	 * not possible to use tags as a criteria in updateAll() at present. It may be possible to get
+	 * around this limitation with a subquery. But given that the use case would be unusual /
+	 * marginal it is probably just easier to work around it.
+	 * 
+	 * @param string $table name
+	 * @param array $key_values to update
+	 * @param object $criteria TfishCriteria object
+	 */
+	public static function updateAll($table, $key_values, $criteria = false)
+	{
+		$clean_table = self::validateTableName($table);
+		$clean_keys = self::validateKeys($key_values);
+		if ($criteria) {
+			$clean_criteria = self::validateCriteriaObject($criteria);
+		} else {
+			$clean_criteria = false;
+		}
+		return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
 	}
 	
 	private static function _updateAll($table, $key_values, $criteria)
@@ -1040,6 +956,64 @@ class TfishDatabase
 		return self::executeTransaction($statement);
 	}
 	
+	/**
+	 * Helper method to set appropriate PDO predefined constants in bindValue() and bindParam().
+	 * 
+	 * Do not use this method for arrays, objects or resources. Note that if you pass in an
+	 * unexpected data type (ie. one that clashes with a column type definition) PDO will throw
+	 * an error.
+	 * 
+	 * @param mixed $data
+	 * @return int PDO data type constant
+	 */
+	public static function setType($data)
+	{
+		$type = gettype($data);
+		switch ($type) {
+			case "boolean":
+				return PDO::PARAM_BOOL;
+			break;
+		
+			case "integer":
+				return PDO::PARAM_INT;
+			break;
+		
+			case "NULL":
+				return PDO::PARAM_NULL;
+			break;
+		
+			case "string":
+			case "double":
+				return PDO::PARAM_STR;
+			break;
+
+			default: // array, object, resource, "unknown type"
+				trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+				exit;
+		}
+	}
+	
+	/**
+	 * Renders a JOIN component of an SQL query for tagged content.
+	 * 
+	 * If the $criteria for a query include tag(s), the object table must have a JOIN to the
+	 * taglinks table in order to sort the content.
+	 * 
+	 * @param string $table name
+	 * @return string $sql query fragment
+	 */
+	private static function _renderTagJoin($table) {
+		$sql = "INNER JOIN `taglink` ON `t1`.`id` = `taglink`.`content_id` ";
+		
+		return $sql;
+	}
+	
+	/**
+	 * Validates the properties of a TfishCriteria object to be used in constructing a database query.
+	 * 
+	 * @param object $criteria TfishCriteria
+	 * @return object TfishCriteria
+	 */
 	public static function validateCriteriaObject($criteria)
 	{
 		if (!is_a($criteria, 'TfishCriteria')) {
@@ -1108,6 +1082,12 @@ class TfishDatabase
 		return $criteria;
 	}
 	
+	/**
+	 * Validate and escape column names to be used in constructing a database query.
+	 * 
+	 * @param array $columns
+	 * @return array of valid, escaped column names
+	 */
 	public static function validateColumns($columns)
 	{
 		$clean_columns = array();
@@ -1129,6 +1109,12 @@ class TfishDatabase
 		}
 	}
 	
+	/**
+	 * Validates and sanitises an ID to be used in constructing a database query.
+	 * 
+	 * @param int $id
+	 * @return int $id
+	 */
 	public static function validateId($id)
 	{
 		$clean_id = (int)$id;
@@ -1141,10 +1127,13 @@ class TfishDatabase
 	}
 	
 	/**
-	 * Validate that keys are alphanumeric and underscore characters only.
+	 * Validate and escapes keys to be used in constructing a database query.
+	 * 
+	 * Keys may only consist of alphanumeric and underscore characters. SQLite identifier delimiters
+	 * are escaped.
 	 * 
 	 * @param array $key_values
-	 * @return array
+	 * @return array valid and escaped keys.
 	 */
 	public static function validateKeys($key_values)
 	{
@@ -1167,6 +1156,12 @@ class TfishDatabase
 		}
 	}
 	
+	/**
+	 * Validate and escape a table name to be used in constructing a database query.
+	 * 
+	 * @param string $table_name
+	 * @return string valid and escaped table name
+	 */
 	public static function validateTableName($table_name)
 	{
 		$table_name = self::escapeIdentifier($table_name);

@@ -16,9 +16,6 @@ class TfishPreferenceHandler
 	// Permitted properties.
 	private $tfish_preferences;
 	
-	/**
-	 * Generic constructor. Reads preferences from database and assigns whitelisted properties
-	 */
 	function __construct($tfish_preferences)
 	{
 		if (is_a($tfish_preferences, 'TfishPreference')) {
@@ -28,6 +25,12 @@ class TfishPreferenceHandler
 		}
 	}
 	
+	/**
+	 * Gets the value of a particular site preference.
+	 * 
+	 * @param type $pref
+	 * @return mixed|null
+	 */
 	public static function get($pref)
 	{
 		if (TfishFilter::isAlnumUnderscore($pref)) {
@@ -41,7 +44,7 @@ class TfishPreferenceHandler
 	/**
 	 * Updates the site preferences in the database.
 	 * 
-	 * @param object $obj
+	 * @param object $obj TfishPreference
 	 * @return boolean
 	 */
 	public static function updatePreferences($obj)

@@ -12,9 +12,6 @@
 
 class TfishStream
 {
-	/**
-	 * Generic constructor
-	 */
 	function __construct(&$handler) 
 	{
 		$this->__data['handler'] = $handler;

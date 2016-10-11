@@ -25,7 +25,7 @@
 class TfishFilter
 {
 	/**
-	 * Forcibly casts to expected datatype; as html form input always arrives as strings.
+	 * Validate an array of input against expected data types, typically $_POST, $_GET or $_REQUEST.
 	 * 
 	 * Use this function to screen user-side input. If data passes validation it will be handed
 	 * back with minimalist sanitisation (control characters and trailing whitespace removed); if
@@ -35,9 +35,9 @@ class TfishFilter
 	 * Note that the "int" case does not provide range checks. If you want a specific range then
 	 * check the range with isInt() manually.
 	 *
-	 * @param array $dirty_vars
-	 * @param array $allowed_vars
-	 * @return mixed
+	 * @param array $dirty_vars untrusted input that requires validation
+	 * @param array $allowed_vars whitelist of permitted variables and expected data types
+	 * @return array
 	 */
 	public static function filterData($dirty_vars, $allowed_vars)
 	{
@@ -100,20 +100,22 @@ class TfishFilter
 	}
 	
 	/**
-	 * Checks if the character encoding of text is UTF-8.
+	 * Check if the character encoding of text is UTF-8.
 	 * 
 	 * All strings received from external sources must be passed through this function, particularly
 	 * prior to storage in the database.
 	 * 
 	 * @param string $dirty_text
-	 * @return bool
+	 * @return bool true if UTF-8 otherwise false
 	 */
 	public static function isUtf8($dirty_string)
 	{
 		return mb_check_encoding($dirty_string, 'UTF-8');
 	}
 	
-		/**
+	/**
+	 * Escape data for display to mitigate XSS attacks.
+	 * 
 	 * Applies htmlentities to text fields destined for output / display to limit XSS attacks.
 	 * Encoding of quotes and use of UTF-8 character set is hardcoded in.
 	 *
@@ -125,6 +127,16 @@ class TfishFilter
 		return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
 	}
 	
+	/**
+	 * URL-encode and escape a string for use in a URL.
+	 * 
+	 * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspeciachars().
+	 * If you wish to use the data on a landing page you must decode it with htmlspecialchars_decode()
+	 * followed by rawurldecode() in that order.
+	 * 
+	 * @param string $url
+	 * @return string
+	 */
 	public static function encodeEscapeUrl($url)
 	{
 		$url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
@@ -138,7 +150,7 @@ class TfishFilter
 	 * Check that a string is comprised soley of alphabetical characters.
 	 *
 	 * @param string $dirty_alpha
-	 * @return mixed
+	 * @return bool true if valid alphabetical string, false otherwise
 	 */
 	public static function isAlpha($alpha)
 	{
@@ -153,7 +165,7 @@ class TfishFilter
 	 * Check that a string is comprised soley of alphanumeric characters.
 	 *
 	 * @param string $dirty_alnum
-	 * @return mixed
+	 * @return bool true if valid alphanumerical string, false otherwise
 	 */
 	public static function isAlnum($alnum)
 	{
@@ -168,7 +180,7 @@ class TfishFilter
 	 * Check that a string is comprised solely of alphanumeric characters and underscores.
 	 * 
 	 * @param type $alnumUnder
-	 * @return boolean
+	 * @return boolean true if valid alphanumerical or underscore string, false otherwise
 	 */
 	public static function isAlnumUnderscore($alnumUnderscore)
 	{
@@ -181,9 +193,12 @@ class TfishFilter
 	
 	/**
 	 * Validate boolean input.
+	 * 
+	 * Be careful with the return value; this method simply determines if a value is boolean or
+	 * not; it does not return the actual value of the parameter.
 	 *
 	 * @param mixed $bool
-	 * @return bool 
+	 * @return bool true if a valid boolean value, false otherwise.
 	 */
 	public static function isBool($bool)
 	{
@@ -199,7 +214,7 @@ class TfishFilter
 	 * Check that a string is comprised solely of digits.
 	 *
 	 * @param string $dirty_digit
-	 * @return mixed
+	 * @return boolean true if valid digit string, false otherwise
 	 */
 	public static function isDigit($digit)
 	{
@@ -211,13 +226,13 @@ class TfishFilter
 	}
 	
 	/**
-	 * Sanitise and validate email address.
+	 * Check if an email address is valid.
 	 * 
 	 * Note that single quotes ' are a valid character in email addresses, so the output of this 
-	 * filter is not database safe in of itself.
+	 * filter IS NOT DATABASE SAFE in of itself.
 	 *
 	 * @param string $dirty_email
-	 * @return string
+	 * @return boolean true if valid email address, otherwise false
 	 */
 	public static function isEmail($email)
 	{
@@ -234,7 +249,7 @@ class TfishFilter
 	 * Potential problem - is_float() allows exponents.
 	 *
 	 * @param float $dirty_float
-	 * @return float
+	 * @return boolean true if valid float, otherwise false
 	 */
 	public static function isFloat($float)
 	{
@@ -242,14 +257,14 @@ class TfishFilter
 	}
 	
 	/**
-	 * Sanitise and validate integer, optionally include range check.
+	 * Validate integer, optionally include range check.
 	 * 
 	 * @param int $dirty_int
 	 * @param int $min
 	 * @param int $max
-	 * @return int
+	 * @return boolean true if valid int and within optional range check, false otherwise
 	 */
-	//1,0,1
+	
 	public static function isInt($int, $min = false, $max = false)
 	{
 		$clean_int = is_int($int) ? (int)$int : false;
@@ -284,7 +299,7 @@ class TfishFilter
 	 *
 	 * @param string $dirty_ip
 	 * @param int $version
-	 * @return string
+	 * @return boolean true if valid IP address, false otherwise
 	 */
 	public static function isIp($ip, $version = false)
 	{
@@ -304,14 +319,14 @@ class TfishFilter
 	}
 	
 	/**
-	 * Strip trailing whitespace and certain control characters. Casts to string. NOT database safe.
+	 * Strip trailing whitespace, control characters, check UTF-8 character set and cast to string.
 	 * 
-	 * CAUTION! THIS METHOD DOES NOT RETURN DATABASE SAFE DATA!!!
+	 * Removes trailing whitespace and control characters (ASCII < 32), checks for UTF-8 character
+	 * set and casts input to a string. Note that the data returned by this function still
+	 * requires escaping at the point of use; it is not database safe.
 	 * 
-	 * All this method does is to remove trailing whitespace and control characters (ASCII < 32).
-	 * The data returned by this function REQUIRES escaping at the point of use.
-	 * 
-	 * Do not apply it to non-string types (int, float, bool, object, resource, null, array, etc).
+	 * As the input is cast to a string do NOT apply this function to non-string types (int, float,
+	 * bool, object, resource, null, array, etc).
 	 * 
 	 * @param string $dirty_text
 	 * @return string
@@ -333,16 +348,12 @@ class TfishFilter
 	/**
 	 * Validate (and to some extent, "sanitise") HTML input to conform with whitelisted tags.
 	 * 
-	 * NOTE: This method is ONLY AVAILABLE IN THE ADMIN SECTION of Tuskfish. This is because the
-	 * HTMLPurifier library is only included there via tfish_admin_header.php (as it is only used
-	 * to validate HTML input in the teaser and description fields of content objects). Not making
-	 * the library available in public-facing areas of the site (which do not allow data entry) is
-	 * a deliberate design decision made in the interests of performance, as HTMLPurifier is big,
-	 * slow and has many includes.
+	 * Applies HTMLPurifier to validate and sanitise HTML input. The precise operation can be
+	 * modified by altering the configuration of HTMLPurifier.
 	 *
 	 * @param string $dirty_text
 	 * @param array $configs
-	 * @return string Validated HTML content
+	 * @return string validated HTML content
 	 */
 	public static function filterHtml($dirty_html, $config = false)
 	{
@@ -360,11 +371,13 @@ class TfishFilter
 	}
 	
 	/**
-	 * Validate url. Only accepts http:// protocol and ASCII characters. Other protocols and
-	 * internationalised domain names (limitation of filter) will fail validation.
+	 * Validate URL.
+	 * 
+	 * Only accepts http:// protocol and ASCII characters. Other protocols and internationalised
+	 * domain names will fail validation (limitation of filter).
 	 *
 	 * @param string $dirty_url
-	 * @return mixed
+	 * @return boolean true if valid URL otherwise false
 	 */
 	public static function isUrl($url)
 	{
@@ -377,10 +390,10 @@ class TfishFilter
 	}
 	
 	/**
-	 * Tests if input is an array.
+	 * Test if input is an array.
 	 *
 	 * @param array $array
-	 * @return bool
+	 * @return boolean true if valid array otherwise false
 	 */
 	public static function isArray($array)
 	{
@@ -388,10 +401,10 @@ class TfishFilter
 	}
 	
 	/**
-	 * Tests if input is an object.
+	 * Test if input is an object.
 	 * 
 	 * @param object $dirty_object
-	 * @return bool
+	 * @return boolean true if valid object otherwise false
 	 */
 	public static function isObject($object)
 	{
@@ -402,7 +415,7 @@ class TfishFilter
 	 * Tests if the input is null (ie set but without an assigned value) or not.
 	 * 
 	 * @param mixed $dirty_null
-	 * @return bool
+	 * @return boolean true if input is null otherwise false
 	 */
 	public static function isNull($null)
 	{
@@ -413,7 +426,7 @@ class TfishFilter
 	 * Tests if input is a resource.
 	 * 
 	 * @param resource $dirty_resource
-	 * @return bool
+	 * @return boolean true if valid resource otherwise false
 	 */
 	public static function isResource($resource)
 	{

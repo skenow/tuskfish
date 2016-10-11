@@ -11,6 +11,16 @@
 
 class TfishSession
 {
+	/**
+	 * Initialise a user session.
+	 * 
+	 * @global obj $tfish_preference TfishPreference object
+	 * @param string $name
+	 * @param int $limit
+	 * @param string $path
+	 * @param string|null $domain
+	 * @param bool|null $https
+	 */
 	public static function sessionStart($name = null, $limit = 0, $path = '/', $domain = null, $https = null)
 	{	
 		// Gather parameters
@@ -35,6 +45,14 @@ class TfishSession
 		self::_sessionStart($clean_name, $clean_limit, $clean_path, $clean_domain, $clean_https, $clean_http_only);
 	}
 	
+	/**
+	 * Regenerates the session ID.
+	 * 
+	 * Called whenever there is a privilege escalation (login) or at random intervals to reduce
+	 * risk of session hijacking.
+	 * 
+	 * @return void
+	 */
 	public static function regenerateSession()
 	{	
 		// If this session is obsolete it means there already is a new id
@@ -69,6 +87,7 @@ class TfishSession
 	 * 
 	 * @param string $email
 	 * @param string $password
+	 * @return void
 	 */
 	public static function login($email, $password)
 	{
@@ -91,7 +110,8 @@ class TfishSession
 	/**
 	 * Destroys the current session on logout
 	 * 
-	 * @param obj $user_object 
+	 * @param string|bool $url_redirect to redirect the user to. 
+	 * @return void
 	 */
 	public static function logout($url_redirect = false)
 	{
@@ -104,7 +124,10 @@ class TfishSession
 	/*
 	 * Shorthand admin privilages check.
 	 * 
-	 * For added security this could retrieve an encrypted token.
+	 * For added security this could retrieve an encrypted token, preferably the SSL session id,
+	 * although thats availability seems to depend on server configuration.
+	 * 
+	 * @return bool true if admin false if not
 	 */
 	public static function isAdmin()
 	{
@@ -117,6 +140,8 @@ class TfishSession
 	
 	/*
 	 * Returns a login or logout link for insertion in the template.
+	 * 
+	 * @return string login or logout link
 	 */
 	public static function loginLink()
 	{
@@ -213,6 +238,14 @@ class TfishSession
 		}
 	}	
 	
+	/**
+	 * Watches for potential signs of session hijacking.
+	 * 
+	 * If the user IP address or user agent change this can indicate session hijacking, and the
+	 * session ID should be regenerated as a precaution.
+	 * 
+	 * @return boolean true if ok false if IP or user agent have changed.
+	 */
 	protected static function preventHijacking()
 	{		
 		if (!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) {
@@ -230,6 +263,13 @@ class TfishSession
 		return true;
 	}
 	
+	/**
+	 * Checks if the session has expired or been declared obsolete.
+	 * 
+	 * If the session has expired or become obsolete it should be destroyed and restarted.
+	 * 
+	 * @return boolean true if session is valid false if expired or obsolete
+	 */
 	protected static function validateSession()
 	{	
 		if ( isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES']) ) {
@@ -243,10 +283,20 @@ class TfishSession
 		return true;
 	}
 	
+	/**
+	 * Implementation of the secure cookie protocol of Liu, IKovacs, Huang and Gouda (2005).
+	 * 
+	 * This function is not in working order. Liu et al. have devised what seems to be a
+	 * bulletproof session security mechanism. Unfortunately, it requires access to a SSL
+	 * session key, which is only accessible with a specific server configuration, ie. in most
+	 * cases it's just not available. Which renders this otherwise excellent idea impracticable
+	 * for general use.
+	 * 
+	 * @return void
+	 */
 	protected static function secureSession()
 	{
 		/**
-		 * Implementation of the secure cookie protocol of Liu, IKovacs, Huang and Gouda (2005).
 		 * Note that it *requires* use of SSL in order to access a session key.
 		 * 
 		 * Modifications:
@@ -254,7 +304,6 @@ class TfishSession
 		 * key-sharing in shared hosting.
 		 * 2. Added a random piece of junk in the data payload, to confound sample-based attempts to
 		 * recover the key.
-		 * 
 		 * 
 		 * Protocol is as follows:
 		 * username|expiration time|(data)k|HMAC(username|expiration time|data|session key, k)

@@ -65,7 +65,9 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
-	 * Read the site preferences from the database and populate the preference object
+	 * Read out the site preferences into an array.
+	 * 
+	 * @return array of site preferences
 	 */
 	public static function readPreferences()
 	{
@@ -82,9 +84,11 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
-	 * Update the preference object using $_REQUEST data
+	 * Update the preference object using $_REQUEST data.
 	 * 
-	 * @param array $request
+	 * The preference object will conduct its own internal data type validation and range checks.
+	 * 
+	 * @param array $_REQUEST
 	 */
 	public function updatePreferences($dirty_input)
 	{
@@ -105,7 +109,9 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
-	 * Save updated preferences to the database
+	 * Save updated preferences to the database.
+	 * 
+	 * @return bool true on success false on failure
 	 */
 	private static function writePreferences()
 	{
@@ -113,10 +119,13 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
-	 * Access an existing object property
+	 * Get the value of an object property.
 	 * 
-	 * @param string $property
-	 * @return mixed
+	 * Intercepts direct calls to access an object property. This method can be overridden to impose
+	 * processing logic to the value before returning it.
+	 * 
+	 * @param string $property name
+	 * @return mixed|false $property value; false if not set.
 	 */
 	public function __get($property)
 	{
@@ -129,10 +138,13 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
-	 * Set an existing object property
+	 * Set the value of an object property and will not allow non-whitelisted properties to be set.
 	 * 
-	 * @param mixed $property
-	 * @param mixed $value
+	 * Intercepts direct calls to set the value of an object property. Imposes data type
+	 * restrictions and range checks before allowing the properties to be set. 
+	 * 
+	 * @param mixed $property name
+	 * @param return void
 	 */
 	public function __set($property, $value)
 	{
@@ -286,6 +298,51 @@ class TfishPreference extends TfishAncestralObject
 		}
 	}
 	
+	/**
+	 * Check if an object property is set.
+	 * 
+	 * Intercepts isset() calls to correctly read object properties. Can be overridden in child
+	 * objects to add processing logic for specific properties.
+	 * 
+	 * @param string $property name
+	 * @return bool 
+	 */
+	public function __isset($property)
+	{
+		if (isset($this->__data[$property])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Unsets an object property.
+	 * 
+	 * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
+	 * objects to add processing logic for specific properties.
+	 * 
+	 * @param type $property name
+	 * @return bool true on success false on failure 
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Escape a property for on-screen display to prevent XSS.
+	 * 
+	 * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
+	 * 
+	 * @param string $property
+	 * @return string|int|null
+	 */
 	public function escape($property) {
 		if (isset($this->__data[$property])) {
 			switch($property) {			
@@ -296,117 +353,5 @@ class TfishPreference extends TfishAncestralObject
 		} else {
 			return null;
 		}
-	}
-	
-	/**
-	 * Returns an array of known mimetypes
-	 * Based on ImpressCMS function (attribute copyright)
-	 *
-	 * @return array
-	 */
-	public static function knownMimeTypes()
-	{
-		return array(
-		     "hqx"		=> "application/mac-binhex40",
-		     "doc"		=> "application/msword",
-		     "dot"		=> "application/msword",
-		     "bin"		=> "application/octet-stream",
-		     "lha"		=> "application/octet-stream",
-		     "lzh"		=> "application/octet-stream",
-		     "exe"		=> "application/octet-stream",
-		     "class"	=> "application/octet-stream",
-		     "so"		=> "application/octet-stream",
-		     "dll"		=> "application/octet-stream",
-		     "pdf"		=> "application/pdf",
-		     "ai"		=> "application/postscript",
-		     "eps"		=> "application/postscript",
-		     "ps"		=> "application/postscript",
-		     "smi"		=> "application/smil",
-		     "smil"		=> "application/smil",
-		     "wbxml"	=> "application/vnd.wap.wbxml",
-		     "wmlc"		=> "application/vnd.wap.wmlc",
-		     "wmlsc"	=> "application/vnd.wap.wmlscriptc",
-		     "xla"		=> "application/vnd.ms-excel",
-		     "xls"		=> "application/vnd.ms-excel",
-		     "xlt"		=> "application/vnd.ms-excel",
-		     "ppt"		=> "application/vnd.ms-powerpoint",
-		     "csh"		=> "application/x-csh",
-		     "dcr"		=> "application/x-director",
-		     "dir"		=> "application/x-director",
-		     "dxr"		=> "application/x-director",
-		     "spl"		=> "application/x-futuresplash",
-		     "gtar"		=> "application/x-gtar",
-		     "php"		=> "application/x-httpd-php",
-		     "php3"		=> "application/x-httpd-php",
-		     "php4"		=> "application/x-httpd-php",
-		     "php5"		=> "application/x-httpd-php",
-		     "phtml"	=> "application/x-httpd-php",
-		     "js"		=> "application/x-javascript",
-		     "sh"		=> "application/x-sh",
-		     "swf"		=> "application/x-shockwave-flash",
-		     "sit"		=> "application/x-stuffit",
-		     "tar"		=> "application/x-tar",
-		     "tcl"		=> "application/x-tcl",
-		     "xhtml"	=> "application/xhtml+xml",
-		     "xht"		=> "application/xhtml+xml",
-		     "xhtml"	=> "application/xml",
-		     "ent"		=> "application/xml-external-parsed-entity",
-		     "dtd"		=> "application/xml-dtd",
-		     "mod"		=> "application/xml-dtd",
-		     "gz"		=> "application/x-gzip",
-		     "zip"		=> "application/zip",
-		     "au"		=> "audio/basic",
-		     "snd"		=> "audio/basic",
-		     "mid"		=> "audio/midi",
-		     "midi"		=> "audio/midi",
-		     "kar"		=> "audio/midi",
-		     "mp1"		=> "audio/mpeg",
-		     "mp2"		=> "audio/mpeg",
-		     "mp3"		=> "audio/mpeg",
-		     "aif"		=> "audio/x-aiff",
-		     "aiff"		=> "audio/x-aiff",
-		     "m3u"		=> "audio/x-mpegurl",
-		     "ram"		=> "audio/x-pn-realaudio",
-		     "rm"		=> "audio/x-pn-realaudio",
-		     "rpm"		=> "audio/x-pn-realaudio-plugin",
-		     "ra"		=> "audio/x-realaudio",
-		     "wav"		=> "audio/x-wav",
-		     "bmp"		=> "image/bmp",
-		     "gif"		=> "image/gif",
-		     "jpeg"		=> "image/jpeg",
-		     "jpg"		=> "image/jpeg",
-		     "jpe"		=> "image/jpeg",
-		     "png"		=> "image/png",
-		     "tiff"		=> "image/tiff",
-		     "tif"		=> "image/tif",
-		     "wbmp"		=> "image/vnd.wap.wbmp",
-		     "pnm"		=> "image/x-portable-anymap",
-		     "pbm"		=> "image/x-portable-bitmap",
-		     "pgm"		=> "image/x-portable-graymap",
-		     "ppm"		=> "image/x-portable-pixmap",
-		     "xbm"		=> "image/x-xbitmap",
-		     "xpm"		=> "image/x-xpixmap",
-			 "ics"		=> "text/calendar",
-			 "ifb"		=> "text/calendar",
-		     "css"		=> "text/css",
-		     "html"		=> "text/html",
-		     "htm"		=> "text/html",
-		     "asc"		=> "text/plain",
-		     "txt"		=> "text/plain",
-		     "rtf"		=> "text/rtf",
-		     "sgml"		=> "text/x-sgml",
-		     "sgm"		=> "text/x-sgml",
-		     "tsv"		=> "text/tab-seperated-values",
-		     "wml"		=> "text/vnd.wap.wml",
-		     "wmls"		=> "text/vnd.wap.wmlscript",
-		     "xsl"		=> "text/xml",
-			 "mp4"		=> "video/mp4",
-		     "mpeg"		=> "video/mpeg",
-		     "mpg"		=> "video/mpeg",
-		     "mpe"		=> "video/mpeg",
-		     "qt"		=> "video/quicktime",
-		     "mov"		=> "video/quicktime",
-		     "avi"		=> "video/x-msvideo",
-		);
 	}
 }

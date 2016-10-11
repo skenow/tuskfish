@@ -71,7 +71,7 @@ class TfishAncestralObject
 	 * to be set. Tuskfish objects are designed not to trust other components; each conducts its
 	 * own internal validation checks. 
 	 * 
-	 * @param mixed $property name
+	 * @param string $property name
 	 * @param return void
 	 */
 	public function __set($property, $value)
@@ -90,7 +90,7 @@ class TfishAncestralObject
 	 * Intercepts isset() calls to correctly read object properties. Can be overridden in child
 	 * objects to add processing logic for specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool 
 	 */
 	public function __isset($property)

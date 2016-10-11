@@ -56,10 +56,13 @@ class TfishRss extends TfishAncestralObject
 	}
 	
 	/**
-	 * Access an existing object property
+	 * Get the value of an object property.
 	 * 
-	 * @param string $property
-	 * @return mixed
+	 * Intercepts direct calls to access an object property. This method can be modified to impose
+	 * processing logic to the value before returning it.
+	 * 
+	 * @param string $property name
+	 * @return mixed $property value if it is set; otherwise false.
 	 */
 	public function __get($property)
 	{
@@ -135,7 +138,44 @@ class TfishRss extends TfishAncestralObject
 				break;
 			}
 		}
-	}	
+	}
+	
+	/**
+	 * Check if an object property is set.
+	 * 
+	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
+	 * processing logic for specific properties.
+	 * 
+	 * @param string $property name
+	 * @return bool 
+	 */
+	public function __isset($property)
+	{
+		if (isset($this->__data[$property])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Unsets an object property.
+	 * 
+	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add
+	 * processing logic for specific properties.
+	 * 
+	 * @param type $property name
+	 * @return bool true on success false on failure 
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	//
 	// ITEM (all optional, but either title or description must be included)

@@ -53,10 +53,31 @@ class TfishBlock  extends TfishAncestralObject
 	}
 	
 	/**
-	 * Set an existing object property
+	 * Get the value of an object property.
 	 * 
-	 * @param mixed $property
-	 * @param mixed $value
+	 * Intercepts direct calls to access an object property. This method can be overridden to impose
+	 * processing logic to the value before returning it.
+	 * 
+	 * @param string $property name
+	 * @return mixed $property value if it is set; otherwise false.
+	 */
+	public function __get($property)
+	{
+		if (isset($this->__data[$property])) {
+			return $this->__data[$property];
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Set the value of an object property and will not allow non-whitelisted properties to be set.
+	 * 
+	 * Intercepts direct calls to set the value of an object property. This method is overriden to
+	 * impose data type restrictions and range checks before allowing the property to be set.
+	 * 
+	 * @param string $property name
+	 * @param return void
 	 */
 	public function __set($property, $value)
 	{
@@ -108,6 +129,43 @@ class TfishBlock  extends TfishAncestralObject
 		} else {
 			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
 			exit;
+		}
+	}
+	
+	/**
+	 * Check if an object property is set.
+	 * 
+	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
+	 * processing logic for specific properties.
+	 * 
+	 * @param string $property name
+	 * @return bool 
+	 */
+	public function __isset($property)
+	{
+		if (isset($this->__data[$property])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Unsets an object property.
+	 * 
+	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add
+	 * processing logic for specific properties.
+	 * 
+	 * @param type $property name
+	 * @return bool true on success false on failure 
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

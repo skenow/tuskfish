@@ -26,8 +26,8 @@ class TfishBlockList extends TfishBlock
 	/**
 	 * Generates HTML code to display the block.
 	 * 
-	 * @param object $criteria
-	 * @return string
+	 * @param object $criteria TfishCriteria object
+	 * @return string HTML output of block
 	 */
 	public function build($criteria = false)
 	{
@@ -47,7 +47,7 @@ class TfishBlockList extends TfishBlock
 
 		return $this->_build($clean_criteria);		
 	}
-	
+
 	private function _build($criteria)
 	{	
 		$content_handler = new TfishContentHandler();
@@ -60,6 +60,16 @@ class TfishBlockList extends TfishBlock
 		}
 	}
 	
+	/**
+	 * Renders a block into HTML code.
+	 * 
+	 * Extracts all properties assigned to the template object as variables and includes the
+	 * designated template file. The extracted variables are used to populate the dynamic sections
+	 * of the template. Templates can be nested by assigning a rendered child template as a property
+	 * of a parent template object.
+	 * 
+	 * @return string HTML output of template
+	 */
 	public function render()
 	{
 		extract($this->__data);

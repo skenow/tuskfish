@@ -14,6 +14,22 @@
 */
 class TfishLogger
 {
+	/**
+	 * Tuskfish custom error logger class.
+	 * 
+	 * Errors are logged to TFISH_ERROR_LOG_PATH (default is /trust_path/log/tuskfish_log.txt). For
+	 * debugging purpose you can uncomment the last two lines to display errors on screen. Be aware,
+	 * however, that this will prevent script execution from halting when an error is triggered,
+	 * which has security implications. You must therefore CLOSE your site via the admin
+	 * preferences before doing this. Comment the lines back out before re-opening your site.
+	 * 
+	 * @param int $errno the level of the error raised
+	 * @param string $error the error message
+	 * @param string $file filename
+	 * @param int $line line number the error was raised at
+	 * @param array $context active symbol table, ie. an array of every variable in scope when the
+	 * error was triggered
+	 */
 	public static function logErrors($errno = false, $error = false, $file = false, $line = false, $context = false)
 	{
 		$message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";

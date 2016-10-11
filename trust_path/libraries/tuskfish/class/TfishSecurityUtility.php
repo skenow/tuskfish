@@ -12,23 +12,15 @@
 * @package		core
 */
 class TfishSecurityUtility
-{
-	public static function checkLogin($user_object, $password)
-	{
-		// Check the password word against the user's stored password hash
-		// If bad password, increment password attempts, warn and redirect to source page
-		// If match, regenerate session ID, set session login flag (and admin flag, if relevant)
-		// Allow passing of session IDs via cookies only
-		ini_set('session.use_only_cookies', true);
-				
-		// Generate an additional session token that is passed via URLs
-	}
-	
+{	
 	/**
-	 * Evaluates the strength of a password to resist brute force cracking
+	 * Evaluates the strength of a password to resist brute force cracking.
+	 * 
+	 * Issues warnings if deficiencies are found. Requires a minimum length of 14 characters
+	 * and maximisation of search space (one upper and lower case letter, one number, one symbol).
 	 * 
 	 * @param string $password
-	 * @return array 
+	 * @return array of evaluation warnings.
 	 */
 	public static function checkPasswordStrength($password)
 	{
@@ -68,7 +60,9 @@ class TfishSecurityUtility
 	}
 	
 	/**
-	 * Generate a psuedo-random salt of arbitrary length
+	 * Generate a psuedo-random salt of arbitrary length.
+	 * 
+	 * This is used to salt user passwords, to make them more difficult to brute force crack.
 	 * 
 	 * @param type $length
 	 * @return string $salt
@@ -82,8 +76,12 @@ class TfishSecurityUtility
 	/**
 	 * Recursively hashes a salted password to harden it against dictionary attacks.
 	 * 
+	 * Recursively hashing a password a large number of times directly increases the amount of
+	 * effort that must be spent to brute force or even dictionary attack a hash, because each
+	 * attempt will consume $iterations more cycles. 
+	 * 
 	 * @param string $password
-	 * @param int $iterations
+	 * @param int $iterations to process, you want this to be a large number (100,000 or more).
 	 * @param string $site_salt
 	 * @param string $user_salt (optional)
 	 * @return string
