@@ -53,6 +53,42 @@ class TfishTemplate
 	}
 	
 	/**
+	 * Check if an object property is set.
+	 * 
+	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
+	 * processing logic to specific properties.
+	 * 
+	 * @param string $property name
+	 * @return bool 
+	 */
+	public function __isset($property)
+	{
+		if (isset($this->__data[$property])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Unsets an object property.
+	 * 
+	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
+	 * processing logic for specific properties.
+	 * 
+	 * @param string $property name
+	 * @return bool true on success false on failure 
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Renders a html template file for display.
 	 * 
 	 * Extracts all properties assigned to the template object as variables and includes the

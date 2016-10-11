@@ -50,24 +50,6 @@ class TfishBlock  extends TfishAncestralObject
 	}
 	
 	/**
-	 * Get the value of an object property.
-	 * 
-	 * Intercepts direct calls to access an object property. This method can be overridden to impose
-	 * processing logic to the value before returning it.
-	 * 
-	 * @param string $property name
-	 * @return mixed|null $property value if it is set; otherwise null.
-	 */
-	public function __get($property)
-	{
-		if (isset($this->__data[$property])) {
-			return $this->__data[$property];
-		} else {
-			return null;
-		}
-	}
-	
-	/**
 	 * Set the value of an object property and will not allow non-whitelisted properties to be set.
 	 * 
 	 * Intercepts direct calls to set the value of an object property. This method is overriden to
@@ -126,43 +108,6 @@ class TfishBlock  extends TfishAncestralObject
 		} else {
 			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
 			exit;
-		}
-	}
-	
-	/**
-	 * Check if an object property is set.
-	 * 
-	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
-	 * processing logic for specific properties.
-	 * 
-	 * @param string $property name
-	 * @return bool 
-	 */
-	public function __isset($property)
-	{
-		if (isset($this->__data[$property])) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Unsets an object property.
-	 * 
-	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add
-	 * processing logic for specific properties.
-	 * 
-	 * @param string $property name
-	 * @return bool true on success false on failure 
-	 */
-	public function __unset($property)
-	{
-		if (isset($this->__data[$property])) {
-			unset($this->__data[$property]);
-			return true;
-		} else {
-			return false;
 		}
 	}
 }

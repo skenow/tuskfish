@@ -56,24 +56,6 @@ class TfishRss extends TfishAncestralObject
 	}
 	
 	/**
-	 * Get the value of an object property.
-	 * 
-	 * Intercepts direct calls to access an object property. This method can be modified to impose
-	 * processing logic to the value before returning it.
-	 * 
-	 * @param string $property name
-	 * @return mixed|null $property value if it is set; otherwise null.
-	 */
-	public function __get($property)
-	{
-		if (isset($this->__data[$property])) {
-			return $this->__data[$property];
-		} else {
-			return null;
-		}
-	}
-	
-	/**
 	 * Validate and set an existing object property according to type specified in constructor.
 	 * 
 	 * For more fine-grained control each property could be dealt with individually.
@@ -137,43 +119,6 @@ class TfishRss extends TfishAncestralObject
 					}
 				break;
 			}
-		}
-	}
-	
-	/**
-	 * Check if an object property is set.
-	 * 
-	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
-	 * processing logic for specific properties.
-	 * 
-	 * @param string $property name
-	 * @return bool 
-	 */
-	public function __isset($property)
-	{
-		if (isset($this->__data[$property])) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Unsets an object property.
-	 * 
-	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add
-	 * processing logic for specific properties.
-	 * 
-	 * @param string $property name
-	 * @return bool true on success false on failure 
-	 */
-	public function __unset($property)
-	{
-		if (isset($this->__data[$property])) {
-			unset($this->__data[$property]);
-			return true;
-		} else {
-			return false;
 		}
 	}
 	
