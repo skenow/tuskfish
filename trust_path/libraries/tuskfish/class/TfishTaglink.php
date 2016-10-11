@@ -20,10 +20,7 @@ class TfishTaglink
 		'content_type', // Type of content object
 		'content_id', // ID of the content object
 		'handler'); // The handler for taglink objects
-	
-	/**
-	 * Generic constructor and object definition - unset any properties not required by this content subclass
-	 */
+
 	function __construct()
 	{
 		$this->__data['type'] = "TfishTaglink";

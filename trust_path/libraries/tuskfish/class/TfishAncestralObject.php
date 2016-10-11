@@ -22,10 +22,7 @@ class TfishAncestralObject
 	
 	// Object properties are stored in this array.
 	protected $__data = array();
-	
-	/**
-	 * Generic constructor
-	 */
+
 	function __construct()
 	{}
 	

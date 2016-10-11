@@ -14,9 +14,6 @@
 
 class TfishTag extends TfishContentObject
 {
-	/**
-	 * Generic constructor and object definition - unset any properties not required by this content subclass
-	 */
 	function __construct()
 	{
 		// Must call parent constructor first.

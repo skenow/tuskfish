@@ -13,14 +13,7 @@
 * @package		core
 */
 class TfishPreference extends TfishAncestralObject
-{	
-	/**
-	 * Whitelist of official properties and datatypes.
-	 */
-	
-	/**
-	 * Generic constructor. Reads preferences from database and assigns whitelisted properties
-	 */
+{
 	function __construct()
 	{
 		/**

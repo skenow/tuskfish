@@ -28,10 +28,7 @@ class TfishMetadata
 		'seo' => '',
 		'robots' => '',
 		'pagination_elements' => '');
-	
-	/**
-	 * Generic constructor
-	 */
+
 	function __construct($preference)
 	{		
 		$this->template = 'default.html';
