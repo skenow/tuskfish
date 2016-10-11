@@ -20,6 +20,14 @@ class TfishTaglinkHandler extends TfishContentHandler
 		parent::__construct();
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param int $content_id of content object
+	 * @param string $type alphabetical characters only and whitelisted in TfishTaglinkHandler::getType()
+	 * @param array $tags as integers
+	 * @return boolean true on success false on failure
+	 */
 	public static function insertTaglinks($content_id, $type, $tags)
 	{
 		if (TfishFilter::isInt($content_id, 1)) {
@@ -65,11 +73,11 @@ class TfishTaglinkHandler extends TfishContentHandler
 	 * 
 	 * Old taglinks are deleted, newly designated set of taglinks are inserted.
 	 * 
-	 * @param int $id
+	 * @param int $id of content object
 	 * @param string $type
-	 * @param array $tags
+	 * @param array $tags as integers
 	 * 
-	 * @return boolean
+	 * @return boolean true on success false on failure
 	 */
 	public static function updateTaglinks($id, $type, $tags)
 	{
@@ -141,7 +149,7 @@ class TfishTaglinkHandler extends TfishContentHandler
 	 * Delete taglinks associated with a particular content object.
 	 * 
 	 * @param int $content_id
-	 * @return boolean
+	 * @return boolean true for success false on failure
 	 */
 	public static function deleteTaglinks($content_id)
 	{

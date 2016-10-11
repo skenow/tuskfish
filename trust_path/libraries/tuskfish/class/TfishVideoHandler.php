@@ -20,6 +20,12 @@ class TfishVideoHandler extends TfishContentHandler
 		parent::__construct();
 	}
 	
+	/**
+	 * Retrieves an array of TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
+	 * 
+	 * @param TfishCriteria $criteria for filtering the database select query
+	 * @return array of video objects
+	 */
 	public static function getObjects($criteria = false)
 	{
 		if (!$criteria) {
@@ -40,7 +46,7 @@ class TfishVideoHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Count TfishVideo objects.
+	 * Counts TfishVideo objects optionally matching conditions specified with a TfishCriteria object.
 	 * 
 	 * @param TfishCriteria $criteria
 	 * @return int $count
@@ -65,7 +71,8 @@ class TfishVideoHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Search the $criteria->items to see if object type has been set and return the index.
+	 * Search the filtering criteria ($criteria->items) to see if object type has been set and
+	 * return the key.
 	 * 
 	 * @param array $criteria_items
 	 * @return mixed

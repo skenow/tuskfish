@@ -21,7 +21,7 @@ class TfishArticleHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Get TfishArticle objects.
+	 * Get TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
 	 * 
 	 * Note that the article type is automatically set, so when calling
 	 * TfishArticleHandler::getObjects($criteria) it is unecessary to set the object type.
@@ -30,8 +30,8 @@ class TfishArticleHandler extends TfishContentHandler
 	 * acceptable to use either handler, although probably good practice to use the object-
 	 * specific one when you know you want a specific kind of object.
 	 * 
-	 * @param TfishCriteria $criteria
-	 * @return array $objects
+	 * @param TfishCriteria $criteria query composer object
+	 * @return array $objects TfishArticle objects
 	 */
 	public static function getObjects($criteria = false)
 	{
@@ -53,7 +53,7 @@ class TfishArticleHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Count TfishArticle objects.
+	 * Count TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
 	 * 
 	 * @param TfishCriteria $criteria
 	 * @return int $count
@@ -78,7 +78,8 @@ class TfishArticleHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Search the $criteria->items to see if object type has been set and return the index.
+	 * Search the filtering criteria ($criteria->items) to see if object type has been set and
+	 * return the key.
 	 * 
 	 * @param array $criteria_items
 	 * @return mixed

@@ -30,25 +30,29 @@ class TfishAncestralObject
 	{}
 	
 	/**
-	 * Returns a whitelist of properties whose values are allowed be set or altered by form input.
+	 * Returns a whitelist of object properties whose values are allowed be set or altered by form input.
 	 * 
-	 * This function is used to build a list of $allowed_vars for use in TfishFilter::filterData()
-	 * or to insert a row in the database. As this function is called by child classes they may
-	 * optionally unset some other properties that they do not use.
+	 * This function is used to build a list of $allowed_vars for a content object. Child classes
+	 * use this list to unset properties they do not use. It is also used by TfishFilter::filterData()
+	 * or when screening data before inserting a row in the database.
 	 * 
-	 * @return array
+	 * @return array of object properties
 	 */
 	public function getPropertyWhitelist() {
 		$properties = $this->__properties;
 		unset($properties['handler'], $properties['template'], $properties['module']);
+		
 		return $properties;
 	}
 	
 	/**
-	 * Access an existing object property
+	 * Get the value of an object property.
 	 * 
-	 * @param string $property
-	 * @return mixed
+	 * Intercepts direct calls to access an object property. This method can be overridden to impose
+	 * processing logic to the value before returning it.
+	 * 
+	 * @param string $property name
+	 * @return mixed $property value if it is set; otherwise false.
 	 */
 	public function __get($property)
 	{
@@ -60,10 +64,15 @@ class TfishAncestralObject
 	}
 	
 	/**
-	 * Set an existing object property
+	 * Set the value of an object property and will not allow non-whitelisted properties to be set.
 	 * 
-	 * @param mixed $property
-	 * @param mixed $value
+	 * Intercepts direct calls to set the value of an object property. This method is overriden by
+	 * child classes to impose data type restrictions and range checks before allowing the property
+	 * to be set. Tuskfish objects are designed not to trust other components; each conducts its
+	 * own internal validation checks. 
+	 * 
+	 * @param mixed $property name
+	 * @param return void
 	 */
 	public function __set($property, $value)
 	{
@@ -76,10 +85,13 @@ class TfishAncestralObject
 	}
 	
 	/**
-	 * Intercept isset() calls to correctly read object properties
+	 * Check if an object property is set.
 	 * 
-	 * @param type $property
-	 * @return type 
+	 * Intercepts isset() calls to correctly read object properties. Can be overridden in child
+	 * objects to add processing logic for specific properties.
+	 * 
+	 * @param type $property name
+	 * @return bool 
 	 */
 	public function __isset($property)
 	{
@@ -91,15 +103,19 @@ class TfishAncestralObject
 	}
 	
 	/**
-	 * Intercept unset() calls to correctly unset object properties
+	 * Unsets an object property.
 	 * 
-	 * @param type $property
-	 * @return type 
+	 * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
+	 * objects to add processing logic for specific properties.
+	 * 
+	 * @param type $property name
+	 * @return bool true on success false on failure 
 	 */
 	public function __unset($property)
 	{
 		if (isset($this->__data[$property])) {
 			unset($this->__data[$property]);
+			return true;
 		} else {
 			return false;
 		}
@@ -110,13 +126,13 @@ class TfishAncestralObject
 	 * 
 	 * Note that the returned array observes the PARENT object's getPropertyWhitelist() as a 
 	 * restriction on the setting of keys. This whitelist explicitly excludes the handler, 
-	 * emplate and module properties as these are part of the class definition and are not stored
+	 * template and module properties as these are part of the class definition and are not stored
 	 * in the database. Calling the parent's property whitelist ensures that properties that are
 	 * unset by child classes are zeroed (this is important when an object is changed to a
 	 * different subclass, as the properties used may differ).
 	 * 
 	 * @param object $obj
-	 * @return array
+	 * @return array of object property/values.
 	 */
 	public function toArray()
 	{	
