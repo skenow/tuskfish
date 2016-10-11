@@ -46,7 +46,7 @@ class TfishCriteria
 	 * Used by content object handler subclasses to remove any existing type filter when they may
 	 * need to set or reset it to a specific type.
 	 * 
-	 * @param type $key
+	 * @param int $key of the item array containing the type filter
 	 */
 	public function killType($key)
 	{
@@ -69,7 +69,7 @@ class TfishCriteria
 	 * processing logic to the value before returning it.
 	 * 
 	 * @param string $property name
-	 * @return mixed $property value if it is set; otherwise false.
+	 * @return mixed|null $property value if it is set; otherwise null.
 	 */
 	public function __get($property)
 	{
@@ -185,7 +185,7 @@ class TfishCriteria
 	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add
 	 * processing logic for specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool true on success false on failure 
 	 */
 	public function __unset($property)

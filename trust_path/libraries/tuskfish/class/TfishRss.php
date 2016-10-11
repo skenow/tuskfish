@@ -62,7 +62,7 @@ class TfishRss extends TfishAncestralObject
 	 * processing logic to the value before returning it.
 	 * 
 	 * @param string $property name
-	 * @return mixed $property value if it is set; otherwise false.
+	 * @return mixed|null $property value if it is set; otherwise null.
 	 */
 	public function __get($property)
 	{
@@ -78,7 +78,7 @@ class TfishRss extends TfishAncestralObject
 	 * 
 	 * For more fine-grained control each property could be dealt with individually.
 	 * 
-	 * @param mixed $property
+	 * @param string $property
 	 * @param mixed $value
 	 */
 	public function __set($property, $value)
@@ -164,7 +164,7 @@ class TfishRss extends TfishAncestralObject
 	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add
 	 * processing logic for specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool true on success false on failure 
 	 */
 	public function __unset($property)

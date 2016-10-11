@@ -29,7 +29,7 @@ class TfishUser
 	 * Access an existing object property; intercepts direct external calls to read the value.
 	 * 
 	 * @param string $property
-	 * @return mixed
+	 * @return mixed|null
 	 */
 	public function __get($property)
 	{
@@ -43,7 +43,7 @@ class TfishUser
 	/**
 	 * Set an existing object property; intercepts direct external calls to set the value.
 	 * 
-	 * @param mixed $property
+	 * @param string $property
 	 * @param mixed $value
 	 */
 	public function __set($property, $value)
@@ -58,8 +58,8 @@ class TfishUser
 	/**
 	 * Intercept external isset() calls to correctly read object properties.
 	 * 
-	 * @param type $property
-	 * @return type 
+	 * @param string $property
+	 * @return boolean 
 	 */
 	public function __isset($property)
 	{
@@ -73,8 +73,8 @@ class TfishUser
 	/**
 	 * Intercept external unset() calls to correctly unset object properties
 	 * 
-	 * @param type $property
-	 * @return type 
+	 * @param string $property
+	 * @return boolean 
 	 */
 	public function __unset($property)
 	{

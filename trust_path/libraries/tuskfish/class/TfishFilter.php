@@ -179,7 +179,7 @@ class TfishFilter
 	/**
 	 * Check that a string is comprised solely of alphanumeric characters and underscores.
 	 * 
-	 * @param type $alnumUnder
+	 * @param string $alnumUnder
 	 * @return boolean true if valid alphanumerical or underscore string, false otherwise
 	 */
 	public static function isAlnumUnderscore($alnumUnderscore)
@@ -197,7 +197,7 @@ class TfishFilter
 	 * Be careful with the return value; this method simply determines if a value is boolean or
 	 * not; it does not return the actual value of the parameter.
 	 *
-	 * @param mixed $bool
+	 * @param boolean $bool
 	 * @return bool true if a valid boolean value, false otherwise.
 	 */
 	public static function isBool($bool)

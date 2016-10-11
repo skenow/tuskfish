@@ -264,7 +264,7 @@ class TfishDatabase
 	 * possible to get around this restriction with a loop or subquery.
 	 * 
 	 * @param string $table name
-	 * @param obj $criteria TfishCriteria object
+	 * @param object $criteria TfishCriteria object
 	 * @return boolean true on success, false on failure
 	 */
 	public static function deleteAll($table, $criteria)
@@ -370,7 +370,7 @@ class TfishDatabase
 	 * Note that statement execution is within a transaction and rollback will occur if it fails.
 	 * This method should be used with database write operations (INSERT, UPDATE, DELETE).
 	 * 
-	 * @param obj $statement
+	 * @param object $statement
 	 * @return boolean true on success, false on failure
 	 */
 	public static function executeTransaction($statement)
@@ -699,7 +699,7 @@ class TfishDatabase
 	 * Use the $columns array to specify which fields you want to filter the results by.
 	 * 
 	 * @param string $table name
-	 * @param obj $criteria TfishCriteria object
+	 * @param object $criteria TfishCriteria object
 	 * @param array $columns names to filter results by
 	 * @return object PDOStatement on success, PDOException on failure
 	 */

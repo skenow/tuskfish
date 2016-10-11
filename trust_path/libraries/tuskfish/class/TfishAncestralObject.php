@@ -49,7 +49,7 @@ class TfishAncestralObject
 	 * processing logic to the value before returning it.
 	 * 
 	 * @param string $property name
-	 * @return mixed $property value if it is set; otherwise false.
+	 * @return mixed|boolean $property value if it is set; otherwise null.
 	 */
 	public function __get($property)
 	{
@@ -105,7 +105,7 @@ class TfishAncestralObject
 	 * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
 	 * objects to add processing logic for specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool true on success false on failure 
 	 */
 	public function __unset($property)

@@ -46,7 +46,7 @@ class TfishMetadata
 	 * Access an existing object property and escape it for output to browser.
 	 * 
 	 * @param string $property
-	 * @return mixed
+	 * @return string|boolean escaped preference if set, otherwise false
 	 */
 	public function __get($property)
 	{
@@ -60,7 +60,7 @@ class TfishMetadata
 	/**
 	 * Set an existing object property
 	 * 
-	 * @param mixed $property
+	 * @param string $property
 	 * @param mixed $value
 	 */
 	public function __set($property, $value)
@@ -77,8 +77,8 @@ class TfishMetadata
 	/**
 	 * Intercept isset() calls to correctly read object properties
 	 * 
-	 * @param type $property
-	 * @return type 
+	 * @param string $property
+	 * @return boolean 
 	 */
 	public function __isset($property)
 	{
@@ -92,8 +92,8 @@ class TfishMetadata
 	/**
 	 * Intercept unset() calls to correctly unset object properties
 	 * 
-	 * @param type $property
-	 * @return type 
+	 * @param string $property
+	 * @return boolean
 	 */
 	public function __unset($property)
 	{

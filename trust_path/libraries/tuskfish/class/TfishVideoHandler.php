@@ -75,7 +75,7 @@ class TfishVideoHandler extends TfishContentHandler
 	 * return the key.
 	 * 
 	 * @param array $criteria_items
-	 * @return mixed
+	 * @return int|null
 	 */
 	private static function getTypeIndex($criteria_items)
 	{

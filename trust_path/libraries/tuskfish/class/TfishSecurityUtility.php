@@ -64,7 +64,7 @@ class TfishSecurityUtility
 	 * 
 	 * This is used to salt user passwords, to make them more difficult to brute force crack.
 	 * 
-	 * @param type $length
+	 * @param int $length
 	 * @return string $salt
 	 */
 	public static function generateSalt($length = 64)

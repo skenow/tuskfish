@@ -33,7 +33,7 @@ class TfishTaglink
 	 * processing logic to specific properties before returning the value.
 	 * 
 	 * @param string $property name
-	 * @return mixed $property value if it is set; otherwise false.
+	 * @return mixed|null $property value if it is set; otherwise null.
 	 */
 	public function __get($property)
 	{
@@ -50,7 +50,7 @@ class TfishTaglink
 	 * Intercepts direct calls to set the value of an object property. This method can be modified
 	 * to impose processing logic to specific properties.
 	 * 
-	 * @param mixed $property name
+	 * @param string $property name
 	 * @param return void
 	 */
 	public function __set($property, $value)
@@ -68,7 +68,7 @@ class TfishTaglink
 	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
 	 * processing logic to specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool 
 	 */
 	public function __isset($property)
@@ -86,7 +86,7 @@ class TfishTaglink
 	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
 	 * processing logic for specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool true on success false on failure 
 	 */
 	public function __unset($property)

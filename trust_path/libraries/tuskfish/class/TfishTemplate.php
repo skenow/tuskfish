@@ -27,7 +27,7 @@ class TfishTemplate
 	 * processing logic to the value before returning it.
 	 * 
 	 * @param string $property name
-	 * @return mixed $property value if it is set; otherwise false.
+	 * @return mixed|null $property value if it is set; otherwise null.
 	 */
 	public function __get($property)
 	{
@@ -41,7 +41,7 @@ class TfishTemplate
 	/**
 	 * Set the value of an object property. Will not allow the 'template' property to be overridden.
 	 * 
-	 * @param mixed $property name
+	 * @param string $property name
 	 * @param return void
 	 */
 	public function __set($property, $value)

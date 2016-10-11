@@ -14,15 +14,13 @@
 */
 class TfishContentHandler
 {
-	function __construct()
-	{
-	}
+	function __construct() {}
 
 	/**
 	 * Check if an existing object has an associated image file upload.
 	 * 
-	 * @param type $id
-	 * @return array
+	 * @param int $id of content object
+	 * @return string filename
 	 */
 	private static function _checkImage($id)
 	{
@@ -51,8 +49,8 @@ class TfishContentHandler
 	/**
 	 * Check if an existing object has an associated media file upload.
 	 * 
-	 * @param type $id
-	 * @return array
+	 * @param int $id of content object
+	 * @return string filename
 	 */
 	private static function _checkMedia($id)
 	{
@@ -81,8 +79,8 @@ class TfishContentHandler
 	/**
 	 * Deletes an uploaded image file associated with a content object.
 	 * 
-	 * @param type $id
-	 * @return boolean
+	 * @param int $id
+	 * @return boolean true on success, false on failure
 	 */
 	private static function _deleteImage($filename)
 	{
@@ -92,14 +90,20 @@ class TfishContentHandler
 	/**
 	 * Deletes an uploaded media file associated with a content object.
 	 * 
-	 * @param type $id
-	 * @return boolean
+	 * @param int $id of content object
+	 * @return boolean true on success, false on failure
 	 */
 	private static function _deleteMedia($filename)
 	{
 		return TfishFileHandler::deleteFile('media/' . $filename);
 	}
 	
+	
+	/**
+	 * Uploads an image file into the uploads/image directory.
+	 * 
+	 * @return void
+	 */
 	private static function _uploadImage()
 	{
 		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
@@ -111,6 +115,11 @@ class TfishContentHandler
 		}
 	}
 	
+	/**
+	 * Uploads a media file into the uploads/media directory.
+	 * 
+	 * @return void
+	 */
 	private static function _uploadMedia()
 	{
 		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
@@ -127,8 +136,8 @@ class TfishContentHandler
 	/**
 	 * Retrieves a single content object based on its ID.
 	 * 
-	 * @param int $id
-	 * @return mixed
+	 * @param int $id of content object
+	 * @return object|boolean $object on success, false on failure
 	 */
 	public static function getObject($id)
 	{
@@ -146,13 +155,13 @@ class TfishContentHandler
 		return false;
 	}
 	
-	// Arguments for injecting the object handler as a dependency:
-	// 1. Can directly access subclass-specific handler methods without knowing the class (good).
-	// 
-	// Arguments against:
-	// 1. Have to manually inspect the 'type' and build the handler / object names + instantiate a handler just to make an object (bad).
-	// 2. If 'type' and 'handler' values were class names it would be easier to instantiate objects.
 	
+	/**
+	 * Get content objects, optionally matching conditions specified with a TfishCriteria object.
+	 * 
+	 * @param object $criteria TfishCriteria
+	 * @return array of content objects
+	 */
 	public static function getObjects($criteria = false)
 	{
 		$objects = array();
@@ -216,22 +225,14 @@ class TfishContentHandler
 		return $objects;
 	}
 	
-	public static function getList($criteria = false)
-	{
-	}
-	
-	private static function _getList($criteria)
-	{
-		//$list = TfishDatabase::select('content', $criteria, array('id', 'title'));
-	}
-	
 	/**
-	 * Counts the number of content objects matching the criteria (without the limit).
+	 * Counts the number of content objects matching the criteria.
 	 * 
-	 * Main use is for constructing the pagination control.
+	 * Main use is for constructing the pagination control. Note that the limit property will
+	 * be ignored even if it is set.
 	 * 
-	 * @param obj $criteria
-	 * @return int
+	 * @param object $criteria TfishCriteria
+	 * @return int $count
 	 */
 	public static function getCount($criteria = false)
 	{
@@ -255,7 +256,7 @@ class TfishContentHandler
 	 * https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes. Be aware that deleting entries that
 	 * are in use by your content objects will cause errors.
 	 * 
-	 * @return array
+	 * @return array of language codes
 	 */
 	public static function getLanguages() {
 		return array(
@@ -271,7 +272,7 @@ class TfishContentHandler
 	 * that you want to use to the array below. Be aware that deleting entries that are in use by
 	 * your content objects will cause errors.
 	 * 
-	 * @return array
+	 * @return array of copyright licenses
 	 */
 	public static function getRights()
 	{
@@ -292,9 +293,12 @@ class TfishContentHandler
 	/**
 	 * Returns a whitelist of permitted content object types.
 	 * 
-	 * Use this whitelist when dynamically instantiating content objects.
+	 * Use this whitelist when dynamically instantiating content objects. If you create additional
+	 * types of content object (which must be descendants of the TfishContentObject class) you
+	 * must add them to the whitelist below. Otherwise their use will be denied in many parts of
+	 * the Tuskfish system.
 	 * 
-	 * @return array
+	 * @return array whitelist of permitted content object types
 	 */
 	public static function getTypes()
 	{
@@ -315,7 +319,7 @@ class TfishContentHandler
 	 * Checks if a class name is a sanctioned subclass of content object.
 	 * 
 	 * @param string $type
-	 * @return boolean
+	 * @return boolean true if sanctioned otherwise false
 	 */
 	public static function isSanctionedType($type)
 	{
@@ -335,7 +339,7 @@ class TfishContentHandler
 	 * 
 	 * @param string $type
 	 * 
-	 * @return boolean
+	 * @return array|boolean list of tags if available, false if empty.
 	 */
 	public static function getActiveTagList($type = null)
 	{
@@ -374,9 +378,9 @@ class TfishContentHandler
 	/**
 	 * Generates an online/offline select box.
 	 * 
-	 * @param string $action
-	 * @param int $selected
-	 * @return string
+	 * @param string $action destination page on submission of the form
+	 * @param int $selected preselected option
+	 * @return string select box
 	 */
 	public static function getOnlineSelectBox($selected = null, $action = false, $zero_option = TFISH_ONLINE_STATUS)
 	{
@@ -404,9 +408,9 @@ class TfishContentHandler
 	}
 	
 	/**
-	 * Get a list of all tag objects as $id => $title
+	 * Get an array of all tag objects in $id => $title format.
 	 * 
-	 * @return array
+	 * @return array of tag objects
 	 */
 	public static function getTagList()
 	{
@@ -435,7 +439,7 @@ class TfishContentHandler
 	}
 	
 	/**
-	 * Returns a list of tag objects.
+	 * Get an array of all tag objects.
 	 * 
 	 * @return array tag objects
 	 */
@@ -448,6 +452,14 @@ class TfishContentHandler
 		return $tags;
 	}
 	
+	/**
+	 * Get a content type select box.
+	 * 
+	 * @param int $selected preselected option
+	 * @param type $action destination page on form submission
+	 * @param type $zero_option the default text to show at top of select box
+	 * @return string select box
+	 */
 	public static function getTypeSelectBox($selected = null, $action = false, $zero_option = TFISH_TYPE)
 	{
 		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
@@ -478,8 +490,8 @@ class TfishContentHandler
 	/**
 	 * Toggle the online status of a content object.
 	 * 
-	 * @param int $id
-	 * @return boolean
+	 * @param int $id of content object
+	 * @return boolean true on success, false on failure
 	 */
 	public static function toggleOnlineStatus($id)
 	{
@@ -487,7 +499,14 @@ class TfishContentHandler
 		return TfishDatabase::toggleBoolean('content', $clean_id, 'online');
 	}
 	
-	public static function updateCounter()
+	/**
+	 * Increment a content object's counter field by one.
+	 * 
+	 * Not yet implemented.
+	 * 
+	 * @param int $id of content object
+	 */
+	public static function updateCounter($id)
 	{
 	}
 	
@@ -567,9 +586,9 @@ class TfishContentHandler
 	 * site will be prepended and .php plus the tag_id will be appended.
 	 * 
 	 * @param arrray $tags
-	 * @param type $target_url
+	 * @param string $target_url
 	 * 
-	 * @return array
+	 * @return array of tag links
 	 */
 	public static function makeTagLinks($tags, $target_filename = false)
 	{
@@ -608,12 +627,11 @@ class TfishContentHandler
 	 * inserted indirectly by binding them to the placeholders. Search terms must NEVER be inserted
 	 * into a query directly, otherwise you may as well do us all a favour and go shoot yourself now.
 	 *
-	 * @param array $queryarray
-	 * @param string $andor
-	 * @param int $limit
-	 * @param int $offset
-	 * @param int $userid
-	 * @return array 
+	 * @param array $queryarray search terms
+	 * @param string $andor operator to chain search terms
+	 * @param int $limit maximum number of results to retrieve (pagination)
+	 * @param int $offset starting point for retrieving results (pagination)
+	 * @return array|boolean array of content objects on success, false failure
 	 */
 	public static function searchContent($search_terms, $andor, $limit, $offset = 0)
 	{
@@ -751,8 +769,8 @@ class TfishContentHandler
 	 * PDO::FETCH_CLASS, prepare a buffer of tags using getTags() and loop through the objects
 	 * referring to the buffer rather than hitting the database every time.
 	 * 
-	 * @param type $row
-	 * @return boolean
+	 * @param array $row
+	 * @return object|boolean content object on success, false on failure
 	 */
 	public static function toObject($row)
 	{
@@ -802,7 +820,7 @@ class TfishContentHandler
 	 * Updates a content object in the database.
 	 * 
 	 * @param object $obj
-	 * @return boolean
+	 * @return boolean true on success, false on failure
 	 */
 	public static function update($obj)
 	{
@@ -904,8 +922,8 @@ class TfishContentHandler
 	/**
 	 * Delete a single object from the content table.
 	 * 
-	 * @param int $id
-	 * @return boolean
+	 * @param int $id of content object to delete
+	 * @return boolean true on success, false on failure
 	 */
 	public static function delete($id)
 	{

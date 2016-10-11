@@ -91,7 +91,6 @@ class TfishContentObject extends TfishAncestralObject
 	 * with the HTMLPurifier library, and so *should* be safe.
 	 * 
 	 * @param string $property
-	 * 
 	 * @return string
 	 */	
 	public function escape($property) {
@@ -127,7 +126,7 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
-	 * Returns a URL to a resized and cached copy of the image property.
+	 * Resizes and caches image property and returns a URL to the copy.
 	 * 
 	 * Allows arbitrary sized thumbnails to be produced from the object's image property. These are
 	 * saved in the cache for future lookups. Image proportions are always preserved, so if both
@@ -137,7 +136,9 @@ class TfishContentObject extends TfishAncestralObject
 	 * Usually, you want to produce an image of a specific width or (less commonly) height to meet
 	 * a template/presentation requirement.
 	 * 
-	 * @return string $url
+	 * @param int $width of the cached image output
+	 * @param int $height of the cached image output
+	 * @return string $url to the cached image
 	 */
 	public function getCachedImage($width = 0, $height = 0)
 	{
@@ -245,6 +246,7 @@ class TfishContentObject extends TfishAncestralObject
 	 * Generates a URL to access this object in single view mode, either relative to home page or
 	 * to the subclass-specific page.
 	 * 
+	 * @param boolean $use_subclass_page
 	 * @return string
 	 */
 	public function getURL($use_subclass_page = false)
@@ -261,20 +263,13 @@ class TfishContentObject extends TfishAncestralObject
 		return $url;
 	}
 	
-	public function getEditLink($urlOnly = false)
-	{	
-	}
-	
-	public function getDeleteLink($urlOnly = false)
-	{	
-	}
-	
 	/**
 	 * Populates the properties of the object from external (untrusted) data source.
 	 * 
 	 * Note that the supplied data is internally validated by __set().
 	 * 
 	 * @param array $dirty_input usually raw form $_REQUEST data.
+	 * @return void
 	 */
 	public function loadProperties($dirty_input)
 	{
@@ -308,50 +303,6 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
-	 * Check if a copy of the image with specific dimensions exists in the cache, generates one if not.
-	 * 
-	 * Returns the URL of the cached copy.
-	 * 
-	 * @param int $width
-	 * @param int $height
-	 * @return string $url
-	 */
-	public function resizeAndCache($width = 0, $height = 0)
-	{
-		$clean_width = (int)$width;
-		$clean_height = (int)$height;
-		if (!TfishFilter::isInt($clean_width, 0) || !TfishFilter::isInt($clean_height, 0)) {
-			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-		}
-		
-		// 1. Check that this object actually has an image file, if not, exit.
-		// 1. Check that either width or height have been supplied.
-		// 2. If both were supplied, the larger dimension will take precedence and be used for 
-		//    scaling, as image proportions are always conserved.
-		// 3. Check if an existing image with the relevant dimensions exists in the cache. This will
-		//    be achieved by looking for the same filename with pixel dimension appendix, for example
-		//    myimage_320x240.jpg.
-		// 4. If there is an existing cached image, return the URL.
-		// 5. If there is not an existing cached image, generate a resized copy in the cache and
-		//    return the URL.
-		// 6. Seems suspiciously simple, doesn't it?
-		
-		$this->_resizeAndCache($clean_width, $clean_height);
-		
-		return $url;
-	}
-	
-	private function _resizeAndCache($width, $height)
-	{
-		
-		return $url;
-	}
-	
-	public function setErrors()
-	{	
-	}
-	
-	/**
 	 * Returns an array of base object properties that are not used by this subclass.
 	 * 
 	 * This list is also used in update calls to the database to ensure that unused columns are
@@ -365,27 +316,15 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
-	 * Access an existing object property
+	 * Set the value of an object property and will not allow non-whitelisted properties to be set.
 	 * 
-	 * @param string $property
-	 * @return mixed
-	 */
-	public function __get($property)
-	{
-		if (isset($this->__data[$property])) {
-			return $this->__data[$property];
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * Validate and set an existing object property according to type specified in constructor.
+	 * Intercepts direct calls to set the value of an object property. This method is overriden by
+	 * child classes to impose data type restrictions and range checks before allowing the property
+	 * to be set. Tuskfish objects are designed not to trust other components; each conducts its
+	 * own internal validation checks. 
 	 * 
-	 * For more fine-grained control each property could be dealt with individually.
-	 * 
-	 * @param mixed $property
-	 * @param mixed $value
+	 * @param string $property name
+	 * @param return void
 	 */
 	public function __set($property, $value)
 	{

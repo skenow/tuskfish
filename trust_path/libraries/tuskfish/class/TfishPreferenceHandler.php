@@ -28,7 +28,7 @@ class TfishPreferenceHandler
 	/**
 	 * Gets the value of a particular site preference.
 	 * 
-	 * @param type $pref
+	 * @param string $pref
 	 * @return mixed|null
 	 */
 	public static function get($pref)

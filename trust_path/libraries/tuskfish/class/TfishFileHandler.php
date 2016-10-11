@@ -134,9 +134,9 @@ class TfishFileHandler
 	 * so create them first if they are needed
 	 * 
 	 * @param string $file_name
-	 * @param mixed $contents
+	 * @param string $contents
 	 * $param bool $append
-	 * @return mixed
+	 * @return boolean true on success, false on failure
 	 */
 	public static function createFile($path, $contents = false, $chmod = 0600, $append = false)
 	{

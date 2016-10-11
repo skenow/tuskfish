@@ -118,7 +118,7 @@ class TfishPreference extends TfishAncestralObject
 	 * processing logic to the value before returning it.
 	 * 
 	 * @param string $property name
-	 * @return mixed|false $property value; false if not set.
+	 * @return mixed|null $property value; null if not set.
 	 */
 	public function __get($property)
 	{
@@ -136,7 +136,7 @@ class TfishPreference extends TfishAncestralObject
 	 * Intercepts direct calls to set the value of an object property. Imposes data type
 	 * restrictions and range checks before allowing the properties to be set. 
 	 * 
-	 * @param mixed $property name
+	 * @param string $property name
 	 * @param return void
 	 */
 	public function __set($property, $value)
@@ -315,7 +315,7 @@ class TfishPreference extends TfishAncestralObject
 	 * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
 	 * objects to add processing logic for specific properties.
 	 * 
-	 * @param type $property name
+	 * @param string $property name
 	 * @return bool true on success false on failure 
 	 */
 	public function __unset($property)
