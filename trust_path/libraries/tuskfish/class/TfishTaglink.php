@@ -40,7 +40,7 @@ class TfishTaglink
 		if (isset($this->__data[$property])) {
 			return $this->__data[$property];
 		} else {
-			return false;
+			return null;
 		}
 	}
 	

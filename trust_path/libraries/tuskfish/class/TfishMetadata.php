@@ -53,7 +53,7 @@ class TfishMetadata
 		if (isset($this->__data[$property])) {
 			return htmlspecialchars($this->__data[$property], ENT_QUOTES, "UTF-8");
 		} else {
-			return false;
+			return null;
 		}
 	}
 	
