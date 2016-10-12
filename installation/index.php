@@ -8,7 +8,7 @@
 * as your own database will not be affected, but it could be embarassing).
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) Version 3 or higher
+* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) Version 3 or higher
 * @since		1.0
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core

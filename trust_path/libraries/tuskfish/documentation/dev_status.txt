@@ -13,6 +13,10 @@ MINIMUM FUNCTIONALITY
 
 RELEASE FUNCTIONALITY
 =====================
+* Rationalise file paths etc: Could be handled better, especially templates.
+* Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
+  other user-side ones eg. in control scripts may be better just to redirect to a polite error
+  warning page.
 * Add an admin-side image gallery script (just needs template, code is already there). 2 hours.
 * Write a simple manual providing installation and usage guide, and overview of the architecture
   with examples of how to build controller scripts, templates and work with criteria. 1 week.

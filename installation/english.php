@@ -4,7 +4,7 @@
 * Language file for Tuskfish installer script.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL) V3 or any higher version
+* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
 * @since		1.0
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
