@@ -125,7 +125,7 @@
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <input id="image" name="image" type="file" data-preview-file-type="text" >
         </div>
-		<script>$("#image").fileinput({'showUpload':false, 'previewFileType':'any'});</script>
+		<script>$("#image").fileinput({'showUpload':false, 'previewFileType':'any', 'initialCaption':'<?php if (isset($content->image)) echo $content->image; ?>'});</script>
 		
 	</div>
 	
@@ -144,7 +144,7 @@
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <input id="media" name="media" type="file" data-preview-file-type="text" >
         </div>
-		<script>$("#media").fileinput({'showUpload':false, 'previewFileType':'any'});</script>
+		<script>$("#media").fileinput({'showUpload':false, 'previewFileType':'any', 'initialCaption':'<?php if (isset($content->media)) echo $content->media; ?>'});</script>
 		
 	</div>
 	
