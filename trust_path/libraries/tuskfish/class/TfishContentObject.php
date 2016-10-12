@@ -204,39 +204,102 @@ class TfishContentObject extends TfishAncestralObject
 			switch($properties['mime']) {
 				case "image/jpeg":
 					$original = imagecreatefromjpeg($original_path);
-					imagecopyresized($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
+					imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
 					$result = imagejpeg($thumbnail, $cached_path); // Optional third quality argument 0-99, higher is better quality.
 				break;
 			
-				case "image/png": // May need additional work to support transparency.
-					$original = imagecreatefrompng($original_path);
-					imagecopyresized($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
-					$result = imagepng($thumbnail, $cached_path); // Optional third quality argument 0-9, lower is better quality.
+				case "image/png":
+				case "image/gif":
+					if ($properties['mime'] == "image/gif") {
+						$original = imagecreatefromgif($original_path);
+					} else {
+						$original = imagecreatefrompng($original_path);
+					}
+					
+					/**
+					 * Handle transparency The following code block (only) is a derivative of
+					 * the PHP_image_resize project by Nimrod007, which is a fork of the
+					 * smart_resize_image project by Maxim Chernyak. The source code is available
+					 * from the link below, and it is distributed under the following license terms:
+					 * 
+					 * Copyright © 2008 Maxim Chernyak
+					 * 
+					 * Permission is hereby granted, free of charge, to any person obtaining a copy
+					 * of this software and associated documentation files (the “Software”), to deal
+					 * in the Software without restriction, including without limitation the rights
+					 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+					 * copies of the Software, and to permit persons to whom the Software is
+					 * furnished to do so, subject to the following conditions:
+					 * 
+					 * The above copyright notice and this permission notice shall be included in
+					 * all copies or substantial portions of the Software.
+					 * 
+					 * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+					 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+					 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+					 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+					 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+					 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+					 * THE SOFTWARE.
+					 * 
+					 * https://github.com/Nimrod007/PHP_image_resize 
+					 */
+					
+					// Sets the transparent colour in the given image, using a colour identifier created with imagecolorallocate().
+					$transparency = imagecolortransparent($original);
+					$number_of_colours = imagecolorstotal($original);
+					
+					if ($transparency >= 0 && $transparency < $number_of_colours) {
+						// Get the colours for an index.
+						$transparent_colour = imagecolorsforindex($original, $transparency);
+						// Allocate a colour for an image. The first call to imagecolorallocate() fills the background colour in palette-based images created using imagecreate().
+						$transparency = imagecolorallocate($thumbnail, $transparent_colour['red'], $transparent_colour['green'], $transparent_colour['blue']);
+						// Flood fill with the given colour starting at the given coordinate (0,0 is top left).
+						imagefill($thumbnail, 0, 0, $transparency);
+						// Define a colour as transparent.
+						imagecolortransparent($thumbnail, $transparency);
+					}
+					
+					// Bugfix from original: Changed next block to be an independent if, instead of
+					// an elseif linked to previous block. Otherwise PNG transparency doesn't work.
+					if ($properties['mime'] == "image/png") {
+						// Set the blending mode for an image.
+						imagealphablending($thumbnail, false);
+						// Allocate a colour for an image ($image, $red, $green, $blue, $alpha).
+						$colour = imagecolorallocatealpha($thumbnail, 0, 0, 0, 127);
+						// Flood fill again.
+						imagefill($thumbnail, 0, 0, $colour);
+						// Set the flag to save full alpha channel information (as opposed to single colour transparency) when saving png images.
+						imagesavealpha($thumbnail, true);
+					}
+					
+					/**
+					 * End code derived from PHP_image_resize project.
+					 */
+					
+					// Copy and resize part of an image with resampling.
+					imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
+					
+					// Output a useable png or gif from the image resource.
+					if ($properties['mime'] == "image/gif") {
+						$result = imagegif($thumbnail, $cached_path);
+					} else {
+						// Quality is controlled through an optional third argument (0-9, lower is better).
+						$result = imagepng($thumbnail, $cached_path);
+					}
 				break;
-			
-				case "image/gif": // May need additional work to support transparency.
-					$original = imagecreatefromgif($original_path);
-					imagecopyresized($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
-					$result = imagegif($thumbnail, $cached_path);
-				break;
-			
+
 				// Anything else, no can do.
 				default:
 				return false;
 			}
+			
 			if ($result) {
 				imagedestroy($thumbnail); // Free memory.
 				return $cached_url; // Return the URL to the cached file.
 			} else {
 				return false;
 			}
-			
-			/**
-			 * Resizing with Imagick installed, preserves aspect ratio.	
-			 */
-			// $thumbnail = new Imagick($original_path);
-			// $thumbnail->thumbnailImage($clean_width, $clean_height);
-			// $thumbnail->writeImage($cached_path);
 			
 			return $cached_url;
 		}
