@@ -117,28 +117,34 @@
 		</div>
 		
 	</div>
+	
 	<div class="form-group">
-		
-		<!-- Caption -->
-		<label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
-		<div class="col-lg-5 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) { echo 'value="' . $content->caption . '"'; } ?>></div>
 		
 		<!-- Image -->
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-		<label class="btn btn-primary btn-file pull-left">
-			<?php if ($content->image) { echo $content->image; } else { echo TFISH_SELECT_FILE; } ?><input type="file" name="image" id="image" accept="<?php echo TfishFileHandler::getPermittedImageMimetypes(); ?>" style="display: none;">
-		</label>
-		</div>
+        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <input id="image" name="image" type="file" data-preview-file-type="text" >
+        </div>
+		<script>$("#image").fileinput({'showUpload':false, 'previewFileType':'any'});</script>
+		
+	</div>
+	
+	<div class="form-group">
+        
+        <!-- Caption -->
+		<label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
+		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) { echo 'value="' . $content->caption . '"'; } ?>></div>
+        
+    </div>
+	
+	<div class="form-group">
 		
 		<!-- Media -->
 		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-		<label class="btn btn-primary btn-file pull-left">
-			<?php if ($content->media) { echo $content->media; } else { echo TFISH_SELECT_FILE; } ?>
-			<input type="file" name="media" id="media" accept="<?php echo TfishFileHandler::getPermittedMediaMimetypes(); ?>" style="display: none;">
-		</label>
-		</div>
+        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <input id="media" name="media" type="file" data-preview-file-type="text" >
+        </div>
+		<script>$("#media").fileinput({'showUpload':false, 'previewFileType':'any'});</script>
 		
 	</div>
 	

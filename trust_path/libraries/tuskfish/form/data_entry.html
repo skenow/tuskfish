@@ -103,8 +103,9 @@
         <!-- Image -->
         <label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
-            <input id="image" name="image" type="file" class="file" data-preview-file-type="text" >
+            <input id="image" name="image" type="file" data-preview-file-type="text" >
         </div>
+		<script>$("#image").fileinput({'showUpload':false, 'previewFileType':'any'});</script>		
         
     </div>
     
@@ -121,8 +122,9 @@
         <!-- Media -->
         <label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
-            <input id="media" name="media" type="file" class="file" data-preview-file-type="text" >
+            <input id="media" name="media" type="file" data-preview-file-type="text" >
         </div>
+		<script>$("#media").fileinput({'showUpload':false, 'previewFileType':'any'});</script>
         
     </div>
 	

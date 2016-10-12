@@ -14,3 +14,23 @@ Remaining issues are:
 If can do this, the backend of Tuskfish is essentially complete. So the question is essentially
 how to populate the upload field of bootstrap-fileinput and wire up the buttons to trigger js
 events?
+
+- The 'file caption section' seems to control the view of the file name.
+- The 'file actions section' controls the browse/remove/upload buttons.
+- The 'file preview section' displays the thumbnail.
+
+All options to the input can be passed as HTML5 data attributes.
+
+Ability to configure the plugin to show an initial preview of images/files with initial caption 
+(more useful for record update scenarios). Refer the initialPreview, initialPreviewConfig, and 
+initialCaption properties in the plugin options section for configuring this.
+
+Option to show/hide any or all of the following:
+
+* Caption section
+* Preview section
+* Upload button
+* Remove button
+
+With release 2.5.0 you can now control which file types or extensions are allowed for upload by
+setting allowedFileTypes and allowedFileExtensions.
