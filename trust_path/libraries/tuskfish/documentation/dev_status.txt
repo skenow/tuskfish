@@ -4,12 +4,12 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
+* Grey out read-only sections of the form when changing object type. 1 day.
+* Minor validation bug in the selection boxes (online?). 20 mins.
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
   warning page.
-* Grey out read-only sections of the form when changing object type. 1 day.
 * Front end object templates. 1 day.
-* Minor validation bug in the selection boxes (online?). 20 mins.
 
 = 2 days.
 

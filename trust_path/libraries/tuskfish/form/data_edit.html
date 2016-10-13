@@ -218,6 +218,25 @@
 	<button class="btn btn-primary" onclick="this.form.elements.op.value=''; submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
 	
 	<!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
-	<input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />	
+	<input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
+	
+	<script>
+		var allowedProperties = ['caption','creator','date','file_size','format','image','language',
+		'media','parent','publisher','rights','tags'];
+		$("#type").change(function(){
+			$.each(allowedProperties, function(i, value) {
+				$('#' + value).prop('disabled',false);
+			});
+			if($("#type").val() == 'TfishImage') {
+				$("#image").prop('disabled',true);
+			} else if ($("#type").val() == 'TfishTag') {
+				var disabledProperties = ['caption','format','file_size','creator','media','date',
+					'parent','language','rights','publisher','tags'];
+					$.each(disabledProperties, function(i, value) {
+					$('#' + value).prop('disabled',true);
+				});
+			}
+		});		
+	</script>
 	
 </form>

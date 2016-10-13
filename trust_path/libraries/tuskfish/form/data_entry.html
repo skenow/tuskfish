@@ -166,5 +166,25 @@
 	<!-- Action buttons -->
 	<button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
 	<button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+	
+	<!-- Enable / disable controls that are permitted / not permitted for this object type -->
+	<script>
+		var allowedProperties = ['caption','creator','date','file_size','format','image','language',
+		'media','parent','publisher','rights','tags'];
+		$("#type").change(function(){
+			$.each(allowedProperties, function(i, value) {
+				$('#' + value).prop('disabled',false);
+			});
+			if($("#type").val() == 'TfishImage') {
+				$("#image").prop('disabled',true);
+			} else if ($("#type").val() == 'TfishTag') {
+				var disabledProperties = ['caption','format','file_size','creator','media','date',
+					'parent','language','rights','publisher','tags'];
+					$.each(disabledProperties, function(i, value) {
+					$('#' + value).prop('disabled',true);
+				});
+			}
+		});		
+	</script>
 
 </form>

@@ -36,6 +36,23 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$tfish_template->rights = TfishContentHandler::getRights();
 			$tfish_template->languages = TfishContentHandler::getLanguages();
 			$tfish_template->tags = TfishContentHandler::getTagList();
+			$content = new TfishContentObject();
+			$tfish_template->allowed_properties = $content->getPropertyWhitelist();
+			$tfish_template->zeroed_properties = array(
+				'image' => array('image'),
+				'tags' => array(
+					'caption',
+					'format',
+					'file_size',
+					'creator',
+					'media',
+					'date',
+					'parent',
+					'language',
+					'rights',
+					'publisher',
+					'tags')
+			);			
 			$tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
 			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		break;
