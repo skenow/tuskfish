@@ -6,6 +6,7 @@
 			<p><em>
 				<?php
 					if ($content->creator) echo $content->escape('creator') . ' | ';
+                    if ($content->submission_time) echo $content->escape('submission_time') . ' | ';
 					if ($content->counter) echo $content->escape('counter') . ' ' . TFISH_VIEWS . ' | ';
 					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
 			</em></p>
