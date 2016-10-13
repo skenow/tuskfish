@@ -117,7 +117,7 @@ class TfishSession
 	{
 		$clean_url = false;
 		if ($url_redirect) {
-			$clean_url = TfishFilter::isUrl($url_redirect) ? TfishFilter::encodeEscapeUrl($url_redirect) : false;
+			$clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
 		}
 		self::_logout($clean_url);
 	}
