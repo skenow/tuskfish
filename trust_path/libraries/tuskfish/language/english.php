@@ -68,7 +68,7 @@ define("TFISH_SEARCH_ALL", "All (AND)");
 define("TFISH_SEARCH_ANY", "Any (OR)");
 define("TFISH_SEARCH_EXACT", "Exact match");
 define("TFISH_SEARCH_NO_RESULTS", "No results.");
-define("TFISH_SEARCH_RESULTS", "results");
+define("TFISH_SEARCH_RESULTS", "result(s)");
 
 // RSS
 define("TFISH_RSS", "RSS");
