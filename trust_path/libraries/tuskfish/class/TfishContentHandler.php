@@ -84,7 +84,9 @@ class TfishContentHandler
 	 */
 	private static function _deleteImage($filename)
 	{
-		return TfishFileHandler::deleteFile('image/' . $filename);
+		if ($filename) {
+			return TfishFileHandler::deleteFile('image/' . $filename);
+		}
 	}
 	
 	/**
@@ -95,7 +97,9 @@ class TfishContentHandler
 	 */
 	private static function _deleteMedia($filename)
 	{
-		return TfishFileHandler::deleteFile('media/' . $filename);
+		if ($filename) {
+			return TfishFileHandler::deleteFile('media/' . $filename);
+		}
 	}
 	
 	
@@ -857,16 +861,19 @@ class TfishContentHandler
 					$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
 					if ($clean_filename) {
 						$key_values['image'] = $clean_filename;
-					}
+					}					
 				} else { // No new image, use the existing file name.
 					$key_values['image'] = $existing_image;
 				}
 			} else {
-				unset($key_values['image']);
+				$key_values['image'] = '';
 			}
 			
-			// If the updated object has no image attached, delete any old image files.
-			if ((!isset($key_values['image']) || empty($key_values['image'])) && $existing_image) {
+			// If the updated object has no image attached, or has been instructed to delete attached image, delete any old image files.
+			if ((!isset($key_values['image']) || empty($key_values['image']))
+					|| (isset($_POST['deleteImage']) && !empty($_POST['deleteImage']))
+					&& $existing_image) {
+				$key_values['image'] = '';
 				self::_deleteImage($existing_image);
 			}
 			
@@ -893,11 +900,18 @@ class TfishContentHandler
 					$key_values['media'] = $existing_media;
 				}
 			} else {
-				unset($key_values['media'], $key_values['format'], $key_values['file_size']);
+				$key_values['media'] = '';
+				$key_values['format'] = '';
+				$key_values['file_size'] = '';
 			}
 			
 			// If the updated object has no media attached, delete any old media files.
-			if ((!isset($key_values['media']) || empty($key_values['media'])) && $existing_media) {
+			if ((!isset($key_values['media']) || empty($key_values['media']))
+					|| (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia']))
+					&& $existing_media) {
+				$key_values['media'] = '';
+				$key_values['format'] = '';
+				$key_values['file_size'] = '';
 				self::_deleteMedia($existing_media);
 			}
 		}

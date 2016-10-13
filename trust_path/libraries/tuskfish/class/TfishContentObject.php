@@ -338,7 +338,12 @@ class TfishContentObject extends TfishAncestralObject
 	{
 		if (!TfishFilter::isArray($dirty_input)) {
 			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-		}		
+		}
+		
+		$delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
+				? true : false;
+		$delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia']))
+				? true : false;
 
 		$property_whitelist = $this->getPropertyWhitelist();
 		foreach ($property_whitelist as $key => $type) {

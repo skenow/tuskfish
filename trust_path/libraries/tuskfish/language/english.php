@@ -138,6 +138,8 @@ define("TFISH_VIEWS", "views"); // Alternative representation of counter, which 
 define("TFISH_META_TITLE", "Title");
 define("TFISH_META_DESCRIPTION", "Description");
 define("TFISH_SEO", "SEO");
+define("TFISH_DELETE_IMAGE", "Delete image");
+define("TFISH_DELETE_MEDIA", "Delete media");
 
 // Base intellectual property licenses.
 define("TFISH_RIGHTS_COPYRIGHT", "Copyright, all rights reserved");

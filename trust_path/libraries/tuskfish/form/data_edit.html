@@ -122,10 +122,25 @@
 		
 		<!-- Image -->
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
-            <input id="image" name="image" type="file" data-preview-file-type="text" >
-        </div>
-		<script>$("#image").fileinput({'showUpload':false, 'previewFileType':'any', 'initialCaption':'<?php if (isset($content->image)) echo $content->image; ?>'});</script>
+		<?php if (isset($content->image) && !empty($content->image)): ?>
+			<div class="control-label col-lg-9 col-md-8 col-sm-6 col-xs-6">
+				<input id="image" name="image" type="file" data-preview-file-type="image" >
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+				<div class="checkbox"><label><input id="deleteImage" name="deleteImage" type="checkbox" value="1"><b><?php echo TFISH_DELETE_IMAGE; ?></b></label></div>
+			</div>
+		<?php else: ?>
+			<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+				<input id="image" name="image" type="file" data-preview-file-type="image" >
+			</div>
+		<?php endif; ?>	
+		
+		<script>$("#image").fileinput({
+			'showUpload':false,
+			'previewFileType':'image',
+			'initialCaption':'<?php if (isset($content->image)) echo $content->image; ?>',
+			});
+		</script>
 		
 	</div>
 	
@@ -133,18 +148,34 @@
         
         <!-- Caption -->
 		<label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
-		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) { echo 'value="' . $content->caption . '"'; } ?>></div>
+		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+			<input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) { echo 'value="' . $content->caption . '"'; } ?>>
+		</div>
         
     </div>
 	
 	<div class="form-group">
-		
+
 		<!-- Media -->
 		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
-            <input id="media" name="media" type="file" data-preview-file-type="text" >
-        </div>
-		<script>$("#media").fileinput({'showUpload':false, 'previewFileType':'any', 'initialCaption':'<?php if (isset($content->media)) echo $content->media; ?>'});</script>
+		<?php if (isset($content->media) && !empty($content->media)): ?>
+			<div class="control-label col-lg-9 col-md-8 col-sm-6 col-xs-6">
+				<input id="media" name="media" type="file" data-preview-file-type="text" >
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+				<div class="checkbox"><label><input id="deleteMedia" name="deleteMedia" type="checkbox" value="1"><b><?php echo TFISH_DELETE_MEDIA; ?></b></label></div>
+			</div>
+		<?php else: ?>
+			<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+				<input id="media" name="media" type="file">
+			</div>
+		<?php endif; ?>
+		
+		<script>$("#media").fileinput({
+			'showUpload':false,
+			'previewFileType':'any',
+			'initialCaption':'<?php if (isset($content->media)) echo $content->media; ?>'});
+		</script>
 		
 	</div>
 	
