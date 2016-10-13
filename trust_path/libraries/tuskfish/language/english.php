@@ -174,6 +174,8 @@ define("TFISH_PREFERENCES_WERE_UPDATED", "Preferences were successfully updated.
 define("TFISH_PREFERENCES_UPDATE_FAILED", "Preference update failed.");
 
 // ERROR MESSAGES.
+define("TFISH_ERROR", "Oops...");
+define("TFISH_SORRY_WE_ENCOUNTERED_AN_ERROR", "Sorry, we encountered an error.");
 define("TFISH_ERROR_NO_SUCH_OBJECT", "Object does not exist.");
 define("TFISH_ERROR_NO_SUCH_PROPERTY", "Trying to set value of non-existant property");
 define("TFISH_ERROR_NO_RESULT", "Database query did not return a statement; query failed.");
