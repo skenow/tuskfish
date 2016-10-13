@@ -19,11 +19,14 @@
 		</div>
 		
 		<!-- Date -->
+        <div id="dateContainer">
 		<label for="date" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="date" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->date . '"'; } ?>></div>
-		
+        </div>
+        
 		<!-- Rights -->
-		<label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
+		<div id="rightsContainer">
+        <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="rights" id="rights" required>
 				<?php
@@ -37,8 +40,10 @@
 				?>
 			</select>
 		</div>
+        </div>
 		
 		<!-- Tags -->
+        <div id="tagsContainer">
 		<label for="tags" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TAGS; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select multiple size="5" class="form-control" name="tags[]" id="tags">
@@ -53,6 +58,7 @@
 				?>
             </select>
 		</div>
+        </div>
 		
 	</div>
 	
@@ -89,18 +95,25 @@
 	<div class="form-group">
 		
 		<!-- Creator -->
+        <div id="creatorContainer">
 		<label for="creator" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) { echo 'value="' . $content->creator . '"'; } ?>></div>
-		
+        </div>
+        
 		<!-- Publisher -->
-		<label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
+        <div id="publisherContainer">
+        <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) { echo 'value="' . $content->publisher . '"'; } ?>></div>
-		
+        </div>
+        
 		<!-- Parent -->
+        <div id="parentContainer">
 		<label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="number" min="0" class="form-control" name="parent" id="parent" <?php if (isset($content->parent)) { echo 'value="' . $content->parent . '"'; } ?>></div>
-		
+        </div>
+        
 		<!-- Language -->
+        <div id="languageContainer">
 		<label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
 		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
 			<select class="form-control" name="language" id="language" required>
@@ -115,12 +128,15 @@
 				?>
 			</select>
 		</div>
+        </div>
 		
 	</div>
-	
+    
+	<div id="imageContainer">
 	<div class="form-group">
 		
 		<!-- Image -->
+        
 		<label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
 		<?php if (isset($content->image) && !empty($content->image)): ?>
 			<div class="control-label col-lg-9 col-md-8 col-sm-6 col-xs-6">
@@ -133,7 +149,7 @@
 			<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
 				<input id="image" name="image" type="file" data-preview-file-type="image" >
 			</div>
-		<?php endif; ?>	
+		<?php endif; ?>
 		
 		<script>$("#image").fileinput({
 			'showUpload':false,
@@ -141,7 +157,7 @@
 			'initialCaption':'<?php if (isset($content->image)) echo $content->image; ?>',
 			});
 		</script>
-		
+
 	</div>
 	
 	<div class="form-group">
@@ -151,12 +167,15 @@
 		<div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
 			<input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) { echo 'value="' . $content->caption . '"'; } ?>>
 		</div>
-        
+            
     </div>
-	
+    </div>
+    
+    <div id="mediaContainer">
 	<div class="form-group">
 
 		<!-- Media -->
+        
 		<label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
 		<?php if (isset($content->media) && !empty($content->media)): ?>
 			<div class="control-label col-lg-9 col-md-8 col-sm-6 col-xs-6">
@@ -178,7 +197,8 @@
 		</script>
 		
 	</div>
-	
+	</div>
+    
 	<div class="form-group">
 		
 		<!-- Online -->
@@ -220,23 +240,26 @@
 	<!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
 	<input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
 	
+    <!-- Show or hide fields that are / not used by specific content subclasses -->
 	<script>
-		var allowedProperties = ['caption','creator','date','file_size','format','image','language',
-		'media','parent','publisher','rights','tags'];
+		var allowedProperties = ['creatorContainer','dateContainer',
+            'file_sizeContainer','formatContainer','imageContainer','languageContainer',
+            'mediaContainer','parentContainer','publisherContainer','rightsContainer','tagsContainer'];
 		$("#type").change(function(){
 			$.each(allowedProperties, function(i, value) {
-				$('#' + value).prop('disabled',false);
+				$('#' + value).show();
 			});
 			if($("#type").val() == 'TfishImage') {
-				$("#image").prop('disabled',true);
+                $("#imageContainer").hide();
 			} else if ($("#type").val() == 'TfishTag') {
-				var disabledProperties = ['caption','format','file_size','creator','media','date',
-					'parent','language','rights','publisher','tags'];
+				var disabledProperties = ['formatContainer','file_sizeContainer',
+                    'creatorContainer','mediaContainer','dateContainer','parentContainer',
+                    'languageContainer','rightsContainer','publisherContainer','tagsContainer'];
 					$.each(disabledProperties, function(i, value) {
-					$('#' + value).prop('disabled',true);
+					$('#' + value).hide();
 				});
 			}
-		});		
+		});
 	</script>
 	
 </form>
