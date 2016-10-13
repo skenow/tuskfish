@@ -60,6 +60,8 @@ if ($clean_id) {
 	if ($clean_start) $criteria->offset = $clean_start;
 	$criteria->limit = $tfish_preference->user_pagination;
 	if ($clean_tag) $criteria->tag = array($clean_tag);
+	$criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
+	$criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
 	$criteria->add(new TfishCriteriaItem('online', 1));
 	
 	// Prepare pagination control.

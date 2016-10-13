@@ -51,6 +51,7 @@ class TfishTag extends TfishContentObject
 			'parent',
 			'language',
 			'rights',
-			'publisher');
+			'publisher',
+			'tags');
 	}
 }

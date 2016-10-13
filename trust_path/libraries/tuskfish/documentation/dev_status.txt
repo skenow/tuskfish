@@ -4,19 +4,18 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Robust solution for file uploads (editing, delinking cases). Half day.
+* Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
+  other user-side ones eg. in control scripts may be better just to redirect to a polite error
+  warning page.
 * Grey out read-only sections of the form when changing object type. 1 day.
 * Front end object templates. 1 day.
 * Minor validation bug in the selection boxes (online?). 20 mins.
 
-= 2.5 days.
+= 2 days.
 
 RELEASE FUNCTIONALITY
 =====================
 * Rationalise file paths etc: Could be handled better, especially templates.
-* Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
-  other user-side ones eg. in control scripts may be better just to redirect to a polite error
-  warning page.
 * Add an admin-side image gallery script (just needs template, code is already there). 2 hours.
 * Write a simple manual providing installation and usage guide, and overview of the architecture
   with examples of how to build controller scripts, templates and work with criteria. 1 week.
