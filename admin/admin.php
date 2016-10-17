@@ -196,6 +196,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$content_object = new $type;
 			$content_object->loadProperties($_REQUEST);
 			
+			// As this object is being sent to storage, need to decode some entities that got
+			// encoded for display, specifically quotes (if you don't encode quotes they will
+			// break the editing form when you populate the values of text fields):
+			$fields_to_decode = array('title', 'creator', 'publisher', 'caption', 'meta_title',
+				'seo', 'meta_description');
+			foreach ($fields_to_decode as $field) {
+				if (isset($content_object->field)) {
+					$content_object->$field = htmlspecialchars_decode($content_object->field, ENT_QUOTES);
+				}
+			}
+			
 			// Update the database row and display a response.
 			$result = TfishContentHandler::update($content_object);
 			if ($result) {
