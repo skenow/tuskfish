@@ -5,5 +5,11 @@
         <data xmlns="http://www.netbeans.org/ns/php-project/1">
             <name>Tuskfish2</name>
         </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>dependencyone</word>
+            <word>Mainfile</word>
+            <word>Masterfile</word>
+            <word>TUSKFISH</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>

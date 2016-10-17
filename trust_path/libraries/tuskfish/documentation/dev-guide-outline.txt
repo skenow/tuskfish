@@ -1,0 +1,151 @@
+DEV GUIDE OUTLINE
+=================
+* What Tuskfish is.
+* Who is Tuskfish designed for?
+  - Tuskfish is for individuals and small organisations that have a single site administrator in 
+    charge of running the show. After 15 years of trying to get professional scientists to 
+	contribute simple news articles in a multi-user WYSIWYG system, I have come to the conclusion
+	that it is a waste of time. The results are always horrible and someone inevitably has to clean
+	them up before publication. Publications have editors and editorial processes for good reason;
+	imagining that a website can function effectively without them is a mistake.
+* Why Tuskfish?
+  - Mainstream systems are all exhibiting feature creep and code bloat syndrome.
+  - Including external libraries by the bucketload is not good for security and
+    significantly slows things down
+  - Learning to develop for a mainstream system takes weeks or months (see points above).
+  - Gap for a truly lightweight (= fast) system built to serve a single administrator.
+* Guiding principles for Tuskfish development:
+  - Build simple, versatile components.
+  - Minimise resource utilisation at every turn (database queries, memory, code base).
+  - Avoid use of external libraries as far as possible, and do not turn them into "dependencies".
+  
+THINGS YOU WON'T FIND IN TUSKFISH
+=================================
+* A dedicated database server. Tuskfish uses SQLite, which is a small, serverless,
+  and zero-configuration database engine ideal for small to medium sized websites.
+* A user "rights management" system; they don't have any. Tuskfish is a single-user system and the
+  site administrator is the only person with administrative privileges. Tuskfish has two classes of
+  content: Stuff you have marked as *online*, which is publicly available; and stuff you have 
+  marked as *offline*, which isn't. Any questions?
+* Libraries to build forms. Tuskfish only has one form for data entry and one for editing (because 
+  of its data model, you'll see why later). There is no *need* to have an entire library for 
+  building forms, because it is not something you are going to need to do.
+* Bucketloads of external libraries. "Just slap another library on" is certainly an efficient way
+  to add features to a system and deliver time-is-money jobs to clients. But is it sustainable?
+  Are they really "libraries" or are they in fact dependencies? What will you do if a dependency
+  breaks and the devs don't fix it? And are you confident that the extra 5MB of code you dropped
+  into your project without reading or understanding contains no security issues?  
+
+OVERVIEW OF THE ARCHITECTURE
+============================
+* Single parent content object using common Dublin Core fields plus a few web standards ones.
+* Subclass the parent object to create a specific content type with it's own methods etc.
+* Unset any parental properties that you don't need in the subclass constructor.
+* This approach allows all common content types to live in the same database table, greatly reducing
+  duplication found in most modular systems, simplifying queries and reducing database load.
+* Global tagging system.
+* "Collection" content objects, rather than traditional categories. Basically, collections are 
+  categories turned into fully-fledged, searchable and presentable content objects.
+
+EXPLANATION OF THE SUB-SYSTEMS
+==============================
+* Search
+* Login
+* Session management
+* Data filter
+* Database and criteria system (and PDO)
+* Data (content) entry and editing system
+* Preference system
+* Template system
+* Metadata system
+* Image caching system
+* File handling (and upload) system
+* Error logging system
+* Pagination control.
+* Block system
+* RSS system
+* Tag system
+* Utilities
+* Security utilities
+* Summary of the page loading cycle
+  - someControllerScript.php
+    - include mainfile.php
+      - masterfile.php
+	    - set file path, url and language constants.
+  - TfishHeader.php (start buffer/compression, database connection, error reporting, preferences, metadata, language files, template object)
+    - [Do stuff here]
+  - TfishFooter.php (include layout file, close database connection, flush buffer)
+  
+COMMON DEV TASKS
+================
+- Creating a new user-facing page to display particular content (controller script, criteria, template).
+- Creating a new block.
+- Creating a new template.
+- Customising the layout for a particular page (or a particular condition).
+- Customising the metadata for a particular page.
+- Adding a new preference.
+
+HACKING THE BASE CONTENT OBJECT
+===============================
+- Adding a new base property.
+- Unsetting a base property in a child object.
+
+TUSKFISH POLICY ON DATA VALIDATION AND ESCAPING
+===============================================
+* Data should in principal be escaped at the point of use:
+- Web-facing controller scripts should i) whitelist permitted parameters and ii) conduct basic data type / range checks on values used in their own operation.
+  - Bad input passed to a controller script or failed object lookups should result in a soft landing (polite error page).
+- Objects should i) only allow whitelisted properties to be set and ii) conduct data type / range checks on the values. Basically, objects should not trust data passed to them.
+  - Bad properties or values passed to an object should result in an error (at this stage, fatal but this may be able to be relaxed to a warning in some cases).
+- Database methods should:
+  i) conduct data type and range checks on identifiers (table, column and key names)
+  ii) escape delimiters (`'") in identifiers
+  iii) escape data for storage through EXCLUSIVE use of PDO and prepared statements with bound values.
+  - Bad identifiers passed  to DB methods shall result in a hard stop in all cases.
+- Data should be escaped for output to the browser (XSS prevention) through either 
+  TfishFilter::escape($data) (non-object data) or through an object's internal ->escape('property')
+  method. The only exceptions are content object teaser and description fields, which as HTML are
+  input-filtered with HTMLPurifier.
+  
+SECURITY CHECKLIST FOR A NEW INSTALLATION
+=========================================
+0. Get an SSL certificate for your site (use Let's Encrypt in cPanel to automate this otherwise 
+   painful process, it's free, pain-free and there is no longer any valid reason not to do this).
+1. Ensure that you use a strong, RANDOM site security key (get one from grc.com/passwords).
+2. Put the /trust_path folder outside of the web root, so that it cannot be accessed via browser.
+   You should also change the name to something random.
+3. Check that the /installation directory has self-deleted. If it hasn't, kill it.
+4. Check the permissions on your SQLite database file (/trust_path/database/yourdatabase.db) are
+   0600 (read and write by owner only). This is CRITICAL as database access in SQLite is enforced
+   via file permissions; there is no database username or password. You absolutely MUST get this
+   right, ESPECIALLY if you have left the trust_path folder inside the web root (which you really 
+   should not do) as this means the database file is accessible via browser.
+5. Check that the permission on mainfile.php are 444. This file contains your trust_path, so it is 
+   a good idea to protect it from access.
+6. Check that the permissions on config.php are 444. This file contains your site security key, salt 
+   and the path to your database file, all of which should be protected.
+5. Set up an automatic backup system for your site (including the trust path, which houses your
+   database). I prefer rSnapshot (well documented, amazingly efficient and well worth an hour of
+   your time to set up).
+
+EXTENDING TUSKFISH: ADDING NON-STANDARD CONTENT TYPES
+=====================================================
+* If you find a need to create a new content object where subclassing TfishContentObject would not
+  be appropriate, you can. The process is basically:
+  - Make a copy of TfishContentObject.php and TfishContentHandler.php and change the class and file
+    names as appropriate.
+  - Edit your new content and handler class properties and methods to meet your needs.
+  - Create a new table in your SQLite database to house your new object.
+  - Create forms to add, edit and delete your new object (and copy/edit the /admin/admin.php script).
+  - Review the handler methods insert(), update(), delete(), getObject(), getObjects() and count().
+    Find the line in each method where the equivalent TfishDatabase method is called. Simply change
+	the database table parameter from 'content' to the table for your new object, for example:
+	
+	// Insert the object into the database.
+	$result = TfishDatabase::insert('content', $key_values);
+	
+	// Would become:
+	$result = TfishDatabase::insert('yourtable', $key_values);
+	
+  - Not too hard, right?
+  

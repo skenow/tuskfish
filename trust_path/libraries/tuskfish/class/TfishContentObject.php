@@ -98,8 +98,8 @@ class TfishContentObject extends TfishAncestralObject
 			switch($property) {
 				case "description":
 				case "teaser":
-					return (string)TfishFilter::filterHtml($this->__data[$property]); // Output filtering
-					//return $this->__data[$property]; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
+					//return (string)TfishFilter::filterHtml($this->__data[$property]); // Output filtering
+					return $this->__data[$property]; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
 				break;
 			
 				case "submission_time":
@@ -484,8 +484,8 @@ class TfishContentObject extends TfishAncestralObject
 			
 				case "html":
 					$value = TfishFilter::trimString($value);
-					//$this->__data[$property] = (string)TfishFilter::filterHtml($value); // Enable input filtering with HTMLPurifier.
-					$this->__data[$property] = (string)TfishFilter::trimString($value); // Disable input filtering with HTMLPurifier (only do this if output filtering is enabled in escape()).
+					$this->__data[$property] = (string)TfishFilter::filterHtml($value); // Enable input filtering with HTMLPurifier.
+					//$this->__data[$property] = (string)TfishFilter::trimString($value); // Disable input filtering with HTMLPurifier (only do this if output filtering is enabled in escape()).
 				break;
 			
 				case "int":
