@@ -36,7 +36,7 @@ class TfishContentObject extends TfishAncestralObject
 		 * Whitelist of official properties and datatypes.
 		 */
 		$this->__properties['id'] = 'int'; // Auto-increment, set by database.
-		$this->__properties['type'] = 'alpha'; // Content object type eg. TfishArticle, TfishPodcast etc. [ALPHA]
+		$this->__properties['type'] = 'alpha'; // Content object type eg. TfishArticle etc. [ALPHA]
 		$this->__properties['title'] = 'string'; // The headline or name of this content.
 		$this->__properties['teaser'] = 'html'; // A short (one paragraph) summary or abstract for this content. [HTML]
 		$this->__properties['description'] = 'html'; // The full article or description of the content. [HTML]

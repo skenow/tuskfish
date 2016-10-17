@@ -312,7 +312,6 @@ class TfishContentHandler
 			'TfishCollection' => TFISH_TYPE_COLLECTION,
 			'TfishDownload' => TFISH_TYPE_DOWNLOAD,
 			'TfishImage' => TFISH_TYPE_IMAGE,
-			'TfishPodcast' => TFISH_TYPE_PODCAST,
 			'TfishStatic' => TFISH_TYPE_STATIC,
 			'TfishTag' => TFISH_TYPE_TAG,
 			'TfishVideo' => TFISH_TYPE_VIDEO,

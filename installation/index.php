@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				// the PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE functionality, which automatically
 				// pulls DB rows into an instance of a class, based on the first column.
 				$content_columns = array(
-					"type" => "TEXT", // article => , image => , podcast => , etc.
+					"type" => "TEXT", // article => , image => , audio => , etc.
 					"id" => "INTEGER", // Auto-increment => , set by database.
 					"title" => "TEXT", // The headline or name of this content.
 					"teaser" => "TEXT", // A short (one paragraph) summary or abstract for this content.
