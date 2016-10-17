@@ -66,9 +66,7 @@ class TfishMetadata
 	public function __set($property, $value)
 	{
 		if (isset($this->__data[$property])) {
-			$value = TfishFilter::trimString($value);
-			$clean_value = TfishFilter::escape($value);
-			$this->__data[$property] = $clean_value;
+			$this->__data[$property] = TfishFilter::trimString($value);
 		} else {
 			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
 		}
