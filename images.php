@@ -16,7 +16,7 @@
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 // Site preferences can be accessed via $tfish_preference->key;
 require_once "mainfile.php";
-require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
+require_once TFISH_PATH . "tfish_header.php";
 
 /**
  * CONVENTIONS:
@@ -25,7 +25,7 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
  */
 $content_handler = 'TfishImageHandler';
 $index_template = 'images';
-$target_file_name = 'galleries';
+$target_file_name = 'images';
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_IMAGES;

@@ -41,7 +41,6 @@ class TfishImage extends TfishContentObject
 	 */
 	public function zeroedProperties()
 	{
-		// Use the media property to upload the image, as it specifies mimetype and file size.
-		return array('image');
+		return array();
 	}
 }

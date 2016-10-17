@@ -245,9 +245,7 @@
 			$.each(allowedProperties, function(i, value) {
 				$('#' + value).show();
 			});
-			if($("#type").val() == 'TfishImage') {
-                $("#imageContainer").hide();
-			} else if ($("#type").val() == 'TfishTag') {
+			if ($("#type").val() == 'TfishTag') {
 				var disabledProperties = ['formatContainer','file_sizeContainer',
                     'creatorContainer','mediaContainer','dateContainer','parentContainer',
                     'languageContainer','rightsContainer','publisherContainer','tagsContainer'];
