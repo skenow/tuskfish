@@ -11,11 +11,21 @@
             </select>
 		</div>
 		
-		<!-- Date -->
+		<!-- Date (bootstrap-datepicker) -->
         <div id="dateContainer">
             <label for="date" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="date" class="form-control" name="date" id="date"></div>
+            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="date" id="date"></div>
         </div>
+		<script>
+			$('#date').datepicker({
+				format: 'yyyy-mm-dd',
+				todayHighlight: 'true',
+				todayBtn: 'linked',
+				startView: 'years'
+			});
+			$('#date').datepicker('setDate', new Date());
+			$('#date').datepicker('update');
+		</script>
         
 		<!-- Rights -->
         <div id="rightsContainer">
