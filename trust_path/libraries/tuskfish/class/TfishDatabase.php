@@ -811,20 +811,58 @@ class TfishDatabase
 	 * @param string $column to update
 	 * @return boolean true on success, false on failure
 	 */
-	public static function toggleBoolean($table, $id, $column)
+	public static function toggleBoolean($id, $table, $column)
 	{
-		$clean_table = self::validateTableName($table);
 		$clean_id = self::validateId($id);
+		$clean_table = self::validateTableName($table);
 		$clean_column = self::validateColumns(array($column));
 		$clean_column = reset($clean_column);
-		return self::_toggleBoolean($clean_table, $clean_id, $clean_column);
+		return self::_toggleBoolean($clean_id, $clean_table, $clean_column);
 	}
 	
-	private static function _toggleBoolean($table, $id, $column)
+	private static function _toggleBoolean($id, $table, $column)
 	{
 		$sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column) 
 				. " = CASE WHEN " . self::addBackticks($column) 
 				. " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
+
+		// Prepare the statement and bind the ID value.
+		try {
+			$statement = TfishDatabase::preparedStatement($sql);
+			if ($statement) {
+				$statement->bindValue(":id", $id, PDO::PARAM_INT);
+			}
+		} catch (PDOException $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
+		
+		return self::executeTransaction($statement);
+	}
+	
+	/**
+	 * Increment a content object's counter field by one.
+	 * 
+	 * Call this method when the full description of an individual content object is viewed, or
+	 * when a related media file is downloaded.
+	 * 
+	 * @param int $id of content object
+	 * @param string $table name
+	 * @param string $column name
+	 * @return boolean true on success false on failure
+	 */
+	public static function updateCounter($id, $table, $column)
+	{
+		$clean_id = self::validateId($id);
+		$clean_table = self::validateTableName($table);
+		$clean_column = self::validateColumns(array($column));
+		$clean_column = reset($clean_column);
+		return self::_updateCounter($clean_id, $clean_table, $clean_column);
+	}
+	
+	private static function _updateCounter($id, $table, $column)
+	{
+		$sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
+				. " = " . self::addBackticks($column) . " + 1 WHERE `id` = :id";
 
 		// Prepare the statement and bind the ID value.
 		try {

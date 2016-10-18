@@ -499,18 +499,18 @@ class TfishContentHandler
 	public static function toggleOnlineStatus($id)
 	{
 		$clean_id = (int)$id;
-		return TfishDatabase::toggleBoolean('content', $clean_id, 'online');
+		return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
 	}
 	
 	/**
 	 * Increment a content object's counter field by one.
 	 * 
-	 * Not yet implemented.
-	 * 
 	 * @param int $id of content object
 	 */
 	public static function updateCounter($id)
 	{
+		$clean_id = (int)$id;
+		return TfishDatabase::updateCounter($clean_id, 'content', 'counter');
 	}
 	
 	/**

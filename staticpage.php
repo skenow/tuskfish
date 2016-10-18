@@ -27,6 +27,8 @@ $clean_id = (int)$id;
 if ($clean_id) {
 	$content = TfishContentHandler::getObject($clean_id);
 	if (is_object($content) && $content->online) {
+		$content->counter += 1;
+		$content_handler::updateCounter($clean_id);
 		$tfish_template->tags = TfishContentHandler::makeTagLinks($content->tags, false);
 		$tfish_template->content = $content;
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;

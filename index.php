@@ -43,7 +43,9 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content) && $content->online) {
-		// For a content type-specific page specify the file name (without extension) or use $content->template if it is the same as your file name.
+		$content_handler->updateCounter($clean_id);
+		// For a content type-specific page specify the file name (without extension) as the
+		// second argument, or use $content->template if it is the same as your file name.
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
 		$tfish_template->content = $content;
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
