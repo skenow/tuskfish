@@ -14,7 +14,7 @@
     </div>
         <?php if ($content->media): ?>
         <div>
-            <video width="320" height="240" controls>
+            <video controls>
                 <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo 'video/mp4'; ?>">
                 <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO; ?>
           </video>
