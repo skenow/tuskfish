@@ -21,6 +21,10 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_TEMPLATES_PATH", TFISH_ROOT_PATH . "templates/layouts/");
 	define("TFISH_TEMPLATES_BLOCK_PATH", TFISH_ROOT_PATH . "templates/blocks/");
 	define("TFISH_TEMPLATES_OBJECT_PATH", TFISH_ROOT_PATH . "templates/objects/");
+	define("TFISH_UPLOADS_PATH", TFISH_ROOT_PATH . "uploads/");
+	define("TFISH_MEDIA_PATH", TFISH_UPLOADS_PATH . "media/");
+	define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');
+	
 	
 	// Constants that make use of the trust path (which is a derivative of the physical path).
 	define("TFISH_PATH", TFISH_TRUST_PATH . "libraries/tuskfish/");
@@ -30,9 +34,6 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_ERROR_LOG_PATH", TFISH_TRUST_PATH . "log/tuskfish_log.txt");
 	define("TFISH_FORM_PATH", TFISH_PATH . "form/");
 	define("TFISH_LIBRARIES_PATH", TFISH_TRUST_PATH . "libraries/");
-	define("TFISH_UPLOADS_PATH", TFISH_TRUST_PATH . "uploads/");
-	define("TFISH_MEDIA_PATH", TFISH_UPLOADS_PATH . "media/");
-	define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');
 	
 	// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL
 	define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
@@ -40,6 +41,8 @@ if (!defined("TFISH_MASTERFILE_INCLUDED")) {
 	define("TFISH_TEMPLATES_URL", TFISH_URL . "templates/");
 	define("TFISH_RSS_URL", TFISH_URL . "rss.php");
 	define("TFISH_PERMALINK_URL", TFISH_URL . "permalink.php?id=");
+	define("TFISH_MEDIA_URL", TFISH_URL . "uploads/media/");
+	define("TFISH_IMAGE_URL", TFISH_URL . "uploads/image/");
 	
 	// RSS enclosure URL - the spec requires that the URL use http protocol, as https will invalidate feed.
 	if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {

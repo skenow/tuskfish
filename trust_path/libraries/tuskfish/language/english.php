@@ -231,7 +231,7 @@ define("TFISH_ERROR_UPLOAD_ERR_NO_TMP_DIR", "Upload failed: No temporary upload 
 define("TFISH_ERROR_UPLOAD_ERR_CANT_WRITE", "Upload failed: Can't write to disk.");
 
 // Browser compatibility error messages.
-define("TFISH_BROWSER_DOES_NOT_SUPPORT_VIDE", "Your browser does not support the video tag.");
+define("TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO", "Your browser does not support the video tag.");
 
 /*
  * Record any new, changed or deleted language constants below by version, to aid translation.

@@ -9,6 +9,9 @@ MINIMUM FUNCTIONALITY
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
   warning page.
 * Front end object templates. 1 day.
+* Review location / path to media/images folder. Have to put video/audio files in web root if
+  want to use HTML5 native players; but images could still live in the trust path, and they are
+  probably more important.
 
 = 1 days.
 

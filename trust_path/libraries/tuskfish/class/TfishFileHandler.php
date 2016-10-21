@@ -414,7 +414,7 @@ class TfishFileHandler
 	}
 	
 	/**
-	 * Upload a file to the uploads/image or uploads/media directory and set permissions to 600.
+	 * Upload a file to the uploads/image or uploads/media directory and set permissions to 644.
 	 * 
 	 * @param string $file Filename.
 	 * @param string $fieldname Name of form field associated with this upload (media subdirectory).
@@ -478,7 +478,7 @@ class TfishFileHandler
 		if (!move_uploaded_file($_FILES[$fieldname]["tmp_name"], $upload_path)) {
 			trigger_error(TFISH_ERROR_FILE_UPLOAD_FAILED, E_USER_ERROR);
 		} else {
-			$permissions = chmod($upload_path, 0600);
+			$permissions = chmod($upload_path, 0644);
 			if ($permissions) {
 				return $filename . '.' . $mimetype;
 			}
