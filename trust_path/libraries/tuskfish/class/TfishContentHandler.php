@@ -499,18 +499,18 @@ class TfishContentHandler
 	public static function toggleOnlineStatus($id)
 	{
 		$clean_id = (int)$id;
-		return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
+		return TfishDatabase::toggleBoolean('content', $clean_id, 'online');
 	}
 	
 	/**
 	 * Increment a content object's counter field by one.
 	 * 
+	 * Not yet implemented.
+	 * 
 	 * @param int $id of content object
 	 */
 	public static function updateCounter($id)
 	{
-		$clean_id = (int)$id;
-		return TfishDatabase::updateCounter($clean_id, 'content', 'counter');
 	}
 	
 	/**
@@ -895,8 +895,10 @@ class TfishContentHandler
 						$key_values['format'] = pathinfo($clean_filename, PATHINFO_EXTENSION);
 						$key_values['file_size'] = $_FILES['media']['size'];
 					}
-				} else { // No new media, use the existing file name.
+				} else { // No new media, use the existing file name, format and file_size.
 					$key_values['media'] = $existing_media;
+					$key_values['format'] = pathinfo($existing_media, PATHINFO_EXTENSION);			
+					$key_values['file_size'] = filesize(TFISH_MEDIA_PATH . $existing_media);
 				}
 			} else {
 				$key_values['media'] = '';

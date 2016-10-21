@@ -102,6 +102,11 @@ class TfishContentObject extends TfishAncestralObject
 					return $this->__data[$property]; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
 				break;
 			
+				case "rights":
+					$rights = TfishContentHandler::getRights();
+					return $rights[$this->__data[$property]];
+				break;
+			
 				case "submission_time":
 					$date = date('j F Y', $this->__data[$property]);
 					return htmlspecialchars($date, ENT_QUOTES, 'UTF-8');

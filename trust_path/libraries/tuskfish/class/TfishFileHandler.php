@@ -421,17 +421,16 @@ class TfishFileHandler
 	 * @return string|bool $filename on success or false on failure.
 	 */
 	public static function uploadFile($filename, $fieldname)
-	{		
+	{
 		$filename = TfishFilter::trimString($filename);
-		$clean_filename = pathinfo($filename, PATHINFO_FILENAME);
+		$clean_filename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
 		
 		$fieldname = TfishFilter::trimString($fieldname);
 		$clean_fieldname = TfishFilter::isAlnum($fieldname) ? $fieldname : false ;
 		
 		$mimetype_list = self::getPermittedUploadMimetypes();
-		$mimetype = pathinfo($filename, PATHINFO_EXTENSION);
+		$mimetype = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
 		$clean_mimetype = in_array($mimetype, $mimetype_list) ? $mimetype : false;
-		
 		if ($clean_filename && $clean_fieldname && $clean_mimetype) {
 			return self::_uploadFile($clean_filename, $clean_fieldname, $clean_mimetype);
 		}

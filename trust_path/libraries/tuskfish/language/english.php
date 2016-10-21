@@ -141,17 +141,22 @@ define("TFISH_SEO", "SEO");
 define("TFISH_DELETE_IMAGE", "Delete image");
 define("TFISH_DELETE_MEDIA", "Delete media");
 
+// Related and parent works.
+define("TFISH_PARENT_WORK", "Parent work");
+define("TFISH_RELATED", "Related");
+define("TFISH_RELATED_WORKS", "Related works");
+
 // Base intellectual property licenses.
-define("TFISH_RIGHTS_COPYRIGHT", "Copyright, all rights reserved");
-define("TFISH_RIGHTS_ATTRIBUTION", "Creative Commons Attribution");
-define("TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE", "Creative Commons Attribution-ShareAlike");
+define("TFISH_RIGHTS_COPYRIGHT", "Copyright, all rights reserved.");
+define("TFISH_RIGHTS_ATTRIBUTION", "Creative Commons Attribution.");
+define("TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE", "Creative Commons Attribution-ShareAlike.");
 define("TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS", "Creative Commons Attribution-NoDerivs");
-define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL", "Creative Commons Attribution-NonCommercial");
-define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE", "Creative Commons Attribution-NonCommercial-ShareAlike");
-define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS", "Creative Commons Attribution-NonCommercial-NoDerivs");
-define("TFISH_RIGHTS_GPL2", "GNU General Public License Version 2");
-define("TFISH_RIGHTS_GPL3", "GNU General Public License Version 3");
-define("TFISH_RIGHTS_PUBLIC_DOMAIN", "Public domain");
+define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL", "Creative Commons Attribution-NonCommercial.");
+define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE", "Creative Commons Attribution-NonCommercial-ShareAlike.");
+define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS", "Creative Commons Attribution-NonCommercial-NoDerivs.");
+define("TFISH_RIGHTS_GPL2", "GNU General Public License Version 2.");
+define("TFISH_RIGHTS_GPL3", "GNU General Public License Version 3.");
+define("TFISH_RIGHTS_PUBLIC_DOMAIN", "Public domain.");
 
 // Confirmation messages.
 define("TFISH_SUBMIT", "Submit");
@@ -224,6 +229,9 @@ define("TFISH_ERROR_UPLOAD_ERR_PARTIAL", "Upload failed: File upload incomplete 
 define("TFISH_ERROR_UPLOAD_ERR_NO_FILE", "Upload failed: No file to upload.");
 define("TFISH_ERROR_UPLOAD_ERR_NO_TMP_DIR", "Upload failed: No temporary upload directory.");
 define("TFISH_ERROR_UPLOAD_ERR_CANT_WRITE", "Upload failed: Can't write to disk.");
+
+// Browser compatibility error messages.
+define("TFISH_BROWSER_DOES_NOT_SUPPORT_VIDE", "Your browser does not support the video tag.");
 
 /*
  * Record any new, changed or deleted language constants below by version, to aid translation.

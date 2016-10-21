@@ -16,14 +16,6 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-/**
- * CONVENTIONS:
- * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
- * 2. Specify the name of the template for the index page, eg. 'articles'.
- * 3. (In type-specific pages) the name of this file (without extension) should be the same as the 
- *    value of the object's 'module' field. If you want to change the file name, change the module
- *    value in the object class as well.
- */
 $content_handler = 'TfishContentHandler';
 $index_template = 'articles';
 
@@ -34,93 +26,70 @@ $tfish_template->page_title = TFISH_TYPE_ARTICLES;
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
-
-/**
- * Controller logic.
- */
-
-// View single object description.
-if ($clean_id) {
-	$content = $content_handler::getObject($clean_id);
-	if (is_object($content) && $content->online) {
-		$content_handler->updateCounter($clean_id);
-		// For a content type-specific page specify the file name (without extension) as the
-		// second argument, or use $content->template if it is the same as your file name.
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
-		$tfish_template->content = $content;
-		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
-		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
-		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
-	} else {
-		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
-	}
 	
 // View index page of multiple objects (teasers).
-} else {
-	// Set criteria for selecting content objects.
-	$criteria = new TfishCriteria();
-	if ($clean_start) $criteria->offset = $clean_start;
-	$criteria->limit = $tfish_preference->user_pagination;
-	if ($clean_tag) $criteria->tag = array($clean_tag);
-	$criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
-	$criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
-	$criteria->add(new TfishCriteriaItem('online', 1));
-	
-	// Prepare pagination control.
-	$count = $content_handler::getCount($criteria);
-	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
+$criteria = new TfishCriteria();
+if ($clean_start) $criteria->offset = $clean_start;
+$criteria->limit = $tfish_preference->user_pagination;
+if ($clean_tag) $criteria->tag = array($clean_tag);
+$criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
+$criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
+$criteria->add(new TfishCriteriaItem('online', 1));
 
-	// Retrieve content objects and assign to template.
-	$content_objects = $content_handler::getObjects($criteria);
-	$tfish_template->content_objects = $content_objects;
-	$tfish_template->tfish_main_content = $tfish_template->render($index_template);
-	
-	// Prepare tag select box.
-	$tfish_template->select_action = 'index.php';
-	$tfish_template->select_filters =  TfishTagHandler::getTagSelectBox($clean_tag, false);
-	$tfish_template->select_filters_form = $tfish_template->render('select_filters');
-	
-	/**
-	// Prepare new $criteria for blocks. Let's try dynamic tagging.
-	$criteria = new TfishCriteria();
-	if ($clean_tag) $criteria->tag = array($clean_tag);
-	$criteria->add(new TfishCriteriaItem('online', 1));
-	
-	// Prepare blocks for centre-top-zone.
-	$centre_top_blocks = array();	
-	$block_list = new TfishBlockList('Top left block');
-	$block_list->build($criteria);
-	$centre_top_blocks[] = $block_list->render();
-	
-	$block_list2 = new TfishBlockList('Top centre block');
-	$criteria->ordertype = 'ASC';
-	$block_list2->build($criteria);
-	$centre_top_blocks[] = $block_list2->render();
-	
-	$block_list3 = new TfishBlockList('Top right block');
-	$block_list3->build($criteria);
-	$centre_top_blocks[] = $block_list3->render();	
-	
-	$tfish_template->centre_top_blocks = $centre_top_blocks;
-	
-	// Prepare blocks for centre-bottom-zone.	
-	$centre_bottom_blocks = array();
-	$block_list = new TfishBlockList('Bottom left block');
-	$block_list->build($criteria);
-	$centre_bottom_blocks[] = $block_list->render();
-	
-	$block_list2 = new TfishBlockList('Bottom centre block');
-	$criteria->ordertype = 'ASC';
-	$block_list2->build($criteria);
-	$centre_bottom_blocks[] = $block_list2->render();
-	
-	$block_list3 = new TfishBlockList('Bottom right block');
-	$block_list3->build($criteria);
-	$centre_bottom_blocks[] = $block_list3->render();
-	
-	$tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
-	*/
-}
+// Prepare pagination control.
+$count = $content_handler::getCount($criteria);
+$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
+
+// Retrieve content objects and assign to template.
+$content_objects = $content_handler::getObjects($criteria);
+$tfish_template->content_objects = $content_objects;
+$tfish_template->tfish_main_content = $tfish_template->render($index_template);
+
+// Prepare tag select box.
+$tfish_template->select_action = 'index.php';
+$tfish_template->select_filters =  TfishTagHandler::getTagSelectBox($clean_tag, false);
+$tfish_template->select_filters_form = $tfish_template->render('select_filters');
+
+/**
+// Prepare new $criteria for blocks. Let's try dynamic tagging.
+$criteria = new TfishCriteria();
+if ($clean_tag) $criteria->tag = array($clean_tag);
+$criteria->add(new TfishCriteriaItem('online', 1));
+
+// Prepare blocks for centre-top-zone.
+$centre_top_blocks = array();	
+$block_list = new TfishBlockList('Top left block');
+$block_list->build($criteria);
+$centre_top_blocks[] = $block_list->render();
+
+$block_list2 = new TfishBlockList('Top centre block');
+$criteria->ordertype = 'ASC';
+$block_list2->build($criteria);
+$centre_top_blocks[] = $block_list2->render();
+
+$block_list3 = new TfishBlockList('Top right block');
+$block_list3->build($criteria);
+$centre_top_blocks[] = $block_list3->render();	
+
+$tfish_template->centre_top_blocks = $centre_top_blocks;
+
+// Prepare blocks for centre-bottom-zone.	
+$centre_bottom_blocks = array();
+$block_list = new TfishBlockList('Bottom left block');
+$block_list->build($criteria);
+$centre_bottom_blocks[] = $block_list->render();
+
+$block_list2 = new TfishBlockList('Bottom centre block');
+$criteria->ordertype = 'ASC';
+$block_list2->build($criteria);
+$centre_bottom_blocks[] = $block_list2->render();
+
+$block_list3 = new TfishBlockList('Bottom right block');
+$block_list3->build($criteria);
+$centre_bottom_blocks[] = $block_list3->render();
+
+$tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
+*/
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).

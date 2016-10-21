@@ -5,3 +5,25 @@ body {
   padding: 40px 15px;
   text-align: center;
 }
+
+.figure-centre {
+	margin: 1rem 0;
+}
+
+.figure-left {
+	margin: 0 1rem 0.5rem 0;
+}
+
+.figure-right {
+	margin: 0 0 1rem 0.5rem;
+}
+
+.rights {
+	font-style: italic;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 972px;
+   }
+}
