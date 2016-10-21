@@ -1,0 +1,47 @@
+<!-- Display a single audio soundtrack object -->
+<?php if ($content): ?>
+	<div class="text-left">
+		<?php echo '<h2>' . $content->escape('title') . '</h2>'; ?>
+		<?php if ($content->author || $content->counter || $tags): ?>
+			<p><em>
+				<?php
+					if ($content->creator) echo $content->escape('creator') . ' | ';
+                    if ($content->submission_time) echo $content->escape('submission_time') . ' | ';
+					if ($content->counter) echo $content->escape('counter') . ' ' . TFISH_VIEWS . ' | ';
+					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
+			</em></p>
+		<?php endif; ?>
+    </div>
+        <?php if ($content->media): ?>
+        <div>
+            <audio controls>
+                <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo 'audio/mp3'; ?>">
+                <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO; ?>
+          </audio>
+        </div>
+		<?php endif; ?>
+    <div class="text-left">
+		<?php if ($content->description) echo $content->escape('description'); ?>
+        <?php if ($content->rights) echo '<p class="rights">' . $content->escape('rights') . '</p>'; ?>
+	</div>
+    
+    <!-- Display parent work -->
+    <?php if (!empty($parent)): ?>
+        <div class="text-left">
+            <h3><?php echo TFISH_RELATED; ?></h3>
+            <h4><a href="<?php echo $parent->getURL(true); ?>"><?php echo $parent->escape('title'); ?></a></h4>
+            <?php if ($parent->image): ?>
+                <div class="pull-left">
+                    <figure class="figure-left">
+                    <a href="<?php echo $parent->getURL(true); ?>">
+                    <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
+                         <?php if ($parent->caption): ?>title="<?php echo $parent->escape('caption'); ?>" 
+                         alt="<?php echo $parent->escape('caption'); ?>"<?php endif; ?> />
+                    </a>
+                    </figure>
+                </div>
+            <?php endif; ?>
+            <?php echo $parent->escape('teaser'); ?>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

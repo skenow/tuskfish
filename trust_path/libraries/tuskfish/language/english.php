@@ -93,7 +93,7 @@ define("TFISH_TYPE_VIDEO", "Video");
 
 // Plural terms
 define("TFISH_TYPE_ARTICLES", "Articles");
-define("TFISH_TYPE_AUDIO _FILES", "Audio files");
+define("TFISH_TYPE_AUDIO_FILES", "Audio files");
 define("TFISH_TYPE_COLLECTIONS", "Collections");
 define("TFISH_TYPE_DOWNLOADS", "Downloads");
 define("TFISH_TYPE_EVENTS", "Events");
@@ -232,6 +232,7 @@ define("TFISH_ERROR_UPLOAD_ERR_CANT_WRITE", "Upload failed: Can't write to disk.
 
 // Browser compatibility error messages.
 define("TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO", "Your browser does not support the video tag.");
+define("TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO", "Your browser does not support the audio tag.");
 
 /*
  * Record any new, changed or deleted language constants below by version, to aid translation.
