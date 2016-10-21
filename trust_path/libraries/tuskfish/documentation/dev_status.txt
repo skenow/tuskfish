@@ -12,6 +12,7 @@ MINIMUM FUNCTIONALITY
 * Review location / path to media/images folder. Have to put video/audio files in web root if
   want to use HTML5 native players; but images could still live in the trust path, and they are
   probably more important.
+* Changed CHMOD of uploaded files to 0644; can something more restrictive be used?
 
 = 1 days.
 
