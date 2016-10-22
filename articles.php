@@ -43,8 +43,17 @@ if ($clean_id) {
 	if (is_object($content) && $content->online) {
 		$content->counter += 1;
 		$content_handler::updateCounter($clean_id);
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
 		$tfish_template->content = $content;
+		$contentInfo = array();
+		if ($content->creator) $contentInfo[] = $content->escape('creator');
+		if ($content->submission_time) $contentInfo[] = $content->escape('submission_time');
+		if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+		if ($content->tags) {
+			$tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
+			$tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+			$contentInfo[] = $tags;
+		}
+		$tfish_template->contentInfo = implode(' | ', $contentInfo);
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
 		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
 		
