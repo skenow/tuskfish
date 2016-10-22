@@ -46,7 +46,7 @@ if ($clean_id) {
 		$tfish_template->content = $content;
 		$contentInfo = array();
 		if ($content->creator) $contentInfo[] = $content->escape('creator');
-		if ($content->submission_time) $contentInfo[] = $content->escape('submission_time');
+		if ($content->date) $contentInfo[] = $content->escape('date');
 		if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
 		if ($content->tags) {
 			$tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template

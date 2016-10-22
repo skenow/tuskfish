@@ -96,6 +96,11 @@ class TfishContentObject extends TfishAncestralObject
 	public function escape($property) {
 		if (isset($this->__data[$property])) {
 			switch($property) {
+				case "date": // Stored in format yyyy-mm-dd
+					$date = new DateTime($this->__data[$property]);
+					return $date->format('j F Y');
+				break;
+				
 				case "description":
 				case "teaser":
 					//return (string)TfishFilter::filterHtml($this->__data[$property]); // Output filtering
@@ -356,6 +361,10 @@ class TfishContentObject extends TfishAncestralObject
 				$this->__set($key, $dirty_input[$key]);
 			}
 			unset($key, $type);
+		}
+		
+		if (array_key_exists('date', $property_whitelist) && empty($dirty_input['date'])) {
+			$this->__set('date', date(DATE_RSS, time()));
 		}
 		
 		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
