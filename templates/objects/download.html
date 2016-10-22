@@ -21,7 +21,7 @@
         <figure>
             <?php if ($content->media): ?>
                 <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
+                <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
                 <?php if ($content->caption): ?>
                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
                 <?php else: ?>
@@ -32,7 +32,7 @@
                     <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
                 <?php endif; ?>
             <?php else: ?>
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
+                <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
                 <?php if ($content->caption): ?>
                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
                     <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
