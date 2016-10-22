@@ -549,6 +549,17 @@ class TfishContentObject extends TfishAncestralObject
 				break;
 			
 				case "string":
+					if ($property == "date") { // Ensure format complies with DATE_RSS
+						$check_date = date_parse_from_format('Y-m-d', $value);
+						if ($check_date == false || $check_date['warning_count'] > 0 || $check_date['error_count'] > 0) {
+							// Bad date supplied, default to today.
+							$this->__data[$property] = date(DATE_RSS, time());
+							trigger_error(TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY, E_USER_WARNING);
+													
+						} else {
+							$this->__data[$property] = $value;
+						}
+					}
 					if ($property == "language") {
 						$language_whitelist = TfishContentHandler::getLanguages();
 						if (!array_key_exists($value, $language_whitelist)) {

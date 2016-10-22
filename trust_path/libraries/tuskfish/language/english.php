@@ -221,6 +221,7 @@ define("TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST", "Template file does not exist.");
 define("TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE", "Cannot overwrite template variable.");
 define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter error.");
 define("TFISH_ERROR_NO_SUCH_CONTENT", "Sorry, this content is not available.");
+define("TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY", "Bad date supplied, defaulting to today.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini size.");
