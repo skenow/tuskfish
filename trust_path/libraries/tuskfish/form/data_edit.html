@@ -219,9 +219,15 @@
 		</div>
 	</div>
     
-    <!-- Counter -->
+    <!-- Automatically calculated (hidden) values: Counter, format, file size -->
     <?php if ($content->counter): ?>
-    <input type="hidden" id="counter" name="counter" value="<?php echo $content->counter; ?>" />
+        <input type="hidden" id="counter" name="counter" value="<?php echo $content->counter; ?>" />
+    <?php endif; ?>
+    <?php if ($content->format): ?>
+        <input type="hidden" id="format" name="format" value="<?php echo $content->format; ?>" />
+    <?php endif; ?>
+    <?php if ($content->file_size): ?>
+        <input type="hidden" id="file_size" name="file_size" value="<?php echo $content->file_size; ?>" />
     <?php endif; ?>
 	
 	<div class="col-xs-12"><hr></div>

@@ -3,7 +3,7 @@
 
     <!-- Title and meta information -->
 	<div class="text-left">
-		<?php echo '<h2>' . $content->escape('title') . '</h2>'; ?>
+        <h2><?php echo $content->escape('title'); ?></h2>
 		<?php if ($contentInfo): ?>
             <p><em><?php echo $contentInfo; ?></em></p>
         <?php endif; ?>
@@ -18,7 +18,7 @@
                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
                     <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
                 <?php else: ?>
-                    <?php echo '/>'; ?>
+                    alt="" />
                 <?php endif; ?>
         </figure>
     </div>

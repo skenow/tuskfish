@@ -18,21 +18,41 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// CONFIGURATION: Enter the object ID and page title you want to display on this static page.
-$id = 23;
+// CONFIGURATION: Enter the object ID, name of the file you want tags to link to and page title you want to display on this static page.
+$id = 10;
+$target_file_name = 'index'; // Do not include file extension.
 $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
 
 // View single object description.
 $clean_id = (int)$id;
 if ($clean_id) {
-	$content = TfishContentHandler::getObject($clean_id);
+	$content = TfishStaticHandler::getObject($clean_id);
 	if (is_object($content) && $content->online) {
 		$content->counter += 1;
-		$content_handler::updateCounter($clean_id);
-		$tfish_template->tags = TfishContentHandler::makeTagLinks($content->tags, false);
+		TfishStaticHandler::updateCounter($clean_id);
 		$tfish_template->content = $content;
+		$contentInfo = array();
+		if ($content->creator) $contentInfo[] = $content->escape('creator');
+		if ($content->date) $contentInfo[] = $content->escape('date');
+		if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+		if ($content->tags) {
+			$tags = TfishStaticHandler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
+			$tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+			$contentInfo[] = $tags;
+		}
+		$tfish_template->contentInfo = implode(' | ', $contentInfo);
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
 		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
+		
+		// Check if has a parental object; if so display a thumbnail and teaser / link.
+		if (!empty($content->parent)) {
+			$parent = TfishStaticHandler::getObject($content->parent);
+			if (is_object($parent) && $parent->online) {
+				$tfish_template->parent = $parent;
+			}
+		}
+		
+		// Render template.
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
 		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;

@@ -1,45 +1,25 @@
-<!-- Display a single article object -->
+<!-- Display a single static page object -->
 <?php if ($content): ?>
 
     <!-- Title and meta information -->
 	<div class="text-left">
-        <h2>
-        <?php if ($content->media): ?>
-        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->escape('title'); ?></a>
-        <?php else: ?>
-        <?php echo $content->escape('title'); ?>
+        <h2><?php echo $content->escape('title'); ?></h2>
+		<?php if ($contentInfo): ?>
+            <p><em><?php echo $contentInfo; ?></em></p>
         <?php endif; ?>
-        </h2>
-    <?php if ($contentInfo): ?>
-        <p><em><?php echo $contentInfo; ?></em></p>
-    <?php endif; ?>
     </div>
     
-    <!-- Image with link to download media attachment -->
+    <!-- Image -->
     <?php if ($content->image): ?>
-    <div class="pull-right figure-right">
-        <figure>
-            <?php if ($content->media): ?>
-                <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
-                <?php if ($content->caption): ?>
-                    title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-                <?php else: ?>
-                    alt="" />
-                <?php endif; ?>
-                </a>
-                <?php if ($content->caption): ?>
-                    <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
-                <?php endif; ?>
-            <?php else: ?>
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
+    <div>
+        <figure class="figure-centre">
+            <img class="img-responsive center-block" src="<?php echo $content->getCachedImage(972); ?>" 
                 <?php if ($content->caption): ?>
                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
                     <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
                 <?php else: ?>
                     alt="" />
                 <?php endif; ?>
-            <?php endif; ?>                
         </figure>
     </div>
     <?php endif; ?>

@@ -100,6 +100,27 @@ class TfishContentObject extends TfishAncestralObject
 					$date = new DateTime($this->__data[$property]);
 					return $date->format('j F Y');
 				break;
+			
+				case "file_size": // Convert to human readable.
+					$bytes = $this->__data[$property];
+					$unit = $val = '';
+					if ($bytes == 0 || $bytes < 1024) {
+						$unit = ' bytes';
+						$val = $bytes;
+					} elseif ($bytes > 1023 && $bytes < 1048576) {
+						$unit = ' KB';
+						$val = ($bytes / 1024);
+					} elseif ($bytes > 1048575 && $bytes < 1073741824) {
+						$unit = ' MB';
+						$val = ($bytes / 1048576);
+					} else {
+						$unit = ' GB';
+						$val = ($bytes / 1073741824);
+					}
+					$val = round($val, 2);
+					return $val . ' ' . $unit;
+					
+				break;
 				
 				case "description":
 				case "teaser":
