@@ -218,6 +218,11 @@
 			</label>
 		</div>
 	</div>
+    
+    <!-- Counter -->
+    <?php if ($content->counter): ?>
+    <input type="hidden" id="counter" name="counter" value="<?php echo $content->counter; ?>" />
+    <?php endif; ?>
 	
 	<div class="col-xs-12"><hr></div>
 	<div class="col-xs-12"><h2><?php echo TFISH_META_TAGS; ?><h2></div>
