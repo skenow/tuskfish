@@ -103,40 +103,25 @@
 		<!-- Creator -->
         <div id="creatorContainer">
 		<label for="creator" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->escape('creator') . '"'; ?>></div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->escape('creator') . '"'; ?>></div>
         </div>
         
 		<!-- Publisher -->
         <div id="publisherContainer">
         <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . $content->escape('publisher') . '"'; ?>></div>
-        </div>
-        
-		<!-- Parent -->
-        <div id="parentContainer">
-		<label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><?php echo $parent_select_box; ?></div>
-        </div>
-        
-		<!-- Language -->
-        <div id="languageContainer">
-		<label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="language" id="language" required>
-				<?php
-					foreach ($languages as $key => $value) {
-						if (isset($content->language) && $content->language == $key) {
-							echo '<option value="' . $key . '" selected>' . $value . '</option>';
-						} else {
-							echo '<option value="' . $key . '">' . $value . '</option>';
-						}
-					}
-				?>
-			</select>
-		</div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . $content->escape('publisher') . '"'; ?>></div>
         </div>
 		
 	</div>
+    
+    <!-- Parent -->
+    <div class="form-group">
+        
+        <div id="parentContainer">
+		<label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
+		<div class="col-lg-11 col-md-10 col-sm-9 col-xs-9"><?php echo $parent_select_box; ?></div>
+        </div>
+    </div>
     
 	<div id="imageContainer">
 	<div class="form-group">
@@ -207,9 +192,27 @@
     
 	<div class="form-group">
 		
+        <!-- Language -->
+        <div id="languageContainer">
+		<label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+			<select class="form-control" name="language" id="language" required>
+				<?php
+					foreach ($languages as $key => $value) {
+						if (isset($content->language) && $content->language == $key) {
+							echo '<option value="' . $key . '" selected>' . $value . '</option>';
+						} else {
+							echo '<option value="' . $key . '">' . $value . '</option>';
+						}
+					}
+				?>
+			</select>
+		</div>
+        </div>
+        
 		<!-- Online -->
 		<label for="online" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
 			<label for="online" class="radio-inline">
 				<input type="radio" name="online" value="1" checked id="online" <?php if ($content->online == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_ONLINE; ?>
 			</label>

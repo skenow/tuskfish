@@ -82,41 +82,26 @@
 		<!-- Creator -->
         <div id="creatorContainer">
 		<label for="creator" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator"></div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator"></div>
         </div>
         
 		<!-- Publisher -->
 		<div id="publisherContainer">
         <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher"></div>
-        </div>
-        
-		<!-- Parent -->
-        <div id="parentContainer">
-		<label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
-        <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><?php echo $parent_select_box; ?></div>
-        </div>
-        
-		<!-- Language -->
-        <div id="languageContainer">
-		<label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-			<select class="form-control" name="language" id="language" required>
-				<?php
-					global $tfish_preference;
-					foreach ($languages as $key => $value) {
-						if ($tfish_preference->default_language == $key) {
-							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
-						} else {
-							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
-						}
-					}
-				?>
-			</select>
-		</div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher"></div>
         </div>
 		
 	</div>
+    
+    <div class="form-group">
+        
+        <!-- Parent -->
+        <div id="parentContainer">
+		<label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
+        <div class="col-lg-11 col-md-10 col-sm-9 col-xs-9"><?php echo $parent_select_box; ?></div>
+        </div>
+        
+    </div>
     
     <div id="imageContainer">
     <div class="form-group">
@@ -153,10 +138,29 @@
     </div>
 	
 	<div class="form-group">
-		
-		<!-- Online -->
+        
+        <!-- Language -->
+        <div id="languageContainer">
+		<label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+			<select class="form-control" name="language" id="language" required>
+				<?php
+					global $tfish_preference;
+					foreach ($languages as $key => $value) {
+						if ($tfish_preference->default_language == $key) {
+							echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
+						} else {
+							echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
+						}
+					}
+				?>
+			</select>
+		</div>
+        </div>
+        
+        <!-- Online -->
 		<label for="online" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
 			<label for="online" class="radio-inline">
 				<input type="radio" name="online" value="1" checked id="online"><?php echo TFISH_ONLINE; ?>
 			</label>

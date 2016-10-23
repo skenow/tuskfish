@@ -41,7 +41,7 @@ class TfishCollectionHandler extends TfishContentHandler
 			$criteria->order = 'date';
 			$criteria->ordertype = 'DESC';
 			
-			$first_children = self::getList($criteria);			
+			$first_children = self::getObjects($criteria);			
 		}
 			
 		return $first_children;
@@ -60,7 +60,7 @@ class TfishCollectionHandler extends TfishContentHandler
 		$criteria->ordertype = 'ASC';
 		$options = $options + self::getList($criteria);
 		
-		$select_box = '<select id="parent" name="parent">';
+		$select_box = '<select id="parent" name="parent" class="form-control">';
 		if (!empty($options)) {
 			foreach ($options as $key => $value) {
 				if ($key == $clean_selected) {
