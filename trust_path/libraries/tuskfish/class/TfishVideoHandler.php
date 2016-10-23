@@ -21,10 +21,17 @@ class TfishVideoHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Retrieves an array of TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
+	 * Get TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
 	 * 
-	 * @param TfishCriteria $criteria for filtering the database select query
-	 * @return array of video objects
+	 * Note that the article type is automatically set, so when calling
+	 * TfishVideoHandler::getObjects($criteria) it is unecessary to set the object type.
+	 * However, if you want to use TfishContentHandler::getObjects($criteria) then you do need to
+	 * specify the object type, otherwise you will get all types of content returned. it is
+	 * acceptable to use either handler, although probably good practice to use the object-
+	 * specific one when you know you want a specific kind of object.
+	 * 
+	 * @param TfishCriteria $criteria query composer object
+	 * @return array $objects TfishVideo objects
 	 */
 	public static function getObjects($criteria = false)
 	{
@@ -46,7 +53,7 @@ class TfishVideoHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Counts TfishVideo objects optionally matching conditions specified with a TfishCriteria object.
+	 * Count TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
 	 * 
 	 * @param TfishCriteria $criteria
 	 * @return int $count
