@@ -1,7 +1,37 @@
 body {
   padding-top: 50px;
 }
+
+video {
+    max-width: 100%;
+    height: auto;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;
+}
+
+.figure-centre {
+	margin: 1rem 0;
+}
+
+.figure-left {
+	margin: 0 2rem 0.5rem 0;
+}
+
+.figure-right {
+	margin: 0 0 0.5rem 2rem;
+}
+
+.rights {
+	font-style: italic;
+}
+
+.audio-player {
+	margin: 2rem 0;
+}
+
+.video-player {
+	margin: 2rem 0;
 }

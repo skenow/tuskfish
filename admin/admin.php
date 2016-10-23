@@ -24,7 +24,7 @@ $clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
-if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
+if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', false))) {
 
 	switch ($op) {
 		
@@ -233,18 +233,6 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$tfish_template->back_url = 'admin.php';
 			$tfish_template->form = TFISH_FORM_PATH . "response.html";
 			$tfish_template->tfish_main_content = $tfish_template->render('form');			
-		break;
-	
-		// View: Display a content object.
-		case "view":
-			$content = TfishContentHandler::getObject($clean_id);
-			if (is_object($content)) {
-				$tfish_template->tags = TfishContentHandler::makeTagLinks($content->tags, false);
-				$tfish_template->content = $content;
-				$tfish_template->tfish_main_content = $tfish_template->render($content->template);
-			} else {
-				$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
-			}
 		break;
 		
 		// Default: Display a table of existing content objects and pagination controls.

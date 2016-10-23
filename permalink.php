@@ -40,13 +40,41 @@ if ($clean_id) {
 		// Update view counter and assign object to template.
 		$content->counter += 1;
 		$content_handler::updateCounter($clean_id);
+		$tfish_template->content = $content;
 		
 		// Prepare meta information for display.
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
-		$tfish_template->content = $content;
+		$contentInfo = array();
+		if ($content->creator) $contentInfo[] = $content->escape('creator');
+		if ($content->date) $contentInfo[] = $content->escape('date');
+		if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+		if ($content->format) $contentInfo[] = '.' . $content->escape('format');
+		if ($content->file_size) $contentInfo[] = $content->escape('file_size');
+		if ($content->tags) {
+			$tags = $content_handler::makeTagLinks($content->tags, $content->module); // For a content type-specific page use $content->tags, $content->template
+			$tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+			$contentInfo[] = $tags;
+		}
+		$tfish_template->contentInfo = implode(' | ', $contentInfo);
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
 		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
+		
+		// Check if has a parental object; if so display a thumbnail and teaser / link.
+		if (!empty($content->parent)) {
+			$parent = $content_handler::getObject($content->parent);
+			if (is_object($parent) && $parent->online) {
+				$tfish_template->parent = $parent;
+			}
+		}
+		
+		// Check if has child objects; if so display thumbnails and teasers / links.
+		$first_children = TfishCollectionHandler::getFirstChild($clean_id);
+		if (!empty($first_children)) {
+			$tfish_template->first_children = $first_children;
+		}
+		
+		// Render template.
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
+		
 	} else {
 		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
 	}
