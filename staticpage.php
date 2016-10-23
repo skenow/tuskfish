@@ -59,7 +59,7 @@ if ($clean_id) {
 		// Render template.
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
-		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+		$tfish_template->tfish_main_content = TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE;
 	}
 }
 

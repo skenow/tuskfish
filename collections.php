@@ -71,6 +71,12 @@ if ($clean_id) {
 			}
 		}
 		
+		// Check if has child objects; if so display thumbnails and teasers / links.
+		$first_children = TfishCollectionHandler::getFirstChild($clean_id);
+		if (!empty($first_children)) {
+			$tfish_template->first_children = $first_children;
+		}
+		
 		// Render template.
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {

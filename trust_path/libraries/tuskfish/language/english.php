@@ -145,6 +145,7 @@ define("TFISH_DELETE_MEDIA", "Delete media");
 define("TFISH_PARENT_WORK", "Parent work");
 define("TFISH_RELATED", "Related");
 define("TFISH_RELATED_WORKS", "Related works");
+define("TFISH_IN_THIS_COLLECTION", "In this collection");
 
 // Base intellectual property licenses.
 define("TFISH_RIGHTS_COPYRIGHT", "Copyright, all rights reserved.");
@@ -222,6 +223,7 @@ define("TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE", "Cannot overwrite template va
 define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter error.");
 define("TFISH_ERROR_NO_SUCH_CONTENT", "Sorry, this content is not available.");
 define("TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY", "Bad date supplied, defaulting to today.");
+define("TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE", "Please configure this page to point to a static content object.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini size.");

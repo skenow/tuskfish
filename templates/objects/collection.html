@@ -82,4 +82,27 @@
             <?php echo $parent->escape('teaser'); ?>
         </div>
     <?php endif; ?>
+    
+    <!-- Display child works -->
+    <?php if (!empty($first_children)): ?>
+        <div class="text-left">
+            <h3>In this collection</h3>
+            <?php foreach ($first_children as $child): ?>
+                <h4><a href="<?php echo $child->getURL(true); ?>"><?php echo $child->escape('title'); ?></a></h4>
+                <?php if ($child->image): ?>
+                    <div class="pull-left">
+                        <figure class="figure-left">
+                        <a href="<?php echo $child->getURL(true); ?>">
+                        <img class="img-responsive" src="<?php echo $child->getCachedImage(100); ?>" 
+                             <?php if ($child->caption): ?>title="<?php echo $child->escape('caption'); ?>" 
+                             alt="<?php echo $child->escape('caption'); ?>"<?php endif; ?> />
+                        </a>
+                        </figure>
+                    </div>
+                <?php endif; ?>
+                <?php echo $child->escape('teaser'); ?>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+    
 <?php endif; ?>

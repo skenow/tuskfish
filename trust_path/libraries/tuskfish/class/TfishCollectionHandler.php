@@ -19,4 +19,31 @@ class TfishCollectionHandler extends TfishContentHandler
 		// Must call parent constructor first.
 		parent::__construct();
 	}
+	
+	/**
+	 * Returns an array of first children of a designed collection object.
+	 * 
+	 * This function is typically used to generate a list of the children of a collection object.
+	 * 
+	 * @param int $id
+	 * @return array content objects
+	 */
+	public static function getFirstChild($id)
+	{
+		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
+		$first_children = array();
+		
+		if ($clean_id) {
+			
+			$criteria = new TfishCriteria();
+			$criteria->add(new TfishCriteriaItem('parent', $clean_id));
+			$criteria->add(new TfishCriteriaItem('online', true));
+			$criteria->order = 'date';
+			$criteria->ordertype = 'DESC';
+			
+			$first_children = TfishContentHandler::getObjects($criteria);			
+		}
+			
+		return $first_children;
+	}
 }
