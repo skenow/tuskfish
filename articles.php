@@ -12,8 +12,6 @@
 * @package		core
 */
 
-if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
