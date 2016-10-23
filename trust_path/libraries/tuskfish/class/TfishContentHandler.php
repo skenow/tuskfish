@@ -159,6 +159,41 @@ class TfishContentHandler
 		return false;
 	}
 	
+	/**
+	 * Returns a list of content object titles with ID as key.
+	 * 
+	 * @param TfishCriteria $criteria
+	 * @return array as id => title of content objects
+	 */
+	public static function getList($criteria = false)
+	{
+		$content_list = array();
+		$columns = array('id', 'title');
+		
+		// Set default sorting order by submission time descending.
+		if (!$criteria) {
+			$criteria = new TfishCriteria;
+		}
+		if (!$criteria->order) {
+			$criteria->order = 'submission_time';
+		}
+		
+		$statement = TfishDatabase::select('content', $criteria, $columns);
+		if ($statement) {
+			try {
+				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+					$content_list[$row['id']] = $row['title'];
+				}
+			} catch (PDOException $e) {
+				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			}
+			unset($statement);
+		} else {
+			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+		}
+		
+		return $content_list;		
+	}
 	
 	/**
 	 * Get content objects, optionally matching conditions specified with a TfishCriteria object.
@@ -292,6 +327,22 @@ class TfishContentHandler
 			'9' => TFISH_RIGHTS_GPL3,
 			'10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
 		);
+	}
+	
+	/**
+	 * Returns a list of collection objects for the data entry/edit forms.
+	 * 
+	 * @todo move this function over to use TfishAngryTree for more robust tree handling
+	 * @return array of collection objects
+	 */
+	public static function getParents()
+	{
+		$parents = array();
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
+		$parents = TfishContentHandler::getList($criteria);
+		
+		return $parents;
 	}
 	
 	/**

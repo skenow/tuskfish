@@ -32,6 +32,7 @@ define("TFISH_EDIT_CONTENT", "Edit content");
 define("TFISH_SELECT_STATUS", "- Select status -");
 define("TFISH_SELECT_TAGS", "- Select tag -");
 define("TFISH_SELECT_TYPE", "- Select type -");
+define("TFISH_SELECT_PARENT", "- Select parent -");
 define("TFISH_META_TAGS", "Meta tags");
 define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");

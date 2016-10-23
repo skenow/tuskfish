@@ -41,9 +41,37 @@ class TfishCollectionHandler extends TfishContentHandler
 			$criteria->order = 'date';
 			$criteria->ordertype = 'DESC';
 			
-			$first_children = TfishContentHandler::getObjects($criteria);			
+			$first_children = self::getList($criteria);			
 		}
 			
 		return $first_children;
+	}
+	
+	public static function getParentSelectBox($selected = 0)
+	{
+		$selected = (int)$selected;
+		$clean_selected = TfishFilter::isInt($selected, 1) ? $selected : 0;
+		$options = array(0 => TFISH_SELECT_PARENT);
+		$select_box = '';
+		
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
+		$criteria->order = 'title';
+		$criteria->ordertype = 'ASC';
+		$options = $options + self::getList($criteria);
+		
+		$select_box = '<select id="parent" name="parent">';
+		if (!empty($options)) {
+			foreach ($options as $key => $value) {
+				if ($key == $clean_selected) {
+					$select_box .= '<option value="' . $key . '" selected>' . $value . '</option>';
+				} else {
+					$select_box .= '<option value="' . $key . '">' . $value . '</option>';
+				}
+			}
+		}
+		$select_box .= '</select>';
+		
+		return $select_box;
 	}
 }

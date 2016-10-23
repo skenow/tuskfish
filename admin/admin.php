@@ -36,6 +36,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$tfish_template->rights = TfishContentHandler::getRights();
 			$tfish_template->languages = TfishContentHandler::getLanguages();
 			$tfish_template->tags = TfishContentHandler::getTagList();
+			$tfish_template->parent_select_box = TfishCollectionHandler::getParentSelectBox();
 			$content = new TfishContentObject();
 			$tfish_template->allowed_properties = $content->getPropertyWhitelist();
 			$tfish_template->zeroed_properties = array(
@@ -109,7 +110,6 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 						header("Location: admin.php");
 					}
 					$row = $statement->fetch(PDO::FETCH_ASSOC);
-					
 					// Assign to template.
 					$tfish_template->page_title = TFISH_EDIT_CONTENT;
 					$tfish_template->op = 'update'; // Critical to launch correct submission action.
@@ -119,6 +119,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 					$tfish_template->rights = TfishContentHandler::getRights();
 					$tfish_template->languages = TfishContentHandler::getLanguages();
 					$tfish_template->tags = TfishContentHandler::getTagList();
+					$tfish_template->parent_select_box = TfishCollectionHandler::getParentSelectBox($row['parent']);
 					$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
 					$tfish_template->tfish_main_content = $tfish_template->render('form');
 				} else {

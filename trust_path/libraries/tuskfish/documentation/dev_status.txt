@@ -4,18 +4,16 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Improve templates for audio and video objects.
 * Index page templates.
-* Collection template needs to show *first level* children as well as any parent object.
 * Collection objects - need to pull in some recursive category handling code:
   - Build a category tree select box (for data entry/edit form, to replace 'parent' text box).
     The parent select box also needs to restrict selections to collectoin objects.
   - Find first child.
+
 * Minor validation bug in the selection boxes (online?). 20 mins.
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
   warning page.
-* Front end object templates. 1 day.
 * Review location / path to media/images folder. Have to put video/audio files in web root if
   want to use HTML5 native players; but images could still live in the trust path, and they are
   probably more important.
