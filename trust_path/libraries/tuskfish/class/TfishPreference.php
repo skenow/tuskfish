@@ -12,6 +12,9 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
+
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
 class TfishPreference extends TfishAncestralObject
 {
 	function __construct()

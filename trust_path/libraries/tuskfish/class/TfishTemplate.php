@@ -13,6 +13,8 @@
 * @package		core
 */
 
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
 class TfishTemplate
 {	
 	protected $__data = array();

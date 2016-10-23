@@ -10,6 +10,8 @@
  * @version		SVN: $Id: Utils.php 11448 2011-11-21 16:37:13Z fiammy $
  */
 
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
 class TfishUtils
 {
 	/**
