@@ -540,11 +540,23 @@ class TfishContentObject extends TfishAncestralObject
 						case "counter":
 						case "file_size":
 						case "id":
-						case "parent":
 							if (TfishFilter::isInt($value, 0)) {
 								$this->__data[$property] = (int)$value;
 							} else {
 								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}
+							
+						break;
+						
+						// Parent ID must be different to content ID (cannot declare self as parent).
+						case "parent":
+							if (!TfishFilter::isInt($value, 0)) {
+								trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+							}							
+							if ($value == $this->__data['id'] && $value > 0) {
+								trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
+							} else {
+								$this->__data[$property] = (int)$value;
 							}
 						break;
 					

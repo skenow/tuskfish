@@ -122,7 +122,9 @@
 		<div class="col-lg-11 col-md-10 col-sm-9 col-xs-9">
         <select class="form-control" name="parent" id="parent" required>
         <?php foreach ($parent_select_options as $key => $option): ?>
-        <?php if ($key == $content->parent): ?>
+        <?php if ($key == $content->id): ?>
+            <option value="<?php echo $key; ?>" disabled><?php echo $option; ?></option>
+        <?php elseif ($key == $content->parent): ?>
             <option value="<?php echo $key; ?>" selected><?php echo $option; ?></option>
         <?php else: ?>
             <option value="<?php echo $key; ?>"><?php echo $option; ?></option>

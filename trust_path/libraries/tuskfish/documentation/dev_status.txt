@@ -4,10 +4,6 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Collection objects - need to pull in some recursive category handling code:
-  - Build a category tree select box (for data entry/edit form, to replace 'parent' text box).
-    The parent select box also needs to restrict selections to collectoin objects.
-  - Find first child.
 * Add icon to indicate object type in index / single view.
 * Make captions wrap if they are wider than the parent figure.
 * Minor validation bug in the selection boxes (online?). 20 mins.
