@@ -33,6 +33,7 @@ define("TFISH_SELECT_STATUS", "- Select status -");
 define("TFISH_SELECT_TAGS", "- Select tag -");
 define("TFISH_SELECT_TYPE", "- Select type -");
 define("TFISH_SELECT_PARENT", "- Select parent -");
+define("TFISH_SELECT_BOX_ZERO_OPTION", "---");
 define("TFISH_META_TAGS", "Meta tags");
 define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");
@@ -225,6 +226,7 @@ define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter e
 define("TFISH_ERROR_NO_SUCH_CONTENT", "Sorry, this content is not available.");
 define("TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY", "Bad date supplied, defaulting to today.");
 define("TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE", "Please configure this page to point to a static content object.");
+define("TFISH_ERROR_ROOT_PATH_NOT_DEFINED", "TFISH_ROOT_PATH not defined.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini size.");

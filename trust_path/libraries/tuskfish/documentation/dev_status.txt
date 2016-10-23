@@ -4,13 +4,16 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Index page templates.
 * Collection objects - need to pull in some recursive category handling code:
   - Build a category tree select box (for data entry/edit form, to replace 'parent' text box).
     The parent select box also needs to restrict selections to collectoin objects.
   - Find first child.
-
+* Add icon to indicate object type in index / single view.
+* Make captions wrap if they are wider than the parent figure.
 * Minor validation bug in the selection boxes (online?). 20 mins.
+* Add an RSS feed to collection objects, to allow creation of podcasts.
+* Add this check to all clases: if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
   warning page.
@@ -32,9 +35,6 @@ RELEASE FUNCTIONALITY
 
 WHERE I LEFT OFF
 ================
-* Data edit form: How to handle editing of file uploads?
-* Add site-wide quality preference for jpeg and png images.
-* Implement site closed preference.
 * Detail the data entry form
   - Consider using this Bootstrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
   - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
@@ -50,17 +50,11 @@ OPTIMISATION / CONSOLIDATION
 POLISH
 ======
 The following things need to be added to make it attractive to the great unwashed public:
-* Shiny AJAXified file uploader.
+* Shiny AJAXified file uploader (have, but add rotational controls as it doesn't like portrait layout).
 * Data entry/edit forms improve spacing of elements, especially on folding the layout.
 * Teaser block.
 * Spotlight block.
 * Image block.
-* "Module" pages
-  - News archive
-  - Podcasts
-  - Events
-  - Galleries
-  - Soundtracks / videos (HTML5 player)
 
 THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 ==============================================

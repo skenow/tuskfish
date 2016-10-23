@@ -1,37 +1,40 @@
 <?php
 /**
-* IcmsPersistableTree
-*
-* @copyright	http://smartfactory.ca The SmartFactory
-* @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
-* @author		Kazumi Ono 	<onokazu@xoops.org>
-* @author		marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
-* @author		Madfish <simon@isengard.biz>
-*/
+ * Represents hierarchical relationships between collections and member content objects.
+ * 
+ * Essentially this is a category tree, although collections (category analogues) are fully-fledged
+ * content objects in their own right. Pass in an array of collection objects; you can choose to
+ * pass in all collection objects or you can pass in a branch, in which case the tree will just
+ * consist of descendants of the root node.
+ * 
+ * As for the name, don't ask.
+ *
+ * @copyright	http://smartfactory.ca The SmartFactory
+ * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
+ * @author		Kazumi Ono 	<onokazu@xoops.org>
+ * @author		marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
+ * @author		Madfish <simon@isengard.biz>
+ */
 
-if (!defined("ICMS_ROOT_PATH")) die("ICMS root path not defined");
+if (!defined("TFISH_ROOT_PATH")) die("ICMS root path not defined");
 
 class TfishAngryTree {
 
-	/**#@+
-	 * @access	private
-	 */
 	private $_parentId;
 	public $_myId;
 	private $_rootId = null;
 	public $_tree = array();
 	public $_objects;
-    /**#@-*/
 
 	/**
 	 * Constructor
 	 *
-	 * @param   array   $objectArr  Array of {@link XoopsObject}s
-	 * @param   string     $myId       field name of object ID
-	 * @param   string     $parentId   field name of parent object ID
-	 * @param   string     $rootId     field name of root object ID
+	 * @param array $objectArr Array of collection objects
+	 * @param string $myId field name of object ID
+	 * @param string $parentId field name of parent object ID
+	 * @param string $rootId field name of root object ID
 	 **/
-	public function IcmsPersistableTree(&$objectArr, $myId, $parentId, $rootId = null)
+	function __construct(&$objectArr, $myId, $parentId, $rootId = null)
 	{
 		$this->_objects =& $objectArr;
 		$this->_myId = $myId;
@@ -44,15 +47,16 @@ class TfishAngryTree {
 
 	/**
 	 * Initialize the object
-	 *
-	 * @access	private
 	 **/
 	private function _initialize()
 	{
 		foreach (array_keys($this->_objects) as $i) {
-            $key1 = $this->_objects[$i]->getVar($this->_myId);
+
+			$id_field = $this->_myId;
+			$key1 = $this->_objects[$i]->$id_field;
             $this->_tree[$key1]['obj'] =& $this->_objects[$i];
-            $key2 = $this->_objects[$i]->getVar($this->_parentId, 'e');
+			$parent_id_field = $this->_parentId;
+            $key2 = $this->_objects[$i]->$parent_id_field;
             $this->_tree[$key1]['parent'] = $key2;
             $this->_tree[$key2]['child'][] = $key1;
 			if (isset($this->_rootId)) {
@@ -158,8 +162,9 @@ class TfishAngryTree {
 	private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, $prefix_curr = '')
 	{
         if ($key > 0) {
-            $value = $this->_tree[$key]['obj']->getVar($this->_myId);
-            $ret[$value] = $prefix_curr.$this->_tree[$key]['obj']->getVar($fieldName);
+			$id_field = $this->_myId;
+            $value = $this->_tree[$key]['obj']->$id_field;
+            $ret[$value] = $prefix_curr.$this->_tree[$key]['obj']->$fieldName;
             $prefix_curr .= $prefix_orig;
         }
         if (isset($this->_tree[$key]['child']) && !empty($this->_tree[$key]['child'])) {
@@ -173,8 +178,8 @@ class TfishAngryTree {
 	 * Make a select box with options from the tree
 	 *
 	 * @param   string  $name            Name of the select box
-	 * @param   string  $fieldName       Name of the member variable from the
-     *  node objects that should be used as the title for the options.
+	 * @param   string  $fieldName       Name of the member variable from the node objects that
+	 * should be used as the title for the options.
 	 * @param   string  $prefix          String to indent deeper levels
 	 * @param   string  $selected        Value to display as selected
 	 * @param   bool    $addEmptyOption  Set TRUE to add an empty option with value "0" at the top of the hierarchy
@@ -183,9 +188,24 @@ class TfishAngryTree {
 	 **/
 	public function makeSelBox($name, $fieldName, $prefix='-', $selected='', $addEmptyOption = FALSE, $key=0)
     {
-        $ret = array(0 => '---');
+        $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
 		
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);
         return $ret;
     }
+	
+	/**
+	 * Make a select box of parent collections from the tree.
+	 * 
+	 * @param int $selected
+	 * @param int $key
+	 * @return string
+	 */
+	public function makeParentSelectBox($selected = 0, $key = 0)
+	{
+		$ret = array(0 => TFISH_SELECT_PARENT);
+		
+        $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-');
+        return $ret;
+	}
 }
