@@ -41,12 +41,37 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content) && $content->online) {
+		
+		// Update view counter and assign object to template.
 		$content->counter += 1;
 		$content_handler::updateCounter($clean_id);
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
 		$tfish_template->content = $content;
+		
+		// Prepare meta information for display.
+		$contentInfo = array();
+		if ($content->creator) $contentInfo[] = $content->escape('creator');
+		if ($content->date) $contentInfo[] = $content->escape('date');
+		if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+		if ($content->format) $contentInfo[] = '.' . $content->escape('format');
+		if ($content->file_size) $contentInfo[] = $content->escape('file_size');
+		if ($content->tags) {
+			$tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
+			$tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+			$contentInfo[] = $tags;
+		}
+		$tfish_template->contentInfo = implode(' | ', $contentInfo);
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
 		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
+		
+		// Check if has a parental object; if so display a thumbnail and teaser / link.
+		if (!empty($content->parent)) {
+			$parent = $content_handler::getObject($content->parent);
+			if (is_object($parent) && $parent->online) {
+				$tfish_template->parent = $parent;
+			}
+		}
+		
+		// Render template.
 		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
 	} else {
 		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;

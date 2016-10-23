@@ -28,6 +28,14 @@ video {
 	font-style: italic;
 }
 
+.audio-player {
+	margin: 2rem 0;
+}
+
+.video-player {
+	margin: 2rem 0;
+}
+
 @media (min-width: 1200px) {
   .container {
     width: 972px;

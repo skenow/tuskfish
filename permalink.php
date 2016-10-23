@@ -36,8 +36,12 @@ $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (isset($content) && is_object($content)) {
+		
+		// Update view counter and assign object to template.
 		$content->counter += 1;
 		$content_handler::updateCounter($clean_id);
+		
+		// Prepare meta information for display.
 		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, false);
 		$tfish_template->content = $content;
 		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;

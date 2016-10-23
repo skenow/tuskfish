@@ -28,9 +28,13 @@ $clean_id = (int)$id;
 if ($clean_id) {
 	$content = TfishStaticHandler::getObject($clean_id);
 	if (is_object($content) && $content->online) {
+		
+		// Update view counter and assign object to template.
 		$content->counter += 1;
 		TfishStaticHandler::updateCounter($clean_id);
 		$tfish_template->content = $content;
+		
+		// Prepare meta information for display.
 		$contentInfo = array();
 		if ($content->creator) $contentInfo[] = $content->escape('creator');
 		if ($content->date) $contentInfo[] = $content->escape('date');

@@ -42,9 +42,13 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content) && $content->online) {
+		
+		// Update view counter and assign object to template.
 		$content->counter += 1;
 		$content_handler::updateCounter($clean_id);
 		$tfish_template->content = $content;
+		
+		// Prepare meta information for display.
 		$contentInfo = array();
 		if ($content->creator) $contentInfo[] = $content->escape('creator');
 		if ($content->date) $contentInfo[] = $content->escape('date');
