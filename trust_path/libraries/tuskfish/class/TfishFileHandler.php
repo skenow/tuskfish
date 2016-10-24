@@ -431,20 +431,20 @@ class TfishFileHandler
 		$fieldname = TfishFilter::trimString($fieldname);
 		$clean_fieldname = TfishFilter::isAlnum($fieldname) ? $fieldname : false ;
 		
-		$mimetype_list = self::getPermittedUploadMimetypes();
-		$mimetype = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
-		$clean_mimetype = array_key_exists($mimetype, $mimetype_list) ? $mimetype_list[$mimetype] : false;
-		if ($clean_filename && $clean_fieldname && $clean_mimetype) {
-			return self::_uploadFile($clean_filename, $clean_fieldname, $clean_mimetype);
+		$mimetype_list = self::getPermittedUploadMimetypes(); // extension => mimetype
+		$extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
+		$clean_extension = array_key_exists($extension, $mimetype_list) ? TfishFilter::trimString($extension) : false;
+		if ($clean_filename && $clean_fieldname && $clean_extension) {
+			return self::_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
 		}
 		trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
 		return false;
 	}
 	
-	private static function _uploadFile($filename, $fieldname, $mimetype)
+	private static function _uploadFile($filename, $fieldname, $extension)
 	{		
 		$filename = time() . '_' . $filename;
-		$upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $mimetype;
+		$upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $extension;
 		if ($_FILES[$fieldname]["error"]) {
 			switch ($_FILES[$fieldname]["error"]) {
 				case 1: // UPLOAD_ERR_INI_SIZE
@@ -483,7 +483,7 @@ class TfishFileHandler
 		} else {
 			$permissions = chmod($upload_path, 0644);
 			if ($permissions) {
-				return $filename . '.' . $mimetype;
+				return $filename . '.' . $extension;
 			}
 		}
 		return false;
