@@ -47,7 +47,7 @@ $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 
 // Prepare tag select box.
 $tfish_template->select_action = 'index.php';
-$tfish_template->select_filters =  TfishTagHandler::getTagSelectBox($clean_tag, false);
+$tfish_template->select_filters =  TfishTagHandler::getTagSelectBox($clean_tag);
 $tfish_template->select_filters_form = $tfish_template->render('select_filters');
 
 /**
