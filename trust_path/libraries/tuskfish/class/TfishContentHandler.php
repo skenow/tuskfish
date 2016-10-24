@@ -435,19 +435,16 @@ class TfishContentHandler
 	/**
 	 * Generates an online/offline select box.
 	 * 
-	 * @param string $action destination page on submission of the form
 	 * @param int $selected preselected option
 	 * @return string select box
 	 */
-	public static function getOnlineSelectBox($selected = null, $action = false, $zero_option = TFISH_ONLINE_STATUS)
+	public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS)
 	{
-		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
 		$clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int)$selected : null; // Offline (0) or online (1)
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 		
 		$options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
-		$select_box = !empty($clean_action) ? '<form name="online_select_form" action="' . $clean_action . '" method="get">' : '';
-		$select_box .= '<select name="online" id="online" onchange="this.form.submit()">';
+		$select_box = '<select class="form-control" name="online" id="online" onchange="this.form.submit()">';
 		if (isset($clean_selected)) {
 			foreach($options as $key => $value) {
 				$select_box .= ($key == $clean_selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
@@ -459,7 +456,6 @@ class TfishContentHandler
 		}
 		
 		$select_box .= '</select>';
-		$select_box .= !empty($clean_action) ? '</form>' : '';
 
 		return $select_box;
 	}
@@ -513,13 +509,11 @@ class TfishContentHandler
 	 * Get a content type select box.
 	 * 
 	 * @param int $selected preselected option
-	 * @param type $action destination page on form submission
 	 * @param type $zero_option the default text to show at top of select box
 	 * @return string select box
 	 */
-	public static function getTypeSelectBox($selected = null, $action = false, $zero_option = TFISH_TYPE)
+	public static function getTypeSelectBox($selected = null, $zero_option = TFISH_TYPE)
 	{
-		$clean_action = TfishFilter::isAlnumUnderscore($action) ? TfishFilter::escape(TfishFilter::trimString($action)) . '.php' : ''; // Name of script to load on submission. Could be user side or admin side.
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 		$clean_selected = '';
 		$type_list = self::getTypes();
@@ -531,15 +525,13 @@ class TfishContentHandler
 		}
 		
 		$options = array(0 => TFISH_SELECT_TYPE) + $type_list;
-		$select_box = !empty($clean_action) ? '<form name="type_select_form" action="' . $clean_action . '" method="get">' : '';
-		$select_box .= '<select name="type" id="type" onchange="this.form.submit()">';
+		$select_box = '<select class="form-control" name="type" id="type" onchange="this.form.submit()">';
 		foreach($options as $key => $value) {
 			$select_box .= ($key == $selected) 
 					? '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>'
 					: '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
 		}
 		$select_box .= '</select>';
-		$select_box .= !empty($clean_action) ? '</form>' : '';
 		
 		return $select_box;
 	}

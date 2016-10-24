@@ -286,8 +286,10 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
 			$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
 			$tfish_template->select_action = 'admin.php';
-			$tfish_template->select_filters = $tag_select_box . ' ' . $type_select_box . ' ' . $online_select_box;
-			$tfish_template->select_filters_form = $tfish_template->render('select_filters');
+			$tfish_template->tag_select = $tag_select_box;
+			$tfish_template->type_select = $type_select_box;
+			$tfish_template->online_select = $online_select_box;
+			$tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
 			
 			// Assign to template.
 			$tfish_template->page_title = TFISH_CURRENT_CONTENT;
