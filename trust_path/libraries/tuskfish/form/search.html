@@ -32,8 +32,21 @@
 		<?php if (!empty($search_results)): ?>
 			<h2><?php echo TfishFilter::escape($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
 				<?php foreach ($search_results as $key => $object): ?>
-				<h3><a href="<?php echo $object->getURL(true); ?>"><?php echo $object->escape('title'); ?></a></h3>
-					<?php echo $object->escape('teaser'); ?>
+                <div class="clearfix">
+				<h3><?php echo $object->icon; ?> <a href="<?php echo $object->getURL(true); ?>"><?php echo $object->escape('title'); ?></a></h3>
+                <?php if ($object->image): ?>
+                    <div class="pull-left">
+                        <figure class="figure-left">
+                        <a href="<?php echo $object->getURL(true); ?>">
+                        <img class="img-responsive" src="<?php echo $object->getCachedImage(100); ?>" 
+                             <?php if ($object->caption): ?>title="<?php echo $object->escape('caption'); ?>" 
+                             alt="<?php echo $object->escape('caption'); ?>"<?php endif; ?> />
+                        </a>
+                        </figure>
+                    </div>
+                <?php endif; ?>
+				<?php echo $object->escape('teaser'); ?>
+                </div>
 				<?php endforeach; ?>
 		<?php else: ?>
 		<h2><?php echo TFISH_SEARCH_NO_RESULTS; ?></h2><hr>
