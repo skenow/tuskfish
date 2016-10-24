@@ -1,6 +1,7 @@
 <!-- Display a list of videos in teaser view -->
 <?php if ($content_objects): ?>
 	<?php foreach ($content_objects as $content): ?>
+    <div class="clearfix">
 		<div class="text-left">
 			<?php echo '<h3><a href="' . $content->getURL(true) . '">' . $content->escape('title') . '</a></h3>'; ?>
 		</div>
@@ -18,5 +19,6 @@
         <?php if ($content->teaser): ?>
             <div class="text-left"><?php echo $content->escape('teaser'); ?></div>
         <?php endif; ?>
+    </div>
 	<?php endforeach; ?>
 <?php endif; ?>

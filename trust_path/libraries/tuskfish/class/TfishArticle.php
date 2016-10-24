@@ -21,10 +21,11 @@ class TfishArticle extends TfishContentObject
 		// Must call parent constructor first.
 		parent::__construct();
 		
-		// Declare the type, template and module for this this class
+		// Declare the type, template, module and icon for this this class
 		$this->__data['type'] = "TfishArticle";
 		$this->__data['template'] = "article";
 		$this->__data['module'] = "articles";
+		$this->__data['icon'] = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
 		
 		// Object definition - unset any properties unused in this subclass.
 		$zeroedProperties = $this->zeroedProperties();		

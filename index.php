@@ -17,10 +17,10 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 $content_handler = 'TfishContentHandler';
-$index_template = 'articles';
+$index_template = 'single_stream';
 
 // Page title.
-$tfish_template->page_title = TFISH_TYPE_ARTICLES;
+$tfish_template->page_title = TFISH_LATEST_POSTS;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

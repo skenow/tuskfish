@@ -31,7 +31,7 @@ glyphicon glyphicon-edit (edit)
 glyphicon glyphicon-trash (delete)
 glyphicon glyphicon-tags (tags / collection)
 
-<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
 
 RELEASE FUNCTIONALITY
 =====================

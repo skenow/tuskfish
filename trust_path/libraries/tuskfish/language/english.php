@@ -38,6 +38,9 @@ define("TFISH_META_TAGS", "Meta tags");
 define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");
 
+// Home page stream.
+define("TFISH_LATEST_POSTS", "Latest posts");
+
 // Preferences.
 define("TFISH_PREFERENCES", "Preferences");
 define("TFISH_PREFERENCE", "Preference");

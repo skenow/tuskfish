@@ -26,7 +26,7 @@ $index_template = 'collections';
 $target_file_name = 'collections';
 
 // Page title.
-$tfish_template->page_title = TFISH_TYPE_COLLECTIONS;
+$tfish_template->page_title = '<i class="fa fa-folder-open-o" aria-hidden="true"></i> ' . TFISH_TYPE_COLLECTIONS;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
