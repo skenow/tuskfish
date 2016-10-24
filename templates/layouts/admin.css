@@ -12,6 +12,21 @@ video {
   text-align: center;
 }
 
+/* Figure and figcaption styles make captions wrap to figure width */
+figure {
+   display: table;
+}
+
+figure img {
+    display: block;
+    width: 100%;
+}
+
+figcaption {
+    display: table-caption;
+    caption-side: bottom;
+}​
+
 .figure-centre {
 	margin: 1rem 0;
 }
@@ -34,4 +49,8 @@ video {
 
 .video-player {
 	margin: 2rem 0;
+}
+
+.select_filters {
+	margin: 3rem 0 0 0;
 }

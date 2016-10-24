@@ -41,7 +41,7 @@ class TfishTagHandler extends TfishContentHandler
 		if (!empty($tag_list)) {
 			asort($tag_list);
 			$tag_list = array(0 => $clean_zero_option) + $tag_list;
-			$select_box = '<select name="tag_id" id="tag_id" onchange="this.form.submit()">';
+			$select_box = '<select class="form-control" name="tag_id" id="tag_id" onchange="this.form.submit()">';
 			foreach($tag_list as $key => $value) {
 				$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
 			}
