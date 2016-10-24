@@ -304,21 +304,21 @@ class TfishFileHandler
 	 */
 	public static function getPermittedUploadMimetypes() {
 		return array(
-			'doc', // Documents.
-			'docx',
-			'pdf',
-			'odt',
-			'gif', // Images.
-			'jpg',
-			'png',
-			'mp3', // Audio.
-			'wav',
-			'mpeg',	// Video.		
-			'mp4', 
-			'webm',
-			'ogg', // Audio/video container
-			'zip', // Archives.
-			'tar',			
+			"doc" => "application/msword", // Documents.
+			"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			"pdf" => "application/pdf",
+			"odt" => "application/vnd.oasis.opendocument.text",
+			"gif" => "image/gif", // Images.
+			"jpg" => "image/jpeg",
+			"png" => "image/png",
+			"mp3" => "audio/mpeg", // Audio.
+			"wav" => "audio/x-wav",		
+			"mp4" => "video/mp4", // Video.	
+			"webm" => "video/webm",
+			"ogg" => "video/ogg", // Audio/video container
+			"zip" => "application/zip", // Archives.
+			"gz" => "application/x-gzip",
+			"tar" => "application/x-tar"	
 		);
 	}
 	
@@ -433,7 +433,7 @@ class TfishFileHandler
 		
 		$mimetype_list = self::getPermittedUploadMimetypes();
 		$mimetype = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
-		$clean_mimetype = in_array($mimetype, $mimetype_list) ? $mimetype : false;
+		$clean_mimetype = array_key_exists($mimetype, $mimetype_list) ? $mimetype_list[$mimetype] : false;
 		if ($clean_filename && $clean_fieldname && $clean_mimetype) {
 			return self::_uploadFile($clean_filename, $clean_fieldname, $clean_mimetype);
 		}

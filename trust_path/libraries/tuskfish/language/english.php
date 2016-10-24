@@ -79,7 +79,7 @@ define("TFISH_SEARCH_RESULTS", "result(s)");
 define("TFISH_RSS", "RSS");
 
 // Permalinks
-define("TFISH_TYPE_PERMALINKS", "Permalinks");
+define("TFISH_TYPE_PERMALINKS", "Permalink");
 
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
@@ -211,6 +211,7 @@ define("TFISH_ERROR_NOT_BOOL", "Not a boolean.");
 define("TFISH_ERROR_NOT_FLOAT", "Not a float.");
 define("TFISH_ERROR_NOT_EMAIL", "Not an email.");
 define("TFISH_ERROR_NOT_OBJECT", "Not an object, or illegal object type.");
+define("TFISH_ERROR_ILLEGAL_MIMETYPE", "Illegal mimetype.");
 define("TFISH_ERROR_UNKNOWN_MIMETYPE", "Unknown mimetype.");
 define("TFISH_ERROR_NO_STATEMENT", "No statement object.");
 define("TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET", "Required parameter not set.");

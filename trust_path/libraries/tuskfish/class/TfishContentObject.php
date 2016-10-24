@@ -100,11 +100,11 @@ class TfishContentObject extends TfishAncestralObject
 			switch($property) {
 				case "date": // Stored in format yyyy-mm-dd
 					$date = new DateTime($this->__data[$property]);
-					return $date->format('j F Y');
+					return htmlspecialchars($date->format('j F Y'), ENT_QUOTES, 'UTF-8');
 				break;
 			
 				case "file_size": // Convert to human readable.
-					$bytes = $this->__data[$property];
+					$bytes = (int)$this->__data[$property];
 					$unit = $val = '';
 					if ($bytes == 0 || $bytes < 1024) {
 						$unit = ' bytes';
@@ -122,6 +122,12 @@ class TfishContentObject extends TfishAncestralObject
 					$val = round($val, 2);
 					return $val . ' ' . $unit;
 					
+				break;
+				
+				case "format": // Output the file extension as user-friendly "mimetype".
+					$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+					$mimetype = array_search($this->__data[$property], $mimetype_whitelist);
+					return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
 				break;
 				
 				case "description":
@@ -584,6 +590,7 @@ class TfishContentObject extends TfishAncestralObject
 				break;
 			
 				case "string":
+					$value = TfishFilter::trimString($value);
 					if ($property == "date") { // Ensure format complies with DATE_RSS
 						$check_date = date_parse_from_format('Y-m-d', $value);
 						if ($check_date == false || $check_date['warning_count'] > 0 || $check_date['error_count'] > 0) {
@@ -593,6 +600,14 @@ class TfishContentObject extends TfishAncestralObject
 													
 						} else {
 							$this->__data[$property] = $value;
+						}
+					}
+					if ($property == "format") {
+						$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+						if (empty($val) || in_array($value, $mimetype_whitelist)) {
+							$this->__data[$property] = $value;
+						} else {
+							trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
 						}
 					}
 					if ($property == "language") {

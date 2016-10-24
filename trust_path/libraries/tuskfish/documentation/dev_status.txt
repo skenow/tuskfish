@@ -5,7 +5,8 @@ The purpose of this file is so I can keep track of what I was last working on, a
 MINIMUM FUNCTIONALITY
 =====================
 * Add an RSS feed to collection objects, to allow creation of podcasts.
-* Make captions wrap if they are wider than the parent figure.
+* Remove hardcode of mimetype in audio/video template; the format field should be mimetype and not extension.
+  Extension could be gathered using ->escape.
 
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
