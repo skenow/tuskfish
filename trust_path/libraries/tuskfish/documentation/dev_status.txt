@@ -4,6 +4,7 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
+* Pagination within collections.
 * Template for tags.
 * Add admin gallery page; display both image objects and image files of other types of content.
 * Add an RSS feed to collection objects, to allow creation of podcasts.
