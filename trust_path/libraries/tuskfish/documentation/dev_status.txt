@@ -7,8 +7,6 @@ MINIMUM FUNCTIONALITY
 * Template for tags.
 * Add admin gallery page; display both image objects and image files of other types of content.
 * Add an RSS feed to collection objects, to allow creation of podcasts.
-* Remove hardcode of mimetype in audio/video template; the format field should be mimetype and not extension.
-  Extension could be gathered using ->escape.
 
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
