@@ -45,7 +45,7 @@ class TfishRss extends TfishAncestralObject
 		global $tfish_preference;
 		
 		$this->__data['title'] = $tfish_preference->site_name;
-		$this->__data['link'] = TFISH_URL;
+		$this->__data['link'] = TFISH_URL . 'rss.php';
 		$this->__data['description'] = $tfish_preference->site_description;
 		$this->__data['copyright'] = $tfish_preference->site_copyright;
 		$this->__data['managingEditor'] = $tfish_preference->site_email;
@@ -122,6 +122,17 @@ class TfishRss extends TfishAncestralObject
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Make a RSS feed for a collection object.
+	 * 
+	 * @param object $obj collection
+	 */
+	public function makeFeedForCollection($obj) {
+		$this->__set('title', $obj->title);
+		$this->__set('link', TFISH_RSS_URL . '?id=' . (int)$obj->id);
+		$this->__set('description', $obj->teaser);
 	}
 	
 	//

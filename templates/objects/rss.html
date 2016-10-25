@@ -2,11 +2,11 @@
   <channel>
     <title><?php echo TfishFilter::escape($rss->title); ?></title>
     <link><?php echo TfishFilter::escape($rss->link); ?></link>
-    <description><?php echo TfishFilter::escape($rss->description); ?></description>
+    <description><?php echo TfishFilter::escape(strip_tags($rss->description)); ?></description>
     <generator><?php echo TfishFilter::escape($rss->generator); ?></generator>
     <managingEditor><?php echo TfishFilter::escape($rss->managingEditor); ?></managingEditor>
     <webMaster><?php echo TfishFilter::escape($rss->webMaster); ?></webMaster>
-    <atom:link href="<?php echo TfishFilter::escape(TFISH_RSS_URL) . $tag_id; ?>" rel="self" type="application/rss+xml" />
+    <atom:link href="<?php echo $rss->link; ?>" rel="self" type="application/rss+xml" />
 <?php if (isset($items) && !empty($items)): ?>
 <?php foreach ($items as $item): ?>
     <item>
