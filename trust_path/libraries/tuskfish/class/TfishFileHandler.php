@@ -312,10 +312,12 @@ class TfishFileHandler
 			"jpg" => "image/jpeg",
 			"png" => "image/png",
 			"mp3" => "audio/mpeg", // Audio.
+			"oga" => "audio/ogg",
+			"ogg" => "audio/ogg",
 			"wav" => "audio/x-wav",		
-			"mp4" => "video/mp4", // Video.	
+			"mp4" => "video/mp4", // Video.
+			"ogv" => "video/ogg",
 			"webm" => "video/webm",
-			"ogg" => "video/ogg", // Audio/video container
 			"zip" => "application/zip", // Archives.
 			"gz" => "application/x-gzip",
 			"tar" => "application/x-tar"	
@@ -323,22 +325,37 @@ class TfishFileHandler
 	}
 	
 	/**
-	 * Returns a string of mimetypes that are permitted for upload.
+	 * Returns an array of audio mimetypes that are permitted for content objects.
 	 * 
-	 * @return string
+	 * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
+	 * is still acceptable, although it must no longer be used for video files.
+	 * 
+	 * @return array
 	 */
-	public static function getPermittedMediaMimetypes() {
-		$mimetypes = self::getPermittedUploadMimetypes();
-		return implode(',', $mimetypes);
+	public static function allowedAudioMimetypes() {
+		return array(
+			"mp3" => "audio/mpeg",
+			"oga" => "audio/ogg",
+			"ogg" => "audio/ogg",
+			"wav" => "audio/x-wav"
+		);
 	}
 	
 	/**
-	 * Returns an string of image mimetypes that are permitted for content objects.
+	 * Returns a string of video mimetypes that are permitted for upload.
+	 * 
+	 * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
+	 * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
+	 * wide use it is now presumed to refer to audio files only.
 	 * 
 	 * @return string
 	 */
-	public static function getPermittedImageMimetypes() {
-		return "gif,jpg,png";
+	public static function allowedVideoMimetypes() {
+		return array(
+			"mp4" => "video/mp4",
+			"ogv" => "video/ogg",
+			"webm" => "video/webm"
+		);
 	}
 	
 	/**

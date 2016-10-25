@@ -592,7 +592,9 @@ class TfishContentHandler
 			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
 			if ($clean_filename) {
 				$key_values['media'] = $clean_filename;
-				$key_values['format'] = pathinfo($clean_filename, PATHINFO_EXTENSION);
+				$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+				$extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+				$key_values['format'] = $mimetype_whitelist[$extension];
 				$key_values['file_size'] = $_FILES['media']['size'];
 			}
 		}

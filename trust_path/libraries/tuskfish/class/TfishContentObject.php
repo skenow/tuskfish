@@ -127,7 +127,10 @@ class TfishContentObject extends TfishAncestralObject
 				case "format": // Output the file extension as user-friendly "mimetype".
 					$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
 					$mimetype = array_search($this->__data[$property], $mimetype_whitelist);
-					return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
+					if (!empty($mimetype)) {
+						return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
+					}
+					
 				break;
 				
 				case "description":
@@ -407,7 +410,9 @@ class TfishContentObject extends TfishAncestralObject
 			$clean_filename = TfishFilter::trimString($_FILES['media']['name']);
 			if ($clean_filename) {
 				$this->__set('media', $clean_filename);
-				$this->__set('format', pathinfo($clean_filename, PATHINFO_EXTENSION));
+				$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+				$extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+				$this->__set('format', $mimetype_whitelist[$extension]);
 				$this->__set('file_size', $_FILES['media']['size']);
 			}
 		}
@@ -591,6 +596,7 @@ class TfishContentObject extends TfishAncestralObject
 			
 				case "string":
 					$value = TfishFilter::trimString($value);
+					
 					if ($property == "date") { // Ensure format complies with DATE_RSS
 						$check_date = date_parse_from_format('Y-m-d', $value);
 						if ($check_date == false || $check_date['warning_count'] > 0 || $check_date['error_count'] > 0) {
@@ -602,14 +608,26 @@ class TfishContentObject extends TfishAncestralObject
 							$this->__data[$property] = $value;
 						}
 					}
+					
 					if ($property == "format") {
-						$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-						if (empty($val) || in_array($value, $mimetype_whitelist)) {
+						switch ($this->__data['type']) {
+							case "TfishAudio":
+								$mimetype_whitelist = TfishFileHandler::allowedAudioMimetypes();
+							break;
+							case "TfishVideo":
+								$mimetype_whitelist = TfishFileHandler::allowedVideoMimetypes();
+							break;
+							default:
+								$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+							break;
+						}
+						if (empty($value) || in_array($value, $mimetype_whitelist)) {
 							$this->__data[$property] = $value;
 						} else {
 							trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
 						}
 					}
+					
 					if ($property == "language") {
 						$language_whitelist = TfishContentHandler::getLanguages();
 						if (!array_key_exists($value, $language_whitelist)) {
