@@ -83,10 +83,17 @@
         </div>
     <?php endif; ?>
     
-    <!-- Display child works -->
+    <!-- Display child works -->    
     <?php if (!empty($first_children)): ?>
+        <?php if (isset($collection_pagination)): ?>
+            <div class="pagination pull-right clearfix">
+                <?php echo $collection_pagination; ?>
+            </div>
+        <?php endif; ?>
         <div class="text-left">
             <h3>In this collection</h3>
+        </div>
+        <div class="text-left">
             <?php foreach ($first_children as $child): ?>
                 <h4><a href="<?php echo $child->getURL(true); ?>"><?php echo $child->escape('title'); ?></a></h4>
                 <?php if ($child->image): ?>
@@ -101,8 +108,15 @@
                     </div>
                 <?php endif; ?>
                 <?php echo $child->escape('teaser'); ?>
-            <?php endforeach; ?>
+            <?php endforeach; ?>    
         </div>
+        
+        <!-- Intra-collection pagination -->
+            <?php if (isset($collection_pagination)): ?>
+            <div class="pagination pull-right clearfix">
+                <?php echo $collection_pagination; ?>
+            </div>
+            <?php endif; ?>
     <?php endif; ?>
     
 <?php endif; ?>

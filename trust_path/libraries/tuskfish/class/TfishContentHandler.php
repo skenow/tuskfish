@@ -213,7 +213,7 @@ class TfishContentHandler
 			$criteria = new TfishCriteria;
 		}
 		if (!$criteria->order) {
-			$criteria->order = 'submission_time';
+			$criteria->order = 'date';
 		}
 		
 		$statement = TfishDatabase::select('content', $criteria);

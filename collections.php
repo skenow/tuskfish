@@ -72,7 +72,24 @@ if ($clean_id) {
 		}
 		
 		// Check if has child objects; if so display thumbnails and teasers / links.
-		$first_children = TfishCollectionHandler::getFirstChild($clean_id);
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('parent', $content->id));
+		$criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
+		$criteria->add(new TfishCriteriaItem('online', 1));
+		if ($clean_start) {
+			$criteria->offset = $clean_start;
+		}
+		$criteria->limit = $tfish_preference->user_pagination;
+		$criteria->order = 'date';
+		$criteria->ordertype = 'DESC';
+		
+		// Prepare pagination control.
+		$first_child_count = TfishContentHandler::getCount($criteria);
+		$tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count,
+			$tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+		
+		// Retrieve content objects and assign to template.
+		$first_children = TfishContentHandler::getObjects($criteria);
 		if (!empty($first_children)) {
 			$tfish_template->first_children = $first_children;
 		}

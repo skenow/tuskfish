@@ -104,9 +104,11 @@ class TfishCollectionHandler extends TfishContentHandler
 	 * @param int $id
 	 * @return array content objects
 	 */
-	public static function getFirstChild($id)
+	public static function getFirstChild($id, $offset = 0, $limit = 0)
 	{
 		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
+		$clean_offset = TfishFilter::isInt($offset) ? (int)$offset : 0;
+		$clean_limit = TfishFilter::isInt($offset) ? (int)$offset : 0;
 		$first_children = array();
 		
 		if ($clean_id) {
@@ -114,6 +116,12 @@ class TfishCollectionHandler extends TfishContentHandler
 			$criteria = new TfishCriteria();
 			$criteria->add(new TfishCriteriaItem('parent', $clean_id));
 			$criteria->add(new TfishCriteriaItem('online', true));
+			if ($offset) {
+				$criteria->offset = $clean_offset;
+			}
+			if ($limit) {
+				$criteria->limit = $clean_limit;
+			}
 			$criteria->order = 'date';
 			$criteria->ordertype = 'DESC';
 			
