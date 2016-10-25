@@ -74,7 +74,6 @@ if ($clean_id) {
 		// Check if has child objects; if so display thumbnails and teasers / links.
 		$criteria = new TfishCriteria();
 		$criteria->add(new TfishCriteriaItem('parent', $content->id));
-		$criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
 		$criteria->add(new TfishCriteriaItem('online', 1));
 		if ($clean_start) {
 			$criteria->offset = $clean_start;

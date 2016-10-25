@@ -24,7 +24,7 @@ class TfishStatic extends TfishContentObject
 		// Declare the type, template and module for this this class
 		$this->__data['type'] = "TfishStatic";
 		$this->__data['template'] = "static";
-		$this->__data['module'] = "statics";
+		$this->__data['module'] = "permalink";
 		
 		// Object definition - unset any properties unused in this subclass.
 		$zeroedProperties = $this->zeroedProperties();		
