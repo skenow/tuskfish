@@ -54,3 +54,10 @@ figcaption {
 .select_filters {
 	margin: 3rem 0 0 0;
 }
+
+.pagination {	
+}
+
+.collection_pagination {
+	margin: -1.5rem 0 1rem 0;
+}
