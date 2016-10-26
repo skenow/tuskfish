@@ -277,19 +277,22 @@
 		var allowedProperties = ['creatorContainer','dateContainer',
             'file_sizeContainer','formatContainer','imageContainer','languageContainer',
             'mediaContainer','parentContainer','publisherContainer','rightsContainer','tagsContainer'];
-		$("#type").change(function(){
-			$.each(allowedProperties, function(i, value) {
-				$('#' + value).show();
-			});
-			if ($("#type").val() == 'TfishTag') {
-				var disabledProperties = ['formatContainer','file_sizeContainer',
-                    'creatorContainer','mediaContainer','dateContainer','parentContainer',
-                    'languageContainer','rightsContainer','publisherContainer','tagsContainer'];
-					$.each(disabledProperties, function(i, value) {
-					$('#' + value).hide();
-				});
-			}
-		});
+        $(document).ready(function(){
+            $("#type").bind('change',function(){
+                $.each(allowedProperties, function(i, value) {
+                    $('#' + value).show();
+                });
+                if ($("#type").val() == 'TfishTag') {
+                    var disabledProperties = ['formatContainer','file_sizeContainer',
+                        'creatorContainer','mediaContainer','dateContainer','parentContainer',
+                        'languageContainer','rightsContainer','publisherContainer','tagsContainer'];
+                        $.each(disabledProperties, function(i, value) {
+                        $('#' + value).hide();
+                    });
+                }
+            });
+            $('#type').trigger('change');
+        });
 	</script>
 	
 </form>
