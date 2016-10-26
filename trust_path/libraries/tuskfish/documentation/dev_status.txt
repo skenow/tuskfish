@@ -6,7 +6,6 @@ MINIMUM FUNCTIONALITY
 =====================
 * Rationalise file paths:
   - Templates are a bit messy. How about a subdirectory for each set? Use the base path + directory name, plus standard file names for layout, css and js.
-  - Can masterfile + config.php be consolidated (reduce includes by 1).
   - Move image uploads back into the trust path; no need to share these resources. Alternatively, use a restrictive chmod (600).
   - Media files need to stay in the web root, otherwise can't use native html5 audio/video players.
 
@@ -30,9 +29,6 @@ RELEASE FUNCTIONALITY
 WHERE I LEFT OFF
 ================
 * Detail the data entry form
-  - Consider using this Bootstrap select box plugin: https://silviomoreto.github.io/bootstrap-select/examples/
-  - Data entry form should show/hide fields as relevant when the content type is selected (use AJAX method and bootstrap hide classes).
-  - Date and submission time fields - need to have a useful selector added. Maybe submission time can be hidden.
 
 OPTIMISATION / CONSOLIDATION
 ============================
