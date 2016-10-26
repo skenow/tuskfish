@@ -18,6 +18,9 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+// $tfish_template->template_set = 'jumbotron'; // Specify the template subdirectory for this template set.
+
 // CONFIGURATION: Enter the object ID, name of the file you want tags to link to and page title you want to display on this static page.
 $id = 10;
 $target_file_name = 'index'; // Do not include file extension.
@@ -73,7 +76,6 @@ if ($clean_id) {
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-// $tfish_metadata->template = 'jumbotron.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

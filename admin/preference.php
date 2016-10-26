@@ -16,6 +16,9 @@
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+$tfish_template->template_set = 'admin';
+
 // Set view option
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 if (in_array($op, array('edit', 'update', false))) {
@@ -72,7 +75,7 @@ if (in_array($op, array('edit', 'update', false))) {
 }
 
 /**
- * Override page template and metadata here (otherwise default site metadata will display).
+ * Override page metadata here (otherwise default site metadata will display).
  */
 // $tfish_metadata->title = '';
 // $tfish_metadata->description = '';
@@ -81,7 +84,6 @@ if (in_array($op, array('edit', 'update', false))) {
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-$tfish_metadata->template = 'admin.html';
 $tfish_metadata->robots = 'noindex,nofollow';
 
 // Include page template and flush buffer

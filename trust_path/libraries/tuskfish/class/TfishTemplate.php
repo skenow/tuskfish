@@ -17,7 +17,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 class TfishTemplate
 {	
-	protected $__data = array();
+	protected $__data = array(
+		'template_set' => 'default'
+	);
 	
 	public function __construct()
 	{}
@@ -41,7 +43,7 @@ class TfishTemplate
 	}
 	
 	/**
-	 * Set the value of an object property. Will not allow the 'template' property to be overridden.
+	 * Set the value of an object property. Will not allow the 'template_set' property to be overridden.
 	 * 
 	 * @param string $property name
 	 * @param return void
@@ -98,20 +100,21 @@ class TfishTemplate
 	 * of the template. Templates can be nested by assigning a rendered child template as a property
 	 * of a parent template object.
 	 * 
-	 * @param string $template name file in the /templates/objects directory.
+	 * @param string $template name file in the /templates/sometemplate directory.
 	 * @return string rendered template
 	 */
 	public function render($template)
 	{
-		if (array_key_exists('template', $this->__data)) {
+		/*if (array_key_exists('template_set', $this->__data)) {
 			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
-		}
+		}*/
 		extract($this->__data);
-		if (file_exists(TFISH_TEMPLATES_OBJECT_PATH . $template . '.html')) {
+		if (file_exists(TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html')) {
 			ob_start();
-			include TFISH_TEMPLATES_OBJECT_PATH . $template . '.html';
+			include TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html';
 			return ob_get_clean();
 		} else {
+			echo TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html';
 			trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
 		}
 	}

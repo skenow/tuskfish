@@ -18,6 +18,9 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+// $tfish_template->template_set = 'jumbotron'; // Specify the template subdirectory for this template set.
+
 // Validate data and separate the search terms.
 $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 // Search terms passed in from a pagination control link, in which case it has been previously
@@ -62,7 +65,7 @@ $tfish_template->form = TFISH_FORM_PATH . 'search.html';
 $tfish_template->tfish_main_content = $tfish_template->render('form');
 
 /**
- * Override page template and metadata here (otherwise default site metadata will display).
+ * Override page metadata here (otherwise default site metadata will display).
  */
 $tfish_metadata->title = TFISH_SEARCH;
 $tfish_metadata->description = TFISH_SEARCH_DESCRIPTION;
@@ -71,7 +74,6 @@ $tfish_metadata->description = TFISH_SEARCH_DESCRIPTION;
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-// $tfish_metadata->template = '';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

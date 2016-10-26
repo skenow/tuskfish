@@ -18,9 +18,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 // Constants that make use of the physical path.
 define("TFISH_ADMIN_PATH", TFISH_ROOT_PATH . "admin/");
 define("TFISH_CACHE_PATH", TFISH_ROOT_PATH . "cache/");
-define("TFISH_TEMPLATES_PATH", TFISH_ROOT_PATH . "templates/layouts/");
+define("TFISH_TEMPLATES_PATH", TFISH_ROOT_PATH . "templates/");
 define("TFISH_TEMPLATES_BLOCK_PATH", TFISH_ROOT_PATH . "templates/blocks/");
-define("TFISH_TEMPLATES_OBJECT_PATH", TFISH_ROOT_PATH . "templates/objects/");
 define("TFISH_UPLOADS_PATH", TFISH_ROOT_PATH . "uploads/");
 define("TFISH_MEDIA_PATH", TFISH_UPLOADS_PATH . "media/");
 define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');

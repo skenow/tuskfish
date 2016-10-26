@@ -13,6 +13,9 @@
 require_once "../mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+// $tfish_template->template_set = 'jumbotron'; // Specify the template subdirectory for this template set.
+
 // Page title.
 $tfish_template->page_title = TFISH_LOGIN;
 
@@ -55,7 +58,7 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
 }
 
 /**
- * Override page template and metadata here (otherwise default site metadata will display).
+ * Override page metadata here (otherwise default site metadata will display).
  */
 $tfish_metadata->title = TFISH_LOGIN;
 $tfish_metadata->description = TFISH_LOGIN_DESCRIPTION;
@@ -64,7 +67,6 @@ $tfish_metadata->description = TFISH_LOGIN_DESCRIPTION;
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 $tfish_metadata->robots = 'noindex,nofollow';
-//$tfish_metadata->template = 'admin.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

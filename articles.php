@@ -16,6 +16,9 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+// $tfish_template->template_set = 'jumbotron'; // Specify the template subdirectory for this template set.
+
 /**
  * CONVENTIONS:
  * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
@@ -105,7 +108,6 @@ if ($clean_id) {
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-// $tfish_metadata->template = 'jumbotron.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

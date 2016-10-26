@@ -17,6 +17,9 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+$tfish_template->template_set = 'rss';
+
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0; // ID of a collection object.
 $clean_tag_id = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
@@ -58,11 +61,11 @@ $criteria->add(new TfishCriteriaItem('online', 1));
 $content_objects = TfishContentHandler::getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.
-$tfish_template->rss = $rss;
+$tfish_template->rss_feed = $rss;
 $tfish_template->items = $content_objects;
 $tfish_template->mimetype_list = $mimetype_list;
 $tfish_template->tag_id = !empty($clean_tag_id) ? '?tag_id=' . (string)$clean_tag_id : '';
-$tfish_template->tfish_main_content = $tfish_template->render('rss');
+$tfish_template->tfish_main_content = $tfish_template->render('feed');
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
@@ -74,7 +77,6 @@ $tfish_template->tfish_main_content = $tfish_template->render('rss');
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
-$tfish_metadata->template = 'rss.html';
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

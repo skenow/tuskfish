@@ -17,6 +17,9 @@
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
+// Specify template set, otherwise 'default' will be used.
+$tfish_template->template_set = 'admin'; // Specify the template subdirectory for this template set.
+
 /**
  * CONVENTIONS:
  * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
@@ -90,9 +93,8 @@ $tfish_template->content_objects = $content_objects;
 $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 
 /**
- * Override page template and metadata here (otherwise default site metadata will display).
+ * Override page metadata here (otherwise default site metadata will display).
  */
-$tfish_metadata->template = 'admin.html';
 // $tfish_metadata->title = '';
 // $tfish_metadata->description = '';
 // $tfish_metadata->author = '';

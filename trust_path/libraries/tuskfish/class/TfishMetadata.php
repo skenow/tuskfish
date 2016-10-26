@@ -22,7 +22,6 @@ class TfishMetadata
 {	
 	private $preference;
 	protected $__data = array(
-		'template' => '',
 		'title' => '',
 		'description' => '',
 		'author' => '',
@@ -34,7 +33,6 @@ class TfishMetadata
 
 	function __construct($preference)
 	{		
-		$this->template = 'default.html';
 		$this->title = $preference->site_name;
 		$this->description = $preference->site_description;
 		$this->author = $preference->site_author;
