@@ -4,8 +4,11 @@ The purpose of this file is so I can keep track of what I was last working on, a
 
 MINIMUM FUNCTIONALITY
 =====================
-* Add admin gallery page; display both image objects and image files of other types of content.
-* Rationalise file paths etc: Could be handled better, especially templates.
+* Rationalise file paths:
+  - Templates are a bit messy. How about a subdirectory for each set? Use the base path + directory name, plus standard file names for layout, css and js.
+  - Can masterfile + config.php be consolidated (reduce includes by 1).
+  - Move image uploads back into the trust path; no need to share these resources. Alternatively, use a restrictive chmod (600).
+  - Media files need to stay in the web root, otherwise can't use native html5 audio/video players.
 
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
