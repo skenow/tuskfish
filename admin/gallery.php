@@ -27,13 +27,13 @@ $index_template = 'admin_images';
 $target_file_name = 'gallery';
 
 // Page title.
-$tfish_template->page_title = TFISH_TYPE_IMAGES;
+$tfish_template->page_title = '<i class="fa fa-file-image-o" aria-hidden="true"></i> ' . TFISH_IMAGE_GALLERY;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
-$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
+$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : 0;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 
 /**
@@ -73,14 +73,21 @@ if ($clean_id) {
 		}
 	}
 	
+	// Prepare pagination control.
+	$count = $content_handler::getCount($criteria);
+	$extra_params = array();
+	if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+		$extra_params['online'] = $clean_online;
+	}
+	if (isset($clean_type)) {
+		$extra_params['type'] = $clean_type;
+	}
+	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
+			$tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, $extra_params);
+	
 	// Set offset and limit.
 	if ($clean_start) $criteria->offset = $clean_start;
 	$criteria->limit = $tfish_preference->gallery_pagination;
-	
-	// Prepare pagination control.
-	$count = $content_handler::getCount($criteria);
-	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
-			$tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag);
 	
 	// Prepare select filters.
 	$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
