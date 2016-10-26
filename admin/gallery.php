@@ -40,70 +40,54 @@ $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimS
  * Controller logic.
  */
 
-// View single object description.
-if ($clean_id) {
-	$content = $content_handler::getObject($clean_id);
-	if (is_object($content) && $content->online) {
-		$tfish_template->tags = $content_handler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
-		$tfish_template->content = $content;
-		if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
-		if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
-		$tfish_template->tfish_main_content = $tfish_template->render($content->template);
-	} else {
-		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
-	}
-	
-// View index page of multiple objects (thumbnails).
-} else {
-	// Select content objects where the image field is not null or empty.
-	$criteria = new TfishCriteria();
-	$criteria->add(new TfishCriteriaItem('image', 'NULL', 'IS NOT'));
-	$criteria->add(new TfishCriteriaItem('image', '', '<>'));
-	
-	// Optional selection criteria.
-	if ($clean_tag) $criteria->tag = array($clean_tag);
-	if (TfishFilter::isInt($clean_online, 0, 1)) {
-		$criteria->add(new TfishCriteriaItem('online', $clean_online));
-	}
-	if ($clean_type) {
-		if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
-			$criteria->add(new TfishCriteriaItem('type', $clean_type));
-		} else {
-			trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-		}
-	}
-	
-	// Prepare pagination control.
-	$count = $content_handler::getCount($criteria);
-	$extra_params = array();
-	if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
-		$extra_params['online'] = $clean_online;
-	}
-	if (isset($clean_type)) {
-		$extra_params['type'] = $clean_type;
-	}
-	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
-			$tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, $extra_params);
-	
-	// Set offset and limit.
-	if ($clean_start) $criteria->offset = $clean_start;
-	$criteria->limit = $tfish_preference->gallery_pagination;
-	
-	// Prepare select filters.
-	$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
-	$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
-	$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
-	$tfish_template->select_action = 'gallery.php';
-	$tfish_template->tag_select = $tag_select_box;
-	$tfish_template->type_select = $type_select_box;
-	$tfish_template->online_select = $online_select_box;
-	$tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
-	
-	// Retrieve content objects and assign to template.
-	$content_objects = $content_handler::getObjects($criteria);
-	$tfish_template->content_objects = $content_objects;
-	$tfish_template->tfish_main_content = $tfish_template->render($index_template);
+// Select content objects where the image field is not null or empty.
+$criteria = new TfishCriteria();
+$criteria->add(new TfishCriteriaItem('image', 'NULL', 'IS NOT'));
+$criteria->add(new TfishCriteriaItem('image', '', '<>'));
+
+// Optional selection criteria.
+if ($clean_tag) $criteria->tag = array($clean_tag);
+if (TfishFilter::isInt($clean_online, 0, 1)) {
+	$criteria->add(new TfishCriteriaItem('online', $clean_online));
 }
+if ($clean_type) {
+	if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+		$criteria->add(new TfishCriteriaItem('type', $clean_type));
+	} else {
+		trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+	}
+}
+
+// Prepare pagination control.
+$count = $content_handler::getCount($criteria);
+$extra_params = array();
+if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+	$extra_params['online'] = $clean_online;
+}
+if (isset($clean_type)) {
+	$extra_params['type'] = $clean_type;
+}
+$tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
+		$tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, $extra_params);
+
+// Set offset and limit.
+if ($clean_start) $criteria->offset = $clean_start;
+$criteria->limit = $tfish_preference->gallery_pagination;
+
+// Prepare select filters.
+$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
+$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
+$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
+$tfish_template->select_action = 'gallery.php';
+$tfish_template->tag_select = $tag_select_box;
+$tfish_template->type_select = $type_select_box;
+$tfish_template->online_select = $online_select_box;
+$tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
+
+// Retrieve content objects and assign to template.
+$content_objects = $content_handler::getObjects($criteria);
+$tfish_template->content_objects = $content_objects;
+$tfish_template->tfish_main_content = $tfish_template->render($index_template);
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
