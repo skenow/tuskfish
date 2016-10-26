@@ -995,7 +995,7 @@ class TfishContentHandler
 		}
 		
 		// Delete associated files.
-		$obj = self::getObject($id);
+		$obj = self::getObject($clean_id);
 		if (TfishFilter::isObject($obj)) {
 			if ($obj->image) {
 				self::_deleteImage($obj->image);
@@ -1009,6 +1009,16 @@ class TfishContentHandler
 		$result = TfishTaglinkHandler::deleteTaglinks($clean_id);
 		if (!$result) {
 			return false;
+		}
+		
+		// If object is a collection delete related parent references in child objects.
+		if ($obj->type == 'TfishCollection') {
+			$criteria = new TfishCriteria();
+			$criteria->add(new TfishCriteriaItem('parent', $clean_id));
+			$result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
+			if (!$result) {
+				return false;
+			}
 		}
 		
 		// Delete the object.
