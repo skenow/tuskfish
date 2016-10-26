@@ -124,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					array('title' => 'search_pagination', 'value' => '20'),
 					array('title' => 'user_pagination', 'value' => '10'),
 					array('title' => 'admin_pagination', 'value' => '20'),
+					array('title' => 'gallery_pagination', 'value' => '20'),
 					array('title' => 'pagination_elements', 'value' => '5'),
 					array('title' => 'session_name', 'value' => 'tfish_session'),
 					array('title' => 'session_timeout', 'value' => '0'),

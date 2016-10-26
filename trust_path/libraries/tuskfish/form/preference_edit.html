@@ -101,6 +101,12 @@
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
 			<input type="number" min="1" class="form-control" name="admin_pagination" id="admin_pagination" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . $preferences['admin_pagination'] . '"'; } ?> required>
 		</div>
+        
+        <!-- Gallery pagination -->
+		<label for="gallery_pagination" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_GALLERY_PAGINATION; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<input type="number" min="1" class="form-control" name="gallery_pagination" id="gallery_pagination" <?php if (isset($preferences['gallery_pagination'])) { echo 'value="' . $preferences['gallery_pagination'] . '"'; } ?> required>
+		</div>
 		
 		<!-- Maximum number of elements in the pagination control -->
 		<label for="pagination_elements" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_PAGINATION_ELEMENTS; ?>:</label>

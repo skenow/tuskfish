@@ -1,10 +1,10 @@
 <?php
 
 /**
-* Tuskfish image manager script.
+* Tuskfish admin image manager script.
 * 
-* Display and filter image content, including offline content. Use it to locate and re-use image
-* assets.
+* Display and filter image content, including offline content and images associated with non-image
+* content objects. Use it to locate and re-use image assets.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -14,18 +14,17 @@
 */
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
-// Site preferences can be accessed via $tfish_preference->key;
-require_once "mainfile.php";
-require_once TFISH_PATH . "tfish_header.php";
+require_once "../mainfile.php";
+require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 /**
  * CONVENTIONS:
  * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
  * 2. Specify the name of the template for the index page, eg. 'articles'.
  */
-$content_handler = 'TfishImageHandler';
-$index_template = 'images';
-$target_file_name = 'galleries';
+$content_handler = 'TfishContentHandler';
+$index_template = 'admin_images';
+$target_file_name = 'gallery';
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_IMAGES;
@@ -34,6 +33,8 @@ $tfish_template->page_title = TFISH_TYPE_IMAGES;
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
+$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
+$clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 
 /**
  * Controller logic.
@@ -52,18 +53,44 @@ if ($clean_id) {
 		$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
 	}
 	
-// View index page of multiple objects (teasers).
+// View index page of multiple objects (thumbnails).
 } else {
-	// Set criteria for selecting content objects.
+	// Select content objects where the image field is not null or empty.
 	$criteria = new TfishCriteria();
-	if ($clean_start) $criteria->offset = $clean_start;
-	$criteria->limit = $tfish_preference->user_pagination;
+	$criteria->add(new TfishCriteriaItem('image', 'NULL', 'IS NOT'));
+	$criteria->add(new TfishCriteriaItem('image', '', '<>'));
+	
+	// Optional selection criteria.
 	if ($clean_tag) $criteria->tag = array($clean_tag);
+	if (TfishFilter::isInt($clean_online, 0, 1)) {
+		$criteria->add(new TfishCriteriaItem('online', $clean_online));
+	}
+	if ($clean_type) {
+		if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+			$criteria->add(new TfishCriteriaItem('type', $clean_type));
+		} else {
+			trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+		}
+	}
+	
+	// Set offset and limit.
+	if ($clean_start) $criteria->offset = $clean_start;
+	$criteria->limit = $tfish_preference->gallery_pagination;
 	
 	// Prepare pagination control.
 	$count = $content_handler::getCount($criteria);
 	$tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
-			$tfish_preference->user_pagination, $target_file_name, $clean_start, $clean_tag);
+			$tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag);
+	
+	// Prepare select filters.
+	$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
+	$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
+	$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
+	$tfish_template->select_action = 'gallery.php';
+	$tfish_template->tag_select = $tag_select_box;
+	$tfish_template->type_select = $type_select_box;
+	$tfish_template->online_select = $online_select_box;
+	$tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
 	
 	// Retrieve content objects and assign to template.
 	$content_objects = $content_handler::getObjects($criteria);

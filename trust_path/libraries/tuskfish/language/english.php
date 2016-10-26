@@ -54,6 +54,7 @@ define("TFISH_PREFERENCE_SITE_TIMEZONE", "Site timezone");
 define("TFISH_PREFERENCE_MIN_SEARCH_LENGTH", "Min. search length");
 define("TFISH_PREFERENCE_SEARCH_PAGINATION", "Search pagination");
 define("TFISH_PREFERENCE_ADMIN_PAGINATION", "Admin-side pagination");
+define("TFISH_PREFERENCE_GALLERY_PAGINATION", "Gallery pagination");
 define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
 define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout");
 define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");

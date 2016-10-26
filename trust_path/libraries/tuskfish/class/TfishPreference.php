@@ -34,6 +34,7 @@ class TfishPreference extends TfishAncestralObject
 		$this->__properties['search_pagination'] = 'int';
 		$this->__properties['user_pagination'] = 'int';
 		$this->__properties['admin_pagination'] = 'int';
+		$this->__properties['gallery_pagination'] = 'int';
 		$this->__properties['pagination_elements'] = 'int';
 		$this->__properties['session_name'] = 'alnumunder';
 		$this->__properties['session_timeout'] = 'int';
@@ -227,6 +228,7 @@ class TfishPreference extends TfishAncestralObject
 						
 						// Minimum value 1.
 						case "admin_pagination":
+						case "gallery_pagination":
 						case "user_pagination":
 							if (TfishFilter::isInt($value, 1)) {
 								$this->__data[$property] = (int)$value;
