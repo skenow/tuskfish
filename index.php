@@ -19,13 +19,15 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishContentHandler';
 $index_template = 'single_stream';
 
-// Page title.
-$tfish_template->page_title = TFISH_LATEST_POSTS;
-
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
+
+$rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_RSS_URL;
+
+// Page title.
+$tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_LATEST_POSTS;
 	
 // View index page of multiple objects (teasers).
 $criteria = new TfishCriteria();
