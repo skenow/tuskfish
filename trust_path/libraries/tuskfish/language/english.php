@@ -148,7 +148,7 @@ define("TFISH_DELETE_IMAGE", "Delete image");
 define("TFISH_DELETE_MEDIA", "Delete media");
 
 // Page titles.
-define("TFISH_IMAGE_GALLERY", "Image gallery");
+define("TFISH_IMAGE_GALLERY", "Gallery");
 
 // Related and parent works.
 define("TFISH_PARENT_WORK", "Parent work");

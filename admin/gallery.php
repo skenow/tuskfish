@@ -33,7 +33,7 @@ $tfish_template->page_title = '<i class="fa fa-file-image-o" aria-hidden="true">
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
-$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : 0;
+$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 
 /**
