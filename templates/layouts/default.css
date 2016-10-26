@@ -25,6 +25,7 @@ figure img {
 figcaption {
     display: table-caption;
     caption-side: bottom;
+	margin-bottom: 1rem;
 }​
 
 .figure-centre {

@@ -25,6 +25,7 @@ class TfishTag extends TfishContentObject
 		$this->__data['type'] = "TfishTag";
 		$this->__data['template'] = "tag";
 		$this->__data['module'] = "tags";
+		$this->__data['icon'] = '<i class="fa fa-tags" aria-hidden="true"></i>';
 		
 		// Object definition - unset any properties unused in this subclass.
 		$zeroedProperties = $this->zeroedProperties();		
@@ -44,7 +45,6 @@ class TfishTag extends TfishContentObject
 	public function zeroedProperties()
 	{
 		return array(
-			'caption',
 			'format',
 			'file_size',
 			'creator',

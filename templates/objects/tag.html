@@ -1,24 +1,29 @@
 <!-- Display a single tag object -->
 <?php if ($content): ?>
+
+    <!-- Title and meta information -->
 	<div class="text-left">
-		<?php echo '<h2>' . $content->escape('title') . '</h2>'; ?>
-		<?php if ($content->author || $content->counter || $tags): ?>
-			<p><em>
-				<?php
-					if ($content->creator) echo $content->escape('creator') . ' | ';
-					if ($content->counter) echo $content->escape('counter') . ' ' . TFISH_VIEWS . ' | ';
-					if ($tags) echo TFISH_TAGS . ': ' . implode(", ", $tags); ?>
-			</em></p>
-		<?php endif; ?>
-		<?php if ($content->image): ?>
-			<div class="pull-right">
-				<img src="<?php echo $content->getCachedImage(300); ?>"
-					<?php if ($content->caption): ?>
-							title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"
-					<?php endif; ?>
-				/>
-			</div>
-		<?php endif; ?>
+        <h2><?php echo $content->escape('title'); ?></h2>
+    </div>
+    
+    <!-- Image -->
+    <?php if ($content->image): ?>
+    <div>
+        <figure class="figure-centre">
+            <img class="img-responsive center-block" src="<?php echo $content->getCachedImage(1170); ?>" 
+                <?php if ($content->caption): ?>
+                    title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+                    <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+                <?php else: ?>
+                    alt="" />
+                <?php endif; ?>
+        </figure>
+    </div>
+    <?php endif; ?>
+    
+    <!-- Description -->
+    <div class="text-left">
 		<?php if ($content->description) echo $content->escape('description'); ?>
 	</div>
+
 <?php endif; ?>

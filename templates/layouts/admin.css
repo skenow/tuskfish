@@ -25,6 +25,7 @@ figure img {
 figcaption {
     display: table-caption;
     caption-side: bottom;
+	margin-bottom: 1rem;
 }​
 
 .figure-centre {
@@ -52,7 +53,7 @@ figcaption {
 }
 
 .select_filters {
-	margin: 3rem 0 0 0;
+	margin: 0 0 0 0;
 }
 
 .pagination {	
