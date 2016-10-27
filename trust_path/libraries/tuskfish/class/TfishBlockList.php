@@ -75,11 +75,13 @@ class TfishBlockList extends TfishBlock
 	 */
 	public function render()
 	{
+		global $tfish_template;
+		
 		extract($this->__data);
-		if (file_exists(TFISH_TEMPLATES_OBJECT_PATH . $this->template . '.html')) {
+		if (file_exists(TFISH_TEMPLATES_PATH . $tfish_template->template_set . '/' . $this->template . '.html')) {
 			ob_start();
 			$title = $this->__data['title'];
-			include TFISH_TEMPLATES_OBJECT_PATH . $this->template . '.html';
+			include TFISH_TEMPLATES_PATH . $tfish_template->template_set . '/' . $this->template . '.html';
 			return ob_get_clean();
 		} else {
 			trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
