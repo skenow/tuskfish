@@ -30,7 +30,7 @@ $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
 $clean_id = (int)$id;
 if ($clean_id) {
 	$content = TfishStaticHandler::getObject($clean_id);
-	if (is_object($content) && $content->online) {
+	if (is_object($content) && $content->online == true) {
 		
 		// Update view counter and assign object to template.
 		$content->counter += 1;

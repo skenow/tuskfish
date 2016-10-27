@@ -40,7 +40,7 @@ $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 // View single object description.
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
-	if (isset($content) && is_object($content)) {
+	if (is_object($content) && $content->online == true) {
 		
 		// Update view counter and assign object to template.
 		$content->counter += 1;
@@ -112,7 +112,7 @@ $tfish_metadata->title = TFISH_TYPE_PERMALINKS;
 // $tfish_metadata->copyright = '';
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
-// $tfish_metadata->robots = '';
+$tfish_metadata->robots = 'noindex,nofollow'; // Don't want search engines indexing duplicate content.
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

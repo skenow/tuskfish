@@ -378,7 +378,7 @@ class TfishFileHandler
 		$clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : false;
 		if ($clean_id) {
 			$result = self::_sendDownload($clean_id, $clean_filename);
-			if (!$result) {
+			if ($result == false) {
 				return false;
 			}
 			return true;
@@ -398,7 +398,7 @@ class TfishFileHandler
 		}
 		$row = $statement->fetch(PDO::FETCH_ASSOC);
 		$content = TfishContentHandler::toObject($row);
-		if ($content) {
+		if ($content  && $content->online == true) {
 			$media = isset($content->media) ? $content->media : false;
 			if ($media && is_readable(TFISH_MEDIA_PATH . $content->media)) {
 				ob_start();
@@ -428,7 +428,7 @@ class TfishFileHandler
 				return false;
 			}
 		} else {
-			trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
+			trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_WARNING);
 			return false;
 		}
 	}

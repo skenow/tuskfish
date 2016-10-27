@@ -43,7 +43,7 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 // View single object description.
 if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
-	if (is_object($content) && $content->online) {
+	if (is_object($content) && $content->online == true) {
 		
 		// Update view counter and assign object to template.
 		$content->counter += 1;
