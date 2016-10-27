@@ -17,7 +17,7 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->template_set = 'admin';
+$tfish_template->setTemplate('admin');
 
 // Set view option
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;

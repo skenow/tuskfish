@@ -19,7 +19,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-// $tfish_template->template_set = 'jumbotron'; // Specify the template subdirectory for this template set.
+// $tfish_template->setTemplate('jumbotron');
 
 // CONFIGURATION: Enter the object ID, name of the file you want tags to link to and page title you want to display on this static page.
 $id = 10;

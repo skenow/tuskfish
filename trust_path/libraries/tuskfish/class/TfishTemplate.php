@@ -95,10 +95,28 @@ class TfishTemplate
 	 */
 	public function __set($property, $value)
 	{
-		if ($property == 'template') {
+		if ($property == 'template_set') {
 			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
 		}
 		$this->__data[$property] = $value;
+	}
+	
+	/**
+	 * Set the template set to be used.
+	 * 
+	 * The template_set must be set through this method. This is a safety measure to prevent
+	 * someone accidentally overwriting the template set when assigning a variable to the template
+	 * object (if content were assigned to $tfish_template->template_set it would mess things up). 
+	 * 
+	 * @param string $template alphanumeric and underscore characters only.
+	 * @return void
+	 */
+	public function setTemplate($template)
+	{
+		if (TfishFilter::isAlnumUnderscore($template)) {
+			$clean_template = TfishFilter::trimString($template);
+			$this->__data['template_set'] = $clean_template;
+		}
 	}
 	
 	/**

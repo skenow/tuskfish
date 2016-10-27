@@ -18,7 +18,7 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->template_set = 'admin'; // Specify the template subdirectory for this template set.
+$tfish_template->setTemplate('admin');
 
 /**
  * CONVENTIONS:

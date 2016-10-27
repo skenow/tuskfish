@@ -18,7 +18,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->template_set = 'rss';
+$tfish_template->setTemplate('rss');
 
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0; // ID of a collection object.

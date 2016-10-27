@@ -14,7 +14,7 @@ require_once "../mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-// $tfish_template->template_set = 'jumbotron'; // Specify the template subdirectory for this template set.
+// $tfish_template->setTemplate('jumbotron');
 
 // Page title.
 $tfish_template->page_title = TFISH_LOGIN;

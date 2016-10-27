@@ -17,7 +17,7 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->template_set = 'admin';
+$tfish_template->setTemplate('admin');
 
 // Validate input parameters.
 $clean_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
