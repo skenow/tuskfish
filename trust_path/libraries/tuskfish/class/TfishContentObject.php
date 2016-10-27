@@ -419,19 +419,6 @@ class TfishContentObject extends TfishAncestralObject
 	}
 	
 	/**
-	 * Returns an array of base object properties that are not used by this subclass.
-	 * 
-	 * This list is also used in update calls to the database to ensure that unused columns are
-	 * cleared and reset with default values.
-	 * 
-	 * @return array
-	 */
-	public function zeroedProperties()
-	{
-		return array();
-	}
-	
-	/**
 	 * Set the value of an object property and will not allow non-whitelisted properties to be set.
 	 * 
 	 * Intercepts direct calls to set the value of an object property. This method is overriden by
@@ -661,5 +648,18 @@ class TfishContentObject extends TfishAncestralObject
 				trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
 			}
 		}
+	}
+	
+	/**
+	 * Returns an array of base object properties that are not used by this subclass.
+	 * 
+	 * This list is also used in update calls to the database to ensure that unused columns are
+	 * cleared and reset with default values.
+	 * 
+	 * @return array
+	 */
+	public function zeroedProperties()
+	{
+		return array();
 	}
 }
