@@ -39,18 +39,6 @@ class TfishCriteriaItem
 	}
 	
 	/**
-	 * Provides a whitelist of permitted operators for use in database queries.
-	 * 
-	 * @return array of permitted operators for use in database queries
-	 */
-	public function permittedOperators()
-	{
-		return array(
-			'=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'BETWEEN', 'IS', 'IS NOT',
-			'LIKE');
-	}
-	
-	/**
 	 * Get the value of an object property.
 	 * 
 	 * Intercepts direct calls to access an object property. This method can be modified to impose
@@ -66,6 +54,18 @@ class TfishCriteriaItem
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Provides a whitelist of permitted operators for use in database queries.
+	 * 
+	 * @return array of permitted operators for use in database queries
+	 */
+	public function permittedOperators()
+	{
+		return array(
+			'=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'BETWEEN', 'IS', 'IS NOT',
+			'LIKE');
 	}
 	
 	/**
