@@ -54,6 +54,14 @@ $tfish_template = new TfishTemplate();
 // Initialise default content variable
 $tfish_content = array('output' => '');
 
+// Helper function to grab the site URL.
+function getUrl() {
+  $url  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] :  'https://'.$_SERVER["SERVER_NAME"];
+  $url .= ($_SERVER["SERVER_PORT"] != 80 && $_SERVER["SERVER_PORT"] != 443) ? ":".$_SERVER["SERVER_PORT"] : "";
+  $url .= '/';
+  return $url;
+}
+
 // Test and save database credentials
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Display blank form
@@ -251,6 +259,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 } else {
 	// Display data entry form
+	$tfish_template->page_title = TFISH_INSTALLATION_TUSKFISH;
+	$tfish_template->tfish_url = getUrl();
+	$tfish_template->tfish_root_path = realpath('../') . '/';
 	$tfish_template->form = "db_credentials_form.html";
 	$tfish_template->tfish_main_content = $tfish_template->render('form');
 }
