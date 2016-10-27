@@ -15,51 +15,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishUtils
 {
 	/**
-	 * Provide a list of timezone offsets.
-	 * 
-	 * @return array of timezone offsets
-	 */
-	public static function getTimezones() {
-		return array(
-			'-12' => 'UTC-12:00',
-			'-11' => 'UTC-11:00',
-			'-10' => 'UTC-10:00',
-			'-9.5' => 'UTC-9:30',
-			'-9' => 'UTC-9:00',
-			'-8' => 'UTC-8:00',
-			'-7' => 'UTC-7:00',
-			'-6' => 'UTC-6:00',
-			'-5' => 'UTC-5:00',
-			'-4' => 'UTC-4:00',
-			'-3.5' => 'UTC-3:30',
-			'-3' => 'UTC-3:00',
-			'-2' => 'UTC-2:00',
-			'-1' => 'UTC-1:00',
-			'0' => 'UTC',
-			'1' => 'UTC+1:00',
-			'2' => 'UTC+2:00',
-			'3' => 'UTC+3:00',
-			'3.5' => 'UTC+3:30',
-			'4' => 'UTC+4:00',
-			'4.5' => 'UTC+4:30',
-			'5' => 'UTC+5:00',
-			'5.5' => 'UTC+5:30',
-			'5.75' => 'UTC+5:45',
-			'6' => 'UTC+6:00',
-			'6.5' => 'UTC+6:30',
-			'7' => 'UTC+7:00',
-			'8' => 'UTC+8:00',
-			'8.75' => 'UTC+8:45',
-			'9' => 'UTC+9:00',
-			'9.5' => 'UTC+9:30',
-			'10' => 'UTC+10:00',
-			'10.5' => 'UTC+10:30',
-			'11' => 'UTC+11:00',
-			'12' => 'UTC+12:00',
-		);
-	}
-	
-	/**
 	 * Return a list of mimetypes.
 	 * 
 	 * This list is not exhaustive, but it does cover most things that a sane person would want.
@@ -177,6 +132,51 @@ class TfishUtils
 		     "qt"		=> "video/quicktime",
 		     "mov"		=> "video/quicktime",
 		     "avi"		=> "video/x-msvideo",
+		);
+	}
+	
+	/**
+	 * Provide a list of timezone offsets.
+	 * 
+	 * @return array of timezone offsets
+	 */
+	public static function getTimezones() {
+		return array(
+			'-12' => 'UTC-12:00',
+			'-11' => 'UTC-11:00',
+			'-10' => 'UTC-10:00',
+			'-9.5' => 'UTC-9:30',
+			'-9' => 'UTC-9:00',
+			'-8' => 'UTC-8:00',
+			'-7' => 'UTC-7:00',
+			'-6' => 'UTC-6:00',
+			'-5' => 'UTC-5:00',
+			'-4' => 'UTC-4:00',
+			'-3.5' => 'UTC-3:30',
+			'-3' => 'UTC-3:00',
+			'-2' => 'UTC-2:00',
+			'-1' => 'UTC-1:00',
+			'0' => 'UTC',
+			'1' => 'UTC+1:00',
+			'2' => 'UTC+2:00',
+			'3' => 'UTC+3:00',
+			'3.5' => 'UTC+3:30',
+			'4' => 'UTC+4:00',
+			'4.5' => 'UTC+4:30',
+			'5' => 'UTC+5:00',
+			'5.5' => 'UTC+5:30',
+			'5.75' => 'UTC+5:45',
+			'6' => 'UTC+6:00',
+			'6.5' => 'UTC+6:30',
+			'7' => 'UTC+7:00',
+			'8' => 'UTC+8:00',
+			'8.75' => 'UTC+8:45',
+			'9' => 'UTC+9:00',
+			'9.5' => 'UTC+9:30',
+			'10' => 'UTC+10:00',
+			'10.5' => 'UTC+10:30',
+			'11' => 'UTC+11:00',
+			'12' => 'UTC+12:00',
 		);
 	}
 }

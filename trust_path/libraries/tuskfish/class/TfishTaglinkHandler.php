@@ -23,6 +23,29 @@ class TfishTaglinkHandler extends TfishContentHandler
 	}
 	
 	/**
+	 * Delete taglinks associated with a particular content object.
+	 * 
+	 * @param int $content_id
+	 * @return boolean true for success false on failure
+	 */
+	public static function deleteTaglinks($content_id)
+	{
+		if (TfishFilter::isInt($content_id, 1)) {
+			$clean_content_id = (int)$content_id;
+		} else {
+			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+		}
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
+		$result = TfishDatabase::deleteAll('taglink', $criteria);
+		if (!$result) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * 
 	 * 
 	 * @param int $content_id of content object
@@ -142,29 +165,6 @@ class TfishTaglinkHandler extends TfishContentHandler
 			if (!$result) {
 				return false;
 			}
-		}
-		
-		return true;
-	}
-	
-	/**
-	 * Delete taglinks associated with a particular content object.
-	 * 
-	 * @param int $content_id
-	 * @return boolean true for success false on failure
-	 */
-	public static function deleteTaglinks($content_id)
-	{
-		if (TfishFilter::isInt($content_id, 1)) {
-			$clean_content_id = (int)$content_id;
-		} else {
-			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-		}
-		$criteria = new TfishCriteria();
-		$criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
-		$result = TfishDatabase::deleteAll('taglink', $criteria);
-		if (!$result) {
-			return false;
 		}
 		
 		return true;

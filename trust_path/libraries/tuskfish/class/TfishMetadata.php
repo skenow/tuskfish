@@ -44,66 +44,6 @@ class TfishMetadata
 	}
 	
 	/**
-	 * Access an existing object property and escape it for output to browser.
-	 * 
-	 * @param string $property
-	 * @return string|boolean escaped preference if set, otherwise false
-	 */
-	public function __get($property)
-	{
-		if (isset($this->__data[$property])) {
-			return htmlspecialchars($this->__data[$property], ENT_QUOTES, "UTF-8");
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * Set an existing object property
-	 * 
-	 * @param string $property
-	 * @param mixed $value
-	 */
-	public function __set($property, $value)
-	{
-		if (isset($this->__data[$property])) {
-			$this->__data[$property] = TfishFilter::trimString($value);
-		} else {
-			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-		}
-	}
-	
-	/**
-	 * Intercept isset() calls to correctly read object properties
-	 * 
-	 * @param string $property
-	 * @return boolean 
-	 */
-	public function __isset($property)
-	{
-		if (isset($this->__data[$property])) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Intercept unset() calls to correctly unset object properties
-	 * 
-	 * @param string $property
-	 * @return boolean
-	 */
-	public function __unset($property)
-	{
-		if (isset($this->__data[$property])) {
-			unset($this->__data[$property]);
-		} else {
-			return false;
-		}
-	}
-	
-	/**
 	 * Creates a pagination control designed for use with the Bootstrap framework.
 	 * 
 	 * $query is an array of arbitrary query string parameters. Note that these need to be passed
@@ -244,5 +184,65 @@ class TfishMetadata
 		$control .= '</ul>';
 		
 		return $control;
+	}
+	
+	/**
+	 * Access an existing object property and escape it for output to browser.
+	 * 
+	 * @param string $property
+	 * @return string|boolean escaped preference if set, otherwise false
+	 */
+	public function __get($property)
+	{
+		if (isset($this->__data[$property])) {
+			return htmlspecialchars($this->__data[$property], ENT_QUOTES, "UTF-8");
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Set an existing object property
+	 * 
+	 * @param string $property
+	 * @param mixed $value
+	 */
+	public function __set($property, $value)
+	{
+		if (isset($this->__data[$property])) {
+			$this->__data[$property] = TfishFilter::trimString($value);
+		} else {
+			trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+		}
+	}
+	
+	/**
+	 * Intercept isset() calls to correctly read object properties
+	 * 
+	 * @param string $property
+	 * @return boolean 
+	 */
+	public function __isset($property)
+	{
+		if (isset($this->__data[$property])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Intercept unset() calls to correctly unset object properties
+	 * 
+	 * @param string $property
+	 * @return boolean
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+		} else {
+			return false;
+		}
 	}
 }

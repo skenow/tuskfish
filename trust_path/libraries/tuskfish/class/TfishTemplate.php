@@ -43,20 +43,6 @@ class TfishTemplate
 	}
 	
 	/**
-	 * Set the value of an object property. Will not allow the 'template_set' property to be overridden.
-	 * 
-	 * @param string $property name
-	 * @param return void
-	 */
-	public function __set($property, $value)
-	{
-		if ($property == 'template') {
-			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
-		}
-		$this->__data[$property] = $value;
-	}
-	
-	/**
 	 * Check if an object property is set.
 	 * 
 	 * Intercepts isset() calls to correctly read object properties. Can be modified to add
@@ -69,24 +55,6 @@ class TfishTemplate
 	{
 		if (isset($this->__data[$property])) {
 			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Unsets an object property.
-	 * 
-	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
-	 * processing logic for specific properties.
-	 * 
-	 * @param string $property name
-	 * @return bool true on success false on failure 
-	 */
-	public function __unset($property)
-	{
-		if (isset($this->__data[$property])) {
-			unset($this->__data[$property]);
 		} else {
 			return false;
 		}
@@ -116,6 +84,38 @@ class TfishTemplate
 		} else {
 			echo TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html';
 			trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
+		}
+	}
+	
+	/**
+	 * Set the value of an object property. Will not allow the 'template_set' property to be overridden.
+	 * 
+	 * @param string $property name
+	 * @param return void
+	 */
+	public function __set($property, $value)
+	{
+		if ($property == 'template') {
+			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
+		}
+		$this->__data[$property] = $value;
+	}
+	
+	/**
+	 * Unsets an object property.
+	 * 
+	 * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
+	 * processing logic for specific properties.
+	 * 
+	 * @param string $property name
+	 * @return bool true on success false on failure 
+	 */
+	public function __unset($property)
+	{
+		if (isset($this->__data[$property])) {
+			unset($this->__data[$property]);
+		} else {
+			return false;
 		}
 	}
 }

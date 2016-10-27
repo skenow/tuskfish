@@ -2,6 +2,8 @@
 
 /**
 * Tuskfish RSS feed generator class.
+* 
+* For information about the RSS 2.0 spec see http://cyber.harvard.edu/rss/rss.html
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
 * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -55,6 +57,17 @@ class TfishRss extends TfishAncestralObject
 		//$this->__data['image'] = ''; // Todo: Add a preference or something for RSS feed.
 		$this->__data['items'] = array();
 		$this->__data['template'] = 'rss';
+	}
+	
+	/**
+	 * Make a RSS feed for a collection object.
+	 * 
+	 * @param object $obj collection
+	 */
+	public function makeFeedForCollection($obj) {
+		$this->__set('title', $obj->title);
+		$this->__set('link', TFISH_RSS_URL . '?id=' . (int)$obj->id);
+		$this->__set('description', $obj->teaser);
 	}
 	
 	/**
@@ -123,29 +136,4 @@ class TfishRss extends TfishAncestralObject
 			}
 		}
 	}
-	
-	/**
-	 * Make a RSS feed for a collection object.
-	 * 
-	 * @param object $obj collection
-	 */
-	public function makeFeedForCollection($obj) {
-		$this->__set('title', $obj->title);
-		$this->__set('link', TFISH_RSS_URL . '?id=' . (int)$obj->id);
-		$this->__set('description', $obj->teaser);
-	}
-	
-	//
-	// ITEM (all optional, but either title or description must be included)
-	// ====
-	// title
-	// link (URL of item)
-	// description (teaser)
-	// author (email address of the author)
-	// category
-	// comments (URL of comments page for this item)
-	// enclosure (media object attached to this item)
-	// guid (string that uniquely identifies the item, a permalink)
-	// pubDate (when the item was published)
-	// source (RSS channel that the item came from)
 }

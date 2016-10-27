@@ -62,6 +62,26 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
+	 * Escape a property for on-screen display to prevent XSS.
+	 * 
+	 * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
+	 * 
+	 * @param string $property
+	 * @return string|int|null
+	 */
+	public function escape($property) {
+		if (isset($this->__data[$property])) {
+			switch($property) {			
+				default:
+					return htmlspecialchars($this->__data[$property], ENT_QUOTES, 'UTF-8');
+				break;
+			}
+		} else {
+			return null;
+		}
+	}
+	
+	/**
 	 * Read out the site preferences into an array.
 	 * 
 	 * @return array of site preferences
@@ -78,41 +98,6 @@ class TfishPreference extends TfishAncestralObject
 			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
 		return $preferences;
-	}
-	
-	/**
-	 * Update the preference object using $_REQUEST data.
-	 * 
-	 * The preference object will conduct its own internal data type validation and range checks.
-	 * 
-	 * @param array $_REQUEST
-	 */
-	public function updatePreferences($dirty_input)
-	{
-		if (!TfishFilter::isArray($dirty_input)) {
-			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-		}	
-		
-		// Obtain a whitelist of permitted fields.
-		$whitelist = $this->getPropertyWhitelist();
-		
-		// Iterate through the whitelist validating supplied parameters.
-		foreach ($whitelist as $key => $type) {
-			if (array_key_exists($key, $dirty_input)) {
-				$this->__set($key, $dirty_input[$key]);
-			}
-			unset($key, $type);
-		}
-	}
-	
-	/**
-	 * Save updated preferences to the database.
-	 * 
-	 * @return bool true on success false on failure
-	 */
-	private static function writePreferences()
-	{
-		return TfishDatabase::update('preference', $this->__data);
 	}
 	
 	/**
@@ -278,22 +263,37 @@ class TfishPreference extends TfishAncestralObject
 	}
 	
 	/**
-	 * Escape a property for on-screen display to prevent XSS.
+	 * Update the preference object using $_REQUEST data.
 	 * 
-	 * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
+	 * The preference object will conduct its own internal data type validation and range checks.
 	 * 
-	 * @param string $property
-	 * @return string|int|null
+	 * @param array $_REQUEST
 	 */
-	public function escape($property) {
-		if (isset($this->__data[$property])) {
-			switch($property) {			
-				default:
-					return htmlspecialchars($this->__data[$property], ENT_QUOTES, 'UTF-8');
-				break;
+	public function updatePreferences($dirty_input)
+	{
+		if (!TfishFilter::isArray($dirty_input)) {
+			trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+		}	
+		
+		// Obtain a whitelist of permitted fields.
+		$whitelist = $this->getPropertyWhitelist();
+		
+		// Iterate through the whitelist validating supplied parameters.
+		foreach ($whitelist as $key => $type) {
+			if (array_key_exists($key, $dirty_input)) {
+				$this->__set($key, $dirty_input[$key]);
 			}
-		} else {
-			return null;
+			unset($key, $type);
 		}
+	}
+	
+	/**
+	 * Save updated preferences to the database.
+	 * 
+	 * @return bool true on success false on failure
+	 */
+	private static function writePreferences()
+	{
+		return TfishDatabase::update('preference', $this->__data);
 	}
 }

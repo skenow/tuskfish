@@ -23,6 +23,31 @@ class TfishVideoHandler extends TfishContentHandler
 	}
 	
 	/**
+	 * Count TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
+	 * 
+	 * @param TfishCriteria $criteria
+	 * @return int $count
+	 */
+	public static function getCount($criteria = false)
+	{
+		if (!$criteria) {
+			$criteria = new TfishCriteria();
+		}
+		
+		// Unset any pre-existing object type criteria.
+		$type_key = self::getTypeIndex($criteria->item);
+		if (isset($type_key)) {
+			$criteria->killType($type_key);
+		}
+		
+		// Set new type criteria specific to this object.
+		$criteria->add(new TfishCriteriaItem('type', 'TfishVideo'));
+		$count = parent::getcount($criteria);
+
+		return $count;
+	}
+	
+	/**
 	 * Get TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
 	 * 
 	 * Note that the article type is automatically set, so when calling
@@ -52,30 +77,5 @@ class TfishVideoHandler extends TfishContentHandler
 		$objects = parent::getObjects($criteria);
 		
 		return $objects;
-	}
-	
-	/**
-	 * Count TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
-	 * 
-	 * @param TfishCriteria $criteria
-	 * @return int $count
-	 */
-	public static function getCount($criteria = false)
-	{
-		if (!$criteria) {
-			$criteria = new TfishCriteria();
-		}
-		
-		// Unset any pre-existing object type criteria.
-		$type_key = self::getTypeIndex($criteria->item);
-		if (isset($type_key)) {
-			$criteria->killType($type_key);
-		}
-		
-		// Set new type criteria specific to this object.
-		$criteria->add(new TfishCriteriaItem('type', 'TfishVideo'));
-		$count = parent::getcount($criteria);
-
-		return $count;
 	}
 }

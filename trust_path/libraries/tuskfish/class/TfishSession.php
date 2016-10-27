@@ -23,69 +23,28 @@ class TfishSession
 	 * @param string|null $domain
 	 * @param bool|null $https
 	 */
-	public static function sessionStart($name = null, $limit = 0, $path = '/', $domain = null, $https = null)
-	{	
-		// Gather parameters
-		global $tfish_preference;
-		$name = isset($name) ? $name : $tfish_preference->session_name;
-		$domain = isset($domain) ? $domain : ltrim($_SERVER['SERVER_NAME'], 'www');
-		$https = isset($https) ? $https : isset($_SERVER['HTTPS']);
-		
-		// Sanitise parameters		
-		$clean_name = TfishFilter::trimString($name);
-		$clean_limit = TfishFilter::isInt($limit, 0) ? $limit : 0;
-		$clean_path = TfishFilter::trimString($path);
-		$clean_domain = TfishFilter::trimString($domain);
-		if (isset($https)) {
-			$clean_https = !empty($https) ? true : false;
-		} else {
-			$clean_https = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) ? true : false;
-		}
-		$clean_http_only = true; // Locked to http as security measure.
-		
-		// Start the session
-		self::_sessionStart($clean_name, $clean_limit, $clean_path, $clean_domain, $clean_https, $clean_http_only);
-	}
 	
-	/**
-	 * Regenerates the session ID.
+	/*
+	 * Shorthand admin privilages check.
 	 * 
-	 * Called whenever there is a privilege escalation (login) or at random intervals to reduce
-	 * risk of session hijacking.
+	 * For added security this could retrieve an encrypted token, preferably the SSL session id,
+	 * although thats availability seems to depend on server configuration.
 	 * 
-	 * @return void
+	 * @return bool true if admin false if not
 	 */
-	public static function regenerateSession()
-	{	
-		// If this session is obsolete it means there already is a new id
-		if (isset($_SESSION['OBSOLETE']) && $_SESSION['OBSOLETE'] == true) {
-			return;
+	public static function isAdmin()
+	{
+		if (isset($_SESSION['TFISH_LOGIN']) && $_SESSION['TFISH_LOGIN'] == true) {
+			return true;
+		} else {
+			return false;
 		}
-
-		// Set current session to expire in 10 seconds
-		$_SESSION['OBSOLETE'] = true;
-		$_SESSION['EXPIRES'] = time() + 10;
-
-		// Create new session without destroying the old one
-		session_regenerate_id(false);
-
-		// Grab current session ID and close both sessions to allow other scripts to use them
-		$newSession = session_id();
-		session_write_close();
-
-		// Set session ID to the new one, and start it back up again
-		session_id($newSession);
-		session_start();
-
-		// Now we unset the obsolete and expiration values for the session we want to keep
-		unset($_SESSION['OBSOLETE']);
-		unset($_SESSION['EXPIRES']);
 	}
 	
 	/**
 	 * Authenticate the user and establish a session.
 	 * 
-	 * Note that the password field is never sanitised.
+	 * Note that the password field is unrestricted content.
 	 * 
 	 * @param string $email
 	 * @param string $password
@@ -106,80 +65,6 @@ class TfishSession
 				// Issue warning - email should follow email format
 				self::logout(TFISH_ADMIN_URL . "login.php");
 			}
-		}
-	}
-	
-	/**
-	 * Destroys the current session on logout
-	 * 
-	 * @param string|bool $url_redirect to redirect the user to. 
-	 * @return void
-	 */
-	public static function logout($url_redirect = false)
-	{
-		$clean_url = false;
-		if ($url_redirect) {
-			$clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
-		}
-		self::_logout($clean_url);
-	}
-	
-	/*
-	 * Shorthand admin privilages check.
-	 * 
-	 * For added security this could retrieve an encrypted token, preferably the SSL session id,
-	 * although thats availability seems to depend on server configuration.
-	 * 
-	 * @return bool true if admin false if not
-	 */
-	public static function isAdmin()
-	{
-		if (isset($_SESSION['TFISH_LOGIN']) && $_SESSION['TFISH_LOGIN'] == true) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/*
-	 * Returns a login or logout link for insertion in the template.
-	 * 
-	 * @return string login or logout link
-	 */
-	public static function loginLink()
-	{
-		if (self::isAdmin()) {
-			return '<a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">' . TFISH_LOGOUT . '</a>';
-		} else {
-			return '<a href="' . TFISH_ADMIN_URL . 'login.php">' . TFISH_LOGIN . '</a>';
-		}
-	}
-	
-	private static function _sessionStart($name, $limit, $path, $domain, $https, $http_only)
-	{	
-		// Set the cookie settings and start the session. Cookies are locked to http only.
-		session_name($name . '_session');
-		session_set_cookie_params($limit, $path, $domain, $https, $http_only);
-		session_start();
-		
-		// Make sure the session hasn't expired, and destroy it if it has
-		if (self::validateSession()) {
-			// Check to see if the session is new or a hijacking attempt
-			if (!self::preventHijacking()) {
-				// Reset session data and regenerate id
-				$_SESSION = array();
-				$_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-				$_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-				self::regenerateSession();
-
-			// Give a 5% chance of the session id changing on any request
-			} elseif (rand(1, 100) <= 5) {
-				self::regenerateSession();
-			}
-		} else {
-			$_SESSION = array();
-			session_destroy();
-			session_start();
 		}
 	}
 	
@@ -219,6 +104,35 @@ class TfishSession
 		}		
 	}
 	
+	/*
+	 * Returns a login or logout link for insertion in the template.
+	 * 
+	 * @return string login or logout link
+	 */
+	public static function loginLink()
+	{
+		if (self::isAdmin()) {
+			return '<a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">' . TFISH_LOGOUT . '</a>';
+		} else {
+			return '<a href="' . TFISH_ADMIN_URL . 'login.php">' . TFISH_LOGIN . '</a>';
+		}
+	}
+	
+	/**
+	 * Destroys the current session on logout
+	 * 
+	 * @param string|bool $url_redirect to redirect the user to. 
+	 * @return void
+	 */
+	public static function logout($url_redirect = false)
+	{
+		$clean_url = false;
+		if ($url_redirect) {
+			$clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
+		}
+		self::_logout($clean_url);
+	}
+	
 	private static function _logout($clean_url)
 	{	
 		// Unset all of the session variables.
@@ -239,7 +153,7 @@ class TfishSession
 			header('location: ' . TFISH_URL);
 			exit;
 		}
-	}	
+	}
 	
 	/**
 	 * Watches for potential signs of session hijacking.
@@ -267,33 +181,20 @@ class TfishSession
 	}
 	
 	/**
-	 * Checks if the session has expired or been declared obsolete.
-	 * 
-	 * If the session has expired or become obsolete it should be destroyed and restarted.
-	 * 
-	 * @return boolean true if session is valid false if expired or obsolete
-	 */
-	protected static function validateSession()
-	{	
-		if ( isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES']) ) {
-			return false;
-		}
-
-		if (isset($_SESSION['EXPIRES']) && $_SESSION['EXPIRES'] < time()) {
-			return false;
-		}
-
-		return true;
-	}
-	
-	/**
 	 * Implementation of the secure cookie protocol of Liu, IKovacs, Huang and Gouda (2005).
 	 * 
 	 * This function is not in working order. Liu et al. have devised what seems to be a
 	 * bulletproof session security mechanism. Unfortunately, it requires access to a SSL
-	 * session key, which is only accessible with a specific server configuration, ie. in most
+	 * session ID, which is only accessible with a specific server configuration, ie. in most
 	 * cases it's just not available. Which renders this otherwise excellent idea impracticable
 	 * for general use.
+	 * 
+	 * It may be possible to make the ID available by adding a configuration directive to the
+	 * VirtualHost in apache, but I haven't tested it yet:
+	 * 
+	 * SSLOptions +StdEnvVars
+	 * 
+	 * See: http://cweiske.de/tagebuch/ssl-client-certificates.htm
 	 * 
 	 * @return void
 	 */
@@ -340,5 +241,112 @@ class TfishSession
 		$encrypted_data = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $k, $data, $mode);
 		
 		// Set the cookie parameters and away we go
+	}
+	
+	public static function sessionStart($name = null, $limit = 0, $path = '/', $domain = null, $https = null)
+	{	
+		// Gather parameters
+		global $tfish_preference;
+		$name = isset($name) ? $name : $tfish_preference->session_name;
+		$domain = isset($domain) ? $domain : ltrim($_SERVER['SERVER_NAME'], 'www');
+		$https = isset($https) ? $https : isset($_SERVER['HTTPS']);
+		
+		// Sanitise parameters		
+		$clean_name = TfishFilter::trimString($name);
+		$clean_limit = TfishFilter::isInt($limit, 0) ? $limit : 0;
+		$clean_path = TfishFilter::trimString($path);
+		$clean_domain = TfishFilter::trimString($domain);
+		if (isset($https)) {
+			$clean_https = !empty($https) ? true : false;
+		} else {
+			$clean_https = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) ? true : false;
+		}
+		$clean_http_only = true; // Locked to http as security measure.
+		
+		// Start the session
+		self::_sessionStart($clean_name, $clean_limit, $clean_path, $clean_domain, $clean_https, $clean_http_only);
+	}
+	
+	private static function _sessionStart($name, $limit, $path, $domain, $https, $http_only)
+	{	
+		// Set the cookie settings and start the session. Cookies are locked to http only.
+		session_name($name . '_session');
+		session_set_cookie_params($limit, $path, $domain, $https, $http_only);
+		session_start();
+		
+		// Make sure the session hasn't expired, and destroy it if it has
+		if (self::validateSession()) {
+			// Check to see if the session is new or a hijacking attempt
+			if (!self::preventHijacking()) {
+				// Reset session data and regenerate id
+				$_SESSION = array();
+				$_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
+				$_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+				self::regenerateSession();
+
+			// Give a 5% chance of the session id changing on any request
+			} elseif (rand(1, 100) <= 5) {
+				self::regenerateSession();
+			}
+		} else {
+			$_SESSION = array();
+			session_destroy();
+			session_start();
+		}
+	}
+	
+	/**
+	 * Regenerates the session ID.
+	 * 
+	 * Called whenever there is a privilege escalation (login) or at random intervals to reduce
+	 * risk of session hijacking.
+	 * 
+	 * @return void
+	 */
+	public static function regenerateSession()
+	{	
+		// If this session is obsolete it means there already is a new id
+		if (isset($_SESSION['OBSOLETE']) && $_SESSION['OBSOLETE'] == true) {
+			return;
+		}
+
+		// Set current session to expire in 10 seconds
+		$_SESSION['OBSOLETE'] = true;
+		$_SESSION['EXPIRES'] = time() + 10;
+
+		// Create new session without destroying the old one
+		session_regenerate_id(false);
+
+		// Grab current session ID and close both sessions to allow other scripts to use them
+		$newSession = session_id();
+		session_write_close();
+
+		// Set session ID to the new one, and start it back up again
+		session_id($newSession);
+		session_start();
+
+		// Now we unset the obsolete and expiration values for the session we want to keep
+		unset($_SESSION['OBSOLETE']);
+		unset($_SESSION['EXPIRES']);
+	}
+	
+	/**
+	 * Checks if the session has expired or been declared obsolete.
+	 * 
+	 * If the session has expired or become obsolete it should be destroyed and restarted.
+	 * 
+	 * @return boolean true if session is valid false if expired or obsolete
+	 */
+	protected static function validateSession()
+	{	
+		if ( isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES']) ) {
+			return false;
+		}
+
+		if (isset($_SESSION['EXPIRES']) && $_SESSION['EXPIRES'] < time()) {
+			return false;
+		}
+
+		return true;
 	}
 }

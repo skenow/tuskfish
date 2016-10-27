@@ -25,7 +25,54 @@
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 class TfishFilter
-{
+{	
+	/**
+	 * Check if the character encoding of text is UTF-8.
+	 * 
+	 * All strings received from external sources must be passed through this function, particularly
+	 * prior to storage in the database.
+	 * 
+	 * @param string $dirty_text
+	 * @return bool true if UTF-8 otherwise false
+	 */
+	public static function isUtf8($dirty_string)
+	{
+		return mb_check_encoding($dirty_string, 'UTF-8');
+	}
+	
+	/**
+	 * Escape data for display to mitigate XSS attacks.
+	 * 
+	 * Applies htmlentities to text fields destined for output / display to limit XSS attacks.
+	 * Encoding of quotes and use of UTF-8 character set is hardcoded in.
+	 *
+	 * @param string $output
+	 * @return string
+	 */
+	public static function escape($output)
+	{
+		return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
+	}
+	
+	/**
+	 * URL-encode and escape a string for use in a URL.
+	 * 
+	 * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspeciachars().
+	 * If you wish to use the data on a landing page you must decode it with htmlspecialchars_decode()
+	 * followed by rawurldecode() in that order.
+	 * 
+	 * @param string $url
+	 * @return string
+	 */
+	public static function encodeEscapeUrl($url)
+	{
+		$url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
+		$url = rawurlencode($url); // Encode characters to make them URL safe.
+		$clean_url = self::escape($url); // Encode entities with htmlspecialchars()
+		
+		return $clean_url;
+	}
+	
 	/**
 	 * Validate an array of input against expected data types, typically $_POST, $_GET or $_REQUEST.
 	 * 
@@ -102,50 +149,28 @@ class TfishFilter
 	}
 	
 	/**
-	 * Check if the character encoding of text is UTF-8.
+	 * Validate (and to some extent, "sanitise") HTML input to conform with whitelisted tags.
 	 * 
-	 * All strings received from external sources must be passed through this function, particularly
-	 * prior to storage in the database.
-	 * 
-	 * @param string $dirty_text
-	 * @return bool true if UTF-8 otherwise false
-	 */
-	public static function isUtf8($dirty_string)
-	{
-		return mb_check_encoding($dirty_string, 'UTF-8');
-	}
-	
-	/**
-	 * Escape data for display to mitigate XSS attacks.
-	 * 
-	 * Applies htmlentities to text fields destined for output / display to limit XSS attacks.
-	 * Encoding of quotes and use of UTF-8 character set is hardcoded in.
+	 * Applies HTMLPurifier to validate and sanitise HTML input. The precise operation can be
+	 * modified by altering the configuration of HTMLPurifier.
 	 *
-	 * @param string $output
-	 * @return string
+	 * @param string $dirty_text
+	 * @param array $configs
+	 * @return string validated HTML content
 	 */
-	public static function escape($output)
+	public static function filterHtml($dirty_html, $config = false)
 	{
-		return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
-	}
-	
-	/**
-	 * URL-encode and escape a string for use in a URL.
-	 * 
-	 * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspeciachars().
-	 * If you wish to use the data on a landing page you must decode it with htmlspecialchars_decode()
-	 * followed by rawurldecode() in that order.
-	 * 
-	 * @param string $url
-	 * @return string
-	 */
-	public static function encodeEscapeUrl($url)
-	{
-		$url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
-		$url = rawurlencode($url); // Encode characters to make them URL safe.
-		$clean_url = self::escape($url); // Encode entities with htmlspecialchars()
-		
-		return $clean_url;
+		if (self::isUtf8($dirty_html)) {
+			if (class_exists('HTMLPurifier')) {
+				$html_purifier = new HTMLPurifier($config);
+				$clean_html = (string)$html_purifier->purify($dirty_html);
+				return $clean_html;
+			} else {
+				return false;
+			}	
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -342,31 +367,6 @@ class TfishFilter
 			// trim($data, chr(0xC2).chr(0xA0));
 			// Combined trim?
 			// trim($data, "\x00..\x20chr(0xC2).chr(0xA0)");
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Validate (and to some extent, "sanitise") HTML input to conform with whitelisted tags.
-	 * 
-	 * Applies HTMLPurifier to validate and sanitise HTML input. The precise operation can be
-	 * modified by altering the configuration of HTMLPurifier.
-	 *
-	 * @param string $dirty_text
-	 * @param array $configs
-	 * @return string validated HTML content
-	 */
-	public static function filterHtml($dirty_html, $config = false)
-	{
-		if (self::isUtf8($dirty_html)) {
-			if (class_exists('HTMLPurifier')) {
-				$html_purifier = new HTMLPurifier($config);
-				$clean_html = (string)$html_purifier->purify($dirty_html);
-				return $clean_html;
-			} else {
-				return false;
-			}	
 		} else {
 			return false;
 		}

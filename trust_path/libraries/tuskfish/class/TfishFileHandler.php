@@ -21,6 +21,40 @@ class TfishFileHandler
 	{}
 	
 	/**
+	 * Returns an array of audio mimetypes that are permitted for content objects.
+	 * 
+	 * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
+	 * is still acceptable, although it must no longer be used for video files.
+	 * 
+	 * @return array
+	 */
+	public static function allowedAudioMimetypes() {
+		return array(
+			"mp3" => "audio/mpeg",
+			"oga" => "audio/ogg",
+			"ogg" => "audio/ogg",
+			"wav" => "audio/x-wav"
+		);
+	}
+	
+	/**
+	 * Returns a string of video mimetypes that are permitted for upload.
+	 * 
+	 * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
+	 * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
+	 * wide use it is now presumed to refer to audio files only.
+	 * 
+	 * @return string
+	 */
+	public static function allowedVideoMimetypes() {
+		return array(
+			"mp4" => "video/mp4",
+			"ogv" => "video/ogg",
+			"webm" => "video/webm"
+		);
+	}
+	
+	/**
 	 * Append a string to a file.
 	 * 
 	 * @param string $path
@@ -321,40 +355,6 @@ class TfishFileHandler
 			"zip" => "application/zip", // Archives.
 			"gz" => "application/x-gzip",
 			"tar" => "application/x-tar"	
-		);
-	}
-	
-	/**
-	 * Returns an array of audio mimetypes that are permitted for content objects.
-	 * 
-	 * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
-	 * is still acceptable, although it must no longer be used for video files.
-	 * 
-	 * @return array
-	 */
-	public static function allowedAudioMimetypes() {
-		return array(
-			"mp3" => "audio/mpeg",
-			"oga" => "audio/ogg",
-			"ogg" => "audio/ogg",
-			"wav" => "audio/x-wav"
-		);
-	}
-	
-	/**
-	 * Returns a string of video mimetypes that are permitted for upload.
-	 * 
-	 * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
-	 * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
-	 * wide use it is now presumed to refer to audio files only.
-	 * 
-	 * @return string
-	 */
-	public static function allowedVideoMimetypes() {
-		return array(
-			"mp4" => "video/mp4",
-			"ogv" => "video/ogg",
-			"webm" => "video/webm"
 		);
 	}
 	

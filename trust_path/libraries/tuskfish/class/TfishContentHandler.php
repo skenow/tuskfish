@@ -18,65 +18,55 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishContentHandler
 {
 	function __construct() {}
-
-	/**
-	 * Check if an existing object has an associated image file upload.
-	 * 
-	 * @param int $id of content object
-	 * @return string filename
-	 */
-	private static function _checkImage($id)
-	{
-		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
-		$filename = '';
-		
-		// Objects without an ID have not yet been inserted into the database.
-		if (empty($clean_id)) {
-			return false;
-		}
-		
-		$criteria = new TfishCriteria;
-		$criteria->add(new TfishCriteriaItem('id', $clean_id));
-		
-		$statement = TfishDatabase::select('content', $criteria, array('image'));
-		if ($statement) {
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
-			$filename = (isset($row['image']) && !empty($row['image'])) ? $row['image'] : false;
-		} else {
-			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-		}
-		
-		return $filename;
-	}
 	
 	/**
-	 * Check if an existing object has an associated media file upload.
+	 * Delete a single object from the content table.
 	 * 
-	 * @param int $id of content object
-	 * @return string filename
+	 * @param int $id of content object to delete
+	 * @return boolean true on success, false on failure
 	 */
-	private static function _checkMedia($id)
+	public static function delete($id)
 	{
-		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
-		$filename = '';
-		
-		// Objects without an ID have not yet been inserted into the database.
-		if (empty($clean_id)) {
+		$clean_id = (int)$id;
+		if (!TfishFilter::isInt($clean_id, 1)) {
+			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
 			return false;
 		}
 		
-		$criteria = new TfishCriteria;
-		$criteria->add(new TfishCriteriaItem('id', $clean_id));
-
-		$statement = TfishDatabase::select('content', $criteria, array('media'));
-		if ($statement) {
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
-			$filename = (isset($row['media']) && !empty($row['media'])) ? $row['media'] : false;
-		} else {
-			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+		// Delete associated files.
+		$obj = self::getObject($clean_id);
+		if (TfishFilter::isObject($obj)) {
+			if ($obj->image) {
+				self::_deleteImage($obj->image);
+			}
+			if ($obj->media) {
+				self::_deleteMedia($obj->media);
+			}
 		}
 		
-		return $filename;
+		// Delete associated taglinks.
+		$result = TfishTaglinkHandler::deleteTaglinks($clean_id);
+		if (!$result) {
+			return false;
+		}
+		
+		// If object is a collection delete related parent references in child objects.
+		if ($obj->type == 'TfishCollection') {
+			$criteria = new TfishCriteria();
+			$criteria->add(new TfishCriteriaItem('parent', $clean_id));
+			$result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
+			if (!$result) {
+				return false;
+			}
+		}
+		
+		// Delete the object.
+		$result = TfishDatabase::delete('content', $clean_id);
+		if (!$result) {
+			return false;
+		}
+		
+		return true;		
 	}
 	
 	/**
@@ -105,61 +95,173 @@ class TfishContentHandler
 		}
 	}
 	
-	
 	/**
-	 * Uploads an image file into the uploads/image directory.
+	 * Inserts a content object into the database.
 	 * 
-	 * @return void
+	 * Note that content child content classes that have unset unused properties from the parent
+	 * should reset them to null before insertion or update. This is to guard against the case
+	 * where the admin reassigns the type of a content object - it makes sure that unused properties
+	 * are zeroed in the database. 
+	 * 
+	 * @param object $obj
+	 * @return boolean
 	 */
-	private static function _uploadImage()
+	public static function insert($obj)
 	{
+		$key_values = $obj->toArray();
+		$key_values['submission_time'] = time(); // Automatically set submission time.
+		unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
+		unset($key_values['tags']);
+		
+		// Process image and media files before inserting the object, as related fields must be set.
+		$property_whitelist = $obj->getPropertyWhitelist();
 		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
 			$filename = TfishFilter::trimString($_FILES['image']['name']);
 			$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
 			if ($clean_filename) {
-				$this->__set('image', $clean_filename);
+				$key_values['image'] = $clean_filename;
 			}
 		}
-	}
 	
-	/**
-	 * Uploads a media file into the uploads/media directory.
-	 * 
-	 * @return void
-	 */
-	private static function _uploadMedia()
-	{
 		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
 			$filename = TfishFilter::trimString($_FILES['media']['name']);
 			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
 			if ($clean_filename) {
-				$this->__set('media', $clean_filename);
-				$this->__set('format', pathinfo($clean_filename, PATHINFO_EXTENSION));
-				$this->__set('file_size', $_FILES['media']['size']);
+				$key_values['media'] = $clean_filename;
+				$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+				$extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+				$key_values['format'] = $mimetype_whitelist[$extension];
+				$key_values['file_size'] = $_FILES['media']['size'];
 			}
+		}
+		
+		// Insert the object into the database.
+		$result = TfishDatabase::insert('content', $key_values);
+		if (!$result) {
+			trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
+			return false;
+		} else {
+			$content_id = TfishDatabase::lastInsertId();
+		}
+		unset($key_values, $result);
+		
+		// Tags are stored separately in the taglinks table. Tags are assembled in one batch before
+		// proceeding to insertion; so if one fails a range check all should fail.
+		if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
+
+			// If the lastInsertId could not be retrieved, then halt execution becuase this data
+			// is necessary in order to correctly assign taglinks to content objects.
+			if (!$content_id) {
+				trigger_error(TFISH_ERROR_NO_LAST_INSERT_ID, E_USER_ERROR);
+				exit;
+			}
+			
+			$result = TfishTaglinkHandler::insertTaglinks($content_id, $obj->type, $obj->tags);
+			if (!$result) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Checks if a class name is a sanctioned subclass of content object.
+	 * 
+	 * @param string $type
+	 * @return boolean true if sanctioned otherwise false
+	 */
+	public static function isSanctionedType($type)
+	{
+		$type = TfishFilter::trimString($type);
+		$sanctioned_types = self::getTypes();
+		if (array_key_exists($type, $sanctioned_types)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
 	/**
-	 * Retrieves a single content object based on its ID.
+	 * Get a list of tags actually in use by other content objects, optionally filtered by content type.
 	 * 
-	 * @param int $id of content object
-	 * @return object|boolean $object on success, false on failure
+	 * Used primarily to build select box controls.
+	 * 
+	 * @param string $type
+	 * 
+	 * @return array|boolean list of tags if available, false if empty.
 	 */
-	public static function getObject($id)
+	public static function getActiveTagList($type = null)
 	{
-		$clean_id = (int)$id;
-		if (TfishFilter::isInt($id, 1)) {
+		$tags = $distinct_tags = array();
+		
+		$tags = self::getTagList();
+		if (empty($tags)) {
+			return false;
+		}
+		
+		// Restrict tag list to those actually in use.
+		$clean_type = (isset($type) && self::isSanctionedType($type)) ? TfishFilter::trimString($type) : null;
+		
+		if (isset($clean_type)) {
 			$criteria = new TfishCriteria();
-			$criteria->add(new TfishCriteriaItem('id', $clean_id));
-			$statement = TfishDatabase::select('content', $criteria);
-			if ($statement) {
-				$row = $statement->fetch(PDO::FETCH_ASSOC);
-				$object = self::toObject($row);
-				return $object;
+			$criteria->add(new TfishCriteriaItem('content_type', $clean_type));
+		} else {
+			$criteria = false;
+		}
+		
+		$statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
+		if ($statement) {
+			try {
+				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+					$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
+				}
+			} catch (PDOException $e) {
+				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 			}
 		}
-		return false;
+
+		return $distinct_tags;
+	}
+	
+	/**
+	 * Counts the number of content objects matching the criteria.
+	 * 
+	 * Main use is for constructing the pagination control. Note that the limit property will
+	 * be ignored even if it is set.
+	 * 
+	 * @param object $criteria TfishCriteria
+	 * @return int $count
+	 */
+	public static function getCount($criteria = false)
+	{
+		if ($criteria && !empty($criteria->limit)) {
+			$limit = $criteria->limit;
+			$criteria->limit = 0;
+		}
+		$count = TfishDatabase::selectCount('content', $criteria);
+		if (isset($limit)) {
+			$criteria->limit = (int)$limit;
+		}
+
+		return $count;
+	}
+	
+	/**
+	 * Returns a list of languages for the content object submission form.
+	 * 
+	 * In the interests of brevity and sanity a full list is not provided. Add entries that you
+	 * want to use to the array using ISO 639-1 two-letter language codes, which you can find at:
+	 * https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes. Be aware that deleting entries that
+	 * are in use by your content objects will cause errors.
+	 * 
+	 * @return array of language codes
+	 */
+	public static function getLanguages() {
+		return array(
+			"en" => "English",
+			"th" => "Thai",
+		);
 	}
 	
 	/**
@@ -196,6 +298,28 @@ class TfishContentHandler
 		}
 		
 		return $content_list;		
+	}
+	
+	/**
+	 * Retrieves a single content object based on its ID.
+	 * 
+	 * @param int $id of content object
+	 * @return object|boolean $object on success, false on failure
+	 */
+	public static function getObject($id)
+	{
+		$clean_id = (int)$id;
+		if (TfishFilter::isInt($id, 1)) {
+			$criteria = new TfishCriteria();
+			$criteria->add(new TfishCriteriaItem('id', $clean_id));
+			$statement = TfishDatabase::select('content', $criteria);
+			if ($statement) {
+				$row = $statement->fetch(PDO::FETCH_ASSOC);
+				$object = self::toObject($row);
+				return $object;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -268,188 +392,6 @@ class TfishContentHandler
 	}
 	
 	/**
-	 * Counts the number of content objects matching the criteria.
-	 * 
-	 * Main use is for constructing the pagination control. Note that the limit property will
-	 * be ignored even if it is set.
-	 * 
-	 * @param object $criteria TfishCriteria
-	 * @return int $count
-	 */
-	public static function getCount($criteria = false)
-	{
-		if ($criteria && !empty($criteria->limit)) {
-			$limit = $criteria->limit;
-			$criteria->limit = 0;
-		}
-		$count = TfishDatabase::selectCount('content', $criteria);
-		if (isset($limit)) {
-			$criteria->limit = (int)$limit;
-		}
-
-		return $count;
-	}
-	
-	/**
-	 * Returns a list of languages for the content object submission form.
-	 * 
-	 * In the interests of brevity and sanity a full list is not provided. Add entries that you
-	 * want to use to the array using ISO 639-1 two-letter language codes, which you can find at:
-	 * https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes. Be aware that deleting entries that
-	 * are in use by your content objects will cause errors.
-	 * 
-	 * @return array of language codes
-	 */
-	public static function getLanguages() {
-		return array(
-			"en" => "English",
-			"th" => "Thai",
-		);
-	}
-	
-	/**
-	 * Returns a list of intellectual property rights licenses for the content submission form.
-	 * 
-	 * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
-	 * that you want to use to the array below. Be aware that deleting entries that are in use by
-	 * your content objects will cause errors.
-	 * 
-	 * @return array of copyright licenses
-	 */
-	public static function getRights()
-	{
-		return array(
-			'1' => TFISH_RIGHTS_COPYRIGHT,
-			'2' => TFISH_RIGHTS_ATTRIBUTION,
-			'3' => TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE,
-			'4' => TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS,
-			'5' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL,
-			'6' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE,
-			'7' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS,
-			'8' => TFISH_RIGHTS_GPL2,
-			'9' => TFISH_RIGHTS_GPL3,
-			'10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
-		);
-	}
-	
-	/**
-	 * Returns a list of collection objects for the data entry/edit forms.
-	 * 
-	 * @todo move this function over to use TfishAngryTree for more robust tree handling
-	 * @return array of collection objects
-	 */
-	public static function getParents()
-	{
-		$parents = array();
-		$criteria = new TfishCriteria();
-		$criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
-		$parents = TfishContentHandler::getList($criteria);
-		
-		return $parents;
-	}
-	
-	/**
-	 * Search the filtering criteria ($criteria->items) to see if object type has been set and
-	 * return the key.
-	 * 
-	 * @param array $criteria_items
-	 * @return int|null
-	 */
-	protected static function getTypeIndex($criteria_items)
-	{
-		foreach ($criteria_items as $key => $item) {
-			if ($item->column == 'type') {
-				return $key;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Returns a whitelist of permitted content object types.
-	 * 
-	 * Use this whitelist when dynamically instantiating content objects. If you create additional
-	 * types of content object (which must be descendants of the TfishContentObject class) you
-	 * must add them to the whitelist below. Otherwise their use will be denied in many parts of
-	 * the Tuskfish system.
-	 * 
-	 * @return array whitelist of permitted content object types
-	 */
-	public static function getTypes()
-	{
-		return array(
-			'TfishArticle' => TFISH_TYPE_ARTICLE,
-			'TfishAudio' => TFISH_TYPE_AUDIO,
-			'TfishCollection' => TFISH_TYPE_COLLECTION,
-			'TfishDownload' => TFISH_TYPE_DOWNLOAD,
-			'TfishImage' => TFISH_TYPE_IMAGE,
-			'TfishStatic' => TFISH_TYPE_STATIC,
-			'TfishTag' => TFISH_TYPE_TAG,
-			'TfishVideo' => TFISH_TYPE_VIDEO,
-		);
-	}
-	
-	/**
-	 * Checks if a class name is a sanctioned subclass of content object.
-	 * 
-	 * @param string $type
-	 * @return boolean true if sanctioned otherwise false
-	 */
-	public static function isSanctionedType($type)
-	{
-		$type = TfishFilter::trimString($type);
-		$sanctioned_types = self::getTypes();
-		if (array_key_exists($type, $sanctioned_types)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Get a list of tags actually in use by other content objects, optionally filtered by content type.
-	 * 
-	 * Used primarily to build select box controls.
-	 * 
-	 * @param string $type
-	 * 
-	 * @return array|boolean list of tags if available, false if empty.
-	 */
-	public static function getActiveTagList($type = null)
-	{
-		$tags = $distinct_tags = array();
-		
-		$tags = self::getTagList();
-		if (empty($tags)) {
-			return false;
-		}
-		
-		// Restrict tag list to those actually in use.
-		$clean_type = (isset($type) && self::isSanctionedType($type)) ? TfishFilter::trimString($type) : null;
-		
-		if (isset($clean_type)) {
-			$criteria = new TfishCriteria();
-			$criteria->add(new TfishCriteriaItem('content_type', $clean_type));
-		} else {
-			$criteria = false;
-		}
-		
-		$statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
-		if ($statement) {
-			try {
-				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-					$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
-				}
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			}
-		}
-
-		return $distinct_tags;
-	}
-	
-	
-	/**
 	 * Generates an online/offline select box.
 	 * 
 	 * @param int $selected preselected option
@@ -475,6 +417,47 @@ class TfishContentHandler
 		$select_box .= '</select>';
 
 		return $select_box;
+	}
+	
+	/**
+	 * Returns a list of collection objects for the data entry/edit forms.
+	 * 
+	 * @todo move this function over to use TfishAngryTree for more robust tree handling
+	 * @return array of collection objects
+	 */
+	public static function getParents()
+	{
+		$parents = array();
+		$criteria = new TfishCriteria();
+		$criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
+		$parents = TfishContentHandler::getList($criteria);
+		
+		return $parents;
+	}
+	
+	/**
+	 * Returns a list of intellectual property rights licenses for the content submission form.
+	 * 
+	 * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
+	 * that you want to use to the array below. Be aware that deleting entries that are in use by
+	 * your content objects will cause errors.
+	 * 
+	 * @return array of copyright licenses
+	 */
+	public static function getRights()
+	{
+		return array(
+			'1' => TFISH_RIGHTS_COPYRIGHT,
+			'2' => TFISH_RIGHTS_ATTRIBUTION,
+			'3' => TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE,
+			'4' => TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS,
+			'5' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL,
+			'6' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE,
+			'7' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS,
+			'8' => TFISH_RIGHTS_GPL2,
+			'9' => TFISH_RIGHTS_GPL3,
+			'10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
+		);
 	}
 	
 	/**
@@ -523,6 +506,47 @@ class TfishContentHandler
 	}
 	
 	/**
+	 * Search the filtering criteria ($criteria->items) to see if object type has been set and
+	 * return the key.
+	 * 
+	 * @param array $criteria_items
+	 * @return int|null
+	 */
+	protected static function getTypeIndex($criteria_items)
+	{
+		foreach ($criteria_items as $key => $item) {
+			if ($item->column == 'type') {
+				return $key;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a whitelist of permitted content object types.
+	 * 
+	 * Use this whitelist when dynamically instantiating content objects. If you create additional
+	 * types of content object (which must be descendants of the TfishContentObject class) you
+	 * must add them to the whitelist below. Otherwise their use will be denied in many parts of
+	 * the Tuskfish system.
+	 * 
+	 * @return array whitelist of permitted content object types
+	 */
+	public static function getTypes()
+	{
+		return array(
+			'TfishArticle' => TFISH_TYPE_ARTICLE,
+			'TfishAudio' => TFISH_TYPE_AUDIO,
+			'TfishCollection' => TFISH_TYPE_COLLECTION,
+			'TfishDownload' => TFISH_TYPE_DOWNLOAD,
+			'TfishImage' => TFISH_TYPE_IMAGE,
+			'TfishStatic' => TFISH_TYPE_STATIC,
+			'TfishTag' => TFISH_TYPE_TAG,
+			'TfishVideo' => TFISH_TYPE_VIDEO,
+		);
+	}
+	
+	/**
 	 * Get a content type select box.
 	 * 
 	 * @param int $selected preselected option
@@ -551,99 +575,6 @@ class TfishContentHandler
 		$select_box .= '</select>';
 		
 		return $select_box;
-	}
-	
-	/**
-	 * Toggle the online status of a content object.
-	 * 
-	 * @param int $id of content object
-	 * @return boolean true on success, false on failure
-	 */
-	public static function toggleOnlineStatus($id)
-	{
-		$clean_id = (int)$id;
-		return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
-	}
-	
-	/**
-	 * Increment a content object's counter field by one.
-	 * 
-	 * @param int $id of content object
-	 */
-	public static function updateCounter($id)
-	{
-		$clean_id = (int)$id;
-		return TfishDatabase::updateCounter($clean_id, 'content', 'counter');
-	}
-	
-	/**
-	 * Inserts a content object into the database.
-	 * 
-	 * Note that content child content classes that have unset unused properties from the parent
-	 * should reset them to null before insertion or update. This is to guard against the case
-	 * where the admin reassigns the type of a content object - it makes sure that unused properties
-	 * are zeroed in the database. 
-	 * 
-	 * @param object $obj
-	 * @return boolean
-	 */
-	public static function insert($obj)
-	{
-		$key_values = $obj->toArray();
-		$key_values['submission_time'] = time(); // Automatically set submission time.
-		unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
-		unset($key_values['tags']);
-		
-		// Process image and media files before inserting the object, as related fields must be set.
-		$property_whitelist = $obj->getPropertyWhitelist();
-		if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
-			$filename = TfishFilter::trimString($_FILES['image']['name']);
-			$clean_filename = TfishFileHandler::uploadFile($filename, 'image');
-			if ($clean_filename) {
-				$key_values['image'] = $clean_filename;
-			}
-		}
-	
-		if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
-			$filename = TfishFilter::trimString($_FILES['media']['name']);
-			$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
-			if ($clean_filename) {
-				$key_values['media'] = $clean_filename;
-				$mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-				$extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
-				$key_values['format'] = $mimetype_whitelist[$extension];
-				$key_values['file_size'] = $_FILES['media']['size'];
-			}
-		}
-		
-		// Insert the object into the database.
-		$result = TfishDatabase::insert('content', $key_values);
-		if (!$result) {
-			trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
-			return false;
-		} else {
-			$content_id = TfishDatabase::lastInsertId();
-		}
-		unset($key_values, $result);
-		
-		// Tags are stored separately in the taglinks table. Tags are assembled in one batch before
-		// proceeding to insertion; so if one fails a range check all should fail.
-		if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
-
-			// If the lastInsertId could not be retrieved, then halt execution becuase this data
-			// is necessary in order to correctly assign taglinks to content objects.
-			if (!$content_id) {
-				trigger_error(TFISH_ERROR_NO_LAST_INSERT_ID, E_USER_ERROR);
-				exit;
-			}
-			
-			$result = TfishTaglinkHandler::insertTaglinks($content_id, $obj->type, $obj->tags);
-			if (!$result) {
-				return false;
-			}
-		}
-		
-		return true;
 	}
 	
 	/**
@@ -829,6 +760,18 @@ class TfishContentHandler
 	}
 	
 	/**
+	 * Toggle the online status of a content object.
+	 * 
+	 * @param int $id of content object
+	 * @return boolean true on success, false on failure
+	 */
+	public static function toggleOnlineStatus($id)
+	{
+		$clean_id = (int)$id;
+		return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
+	}
+	
+	/**
 	 * Convert a database content row to a corresponding content object.
 	 * 
 	 * Only use this function to convert single objects, as it does a seperate query to look up
@@ -998,52 +941,73 @@ class TfishContentHandler
 	}
 	
 	/**
-	 * Delete a single object from the content table.
+	 * Check if an existing object has an associated image file upload.
 	 * 
-	 * @param int $id of content object to delete
-	 * @return boolean true on success, false on failure
+	 * @param int $id of content object
+	 * @return string filename
 	 */
-	public static function delete($id)
+	private static function _checkImage($id)
+	{
+		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
+		$filename = '';
+		
+		// Objects without an ID have not yet been inserted into the database.
+		if (empty($clean_id)) {
+			return false;
+		}
+		
+		$criteria = new TfishCriteria;
+		$criteria->add(new TfishCriteriaItem('id', $clean_id));
+		
+		$statement = TfishDatabase::select('content', $criteria, array('image'));
+		if ($statement) {
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+			$filename = (isset($row['image']) && !empty($row['image'])) ? $row['image'] : false;
+		} else {
+			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+		}
+		
+		return $filename;
+	}
+	
+	/**
+	 * Check if an existing object has an associated media file upload.
+	 * 
+	 * @param int $id of content object
+	 * @return string filename
+	 */
+	private static function _checkMedia($id)
+	{
+		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
+		$filename = '';
+		
+		// Objects without an ID have not yet been inserted into the database.
+		if (empty($clean_id)) {
+			return false;
+		}
+		
+		$criteria = new TfishCriteria;
+		$criteria->add(new TfishCriteriaItem('id', $clean_id));
+
+		$statement = TfishDatabase::select('content', $criteria, array('media'));
+		if ($statement) {
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+			$filename = (isset($row['media']) && !empty($row['media'])) ? $row['media'] : false;
+		} else {
+			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+		}
+		
+		return $filename;
+	}
+	
+	/**
+	 * Increment a content object's counter field by one.
+	 * 
+	 * @param int $id of content object
+	 */
+	public static function updateCounter($id)
 	{
 		$clean_id = (int)$id;
-		if (!TfishFilter::isInt($clean_id, 1)) {
-			trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-			return false;
-		}
-		
-		// Delete associated files.
-		$obj = self::getObject($clean_id);
-		if (TfishFilter::isObject($obj)) {
-			if ($obj->image) {
-				self::_deleteImage($obj->image);
-			}
-			if ($obj->media) {
-				self::_deleteMedia($obj->media);
-			}
-		}
-		
-		// Delete associated taglinks.
-		$result = TfishTaglinkHandler::deleteTaglinks($clean_id);
-		if (!$result) {
-			return false;
-		}
-		
-		// If object is a collection delete related parent references in child objects.
-		if ($obj->type == 'TfishCollection') {
-			$criteria = new TfishCriteria();
-			$criteria->add(new TfishCriteriaItem('parent', $clean_id));
-			$result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
-			if (!$result) {
-				return false;
-			}
-		}
-		
-		// Delete the object.
-		$result = TfishDatabase::delete('content', $clean_id);
-		if (!$result) {
-			return false;
-		}
-		
-		return true;		
+		return TfishDatabase::updateCounter($clean_id, 'content', 'counter');
 	}
 }
