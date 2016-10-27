@@ -621,11 +621,17 @@ class TfishContentObject extends TfishAncestralObject
 							trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
 						}
 					}
+					
+					// Replace spaces with dashes.
+					if ($property == "seo") {
+						if (TfishFilter::isUtf8($value)) {
+							$value = str_replace(' ', '-', $value);
+						}
+					}
 					$this->__data[$property] = TfishFilter::trimString($value);
 				break;
 			
 				case "url":
-					$value = TfishFilter::trimString($value);
 					if ($value == "" || TfishFilter::isUrl($value)) {
 						$this->__data[$property] = $value;
 					} else {
