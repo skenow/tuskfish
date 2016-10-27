@@ -33,6 +33,24 @@ set_error_handler("TfishLogger::logErrors");
 // Include installation language files
 include_once "./english.php";
 
+// Set template
+$tfish_template = new TfishTemplate();
+$tfish_template->setTemplate('admin');
+
+// No preferences available yet, so just set up a preference analogue
+$tfish_preference = new stdClass();
+$tfish_preference->site_name = 'Tuskfish CMS';
+$tfish_preference->site_description = 'A cutting edge micro-CMS';
+$tfish_preference->site_author = '';
+$tfish_preference->site_copyright = '';
+$tfish_preference->generator = 'Tuskfish CMS';
+$tfish_preference->seo = '';
+$tfish_preference->robots = 'noindex,nofollow';
+$tfish_preference->pagination_elements = '5';
+
+// Instantiate the template object so that it will be available globally.
+$tfish_template = new TfishTemplate();
+
 // Initialise default content variable
 $tfish_content = array('output' => '');
 
@@ -232,15 +250,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 } else {
-// Display data entry form
-	$tfish_form = "db_credentials_form.html";	
+	// Display data entry form
+	$tfish_template->form = "db_credentials_form.html";
+	$tfish_template->tfish_main_content = $tfish_template->render('form');
 }
 
 /**
  * Manually instantiate the metadata object.
  */
-$tfish_metadata = new TfishMetadata();
+$tfish_metadata = new TfishMetadata($tfish_preference);
 $tfish_metadata->title = TFISH_INSTALLATION_TUSKFISH;
 $tfish_metadata->description = TFISH_INSTALLATION_DESCRIPTION;
-$tfish_metadata->template = 'admin.html';
+
 require_once TFISH_PATH . "tfish_footer.php";

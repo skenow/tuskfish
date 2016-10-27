@@ -27,6 +27,9 @@ define("TFISH_INSTALLATION_USER_SALT", "User password salt");
 define("TFISH_INSTALLATION_SITE_SALT", "Site password salt");
 define("TFISH_INSTALLATION_KEY", "HMAC key (63 random characters)");
 define("TFISH_INSTALLATION_STRONG_PASSWORD", "Password is strong");
+define("TFISH_INSTALLATION_URL", "Site URL with trailing slash eg. https://tuskfish.biz/");
+define("TFISH_INSTALLATION_ROOT_PATH", "File path to Tuskfish web root");
+define("TFISH_INSTALLATION_TRUST_PATH", "File path to to Tuskfish Trust Path");
 define("TFISH_INSTALLATION_WARNING", "Warning");
 define("TFISH_INSTALLATION_WEAK_PASSWORD", "This password is WEAK, please try again. For maximum strength your password needs to incorporate the following attributes:");
 define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "At least 13 characters long to resist exhaustive searches of the keyspace.");
@@ -37,3 +40,7 @@ define("TFISH_PASSWORD_SYMBOLIC_WEAKNESS", "At least one non-alphanumeric charac
 define("TFISH_WELCOME", "Welcome to Tuskfish CMS");
 define("TFISH_LOGIN", "Login");
 define("TFISH_SUBMIT", "Submit");
+
+// Constants used in theme, to prevent errors.
+define("TFISH_SEARCH", "Search");
+define("TFISH_RSS", "RSS");
