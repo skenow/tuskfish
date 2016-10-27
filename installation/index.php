@@ -74,7 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			'db_name' => 'string',
 			'admin_email' => 'string',
 			'admin_password' => 'string',
-			'hmac_key' => 'string');
+			'hmac_key' => 'string',
+			//'trust_path' => 'string',
+			//'root_path' => 'string',
+			//'site_url' => 'string'
+			);
 		$clean_vars = TfishFilter::filterData($_POST, $allowed_vars);
 		
 		// Check password length and quality
