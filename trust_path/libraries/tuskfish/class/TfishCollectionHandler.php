@@ -80,23 +80,6 @@ class TfishCollectionHandler extends TfishContentHandler
 	}
 	
 	/**
-	 * Search the filtering criteria ($criteria->items) to see if object type has been set and
-	 * return the key.
-	 * 
-	 * @param array $criteria_items
-	 * @return int|null
-	 */
-	private static function getTypeIndex($criteria_items)
-	{
-		foreach ($criteria_items as $key => $item) {
-			if ($item->column == 'type') {
-				return $key;
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * Returns an array of first children of a designed collection object.
 	 * 
 	 * This function is typically used to generate a list of the children of a collection object.

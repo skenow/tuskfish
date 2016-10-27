@@ -349,6 +349,23 @@ class TfishContentHandler
 	}
 	
 	/**
+	 * Search the filtering criteria ($criteria->items) to see if object type has been set and
+	 * return the key.
+	 * 
+	 * @param array $criteria_items
+	 * @return int|null
+	 */
+	protected static function getTypeIndex($criteria_items)
+	{
+		foreach ($criteria_items as $key => $item) {
+			if ($item->column == 'type') {
+				return $key;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Returns a whitelist of permitted content object types.
 	 * 
 	 * Use this whitelist when dynamically instantiating content objects. If you create additional
