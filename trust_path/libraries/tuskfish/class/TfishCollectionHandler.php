@@ -79,41 +79,6 @@ class TfishCollectionHandler extends TfishContentHandler
 		return $count;
 	}
 	
-	/**
-	 * Returns an array of first children of a designed collection object.
-	 * 
-	 * This function is typically used to generate a list of the children of a collection object.
-	 * 
-	 * @param int $id
-	 * @return array content objects
-	 */
-	public static function getFirstChild($id, $offset = 0, $limit = 0)
-	{
-		$clean_id = TfishFilter::isInt($id, 1) ? (int)$id : null;
-		$clean_offset = TfishFilter::isInt($offset) ? (int)$offset : 0;
-		$clean_limit = TfishFilter::isInt($offset) ? (int)$offset : 0;
-		$first_children = array();
-		
-		if ($clean_id) {
-			
-			$criteria = new TfishCriteria();
-			$criteria->add(new TfishCriteriaItem('parent', $clean_id));
-			$criteria->add(new TfishCriteriaItem('online', true));
-			if ($offset) {
-				$criteria->offset = $clean_offset;
-			}
-			if ($limit) {
-				$criteria->limit = $clean_limit;
-			}
-			$criteria->order = 'date';
-			$criteria->ordertype = 'DESC';
-			
-			$first_children = self::getObjects($criteria);			
-		}
-			
-		return $first_children;
-	}
-	
 	public static function getParentSelectBox($selected = 0)
 	{
 		$selected = (int)$selected;

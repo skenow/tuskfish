@@ -55,7 +55,7 @@ $tfish_template->select_action = 'index.php';
 $tfish_template->select_filters =  TfishTagHandler::getTagSelectBox($clean_tag);
 $tfish_template->select_filters_form = $tfish_template->render('select_filters');
 
-
+/**
 //Prepare new $criteria for blocks. Let's try dynamic tagging.
 $criteria = new TfishCriteria();
 if ($clean_tag) $criteria->tag = array($clean_tag);
@@ -94,6 +94,7 @@ $block_list3->build($criteria);
 $centre_bottom_blocks[] = $block_list3->render();
 
 $tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
+ */
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
