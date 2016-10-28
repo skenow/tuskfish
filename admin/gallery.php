@@ -45,12 +45,11 @@ $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimS
 
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria();
-$criteria->add(new TfishCriteriaItem('image', 'NULL', 'IS NOT'));
 $criteria->add(new TfishCriteriaItem('image', '', '<>'));
 
 // Optional selection criteria.
 if ($clean_tag) $criteria->tag = array($clean_tag);
-if (TfishFilter::isInt($clean_online, 0, 1)) {
+if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
 	$criteria->add(new TfishCriteriaItem('online', $clean_online));
 }
 if ($clean_type) {
