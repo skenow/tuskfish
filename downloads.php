@@ -46,9 +46,7 @@ if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content) && $content->online == true) {
 		
-		// Update view counter and assign object to template.
-		$content->counter += 1;
-		$content_handler::updateCounter($clean_id);
+		// Assign object to template. Counter is only updated when a file download is triggered.
 		$tfish_template->content = $content;
 		
 		// Prepare meta information for display.
