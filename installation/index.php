@@ -56,7 +56,7 @@ $tfish_content = array('output' => '');
 
 // Helper function to grab the site URL.
 function getUrl() {
-  $url  = @( $_SERVER["HTTPS"] != 'on' ) ? 'http://'.$_SERVER["SERVER_NAME"] :  'https://'.$_SERVER["SERVER_NAME"];
+  $url  = @(!isset($_server['HTTPS']) || $_SERVER["HTTPS"] != 'on') ? 'http://' . $_SERVER["SERVER_NAME"] :  'https://' . $_SERVER["SERVER_NAME"];
   $url .= ($_SERVER["SERVER_PORT"] != 80 && $_SERVER["SERVER_PORT"] != 443) ? ":".$_SERVER["SERVER_PORT"] : "";
   $url .= '/';
   return $url;
@@ -67,7 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Display blank form
 	if (empty($_POST['db_name']) || empty($_POST['admin_email']) || empty($_POST['admin_password']) || empty($_POST['hmac_key'])) {
 		$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE_FORM . '</p>';
-		$tfish_form = "db_credentials_form.html";
+		$tfish_template->output = $tfish_content['output'];
+		$tfish_template->form = "db_credentials_form.html";
+		$tfish_template->tfish_main_content = $tfish_template->render('form');
 	} else {
 		// Filter user input
 		$allowed_vars = array(
@@ -233,8 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			// Report on status of database creation
 			if ($db_path && $query) {
-				$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DATABASE_SUCCESS . '</p>'
-					. '<p>' . TFISH_INSTALLATION_COMPLETE . '</p>';
+				$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE . '</p>';
 
 				// Delete the installation folder from the server for security reasons
 				/*try {
@@ -244,10 +245,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				} catch(Exception $e) {
 					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_REMOVE_DIRECTORY . '</p>';
 				}*/
+				$tfish_template->output = $tfish_content['output'];
+				$tfish_template->form = "success.html";
+				$tfish_template->tfish_main_content = $tfish_template->render('form');
 			} else {
 				// If database creation failed, complain and display data entry form again
 				$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DATABASE_FAILED . '</p>';
-				$tfish_form = "db_credentials_form.html";
+				$tfish_template->output = $tfish_content['output'];
+				$tfish_template->form = "db_credentials_form.html";
+				$tfish_template->tfish_main_content = $tfish_template->render('form');
 			}			
 		} else {
 			$tfish_content['output'] .= '<h1>' . TFISH_INSTALLATION_WARNING . '</h1>';
@@ -258,7 +264,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$tfish_content['output'] .= '<li>' . $weakness . '</li>';
 			}
 			$tfish_content['output'] .= '</ul>';
-			$tfish_form = "db_credentials_form.html";
+			$tfish_template->output = $tfish_content['output'];
+			$tfish_template->form = "db_credentials_form.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');
 		}
 	}
 } else {

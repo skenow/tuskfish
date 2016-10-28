@@ -20,7 +20,8 @@
 define("TFISH_ROOT_PATH", "/home/isengard/public_html/tuskfish/");
 define("TFISH_TRUST_PATH", "/home/isengard/public_html/tuskfish/trust_path/");
 define("TFISH_PATH", TFISH_TRUST_PATH . "libraries/tuskfish/");
+define("TFISH_CONFIGURATION_PATH", TFISH_PATH . "configuration/config.php");
 define("TFISH_URL", "https://tuskfish.biz/");
 
 // Include critical files
-require_once(TFISH_PATH . "configuration/config.php");
+require_once(TFISH_CONFIGURATION_PATH);
