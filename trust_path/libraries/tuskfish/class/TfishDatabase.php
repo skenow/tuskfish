@@ -299,6 +299,9 @@ class TfishDatabase
 			// Set the order (sort) column and order (default is ascending).
 			if ($criteria->order) {
 				$sql .= "ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+				if ($criteria->order != 'submission_time') {
+					$sql .= ", `t1`.`submission_time` ";
+				}
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 
@@ -537,8 +540,10 @@ class TfishDatabase
 			
 			// Set the order (sort) column and order (default is ascending).
 			if ($criteria->order) {
-				$sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . ", ";
-				$sql .= "`t1`.`submission_time` ";
+				$sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+				if ($criteria->order != 'submission_time') {
+					$sql .= ", `t1`.`submission_time` ";
+				}
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 
@@ -762,8 +767,10 @@ class TfishDatabase
 			
 			// Set the order (sort) column and type (default is ascending)
 			if ($criteria->order) {
-				$sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . ", ";
-				$sql .= "`t1`.`submission_time` ";
+				$sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+				if ($criteria->order != 'submission_time') {
+					$sql .= ", `t1`.`submission_time` ";
+				}
 				$sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
 			}
 

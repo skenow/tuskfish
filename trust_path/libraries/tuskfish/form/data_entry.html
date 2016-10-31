@@ -26,21 +26,11 @@
 			$('#date').datepicker('setDate', new Date());
 			$('#date').datepicker('update');
 		</script>
-        
-		<!-- Rights -->
-        <div id="rightsContainer">
-            <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
-                <select class="form-control" name="rights" id="rights" required>
-                    <?php foreach ($rights as $key => $right) { echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
-                </select>
-            </div>
-        </div>
 		
 		<!-- Tags -->
         <div id="tagsContainer">
 		<label for="tags" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TAGS; ?>:</label>
-		<div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9">
 			<select multiple size="5" class="form-control" name="tags[]" id="tags">
 				<?php
 					foreach ($tags as $tag_id => $tag_title) {
@@ -144,6 +134,16 @@
     </div>
 	
 	<div class="form-group">
+		
+		<!-- Rights -->
+        <div id="rightsContainer">
+            <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
+            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
+                <select class="form-control" name="rights" id="rights" required>
+                    <?php foreach ($rights as $key => $right) { echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
+                </select>
+            </div>
+        </div>
         
         <!-- Language -->
         <div id="languageContainer">
