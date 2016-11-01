@@ -41,6 +41,11 @@ define("TFISH_PERMALINK_URL", TFISH_URL . "permalink.php?id=");
 define("TFISH_MEDIA_URL", TFISH_URL . "uploads/media/");
 define("TFISH_IMAGE_URL", TFISH_URL . "uploads/image/");
 
+// Alias of TFISH_URL (without trailing slash) for use in teaser/description fields. Use this to
+// make your content portable (if you change domain, all your links will still be valid). The
+// trailing slash is omitted for ease of reading in the editor.
+define("TFISH_LINK", rtrim('/', TFISH_URL));
+
 // RSS enclosure URL - the spec requires that the URL use http protocol, as https will invalidate feed.
 if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
 	define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST) . "/enclosure.php?id=");

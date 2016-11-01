@@ -135,8 +135,10 @@ class TfishContentObject extends TfishAncestralObject
 				
 				case "description":
 				case "teaser":
-					//return (string)TfishFilter::filterHtml($this->__data[$property]); // Output filtering
-					return $this->__data[$property]; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
+					// Do a simple string replace to allow TFISH_URL to be used as a constant, making the site portable.
+					$tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK, $this->__data[$property]);
+					//return (string)TfishFilter::filterHtml($tfish_url_enabled); // Output filtering
+					return $tfish_url_enabled; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
 				break;
 			
 				case "rights":
