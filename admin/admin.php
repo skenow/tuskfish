@@ -38,7 +38,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			$tfish_template->content_types = TfishContentHandler::getTypes();
 			$tfish_template->rights = TfishContentHandler::getRights();
 			$tfish_template->languages = TfishContentHandler::getLanguages();
-			$tfish_template->tags = TfishContentHandler::getTagList();
+			$tfish_template->tags = TfishContentHandler::getTagList(false);
 			
 			// Make a parent tree select box options.
 			$collections = TfishCollectionHandler::getObjects();
@@ -132,7 +132,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 					$tfish_template->content_types = TfishContentHandler::getTypes();
 					$tfish_template->rights = TfishContentHandler::getRights();
 					$tfish_template->languages = TfishContentHandler::getLanguages();
-					$tfish_template->tags = TfishContentHandler::getTagList();
+					$tfish_template->tags = TfishContentHandler::getTagList(false);
 					$tfish_template->parent_select_options = $parent_tree->makeParentSelectBox($row['parent']);
 					$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
 					$tfish_template->tfish_main_content = $tfish_template->render('form');
@@ -285,7 +285,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 					$tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
 			
 			// Prepare select filters.
-			$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
+			$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag, false);
 			$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
 			$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
 			$tfish_template->select_action = 'admin.php';

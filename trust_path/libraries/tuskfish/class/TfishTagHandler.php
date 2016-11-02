@@ -82,10 +82,18 @@ class TfishTagHandler extends TfishContentHandler
 	/**
 	 * Generates a tag select box control.
 	 * 
+	 * Use the $online_only parameter to control whether you retrieve all tags, or just those marked
+	 * as online. Essentially this provides a way to keep your select box uncluttered; mark tags
+	 * that are not important enough to serve as navigation elements as 'offline'. They are still
+	 * available, but they won't appear in the select box list.
+	 * 
 	 * @param int $selected
+	 * @param string $type of content object
+	 * @param string $zero_option the string that will be displayed for the 'zero' or no selection option.
+	 * @param bool $online_only get all tags or just those marked online.
 	 * @return boolean|string
 	 */
-	public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS)
+	public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS, $online_only = true)
 	{
 		$select_box = '';
 		$tag_list = array();
@@ -93,8 +101,9 @@ class TfishTagHandler extends TfishContentHandler
 		$clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1)) ? (int)$selected : null; // ID of a previously selected tag, if any.
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 		$clean_type = TfishContentHandler::isSanctionedType($type) ? TfishFilter::trimString($type) : null;  // Used to filter tags relevant to a specific content subclass, eg. TfishArticle.
+		$clean_online_only = TfishFilter::isBool($online_only) ? (bool)$online_only : true;
 		
-		$tag_list = TfishContentHandler::getActiveTagList($clean_type);
+		$tag_list = TfishContentHandler::getActiveTagList($clean_type, $clean_online_only);
 		if (!empty($tag_list)) {
 			asort($tag_list);
 			$tag_list = array(0 => $clean_zero_option) + $tag_list;

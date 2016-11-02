@@ -185,17 +185,20 @@ class TfishContentHandler
 	/**
 	 * Get a list of tags actually in use by other content objects, optionally filtered by content type.
 	 * 
-	 * Used primarily to build select box controls.
+	 * Used primarily to build select box controls. Use $online_only to select only those tags that
+	 * are marked as online (true), or all tags (false).
 	 * 
 	 * @param string $type
+	 * @param bool $online_only
 	 * 
 	 * @return array|boolean list of tags if available, false if empty.
 	 */
-	public static function getActiveTagList($type = null)
+	public static function getActiveTagList($type = null, $online_only = true)
 	{
 		$tags = $distinct_tags = array();
 		
-		$tags = self::getTagList();
+		$clean_online_only = TfishFilter::isBool($online_only) ? (bool)$online_only : true;
+		$tags = self::getTagList($clean_online_only);
 		if (empty($tags)) {
 			return false;
 		}
@@ -203,23 +206,29 @@ class TfishContentHandler
 		// Restrict tag list to those actually in use.
 		$clean_type = (isset($type) && self::isSanctionedType($type)) ? TfishFilter::trimString($type) : null;
 		
+		$criteria = new TfishCriteria();
+		
+		// Filter tags by type.
 		if (isset($clean_type)) {
-			$criteria = new TfishCriteria();
 			$criteria->add(new TfishCriteriaItem('content_type', $clean_type));
-		} else {
-			$criteria = false;
 		}
 		
+		// Put a check for online status in here.
 		$statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
 		if ($statement) {
 			try {
 				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-					$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
+					if (isset($tags[$row['tag_id']])) {
+						$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
+					}
 				}
 			} catch (PDOException $e) {
 				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 			}
 		}
+		
+		// Sort the tags into alphabetical order.
+		asort($distinct_tags);
 
 		return $distinct_tags;
 	}
@@ -465,14 +474,18 @@ class TfishContentHandler
 	 * 
 	 * @return array of tag objects
 	 */
-	public static function getTagList()
+	public static function getTagList($online_only = true)
 	{
 		$tags = array();
 		$statement = false;
+		$clean_online_only = TfishFilter::isBool($online_only) ? (bool)$online_only : true;
 
 		$columns = array('id', 'title');
 		$criteria = new TfishCriteria();
 		$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+		if ($clean_online_only) {
+			$criteria->add(new TfishCriteriaItem('online', true));
+		}
 		
 		$statement = TfishDatabase::select('content', $criteria, $columns);
 		if ($statement) {
@@ -487,7 +500,8 @@ class TfishContentHandler
 		} else {
 			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 		}
-
+		asort($tags);
+		
 		return $tags;
 	}
 	
@@ -606,7 +620,7 @@ class TfishContentHandler
 			}
 		}
 		
-		$tag_list = self::getTagList();
+		$tag_list = self::getTagList(false);
 		$tag_links = array();
 		foreach ($tags as $tag) {
 			if (TfishFilter::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
