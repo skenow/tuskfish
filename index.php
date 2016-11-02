@@ -46,6 +46,8 @@ $count = $content_handler::getCount($criteria);
 $tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 
 // Retrieve content objects and assign to template.
+$criteria->order = 'date';
+$criteria->ordertype = 'DESC';
 $content_objects = $content_handler::getObjects($criteria);
 $tfish_template->content_objects = $content_objects;
 $tfish_template->tfish_main_content = $tfish_template->render($index_template);
