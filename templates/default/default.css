@@ -18,6 +18,8 @@ figure {
 }
 
 figure img {
+	border-style: solid;
+	border-width: 1px;
     display: block;
     width: 100%;
 }
@@ -61,4 +63,18 @@ figcaption {
 
 .collection_pagination {
 	margin: -1.5rem 0 1rem 0;
+}
+
+.clearfix-left {
+	display: table;
+    content: " ";
+    display: table;
+	clear:left;
+}
+
+.clearfix-right {
+	display: table;
+    content: " ";
+    display: table;
+	clear:right;
 }

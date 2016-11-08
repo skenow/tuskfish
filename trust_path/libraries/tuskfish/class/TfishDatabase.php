@@ -58,13 +58,8 @@ class TfishDatabase
 	
 	private static function _close() 
 	{
-		try {
-			self::$_db = null;
-			return true;
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
-		}
+		self::$_db = null;
+		return true;
 	}
 	
 	/**
@@ -81,18 +76,15 @@ class TfishDatabase
 	
 	private static function _connect()
 	{
-		try {
-			// SQLite just expects a file name, which was defined as a constant during create()
-			self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
-			if (self::$_db) {
-				// Set PDO to throw exceptions every time it encounters an error.
-				// On production sites it may be best to change the second argument to 
-				// PDO::ERRMODE_SILENT OR PDO::ERRMODE_WARNING
-				self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				return true;
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		// SQLite just expects a file name, which was defined as a constant during create()
+		self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
+		if (self::$_db) {
+			// Set PDO to throw exceptions every time it encounters an error.
+			// On production sites it may be best to change the second argument to 
+			// PDO::ERRMODE_SILENT OR PDO::ERRMODE_WARNING
+			self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			return true;
+		} else {
 			return false;
 		}
 	}
@@ -212,17 +204,12 @@ class TfishDatabase
 			}
 			$sql = trim($sql, ', ');
 			$sql .= ")";
-			try {
-				$statement = self::preparedStatement($sql);
-				$statement->execute();
-				if ($statement) {
-					return true;
-				} else {
-					trigger_error(TFISH_ERROR_NO_STATEMENT, E_USER_ERROR);
-				}
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-				return false;
+			$statement = self::preparedStatement($sql);
+			$statement->execute();
+			if ($statement) {
+				return true;
+			} else {
+				trigger_error(TFISH_ERROR_NO_STATEMENT, E_USER_ERROR);
 			}
 		}
 	}
@@ -244,15 +231,11 @@ class TfishDatabase
 	private static function _delete($table, $id)
 	{
 		$sql = "DELETE FROM " . self::addBackticks($table) . " WHERE `id` = :id";
-		try {
-			$statement = self::preparedStatement($sql);
-			if ($statement) {
-				$statement->bindValue(':id', $id, PDO::PARAM_INT);
-			} else {
-				return false;
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		$statement = self::preparedStatement($sql);
+		if ($statement) {
+			$statement->bindValue(':id', $id, PDO::PARAM_INT);
+		} else {
+			return false;
 		}
 		return self::executeTransaction($statement);
 	}
@@ -315,24 +298,20 @@ class TfishDatabase
 		}
 
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::preparedStatement($sql);
-			if ($criteria) {
-				if (!empty($pdo_placeholders)) {
-					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::setType($value));
-						unset($placeholder);
-					}
-				}
-				if ($criteria->limit && $criteria->offset) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
-					$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
-				} elseif ($criteria->limit) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+		$statement = self::preparedStatement($sql);
+		if ($criteria) {
+			if (!empty($pdo_placeholders)) {
+				foreach ($pdo_placeholders as $placeholder => $value) {
+					$statement->bindValue($placeholder, $value, self::setType($value));
+					unset($placeholder);
 				}
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			if ($criteria->limit && $criteria->offset) {
+				$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+				$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
+			} elseif ($criteria->limit) {
+				$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+			}
 		}
 		return self::executeTransaction($statement);
 	}
@@ -423,15 +402,10 @@ class TfishDatabase
 		$sql .= ") VALUES (" . $pdo_placeholders . ")";
 		
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::$_db->prepare($sql);
-			foreach ($key_values as $key => $value) {
-				$statement->bindValue(":" . $key, $value, self::setType($value));
-				unset($key, $value);
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			return false;
+		$statement = self::$_db->prepare($sql);
+		foreach ($key_values as $key => $value) {
+			$statement->bindValue(":" . $key, $value, self::setType($value));
+			unset($key, $value);
 		}
 		return self::executeTransaction($statement);
 	}
@@ -559,40 +533,32 @@ class TfishDatabase
 		}
 
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::preparedStatement($sql);
-			if ($criteria && $statement) {
-				if (!empty($pdo_placeholders)) {
-					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::setType($value));
-						unset($placeholder);
-					}
-				}
-				
-				if (isset($tag_placeholders) && !empty($tag_placeholders)) {
-					foreach ($tag_placeholders as $tag_placeholder => $value) {
-						$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
-						unset($placeholder);
-					}
-				}
-				
-				if ($criteria->limit && $criteria->offset) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
-					$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
-				} elseif ($criteria->limit) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+		$statement = self::preparedStatement($sql);
+		if ($criteria && $statement) {
+			if (!empty($pdo_placeholders)) {
+				foreach ($pdo_placeholders as $placeholder => $value) {
+					$statement->bindValue($placeholder, $value, self::setType($value));
+					unset($placeholder);
 				}
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+
+			if (isset($tag_placeholders) && !empty($tag_placeholders)) {
+				foreach ($tag_placeholders as $tag_placeholder => $value) {
+					$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+					unset($placeholder);
+				}
+			}
+
+			if ($criteria->limit && $criteria->offset) {
+				$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+				$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
+			} elseif ($criteria->limit) {
+				$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+			}
 		}
 
 		// Execute the statement.
-		try {
-			$statement->execute();
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-		}
+		$statement->execute();
 		
 		// Return the statement object, results can be extracted as required with standard PDO calls.
 		return $statement;
@@ -667,39 +633,27 @@ class TfishDatabase
 		}
 
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::preparedStatement($sql);
-			if ($criteria && $statement) {
-				if (!empty($pdo_placeholders)) {
-					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::setType($value));
-						unset($placeholder);
-					}
-				}
-			}
-			if (isset($tag_placeholders) && !empty($tag_placeholders)) {
-				foreach ($tag_placeholders as $tag_placeholder => $value) {
-					$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+		$statement = self::preparedStatement($sql);
+		if ($criteria && $statement) {
+			if (!empty($pdo_placeholders)) {
+				foreach ($pdo_placeholders as $placeholder => $value) {
+					$statement->bindValue($placeholder, $value, self::setType($value));
 					unset($placeholder);
 				}
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		}
+		if (isset($tag_placeholders) && !empty($tag_placeholders)) {
+			foreach ($tag_placeholders as $tag_placeholder => $value) {
+				$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+				unset($placeholder);
+			}
 		}
 
 		// Execute the statement.
-		try {
-			$statement->execute();
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-		}
+		$statement->execute();
 
 		// Return the row count (integer) by retrieving the row.
-		try {
-			$count = $statement->fetch(PDO::FETCH_NUM);
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-		}
+		$count = $statement->fetch(PDO::FETCH_NUM);
 
 		return (int)reset($count);
 	}
@@ -787,32 +741,29 @@ class TfishDatabase
 		}
 
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::preparedStatement($sql);
-			if ($criteria && $statement) {
-				if (!empty($pdo_placeholders)) {
-					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::setType($value));
-						unset($placeholder);
-					}
-				}
-				if ($criteria->limit && $criteria->offset) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
-					$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
-				} elseif ($criteria->limit) {
-					$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
-				}
-			}
-			if (isset($tag_placeholders) && !empty($tag_placeholders)) {
-				foreach ($tag_placeholders as $tag_placeholder => $value) {
-					$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+		$statement = self::preparedStatement($sql);
+		if ($criteria && $statement) {
+			if (!empty($pdo_placeholders)) {
+				foreach ($pdo_placeholders as $placeholder => $value) {
+					$statement->bindValue($placeholder, $value, self::setType($value));
 					unset($placeholder);
 				}
 			}
-			$statement->execute();
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			if ($criteria->limit && $criteria->offset) {
+				$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+				$statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
+			} elseif ($criteria->limit) {
+				$statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
+			}
 		}
+		if (isset($tag_placeholders) && !empty($tag_placeholders)) {
+			foreach ($tag_placeholders as $tag_placeholder => $value) {
+				$statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
+				unset($placeholder);
+			}
+		}
+		$statement->execute();
+		
 		return $statement;
 	}
 	
@@ -842,13 +793,9 @@ class TfishDatabase
 				. " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
 
 		// Prepare the statement and bind the ID value.
-		try {
-			$statement = TfishDatabase::preparedStatement($sql);
-			if ($statement) {
-				$statement->bindValue(":id", $id, PDO::PARAM_INT);
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		$statement = TfishDatabase::preparedStatement($sql);
+		if ($statement) {
+			$statement->bindValue(":id", $id, PDO::PARAM_INT);
 		}
 		
 		return self::executeTransaction($statement);
@@ -880,13 +827,9 @@ class TfishDatabase
 				. " = " . self::addBackticks($column) . " + 1 WHERE `id` = :id";
 
 		// Prepare the statement and bind the ID value.
-		try {
-			$statement = TfishDatabase::preparedStatement($sql);
-			if ($statement) {
-				$statement->bindValue(":id", $id, PDO::PARAM_INT);
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		$statement = TfishDatabase::preparedStatement($sql);
+		if ($statement) {
+			$statement->bindValue(":id", $id, PDO::PARAM_INT);
 		}
 		
 		return self::executeTransaction($statement);
@@ -918,20 +861,16 @@ class TfishDatabase
 		$sql .= " WHERE `id` = :id";
 
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::preparedStatement($sql);
-			if ($statement) {
-				$statement->bindValue(":id", $id, PDO::PARAM_INT);
-				foreach($key_values as $key => $value) {
-					$type = gettype($value);
-					$statement->bindValue(":" . $key, $value, self::setType($type));
-					unset($type);
-				}
-			} else {
-				return false;
+		$statement = self::preparedStatement($sql);
+		if ($statement) {
+			$statement->bindValue(":id", $id, PDO::PARAM_INT);
+			foreach($key_values as $key => $value) {
+				$type = gettype($value);
+				$statement->bindValue(":" . $key, $value, self::setType($type));
+				unset($type);
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		} else {
+			return false;
 		}
 		return self::executeTransaction($statement);	
 	}
@@ -989,23 +928,20 @@ class TfishDatabase
 		}
 		
 		// Prepare the statement and bind the values.
-		try {
-			$statement = self::preparedStatement($sql);
-			foreach ($key_values as $key => $value) {
-				$statement->bindValue(':' . $key, $value, self::setType($value));
-				unset($key, $value);
-			}
-			if ($criteria) {
-				if (!empty($pdo_placeholders)) {
-					foreach ($pdo_placeholders as $placeholder => $value) {
-						$statement->bindValue($placeholder, $value, self::setType($value));
-						unset($placeholder);
-					}
+		$statement = self::preparedStatement($sql);
+		foreach ($key_values as $key => $value) {
+			$statement->bindValue(':' . $key, $value, self::setType($value));
+			unset($key, $value);
+		}
+		if ($criteria) {
+			if (!empty($pdo_placeholders)) {
+				foreach ($pdo_placeholders as $placeholder => $value) {
+					$statement->bindValue($placeholder, $value, self::setType($value));
+					unset($placeholder);
 				}
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 		}
+			
 		return self::executeTransaction($statement);
 	}
 	

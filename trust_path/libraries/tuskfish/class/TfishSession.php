@@ -69,17 +69,12 @@ class TfishSession
 	}
 	
 	private static function _login($clean_email, $dirty_password)
-	{	
+	{
 		// Query the database for a matching user
-		try {
-			$statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `admin_email` = :clean_email");
-			$statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
-			$statement->execute();
-			$user = $statement->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			exit;
-		}
+		$statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `admin_email` = :clean_email");
+		$statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
+		$statement->execute();
+		$user = $statement->fetch(PDO::FETCH_ASSOC);
 		
 		// Authenticate user by calculating their password hash and comparing it to the one on file
 		if ($user) {

@@ -57,13 +57,9 @@ class TfishPreferenceHandler
 		
 		foreach ($key_values as $key => $value) {
 			$sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
-			try {
-				$statement = TfishDatabase::preparedStatement($sql);
-				$statement->bindValue(':title', $key, TfishDatabase::setType($key));
-				$statement->bindValue(':value', $value, TfishDatabase::setType($value));
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-			}
+			$statement = TfishDatabase::preparedStatement($sql);
+			$statement->bindValue(':title', $key, TfishDatabase::setType($key));
+			$statement->bindValue(':value', $value, TfishDatabase::setType($value));
 			unset($sql, $key, $value);
 			$result = TfishDatabase::executeTransaction($statement);
 			if (!$result) {

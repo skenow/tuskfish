@@ -17,11 +17,11 @@
  * All paths MUST end with a trailing slash /
  * If you are using SSL, you MUST specify https in the TFISH_URL
  */
-define("TFISH_ROOT_PATH", "/home/isengard/public_html/tuskfish/");
-define("TFISH_TRUST_PATH", "/home/isengard/public_html/tuskfish/trust_path/");
+define("TFISH_ROOT_PATH", "/home/enaca/public_html/tuskfish/");
+define("TFISH_TRUST_PATH", "/home/enaca/public_html/tuskfish/trust_path/");
 define("TFISH_PATH", TFISH_TRUST_PATH . "libraries/tuskfish/");
 define("TFISH_CONFIGURATION_PATH", TFISH_PATH . "configuration/config.php");
-define("TFISH_URL", "https://tuskfish.biz/");
+define("TFISH_URL", "http://enaca.org/tuskfish/");
 
 // Include critical files
 require_once(TFISH_CONFIGURATION_PATH);

@@ -90,12 +90,8 @@ class TfishPreference extends TfishAncestralObject
 	{
 		$preferences = array();
 		$result = TfishDatabase::select('preference');
-		try {
-			while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-				$preferences[$row['title']] = $row['value'];
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+			$preferences[$row['title']] = $row['value'];
 		}
 		return $preferences;
 	}

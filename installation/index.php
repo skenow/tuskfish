@@ -113,125 +113,121 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			////////////////////////////////////
 			// INITIALISE THE SQLITE DATABASE //
 			////////////////////////////////////
-			try {
-				// Create the database
-				$db_path = TfishDatabase::create($clean_vars['db_name']);
-				if ($db_path) {
-					if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", $db_path);
-				}
-
-				// Create user table
-				$user_columns = array(
-					"id" => "INTEGER",
-					"admin_email" => "TEXT",
-					"password_hash" => "TEXT",
-					"user_salt" => "TEXT",
-					"user_group" => "INTEGER"
-				);
-
-				TfishDatabase::createTable('user', $user_columns, 'id');
-				// Insert admin user's details to database
-				$user_data = array('admin_email' => $clean_vars['admin_email'], 'password_hash' => $password_hash, 'user_salt' => $user_salt, 'user_group' => '1');
-				$query = TfishDatabase::insert('user', $user_data);
-
-				// Create preference table
-				$preference_columns =  array(
-					"id" => "INTEGER",
-					"title" => "TEXT",
-					"value" => "TEXT"
-				);
-				TfishDatabase::createTable('preference', $preference_columns, 'id');
-
-				// Insert default preferences to database
-				$preference_data = array(
-					array('title' => 'site_name', 'value' => 'Tuskfish CMS'),
-					array('title' => 'site_description', 'value' => 'A cutting edge micro CMS'),
-					array('title' => 'site_author', 'value' => ''),
-					array('title' => 'site_email', 'value' => $clean_vars['admin_email']),
-					array('title' => 'site_copyright', 'value' => 'Copyright all rights reserved'),
-					array('title' => 'close_site', 'value' => '0'),
-					array('title' => 'server_timezone', 'value' => '0'),
-					array('title' => 'site_timezone', 'value' => '0'),
-					array('title' => 'min_search_length', 'value' => '3'),
-					array('title' => 'search_pagination', 'value' => '20'),
-					array('title' => 'user_pagination', 'value' => '10'),
-					array('title' => 'admin_pagination', 'value' => '20'),
-					array('title' => 'gallery_pagination', 'value' => '20'),
-					array('title' => 'pagination_elements', 'value' => '5'),
-					array('title' => 'session_name', 'value' => 'tfish_session'),
-					array('title' => 'session_timeout', 'value' => '0'),
-					array('title' => 'session_domain', 'value' => '/'),
-					array('title' => 'default_language', 'value' => 'en'),
-					array('title' => 'date_format', 'value' => 'j F Y'),
-				);
-				foreach ($preference_data as $preference) {
-					TfishDatabase::insert('preference', $preference, 'id');
-				}
-
-				// Create session table
-				$session_columns = array(
-					"id" => "INTEGER",
-					"last_active" => "INTEGER",
-					"data" => "TEXT"
-				);
-				TfishDatabase::createTable('session', $session_columns, 'id');	
-
-				// Create content object table. Note that the type must be first column to enable
-				// the PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE functionality, which automatically
-				// pulls DB rows into an instance of a class, based on the first column.
-				$content_columns = array(
-					"type" => "TEXT", // article => , image => , audio => , etc.
-					"id" => "INTEGER", // Auto-increment => , set by database.
-					"title" => "TEXT", // The headline or name of this content.
-					"teaser" => "TEXT", // A short (one paragraph) summary or abstract for this content.
-					"description" => "TEXT", // The full article or description of the content.
-					"media" => "TEXT", // URL of an associated audio file.
-					"format" => "TEXT", // Mimetype
-					"file_size" => "INTEGER", // Specify in bytes.
-					"creator" => "TEXT", // Author.
-					"image" => "TEXT", // URL of an associated image file => , eg. a screenshot a good way to handle it.
-					"caption" => "TEXT", // Caption of the image file.
-					"date" => "TEXT", // Date of first publication expressed as a string, hopefully in a standard format to allow time/date conversion.
-					"parent" => "INTEGER", // A source work or collection of which this content is part.
-					"language" => "TEXT", // English (future proofing).
-					"rights" => "INTEGER", // Intellectual property rights scheme or license under which the work is distributed.
-					"publisher" => "TEXT", // The entity responsible for distributing this work.
-					"online" => "INTEGER", // Toggle object on or offline
-					"submission_time" => "INTEGER", // Timestamp representing submission time.
-					"counter" => "INTEGER", // Number of times this content was viewed or downloaded.
-					"meta_title" => "TEXT", // Set a custom page title for this content.
-					"meta_description" => "TEXT", // Set a custom page meta description for this content.
-					"seo" => "TEXT"); // SEO-friendly string; it will be appended to the URL for this content.
-				TfishDatabase::createTable('content', $content_columns, 'id');
-
-				// Insert a "General" tag content object
-				$content_data = array(
-					"type" => "TfishTag",
-					"title" => "General",
-					"teaser" => "Default content tag.",
-					"description" => "Default content tag, please edit it to something useful.",
-					"language" => "en",
-					"online" => "1",
-					"submission_time" => time(),
-					"counter" => "0",
-					"meta_title" => "General",
-					"meta_description" => "General information.",
-					"seo" => "general");
-				$query = TfishDatabase::insert('content', $content_data);
-
-				// Create taglink table
-				$taglink_columns = array(
-					"id" => "INTEGER",
-					"tag_id" => "INTEGER",
-					"content_type" => "TEXT",
-					"content_id" => "INTEGER");
-				TfishDatabase::createTable('taglink', $taglink_columns, 'id');
-
-				// Close database
-				TfishDatabase::close();
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			// Create the database
+			$db_path = TfishDatabase::create($clean_vars['db_name']);
+			if ($db_path) {
+				if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", $db_path);
 			}
+
+			// Create user table
+			$user_columns = array(
+				"id" => "INTEGER",
+				"admin_email" => "TEXT",
+				"password_hash" => "TEXT",
+				"user_salt" => "TEXT",
+				"user_group" => "INTEGER"
+			);
+
+			TfishDatabase::createTable('user', $user_columns, 'id');
+			// Insert admin user's details to database
+			$user_data = array('admin_email' => $clean_vars['admin_email'], 'password_hash' => $password_hash, 'user_salt' => $user_salt, 'user_group' => '1');
+			$query = TfishDatabase::insert('user', $user_data);
+
+			// Create preference table
+			$preference_columns =  array(
+				"id" => "INTEGER",
+				"title" => "TEXT",
+				"value" => "TEXT"
+			);
+			TfishDatabase::createTable('preference', $preference_columns, 'id');
+
+			// Insert default preferences to database
+			$preference_data = array(
+				array('title' => 'site_name', 'value' => 'Tuskfish CMS'),
+				array('title' => 'site_description', 'value' => 'A cutting edge micro CMS'),
+				array('title' => 'site_author', 'value' => ''),
+				array('title' => 'site_email', 'value' => $clean_vars['admin_email']),
+				array('title' => 'site_copyright', 'value' => 'Copyright all rights reserved'),
+				array('title' => 'close_site', 'value' => '0'),
+				array('title' => 'server_timezone', 'value' => '0'),
+				array('title' => 'site_timezone', 'value' => '0'),
+				array('title' => 'min_search_length', 'value' => '3'),
+				array('title' => 'search_pagination', 'value' => '20'),
+				array('title' => 'user_pagination', 'value' => '10'),
+				array('title' => 'admin_pagination', 'value' => '20'),
+				array('title' => 'gallery_pagination', 'value' => '20'),
+				array('title' => 'pagination_elements', 'value' => '5'),
+				array('title' => 'session_name', 'value' => 'tfish_session'),
+				array('title' => 'session_timeout', 'value' => '0'),
+				array('title' => 'session_domain', 'value' => '/'),
+				array('title' => 'default_language', 'value' => 'en'),
+				array('title' => 'date_format', 'value' => 'j F Y'),
+			);
+			foreach ($preference_data as $preference) {
+				TfishDatabase::insert('preference', $preference, 'id');
+			}
+
+			// Create session table
+			$session_columns = array(
+				"id" => "INTEGER",
+				"last_active" => "INTEGER",
+				"data" => "TEXT"
+			);
+			TfishDatabase::createTable('session', $session_columns, 'id');	
+
+			// Create content object table. Note that the type must be first column to enable
+			// the PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE functionality, which automatically
+			// pulls DB rows into an instance of a class, based on the first column.
+			$content_columns = array(
+				"type" => "TEXT", // article => , image => , audio => , etc.
+				"id" => "INTEGER", // Auto-increment => , set by database.
+				"title" => "TEXT", // The headline or name of this content.
+				"teaser" => "TEXT", // A short (one paragraph) summary or abstract for this content.
+				"description" => "TEXT", // The full article or description of the content.
+				"media" => "TEXT", // URL of an associated audio file.
+				"format" => "TEXT", // Mimetype
+				"file_size" => "INTEGER", // Specify in bytes.
+				"creator" => "TEXT", // Author.
+				"image" => "TEXT", // URL of an associated image file => , eg. a screenshot a good way to handle it.
+				"caption" => "TEXT", // Caption of the image file.
+				"date" => "TEXT", // Date of first publication expressed as a string, hopefully in a standard format to allow time/date conversion.
+				"parent" => "INTEGER", // A source work or collection of which this content is part.
+				"language" => "TEXT", // English (future proofing).
+				"rights" => "INTEGER", // Intellectual property rights scheme or license under which the work is distributed.
+				"publisher" => "TEXT", // The entity responsible for distributing this work.
+				"online" => "INTEGER", // Toggle object on or offline
+				"submission_time" => "INTEGER", // Timestamp representing submission time.
+				"counter" => "INTEGER", // Number of times this content was viewed or downloaded.
+				"meta_title" => "TEXT", // Set a custom page title for this content.
+				"meta_description" => "TEXT", // Set a custom page meta description for this content.
+				"seo" => "TEXT"); // SEO-friendly string; it will be appended to the URL for this content.
+			TfishDatabase::createTable('content', $content_columns, 'id');
+
+			// Insert a "General" tag content object
+			$content_data = array(
+				"type" => "TfishTag",
+				"title" => "General",
+				"teaser" => "Default content tag.",
+				"description" => "Default content tag, please edit it to something useful.",
+				"language" => "en",
+				"online" => "1",
+				"submission_time" => time(),
+				"counter" => "0",
+				"meta_title" => "General",
+				"meta_description" => "General information.",
+				"seo" => "general");
+			$query = TfishDatabase::insert('content', $content_data);
+
+			// Create taglink table
+			$taglink_columns = array(
+				"id" => "INTEGER",
+				"tag_id" => "INTEGER",
+				"content_type" => "TEXT",
+				"content_id" => "INTEGER");
+			TfishDatabase::createTable('taglink', $taglink_columns, 'id');
+
+			// Close database
+			TfishDatabase::close();
 
 			// Report on status of database creation
 			if ($db_path && $query) {

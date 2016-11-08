@@ -216,14 +216,10 @@ class TfishContentHandler
 		// Put a check for online status in here.
 		$statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
 		if ($statement) {
-			try {
-				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-					if (isset($tags[$row['tag_id']])) {
-						$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
-					}
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				if (isset($tags[$row['tag_id']])) {
+					$distinct_tags[$row['tag_id']] = $tags[$row['tag_id']];
 				}
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 			}
 		}
 		
@@ -294,12 +290,8 @@ class TfishContentHandler
 		
 		$statement = TfishDatabase::select('content', $criteria, $columns);
 		if ($statement) {
-			try {
-				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-					$content_list[$row['id']] = $row['title'];
-				}
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$content_list[$row['id']] = $row['title'];
 			}
 			unset($statement);
 		} else {
@@ -351,16 +343,12 @@ class TfishContentHandler
 		
 		$statement = TfishDatabase::select('content', $criteria);
 		if ($statement) {
-			try {
-				// Fetch rows into the appropriate class type, as determined by the first column.
-				$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
-				while ($object = $statement->fetch()) {
-					$objects[$object->id] = $object;
-				}
-				unset($statement);
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			// Fetch rows into the appropriate class type, as determined by the first column.
+			$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
+			while ($object = $statement->fetch()) {
+				$objects[$object->id] = $object;
 			}
+			unset($statement);
 		} else {
 			trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 		}
@@ -378,13 +366,9 @@ class TfishContentHandler
 			
 			$statement = TfishDatabase::select('taglink', $criteria);
 			if ($statement) {
-				try {
-					// Sort tag into multi-dimensional array indexed by content_id.
-					while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-						$taglinks[$row['content_id']][] = $row['tag_id'];
-					}
-				} catch (PDOException $e) {
-					TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+				// Sort tag into multi-dimensional array indexed by content_id.
+				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+					$taglinks[$row['content_id']][] = $row['tag_id'];
 				}
 				
 				// Assign the sorted tags to correct content objects.
@@ -489,12 +473,8 @@ class TfishContentHandler
 		
 		$statement = TfishDatabase::select('content', $criteria, $columns);
 		if ($statement) {
-			try {
-				while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-					$tags[$row['id']] = $row['title'];
-				}
-			} catch (PDOException $e) {
-				TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+				$tags[$row['id']] = $row['title'];
 			}
 			unset($statement);
 		} else {
@@ -707,25 +687,17 @@ class TfishContentHandler
 		$sql_count .= $sql;
 		
 		// Bind the search term values and execute the statement.
-		try {
-			$statement = TfishDatabase::preparedStatement($sql_count);
-			if ($statement) {
-				for ($i = 0; $i < $count; $i++) {
-					$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
-				}
-			} else {
-				return false;
+		$statement = TfishDatabase::preparedStatement($sql_count);
+		if ($statement) {
+			for ($i = 0; $i < $count; $i++) {
+				$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		} else {
+			return false;
 		}
 		
 		// Execute the statement.
-		try {
-			$statement->execute();
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-		}
+		$statement->execute();
 		
 		$row = $statement->fetch(PDO::FETCH_NUM);
 		$result[0] = reset($row);
@@ -742,33 +714,25 @@ class TfishContentHandler
 		}
 		
 		$sql_search .= $sql;
-		try {
-			$statement = TfishDatabase::preparedStatement($sql_search);
-			if ($statement) {
-				for ($i = 0; $i < $count; $i++) {
-					$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
-					$statement->bindValue(":limit", (int)$limit, PDO::PARAM_INT);
-					if ($offset) {
-						$statement->bindValue(":offset", (int)$offset, PDO::PARAM_INT);
-					}
+		$statement = TfishDatabase::preparedStatement($sql_search);
+		if ($statement) {
+			for ($i = 0; $i < $count; $i++) {
+				$statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
+				$statement->bindValue(":limit", (int)$limit, PDO::PARAM_INT);
+				if ($offset) {
+					$statement->bindValue(":offset", (int)$offset, PDO::PARAM_INT);
 				}
-			} else {
-				return false;
 			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		} else {
+			return false;
 		}
 
 		// Execute the statement, fetch rows into the appropriate class type as determined by the
 		// first column of the table.
-		try {
-			$statement->execute();
-			$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
-			while ($object = $statement->fetch()) {
-				$result[$object->id] = $object;
-			}
-		} catch (PDOException $e) {
-			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+		$statement->execute();
+		$statement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE|PDO::FETCH_PROPS_LATE);
+		while ($object = $statement->fetch()) {
+			$result[$object->id] = $object;
 		}
 		return $result;
 	}
@@ -822,14 +786,10 @@ class TfishContentHandler
 				$criteria->add(new TfishCriteriaItem('content_id', (int)$content_object->id ));
 				$statement = TfishDatabase::select('taglink', $criteria, array('tag_id'));
 				if ($statement) {
-					try {
 						while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 							$tags[] = $row['tag_id'];
 						}
 						$content_object->tags = $tags;
-					} catch (PDOException $e) {
-						TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-					}
 				} else {
 					trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
 				}

@@ -60,6 +60,6 @@ if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
 define("TFISH_LANGUAGE_PATH", TFISH_PATH . "language/");
 define("TFISH_DEFAULT_LANGUAGE", TFISH_LANGUAGE_PATH . "english.php");
 
-if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "YN1j+i/CnV933fNii0lycDYvQ+HfpGEiK4NB6jk/7sUnfV0SEfEURa3y1ZaAkxd2");
-if (!defined("TFISH_KEY")) define("TFISH_KEY", "vkOgkkp2vl27riArGxK486Ei1M2sak4D0neezxJjBYr0Q4LQpdlEXKLZoSno2nK");
-if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "/home/isengard/public_html/tuskfish/trust_path/database/244542853_tfish11.db");
+if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "kW6D3ii78cwUdllATGukwIawdAilMP2anU5iKoxwicIMq1yZXAFk0+/9jFrSmUfv");
+if (!defined("TFISH_KEY")) define("TFISH_KEY", "fxdS5cjqJW9dWMyXuc2cr5BJKqer4iFgnoKChbaPfOR3q2eFIJFLOrEhwiBwi8z");
+if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", TFISH_TRUST_PATH . "database/1973395414_naca_tuskfish.db");

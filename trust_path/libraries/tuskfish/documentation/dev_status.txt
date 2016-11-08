@@ -7,6 +7,8 @@ MINIMUM FUNCTIONALITY
 * Review error handling policy: Some fatal triggered errors could be handled as warnings + log;
   other user-side ones eg. in control scripts may be better just to redirect to a polite error
   warning page.
+  - See PDO tutorial notes about correct handling of PDO errors; try/catch is not required if you set the error mode properly.
+  - Collections should clean up parental references from child objects on deletion.
 
 = 0.5 days.
 
@@ -42,5 +44,12 @@ THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 * Set UTF-8 as the default charset in php.ini.
 * Logger needs echoing of error messages to screen commented out.
 * Logger needs to return FALSE otherwise trigger_error() will not stop script execution (in dev mode, it's handy to let the script keep going to get context).
-* TfishFilter::connect() needs the error mode PDO::ERRMODE_EXCEPTION changed to silent or warning (stop throwing exceptions!). This could be a preference setting.
 * Uncomment the section of the installation script that deletes the installation script.
+
+On a development server just turn displaying errors on:
+
+ini_set('display_errors', 1);
+While on a production server turn displaying errors off while logging errors on:
+
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
