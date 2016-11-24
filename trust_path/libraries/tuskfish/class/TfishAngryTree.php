@@ -233,7 +233,7 @@ class TfishAngryTree {
 	{
 		$ret = array(0 => TFISH_SELECT_PARENT);
 		
-        $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-');
+        $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-- ');
         return $ret;
 	}
 }
