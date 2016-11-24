@@ -778,7 +778,7 @@ class TfishContentHandler
 		// Populate the object from the $row using whitelisted properties.
 		if ($content_object) {
 			$content_object->loadProperties($row, true);
-			
+
 			// Populate the tag property.
 			if (isset($content_object->tags) && !empty($content_object->id)) {
 				$tags = array();
@@ -874,7 +874,9 @@ class TfishContentHandler
 					$clean_filename = TfishFileHandler::uploadFile($filename, 'media');
 					if ($clean_filename) {
 						$key_values['media'] = $clean_filename;
-						$key_values['format'] = pathinfo($clean_filename, PATHINFO_EXTENSION);
+                                                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                                                $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+                                                $key_values['format'] = $mimetype_whitelist[$extension];
 						$key_values['file_size'] = $_FILES['media']['size'];
 					}
 				} else { // No new media, use the existing file name.
