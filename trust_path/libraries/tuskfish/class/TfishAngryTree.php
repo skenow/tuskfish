@@ -214,7 +214,7 @@ class TfishAngryTree {
 	 * @param   integer $key             ID of the object to display as the root of select options
 	 * @return  string  HTML select box
 	 **/
-	public function makeSelBox($name, $fieldName, $prefix='-', $selected='', $addEmptyOption = FALSE, $key=0)
+	public function makeSelBox($name, $fieldName, $prefix='-- ', $selected='', $addEmptyOption = FALSE, $key=0)
     {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
 		
