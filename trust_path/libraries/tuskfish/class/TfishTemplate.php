@@ -95,9 +95,9 @@ class TfishTemplate
 	 */
 	public function __set($property, $value)
 	{
-		if ($property == 'template_set') {
+		/*if ($property == 'template_set') {
 			trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
-		}
+		}*/
 		$this->__data[$property] = $value;
 	}
 	
