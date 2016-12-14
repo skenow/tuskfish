@@ -78,7 +78,8 @@
 		<!-- Publisher -->
 		<div id="publisherContainer">
         <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
-		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher"></div>
+		<div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher" 
+			value="<?php global $tfish_preference; echo TfishFilter::escape($tfish_preference->site_author); ?>"></div>
         </div>
 		
 	</div>

@@ -53,3 +53,10 @@ While on a production server turn displaying errors off while logging errors on:
 
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
+
+Set PDO in exception mode.
+Do not use try..catch to report errors.
+Configure PHP for proper error reporting
+on a live site set display_errors=off and log_errors=on
+on a development site, you may want to set display_errors=on
+of course, error_reporting has to be set to E_ALL in both cases
