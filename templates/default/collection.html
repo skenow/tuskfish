@@ -21,7 +21,7 @@
         <figure>
             <?php if ($content->media): ?>
                 <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
+                <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
                 <?php if ($content->caption): ?>
                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
                 <?php else: ?>
@@ -62,9 +62,10 @@
         <p class="rights"><?php echo $content->escape('rights'); ?></p>
     </div>
     <?php endif; ?>
-    
+	    
     <!-- Display parent work -->
     <?php if (!empty($parent)): ?>
+	<div class="clearfix">
         <div class="text-left">
             <h3><?php echo TFISH_RELATED; ?></h3>
             <h4><?php echo $parent->icon; ?> <a href="<?php echo $parent->getURL(true); ?>"><?php echo $parent->escape('title'); ?></a></h4>
@@ -81,6 +82,7 @@
             <?php endif; ?>
             <?php echo $parent->escape('teaser'); ?>
         </div>
+	</div>
     <?php endif; ?>
     
     <!-- Display child works -->    
