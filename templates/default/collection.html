@@ -97,6 +97,7 @@
         </div>
         <div class="text-left">
             <?php foreach ($first_children as $child): ?>
+			<div class="clearfix">
                 <h4><?php echo $child->icon; ?> <a href="<?php echo $child->getURL(true); ?>"><?php echo $child->escape('title'); ?></a></h4>
                 <?php if ($child->image): ?>
                     <div class="pull-left">
@@ -110,6 +111,7 @@
                     </div>
                 <?php endif; ?>
                 <?php echo $child->escape('teaser'); ?>
+			</div>
             <?php endforeach; ?>    
         </div>
         
