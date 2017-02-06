@@ -409,23 +409,22 @@ class TfishFileHandler
 				$mimetype_list = TfishUtils::getMimetypes();
 				$mimetype = $mimetype_list[$file_extension];
 
-				// Output the file. Must call session_write_close() first otherwise the script is
-				// locked to all other requests and users until the present download completes!
+				// Must call session_write_close() first otherwise the script gets locked.
 				session_write_close();
-				header('Content-Description: File Transfer');
-				header("Content-type: " . $mimetype);
-				header('Content-Type: application/octet-stream');
-				header('Content-Disposition: attachment;filename="' . $filename . '.' . $file_extension . '"');
-				header("Content-Transfer-Encoding: binary");
-				header("Expires: 0"); 
-				header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
+				
+				// Prevent caching
 				header("Pragma: public");
+				header("Expires: -1");
+				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+				
+				// Set file-specific headers.
+				header('Content-Disposition: attachment; filename="' . $filename . '.' . $file_extension . '"');
+				//header('Content-Type: application/octet-stream');
+				header("Content-Type: " . $mimetype);
 				header("Content-Length: " . $file_size);
-				header('Content-Description: File Transfer');
 				ob_clean();
 				flush();
 				readfile($file_path);
-				//exit;
 			} else {
 				return false;
 			}
