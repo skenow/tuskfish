@@ -409,7 +409,9 @@ class TfishFileHandler
 				$mimetype_list = TfishUtils::getMimetypes();
 				$mimetype = $mimetype_list[$file_extension];
 
-				// Output the file.
+				// Output the file. Must call session_write_close() first otherwise the script is
+				// locked to all other requests and users until the present download completes!
+				session_write_close();
 				header('Content-Description: File Transfer');
 				header("Content-type: " . $mimetype);
 				header('Content-Type: application/octet-stream');
@@ -423,7 +425,7 @@ class TfishFileHandler
 				ob_clean();
 				flush();
 				readfile($file_path);
-				exit;
+				//exit;
 			} else {
 				return false;
 			}
