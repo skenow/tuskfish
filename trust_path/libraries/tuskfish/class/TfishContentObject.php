@@ -243,13 +243,13 @@ class TfishContentObject extends TfishAncestralObject
 			// Get a reference to a new image resource.
 			$thumbnail = imagecreatetruecolor($destination_width, $destination_height); // Creates a blank (black) image RESOURCE of the specified size.
 			
-			// Different image types require different handling. JPEg and PNG support optional quality parameter (TODO: Create a preference).
+			// Different image types require different handling. JPEG and PNG support optional quality parameter (TODO: Create a preference).
 			$result = false;
 			switch($properties['mime']) {
 				case "image/jpeg":
 					$original = imagecreatefromjpeg($original_path);
 					imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
-					$result = imagejpeg($thumbnail, $cached_path); // Optional third quality argument 0-99, higher is better quality.
+					$result = imagejpeg($thumbnail, $cached_path, 70); // Optional third quality argument 0-99, higher is better quality.
 				break;
 			
 				case "image/png":
