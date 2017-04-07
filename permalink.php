@@ -106,7 +106,7 @@ if ($clean_id) {
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tfish_metadata->title = TFISH_TYPE_PERMALINKS;
+// $tfish_metadata->title = TFISH_TYPE_PERMALINKS;
 // $tfish_metadata->description = '';
 // $tfish_metadata->author = '';
 // $tfish_metadata->copyright = '';
