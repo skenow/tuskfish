@@ -36,7 +36,7 @@ $mimetype_list = TfishUtils::getMimetypes();
 
 // Add items to feed.
 $criteria = new TfishCriteria();
-$criteria->order = 'submission_time';
+$criteria->order = 'date';
 $criteria->ordertype = 'DESC';
 $criteria->offset = 0;
 $criteria->limit = $tfish_preference->user_pagination;
