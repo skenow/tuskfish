@@ -50,7 +50,7 @@ class TfishTag extends TfishContentObject
 			'creator',
 			'media',
 			'date',
-			'parent',
+			//'parent', // Turns out allowing collections of tags is actually useful.
 			'language',
 			'rights',
 			'publisher',
