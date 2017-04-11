@@ -32,8 +32,10 @@ $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_
 if ($clean_id) {
     
     // Page title.
-    $content = $content_handler::getObject($clean_id);
+    $tfish_template->page_title = TFISH_TYPE_PERMALINKS;
     
+    // Retrieve target object.
+    $content = $content_handler::getObject($clean_id);
     if (is_object($content) && $content->online == true) {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
