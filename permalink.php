@@ -57,7 +57,7 @@ if ($clean_id) {
         if ($content->format) $contentInfo[] = '.' . $content->escape('format');
         if ($content->file_size) $contentInfo[] = $content->escape('file_size');
         if ($content->tags) {
-                $tags = $content_handler::makeTagLinks($content->tags, $content->module); // For a content type-specific page use $content->tags, $content->template
+                $tags = $content_handler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
                 $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
                 $contentInfo[] = $tags;
         }
