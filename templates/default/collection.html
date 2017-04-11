@@ -68,11 +68,11 @@
 	<div class="clearfix">
         <div class="text-left">
             <h3><?php echo TFISH_RELATED; ?></h3>
-            <h4><?php echo $parent->icon; ?> <a href="<?php echo $parent->getURL(true); ?>"><?php echo $parent->escape('title'); ?></a></h4>
+            <h4><?php echo $parent->icon; ?> <a href="<?php echo $parent->getURL(false); ?>"><?php echo $parent->escape('title'); ?></a></h4>
             <?php if ($parent->image): ?>
                 <div class="pull-left">
                     <figure class="figure-left">
-                    <a href="<?php echo $parent->getURL(true); ?>">
+                    <a href="<?php echo $parent->getURL(false); ?>">
                     <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
                          <?php if ($parent->caption): ?>title="<?php echo $parent->escape('caption'); ?>" 
                          alt="<?php echo $parent->escape('caption'); ?>"<?php endif; ?> />
@@ -98,11 +98,11 @@
         <div class="text-left">
             <?php foreach ($first_children as $child): ?>
 			<div class="clearfix">
-                <h4><?php echo $child->icon; ?> <a href="<?php echo $child->getURL(true); ?>"><?php echo $child->escape('title'); ?></a></h4>
+                <h4><?php echo $child->icon; ?> <a href="<?php echo $child->getURL(false); ?>"><?php echo $child->escape('title'); ?></a></h4>
                 <?php if ($child->image): ?>
                     <div class="pull-left">
                         <figure class="figure-left">
-                        <a href="<?php echo $child->getURL(true); ?>">
+                        <a href="<?php echo $child->getURL(false); ?>">
                         <img class="img-responsive" src="<?php echo $child->getCachedImage(100); ?>" 
                              <?php if ($child->caption): ?>title="<?php echo $child->escape('caption'); ?>" 
                              alt="<?php echo $child->escape('caption'); ?>"<?php endif; ?> />
