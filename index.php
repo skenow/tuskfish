@@ -68,18 +68,30 @@ if ($clean_id) {
                         $tfish_template->parent = $parent;
                 }
         }
-
-        // Check if has child objects; if so display thumbnails and teasers / links.
+        
+        // Initialise criteria object.
         $criteria = new TfishCriteria();
-        $criteria->add(new TfishCriteriaItem('parent', $content->id));
-        $criteria->add(new TfishCriteriaItem('online', 1));
-        if ($clean_start) {
-                $criteria->offset = $clean_start;
-        }
-        $criteria->limit = $tfish_preference->user_pagination;
         $criteria->order = 'date';
         $criteria->ordertype = 'DESC';
 
+        // If object is a collection check if has child objects; if so display thumbnails and teasers / links.
+        if ($content->type == 'TfishCollection') {
+            $criteria->add(new TfishCriteriaItem('parent', $content->id));
+            $criteria->add(new TfishCriteriaItem('online', 1));
+            if ($clean_start) {
+                    $criteria->offset = $clean_start;
+            }
+            $criteria->limit = $tfish_preference->user_pagination;
+        }
+        
+        // If object is a tag, then a different method is required to call the related content.
+        if ($content->type == 'TfishTag') {
+            if ($clean_start) $criteria->offset = $clean_start;
+            $criteria->limit = $tfish_preference->user_pagination;
+            $criteria->tag = array($content->id);
+            $criteria->add(new TfishCriteriaItem('online', 1));
+        }
+        
         // Prepare pagination control.
         $first_child_count = TfishContentHandler::getCount($criteria);
         $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count,
@@ -100,7 +112,7 @@ if ($clean_id) {
     // Page title
     $tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_LATEST_POSTS;
 	
-    // View index page of multiple objects (teasers).
+    // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();
     if ($clean_start) $criteria->offset = $clean_start;
     $criteria->limit = $tfish_preference->user_pagination;
