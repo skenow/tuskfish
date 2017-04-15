@@ -78,9 +78,7 @@ if ($clean_id) {
         if ($content->type == 'TfishCollection') {
             $criteria->add(new TfishCriteriaItem('parent', $content->id));
             $criteria->add(new TfishCriteriaItem('online', 1));
-            if ($clean_start) {
-                    $criteria->offset = $clean_start;
-            }
+            if ($clean_start) $criteria->offset = $clean_start;
             $criteria->limit = $tfish_preference->user_pagination;
         }
         
@@ -93,15 +91,17 @@ if ($clean_id) {
         }
         
         // Prepare pagination control.
-        $first_child_count = TfishContentHandler::getCount($criteria);
-        $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count,
-        $tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+		if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
+			$first_child_count = TfishContentHandler::getCount($criteria);
+			$tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count,
+				$tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
 
-        // Retrieve content objects and assign to template.
-        $first_children = TfishContentHandler::getObjects($criteria);
-        if (!empty($first_children)) {
-                $tfish_template->first_children = $first_children;
-        }
+			// Retrieve content objects and assign to template.
+			$first_children = TfishContentHandler::getObjects($criteria);
+			if (!empty($first_children)) {
+					$tfish_template->first_children = $first_children;
+			}
+		}
 
         // Render template.
         $tfish_template->tfish_main_content = $tfish_template->render($content->template);
