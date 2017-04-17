@@ -1,12 +1,10 @@
-@media (min-width: 1200px) {
+/*@media (min-width: 1200px) {
     .container {
         max-width: 970px;
     }
-}
+}*/
 
-body {
-  padding-top: 50px;
-}
+body {}
 
 video {
     max-width: 100%;

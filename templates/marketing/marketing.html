@@ -20,20 +20,11 @@
     
     <!-- Bootstrap -->
     <link href="http://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+    <link href="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/css/bootstrap.min.css'; ?>" rel="stylesheet">
+    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap/dist/js/bootstrap.min.js'; ?>"></script>
     <link href="<?php echo TFISH_TEMPLATES_URL . 'marketing/css/toolkit-minimal.css'; ?>" rel="stylesheet">
     <link href="<?php echo TFISH_TEMPLATES_URL . 'marketing/css/application-minimal.css'; ?>" rel="stylesheet">
-    <script src="<?php echo TFISH_TEMPLATES_URL . 'marketing/js/toolkit.js'; ?>"></script>
     <script src="<?php echo TFISH_TEMPLATES_URL . 'marketing/js/application.js'; ?>"></script>
-    <script src="<?php echo TFISH_TEMPLATES_URL . 'bootstrap_bak/dist/js/bootstrap.js'; ?>"></script>
-    
-    <!-- Fontawesome -->
-    <link rel="stylesheet" href="<?php echo TFISH_TEMPLATES_URL . 'font-awesome/css/font-awesome.min.css'; ?>">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
     
     <!-- Custom styles for this template -->
     <link href="<?php echo TFISH_TEMPLATES_URL . 'marketing/marketing.css'; ?>" rel="stylesheet">
@@ -41,6 +32,7 @@
 
   <body>
 
+    <!-- Navigation bar -->
     <nav class="navbar navbar-default navbar-static-top navbar-padded text-uppercase app-navbar">
       <div class="container">
         <div class="navbar-header">
@@ -50,19 +42,33 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="<?php echo TFISH_URL; ?>">Tuskfish CMS</a>
+            <a class="navbar-brand" href="<?php echo TFISH_URL; ?>">Network of Aquaculture Centres<br />in Asia-Pacific</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="<?php echo TFISH_URL; ?>">Home</a></li>
+        <div id="navbar-collapse" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Network <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="<?php echo TFISH_URL . 'experts.php?title=experts'; ?>"><?php echo 'People'; ?></a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=42&amp;title=participating-research-centres'; ?>"><?php echo 'Centres'; ?></a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=34&amp;title=naca-governing-council'; ?>">Governments</a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=37&amp;title=naca-staff-directory'; ?>">Secretariat</a></li>
+                </ul>
+            </li>
+            <li><a href="<?php echo TFISH_URL . '?id=4&amp;title=projects'; ?>"><?php echo 'Projects'; ?></a></li>
+            <li><a href="<?php echo TFISH_URL . 'publications.php?title=publications'; ?>"><?php echo 'Publications'; ?></a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Themes <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="<?php echo TFISH_URL . '?id=21'; ?>">Aquatic animal health</a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=14'; ?>">Climate change</a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=18'; ?>">Gender</a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=19'; ?>">Genetics and biodiversity</a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=31'; ?>">Sustainable farming</a></li>
+                    <li><a href="<?php echo TFISH_URL . '?id=32'; ?>">Training &amp; education</a></li>
+                </ul>
+            </li>
             <li><a href="<?php echo TFISH_URL . 'search.php'; ?>"><?php echo TFISH_SEARCH; ?></a></li>
-			<li><a href="<?php echo TFISH_URL . 'rss.php'; ?>"><?php echo TFISH_RSS; ?></a></li>
-			<?php if (TfishSession::isAdmin()): ?>
-            <li><a href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
-			<li><a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
-			<li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
-			<?php endif; ?>
-			<li><?php echo TfishSession::loginLink(); ?></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div><!-- /.container -->
@@ -82,7 +88,54 @@
 			<div><?php echo $tfish_template->render('centre_bottom_zone'); ?></div>
             
         </div>
-    </div> 
+    </div>
+    
+    <!-- Footer -->
+    <div class="block app-block-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-2 m-b">
+              <ul class="list-unstyled list-spaced">
+                <li><h6 class="text-uppercase">Contacts</h6></li>
+                <li>Experts database</li>
+                <li><a href="<?php echo TFISH_URL . '?id=42&amp;title=participating-centres'; ?>">Research centres</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=35&amp;title=technical-advisory-committee'; ?>">Technical Committee</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=34&amp;title=naca-governing-council'; ?>">Member governments</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=37&amp;title=naca-staff-directory'; ?>">Secretariat staff</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-2 m-b">
+              <ul class="list-unstyled list-spaced">
+                <li><h6 class="text-uppercase">Themes</h6></li>
+                <li><a href="<?php echo TFISH_URL . '?id=21&amp;title=aquatic-animal-health'; ?>">Aquatic animal health</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=14&amp;title=climate-change'; ?>">Climate change</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=18&amp;title=gender'; ?>">Gender</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=19&amp;title=genetics-and-biodiversity'; ?>">Genetics and biodiversity</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=31&amp;title=sustainable-farming-systems'; ?>">Sustainable farming</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=32&amp;title=training-and-education'; ?>">Training &amp; education</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-2 m-b">
+              <ul class="list-unstyled list-spaced">
+                <li><h6 class="text-uppercase">Documents</h6></li>
+                <li><a href="<?php echo TFISH_URL . '?id=36&amp;title=naca-work-programme-2015+'; ?>">Work plan</a></li>
+                <li><a href="<?php echo TFISH_URL . '?id=853&amp;title=naca-agreement'; ?>">NACA Agreement</a></li>
+                <?php if (TfishSession::isAdmin()): ?>
+                <li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
+                <?php else: ?>
+                <li><?php echo TfishSession::loginLink(); ?></li>
+                <?php endif; ?>
+              </ul>
+            </div>
+            <div class="col-sm-6">
+              <h6 class="text-uppercase">About</h6>
+              <p><a href="<?php echo TFISH_URL . '?id=33&amp;title=about-naca'; ?>">NACA is an intergovernmental organisation that promotes rural development through 
+                  sustainable aquaculture and aquatic resources management. NACA seeks to improve the 
+                  livelihoods of rural people, reduce poverty and increase food security.</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
     
   </body>
 </html>

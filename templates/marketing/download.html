@@ -21,7 +21,7 @@
         <figure>
             <?php if ($content->media): ?>
                 <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
+                <img src="<?php echo $content->getCachedImage(400); ?>" 
                 <?php if ($content->caption): ?>
                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
                 <?php else: ?>
