@@ -40,6 +40,7 @@ define("TFISH_EDIT", "Edit");
 
 // Home page stream.
 define("TFISH_LATEST_POSTS", "Latest posts");
+define("TFISH_NEWS", "News"); // Alternative.
 
 // Preferences.
 define("TFISH_PREFERENCES", "Preferences");
