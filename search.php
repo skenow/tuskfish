@@ -19,7 +19,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-// $tfish_template->setTemplate('jumbotron');
+$tfish_template->setTemplate('marketing');
 
 // Validate data and separate the search terms.
 $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;

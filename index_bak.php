@@ -1,13 +1,26 @@
 <?php
 
+/**
+* Tuskfish default index page script.
+* 
+* User-facing controller script for presenting all content objects other than tags and static content.
+*
+* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+* @since		1.0
+* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+*/
+
+// Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-$tfish_template->setTemplate('marketing');
+// Specify template set, otherwise 'default' will be used.
+$tfish_template->template_set = 'default';
 
 $content_handler = 'TfishContentHandler';
-$index_template = 'test';
-$target_file_name = 'test';
+$target_file_name = 'index';
+$index_template = 'single_stream';
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -97,7 +110,7 @@ if ($clean_id) {
     }
 } else {
     // Page title
-    $tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_NEWS;
+    $tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_LATEST_POSTS;
 	
     // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();
@@ -164,6 +177,18 @@ $block_list3->build($criteria);
 $centre_bottom_blocks[] = $block_list3->render();
 
 $tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
-*/
+ */
 
+/**
+ * Override page template and metadata here (otherwise default site metadata will display).
+ */
+// $tfish_metadata->title = '';
+// $tfish_metadata->description = '';
+// $tfish_metadata->author = '';
+// $tfish_metadata->copyright = '';
+// $tfish_metadata->generator = '';
+// $tfish_metadata->seo = '';
+// $tfish_metadata->robots = '';
+
+// Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

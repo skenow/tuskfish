@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Tuskfish default index page script.
+* Tuskfish index page script for the marketing theme.
 * 
 * User-facing controller script for presenting all content objects other than tags and static content.
 *
@@ -15,10 +15,11 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify template set, otherwise 'default' will be used.
-$tfish_template->template_set = 'default'; // Specify the template subdirectory for this template set.
-
+// Get the relevant handler.
 $content_handler = 'TfishContentHandler';
+
+// Specify template set, otherwise 'default' will be used.
+$tfish_template->template_set = 'marketing';
 $target_file_name = 'index';
 $index_template = 'single_stream';
 
@@ -32,7 +33,7 @@ $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_
 if ($clean_id) {
     
     // Page title.
-    $tfish_template->page_title = TFISH_TYPE_PERMALINKS;
+    //$tfish_template->page_title = TFISH_TYPE_PERMALINKS;
     
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
@@ -110,7 +111,7 @@ if ($clean_id) {
     }
 } else {
     // Page title
-    $tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_LATEST_POSTS;
+    $tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_NEWS;
 	
     // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();
@@ -177,18 +178,6 @@ $block_list3->build($criteria);
 $centre_bottom_blocks[] = $block_list3->render();
 
 $tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
- */
+*/
 
-/**
- * Override page template and metadata here (otherwise default site metadata will display).
- */
-// $tfish_metadata->title = '';
-// $tfish_metadata->description = '';
-// $tfish_metadata->author = '';
-// $tfish_metadata->copyright = '';
-// $tfish_metadata->generator = '';
-// $tfish_metadata->seo = '';
-// $tfish_metadata->robots = '';
-
-// Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";
