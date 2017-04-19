@@ -32,9 +32,6 @@ $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_
 
 if ($clean_id) {
     
-    // Page title.
-    //$tfish_template->page_title = TFISH_TYPE_PERMALINKS;
-    
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
     if (is_object($content) && $content->online == true) {
@@ -111,7 +108,7 @@ if ($clean_id) {
     }
 } else {
     // Page title
-    $tfish_template->page_title = '<a href="' . $rss_url . '"><i class="fa fa-rss" aria-hidden="true"></i></a> ' . TFISH_NEWS;
+    $tfish_template->page_title = TFISH_NEWS;
 	
     // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();

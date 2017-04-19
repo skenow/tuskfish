@@ -25,7 +25,7 @@ class TfishAudio extends TfishContentObject
 		$this->__data['type'] = "audio";
 		$this->__data['template'] = "audio";
 		$this->__data['module'] = "soundtracks";
-		$this->__data['icon'] = '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+		$this->__data['icon'] = '<span class="icon icon-modern-mic" aria-hidden="true"></span>';
 		
 		// Object definition - unset any properties unused in this subclass.
 		$zeroedProperties = $this->zeroedProperties();		
