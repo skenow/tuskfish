@@ -76,8 +76,14 @@
         </div><!--/.nav-collapse -->
       </div><!-- /.container -->
     </nav>
+	
+	<!-- Carousel -->
+	<?php if (!empty($clean_id) && !empty($clean_start) && !empty($clean_tag)): ?>
+	<?php echo $tfish_template->render('carousel'); ?>
+	<?php endif; ?>
 	  
 	<!-- Main content of page -->
+	<div class="block block-bordered-lg">
     <div class="container">
         <div class="starter-template">
 			
@@ -92,6 +98,12 @@
             
         </div>
     </div>
+	</div>
+	
+	<!-- Featured content -->
+	<?php if (!empty($clean_id) && !empty($clean_start) && !empty($clean_tag)): ?>
+	<?php echo $tfish_template->render('featured_content'); ?>
+	<?php endif; ?>
     
     <!-- Footer -->
     <div class="block app-block-footer">
