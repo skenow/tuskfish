@@ -117,4 +117,45 @@ class TfishTagHandler extends TfishContentHandler
 			return false;
 		}
 	}
+	
+	/**
+	 * Build a select box from an arbitrary array of tags.
+	 * 
+	 * Use this when you need to customise a tag select box. Pass in an array of the tags you want
+	 * to use as $tag_list as key => value pairs.
+	 * 
+	 * @param int $selected tag
+	 * @param array $tag_list key => value array of ID => title
+	 * @param string $zero_option the string that will be displayed for the 'zero' or no selection option
+	 * @return string select box
+	 */
+	public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $zero_option = TFISH_SELECT_TAGS)
+	{
+		// Initialise variables.
+		$select_box = '';
+		$clean_tag_list = array();
+		
+		// Validate input.
+		$clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1)) ? (int)$selected : null; // ID of a previously selected tag, if any.
+		if (TfishFilter::isArray($tag_list) && !empty($tag_list)) {
+			asort($tag_list);
+			foreach($tag_list as $key => $value) {
+				$clean_key = (int)$key;
+				$clean_value = TfishFilter::escape(TfishFilter::trimString($value));
+				$clean_tag_list[$clean_key] = $clean_value;
+				unset($key, $clean_key, $value, $clean_value);
+			}
+		}
+		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
+		
+		// Build the select box.
+		$clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list; 
+		$select_box = '<select class="form-control" name="tag_id" id="tag_id" onchange="this.form.submit()">';
+		foreach($clean_tag_list as $key => $value) {
+			$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+		}
+		$select_box .= '</select>';
+		
+		return $select_box;
+	}
 }

@@ -133,9 +133,17 @@ if ($clean_id) {
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 
-    // Prepare tag select box.
+    // Prepare tag select box. In this case, I am using a hard coded ID to retrieve a specific
+	// collection of tags (you can group tags into collections by creating collection objects and
+	// assigning tags via their 'parent' field.
     $tfish_template->select_action = 'index.php';
-    $tfish_template->select_filters =  TfishTagHandler::getTagSelectBox($clean_tag);
+	$criteria = new TfishCriteria();
+	$criteria->add(new TfishCriteriaItem('parent', 851), 'OR');
+	$criteria->add(new TfishCriteriaItem('parent', 852));
+	$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+	$criteria->add(new TfishCriteriaItem('online', 1));
+	$tag_list = TfishContentHandler::getList($criteria);
+    $tfish_template->select_filters =  TfishTagHandler::getArbitraryTagSelectBox($clean_tag, $tag_list);
     $tfish_template->select_filters_form = $tfish_template->render('select_filters');
 }
 
