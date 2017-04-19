@@ -78,7 +78,7 @@
     </nav>
 	
 	<!-- Carousel -->
-	<?php if (!empty($clean_id) && !empty($clean_start) && !empty($clean_tag)): ?>
+	<?php if (isset($clean_id) && empty($clean_id)): ?>
 	<?php echo $tfish_template->render('carousel'); ?>
 	<?php endif; ?>
 	  
@@ -101,7 +101,7 @@
 	</div>
 	
 	<!-- Featured content -->
-	<?php if (!empty($clean_id) && !empty($clean_start) && !empty($clean_tag)): ?>
+	<?php if (isset($clean_id) && empty($clean_id)): ?>
 	<?php echo $tfish_template->render('featured_content'); ?>
 	<?php endif; ?>
     
