@@ -108,7 +108,7 @@ if ($clean_id) {
     }
 } else {
     // Page title
-    $tfish_template->page_title = TFISH_NEWS;
+    //$tfish_template->page_title = TFISH_NEWS;
 	
     // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();

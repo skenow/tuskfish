@@ -45,13 +45,13 @@
     <?php endif; ?>
     
     <!-- Description -->
-    <div class="text-left">
+    <div class="text-left custom-font-size">
 		<?php if ($content->description) echo $content->escape('description'); ?>
 	</div>
     
     <!-- Media attachment -->
     <?php if ($content->media): ?>
-    <div class="text-left">
+    <div class="text-left custom-font-size">
         <p><span class="icon icon-download" aria-hidden="true"></span> <b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->media; ?></a></b></p>
     </div>
     <?php endif; ?>
@@ -66,7 +66,7 @@
     <!-- Display parent work -->
     <?php if (!empty($parent)): ?>
 	<div class="clearfix">
-        <div class="text-left">
+        <div class="text-left custom-font-size">
             <h3><?php echo TFISH_RELATED; ?></h3>
             <h4><?php echo $parent->icon; ?> <a href="<?php echo $parent->getURL(false); ?>"><?php echo $parent->escape('title'); ?></a></h4>
             <?php if ($parent->image): ?>
@@ -95,7 +95,7 @@
         <div class="text-left">
             <h3>In this collection</h3>
         </div>
-        <div class="text-left">
+        <div class="text-left custom-font-size">
             <?php foreach ($first_children as $child): ?>
 			<div class="clearfix">
                 <h4><?php echo $child->icon; ?> <a href="<?php echo $child->getURL(false); ?>"><?php echo $child->escape('title'); ?></a></h4>

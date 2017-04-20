@@ -6,6 +6,7 @@
 
 body {}
 
+/* Adjustments to bootstrap styles */
 h1 {}
 h2 {font-weight: bolder;}
 h3 {font-weight: bolder;}
@@ -13,9 +14,11 @@ h4 {font-weight: bolder;}
 h5 {font-weight: bolder;}
 h6 {font-weight: bolder;}
 
-p {
+.custom-font-size p, .custom-font-size li {
   font-size: 16px;
 }
+
+/* End adjustments */
 
 video {
     max-width: 100%;
@@ -91,4 +94,8 @@ figcaption {
     content: " ";
     display: table;
 	clear:right;
+}
+
+#featured-content {
+	margin-top: 6rem;
 }
