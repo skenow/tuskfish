@@ -13,6 +13,8 @@
 * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
+
+define("TFISH_TUSKFISH", "Tuskfish");
 define("TFISH_WELCOME", "Welcome to Tuskfish CMS");
 
 // admin/login.php
