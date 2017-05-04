@@ -358,7 +358,7 @@ class TfishContentObject extends TfishAncestralObject
 	 */
 	public function getURL($use_subclass_page = false)
 	{
-		$url='';
+		$url = TFISH_URL;
 		if ($use_subclass_page) {
 			$url .= $this->module . '.php';
 		}
