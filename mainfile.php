@@ -16,12 +16,31 @@
  * Access trust path, DB credentials and read preferences.
  * All paths MUST end with a trailing slash /
  * If you are using SSL, you MUST specify https in the TFISH_URL
+ * 
+ * Example paths (yours may vary):
+ * TFISH_ROOT_PATH is the file path to your web root, eg: /home/youraccount/public_html/
+ * TFISH_TRUST_PATH is the file path to your trust_path directory, which should sit outside of
+ * your web root if possible, eg.: /home/youraccount/trust_path/
+ * TFISH_URL is simply your domain, eg: http://yourdomain.com/
+ * 
+ * After configuring the paths you should set the access permissions for this file (CHMOD) to 0400.
+ * 
+ * If you have problems please see the installation section of the Tuskfish User Manual for a
+ * more detailed explanation. 
  */
-define("TFISH_ROOT_PATH", "/home/enaca/public_html/tuskfish/");
-define("TFISH_TRUST_PATH", "/home/enaca/public_html/tuskfish/trust_path/");
+
+////////////////////////////////////////////////////////////
+////////// You must configure the following paths //////////
+////////////////////////////////////////////////////////////
+define("TFISH_ROOT_PATH", "");
+define("TFISH_TRUST_PATH", "");
+define("TFISH_URL", "");
+////////////////////////////////////////////////////////////
+//////////////////// End configuration /////////////////////
+////////////////////////////////////////////////////////////
+
 define("TFISH_PATH", TFISH_TRUST_PATH . "libraries/tuskfish/");
 define("TFISH_CONFIGURATION_PATH", TFISH_PATH . "configuration/config.php");
-define("TFISH_URL", "http://enaca.org/tuskfish/");
 
 // Include critical files
 require_once(TFISH_CONFIGURATION_PATH);

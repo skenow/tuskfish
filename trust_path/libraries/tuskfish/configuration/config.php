@@ -32,7 +32,7 @@ define("TFISH_ERROR_LOG_PATH", TFISH_TRUST_PATH . "log/tuskfish_log.txt");
 define("TFISH_FORM_PATH", TFISH_PATH . "form/");
 define("TFISH_LIBRARIES_PATH", TFISH_TRUST_PATH . "libraries/");
 
-// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL
+// Constants that make use of the virtual (URL) path, these refer to assets accessed by URL.
 define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
 define("TFISH_CACHE_URL" , TFISH_URL . "cache/");
 define("TFISH_TEMPLATES_URL", TFISH_URL . "templates/");
@@ -56,10 +56,8 @@ if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
 /*
  * Preferences
  */
-// Language: Specify the file name of the default language file
+// Language: Specify the file name of the default language file.
 define("TFISH_LANGUAGE_PATH", TFISH_PATH . "language/");
 define("TFISH_DEFAULT_LANGUAGE", TFISH_LANGUAGE_PATH . "english.php");
 
-if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "kW6D3ii78cwUdllATGukwIawdAilMP2anU5iKoxwicIMq1yZXAFk0+/9jFrSmUfv");
-if (!defined("TFISH_KEY")) define("TFISH_KEY", "fxdS5cjqJW9dWMyXuc2cr5BJKqer4iFgnoKChbaPfOR3q2eFIJFLOrEhwiBwi8z");
-if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", TFISH_TRUST_PATH . "database/1973395414_naca_tuskfish.db");
+// Site salt, key and database name are appended here.
