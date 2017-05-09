@@ -56,7 +56,7 @@ define("TFISH_INSTALLATION_TRUST_PATH", "File path to trust_path");
 define("TFISH_INSTALLATION_TRAILING_SLASH", "With trailing slash /");
 define("TFISH_INSTALLATION_WARNING", "Warning");
 define("TFISH_INSTALLATION_WEAK_PASSWORD", "This password is WEAK, please try again. For maximum strength your password needs to incorporate the following attributes:");
-define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "At least 13 characters long to resist exhaustive searches of the keyspace.");
+define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "At least 15 characters long to resist exhaustive searches of the keyspace.");
 define("TFISH_PASSWORD_LOWER_CASE_WEAKNESS", "At least one lower case letter.");
 define("TFISH_PASSWORD_UPPER_CASE_WEAKNESS", "At least one upper case letter.");
 define("TFISH_PASSWORD_NUMBERIC_WEAKNESS", "At least one number.");

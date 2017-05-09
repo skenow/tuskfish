@@ -249,7 +249,7 @@ class TfishContentObject extends TfishAncestralObject
 				case "image/jpeg":
 					$original = imagecreatefromjpeg($original_path);
 					imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
-					$result = imagejpeg($thumbnail, $cached_path, 70); // Optional third quality argument 0-99, higher is better quality.
+					$result = imagejpeg($thumbnail, $cached_path, 80); // Optional third quality argument 0-99, higher is better quality.
 				break;
 			
 				case "image/png":
@@ -329,7 +329,7 @@ class TfishContentObject extends TfishAncestralObject
 						$result = imagegif($thumbnail, $cached_path);
 					} else {
 						// Quality is controlled through an optional third argument (0-9, lower is better).
-						$result = imagepng($thumbnail, $cached_path);
+						$result = imagepng($thumbnail, $cached_path, 0);
 					}
 				break;
 
