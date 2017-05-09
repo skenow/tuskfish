@@ -19,7 +19,7 @@ class TfishSecurityUtility
 	/**
 	 * Evaluates the strength of a password to resist brute force cracking.
 	 * 
-	 * Issues warnings if deficiencies are found. Requires a minimum length of 14 characters
+	 * Issues warnings if deficiencies are found. Requires a minimum length of 15 characters
 	 * and maximisation of search space (one upper and lower case letter, one number, one symbol).
 	 * 
 	 * @param string $password
@@ -29,8 +29,8 @@ class TfishSecurityUtility
 	{
 		$evaluation = array('strong' => true);
 		
-		// Length must be > 14 characters to prevent brute force search of the keyspace.
-		if (mb_strlen($password, 'UTF-8') < 14) {
+		// Length must be > 15 characters to prevent brute force search of the keyspace.
+		if (mb_strlen($password, 'UTF-8') < 15) {
 			$evaluation['strong'] = false;
 			$evaluation[] = TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS;
 		}
