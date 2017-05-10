@@ -52,3 +52,9 @@ $tfish_metadata = new TfishMetadata($tfish_preference);
 
 // Instantiate the template object so that it will be available globally.
 $tfish_template = new TfishTemplate();
+
+// Check if site is closed, if so redirect to the login page and exit.
+if ($tfish_preference->close_site == true && !TfishSession::isAdmin()) {
+	header('Location: ' . TFISH_ADMIN_URL . "login.php");
+	exit;
+}
