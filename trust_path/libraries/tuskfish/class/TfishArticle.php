@@ -25,7 +25,7 @@ class TfishArticle extends TfishContentObject
 		$this->__data['type'] = "TfishArticle";
 		$this->__data['template'] = "article";
 		$this->__data['module'] = "articles";
-		$this->__data['icon'] = '<span class="icon icon-news" aria-hidden="true"></span>';
+		$this->__data['icon'] = '<span class="glyphicon glyphicon-book" aria-hidden="true"></span>';
 		
 		// Object definition - unset any properties unused in this subclass.
 		$zeroedProperties = $this->zeroedProperties();		
