@@ -36,9 +36,7 @@ class TfishPreference extends TfishAncestralObject
 		$this->__properties['admin_pagination'] = 'int';
 		$this->__properties['gallery_pagination'] = 'int';
 		$this->__properties['pagination_elements'] = 'int';
-		$this->__properties['session_name'] = 'alnumunder';
-		$this->__properties['session_timeout'] = 'int';
-		$this->__properties['session_domain'] = 'string';
+		$this->__properties['session_name'] = 'alnum';
 		$this->__properties['default_language'] = 'alpha';
 		$this->__properties['date_format'] = 'string';
 		//$this->__properties['allowed_mimetypes'] = 'string';		
@@ -199,7 +197,6 @@ class TfishPreference extends TfishAncestralObject
 						
 						// Minimum value 0.
 						case "search_pagination":
-						case "session_timeout":
 							if (TfishFilter::isInt($value, 0)) {
 								$this->__data[$property] = (int)$value;
 							} else {

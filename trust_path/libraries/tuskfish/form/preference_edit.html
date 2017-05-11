@@ -120,18 +120,6 @@
 			<input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . $preferences['session_name'] . '"'; } ?> required>
 		</div>
 		
-		<!-- Session timeout -->
-		<label for="session_timeout" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_TIMEOUT; ?>:</label>
-		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="number" min="0" class="form-control" name="session_timeout" id="session_timeout" <?php if (isset($preferences['session_timeout'])) { echo 'value="' . $preferences['session_timeout'] . '"'; } ?> required>
-		</div>
-		
-		<!-- Session domain -->
-		<label for="session_domain" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_DOMAIN; ?>:</label>
-		<div class="control-label col-lg-9 col-md-8 col-sm-8">
-			<input type="text" minlength="1" class="form-control" name="session_domain" id="session_domain" <?php if (isset($preferences['session_domain'])) { echo 'value="' . $preferences['session_domain'] . '"'; } ?> required>
-		</div>
-		
 		<!-- Default language -->
 		<label for="default_language" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_DEFAULT_LANGUAGE; ?>:</label>
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">

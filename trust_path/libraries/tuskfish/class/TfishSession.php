@@ -248,7 +248,7 @@ class TfishSession
 		
 		// Sanitise parameters		
 		$clean_name = TfishFilter::trimString($name);
-		$clean_limit = TfishFilter::isInt($limit, 0) ? $limit : 0;
+		$clean_limit = TfishFilter::isInt($limit, 0) ? (int)$limit : 0;
 		$clean_path = TfishFilter::trimString($path);
 		$clean_domain = TfishFilter::trimString($domain);
 		if (isset($https)) {
