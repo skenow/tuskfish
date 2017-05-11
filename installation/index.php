@@ -232,13 +232,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE . '</p>';
 
 				// Delete the installation folder from the server for security reasons
-				/*try {
+				try {
 					$tfish_file_handler = new TfishFileHandler();
 					$tfish_file_handler->delete_directory(TFISH_ROOT_PATH . 'installation/');
 					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DIRECTORY_DELETED . '</p>';
 				} catch(Exception $e) {
 					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_REMOVE_DIRECTORY . '</p>';
-				}*/
+				}
 				$tfish_template->output = $tfish_content['output'];
 				$tfish_template->form = "success.html";
 				$tfish_template->tfish_main_content = $tfish_template->render('form');
