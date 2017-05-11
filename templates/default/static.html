@@ -5,7 +5,12 @@
 	<div class="text-left">
         <h2><?php echo $content->escape('title'); ?></h2>
 		<?php if ($contentInfo): ?>
-            <p><em><?php echo $contentInfo; ?></em></p>
+            <p>
+                <?php if (TfishSession::isAdmin()): ?>
+                <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><span class="glyphicon glyphicon-edit"></span></a>
+                <?php endif; ?>
+                <em><?php echo $contentInfo; ?></em>
+            </p>
         <?php endif; ?>
     </div>
     
