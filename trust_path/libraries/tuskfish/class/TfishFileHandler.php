@@ -105,7 +105,7 @@ class TfishFileHandler
 	
 	private static function _clearDirectory($path)
 	{
-		$path = self::_data_file_path($path);
+		$path = self::_dataFilePath($path);
 		if ($path) {
 			try {
 				foreach (new DirectoryIteratory($path) as $file) {
@@ -265,7 +265,7 @@ class TfishFileHandler
 	
 	private static function _deleteDirectory($path)
 	{
-		$path = self::_data_file_path($path);
+		$path = self::_dataFilePath($path);
 		if ($path) {
 			try {
 				$iterator = new RecursiveDirectoryIterator($path);

@@ -65,6 +65,10 @@ define("TFISH_WELCOME", "Welcome to Tuskfish CMS");
 define("TFISH_LOGIN", "Login");
 define("TFISH_SUBMIT", "Submit");
 
+// Errors
+define("TFISH_ERROR_BAD_PATH", "Bad file path.");
+define("TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY.", "Failed to delete directory");
+
 // Constants used in theme, to prevent errors.
 define("TFISH_SEARCH", "Search");
 define("TFISH_RSS", "RSS");

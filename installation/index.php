@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				// Delete the installation folder from the server for security reasons
 				try {
 					$tfish_file_handler = new TfishFileHandler();
-					$tfish_file_handler->delete_directory(TFISH_ROOT_PATH . 'installation/');
+					$tfish_file_handler->deleteDirectory(TFISH_ROOT_PATH . 'installation/');
 					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DIRECTORY_DELETED . '</p>';
 				} catch(Exception $e) {
 					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_REMOVE_DIRECTORY . '</p>';
