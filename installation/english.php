@@ -19,7 +19,7 @@ define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on
 	number and symbol, no words or names).</li>
 	<li>Using a <b>random</b> HMAC key (just grab one from <b><a href='https://grc.com/passwords/'>
 	grc.com</a></b>).</li>
-	<li>Setting the CHMOD permissions on mainfile.php to <b>0400</b>.</li>
+	<li>Setting the CHMOD permissions on mainfile.php and config.php to <b>0400</b>.</li>
 	<li>Putting your trust_path folder <b>outside the web root</b> (eg. outside of public_html), so
 	that it is not accessible via browser. You can rename it if you want.</li>
 	<li>Setting the CHMOD permissions on your database file (/trustpath/your_database.db) to
