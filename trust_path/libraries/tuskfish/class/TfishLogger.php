@@ -40,9 +40,9 @@ class TfishLogger
 		error_log($message, 3, TFISH_ERROR_LOG_PATH);
 		
 		// Debug only - comment OUT in production site.
-		echo '<p>' . print($message) . '</p>';
+		// echo '<p>' . print($message) . '</p>';
 		
 		// Debug only - UNCOMMENT in production site.
-		// return false;
+		return false;
 	}
 }

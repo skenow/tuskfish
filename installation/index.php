@@ -86,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Check password length and quality
 		$password_quality = TfishSecurityUtility::checkPasswordStrength($clean_vars['admin_password']);
 		if ($password_quality['strong'] == true) {
-			$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_STRONG_PASSWORD . '</p>';
 			
 			// Salt and iteratively hash the password 100,000 times to resist brute force attacks
 			$site_salt = TfishSecurityUtility::generateSalt(64);
@@ -229,16 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			// Report on status of database creation
 			if ($db_path && $query) {
-				$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE . '</p>';
-
-				// Delete the installation folder from the server for security reasons
-				try {
-					$tfish_file_handler = new TfishFileHandler();
-					$tfish_file_handler->deleteDirectory(TFISH_ROOT_PATH . 'installation/');
-					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DIRECTORY_DELETED . '</p>';
-				} catch(Exception $e) {
-					$tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_REMOVE_DIRECTORY . '</p>';
-				}
+				$tfish_content['output'] .= '<h3>' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3>';
+				$tfish_content['output'] .= TFISH_INSTALLATION_SECURITY_INSTRUCTIONS;
 				$tfish_template->output = $tfish_content['output'];
 				$tfish_template->form = "success.html";
 				$tfish_template->tfish_main_content = $tfish_template->render('form');
