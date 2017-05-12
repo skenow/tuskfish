@@ -61,7 +61,7 @@ $tfish_template = new TfishTemplate();
  */
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('marketing');
+$tfish_template->setTemplate('default');
 
 // Page title.
 $tfish_template->page_title = TFISH_LOGIN;
