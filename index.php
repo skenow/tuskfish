@@ -134,13 +134,7 @@ if ($clean_id) {
 	// collection of tags (you can group tags into collections by creating collection objects and
 	// assigning tags via their 'parent' field.
     $tfish_template->select_action = 'index.php';
-	$criteria = new TfishCriteria();
-	$criteria->add(new TfishCriteriaItem('parent', 851), 'OR');
-	$criteria->add(new TfishCriteriaItem('parent', 852));
-	$criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
-	$criteria->add(new TfishCriteriaItem('online', 1));
-	$tag_list = TfishContentHandler::getList($criteria);
-    $tfish_template->select_filters =  TfishTagHandler::getArbitraryTagSelectBox($clean_tag, $tag_list);
+    $tfish_template->select_filters =  TfishTagHandler::TagSelectBox($clean_tag);
     $tfish_template->select_filters_form = $tfish_template->render('select_filters');
 }
 
