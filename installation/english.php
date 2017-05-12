@@ -18,7 +18,7 @@ define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on
 	<li>Using a <b>strong</b> password (> 14 characters, at least one upper and lower case letter,
 	number and symbol, no names or words that can be found in any dictionary of any language).</li>
 	<li>Using a <b>random</b> HMAC key (just grab one from <b><a href='https://grc.com/passwords/'>
-	grc.com</a></b>).</li>
+	grc.com</a></b>. Please use the last box on the page (no quote characters allowed).</li>
 	<li>Putting your trust_path folder <b>outside the web root</b> (eg. outside of public_html), so
 	that it is not accessible via browser. You can rename it if you want.</li>
 	</ol>
