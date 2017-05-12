@@ -52,7 +52,7 @@
     <?php if (!empty($parent)): ?>
         <div class="text-left">
             <h3><?php echo TFISH_RELATED; ?></h3>
-            <h4><a href="<?php echo $parent->getURL(true); ?>"><?php echo $parent->escape('title'); ?></a></h4>
+            <h4><a href="<?php echo $parent->getURL(true); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
             <?php if ($parent->image): ?>
                 <div class="pull-left">
                     <figure class="figure-left">
