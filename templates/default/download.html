@@ -5,9 +5,9 @@
 	<div class="text-left">
         <h2>
         <?php if ($content->media): ?>
-        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->escape('title'); ?></a>
+        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
         <?php else: ?>
-        <?php echo $content->escape('title'); ?>
+        <?php echo $content->icon . ' ' . $content->escape('title'); ?>
         <?php endif; ?>
         </h2>
     <?php if ($contentInfo): ?>
