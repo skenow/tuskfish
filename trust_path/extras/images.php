@@ -31,7 +31,7 @@ $index_template = 'images';
 $target_file_name = 'images';
 
 // Page title.
-$tfish_template->page_title = '<i class="fa fa-file-image-o" aria-hidden="true"></i> ' . TFISH_TYPE_IMAGES;
+$tfish_template->page_title = TFISH_TYPE_IMAGES;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

@@ -29,7 +29,7 @@ $index_template = 'soundtracks';
 $target_file_name = 'soundtracks';
 
 // Page title.
-$tfish_template->page_title = '<i class="fa fa-file-audio-o" aria-hidden="true"></i> ' . TFISH_TYPE_AUDIO_FILES;
+$tfish_template->page_title = TFISH_TYPE_AUDIO_FILES;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

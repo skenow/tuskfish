@@ -30,7 +30,7 @@ $index_template = 'downloads';
 $target_file_name = 'downloads';
 
 // Page title.
-$tfish_template->page_title = '<i class="fa fa-download" aria-hidden="true"></i> ' . TFISH_TYPE_DOWNLOADS;
+$tfish_template->page_title =  TFISH_TYPE_DOWNLOADS;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

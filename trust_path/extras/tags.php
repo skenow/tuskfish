@@ -29,7 +29,7 @@ $index_template = 'tags';
 $target_file_name = 'tags';
 
 // Page title.
-$tfish_template->page_title = '<i class="fa fa-tags" aria-hidden="true"></i> ' . TFISH_TYPE_TAGS;
+$tfish_template->page_title = TFISH_TYPE_TAGS;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;

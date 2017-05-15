@@ -29,7 +29,7 @@ $index_template = 'articles';
 $target_file_name = 'articles';
 
 // Page title.
-$tfish_template->page_title = '<i class="fa fa-file-text-o" aria-hidden="true"></i> ' . TFISH_TYPE_ARTICLES;
+$tfish_template->page_title = TFISH_TYPE_ARTICLES;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
