@@ -45,16 +45,22 @@ if ($clean_id) {
 	$content = $content_handler::getObject($clean_id);
 	if (is_object($content) && $content->online == true) {
 		
-		// Update view counter and assign object to template.
-		$content->counter += 1;
-		$content_handler::updateCounter($clean_id);
+		// Update view counter (if not a downloadable resource) and assign object to template.
+		if (!$content->media) {
+			$content->counter += 1;
+			$content_handler::updateCounter($clean_id);
+		}
 		$tfish_template->content = $content;
 		
 		// Prepare meta information for display.
 		$contentInfo = array();
 		if ($content->creator) $contentInfo[] = $content->escape('creator');
 		if ($content->date) $contentInfo[] = $content->escape('date');
-		if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+		if ($content->media) { // Label the counter as downloads or views depending on whether the collection is a downloadable resource or not.
+			if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+		} else {
+			if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+		}
 		if ($content->format) $contentInfo[] = '.' . $content->escape('format');
 		if ($content->file_size) $contentInfo[] = $content->escape('file_size');
 		if ($content->tags) {

@@ -37,7 +37,7 @@ if ($clean_id) {
     if (is_object($content) && $content->online == true) {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
-        if ($content->type != 'TfishDownload') {
+        if ($content->type != 'TfishDownload' && !($content->type == 'TfishCollection' && $content->media)) {
                 $content->counter += 1;
                 $content_handler::updateCounter($clean_id);
         }
