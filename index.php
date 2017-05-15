@@ -51,6 +51,7 @@ if ($clean_id) {
 			switch($content->type) {
 				case "TfishDownload":
 					$contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+					break;
 				default:
 					$contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
 			}
