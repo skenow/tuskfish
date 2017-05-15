@@ -57,7 +57,7 @@
     <!-- Media attachment -->
     <?php if ($content->media): ?>
     <div class="text-left">
-        <p><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->media; ?></a></b></p>
+        <p><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <?php echo $content->media; ?></a></b></p>
     </div>
     <?php endif; ?>
     
