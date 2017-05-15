@@ -47,7 +47,14 @@ if ($clean_id) {
         $contentInfo = array();
         if ($content->creator) $contentInfo[] = $content->escape('creator');
         if ($content->date) $contentInfo[] = $content->escape('date');
-        if ($content->counter) $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+        if ($content->counter) {
+			switch($content->type) {
+				case "TfishDownload":
+					$contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+				default:
+					$contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+			}
+		}
         if ($content->format) $contentInfo[] = '.' . $content->escape('format');
         if ($content->file_size) $contentInfo[] = $content->escape('file_size');
         if ($content->tags) {

@@ -256,3 +256,6 @@ define("TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO", "Your browser does not support th
 /*
  * Record any new, changed or deleted language constants below by version, to aid translation.
  */
+
+// Beta 1.
+define("TFISH_DOWNLOADS", "Downloads");
