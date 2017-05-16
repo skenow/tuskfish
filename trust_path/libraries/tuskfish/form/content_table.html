@@ -19,17 +19,17 @@
 			<tr>
 				<td><?php echo TfishFilter::escape($row['id']); ?></td>
 				<td><?php echo TfishFilter::escape($typelist[$row['type']]); ?></td>
-                <td><a href="<?php echo TFISH_URL . '?id=' . TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['title']); ?></a></td>
+                <td><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=view&amp;id=' . TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['title']); ?></a></td>
 				<td><?php echo TfishFilter::escape($row['submission_time']); ?></td>
 				<td><?php echo TfishFilter::escape($row['counter']); ?></td>
                 <?php if ($row['online']): ?>
-                <td><a class="text-success" href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=toggle"><?php echo TFISH_ONLINE; ?></a></td>
+                <td><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><?php echo TFISH_ONLINE; ?></a></td>
                 <?php else: ?>
-                <td><a class="text-danger" href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=toggle"><b><?php echo TFISH_OFFLINE; ?></b></a></td>
+                <td><a class="text-danger" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><b><?php echo TFISH_OFFLINE; ?></b></a></td>
                 <?php endif; ?>
-				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=edit">
+				<td><a href="admin.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
 						<?php echo TFISH_EDIT; ?></a></td>
-				<td><a href="admin.php?id=<?php echo TfishFilter::escape($row['id']); ?>&amp;op=confirm">
+				<td><a href="admin.php?op=confirm&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
 						<?php echo TFISH_DELETE; ?></a></td>
 				<?php unset($row); ?>
 			</tr>
