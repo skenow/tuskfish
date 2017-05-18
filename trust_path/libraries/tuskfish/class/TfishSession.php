@@ -168,8 +168,11 @@ class TfishSession
 			return false;
 		}
 
-		if ( $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
-			return false;
+		// User agent comparison can only be made if the agent is actually set. Bots may not set one.
+		if (isset($_SERVER['HTTP_USER_AGENT'])) {
+			if ( $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
+				return false;
+			}
 		}
 
 		return true;
@@ -276,7 +279,12 @@ class TfishSession
 				// Reset session data and regenerate id
 				$_SESSION = array();
 				$_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-				$_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+				// Only set userAgent if HTTP_USER_AGENT has been set; as bots may not set it.
+				if (isset($_SERVER['HTTP_USER_AGENT'])) {
+					$_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+				} else {
+					$_SESSION['userAgent'] = false;
+				}
 				self::regenerateSession();
 
 			// Give a 5% chance of the session id changing on any request
