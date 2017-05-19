@@ -122,17 +122,20 @@ class TfishTagHandler extends TfishContentHandler
 	 * Build a select box from an arbitrary array of tags.
 	 * 
 	 * Use this when you need to customise a tag select box. Pass in an array of the tags you want
-	 * to use as $tag_list as key => value pairs.
+	 * to use as $tag_list as key => value pairs. If you have multiple select boxes on one page then
+	 * you need to assign them different keys and listen for matching input parameters.
 	 * 
 	 * @param int $selected tag
 	 * @param array $tag_list key => value array of ID => title
+	 * @param string $key_name the input parameter name you want to use as key for this select box. Defaults to 'tag_id'.
 	 * @param string $zero_option the string that will be displayed for the 'zero' or no selection option
 	 * @return string select box
 	 */
-	public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $zero_option = TFISH_SELECT_TAGS)
+	public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $key_name = null, $zero_option = TFISH_SELECT_TAGS)
 	{
 		// Initialise variables.
 		$select_box = '';
+		$clean_key_name = '';
 		$clean_tag_list = array();
 		
 		// Validate input.
@@ -147,10 +150,11 @@ class TfishTagHandler extends TfishContentHandler
 			}
 		}
 		$clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
+		$clean_key_name = isset($key_name) ? TfishFilter::escape(TfishFilter::trimString($key_name)) : 'tag_id';
 		
 		// Build the select box.
 		$clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list; 
-		$select_box = '<select class="form-control" name="tag_id" id="tag_id" onchange="this.form.submit()">';
+		$select_box = '<select class="form-control" name="' . $clean_key_name . '" id="" onchange="this.form.submit()">';
 		foreach($clean_tag_list as $key => $value) {
 			$select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
 		}
