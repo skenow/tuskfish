@@ -37,9 +37,12 @@
                     <figure class="figure-left">
                     <a href="<?php echo $parent->getURL(false); ?>">
                     <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
-                         <?php if ($parent->caption): ?>title="<?php echo $parent->escape('caption'); ?>" 
-                         alt="<?php echo $parent->escape('caption'); ?>"<?php endif; ?> />
-                    </a>
+                        <?php if ($parent->caption): ?>
+							title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
+						<?php else: ?>
+							alt=""
+						<?php endif; ?>
+					/></a>
                     </figure>
                 </div>
             <?php endif; ?>
@@ -67,9 +70,12 @@
                         <figure class="figure-left">
                         <a href="<?php echo $child->getURL(false); ?>">
                         <img class="img-responsive" src="<?php echo $child->getCachedImage(100); ?>" 
-                             <?php if ($child->caption): ?>title="<?php echo $child->escape('caption'); ?>" 
-                             alt="<?php echo $child->escape('caption'); ?>"<?php endif; ?> />
-                        </a>
+                            <?php if ($child->caption): ?>
+								title="<?php echo $child->escape('caption'); ?>" alt="<?php echo $child->escape('caption'); ?>"
+							<?php else: ?>
+								alt=""
+							<?php endif; ?>
+						/></a>
                         </figure>
                     </div>
                 <?php endif; ?>

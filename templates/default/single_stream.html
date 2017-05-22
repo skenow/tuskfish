@@ -10,9 +10,12 @@
                 <figure class="figure-left">
                 <a href="<?php echo $content->getURL(false); ?>">
                 <img class="img-responsive" src="<?php echo $content->getCachedImage(100); ?>" 
-                     <?php if ($content->caption): ?>title="<?php echo $content->escape('caption'); ?>" 
-                     alt="<?php echo $content->escape('caption'); ?>"<?php endif; ?> />
-                </a>
+                    <?php if ($content->caption): ?>
+						title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"
+					<?php else: ?>
+						alt=""
+					<?php endif; ?>
+				/></a>
                 </figure>
             </div>
         <?php endif; ?>
