@@ -115,8 +115,8 @@ if ($clean_id) {
         $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
     }
 } else {
-    // Page title
-    //$tfish_template->page_title = TFISH_NEWS;
+    // Page title, customise it as you see fit.
+    $tfish_template->page_title = TFISH_LATEST_POSTS;
 	
     // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();
