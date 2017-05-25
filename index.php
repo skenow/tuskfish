@@ -28,6 +28,10 @@ $clean_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 
+// Set cache parameters.
+$basename = basename(__FILE__);
+$cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
+
 $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_RSS_URL;
 
 if ($clean_id) {
@@ -42,10 +46,7 @@ if ($clean_id) {
                 $content_handler::updateCounter($clean_id);
         }
 		
-		// Check if cached page is available. Pass in the file name and whitelisted parameters.
-		// If a cached page is available script execution stops here.
-		$basename = basename(__FILE__);
-		$cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
+		// Check if cached page is available.
 		TfishCache::checkCache($basename, $cache_parameters);
 		
 		// Assign content object to template.
@@ -123,6 +124,10 @@ if ($clean_id) {
         $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
     }
 } else {
+	
+	// Check if cached page is available.
+	TfishCache::checkCache($basename, $cache_parameters);
+	
     // Page title, customise it as you see fit.
     $tfish_template->page_title = TFISH_LATEST_POSTS;
 	

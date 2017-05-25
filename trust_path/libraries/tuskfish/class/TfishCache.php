@@ -136,7 +136,7 @@ class TfishCache
 	 */
 	public static function cachePage($basename, $params, $buffer) {
 		
-		// Resolve the file name and vrify that the constructed path matches the canonical path.
+		// Resolve the file name and verify that the constructed path matches the canonical path.
 		$file_name = self::_getCachedFileName($basename, $params);
 		$file_path = realpath(TFISH_CACHE_PATH) . '/' . $file_name;
 		if ($file_path != TFISH_CACHE_PATH . $file_name) {
