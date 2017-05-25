@@ -19,8 +19,13 @@ if ($tfish_template && !empty($tfish_template->template_set)) {
 	include_once TFISH_TEMPLATES_PATH . "default/default.html";
 }
 
-// Close the database connection
+// Close the database connection.
 TfishDatabase::close();
 
-// Flush the output buffer to screen
+// Write the contents of the buffer to the cache (if a cached version of this page was available
+// then execution would have ceased in tfish_header.php). Note that $basename and $cache_parameters
+// should be declared in your controller script (ie. after the header).
+TfishCache::cachePage($basename, $cache_parameters, ob_get_contents());
+
+// Flush the output buffer to screen and clear it.
 ob_end_flush();

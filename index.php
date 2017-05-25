@@ -31,7 +31,7 @@ $clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
 $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_RSS_URL;
 
 if ($clean_id) {
-    
+	
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
     if (is_object($content) && $content->online == true) {
@@ -41,6 +41,14 @@ if ($clean_id) {
                 $content->counter += 1;
                 $content_handler::updateCounter($clean_id);
         }
+		
+		// Check if cached page is available. Pass in the file name and whitelisted parameters.
+		// If a cached page is available script execution stops here.
+		$basename = basename(__FILE__);
+		$cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
+		TfishCache::checkCache($basename, $cache_parameters);
+		
+		// Assign content object to template.
         $tfish_template->content = $content;
 
         // Prepare meta information for display.
@@ -184,5 +192,18 @@ $centre_bottom_blocks[] = $block_list3->render();
 
 $tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
 */
+
+/**
+ * Override page template and metadata here (otherwise default site metadata will display).
+ */
+// $tfish_metadata->title = '';
+// $tfish_metadata->description = '';
+// $tfish_metadata->author = '';
+// $tfish_metadata->copyright = '';
+// $tfish_metadata->generator = '';
+// $tfish_metadata->seo = '';
+// $tfish_metadata->robots = '';
+
+// Include page template and flush buffer
 
 require_once TFISH_PATH . "tfish_footer.php";
