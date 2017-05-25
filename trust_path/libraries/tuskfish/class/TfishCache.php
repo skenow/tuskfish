@@ -45,14 +45,9 @@
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 class TfishCache
-{
-	private static $_cache_life;
-	
+{	
 	public function __construct()
-	{
-		// Should set a sane (minimum) cache time. 24 hours, for testing purpses.
-		self::$_cache_life = 86400;
-	}
+	{}
 	
 	/**
 	 * Check if a cached page exists and has not expired, and displays it.
@@ -74,6 +69,13 @@ class TfishCache
 	 */
 	public static function checkCache($basename, $params = array()) {
 		
+		global $tfish_preference;
+
+		// Abort if cache is disabled.
+		if (!$tfish_preference->enable_cache) {
+			return;
+		}
+		
 		// Resolve the file name.
 		$file_name = self::_getCachedFileName($basename, $params);
 		// Verify that the constructed path matches the canonical path. Exit cache if path is bad.
@@ -84,10 +86,11 @@ class TfishCache
 		
 		// Path is good, so check if the file actually exists and has not expired. If so, flush
 		// the output buffer to screen. This buffer was opened in tfish_header.
-		if (file_exists($resolved_path) && (filemtime($resolved_path) < (time() - self::$_cache_life))) {
+		if (file_exists($resolved_path) && (filemtime($resolved_path) > (time() - $tfish_preference->cache_life))) {
 			echo file_get_contents($resolved_path);
 			ob_end_flush();
 			exit;
+		} else {
 		}
 	}
 
@@ -135,6 +138,13 @@ class TfishCache
 	 * 
 	 */
 	public static function cachePage($basename, $params, $buffer) {
+		
+		global $tfish_preference;
+		
+		// Abort if cache is disabled.
+		if (!$tfish_preference->enable_cache) {
+			return;
+		}
 		
 		// Resolve the file name and verify that the constructed path matches the canonical path.
 		$file_name = self::_getCachedFileName($basename, $params);

@@ -159,6 +159,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				array('title' => 'session_name', 'value' => 'tfish'),
 				array('title' => 'default_language', 'value' => 'en'),
 				array('title' => 'date_format', 'value' => 'j F Y'),
+				array('title' => 'enable_cache', 'value' => '0'),
+				array('title' => 'cache_life', 'value' => '86400')
 			);
 			foreach ($preference_data as $preference) {
 				TfishDatabase::insert('preference', $preference, 'id');

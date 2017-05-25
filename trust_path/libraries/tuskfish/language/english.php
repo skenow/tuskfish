@@ -68,6 +68,8 @@ define("TFISH_PREFERENCE_USER_PAGINATION", "User-side pagination");
 define("TFISH_PREFERENCE_SITE_DESCRIPTION", "Site description");
 define("TFISH_PREFERENCE_SITE_AUTHOR", "Site author / publisher");
 define("TFISH_PREFERENCE_SITE_COPYRIGHT", "Site copyright");
+define("TFISH_PREFERENCE_ENABLE_CACHE", "Enable cache");
+define("TFISH_PREFERENCE_CACHE_LIFE", "Cache life (seconds)");
 
 // Search
 define("TFISH_SEARCH", "Search");

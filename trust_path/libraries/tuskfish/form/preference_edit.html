@@ -37,7 +37,7 @@
 			<label class="radio-inline pull-left">
 				<input class="pull-left" type="radio" name="close_site" value="1" id="close_site" <?php if ($preferences['close_site'] == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
 			</label>
-			<label for="online" class="radio-inline pull-left">
+			<label for="close_site" class="radio-inline pull-left">
 				<input type="radio" name="close_site" value="0" id="close_site" <?php if ($preferences['close_site'] == 0) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
 			</label>
 		</div>
@@ -141,6 +141,24 @@
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
 			<input type="text" class="form-control" name="date_format" id="date_format" <?php if (isset($preferences['date_format'])) { echo 'value="' . $preferences['date_format'] . '"'; } ?> required>
 		</div>
+        
+        <!-- Enable cache -->
+		<label for="enable_cache" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_ENABLE_CACHE; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<label class="radio-inline pull-left">
+				<input class="pull-left" type="radio" name="enable_cache" value="1" id="enable_cache" <?php if ($preferences['enable_cache'] == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
+			</label>
+			<label for="enable_cache" class="radio-inline pull-left">
+				<input type="radio" name="enable_cache" value="0" id="enable_cache" <?php if ($preferences['enable_cache'] == 0) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
+			</label>
+		</div>
+        
+        <!-- Cache life -->
+		<label for="cache_life" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_CACHE_LIFE; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<input type="number" min="1" class="form-control" name="cache_life" id="cache_life" <?php if (isset($preferences['cache_life'])) { echo 'value="' . $preferences['cache_life'] . '"'; } ?> required>
+		</div>
+        
 	</div>
 	<button name="op" value="update" type="submit" class="btn btn-primary"><?php echo TFISH_UPDATE; ?></button>
 	<button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>

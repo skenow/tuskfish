@@ -64,6 +64,7 @@ if (in_array($op, array('edit', 'update', false))) {
 			$preferences['server_timezone'] = $timezones[$preferences['server_timezone']];
 			$preferences['site_timezone'] = $timezones[$preferences['site_timezone']];
 			$preferences['close_site'] = empty($preferences['close_site']) ? TFISH_NO : TFISH_YES;
+			$preferences['enable_cache'] = empty($preferences['enable_cache']) ? TFISH_NO : TFISH_YES;
 			$tfish_template->preferences = $preferences;
 			$tfish_template->form = TFISH_FORM_PATH . "preference_table.html";
 			$tfish_template->tfish_main_content = $tfish_template->render('form');

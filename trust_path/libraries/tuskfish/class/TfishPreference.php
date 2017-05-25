@@ -39,7 +39,8 @@ class TfishPreference extends TfishAncestralObject
 		$this->__properties['session_name'] = 'alnum';
 		$this->__properties['default_language'] = 'alpha';
 		$this->__properties['date_format'] = 'string';
-		//$this->__properties['allowed_mimetypes'] = 'string';		
+		$this->__properties['enable_cache'] = 'int';
+		$this->__properties['cache_life'] = 'int';
 		
 		// Instantiate whitelisted fields in the protected $__data property.
 		foreach ($this->__properties as $key => $value) {
@@ -188,6 +189,7 @@ class TfishPreference extends TfishAncestralObject
 						
 						// 0 or 1.
 						case "close_site":
+						case "enable_cache":
 							if (TfishFilter::isInt($value, 0, 1)) {
 								$this->__data[$property] = (int)$value;
 							} else {
@@ -208,6 +210,7 @@ class TfishPreference extends TfishAncestralObject
 						case "admin_pagination":
 						case "gallery_pagination":
 						case "user_pagination":
+						case "cache_life":
 							if (TfishFilter::isInt($value, 1)) {
 								$this->__data[$property] = (int)$value;
 							} else {
