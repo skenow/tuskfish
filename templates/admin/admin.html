@@ -75,6 +75,7 @@
 			<?php if (TfishSession::isAdmin()): ?>
             <li><a href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
 			<li><a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
+            <li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=flush'; ?>"><?php echo TFISH_FLUSH_CACHE; ?></a></li>
 			<li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
 			<?php endif; ?>
 			<li><?php echo TfishSession::loginLink(); ?></li>

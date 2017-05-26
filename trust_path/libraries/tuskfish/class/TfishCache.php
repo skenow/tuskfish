@@ -145,22 +145,39 @@ class TfishCache
 	}
 
 	/**
-	 * Clear the cache, or optionally a single file if ID parameter supplied.
+	 * Clear the cache.
 	 * 
-	 * @param int $id
-	 * @return boolean
+	 * At the moment this is something of a blunt instrument; the entire cache will be cleared
+	 * if a single object is added, edited or destroyed (this is to ensure that index pages and
+	 * pagination controls stay up to date). Later it would be good to be more selective, perhaps
+	 * marking individual object pages by their id, to allow them to be distinguished from index
+	 * pages.
+	 * 
+	 * @return boolean success or failure.
 	 */
-	public static function clearCache($id = false) {
-		$result = self::_clearCache();
-		if (!$result) {
-			trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
+	public static function flushCache()	{
+		try {
+			$directory_iterator = new DirectoryIterator(TFISH_CACHE_PATH);
+			foreach ($directory_iterator as $file) {
+				if ($file->isFile()) {
+					$path = TFISH_CACHE_PATH . $file->getFileName();
+					if ($path && file_exists($path)) {
+						try {
+							unlink($path);
+						} catch (Exeption $e) {
+							TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+						}
+					} else {
+						trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
+						return false;
+					}
+				}
+			}
+		} catch (Exception $e) {
+			TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 			return false;
 		}
-		
 		return true;
 	}
-	
-	private static function _clearCache()
-	{}
 }
 

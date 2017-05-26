@@ -108,9 +108,9 @@ class TfishFileHandler
 		$path = self::_dataFilePath($path);
 		if ($path) {
 			try {
-				foreach (new DirectoryIteratory($path) as $file) {
-					if (isFile($file)) {
-						self::_deleteFile($path . '/' . getFileName($file));
+				foreach (new DirectoryIterator($path) as $file) {
+					if ($file->isFile()) {
+						self::_deleteFile($path . '/' . $file->getFileName());
 					}
 				}
 			} catch (Exception $e) {

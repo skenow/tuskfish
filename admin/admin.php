@@ -30,7 +30,7 @@ $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 // Set target file for intra-collection pagination controls when viewing objects. False will default to your home page.
 $target_file_name = false;
 
-if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 'update', 'view', false))) {
+if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update', 'view', false))) {
 	
 	// Specify the admin template and the template to be used to preview content (user side template).
 	if ($op == 'view') {
@@ -152,6 +152,23 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'submit', 'toggle', 
 			} else {
 				trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
 			}
+		break;
+		
+		// Flush: Flush the cache.
+		case "flush":
+			$result = TfishCache::flushCache();
+			if ($result) {
+				$tfish_template->page_title = TFISH_SUCCESS;
+				$tfish_template->alert_class = 'alert-success';
+				$tfish_template->message = TFISH_CACHE_WAS_FLUSHED;
+			} else {
+				$tfish_template->page_title = TFISH_FAILED;
+				$tfish_template->alert_class = 'alert-danger';
+				$tfish_template->message = TFISH_CACHE_FLUSH_FAILED;
+			}
+			$tfish_template->back_url = 'admin.php';
+			$tfish_template->form = TFISH_FORM_PATH . "response.html";
+			$tfish_template->tfish_main_content = $tfish_template->render('form');		
 		break;
 	
 		// Submit: Determine object type, instantiate, validate input, populate properties  and and
