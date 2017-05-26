@@ -100,6 +100,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 				$clean_id = (int)$_REQUEST['id'];
 				$result = TfishContentHandler::delete($clean_id);
 				if ($result) {
+					TfishCache::flushCache();
 					$tfish_template->page_title = TFISH_SUCCESS;
 					$tfish_template->alert_class = 'alert-success';
 					$tfish_template->message = TFISH_OBJECT_WAS_DELETED;
@@ -191,6 +192,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 			// Insert the object
 			$result = TfishContentHandler::insert($content_object);
 			if ($result) {
+				TfishCache::flushCache();
 				$tfish_template->page_title = TFISH_SUCCESS;
 				$tfish_template->alert_class = 'alert-success';
 				$tfish_template->message = TFISH_OBJECT_WAS_INSERTED;
@@ -210,6 +212,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 			$clean_id = TfishFilter::isInt($id, 1) ? $id : 0;
 			$result = TfishContentHandler::toggleOnlineStatus($clean_id);
 			if ($result) {
+				TfishCache::flushCache();
 				$tfish_template->page_title = TFISH_SUCCESS;
 				$tfish_template->alert_class = 'alert-success';
 				$tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
@@ -252,6 +255,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 			// Update the database row and display a response.
 			$result = TfishContentHandler::update($content_object);
 			if ($result) {
+				TfishCache::flushCache();
 				$tfish_template->page_title = TFISH_SUCCESS;
 				$tfish_template->alert_class = 'alert-success';
 				$tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
