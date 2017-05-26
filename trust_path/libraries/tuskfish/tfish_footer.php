@@ -25,7 +25,7 @@ TfishDatabase::close();
 // Write the contents of the buffer to the cache (if a cached version of this page was available
 // then execution would have ceased in tfish_header.php). Note that $basename and $cache_parameters
 // should be declared in your controller script (ie. after the header).
-if ($tfish_preference->enable_cache) {
+if ($tfish_preference->enable_cache && isset($basename)) {
 	TfishCache::cachePage($basename, $cache_parameters, ob_get_contents());
 }
 

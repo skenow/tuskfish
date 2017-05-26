@@ -19,21 +19,6 @@
 * Cache timeout should be based on a preference. A minimum value should be enforced in order to
 * prevent admins from setting stupid ones. There should also be an on/off control, and a 'flush'
 * link in the control panel.
-* 
-* Issues:
-* - Current implementation only works for individual objects with IDs. Need to allow for index
-*   pages with a few parameters attached as well. Use naming convention index . basename . param
-*   to allow index pages to be identified separately from ID pages.
-* - Cache preferences need to be implemented (on/off switch, expiry timer) - easy.
-* - Validation of parameters and file paths needs to be rigorous - doable.
-* - If someone requests a page that doesn't exist, the 'no content' page gets cached. This could
-*   cause problems if an object with that ID was created later. Solution: Object-specific cache
-*   pages are destroyed each time an object is created, modified or deleted.
-* - Index pages, tags and collections may have a problem with cached pagination controls becoming
-*   out of date or wrong when content is added, edited or deleted.
-* - A lot of these (index page) problems would be solved by clearing the entire cache each time a 
-*  piece of content is added, edited or deleted. For an infrequently updated site this is not an 
-*  issue, but for frequently updated sites it reduces the value of the cache.
 *
 * @copyright	Simon Wilkinson (Crushdepth) 2017
 * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
