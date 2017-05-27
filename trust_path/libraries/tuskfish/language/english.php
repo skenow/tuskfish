@@ -70,6 +70,7 @@ define("TFISH_PREFERENCE_SITE_AUTHOR", "Site author / publisher");
 define("TFISH_PREFERENCE_SITE_COPYRIGHT", "Site copyright");
 define("TFISH_PREFERENCE_ENABLE_CACHE", "Enable cache");
 define("TFISH_PREFERENCE_CACHE_LIFE", "Cache life (seconds)");
+define("TFISH_PREFERENCE_SESSION_LIFE", "Session life (minutes)");
 
 // Search
 define("TFISH_SEARCH", "Search");

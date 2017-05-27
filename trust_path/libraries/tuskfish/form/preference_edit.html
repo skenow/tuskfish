@@ -119,6 +119,12 @@
 		<div class="control-label col-lg-9 col-md-8 col-sm-8">
 			<input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . $preferences['session_name'] . '"'; } ?> required>
 		</div>
+        
+        <!-- Session life -->
+		<label for="session_life" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_LIFE; ?>:</label>
+		<div class="control-label col-lg-9 col-md-8 col-sm-8">
+			<input type="number" min="0" class="form-control" name="session_life" id="session_life" <?php if (isset($preferences['session_life'])) { echo 'value="' . $preferences['session_life'] . '"'; } ?> required>
+		</div>
 		
 		<!-- Default language -->
 		<label for="default_language" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_DEFAULT_LANGUAGE; ?>:</label>

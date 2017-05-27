@@ -82,7 +82,7 @@ class TfishSession
 		$last_seen = isset($_SESSION['last_seen']) ? (int)$_SESSION['last_seen'] : false;
 		
 		// Does this work with a session lifetime of zero? A session lifetime preference has not been implemented yet.
-		if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_lifetime * 60)) {
+		if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_life * 60)) {
 			return true;
 		}
 		
@@ -161,7 +161,7 @@ class TfishSession
 			if ($password_hash == $user['password_hash']) {
 				
 				// Regenerate session due to priviledge escalation
-				self::regenerateSession();
+				self::regenerate();
 				$_SESSION['TFISH_LOGIN'] = true;
 				header('location: ' . TFISH_ADMIN_URL . "admin.php");
 				exit;
@@ -313,7 +313,7 @@ class TfishSession
 		
 		// Set the parameters and start the session.
 		session_name($session_name);
-		session_set_cookie_parameters($lifetime, $path, $domain, $secure, $http_only);
+		session_set_cookie_params($lifetime, $path, $domain, $secure, $http_only);
 		session_start();
 		
 		// Check if the session has expired.

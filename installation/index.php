@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				array('title' => 'gallery_pagination', 'value' => '20'),
 				array('title' => 'pagination_elements', 'value' => '5'),
 				array('title' => 'session_name', 'value' => 'tfish'),
+				array('title' => 'session_life', 'value' => '20'),
 				array('title' => 'default_language', 'value' => 'en'),
 				array('title' => 'date_format', 'value' => 'j F Y'),
 				array('title' => 'enable_cache', 'value' => '0'),
