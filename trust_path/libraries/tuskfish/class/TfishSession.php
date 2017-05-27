@@ -3,11 +3,21 @@
 /**
 * Tuskfish session security class.
 * 
-* Provides functions for managing sessions in a secure manner. 
+* Provides functions for managing sessions in a security-concious manner.
 *
-* @copyright	http://blog.teamtreehouse.com/how-to-create-bulletproof-sessions
+* @copyright	Simon Wilkinson (Crushdepth) 2016
+* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+* @since		1.0
+* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
 * @package		core
 */
+
+/**
+ * NEEDS VERY CAREFUL TESTING.
+ * 
+ * What happens if session timeout is set to '0'? This normally means that the session ends when
+ * the browser is closed, but need to check that.
+ */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
@@ -24,6 +34,17 @@ class TfishSession
 	 * @param bool|null $https
 	 */
 	
+	/**
+	 * Unset session variables and destroy the session.
+	 * 
+	 * @return void
+	 */
+	public static function destroy() {
+		$_SESSION = [];
+		session_destroy();
+		session_start();
+	}
+	
 	/*
 	 * Shorthand admin privilages check.
 	 * 
@@ -39,6 +60,64 @@ class TfishSession
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Checks if a session has expired and sets last seen activity flag.
+	 * 
+	 * @global type $tfish_preference
+	 * @return boolean
+	 */
+	public static function isExpired()
+	{
+		// Make Tuskfish preferences available.
+		global $tfish_preference;
+		
+		// Check if session carries a destroyed flag and kill it if the grace timer has expired.
+		if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
+			return true;
+		}
+		
+		// Check for expiry and update "last seen" timestamp.
+		$last_seen = isset($_SESSION['last_seen']) ? (int)$_SESSION['last_seen'] : false;
+		
+		// Does this work with a session lifetime of zero? A session lifetime preference has not been implemented yet.
+		if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_lifetime * 60)) {
+			return true;
+		}
+		
+		// Session not seen before, add an activity timestamp.
+		$_SESSION['last_seen'] = time();
+		
+		return false;
+	}
+	
+	/**
+	 * Checks if client IP address or user agent has changed.
+	 * 
+	 * These tests can indicate hijacking but are not definitive; however they do indicate elevated
+	 * risk and session should be regenerated as a counter measure.
+	 * 
+	 * @return boolean
+	 */
+	public static function isHijacked()
+	{
+		if (!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) {
+			return true;
+		}
+
+		if ($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) {
+			return true;
+		}
+
+		// User agent comparison can only be made if the agent is actually set. Bots may not set one.
+		if (isset($_SERVER['HTTP_USER_AGENT'])) {
+			if ( $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 	
 	/**
@@ -131,7 +210,7 @@ class TfishSession
 	private static function _logout($clean_url)
 	{	
 		// Unset all of the session variables.
-		$_SESSION = array();
+		$_SESSION = [];
 		
 		// Destroy the session cookie, DESTROY IT ISILDUR!
 		if (ini_get("session.use_cookies")) {
@@ -151,150 +230,18 @@ class TfishSession
 	}
 	
 	/**
-	 * Watches for potential signs of session hijacking.
-	 * 
-	 * If the user IP address or user agent change this can indicate session hijacking, and the
-	 * session ID should be regenerated as a precaution.
-	 * 
-	 * @return boolean true if ok false if IP or user agent have changed.
-	 */
-	protected static function preventHijacking()
-	{		
-		if (!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) {
-			return false;
-		}
-
-		if ($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) {
-			return false;
-		}
-
-		// User agent comparison can only be made if the agent is actually set. Bots may not set one.
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			if ( $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-	
-	/**
-	 * Implementation of the secure cookie protocol of Liu, IKovacs, Huang and Gouda (2005).
-	 * 
-	 * This function is not in working order. Liu et al. have devised what seems to be a
-	 * bulletproof session security mechanism. Unfortunately, it requires access to a SSL
-	 * session ID, which is only accessible with a specific server configuration, ie. in most
-	 * cases it's just not available. Which renders this otherwise excellent idea impracticable
-	 * for general use.
-	 * 
-	 * It may be possible to make the ID available by adding a configuration directive to the
-	 * VirtualHost in apache, but I haven't tested it yet:
-	 * 
-	 * SSLOptions +StdEnvVars
-	 * 
-	 * See: http://cweiske.de/tagebuch/ssl-client-certificates.htm
+	 * Reset session data after a hijacking check fails.
 	 * 
 	 * @return void
 	 */
-	protected static function secureSession()
+	public static function reset()
 	{
-		/**
-		 * Note that it *requires* use of SSL in order to access a session key.
-		 * 
-		 * Modifications:
-		 * 1. Use the TFISH_KEY as the parent key rather than the server key due to possibility of 
-		 * key-sharing in shared hosting.
-		 * 2. Added a random piece of junk in the data payload, to confound sample-based attempts to
-		 * recover the key.
-		 * 
-		 * Protocol is as follows:
-		 * username|expiration time|(data)k|HMAC(username|expiration time|data|session key, k)
-		 * where k=HMAC(username|expiration time, server key)
-		 */
-		
-		$data = '';
-		
-		// Calculate the key k
-		$k = hmac('sha256', $username . $expiration , TFISH_KEY);
-		
-		// Obtain the SSL session key
-		$session_key = '';
-		
-		// Generate a bit of psuedo-random garbage payload to confound sample-based cryptanalysis
-		$pad = '';
-
-		// Calculate the cookie HMAC (SHA256)
-		$hmac = hmac('sha256', $username . $expiration . $data . $session_key, $k);
-		
-		// Encrypt the data payload (session ID)
-		// string mcrypt_encrypt ( string $cipher , string $key , string $data , string $mode [, string $iv ] )
-		// Note that the '128' in the cipher specification refers to block size, NOT encryption strength!
-		// So how do you do 256-bit AES encryption in PHP vs. 128-bit AES encryption???
-		// The answer is:  Give it a key that's 32 bytes long as opposed to 16 bytes long.
-		// For example:
-		//$key256 = '12345678901234561234567890123456';
-		//$key128 = '1234567890123456';
-		// If you want to be AES compliant always choose the MCRYPT_RIJNDAEL_128 cipher constant.
-		// For a good explanation of mycript_encrypt() see https://www.chilkatsoft.com/p/php_aes.asp
-		$encrypted_data = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $k, $data, $mode);
-		
-		// Set the cookie parameters and away we go
-	}
-	
-	public static function sessionStart($name = null, $limit = 0, $path = '/', $domain = null, $https = null)
-	{	
-		// Gather parameters
-		global $tfish_preference;
-		$name = isset($name) ? $name : $tfish_preference->session_name;
-		$domain = isset($domain) ? $domain : ltrim($_SERVER['SERVER_NAME'], 'www');
-		$https = isset($https) ? $https : isset($_SERVER['HTTPS']);
-		
-		// Sanitise parameters		
-		$clean_name = TfishFilter::trimString($name);
-		$clean_limit = TfishFilter::isInt($limit, 0) ? (int)$limit : 0;
-		$clean_path = TfishFilter::trimString($path);
-		$clean_domain = TfishFilter::trimString($domain);
-		if (isset($https)) {
-			$clean_https = !empty($https) ? true : false;
+		$_SESSION = [];
+		$_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER['HTTP_USER_AGENT'])) {
+			$_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
 		} else {
-			$clean_https = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) ? true : false;
-		}
-		$clean_http_only = true; // Locked to http as security measure.
-		
-		// Start the session
-		self::_sessionStart($clean_name, $clean_limit, $clean_path, $clean_domain, $clean_https, $clean_http_only);
-	}
-	
-	private static function _sessionStart($name, $limit, $path, $domain, $https, $http_only)
-	{	
-		// Set the cookie settings and start the session. Cookies are locked to http only.
-		session_name($name . '_session');
-		session_set_cookie_params($limit, $path, $domain, $https, $http_only);
-		session_start();
-		
-		// Make sure the session hasn't expired, and destroy it if it has
-		if (self::validateSession()) {
-			// Check to see if the session is new or a hijacking attempt
-			if (!self::preventHijacking()) {
-				// Reset session data and regenerate id
-				$_SESSION = array();
-				$_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-				// Only set userAgent if HTTP_USER_AGENT has been set; as bots may not set it.
-				if (isset($_SERVER['HTTP_USER_AGENT'])) {
-					$_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-				} else {
-					$_SESSION['userAgent'] = false;
-				}
-				self::regenerateSession();
-
-			// Give a 5% chance of the session id changing on any request
-			} elseif (rand(1, 100) <= 5) {
-				self::regenerateSession();
-			}
-		} else {
-			$_SESSION = array();
-			session_destroy();
-			session_start();
+			$_SESSION['userAgent'] = false;
 		}
 	}
 	
@@ -304,52 +251,80 @@ class TfishSession
 	 * Called whenever there is a privilege escalation (login) or at random intervals to reduce
 	 * risk of session hijacking.
 	 * 
+	 * Note that it allows the new and  old sessions to co-exist for a short period, this is to 
+	 * avoid headaches with flaky network connections and asynchronous (AJAX) requests, as explained
+	 * in the PHP Manual warning: http://php.net/manual/en/function.session-regenerate-id.php
+	 * 
 	 * @return void
 	 */
-	public static function regenerateSession()
-	{	
-		// If this session is obsolete it means there already is a new id
-		if (isset($_SESSION['OBSOLETE']) && $_SESSION['OBSOLETE'] == true) {
+	public static function regenerate()
+	{
+		// If destroyed flag is set, no need to regenerate ID as it has already been done.
+		if (isset($_SESSION['destroyed'])) {
 			return;
 		}
 
-		// Set current session to expire in 10 seconds
-		$_SESSION['OBSOLETE'] = true;
-		$_SESSION['EXPIRES'] = time() + 10;
+		// Flag old session for destruction in (arbitrary) 10 seconds.
+		$_SESSION['destroyed'] = time() + 10;
 
-		// Create new session without destroying the old one
-		session_regenerate_id(false);
+		// Create new session.
+		session_regenerate_id(false); // Update session ID and keep current session info. Old one is not destroyed.
+		$new_session_id = session_id(); // Get the (new) session ID.
+		session_write_close(); // Lock the session and close it.
 
-		// Grab current session ID and close both sessions to allow other scripts to use them
-		$newSession = session_id();
-		session_write_close();
-
-		// Set session ID to the new one, and start it back up again
-		session_id($newSession);
-		session_start();
-
-		// Now we unset the obsolete and expiration values for the session we want to keep
-		unset($_SESSION['OBSOLETE']);
-		unset($_SESSION['EXPIRES']);
+		// Assign ID to the new session and unset the destroyed flag.
+		session_id($new_session_id); // Set the session ID to the new value.
+		session_start(); // Now working with the new session. Note that old one still exists and both carry a 'destroyed' flag.
+		unset($_SESSION['destroyed']); // Remove the destroyed flag from the new session. Old one will be destroyed next time isExpired() is called on it.
 	}
 	
 	/**
-	 * Checks if the session has expired or been declared obsolete.
+	 * Initialises a session and sets session cookie parameters to security-concious values. 
 	 * 
-	 * If the session has expired or become obsolete it should be destroyed and restarted.
-	 * 
-	 * @return boolean true if session is valid false if expired or obsolete
+	 * @global type $tfish_preference
+	 * @return void
 	 */
-	protected static function validateSession()
-	{	
-		if ( isset($_SESSION['OBSOLETE']) && !isset($_SESSION['EXPIRES']) ) {
-			return false;
+	public static function start()
+	{
+		// Make Tuskfish preferences available.
+		global $tfish_preference;
+		
+		// Force session to use cookies to prevent the session ID being passed in the URL.
+		ini_set('session.use_cookies', 1);
+        ini_set('session.use_only_cookies', 1);
+		
+		// Session name.
+		$session_name = isset($tfish_preference->session_name) ? $tfish_preference->session_name : 'tfish';
+		
+		// Session life time, in seconds. '0' means until the browser is closed. Todo: Add a preference for this.
+		$lifetime = $tfish_preference->session_lifetime;
+		
+		// Path on the domain where the cookie will work. Use a single slash for all paths (default, as there are admin checks in some templates).
+		$path = '/';
+		
+		// Cookie domain, for example www.php.net. To make cookies visible on all subdomains (default) prefix with dot eg. '.php.net'
+		$domain = isset($domain) ? $domain : ltrim($_SERVER['SERVER_NAME'], 'www');
+		
+		// If true the cookie will only be sent over secure connections.
+		$secure = isset($_SERVER['HTTPS']);
+		
+		// If true PHP will *attempt* to send the httponly flag when setting the session cookie.
+		$http_only = true; 
+		
+		// Set the parameters and start the session.
+		session_name($session_name);
+		session_set_cookie_parameters($lifetime, $path, $domain, $secure, $http_only);
+		session_start();
+		
+		// Check if the session has expired.
+		if (self::isExpired()) self::destroy();
+		
+		// Check for signs of session hijacking and regenerate if at risk. 10% chance of doing it anyway.
+		if (self::isHijacked()) {
+			self::reset();
+			self::regenerate();
+		} elseif (rand(1, 100) <= 10) {
+			self::regenerate();
 		}
-
-		if (isset($_SESSION['EXPIRES']) && $_SESSION['EXPIRES'] < time()) {
-			return false;
-		}
-
-		return true;
 	}
 }
