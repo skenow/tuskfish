@@ -12,14 +12,6 @@
 * @package		core
 */
 
-/**
- * NEEDS VERY CAREFUL TESTING.
- * 
- * Test if the subdomain / path parameter actually works now. If so, could remove cookies from
- * the user side of the system (optionally, although this would remove the front end content editing
- * links, which are probably more valuable to me).
- */
-
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 class TfishSession
