@@ -78,12 +78,14 @@ class TfishSession
 			return true;
 		}
 		
-		// Check for expiry and update "last seen" timestamp.
+		// Check for "last seen" timestamp.
 		$last_seen = isset($_SESSION['last_seen']) ? (int)$_SESSION['last_seen'] : false;
 		
-		// Does this work with a session lifetime of zero? A session lifetime preference has not been implemented yet.
-		if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_life * 60)) {
-			return true;
+		// Check expiry (but not if session_life == 0).
+		if ($last_seen && $tfish_preference->session_life > 0) {
+			if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_life * 60)) {
+				return true;
+			}
 		}
 		
 		// Session not seen before, add an activity timestamp.
