@@ -291,7 +291,7 @@ class TfishSession
 		// Session name.
 		$session_name = isset($tfish_preference->session_name) ? $tfish_preference->session_name : 'tfish';
 		
-		// Session life time, in seconds. '0' means until the browser is closed. Todo: Add a preference for this.
+		// Session life time, in seconds. '0' means until the browser is closed.
 		$lifetime = $tfish_preference->session_lifetime;
 		
 		// Path on the domain where the cookie will work. Use a single slash for all paths (default, as there are admin checks in some templates).
