@@ -1,17 +1,16 @@
 <?php
 
 /**
-* Tuskfish content management script. Add, edit or delete content objects as required.
-*
-* This is the core of the administrative system.
-* 
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Tuskfish content management script. Add, edit or delete content objects as required.
+ *
+ * This is the core of the administrative system.
+ * 
+ * @copyright    Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
@@ -20,10 +19,10 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 $tfish_template->setTemplate('admin');
 
 // Validate input parameters.
-$clean_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
-$clean_start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-$clean_tag = isset($_GET['tag_id']) ? (int)$_GET['tag_id'] : 0;
-$clean_online = isset($_GET['online']) ? (int)$_GET['online'] : null;
+$clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
+$clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
@@ -31,398 +30,405 @@ $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 $target_file_name = false;
 
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update', 'view', false))) {
-	
-	// Specify the admin template and the template to be used to preview content (user side template).
-	if ($op == 'view') {
-		$tfish_template->setTemplate('default');
-	} else {
-		$tfish_template->setTemplate('admin');
-	}
 
-	switch ($op) {
-		
-		// Add: Display an empty content object submission form.
-		case "add":
-			$tfish_template->page_title = TFISH_ADD_CONTENT;
-			$tfish_template->op = 'submit'; // Critical to launch correct form submission action.
-			$tfish_template->content_types = TfishContentHandler::getTypes();
-			$tfish_template->rights = TfishContentHandler::getRights();
-			$tfish_template->languages = TfishContentHandler::getLanguages();
-			$tfish_template->tags = TfishContentHandler::getTagList(false);
-			
-			// Make a parent tree select box options.
-			$collections = TfishCollectionHandler::getObjects();
-			$parent_tree = new TfishAngryTree($collections, 'id', 'parent');
-			$tfish_template->parent_select_options = $parent_tree->makeParentSelectBox();
-			
-			//$tfish_template->parent_select_box = TfishCollectionHandler::getParentSelectBox();
-			$content = new TfishContentObject();
-			$tfish_template->allowed_properties = $content->getPropertyWhitelist();
-			$tfish_template->zeroed_properties = array(
-				'image' => array('image'),
-				'tags' => array(
-					'caption',
-					'format',
-					'file_size',
-					'creator',
-					'media',
-					'date',
-					'parent',
-					'language',
-					'rights',
-					'publisher',
-					'tags')
-			);			
-			$tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form');
-		break;
+    // Specify the admin template and the template to be used to preview content (user side template).
+    if ($op == 'view') {
+        $tfish_template->setTemplate('default');
+    } else {
+        $tfish_template->setTemplate('admin');
+    }
 
-		// Confirm: Confirm deletion of a content object.
-		case "confirm":
-			if (isset($_REQUEST['id'])) {
-				$clean_id = (int)$_REQUEST['id'];
-				if (TfishFilter::isInt($clean_id, 1)) {
-					$tfish_template->page_title = TFISH_CONFIRM_DELETE;
-					$tfish_template->content = TfishContentHandler::getObject($clean_id);
-					$tfish_template->form = TFISH_FORM_PATH . "confirm_delete.html";
-					$tfish_template->tfish_main_content = $tfish_template->render('form');
-				} else {
-					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-				}
-			} else {
-				trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-			}
-		break;
-		
-		// Delete: Delete a content object. ID must be an integer and > 1.
-		case "delete":
-			if (isset($_REQUEST['id'])) {
-				$clean_id = (int)$_REQUEST['id'];
-				$result = TfishContentHandler::delete($clean_id);
-				if ($result) {
-					TfishCache::flushCache();
-					$tfish_template->page_title = TFISH_SUCCESS;
-					$tfish_template->alert_class = 'alert-success';
-					$tfish_template->message = TFISH_OBJECT_WAS_DELETED;
-				} else {
-					$tfish_template->page_title = TFISH_FAILED;
-					$tfish_template->alert_class = 'alert-danger';
-					$tfish_template->message = TFISH_OBJECT_DELETION_FAILED;
-				}
-				$tfish_template->back_url = 'admin.php';
-				$tfish_template->form = TFISH_FORM_PATH . "response.html";
-				$tfish_template->tfish_main_content = $tfish_template->render('form');
-			} else {
-				trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-			}
-		break;
+    switch ($op) {
 
-		// Edit: Display a data entry form containing the object's current properties.
-		case "edit":
-			if (isset($_REQUEST['id'])) {
-				$clean_id = (int)$_REQUEST['id'];
-				if (TfishFilter::isInt($clean_id, 1)) {
-					$criteria = new TfishCriteria();
-					$criteria->add(new TfishCriteriaItem('id', $clean_id));
-					$statement = TfishDatabase::select('content', $criteria);
-					if (!$statement) {
-						trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
-						header("Location: admin.php");
-					}
-					$row = $statement->fetch(PDO::FETCH_ASSOC);
-					
-					// Make a parent tree select box options.
-					$collections = TfishCollectionHandler::getObjects();
-					$parent_tree = new TfishAngryTree($collections, 'id', 'parent');
-			
-					// Assign to template.
-					$tfish_template->page_title = TFISH_EDIT_CONTENT;
-					$tfish_template->op = 'update'; // Critical to launch correct submission action.
-					$tfish_template->action = TFISH_UPDATE;
-					$tfish_template->content = TfishContentHandler::toObject($row);
-					$tfish_template->content_types = TfishContentHandler::getTypes();
-					$tfish_template->rights = TfishContentHandler::getRights();
-					$tfish_template->languages = TfishContentHandler::getLanguages();
-					$tfish_template->tags = TfishContentHandler::getTagList(false);
-					$tfish_template->parent_select_options = $parent_tree->makeParentSelectBox($row['parent']);
-					$tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
-					$tfish_template->tfish_main_content = $tfish_template->render('form');
-				} else {
-					trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-				}
-			} else {
-				trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-			}
-		break;
-		
-		// Flush: Flush the cache.
-		case "flush":
-			$result = TfishCache::flushCache();
-			if ($result) {
-				$tfish_template->page_title = TFISH_SUCCESS;
-				$tfish_template->alert_class = 'alert-success';
-				$tfish_template->message = TFISH_CACHE_WAS_FLUSHED;
-			} else {
-				$tfish_template->page_title = TFISH_FAILED;
-				$tfish_template->alert_class = 'alert-danger';
-				$tfish_template->message = TFISH_CACHE_FLUSH_FAILED;
-			}
-			$tfish_template->back_url = 'admin.php';
-			$tfish_template->form = TFISH_FORM_PATH . "response.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form');		
-		break;
-	
-		// Submit: Determine object type, instantiate, validate input, populate properties  and and
-		// insert a new content object.
-		case "submit":
-			if (empty($_REQUEST['type'])) {
-				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				exit;
-			}
-			
-			$clean_type = TfishFilter::trimString($_REQUEST['type']);
-			$type_whitelist =  TfishContentHandler::getTypes();
-			if (!array_key_exists($clean_type, $type_whitelist)) {
-				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				exit;
-			}
-			$content_object = new $clean_type;
-			$content_object->loadProperties($_REQUEST);
-			
-			// Insert the object
-			$result = TfishContentHandler::insert($content_object);
-			if ($result) {
-				TfishCache::flushCache();
-				$tfish_template->page_title = TFISH_SUCCESS;
-				$tfish_template->alert_class = 'alert-success';
-				$tfish_template->message = TFISH_OBJECT_WAS_INSERTED;
-			} else {
-				$tfish_template->title = TFISH_FAILED;
-				$tfish_template->alert_class = 'alert-danger';
-				$tfish_template->message = TFISH_OBJECT_INSERTION_FAILED;
-			}
-			$tfish_template->back_url = 'admin.php';
-			$tfish_template->form = TFISH_FORM_PATH . "response.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form');
-		break;
-		
-		// Toggle the online status of a particular object.
-		case "toggle":
-			$id = (int)$_REQUEST['id'];
-			$clean_id = TfishFilter::isInt($id, 1) ? $id : 0;
-			$result = TfishContentHandler::toggleOnlineStatus($clean_id);
-			if ($result) {
-				TfishCache::flushCache();
-				$tfish_template->page_title = TFISH_SUCCESS;
-				$tfish_template->alert_class = 'alert-success';
-				$tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
-			} else {
-				$tfish_template->page_title = TFISH_FAILED;
-				$tfish_template->alert_class = 'alert-danger';
-				$tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
-			}
-			$tfish_template->back_url = 'admin.php';
-			$tfish_template->form = TFISH_FORM_PATH . "response.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form');
-		break;
-		
-		// Update: Submit the modified object and update the corresponding database row.
-		case "update":
-			if (empty($_REQUEST['type'])) {
-				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				exit;
-			}
-			$type = TfishFilter::trimString($_REQUEST['type']);
-			$type_whitelist =  TfishContentHandler::getTypes();
-			if (!array_key_exists($type, $type_whitelist)) {
-				trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				exit;
-			}
-			$content_object = new $type;
-			$content_object->loadProperties($_REQUEST);
-			
-			// As this object is being sent to storage, need to decode some entities that got
-			// encoded for display, specifically quotes (if you don't encode quotes they will
-			// break the editing form when you populate the values of text fields):
-			$fields_to_decode = array('title', 'creator', 'publisher', 'caption', 'meta_title',
-				'seo', 'meta_description');
-			foreach ($fields_to_decode as $field) {
-				if (isset($content_object->field)) {
-					$content_object->$field = htmlspecialchars_decode($content_object->field, ENT_QUOTES);
-				}
-			}
-			
-			// Update the database row and display a response.
-			$result = TfishContentHandler::update($content_object);
-			if ($result) {
-				TfishCache::flushCache();
-				$tfish_template->page_title = TFISH_SUCCESS;
-				$tfish_template->alert_class = 'alert-success';
-				$tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
-			} else {
-				$tfish_template->page_title = TFISH_FAILED;
-				$tfish_template->alert_class = 'alert-danger';
-				$tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
-			}
-			$tfish_template->back_url = 'admin.php';
-			$tfish_template->form = TFISH_FORM_PATH . "response.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form');			
-		break;
-		
-		// View: See the user-side display of a single object, including offline objects.
-		case "view":
-			if ($clean_id) {
-			$content = TfishContentHandler::getObject($clean_id);
-			if (is_object($content)) {
-				$tfish_template->content = $content;
+        // Add: Display an empty content object submission form.
+        case "add":
+            $tfish_template->page_title = TFISH_ADD_CONTENT;
+            $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
+            $tfish_template->content_types = TfishContentHandler::getTypes();
+            $tfish_template->rights = TfishContentHandler::getRights();
+            $tfish_template->languages = TfishContentHandler::getLanguages();
+            $tfish_template->tags = TfishContentHandler::getTagList(false);
 
-				// Prepare meta information for display.
-				$contentInfo = array();
-				if ($content->creator) $contentInfo[] = $content->escape('creator');
-				if ($content->date) $contentInfo[] = $content->escape('date');
-				if ($content->counter) {
-					switch($content->type) {
-						case "TfishDownload": // Display 'downloads' after the counter.
-							$contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
-							break;
-						case "TfishCollection": // Display 'downloads' after the counter if there is an attached media file; otherwise 'views'.
-							if ($content->media) {
-								$contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
-								break;
-							}
-							break;
-						default: // Display 'views' after the counter.
-							$contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
-					}
-				}
-				if ($content->format) $contentInfo[] = '.' . $content->escape('format');
-				if ($content->file_size) $contentInfo[] = $content->escape('file_size');
-				if ($content->tags) {
-						$tags = TfishContentHandler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
-						$tags = TFISH_TAGS . ': ' . implode(', ', $tags);
-						$contentInfo[] = $tags;
-				}
-				$tfish_template->contentInfo = implode(' | ', $contentInfo);
-				if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
-				if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
+            // Make a parent tree select box options.
+            $collections = TfishCollectionHandler::getObjects();
+            $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
+            $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox();
 
-				// Check if has a parental object; if so display a thumbnail and teaser / link.
-				if (!empty($content->parent)) {
-						$parent = TfishContentHandler::getObject($content->parent);
-						if (is_object($parent) && $parent->online) {
-								$tfish_template->parent = $parent;
-						}
-				}
+            //$tfish_template->parent_select_box = TfishCollectionHandler::getParentSelectBox();
+            $content = new TfishContentObject();
+            $tfish_template->allowed_properties = $content->getPropertyWhitelist();
+            $tfish_template->zeroed_properties = array(
+                'image' => array('image'),
+                'tags' => array(
+                    'caption',
+                    'format',
+                    'file_size',
+                    'creator',
+                    'media',
+                    'date',
+                    'parent',
+                    'language',
+                    'rights',
+                    'publisher',
+                    'tags')
+            );
+            $tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            break;
 
-				// Initialise criteria object.
-				$criteria = new TfishCriteria();
-				$criteria->order = 'date';
-				$criteria->ordertype = 'DESC';
+        // Confirm: Confirm deletion of a content object.
+        case "confirm":
+            if (isset($_REQUEST['id'])) {
+                $clean_id = (int) $_REQUEST['id'];
+                if (TfishFilter::isInt($clean_id, 1)) {
+                    $tfish_template->page_title = TFISH_CONFIRM_DELETE;
+                    $tfish_template->content = TfishContentHandler::getObject($clean_id);
+                    $tfish_template->form = TFISH_FORM_PATH . "confirm_delete.html";
+                    $tfish_template->tfish_main_content = $tfish_template->render('form');
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
+            break;
 
-				// If object is a collection check if has child objects; if so display thumbnails and teasers / links.
-				if ($content->type == 'TfishCollection') {
-					$criteria->add(new TfishCriteriaItem('parent', $content->id));
-					$criteria->add(new TfishCriteriaItem('online', 1));
-					if ($clean_start) $criteria->offset = $clean_start;
-					$criteria->limit = $tfish_preference->user_pagination;
-				}
+        // Delete: Delete a content object. ID must be an integer and > 1.
+        case "delete":
+            if (isset($_REQUEST['id'])) {
+                $clean_id = (int) $_REQUEST['id'];
+                $result = TfishContentHandler::delete($clean_id);
+                if ($result) {
+                    TfishCache::flushCache();
+                    $tfish_template->page_title = TFISH_SUCCESS;
+                    $tfish_template->alert_class = 'alert-success';
+                    $tfish_template->message = TFISH_OBJECT_WAS_DELETED;
+                } else {
+                    $tfish_template->page_title = TFISH_FAILED;
+                    $tfish_template->alert_class = 'alert-danger';
+                    $tfish_template->message = TFISH_OBJECT_DELETION_FAILED;
+                }
+                $tfish_template->back_url = 'admin.php';
+                $tfish_template->form = TFISH_FORM_PATH . "response.html";
+                $tfish_template->tfish_main_content = $tfish_template->render('form');
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
+            break;
 
-				// If object is a tag, then a different method is required to call the related content.
-				if ($content->type == 'TfishTag') {
-					if ($clean_start) $criteria->offset = $clean_start;
-					$criteria->limit = $tfish_preference->user_pagination;
-					$criteria->tag = array($content->id);
-					$criteria->add(new TfishCriteriaItem('online', 1));
-				}
+        // Edit: Display a data entry form containing the object's current properties.
+        case "edit":
+            if (isset($_REQUEST['id'])) {
+                $clean_id = (int) $_REQUEST['id'];
+                if (TfishFilter::isInt($clean_id, 1)) {
+                    $criteria = new TfishCriteria();
+                    $criteria->add(new TfishCriteriaItem('id', $clean_id));
+                    $statement = TfishDatabase::select('content', $criteria);
+                    if (!$statement) {
+                        trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
+                        header("Location: admin.php");
+                    }
+                    $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-				// Prepare pagination control.
-				if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
-					$first_child_count = TfishContentHandler::getCount($criteria);
-					$tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count,
-						$tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+                    // Make a parent tree select box options.
+                    $collections = TfishCollectionHandler::getObjects();
+                    $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
 
-					// Retrieve content objects and assign to template.
-					$first_children = TfishContentHandler::getObjects($criteria);
-					if (!empty($first_children)) {
-							$tfish_template->first_children = $first_children;
-					}
-				}
+                    // Assign to template.
+                    $tfish_template->page_title = TFISH_EDIT_CONTENT;
+                    $tfish_template->op = 'update'; // Critical to launch correct submission action.
+                    $tfish_template->action = TFISH_UPDATE;
+                    $tfish_template->content = TfishContentHandler::toObject($row);
+                    $tfish_template->content_types = TfishContentHandler::getTypes();
+                    $tfish_template->rights = TfishContentHandler::getRights();
+                    $tfish_template->languages = TfishContentHandler::getLanguages();
+                    $tfish_template->tags = TfishContentHandler::getTagList(false);
+                    $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox($row['parent']);
+                    $tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
+                    $tfish_template->tfish_main_content = $tfish_template->render('form');
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
+            break;
 
-				// Render template.
-				$tfish_template->tfish_main_content = $tfish_template->render($content->template);
-			} else {
-				$tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
-			}
-		}
-		break;
-		
-		// Default: Display a table of existing content objects and pagination controls.
-		default:
-			$criteria = new TfishCriteria;
-			
-			// Select box filter input.
-			if ($clean_tag) $criteria->tag = array($clean_tag);
-			if (TfishFilter::isInt($clean_online, 0, 1)) {
-				$criteria->add(new TfishCriteriaItem('online', $clean_online));
-			}
-			if ($clean_type) {
-				if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
-					$criteria->add(new TfishCriteriaItem('type', $clean_type));
-				} else {
-					trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-				}
-			}
-			
-			// Other criteria.
-			$criteria->offset = $clean_start;
-			$criteria->limit = $tfish_preference->admin_pagination;
-			$criteria->order = 'submission_time';
-			$criteria->ordertype = 'DESC';
-			$columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
-			$result = TfishDatabase::select('content', $criteria, $columns);
-			if ($result) {
-				$rows = $result->fetchAll(PDO::FETCH_ASSOC);
-			} else {
-				trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-			}
-			foreach ($rows as &$row) {
-				$row['submission_time'] = date($tfish_preference->date_format, $row['submission_time']);
-			}
-			$typelist = TfishContentHandler::getTypes();
-			
-			// Pagination control.
-			$count = TfishDatabase::selectCount('content', $criteria);
-			$extra_params = array();
-			if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
-				$extra_params['online'] = $clean_online;
-			}
-			if (isset($clean_type)) {
-				$extra_params['type'] = $clean_type;
-			}
-			$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
-					$tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
-			
-			// Prepare select filters.
-			$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag, false);
-			$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
-			$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
-			$tfish_template->select_action = 'admin.php';
-			$tfish_template->tag_select = $tag_select_box;
-			$tfish_template->type_select = $type_select_box;
-			$tfish_template->online_select = $online_select_box;
-			$tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
-			
-			// Assign to template.
-			$tfish_template->page_title = TFISH_CURRENT_CONTENT;
-			$tfish_template->rows = $rows;
-			$tfish_template->typelist = TfishContentHandler::getTypes();
-			$tfish_template->form = TFISH_FORM_PATH . "content_table.html";
-			$tfish_template->tfish_main_content = $tfish_template->render('form'); 
-		break;
-	}
+        // Flush: Flush the cache.
+        case "flush":
+            $result = TfishCache::flushCache();
+            if ($result) {
+                $tfish_template->page_title = TFISH_SUCCESS;
+                $tfish_template->alert_class = 'alert-success';
+                $tfish_template->message = TFISH_CACHE_WAS_FLUSHED;
+            } else {
+                $tfish_template->page_title = TFISH_FAILED;
+                $tfish_template->alert_class = 'alert-danger';
+                $tfish_template->message = TFISH_CACHE_FLUSH_FAILED;
+            }
+            $tfish_template->back_url = 'admin.php';
+            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            break;
+
+        // Submit: Determine object type, instantiate, validate input, populate properties  and and
+        // insert a new content object.
+        case "submit":
+            if (empty($_REQUEST['type'])) {
+                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+                exit;
+            }
+
+            $clean_type = TfishFilter::trimString($_REQUEST['type']);
+            $type_whitelist = TfishContentHandler::getTypes();
+            if (!array_key_exists($clean_type, $type_whitelist)) {
+                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+                exit;
+            }
+            $content_object = new $clean_type;
+            $content_object->loadProperties($_REQUEST);
+
+            // Insert the object
+            $result = TfishContentHandler::insert($content_object);
+            if ($result) {
+                TfishCache::flushCache();
+                $tfish_template->page_title = TFISH_SUCCESS;
+                $tfish_template->alert_class = 'alert-success';
+                $tfish_template->message = TFISH_OBJECT_WAS_INSERTED;
+            } else {
+                $tfish_template->title = TFISH_FAILED;
+                $tfish_template->alert_class = 'alert-danger';
+                $tfish_template->message = TFISH_OBJECT_INSERTION_FAILED;
+            }
+            $tfish_template->back_url = 'admin.php';
+            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            break;
+
+        // Toggle the online status of a particular object.
+        case "toggle":
+            $id = (int) $_REQUEST['id'];
+            $clean_id = TfishFilter::isInt($id, 1) ? $id : 0;
+            $result = TfishContentHandler::toggleOnlineStatus($clean_id);
+            if ($result) {
+                TfishCache::flushCache();
+                $tfish_template->page_title = TFISH_SUCCESS;
+                $tfish_template->alert_class = 'alert-success';
+                $tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
+            } else {
+                $tfish_template->page_title = TFISH_FAILED;
+                $tfish_template->alert_class = 'alert-danger';
+                $tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
+            }
+            $tfish_template->back_url = 'admin.php';
+            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            break;
+
+        // Update: Submit the modified object and update the corresponding database row.
+        case "update":
+            if (empty($_REQUEST['type'])) {
+                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+                exit;
+            }
+            $type = TfishFilter::trimString($_REQUEST['type']);
+            $type_whitelist = TfishContentHandler::getTypes();
+            if (!array_key_exists($type, $type_whitelist)) {
+                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+                exit;
+            }
+            $content_object = new $type;
+            $content_object->loadProperties($_REQUEST);
+
+            // As this object is being sent to storage, need to decode some entities that got
+            // encoded for display, specifically quotes (if you don't encode quotes they will
+            // break the editing form when you populate the values of text fields):
+            $fields_to_decode = array('title', 'creator', 'publisher', 'caption', 'meta_title',
+                'seo', 'meta_description');
+            foreach ($fields_to_decode as $field) {
+                if (isset($content_object->field)) {
+                    $content_object->$field = htmlspecialchars_decode($content_object->field, ENT_QUOTES);
+                }
+            }
+
+            // Update the database row and display a response.
+            $result = TfishContentHandler::update($content_object);
+            if ($result) {
+                TfishCache::flushCache();
+                $tfish_template->page_title = TFISH_SUCCESS;
+                $tfish_template->alert_class = 'alert-success';
+                $tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
+            } else {
+                $tfish_template->page_title = TFISH_FAILED;
+                $tfish_template->alert_class = 'alert-danger';
+                $tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
+            }
+            $tfish_template->back_url = 'admin.php';
+            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            break;
+
+        // View: See the user-side display of a single object, including offline objects.
+        case "view":
+            if ($clean_id) {
+                $content = TfishContentHandler::getObject($clean_id);
+                if (is_object($content)) {
+                    $tfish_template->content = $content;
+
+                    // Prepare meta information for display.
+                    $contentInfo = array();
+                    if ($content->creator)
+                        $contentInfo[] = $content->escape('creator');
+                    if ($content->date)
+                        $contentInfo[] = $content->escape('date');
+                    if ($content->counter) {
+                        switch ($content->type) {
+                            case "TfishDownload": // Display 'downloads' after the counter.
+                                $contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+                                break;
+                            case "TfishCollection": // Display 'downloads' after the counter if there is an attached media file; otherwise 'views'.
+                                if ($content->media) {
+                                    $contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+                                    break;
+                                }
+                                break;
+                            default: // Display 'views' after the counter.
+                                $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+                        }
+                    }
+                    if ($content->format)
+                        $contentInfo[] = '.' . $content->escape('format');
+                    if ($content->file_size)
+                        $contentInfo[] = $content->escape('file_size');
+                    if ($content->tags) {
+                        $tags = TfishContentHandler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
+                        $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+                        $contentInfo[] = $tags;
+                    }
+                    $tfish_template->contentInfo = implode(' | ', $contentInfo);
+                    if ($content->meta_title)
+                        $tfish_metadata->title = $content->meta_title;
+                    if ($content->meta_description)
+                        $tfish_metadata->description = $content->meta_description;
+
+                    // Check if has a parental object; if so display a thumbnail and teaser / link.
+                    if (!empty($content->parent)) {
+                        $parent = TfishContentHandler::getObject($content->parent);
+                        if (is_object($parent) && $parent->online) {
+                            $tfish_template->parent = $parent;
+                        }
+                    }
+
+                    // Initialise criteria object.
+                    $criteria = new TfishCriteria();
+                    $criteria->order = 'date';
+                    $criteria->ordertype = 'DESC';
+
+                    // If object is a collection check if has child objects; if so display thumbnails and teasers / links.
+                    if ($content->type == 'TfishCollection') {
+                        $criteria->add(new TfishCriteriaItem('parent', $content->id));
+                        $criteria->add(new TfishCriteriaItem('online', 1));
+                        if ($clean_start)
+                            $criteria->offset = $clean_start;
+                        $criteria->limit = $tfish_preference->user_pagination;
+                    }
+
+                    // If object is a tag, then a different method is required to call the related content.
+                    if ($content->type == 'TfishTag') {
+                        if ($clean_start)
+                            $criteria->offset = $clean_start;
+                        $criteria->limit = $tfish_preference->user_pagination;
+                        $criteria->tag = array($content->id);
+                        $criteria->add(new TfishCriteriaItem('online', 1));
+                    }
+
+                    // Prepare pagination control.
+                    if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
+                        $first_child_count = TfishContentHandler::getCount($criteria);
+                        $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count, $tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+
+                        // Retrieve content objects and assign to template.
+                        $first_children = TfishContentHandler::getObjects($criteria);
+                        if (!empty($first_children)) {
+                            $tfish_template->first_children = $first_children;
+                        }
+                    }
+
+                    // Render template.
+                    $tfish_template->tfish_main_content = $tfish_template->render($content->template);
+                } else {
+                    $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+                }
+            }
+            break;
+
+        // Default: Display a table of existing content objects and pagination controls.
+        default:
+            $criteria = new TfishCriteria;
+
+            // Select box filter input.
+            if ($clean_tag)
+                $criteria->tag = array($clean_tag);
+            if (TfishFilter::isInt($clean_online, 0, 1)) {
+                $criteria->add(new TfishCriteriaItem('online', $clean_online));
+            }
+            if ($clean_type) {
+                if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+                    $criteria->add(new TfishCriteriaItem('type', $clean_type));
+                } else {
+                    trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+                }
+            }
+
+            // Other criteria.
+            $criteria->offset = $clean_start;
+            $criteria->limit = $tfish_preference->admin_pagination;
+            $criteria->order = 'submission_time';
+            $criteria->ordertype = 'DESC';
+            $columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
+            $result = TfishDatabase::select('content', $criteria, $columns);
+            if ($result) {
+                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+            }
+            foreach ($rows as &$row) {
+                $row['submission_time'] = date($tfish_preference->date_format, $row['submission_time']);
+            }
+            $typelist = TfishContentHandler::getTypes();
+
+            // Pagination control.
+            $count = TfishDatabase::selectCount('content', $criteria);
+            $extra_params = array();
+            if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+                $extra_params['online'] = $clean_online;
+            }
+            if (isset($clean_type)) {
+                $extra_params['type'] = $clean_type;
+            }
+            $tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
+
+            // Prepare select filters.
+            $tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag, false);
+            $type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
+            $online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
+            $tfish_template->select_action = 'admin.php';
+            $tfish_template->tag_select = $tag_select_box;
+            $tfish_template->type_select = $type_select_box;
+            $tfish_template->online_select = $online_select_box;
+            $tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
+
+            // Assign to template.
+            $tfish_template->page_title = TFISH_CURRENT_CONTENT;
+            $tfish_template->rows = $rows;
+            $tfish_template->typelist = TfishContentHandler::getTypes();
+            $tfish_template->form = TFISH_FORM_PATH . "content_table.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            break;
+    }
 } else {
-	trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-	exit;
+    trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+    exit;
 }
 
 /**
