@@ -1,29 +1,28 @@
 <?php
 
 /**
-* Tuskfish login script.
-*
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Tuskfish login script.
+ *
+ * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 require_once "../mainfile.php";
 
 /**
  * tfish_header is manually duplicated on this page but without the site closed check and redirect
  * as that creates a redirect loop. 
  */
-
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
 // Autoload core Tuskfish classes, spl_autoload_register() avoids namespace clashes.
 function tfish_autoload($classname) {
-	include TFISH_CLASS_PATH . $classname . '.php';
+    include TFISH_CLASS_PATH . $classname . '.php';
 }
+
 spl_autoload_register('tfish_autoload');
 
 // HTMLPurifier library is used to validate the teaser and description fields of objects.
@@ -59,7 +58,6 @@ $tfish_template = new TfishTemplate();
 /**
  * End manual duplication of header.
  */
-
 // Specify template set, otherwise 'default' will be used.
 $tfish_template->setTemplate('default');
 
@@ -72,36 +70,36 @@ $allowed_options = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NOT sanitised and therefore it is dangerous.
 if (!empty($_POST['op'])) {
-	$op = TfishFilter::trimString($_POST['op']);
-	$clean_op = TfishFilter::isAlpha($op) ? $op : false;
+    $op = TfishFilter::trimString($_POST['op']);
+    $clean_op = TfishFilter::isAlpha($op) ? $op : false;
 } elseif (!empty($_GET['op'])) {
-	$op = TfishFilter::trimString($_GET['op']);
-	$clean_op = TfishFilter::isAlpha($op) ? $op : false;
+    $op = TfishFilter::trimString($_GET['op']);
+    $clean_op = TfishFilter::isAlpha($op) ? $op : false;
 }
 if (isset($_POST['email'])) {
-	$email = TfishFilter::trimString($_POST['email']);
-	$clean_email = TfishFilter::isEmail($email) ? $email : false;
+    $email = TfishFilter::trimString($_POST['email']);
+    $clean_email = TfishFilter::isEmail($email) ? $email : false;
 }
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 
 if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
-	switch ($clean_op) {
-		case "login":
-			TfishSession::login($clean_email, $dirty_password);
-		break;
+    switch ($clean_op) {
+        case "login":
+            TfishSession::login($clean_email, $dirty_password);
+            break;
 
-		case "logout":
-			TfishSession::logout(TFISH_ADMIN_URL . 'login.php');
-		break;
+        case "logout":
+            TfishSession::logout(TFISH_ADMIN_URL . 'login.php');
+            break;
 
-		// Display the login form or a logout link, depending on whether the user is signed in or not
-		default:
-			$tfish_template->tfish_main_content = $tfish_template->render('login');
-		break;
-	}
+        // Display the login form or a logout link, depending on whether the user is signed in or not
+        default:
+            $tfish_template->tfish_main_content = $tfish_template->render('login');
+            break;
+    }
 } else {
-	// Bad input, do nothing
-	exit;
+    // Bad input, do nothing
+    exit;
 }
 
 /**

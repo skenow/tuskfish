@@ -1,137 +1,137 @@
 <!-- Display a single collection object -->
 <?php if ($content): ?>
 
-    <!-- Title and meta information -->
-	<div class="text-left">
-        <h2><a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><span class="icon icon-rss" aria-hidden="true"></span></a>
+<!-- Title and meta information -->
+<div class="text-left">
+    <h2><a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><span class="icon icon-rss" aria-hidden="true"></span></a>
         <?php if ($content->media): ?>
         <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
         <?php else: ?>
         <?php echo $content->icon . ' ' . $content->escape('title'); ?>
         <?php endif; ?>
-        </h2>
+    </h2>
     <?php if ($contentInfo): ?>
-        <p>
-            <?php if (TfishSession::isAdmin()): ?>
-            <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><span class="glyphicon glyphicon-edit"></span></a>
-            <?php endif; ?>
-            <em><?php echo $contentInfo; ?></em>
-        </p>
-    <?php endif; ?>
-    </div>
-    
-    <!-- Image with link to download media attachment -->
-    <?php if ($content->image): ?>
-    <div class="pull-right figure-right">
-        <figure>
-            <?php if ($content->media): ?>
-                <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
-                <?php if ($content->caption): ?>
-                    title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-                <?php else: ?>
-                    alt="" />
-                <?php endif; ?>
-                </a>
-                <?php if ($content->caption): ?>
-                    <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
-                <?php endif; ?>
-            <?php else: ?>
-                <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
-                <?php if ($content->caption): ?>
-                    title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-                    <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
-                <?php else: ?>
-                    alt="" />
-                <?php endif; ?>
-            <?php endif; ?>                
-        </figure>
-    </div>
-    <?php endif; ?>
-    
-    <!-- Description -->
-    <div class="text-left">
-		<?php if ($content->description) echo $content->escape('description'); ?>
-	</div>
-    
-    <!-- Media attachment -->
-    <?php if ($content->media): ?>
-    <div class="text-left">
-        <p><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <?php echo $content->media; ?></a></b></p>
-    </div>
-    <?php endif; ?>
-    
-    <!-- Rights -->
-    <?php if ($content->rights): ?>
-    <div class="text-left">
-        <p class="rights"><?php echo $content->escape('rights'); ?></p>
-    </div>
-    <?php endif; ?>
-	    
-    <!-- Display parent work -->
-    <?php if (!empty($parent)): ?>
-	<div class="clearfix">
-        <div class="text-left">
-            <h3><?php echo TFISH_RELATED; ?></h3>
-            <h4><a href="<?php echo $parent->getURL(false); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
-            <?php if ($parent->image): ?>
-                <div class="pull-left">
-                    <figure class="figure-left">
-                    <a href="<?php echo $parent->getURL(false); ?>">
-                    <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
-                        <?php if ($parent->caption): ?>
-							title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
-						<?php else: ?>
-							alt=""
-						<?php endif; ?>
-					/></a>
-                    </figure>
-                </div>
-            <?php endif; ?>
-            <?php echo $parent->escape('teaser'); ?>
-        </div>
-	</div>
-    <?php endif; ?>
-    
-    <!-- Display child works -->    
-    <?php if (!empty($first_children)): ?>
-        <?php if (isset($collection_pagination)): ?>
-            <div class="pull-right collection_pagination clearfix">
-                <?php echo $collection_pagination; ?>
-            </div>
+    <p>
+        <?php if (TfishSession::isAdmin()): ?>
+        <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><span class="glyphicon glyphicon-edit"></span></a>
         <?php endif; ?>
-        <div class="text-left">
-            <h3>In this collection</h3>
-        </div>
-        <div class="text-left">
-            <?php foreach ($first_children as $child): ?>
-			<div class="clearfix">
-                <h4><a href="<?php echo $child->getURL(false); ?>"><?php echo $child->icon; ?> <?php echo $child->escape('title'); ?></a></h4>
-                <?php if ($child->image): ?>
-                    <div class="pull-left">
-                        <figure class="figure-left">
-                        <a href="<?php echo $child->getURL(false); ?>">
-                        <img class="img-responsive" src="<?php echo $child->getCachedImage(100); ?>" 
-                            <?php if ($child->caption): ?>
-								title="<?php echo $child->escape('caption'); ?>" alt="<?php echo $child->escape('caption'); ?>"
-							<?php else: ?>
-								alt=""
-							<?php endif; ?> />
-                        </a>
-                        </figure>
-                    </div>
-                <?php endif; ?>
-                <?php echo $child->escape('teaser'); ?>
-			</div>
-            <?php endforeach; ?>    
-        </div>
-        
-        <!-- Intra-collection pagination -->
-            <?php if (isset($collection_pagination)): ?>
-            <div class="pull-right collection_pagination clearfix">
-                <?php echo $collection_pagination; ?>
-            </div>
-            <?php endif; ?>
+        <em><?php echo $contentInfo; ?></em>
+    </p>
     <?php endif; ?>
-    
+</div>
+
+<!-- Image with link to download media attachment -->
+<?php if ($content->image): ?>
+<div class="pull-right figure-right">
+    <figure>
+        <?php if ($content->media): ?>
+        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
+            <img class="img-responsive" src="<?php echo $content->getCachedImage(300); ?>" 
+                 <?php if ($content->caption): ?>
+                 title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+                 <?php else: ?>
+                 alt="" />
+                 <?php endif; ?>
+        </a>
+        <?php if ($content->caption): ?>
+        <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+        <?php endif; ?>
+        <?php else: ?>
+        <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
+             <?php if ($content->caption): ?>
+             title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+             <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+        <?php else: ?>
+        alt="" />
+        <?php endif; ?>
+        <?php endif; ?>                
+    </figure>
+</div>
+<?php endif; ?>
+
+<!-- Description -->
+<div class="text-left">
+    <?php if ($content->description) echo $content->escape('description'); ?>
+</div>
+
+<!-- Media attachment -->
+<?php if ($content->media): ?>
+<div class="text-left">
+    <p><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <?php echo $content->media; ?></a></b></p>
+</div>
+<?php endif; ?>
+
+<!-- Rights -->
+<?php if ($content->rights): ?>
+<div class="text-left">
+    <p class="rights"><?php echo $content->escape('rights'); ?></p>
+</div>
+<?php endif; ?>
+
+<!-- Display parent work -->
+<?php if (!empty($parent)): ?>
+<div class="clearfix">
+    <div class="text-left">
+        <h3><?php echo TFISH_RELATED; ?></h3>
+        <h4><a href="<?php echo $parent->getURL(false); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
+        <?php if ($parent->image): ?>
+        <div class="pull-left">
+            <figure class="figure-left">
+                <a href="<?php echo $parent->getURL(false); ?>">
+                    <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
+                         <?php if ($parent->caption): ?>
+                         title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
+                         <?php else: ?>
+                         alt=""
+                         <?php endif; ?>
+                         /></a>
+            </figure>
+        </div>
+        <?php endif; ?>
+        <?php echo $parent->escape('teaser'); ?>
+    </div>
+</div>
+<?php endif; ?>
+
+<!-- Display child works -->    
+<?php if (!empty($first_children)): ?>
+<?php if (isset($collection_pagination)): ?>
+<div class="pull-right collection_pagination clearfix">
+    <?php echo $collection_pagination; ?>
+</div>
+<?php endif; ?>
+<div class="text-left">
+    <h3>In this collection</h3>
+</div>
+<div class="text-left">
+    <?php foreach ($first_children as $child): ?>
+    <div class="clearfix">
+        <h4><a href="<?php echo $child->getURL(false); ?>"><?php echo $child->icon; ?> <?php echo $child->escape('title'); ?></a></h4>
+        <?php if ($child->image): ?>
+        <div class="pull-left">
+            <figure class="figure-left">
+                <a href="<?php echo $child->getURL(false); ?>">
+                    <img class="img-responsive" src="<?php echo $child->getCachedImage(100); ?>" 
+                         <?php if ($child->caption): ?>
+                         title="<?php echo $child->escape('caption'); ?>" alt="<?php echo $child->escape('caption'); ?>"
+                         <?php else: ?>
+                         alt=""
+                         <?php endif; ?> />
+                </a>
+            </figure>
+        </div>
+        <?php endif; ?>
+        <?php echo $child->escape('teaser'); ?>
+    </div>
+    <?php endforeach; ?>    
+</div>
+
+<!-- Intra-collection pagination -->
+<?php if (isset($collection_pagination)): ?>
+<div class="pull-right collection_pagination clearfix">
+    <?php echo $collection_pagination; ?>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+
 <?php endif; ?>

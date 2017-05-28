@@ -10,7 +10,7 @@ So I ended up with two viable options:
 
 1. TinyMCE: It's a solid, mainstream editor, has every feature you could reasonably want and it's
 relatively small. At least, it *can* be relatively small if you don't switch on a ridiculous number
-of options. It is embarassingly easy to integrate and the script can be pulled down from a CDN with
+of options. It is embarrassingly easy to integrate and the script can be pulled down from a CDN with
 a single link. This will be the default editor for Tuskfish.
 
 2. Trumbowyg: Possibly the smallest editor out there, not as polished as TinyMCE but it has all

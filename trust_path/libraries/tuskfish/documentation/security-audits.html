@@ -1,9 +1,9 @@
 <h1>Standard code security audit</h1>
 <p>All PHP files *must* be audited against the following criteria:</p>
 <ul>
-	<li>Externally supplied data ($_POST, $_GET etc) may only be accepted for processing if it's on
-		a whitelist of expected data and range checked as far as possible prior before use.</li>
-	<li>Database operations exclusively use prepared statements (PDO) with bound parameters to
-		guard against SQL injection. No parameter may be directly included in an SQL statement; all
-		parameters are required to be inserted via a bound parameter or bound value.</li>
+    <li>Externally supplied data ($_POST, $_GET etc) may only be accepted for processing if it's on
+        a whitelist of expected data and range checked as far as possible prior before use.</li>
+    <li>Database operations exclusively use prepared statements (PDO) with bound parameters to
+        guard against SQL injection. No parameter may be directly included in an SQL statement; all
+        parameters are required to be inserted via a bound parameter or bound value.</li>
 </ul>

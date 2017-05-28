@@ -1,17 +1,16 @@
 <?php
 
 /**
-* Tuskfish mainfile script.
-* 
-* Includes critical files. Must be included in ALL pages as first order of business.
-*
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Tuskfish mainfile script.
+ * 
+ * Includes critical files. Must be included in ALL pages as first order of business.
+ *
+ * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 /**
  * Access trust path, DB credentials and read preferences.
  * All paths MUST end with a trailing slash /
@@ -28,7 +27,6 @@
  * If you have problems please see the installation section of the Tuskfish User Manual for a
  * more detailed explanation. 
  */
-
 ////////////////////////////////////////////////////////////
 ////////// You must configure the following paths //////////
 ////////////////////////////////////////////////////////////

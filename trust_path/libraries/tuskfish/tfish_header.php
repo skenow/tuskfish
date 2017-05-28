@@ -1,26 +1,26 @@
 <?php
 
 /**
-* Tuskfish header script, must be included on every page.
-* 
-* Establishes connection with database, sets up preference and template objects, error logging,
-* class autoloading, includes language constants, HTMLPufifier and starts the session and compressed
-* output buffer.
-*
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Tuskfish header script, must be included on every page.
+ * 
+ * Establishes connection with database, sets up preference and template objects, error logging,
+ * class autoloading, includes language constants, HTMLPufifier and starts the session and compressed
+ * output buffer.
+ *
+ * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
 // Autoload core Tuskfish classes, spl_autoload_register() avoids namespace clashes.
 function tfish_autoload($classname) {
-	include TFISH_CLASS_PATH . $classname . '.php';
+    include TFISH_CLASS_PATH . $classname . '.php';
 }
+
 spl_autoload_register('tfish_autoload');
 
 // HTMLPurifier library is used to validate the teaser and description fields of objects.
@@ -55,6 +55,6 @@ $tfish_template = new TfishTemplate();
 
 // Check if site is closed, if so redirect to the login page and exit.
 if ($tfish_preference->close_site == true && !TfishSession::isAdmin()) {
-	header('Location: ' . TFISH_ADMIN_URL . "login.php");
-	exit;
+    header('Location: ' . TFISH_ADMIN_URL . "login.php");
+    exit;
 }

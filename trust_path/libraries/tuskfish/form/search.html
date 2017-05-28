@@ -2,54 +2,54 @@
     <div class="form-group">
         <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
             <input type="text" class="form-control" name="search_terms" id="search_terms"
-				<?php if (isset($terms) && !empty($terms)): ?>
-					value="<?php echo TfishFilter::escape($terms); ?>"
-				<?php else: ?>
-					placeholder="<?php echo TFISH_SEARCH_ENTER_TERMS; ?>" 
-				<?php endif; ?>				   
-				required>
+                   <?php if (isset($terms) && !empty($terms)): ?>
+                   value="<?php echo TfishFilter::escape($terms); ?>"
+                   <?php else: ?>
+                   placeholder="<?php echo TFISH_SEARCH_ENTER_TERMS; ?>" 
+                   <?php endif; ?>				   
+                   required>
         </div>
     </div>
     <div class="form-group">
         <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-			<select class="form-control" name="search_type" id="search_type">
-				<option <?php if (isset($type) && $type == "AND") echo "selected"; ?> value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
-				<option <?php if (isset($type) && $type == "OR") echo "selected"; ?> value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
-				<option <?php if (isset($type) && $type == "exact") echo "selected"; ?> value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>	
+            <select class="form-control" name="search_type" id="search_type">
+                <option <?php if (isset($type) && $type == "AND") echo "selected"; ?> value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
+                <option <?php if (isset($type) && $type == "OR") echo "selected"; ?> value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
+                <option <?php if (isset($type) && $type == "exact") echo "selected"; ?> value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>	
             </select>
         </div>
     </div>
     <div class="form-group">
-		<input type="hidden" name="op" value="search" />
+        <input type="hidden" name="op" value="search" />
         <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
             <button type="submit" class="btn btn-primary pull-left"><?php echo TFISH_SEARCH ?></button>
         </div>
     </div>
 </form>
 <?php if (isset($search_results)): ?>
-	<hr>
-	<div class="text-left">
-		<?php if (!empty($search_results)): ?>
-			<h2><?php echo TfishFilter::escape($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
-				<?php foreach ($search_results as $key => $object): ?>
-                <div class="clearfix">
-				<h3><?php echo $object->icon; ?> <a href="<?php echo $object->getURL(false); ?>"><?php echo $object->escape('title'); ?></a></h3>
-                <?php if ($object->image): ?>
-                    <div class="pull-left">
-                        <figure class="figure-left">
-                        <a href="<?php echo $object->getURL(false); ?>">
-                        <img class="img-responsive" src="<?php echo $object->getCachedImage(100); ?>" 
-                             <?php if ($object->caption): ?>title="<?php echo $object->escape('caption'); ?>" 
-                             alt="<?php echo $object->escape('caption'); ?>"<?php endif; ?> />
-                        </a>
-                        </figure>
-                    </div>
-                <?php endif; ?>
-				<?php echo $object->escape('teaser'); ?>
-                </div>
-				<?php endforeach; ?>
-		<?php else: ?>
-		<h2><?php echo TFISH_SEARCH_NO_RESULTS; ?></h2><hr>
-		<?php endif; ?>
-	</div>
+<hr>
+<div class="text-left">
+    <?php if (!empty($search_results)): ?>
+    <h2><?php echo TfishFilter::escape($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
+    <?php foreach ($search_results as $key => $object): ?>
+    <div class="clearfix">
+        <h3><?php echo $object->icon; ?> <a href="<?php echo $object->getURL(false); ?>"><?php echo $object->escape('title'); ?></a></h3>
+        <?php if ($object->image): ?>
+        <div class="pull-left">
+            <figure class="figure-left">
+                <a href="<?php echo $object->getURL(false); ?>">
+                    <img class="img-responsive" src="<?php echo $object->getCachedImage(100); ?>" 
+                         <?php if ($object->caption): ?>title="<?php echo $object->escape('caption'); ?>" 
+                         alt="<?php echo $object->escape('caption'); ?>"<?php endif; ?> />
+                </a>
+            </figure>
+        </div>
+        <?php endif; ?>
+        <?php echo $object->escape('teaser'); ?>
+    </div>
+    <?php endforeach; ?>
+    <?php else: ?>
+    <h2><?php echo TFISH_SEARCH_NO_RESULTS; ?></h2><hr>
+    <?php endif; ?>
+</div>
 <?php endif; ?>

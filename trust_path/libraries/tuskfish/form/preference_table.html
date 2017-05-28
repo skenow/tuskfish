@@ -1,23 +1,23 @@
 <table class="table table-striped text-left">
-	<thead>
-		<tr>
-			<th><?php echo TFISH_PREFERENCE; ?></th>
-			<th><?php echo TFISH_PREFERENCE_VALUE; ?></th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php foreach($preferences as $key => &$value) {
-			$lang = "TFISH_PREFERENCE_" . strtoupper($key);
-		?>
-			<tr>
-				<td><?php echo constant($lang); ?></td>
-				<td><?php echo TfishFilter::escape($value); ?></td>
-				<?php unset($key, $value, $lang); ?>
-			</tr>
-		<?php } ?>
-	</tbody>
+    <thead>
+        <tr>
+            <th><?php echo TFISH_PREFERENCE; ?></th>
+            <th><?php echo TFISH_PREFERENCE_VALUE; ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($preferences as $key => &$value) {
+        $lang = "TFISH_PREFERENCE_" . strtoupper($key);
+        ?>
+        <tr>
+            <td><?php echo constant($lang); ?></td>
+            <td><?php echo TfishFilter::escape($value); ?></td>
+            <?php unset($key, $value, $lang); ?>
+        </tr>
+        <?php } ?>
+    </tbody>
 </table>
 <form class="form-horizontal" action="preference.php" method="post" enctype="multipart/form-data" role="form">
-	<button name="op" value="edit" type="submit" class="btn btn-primary pull-left">
-	<?php echo TFISH_PREFERENCE_EDIT_PREFERENCES; ?></button>
+    <button name="op" value="edit" type="submit" class="btn btn-primary pull-left">
+        <?php echo TFISH_PREFERENCE_EDIT_PREFERENCES; ?></button>
 </form>

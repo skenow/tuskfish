@@ -1,18 +1,17 @@
 <?php
 
 /**
-* Tuskfish configuration script.
-* 
-* Stores the site salt (used for recursive password hashing), key and database path. Included in
-* every page via mainfile.php / masterfile.php  
-*
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Tuskfish configuration script.
+ * 
+ * Stores the site salt (used for recursive password hashing), key and database path. Included in
+ * every page via mainfile.php / masterfile.php  
+ *
+ * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 // Constants that make use of the physical path.
@@ -34,7 +33,7 @@ define("TFISH_LIBRARIES_PATH", TFISH_TRUST_PATH . "libraries/");
 
 // Constants that make use of the virtual (URL) path, these refer to assets accessed by URL.
 define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
-define("TFISH_CACHE_URL" , TFISH_URL . "cache/");
+define("TFISH_CACHE_URL", TFISH_URL . "cache/");
 define("TFISH_TEMPLATES_URL", TFISH_URL . "templates/");
 define("TFISH_RSS_URL", TFISH_URL . "rss.php");
 define("TFISH_PERMALINK_URL", TFISH_URL . "permalink.php?id=");
@@ -48,9 +47,9 @@ define("TFISH_LINK", rtrim('/', TFISH_URL));
 
 // RSS enclosure URL - the spec requires that the URL use http protocol, as https will invalidate feed.
 if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
-	define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST) . "/enclosure.php?id=");
+    define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST) . "/enclosure.php?id=");
 } else {
-	define("TFISH_ENCLOSURE_URL", TFISH_URL . "enclosure.php?id=");
+    define("TFISH_ENCLOSURE_URL", TFISH_URL . "enclosure.php?id=");
 }
 
 /*

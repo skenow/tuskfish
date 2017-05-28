@@ -5,7 +5,7 @@
 }
 
 body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
 
 video {
@@ -14,18 +14,18 @@ video {
 }
 
 .starter-template {
-  padding: 40px 15px;
-  text-align: center;
+    padding: 40px 15px;
+    text-align: center;
 }
 
 /* Figure and figcaption styles make captions wrap to figure width */
 figure {
-   display: table;
+    display: table;
 }
 
 figure img {
-	border-style: solid;
-	border-width: 1px;
+    border-style: solid;
+    border-width: 1px;
     display: block;
     width: 100%;
 }
@@ -33,54 +33,54 @@ figure img {
 figcaption {
     display: table-caption;
     caption-side: bottom;
-	margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }​
 
 .figure-centre {
-	margin: 1rem 0;
+    margin: 1rem 0;
 }
 
 .figure-left {
-	margin: 0 2rem 0.5rem 0;
+    margin: 0 2rem 0.5rem 0;
 }
 
 .figure-right {
-	margin: 0 0 0.5rem 2rem;
+    margin: 0 0 0.5rem 2rem;
 }
 
 .rights {
-	font-style: italic;
+    font-style: italic;
 }
 
 .audio-player {
-	margin: 2rem 0;
+    margin: 2rem 0;
 }
 
 .video-player {
-	margin: 2rem 0;
+    margin: 2rem 0;
 }
 
 .select_filters {
-	margin: 0 0 0 0;
+    margin: 0 0 0 0;
 }
 
 .pagination {	
 }
 
 .collection_pagination {
-	margin: -1.5rem 0 1rem 0;
+    margin: -1.5rem 0 1rem 0;
 }
 
 .clearfix-left {
-	display: table;
+    display: table;
     content: " ";
     display: table;
-	clear:left;
+    clear:left;
 }
 
 .clearfix-right {
-	display: table;
+    display: table;
     content: " ";
     display: table;
-	clear:right;
+    clear:right;
 }

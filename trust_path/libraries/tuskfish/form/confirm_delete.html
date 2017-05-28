@@ -1,5 +1,5 @@
 <div class="alert alert-danger">
-	<p><strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($content->title)) { echo $content->escape('title'); } ?></p>
+    <p><strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($content->title)) { echo $content->escape('title'); } ?></p>
 </div>
 <form class="form-horizontal" action="admin.php" method="post">
     <input name="id" value="<?php echo $content->escape('id'); ?>" type="hidden">

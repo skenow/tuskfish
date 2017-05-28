@@ -1,15 +1,14 @@
 <?php
 
 /**
-* Language file for Tuskfish installer script.
-*
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Language file for Tuskfish installer script.
+ *
+ * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 define("TFISH_INSTALLATION_TUSKFISH", "Installation");
 define("TFISH_INSTALLATION_PLEASE_NOTE", "Please note");
 define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on the following 
@@ -23,7 +22,7 @@ define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on
 	that it is not accessible via browser. You can rename it if you want.</li>
 	</ol>
 	<p>Further instructions on securing your site will be displayed when installation is complete.</p>");
-			
+
 define("TFISH_INSTALLATION_DESCRIPTION", "Script to install the Tuskfish CMS. Delete from server after use.");
 define("TFISH_INSTALLATION_ENTER_DB_NAME", "Please enter a name for your database and the administrator's email/password below.");
 define("TFISH_INSTALLATION_DB_NAME", "Database name");
@@ -35,12 +34,12 @@ define("TFISH_INSTALLATION_HOME_PAGE", "home page");
 define("TFISH_INSTALLATION_COMPLETE", "Installation complete!");
 define("TFISH_INSTALLATION_SECURE_YOUR_SITE", "Secure your site");
 define("TFISH_INSTALLATION_SECURITY_INSTRUCTIONS", "<ul>"
-		. "<li>Delete the installation directory.</li>"
-		. "<li>Set the file permissions for mainfile.php to <strong>0400</strong>.</li>"
-		. "<li>Set the file permissions for trust_path/database/yourdatabase.db to <strong>0600</strong>.</li>"
-		. "<li>Set the file permissions for trust_path/libraries/tuskfish/configuration/config.php to <strong>0400</strong>.</li>"
-		. "</ul>"
-		. "<p>Please note that you may need to use the cPanel File Manager or shell access to set file permissions to these levels.</p>");
+        . "<li>Delete the installation directory.</li>"
+        . "<li>Set the file permissions for mainfile.php to <strong>0400</strong>.</li>"
+        . "<li>Set the file permissions for trust_path/database/yourdatabase.db to <strong>0600</strong>.</li>"
+        . "<li>Set the file permissions for trust_path/libraries/tuskfish/configuration/config.php to <strong>0400</strong>.</li>"
+        . "</ul>"
+        . "<p>Please note that you may need to use the cPanel File Manager or shell access to set file permissions to these levels.</p>");
 define("TFISH_INSTALLATION_DIRECTORY_DELETED", "Successfully removed the installation directory.");
 define("TFISH_INSTALLATION_REMOVE_DIRECTORY", "Removal of the installation directory failed. Please delete it manually as it can be used to overwrite your site.");
 define("TFISH_INSTALLATION_ADMIN_EMAIL", "Admin email address");

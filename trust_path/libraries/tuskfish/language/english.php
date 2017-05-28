@@ -1,19 +1,18 @@
 <?php
 
 /**
-* Tuskfish core language constants (English).
-* 
-* Translate this file to convert Tuskfish to another language. To actually use a translated language
-* file, edit /trust_path/masterfile.php and change the TFISH_DEFAULT_LANGUAGE constant to point at
-* your translated language file.
-*
-* @copyright	Simon Wilkinson (Crushdepth) 2013-2016
-* @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
-* @since		1.0
-* @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
-* @package		core
-*/
-
+ * Tuskfish core language constants (English).
+ * 
+ * Translate this file to convert Tuskfish to another language. To actually use a translated language
+ * file, edit /trust_path/masterfile.php and change the TFISH_DEFAULT_LANGUAGE constant to point at
+ * your translated language file.
+ *
+ * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @since		1.0
+ * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
+ * @package		core
+ */
 define("TFISH_TUSKFISH", "Tuskfish");
 define("TFISH_WELCOME", "Welcome to Tuskfish CMS");
 
@@ -41,8 +40,8 @@ define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");
 define("TFISH_CHANGE_PASSWORD", "Change password");
 define("TFISH_CHANGE_PASSWORD_EXPLANATION", "Please enter and confirm your new administrative "
-		. "password in the form below to change it. Passwords must be at least 15 characters long "
-		. "and contain at least least one upper and lower case letter, number and symbol.");
+        . "password in the form below to change it. Passwords must be at least 15 characters long "
+        . "and contain at least least one upper and lower case letter, number and symbol.");
 
 // admin/password.php
 define("TFISH_NEW_PASSWORD", "Enter new password");
@@ -61,7 +60,6 @@ define("TFISH_PASSWORD_CHANGED_SUCCESSFULLY", "Password successfully changed.");
 // Home page stream.
 define("TFISH_LATEST_POSTS", "Latest posts");
 define("TFISH_NEWS", "News"); // Alternative.
-
 // Preferences.
 define("TFISH_PREFERENCES", "Preferences");
 define("TFISH_PREFERENCE", "Preference");

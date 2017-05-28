@@ -3,5 +3,5 @@ STATIC PAGES
 * Static pages are added to (and become searchable in) the database via the standard data entry form.
 * Copy the static page template file into your root directory with whatever name you want.
 * Manually set the ID of the static content object at the top of the page.
-* As with any other page, you can manually override the template and metadate by edting the comments
+* As with any other page, you can manually override the template and metadata by editing the comments
   in the footer. You can also create a unique block layout etc, should you wish.
