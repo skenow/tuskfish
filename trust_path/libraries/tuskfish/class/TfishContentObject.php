@@ -200,7 +200,7 @@ class TfishContentObject extends TfishAncestralObject {
         // CONVENTION: Thumbnail name should follow the pattern: image_file_name . '-' . $width . 'x' . $height
         $filename = pathinfo($this->image, PATHINFO_FILENAME);
         $extension = '.' . pathinfo($this->image, PATHINFO_EXTENSION);
-        $cached_path = TFISH_CACHE_PATH . $filename . '-';
+        $cached_path = TFISH_PUBLIC_CACHE_PATH . $filename . '-';
         $cached_url = TFISH_CACHE_URL . $filename . '-';
         $original_path = TFISH_IMAGE_PATH . $filename . $extension;
         if ($clean_width > $clean_height) {

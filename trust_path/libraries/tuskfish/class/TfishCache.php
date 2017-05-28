@@ -65,8 +65,8 @@ class TfishCache {
         // Resolve the file name.
         $file_name = self::_getCachedFileName($basename, $params);
         // Verify that the constructed path matches the canonical path. Exit cache if path is bad.
-        $resolved_path = realpath(TFISH_CACHE_PATH) . '/' . $file_name;
-        if ($resolved_path != TFISH_CACHE_PATH . $file_name) {
+        $resolved_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
+        if ($resolved_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
             return;
         }
 
@@ -134,8 +134,8 @@ class TfishCache {
 
         // Resolve the file name and verify that the constructed path matches the canonical path.
         $file_name = self::_getCachedFileName($basename, $params);
-        $file_path = realpath(TFISH_CACHE_PATH) . '/' . $file_name;
-        if ($file_path != TFISH_CACHE_PATH . $file_name) {
+        $file_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
+        if ($file_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
             return;
         }
 
@@ -146,22 +146,23 @@ class TfishCache {
     }
 
     /**
-     * Clear the cache.
+     * Clear the private cache.
      * 
      * At the moment this is something of a blunt instrument; the entire cache will be cleared
      * if a single object is added, edited or destroyed (this is to ensure that index pages and
      * pagination controls stay up to date). Later it would be good to be more selective, perhaps
      * marking individual object pages by their id, to allow them to be distinguished from index
-     * pages.
+     * pages. If an index.html is present it will be left in place (to prevent listing the cache
+     * directory).
      * 
      * @return boolean success or failure.
      */
     public static function flushCache() {
         try {
-            $directory_iterator = new DirectoryIterator(TFISH_CACHE_PATH);
+            $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
             foreach ($directory_iterator as $file) {
                 if ($file->isFile()) {
-                    $path = TFISH_CACHE_PATH . $file->getFileName();
+                    $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
                     if ($path && file_exists($path)) {
                         try {
                             unlink($path);
