@@ -414,7 +414,6 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 			
 			// Assign to template.
 			$tfish_template->page_title = TFISH_CURRENT_CONTENT;
-			$tfish_form = TFISH_FORM_PATH . "content_table.html";
 			$tfish_template->rows = $rows;
 			$tfish_template->typelist = TfishContentHandler::getTypes();
 			$tfish_template->form = TFISH_FORM_PATH . "content_table.html";

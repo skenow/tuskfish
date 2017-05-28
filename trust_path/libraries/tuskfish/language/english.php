@@ -26,7 +26,7 @@ define("TFISH_EMAIL", "Email");
 define("TFISH_ACTION", "Action");
 define("TFISH_YOU_ARE_ALREADY_LOGGED_IN", "You are already logged in.");
 
-// Admin.
+// admin/admin.php
 define("TFISH_ADMIN", "Admin");
 define("TFISH_CURRENT_CONTENT", "Current content");
 define("TFISH_ADD_CONTENT", "Add content");
@@ -39,6 +39,24 @@ define("TFISH_SELECT_BOX_ZERO_OPTION", "---");
 define("TFISH_META_TAGS", "Meta tags");
 define("TFISH_DELETE", "Delete");
 define("TFISH_EDIT", "Edit");
+define("TFISH_CHANGE_PASSWORD", "Change password");
+define("TFISH_CHANGE_PASSWORD_EXPLANATION", "Please enter and confirm your new administrative "
+		. "password in the form below to change it. Passwords must be at least 15 characters long "
+		. "and contain at least least one upper and lower case letter, number and symbol.");
+
+// admin/password.php
+define("TFISH_NEW_PASSWORD", "Enter new password");
+define("TFISH_CONFIRM_PASSWORD", "Re-enter new password to confirm");
+define("TFISH_USER_SALT_UNAVAILABLE", "User salt unavailable, cannot proceed.");
+define("TFISH_ENTER_PASSWORD_TWICE", "You must enter the new password twice for confirmation.");
+define("TFISH_PASSWORDS_DO_NOT_MATCH", "Passwords do not match, please try again.");
+define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "Password must be at least 15 characters long to resist exhaustive searches of the keyspace.");
+define("TFISH_PASSWORD_LOWER_CASE_WEAKNESS", "Password must include at least one lower case letter.");
+define("TFISH_PASSWORD_UPPER_CASE_WEAKNESS", "Password must include at least one upper case letter.");
+define("TFISH_PASSWORD_NUMBERIC_WEAKNESS", "Password must include at least one number.");
+define("TFISH_PASSWORD_SYMBOLIC_WEAKNESS", "Password must include at least one non-alphanumeric character.");
+define("TFISH_PASSWORD_CHANGE_FAILED", "Sorry, password change failed.");
+define("TFISH_PASSWORD_CHANGED_SUCCESSFULLY", "Password successfully changed.");
 
 // Home page stream.
 define("TFISH_LATEST_POSTS", "Latest posts");

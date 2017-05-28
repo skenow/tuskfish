@@ -158,6 +158,7 @@ class TfishSession
 				// Regenerate session due to priviledge escalation
 				self::regenerate();
 				$_SESSION['TFISH_LOGIN'] = true;
+				$_SESSION['user_id'] = (int)$user['id']; // Added as a handle for the password change script.
 				header('location: ' . TFISH_ADMIN_URL . "admin.php");
 				exit;
 			} else {
