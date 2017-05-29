@@ -14,9 +14,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishTagHandler extends TfishContentHandler {
+class TfishTagHandler extends TfishContentHandler
+{
 
-    function __construct() {
+    function __construct()
+    {
         // Must call parent constructor first.
         parent::__construct();
     }
@@ -27,7 +29,8 @@ class TfishTagHandler extends TfishContentHandler {
      * @param TfishCriteria $criteria
      * @return int $count
      */
-    public static function getCount($criteria = false) {
+    public static function getCount($criteria = false)
+    {
         if (!$criteria) {
             $criteria = new TfishCriteria();
         }
@@ -58,7 +61,8 @@ class TfishTagHandler extends TfishContentHandler {
      * @param TfishCriteria $criteria query composer object
      * @return array $objects TfishArticle objects
      */
-    public static function getObjects($criteria = false) {
+    public static function getObjects($criteria = false)
+    {
         if (!$criteria) {
             $criteria = new TfishCriteria();
         }
@@ -90,7 +94,8 @@ class TfishTagHandler extends TfishContentHandler {
      * @param bool $online_only get all tags or just those marked online.
      * @return boolean|string
      */
-    public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS, $online_only = true) {
+    public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS, $online_only = true)
+    {
         $select_box = '';
         $tag_list = array();
 
@@ -127,7 +132,8 @@ class TfishTagHandler extends TfishContentHandler {
      * @param string $zero_option the string that will be displayed for the 'zero' or no selection option
      * @return string select box
      */
-    public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $key_name = null, $zero_option = TFISH_SELECT_TAGS) {
+    public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $key_name = null, $zero_option = TFISH_SELECT_TAGS)
+    {
         // Initialise variables.
         $select_box = '';
         $clean_key_name = '';

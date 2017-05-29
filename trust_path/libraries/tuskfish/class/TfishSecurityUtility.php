@@ -14,7 +14,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishSecurityUtility {
+class TfishSecurityUtility
+{
 
     /**
      * Evaluates the strength of a password to resist brute force cracking.
@@ -25,7 +26,8 @@ class TfishSecurityUtility {
      * @param string $password
      * @return array of evaluation warnings.
      */
-    public static function checkPasswordStrength($password) {
+    public static function checkPasswordStrength($password)
+    {
         $evaluation = array('strong' => true);
 
         // Length must be > 15 characters to prevent brute force search of the keyspace.
@@ -69,7 +71,8 @@ class TfishSecurityUtility {
      * @param int $length
      * @return string $salt
      */
-    public static function generateSalt($length = 64) {
+    public static function generateSalt($length = 64)
+    {
         $salt = mb_substr(base64_encode(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)), 0, $length, 'UTF-8');
         return $salt;
     }
@@ -87,13 +90,14 @@ class TfishSecurityUtility {
      * @param string $user_salt (optional)
      * @return string
      */
-    public static function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '') {
-        
-        $iterations = (int)$iterations;
-        
+    public static function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '')
+    {
+
+        $iterations = (int) $iterations;
+
         // Force a minimum number of iterations (1).
         $iterations = $iterations > 0 ? $iterations : 1;
-        
+
         $password = $site_salt . $password;
         if ($user_salt) {
             $password .= $user_salt;

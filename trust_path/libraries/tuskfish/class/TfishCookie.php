@@ -15,9 +15,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishCookie {
+class TfishCookie
+{
 
-    function __construct(&$handler) {
+    function __construct(&$handler)
+    {
         
     }
 
@@ -33,7 +35,8 @@ class TfishCookie {
      * @param bool $httponly
      * @return void
      */
-    public static function setSessionCookie($limit = 0, $path = '/admin/', $domain = null, $secure = true, $httponly = true) {
+    public static function setSessionCookie($limit = 0, $path = '/admin/', $domain = null, $secure = true, $httponly = true)
+    {
         session_name($tfish_preference->session_name);
         $domain = isset($domain) ? $domain : isset($_SERVER['SERVER_NAME']);
         session_set_cookie_params($limit, $path, $domain, $secure, $httponly);
@@ -52,7 +55,8 @@ class TfishCookie {
      * @param bool $secure
      * @param bool $httponly
      */
-    public static function setDataCookie($name, $value, $expire = 0, $path = '/admin', $domain = '', $secure = true, $httponly = true) {
+    public static function setDataCookie($name, $value, $expire = 0, $path = '/admin', $domain = '', $secure = true, $httponly = true)
+    {
         setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
 

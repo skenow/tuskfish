@@ -16,7 +16,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishCriteria {
+class TfishCriteria
+{
 
     protected $__data = array(
         'item' => array(), // Array of TfishCriteriaItem
@@ -29,7 +30,8 @@ class TfishCriteria {
         'tag' => array() // Array of tag IDs
     );
 
-    function __construct() {
+    function __construct()
+    {
         
     }
 
@@ -39,7 +41,8 @@ class TfishCriteria {
      * @param object $criteria_item TfishCriteriaItem object
      * @param string $condition used to chain TfishCriteriaItems, "AND" or "OR" only
      */
-    public function add($criteria_item, $condition = "AND") {
+    public function add($criteria_item, $condition = "AND")
+    {
         self::__set('item', $criteria_item);
         self::__set('condition', $condition);
     }
@@ -53,7 +56,8 @@ class TfishCriteria {
      * @param string $property name
      * @return mixed|null $property value if it is set; otherwise null.
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -70,7 +74,8 @@ class TfishCriteria {
      * @param string $property name
      * @return bool 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -86,7 +91,8 @@ class TfishCriteria {
      * 
      * @param int $key of the item array containing the type filter
      */
-    public function killType($key) {
+    public function killType($key)
+    {
         $key = (int) $key;
 
         if (isset($this->__data['item'][$key])) {
@@ -108,7 +114,8 @@ class TfishCriteria {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
             switch ($property) {
                 case "item": // Array of TfishCriteriaItem objects
@@ -191,7 +198,8 @@ class TfishCriteria {
      * 
      * @return string $sql query fragment
      */
-    public function renderSQL() {
+    public function renderSQL()
+    {
         $sql = '';
         $count = count($this->item);
         if ($count) {
@@ -218,7 +226,8 @@ class TfishCriteria {
      * 
      * @return array $pdo_placeholders
      */
-    public function renderPDO() {
+    public function renderPDO()
+    {
         $pdo_placeholders = array();
         $count = count($this->item);
         for ($i = 0; $i < $count; $i++) {
@@ -237,7 +246,8 @@ class TfishCriteria {
      * 
      * @return string $sql query fragment
      */
-    public function renderTagSQL() {
+    public function renderTagSQL()
+    {
         $sql = '';
         $count = count($this->tag);
         if ($count == 1) {
@@ -262,7 +272,8 @@ class TfishCriteria {
      * 
      * @return array $tag_placeholders
      */
-    public function renderTagPDO() {
+    public function renderTagPDO()
+    {
         $tag_placeholders = array();
         for ($i = 0; $i < count($this->tag); $i++) {
             $tag_placeholders[":tag" . (string) $i] = (int) $this->tag[$i];
@@ -279,7 +290,8 @@ class TfishCriteria {
      * @param string $property name
      * @return bool true on success false on failure 
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
         } else {

@@ -14,12 +14,14 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishPreferenceHandler {
+class TfishPreferenceHandler
+{
 
     // Permitted properties.
     private $tfish_preferences;
 
-    function __construct($tfish_preferences) {
+    function __construct($tfish_preferences)
+    {
         if (is_a($tfish_preferences, 'TfishPreference')) {
             $this->preferences = $tfish_preferences;
         } else {
@@ -33,7 +35,8 @@ class TfishPreferenceHandler {
      * @param string $pref
      * @return mixed|null
      */
-    public static function get($pref) {
+    public static function get($pref)
+    {
         if (TfishFilter::isAlnumUnderscore($pref)) {
             return $this->tfish_preferences->$pref;
         } else {
@@ -48,7 +51,8 @@ class TfishPreferenceHandler {
      * @param object $obj TfishPreference
      * @return boolean
      */
-    public static function updatePreferences($obj) {
+    public static function updatePreferences($obj)
+    {
         // Convert object to array of key => values.
         $key_values = $obj->toArray();
 

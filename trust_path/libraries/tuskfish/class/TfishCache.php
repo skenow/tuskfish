@@ -29,9 +29,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishCache {
+class TfishCache
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         
     }
 
@@ -53,7 +55,8 @@ class TfishCache {
      * @param array $params
      * @return void
      */
-    public static function checkCache($basename, $params = array()) {
+    public static function checkCache($basename, $params = array())
+    {
 
         global $tfish_preference;
 
@@ -87,7 +90,8 @@ class TfishCache {
      * @param int $id
      * @return string
      */
-    private static function _getCachedFileName($basename, $params) {
+    private static function _getCachedFileName($basename, $params)
+    {
 
         $clean_filename = false;
         $basename = rtrim($basename, '.php'); // Remove the extension.
@@ -123,7 +127,8 @@ class TfishCache {
      * warnings are suppressed when trying to open the file.
      * 
      */
-    public static function cachePage($basename, $params, $buffer) {
+    public static function cachePage($basename, $params, $buffer)
+    {
 
         global $tfish_preference;
 
@@ -157,7 +162,8 @@ class TfishCache {
      * 
      * @return boolean success or failure.
      */
-    public static function flushCache() {
+    public static function flushCache()
+    {
         try {
             $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
             foreach ($directory_iterator as $file) {

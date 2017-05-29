@@ -14,7 +14,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishTaglink {
+class TfishTaglink
+{
 
     protected $__data = array(
         'id', // ID of this taglink object
@@ -23,7 +24,8 @@ class TfishTaglink {
         'content_id', // ID of the content object
         'handler'); // The handler for taglink objects
 
-    function __construct() {
+    function __construct()
+    {
         $this->__data['type'] = "TfishTaglink";
     }
 
@@ -36,7 +38,8 @@ class TfishTaglink {
      * @param string $property name
      * @return mixed|null $property value if it is set; otherwise null.
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -53,7 +56,8 @@ class TfishTaglink {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
             $this->__data[$property] = $value;
         } else {
@@ -70,7 +74,8 @@ class TfishTaglink {
      * @param string $property name
      * @return bool 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -87,7 +92,8 @@ class TfishTaglink {
      * @param string $property name
      * @return bool true on success false on failure 
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
         } else {

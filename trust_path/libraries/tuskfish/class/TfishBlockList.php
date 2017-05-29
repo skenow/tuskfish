@@ -15,9 +15,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishBlockList extends TfishBlock {
+class TfishBlockList extends TfishBlock
+{
 
-    function __construct($title) {
+    function __construct($title)
+    {
         parent::__construct();
 
         $this->__set('title', $title); // String: Title of the block (blank for no title).
@@ -31,7 +33,8 @@ class TfishBlockList extends TfishBlock {
      * @param object $criteria TfishCriteria object
      * @return string HTML output of block
      */
-    public function build($criteria = false) {
+    public function build($criteria = false)
+    {
         if ($criteria) {
             $clean_criteria = TfishDatabase::validateCriteriaObject($criteria);
         } else {
@@ -49,7 +52,8 @@ class TfishBlockList extends TfishBlock {
         return $this->_build($clean_criteria);
     }
 
-    private function _build($criteria) {
+    private function _build($criteria)
+    {
         $content_handler = new TfishContentHandler();
         $content_objects = $content_handler->getObjects($criteria);
         if (!empty($content_objects)) {
@@ -70,7 +74,8 @@ class TfishBlockList extends TfishBlock {
      * 
      * @return string HTML output of template
      */
-    public function render() {
+    public function render()
+    {
         global $tfish_template;
 
         extract($this->__data);

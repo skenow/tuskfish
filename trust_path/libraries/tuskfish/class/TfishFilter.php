@@ -24,7 +24,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishFilter {
+class TfishFilter
+{
 
     /**
      * Check if the character encoding of text is UTF-8.
@@ -35,7 +36,8 @@ class TfishFilter {
      * @param string $dirty_text
      * @return bool true if UTF-8 otherwise false
      */
-    public static function isUtf8($dirty_string) {
+    public static function isUtf8($dirty_string)
+    {
         return mb_check_encoding($dirty_string, 'UTF-8');
     }
 
@@ -48,7 +50,8 @@ class TfishFilter {
      * @param string $output
      * @return string
      */
-    public static function escape($output) {
+    public static function escape($output)
+    {
         return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
     }
 
@@ -62,7 +65,8 @@ class TfishFilter {
      * @param string $url
      * @return string
      */
-    public static function encodeEscapeUrl($url) {
+    public static function encodeEscapeUrl($url)
+    {
         $url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
         $url = rawurlencode($url); // Encode characters to make them URL safe.
         $clean_url = self::escape($url); // Encode entities with htmlspecialchars()
@@ -85,7 +89,8 @@ class TfishFilter {
      * @param array $allowed_vars whitelist of permitted variables and expected data types
      * @return array
      */
-    public static function filterData($dirty_vars, $allowed_vars) {
+    public static function filterData($dirty_vars, $allowed_vars)
+    {
         $clean_vars = array();
 
         foreach ($allowed_vars as $key => $type) {
@@ -154,7 +159,8 @@ class TfishFilter {
      * @param array $configs
      * @return string validated HTML content
      */
-    public static function filterHtml($dirty_html, $config = false) {
+    public static function filterHtml($dirty_html, $config = false)
+    {
         if (self::isUtf8($dirty_html)) {
             if (class_exists('HTMLPurifier')) {
                 $html_purifier = new HTMLPurifier($config);
@@ -174,7 +180,8 @@ class TfishFilter {
      * @param string $dirty_alpha
      * @return bool true if valid alphabetical string, false otherwise
      */
-    public static function isAlpha($alpha) {
+    public static function isAlpha($alpha)
+    {
         if (mb_strlen($alpha, 'UTF-8') > 0) {
             return preg_match('/[^a-z]/i', $alpha) ? false : true;
         } else {
@@ -188,7 +195,8 @@ class TfishFilter {
      * @param string $dirty_alnum
      * @return bool true if valid alphanumerical string, false otherwise
      */
-    public static function isAlnum($alnum) {
+    public static function isAlnum($alnum)
+    {
         if (mb_strlen($alnum, 'UTF-8') > 0) {
             return preg_match('/[^a-z0-9]/i', $alnum) ? false : true;
         } else {
@@ -202,7 +210,8 @@ class TfishFilter {
      * @param string $alnumUnder
      * @return boolean true if valid alphanumerical or underscore string, false otherwise
      */
-    public static function isAlnumUnderscore($alnumUnderscore) {
+    public static function isAlnumUnderscore($alnumUnderscore)
+    {
         if (mb_strlen($alnumUnderscore, 'UTF-8') > 0) {
             return preg_match('/[^a-z0-9_]/i', $alnumUnderscore) ? false : true;
         } else {
@@ -219,7 +228,8 @@ class TfishFilter {
      * @param boolean $bool
      * @return bool true if a valid boolean value, false otherwise.
      */
-    public static function isBool($bool) {
+    public static function isBool($bool)
+    {
         $result = filter_var($bool, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if (is_null($result)) {
             return false;
@@ -234,7 +244,8 @@ class TfishFilter {
      * @param string $dirty_digit
      * @return boolean true if valid digit string, false otherwise
      */
-    public static function isDigit($digit) {
+    public static function isDigit($digit)
+    {
         if (mb_strlen($digit, 'UTF-8') > 0) {
             return preg_match('/[^0-9]/', $digit) ? false : true;
         } else {
@@ -251,7 +262,8 @@ class TfishFilter {
      * @param string $dirty_email
      * @return boolean true if valid email address, otherwise false
      */
-    public static function isEmail($email) {
+    public static function isEmail($email)
+    {
         if (mb_strlen($email, 'UTF-8') > 2) {
             return filter_var($email, FILTER_VALIDATE_EMAIL);
         } else {
@@ -267,7 +279,8 @@ class TfishFilter {
      * @param float $dirty_float
      * @return boolean true if valid float, otherwise false
      */
-    public static function isFloat($float) {
+    public static function isFloat($float)
+    {
         return is_float($float);
     }
 
@@ -279,7 +292,8 @@ class TfishFilter {
      * @param int $max
      * @return boolean true if valid int and within optional range check, false otherwise
      */
-    public static function isInt($int, $min = false, $max = false) {
+    public static function isInt($int, $min = false, $max = false)
+    {
         $clean_int = is_int($int) ? (int) $int : false;
         $clean_min = is_int($min) ? (int) $min : false;
         $clean_max = is_int($max) ? (int) $max : false;
@@ -314,7 +328,8 @@ class TfishFilter {
      * @param int $version
      * @return boolean true if valid IP address, false otherwise
      */
-    public static function isIp($ip, $version = false) {
+    public static function isIp($ip, $version = false)
+    {
         if ($version == 6) {
             if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
@@ -343,7 +358,8 @@ class TfishFilter {
      * @param string $dirty_text
      * @return string
      */
-    public static function trimString($dirty_text) {
+    public static function trimString($dirty_text)
+    {
         if (self::isUtf8($dirty_text)) {
             // Trims all control characters plus space (ASCII 0-32 inclusive)
             return (string) trim($dirty_text, "\x00..\x20");
@@ -365,7 +381,8 @@ class TfishFilter {
      * @param string $dirty_url
      * @return boolean true if valid URL otherwise false
      */
-    public static function isUrl($url) {
+    public static function isUrl($url)
+    {
         if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED)) {
             if (mb_substr($url, 0, 7, 'UTF-8') == 'http://' || mb_substr($url, 0, 8, 'UTF-8') == 'https://') {
                 return true;
@@ -380,7 +397,8 @@ class TfishFilter {
      * @param array $array
      * @return boolean true if valid array otherwise false
      */
-    public static function isArray($array) {
+    public static function isArray($array)
+    {
         return is_array($array);
     }
 
@@ -390,7 +408,8 @@ class TfishFilter {
      * @param object $dirty_object
      * @return boolean true if valid object otherwise false
      */
-    public static function isObject($object) {
+    public static function isObject($object)
+    {
         return is_object($object);
     }
 
@@ -400,7 +419,8 @@ class TfishFilter {
      * @param mixed $dirty_null
      * @return boolean true if input is null otherwise false
      */
-    public static function isNull($null) {
+    public static function isNull($null)
+    {
         return is_null($null);
     }
 
@@ -410,7 +430,8 @@ class TfishFilter {
      * @param resource $dirty_resource
      * @return boolean true if valid resource otherwise false
      */
-    public static function isResource($resource) {
+    public static function isResource($resource)
+    {
         return is_resource($resource);
     }
 

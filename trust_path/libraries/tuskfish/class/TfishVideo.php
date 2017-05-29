@@ -1,4 +1,4 @@
-S<?php
+<?php
 
 /**
  * Tuskfish video object class.
@@ -14,9 +14,11 @@ S<?php
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishVideo extends TfishContentObject {
+class TfishVideo extends TfishContentObject
+{
 
-    function __construct() {
+    function __construct()
+    {
         // Must call parent constructor first.
         parent::__construct();
 
@@ -41,7 +43,8 @@ class TfishVideo extends TfishContentObject {
      * 
      * @return array
      */
-    public function zeroedProperties() {
+    public function zeroedProperties()
+    {
         return array();
     }
 

@@ -14,9 +14,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishTaglinkHandler extends TfishContentHandler {
+class TfishTaglinkHandler extends TfishContentHandler
+{
 
-    function __construct() {
+    function __construct()
+    {
         // Must call parent constructor first.
         parent::__construct();
     }
@@ -27,7 +29,8 @@ class TfishTaglinkHandler extends TfishContentHandler {
      * @param int $content_id
      * @return boolean true for success false on failure
      */
-    public static function deleteTaglinks($content_id) {
+    public static function deleteTaglinks($content_id)
+    {
         if (TfishFilter::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
         } else {
@@ -51,7 +54,8 @@ class TfishTaglinkHandler extends TfishContentHandler {
      * @param array $tags as integers
      * @return boolean true on success false on failure
      */
-    public static function insertTaglinks($content_id, $type, $tags) {
+    public static function insertTaglinks($content_id, $type, $tags)
+    {
         if (TfishFilter::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
         } else {
@@ -101,7 +105,8 @@ class TfishTaglinkHandler extends TfishContentHandler {
      * 
      * @return boolean true on success false on failure
      */
-    public static function updateTaglinks($id, $type, $tags) {
+    public static function updateTaglinks($id, $type, $tags)
+    {
         // Validate ID.
         if (TfishFilter::isInt($id, 1)) {
             $clean_id = (int) $id;

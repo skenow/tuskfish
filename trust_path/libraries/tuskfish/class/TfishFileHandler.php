@@ -15,9 +15,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishFileHandler {
+class TfishFileHandler
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         
     }
 
@@ -29,7 +31,8 @@ class TfishFileHandler {
      * 
      * @return array
      */
-    public static function allowedAudioMimetypes() {
+    public static function allowedAudioMimetypes()
+    {
         return array(
             "mp3" => "audio/mpeg",
             "oga" => "audio/ogg",
@@ -47,7 +50,8 @@ class TfishFileHandler {
      * 
      * @return string
      */
-    public static function allowedVideoMimetypes() {
+    public static function allowedVideoMimetypes()
+    {
         return array(
             "mp4" => "video/mp4",
             "ogv" => "video/ogg",
@@ -62,7 +66,8 @@ class TfishFileHandler {
      * @param string $contents
      * @return boolean
      */
-    public static function appendFile($path, $contents) {
+    public static function appendFile($path, $contents)
+    {
         $clean_path = TfishFilter::trimString($path);
         $clean_content = PHP_EOL . TfishFilter::trimString($contents); // NOTE: Calling trim() removes linefeed from the contents.
         if ($clean_path && $clean_content) {
@@ -77,7 +82,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _appendFile($path, $contents) {
+    private static function _appendFile($path, $contents)
+    {
         return file_put_contents($path, $contents, FILE_APPEND);
     }
 
@@ -87,7 +93,8 @@ class TfishFileHandler {
      * @param string $path
      * @return boolean true on success false on failure
      */
-    public static function clearDirectory($path) {
+    public static function clearDirectory($path)
+    {
         $clean_path = TfishFilter::trimString($path);
         if ($clean_path) {
             $result = self::_clearDirectory($clean_path);
@@ -101,7 +108,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _clearDirectory($path) {
+    private static function _clearDirectory($path)
+    {
         $path = self::_dataFilePath($path);
         if ($path) {
             try {
@@ -128,7 +136,8 @@ class TfishFileHandler {
      * @param bool $create_parents makes parent directories if they do not exist
      * @return bool true on success false on failure
      */
-    public static function createDirectory($path, $chmod = 0755, $create_parents = true) {
+    public static function createDirectory($path, $chmod = 0755, $create_parents = true)
+    {
         $clean_path = TfishFilter::trimString($path);
         $clean_chmod = TfishFilter::isDigit($chmod) ? $chmod : false;
         $clean_create_parents = TfishFilter::isBool($create_parents) ? $create_parents : null;
@@ -144,7 +153,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _createDirectory($path, $chmod, $create_parents) {
+    private static function _createDirectory($path, $chmod, $create_parents)
+    {
         $path = self::_dataFilePath($path);
         if ($path) {
             try {
@@ -169,7 +179,8 @@ class TfishFileHandler {
      * $param bool $append
      * @return boolean true on success, false on failure
      */
-    public static function createFile($path, $contents = false, $chmod = 0600, $append = false) {
+    public static function createFile($path, $contents = false, $chmod = 0600, $append = false)
+    {
         $clean_path = TfishFilter::trimString($path);
         $clean_contents = TfishFilter::trimString($contents);
         $clean_chmod = TfishFilter::isDigit($chmod) ? $chmod : false;
@@ -186,7 +197,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _createFile($path, $contents, $chmod, $append) {
+    private static function _createFile($path, $contents, $chmod, $append)
+    {
         $path = self::_dataFilePath($path);
         if ($path && isset($append)) {
             try {
@@ -216,7 +228,8 @@ class TfishFileHandler {
      * @param string $file_name
      * @return string|bool path on success false on failture
      */
-    private static function _dataFilePath($path) {
+    private static function _dataFilePath($path)
+    {
         if (mb_strlen($path, 'UTF-8') > 0) {
             $path = rtrim($path, '/');
 
@@ -239,7 +252,8 @@ class TfishFileHandler {
      * @param string $directory_name
      * @return bool true on success false on failure
      */
-    public static function deleteDirectory($path) {
+    public static function deleteDirectory($path)
+    {
         $clean_path = TfishFilter::trimString($path);
         if ($clean_path) {
             $result = self::_deleteDirectory($clean_path);
@@ -253,7 +267,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _deleteDirectory($path) {
+    private static function _deleteDirectory($path)
+    {
         $path = self::_dataFilePath($path);
         if ($path) {
             try {
@@ -282,7 +297,8 @@ class TfishFileHandler {
      * @param string $file_path
      * @return bool true on success false on failure
      */
-    public static function deleteFile($path) {
+    public static function deleteFile($path)
+    {
         $clean_path = TfishFilter::trimString($path);
         if ($clean_path) {
             $result = self::_deleteFile($clean_path);
@@ -296,7 +312,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _deleteFile($path) {
+    private static function _deleteFile($path)
+    {
         $path = self::_dataFilePath($path);
         if ($path && file_exists($path)) {
             try {
@@ -323,7 +340,8 @@ class TfishFileHandler {
      * @todo Move this into a static TfishPreference method
      *
      */
-    public static function getPermittedUploadMimetypes() {
+    public static function getPermittedUploadMimetypes()
+    {
         return array(
             "doc" => "application/msword", // Documents.
             "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -359,7 +377,8 @@ class TfishFileHandler {
      * excluding extension.
      * @return boolean
      */
-    public static function sendDownload($id, $filename = false) {
+    public static function sendDownload($id, $filename = false)
+    {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : false;
         $clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : false;
         if ($clean_id) {
@@ -373,7 +392,8 @@ class TfishFileHandler {
         }
     }
 
-    private static function _sendDownload($id, $filename) {
+    private static function _sendDownload($id, $filename)
+    {
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('id', $id));
         $statement = TfishDatabase::select('content', $criteria);
@@ -426,7 +446,8 @@ class TfishFileHandler {
      * @param string $fieldname Name of form field associated with this upload (media subdirectory).
      * @return string|bool $filename on success or false on failure.
      */
-    public static function uploadFile($filename, $fieldname) {
+    public static function uploadFile($filename, $fieldname)
+    {
         $filename = TfishFilter::trimString($filename);
         $clean_filename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
 
@@ -443,7 +464,8 @@ class TfishFileHandler {
         return false;
     }
 
-    private static function _uploadFile($filename, $fieldname, $extension) {
+    private static function _uploadFile($filename, $fieldname, $extension)
+    {
         $filename = time() . '_' . $filename;
         $upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $extension;
         if ($_FILES[$fieldname]["error"]) {

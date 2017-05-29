@@ -15,7 +15,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishLogger {
+class TfishLogger
+{
 
     /**
      * Tuskfish custom error logger class.
@@ -33,7 +34,8 @@ class TfishLogger {
      * @param array $context active symbol table, ie. an array of every variable in scope when the
      * error was triggered
      */
-    public static function logErrors($errno = false, $error = false, $file = false, $line = false, $context = false) {
+    public static function logErrors($errno = false, $error = false, $file = false, $line = false, $context = false)
+    {
         $message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";
         $message .= "[$file:$line]\r\n";
         error_log($message, 3, TFISH_ERROR_LOG_PATH);

@@ -14,9 +14,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishRss extends TfishAncestralObject {
+class TfishRss extends TfishAncestralObject
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         /**
@@ -63,7 +65,8 @@ class TfishRss extends TfishAncestralObject {
      * 
      * @param object $obj collection
      */
-    public function makeFeedForCollection($obj) {
+    public function makeFeedForCollection($obj)
+    {
         $this->__set('title', $obj->title);
         $this->__set('link', TFISH_RSS_URL . '?id=' . (int) $obj->id);
         $this->__set('description', $obj->teaser);
@@ -77,7 +80,8 @@ class TfishRss extends TfishAncestralObject {
      * @param string $property
      * @param mixed $value
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
 
             // Validate $value against expected data type and business rules.

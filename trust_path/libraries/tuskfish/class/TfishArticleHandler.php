@@ -14,9 +14,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishArticleHandler extends TfishContentHandler {
+class TfishArticleHandler extends TfishContentHandler
+{
 
-    function __construct() {
+    function __construct()
+    {
         // Must call parent constructor first.
         parent::__construct();
     }
@@ -34,7 +36,8 @@ class TfishArticleHandler extends TfishContentHandler {
      * @param TfishCriteria $criteria query composer object
      * @return array $objects TfishArticle objects
      */
-    public static function getObjects($criteria = false) {
+    public static function getObjects($criteria = false)
+    {
         if (!$criteria) {
             $criteria = new TfishCriteria();
         }
@@ -58,7 +61,8 @@ class TfishArticleHandler extends TfishContentHandler {
      * @param TfishCriteria $criteria
      * @return int $count
      */
-    public static function getCount($criteria = false) {
+    public static function getCount($criteria = false)
+    {
         if (!$criteria) {
             $criteria = new TfishCriteria();
         }

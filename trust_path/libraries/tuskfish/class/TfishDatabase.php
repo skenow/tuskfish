@@ -20,19 +20,20 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishDatabase {
+class TfishDatabase
+{
 
     private static $_db;
 
     /**
      * No cloning or instantiation permitted
      */
-    final private function __construct() { // Finished
-        
+    final private function __construct()
+    { // Finished
     }
 
-    final private function __clone() { // Finished
-        
+    final private function __clone()
+    { // Finished
     }
 
     /**
@@ -44,7 +45,8 @@ class TfishDatabase {
      * @param string $identifier
      * @return string
      */
-    public static function addBackticks($identifier) { // Finished
+    public static function addBackticks($identifier)
+    { // Finished
         return '`' . $identifier . '`';
     }
 
@@ -53,11 +55,13 @@ class TfishDatabase {
      * 
      * @return boolean true on success false on failure
      */
-    public static function close() {
+    public static function close()
+    {
         return self::_close();
     }
 
-    private static function _close() {
+    private static function _close()
+    {
         self::$_db = null;
         return true;
     }
@@ -69,11 +73,13 @@ class TfishDatabase {
      * 
      * @return boolean true on success, false on failure
      */
-    public static function connect() { // Finished
+    public static function connect()
+    { // Finished
         return self::_connect();
     }
 
-    private static function _connect() {
+    private static function _connect()
+    {
         // SQLite just expects a file name, which was defined as a constant during create()
         self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
         if (self::$_db) {
@@ -96,7 +102,8 @@ class TfishDatabase {
      * @param string $db_name
      * @return string|boolean path to database file on success, false on failure
      */
-    public static function create($db_name) { // Finished
+    public static function create($db_name)
+    { // Finished
         // Validate input parameters
         $db_name = TfishFilter::trimString($db_name);
         if (TfishFilter::isAlnumUnderscore($db_name)) {
@@ -107,7 +114,8 @@ class TfishDatabase {
         }
     }
 
-    private static function _create($db_name) {
+    private static function _create($db_name)
+    {
         // Generate a random prefix for the database filename to make it unpredictable.
         $prefix = mt_rand();
 
@@ -140,7 +148,8 @@ class TfishDatabase {
      * @param string $primary_key name of field to be used as primary key
      * @return boolean true on success, false on failure
      */
-    public static function createTable($table, $columns, $primary_key = null) { // Finished
+    public static function createTable($table, $columns, $primary_key = null)
+    { // Finished
         // Initialise
         $clean_primary_key = null;
         $clean_columns = array();
@@ -185,7 +194,8 @@ class TfishDatabase {
         }
     }
 
-    private static function _createTable($table_name, $columns, $primary_key = null) {
+    private static function _createTable($table_name, $columns, $primary_key = null)
+    {
         if (mb_strlen($table_name, 'UTF-8') > 0 && is_array($columns)) {
             $sql = "CREATE TABLE IF NOT EXISTS `" . $table_name . "` (";
             foreach ($columns as $key => $value) {
@@ -214,13 +224,15 @@ class TfishDatabase {
      * @param int $id of row to be deleted
      * @return boolean true on success false on failure
      */
-    public static function delete($table, $id) { // Finished
+    public static function delete($table, $id)
+    { // Finished
         $clean_table = self::validateTableName($table);
         $clean_id = self::validateId($id);
         return self::_delete($clean_table, $clean_id);
     }
 
-    private static function _delete($table, $id) {
+    private static function _delete($table, $id)
+    {
         $sql = "DELETE FROM " . self::addBackticks($table) . " WHERE `id` = :id";
         $statement = self::preparedStatement($sql);
         if ($statement) {
@@ -243,13 +255,15 @@ class TfishDatabase {
      * @param object $criteria TfishCriteria object
      * @return boolean true on success, false on failure
      */
-    public static function deleteAll($table, $criteria) {
+    public static function deleteAll($table, $criteria)
+    {
         $clean_table = self::validateTableName($table);
         $clean_criteria = self::validateCriteriaObject($criteria);
         return self::_deleteAll($clean_table, $clean_criteria);
     }
 
-    private static function _deleteAll($table, $criteria) {
+    private static function _deleteAll($table, $criteria)
+    {
         // Set table.
         $sql = "DELETE FROM " . self::addBackticks($table) . " ";
 
@@ -326,7 +340,8 @@ class TfishDatabase {
      * @param string $identfier
      * @return string
      */
-    public static function escapeIdentifier($identifier) {
+    public static function escapeIdentifier($identifier)
+    {
         $clean_identifier = '';
         $identifier = TfishFilter::trimString($identifier);
         $identifier = str_replace('"', '""', $identifier);
@@ -346,7 +361,8 @@ class TfishDatabase {
      * @param object $statement
      * @return boolean true on success, false on failure
      */
-    public static function executeTransaction($statement) {
+    public static function executeTransaction($statement)
+    {
         try {
             self::$_db->beginTransaction();
             $statement->execute();
@@ -366,13 +382,15 @@ class TfishDatabase {
      * @param array $key_values column names and values to be inserted
      * @return boolean true on success, false on failure
      */
-    public static function insert($table, $key_values) { // Finished
+    public static function insert($table, $key_values)
+    { // Finished
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
         return self::_insert($clean_table, $clean_keys);
     }
 
-    private static function _insert($table, $key_values) {
+    private static function _insert($table, $key_values)
+    {
         $pdo_placeholders = '';
         $sql = "INSERT INTO " . self::addBackticks($table) . " (";
 
@@ -403,7 +421,8 @@ class TfishDatabase {
      * 
      * @return int|boolean row ID on success, false on failure
      */
-    public static function lastInsertId() {
+    public static function lastInsertId()
+    {
         if (self::$_db->lastInsertId()) {
             return (int) self::$_db->lastInsertId();
         } else {
@@ -418,11 +437,13 @@ class TfishDatabase {
      * @param string $sql
      * @return object PDOStatement object on success PDOException object on failure
      */
-    public static function preparedStatement($sql) {
+    public static function preparedStatement($sql)
+    {
         return self::_preparedStatement($sql);
     }
 
-    private static function _preparedStatement($sql) {
+    private static function _preparedStatement($sql)
+    {
         return self::$_db->prepare($sql);
     }
 
@@ -435,14 +456,16 @@ class TfishDatabase {
      * @param object $criteria TfishCriteria object
      * @return object PDOStatement object on success PDOException on failure
      */
-    public static function select($table, $criteria = false, $columns = false) {
+    public static function select($table, $criteria = false, $columns = false)
+    {
         $clean_table = self::validateTableName($table);
         $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
         $clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
         return self::_select($clean_table, $clean_criteria, $clean_columns);
     }
 
-    private static function _select($table, $criteria, $columns) {
+    private static function _select($table, $criteria, $columns)
+    {
         // Specify operation.
         $sql = "SELECT ";
 
@@ -551,7 +574,8 @@ class TfishDatabase {
      * @param string $column name
      * @return int|object row count on success PDOException object on failure
      */
-    public static function selectCount($table, $criteria = false, $column = false) {
+    public static function selectCount($table, $criteria = false, $column = false)
+    {
         $clean_table = self::validateTableName($table);
         $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
         if ($column) {
@@ -568,7 +592,8 @@ class TfishDatabase {
         return self::_selectCount($clean_table, $clean_criteria, $clean_column);
     }
 
-    private static function _selectCount($table, $criteria, $column) {
+    private static function _selectCount($table, $criteria, $column)
+    {
         // Specify operation and column
         $sql = "SELECT COUNT(";
         $sql .= $column = "*" ? $column : self::addBackticks($column);
@@ -645,7 +670,8 @@ class TfishDatabase {
      * @param array $columns names to filter results by
      * @return object PDOStatement on success, PDOException on failure
      */
-    public static function selectDistinct($table, $criteria = false, $columns) {
+    public static function selectDistinct($table, $criteria = false, $columns)
+    {
         // Validate the tablename (alphanumeric characters only).
         $clean_table = self::validateTableName($table);
         $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
@@ -653,7 +679,8 @@ class TfishDatabase {
         return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
     }
 
-    private static function _selectDistinct($table, $criteria, $columns) {
+    private static function _selectDistinct($table, $criteria, $columns)
+    {
         // Specify operation
         $sql = "SELECT DISTINCT ";
 
@@ -752,7 +779,8 @@ class TfishDatabase {
      * @param string $column to update
      * @return boolean true on success, false on failure
      */
-    public static function toggleBoolean($id, $table, $column) {
+    public static function toggleBoolean($id, $table, $column)
+    {
         $clean_id = self::validateId($id);
         $clean_table = self::validateTableName($table);
         $clean_column = self::validateColumns(array($column));
@@ -760,7 +788,8 @@ class TfishDatabase {
         return self::_toggleBoolean($clean_id, $clean_table, $clean_column);
     }
 
-    private static function _toggleBoolean($id, $table, $column) {
+    private static function _toggleBoolean($id, $table, $column)
+    {
         $sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
                 . " = CASE WHEN " . self::addBackticks($column)
                 . " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
@@ -785,7 +814,8 @@ class TfishDatabase {
      * @param string $column name
      * @return boolean true on success false on failure
      */
-    public static function updateCounter($id, $table, $column) {
+    public static function updateCounter($id, $table, $column)
+    {
         $clean_id = self::validateId($id);
         $clean_table = self::validateTableName($table);
         $clean_column = self::validateColumns(array($column));
@@ -793,7 +823,8 @@ class TfishDatabase {
         return self::_updateCounter($clean_id, $clean_table, $clean_column);
     }
 
-    private static function _updateCounter($id, $table, $column) {
+    private static function _updateCounter($id, $table, $column)
+    {
         $sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
                 . " = " . self::addBackticks($column) . " + 1 WHERE `id` = :id";
 
@@ -813,14 +844,16 @@ class TfishDatabase {
      * @param array $key_values to update
      * @return boolean true on success, false on failure
      */
-    public static function update($table, $id, $key_values) { // Finished
+    public static function update($table, $id, $key_values)
+    { // Finished
         $clean_table = self::validateTableName($table);
         $clean_id = self::validateId($id);
         $clean_keys = self::validateKeys($key_values);
         return self::_update($clean_table, $clean_id, $clean_keys);
     }
 
-    private static function _update($table, $id, $key_values) {
+    private static function _update($table, $id, $key_values)
+    {
         // Prepare the statement
         $sql = "UPDATE " . self::addBackticks($table) . " SET ";
         foreach ($key_values as $key => $value) {
@@ -856,7 +889,8 @@ class TfishDatabase {
      * @param array $key_values to update
      * @param object $criteria TfishCriteria object
      */
-    public static function updateAll($table, $key_values, $criteria = false) {
+    public static function updateAll($table, $key_values, $criteria = false)
+    {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
         if ($criteria) {
@@ -867,7 +901,8 @@ class TfishDatabase {
         return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
     }
 
-    private static function _updateAll($table, $key_values, $criteria) {
+    private static function _updateAll($table, $key_values, $criteria)
+    {
         // Set table.
         $sql = "UPDATE " . self::addBackticks($table) . " SET ";
 
@@ -922,7 +957,8 @@ class TfishDatabase {
      * @param mixed $data
      * @return int PDO data type constant
      */
-    public static function setType($data) {
+    public static function setType($data)
+    {
         $type = gettype($data);
         switch ($type) {
             case "boolean":
@@ -957,7 +993,8 @@ class TfishDatabase {
      * @param string $table name
      * @return string $sql query fragment
      */
-    private static function _renderTagJoin($table) {
+    private static function _renderTagJoin($table)
+    {
         $sql = "INNER JOIN `taglink` ON `t1`.`id` = `taglink`.`content_id` ";
 
         return $sql;
@@ -969,7 +1006,8 @@ class TfishDatabase {
      * @param object $criteria TfishCriteria
      * @return object TfishCriteria
      */
-    public static function validateCriteriaObject($criteria) {
+    public static function validateCriteriaObject($criteria)
+    {
         if (!is_a($criteria, 'TfishCriteria')) {
             trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
             exit;
@@ -1042,7 +1080,8 @@ class TfishDatabase {
      * @param array $columns
      * @return array of valid, escaped column names
      */
-    public static function validateColumns($columns) {
+    public static function validateColumns($columns)
+    {
         $clean_columns = array();
         if (TfishFilter::isArray($columns) && !empty($columns)) {
             foreach ($columns as $column) {
@@ -1068,7 +1107,8 @@ class TfishDatabase {
      * @param int $id
      * @return int $id
      */
-    public static function validateId($id) {
+    public static function validateId($id)
+    {
         $clean_id = (int) $id;
         if (TfishFilter::isInt($clean_id, 1)) {
             return $clean_id;
@@ -1087,7 +1127,8 @@ class TfishDatabase {
      * @param array $key_values
      * @return array valid and escaped keys.
      */
-    public static function validateKeys($key_values) {
+    public static function validateKeys($key_values)
+    {
         $clean_keys = array();
         if (TfishFilter::isArray($key_values) && !empty($key_values)) {
             foreach ($key_values as $key => $value) {
@@ -1113,7 +1154,8 @@ class TfishDatabase {
      * @param string $table_name
      * @return string valid and escaped table name
      */
-    public static function validateTableName($table_name) {
+    public static function validateTableName($table_name)
+    {
         $table_name = self::escapeIdentifier($table_name);
         if (TfishFilter::isAlnum($table_name)) {
             return $table_name;

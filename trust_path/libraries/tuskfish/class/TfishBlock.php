@@ -14,9 +14,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishBlock extends TfishAncestralObject {
+class TfishBlock extends TfishAncestralObject
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         /**
@@ -60,7 +62,8 @@ class TfishBlock extends TfishAncestralObject {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         // Validate $value against expected data type and business rules
         if (isset($this->__data[$property])) {
             $type = $this->__properties[$property];

@@ -15,13 +15,15 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishTemplate {
+class TfishTemplate
+{
 
     protected $__data = array(
         'template_set' => 'default'
     );
 
-    public function __construct() {
+    public function __construct()
+    {
         
     }
 
@@ -34,7 +36,8 @@ class TfishTemplate {
      * @param string $property name
      * @return mixed|null $property value if it is set; otherwise null.
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -51,7 +54,8 @@ class TfishTemplate {
      * @param string $property name
      * @return bool 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -70,7 +74,8 @@ class TfishTemplate {
      * @param string $template name file in the /templates/sometemplate directory.
      * @return string rendered template
      */
-    public function render($template) {
+    public function render($template)
+    {
         /* if (array_key_exists('template_set', $this->__data)) {
           trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
           } */
@@ -91,7 +96,8 @@ class TfishTemplate {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         /* if ($property == 'template_set') {
           trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
           } */
@@ -108,7 +114,8 @@ class TfishTemplate {
      * @param string $template alphanumeric and underscore characters only.
      * @return void
      */
-    public function setTemplate($template) {
+    public function setTemplate($template)
+    {
         if (TfishFilter::isAlnumUnderscore($template)) {
             $clean_template = TfishFilter::trimString($template);
             $this->__data['template_set'] = $clean_template;
@@ -124,7 +131,8 @@ class TfishTemplate {
      * @param string $property name
      * @return bool true on success false on failure 
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
         } else {

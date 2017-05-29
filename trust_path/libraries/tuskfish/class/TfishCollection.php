@@ -19,9 +19,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishCollection extends TfishContentObject {
+class TfishCollection extends TfishContentObject
+{
 
-    function __construct() {
+    function __construct()
+    {
         // Must call parent constructor first.
         parent::__construct();
 
@@ -46,7 +48,8 @@ class TfishCollection extends TfishContentObject {
      * 
      * @return array
      */
-    public function zeroedProperties() {
+    public function zeroedProperties()
+    {
         return array();
     }
 

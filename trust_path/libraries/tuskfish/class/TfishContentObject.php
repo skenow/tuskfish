@@ -28,9 +28,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishContentObject extends TfishAncestralObject {
+class TfishContentObject extends TfishAncestralObject
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
 
         /**
@@ -94,7 +96,8 @@ class TfishContentObject extends TfishAncestralObject {
      * @param string $property
      * @return string
      */
-    public function escape($property) {
+    public function escape($property)
+    {
         if (isset($this->__data[$property])) {
             switch ($property) {
                 case "date": // Stored in format yyyy-mm-dd
@@ -183,7 +186,8 @@ class TfishContentObject extends TfishAncestralObject {
      * @param int $height of the cached image output
      * @return string $url to the cached image
      */
-    public function getCachedImage($width = 0, $height = 0) {
+    public function getCachedImage($width = 0, $height = 0)
+    {
         // Validate parameters; and at least one must be set.
         $clean_width = TfishFilter::isInt($width, 1) ? (int) $width : 0;
         $clean_height = TfishFilter::isInt($height, 1) ? (int) $height : 0;
@@ -350,7 +354,8 @@ class TfishContentObject extends TfishAncestralObject {
      * @param boolean $use_subclass_page
      * @return string
      */
-    public function getURL($use_subclass_page = false) {
+    public function getURL($use_subclass_page = false)
+    {
         $url = TFISH_URL;
         if ($use_subclass_page) {
             $url .= $this->module . '.php';
@@ -371,7 +376,8 @@ class TfishContentObject extends TfishAncestralObject {
      * @param array $dirty_input usually raw form $_REQUEST data.
      * @return void
      */
-    public function loadProperties($dirty_input) {
+    public function loadProperties($dirty_input)
+    {
         if (!TfishFilter::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
@@ -421,7 +427,8 @@ class TfishContentObject extends TfishAncestralObject {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
 
             // Validate $value against expected data type and business rules
@@ -654,7 +661,8 @@ class TfishContentObject extends TfishAncestralObject {
      * 
      * @return array
      */
-    public function zeroedProperties() {
+    public function zeroedProperties()
+    {
         return array();
     }
 

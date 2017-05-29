@@ -17,14 +17,16 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishAncestralObject {
+class TfishAncestralObject
+{
 
     // Object properties are defined in this array.
     protected $__properties = array();
     // Object properties are stored in this array.
     protected $__data = array();
 
-    function __construct() {
+    function __construct()
+    {
         
     }
 
@@ -37,7 +39,8 @@ class TfishAncestralObject {
      * 
      * @return array of object properties
      */
-    public function getPropertyWhitelist() {
+    public function getPropertyWhitelist()
+    {
         $properties = $this->__properties;
         unset($properties['handler'], $properties['template'], $properties['module']);
 
@@ -53,7 +56,8 @@ class TfishAncestralObject {
      * @param string $property name
      * @return mixed|boolean $property value if it is set; otherwise null.
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -72,7 +76,8 @@ class TfishAncestralObject {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
             $this->__data[$property] = $value;
         } else {
@@ -90,7 +95,8 @@ class TfishAncestralObject {
      * @param string $property name
      * @return bool 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -107,7 +113,8 @@ class TfishAncestralObject {
      * @param string $property name
      * @return bool true on success false on failure 
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
             return true;
@@ -129,7 +136,8 @@ class TfishAncestralObject {
      * @param object $obj
      * @return array of object property/values.
      */
-    public function toArray() {
+    public function toArray()
+    {
         $key_values = array();
         $properties = $this->getPropertyWhitelist();
         foreach ($properties as $key => $value) {

@@ -14,9 +14,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishCollectionHandler extends TfishContentHandler {
+class TfishCollectionHandler extends TfishContentHandler
+{
 
-    function __construct() {
+    function __construct()
+    {
         // Must call parent constructor first.
         parent::__construct();
     }
@@ -27,7 +29,8 @@ class TfishCollectionHandler extends TfishContentHandler {
      * @param TfishCriteria $criteria
      * @return int $count
      */
-    public static function getCount($criteria = false) {
+    public static function getCount($criteria = false)
+    {
         if (!$criteria) {
             $criteria = new TfishCriteria();
         }
@@ -58,7 +61,8 @@ class TfishCollectionHandler extends TfishContentHandler {
      * @param TfishCriteria $criteria query composer object
      * @return array $objects TfishCollection objects
      */
-    public static function getObjects($criteria = false) {
+    public static function getObjects($criteria = false)
+    {
         if (!$criteria) {
             $criteria = new TfishCriteria();
         }
@@ -76,7 +80,8 @@ class TfishCollectionHandler extends TfishContentHandler {
         return $objects;
     }
 
-    public static function getParentSelectBox($selected = 0) {
+    public static function getParentSelectBox($selected = 0)
+    {
         $selected = (int) $selected;
         $clean_selected = TfishFilter::isInt($selected, 1) ? $selected : 0;
         $options = array(0 => TFISH_SELECT_PARENT);

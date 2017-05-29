@@ -16,7 +16,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishCriteriaItem {
+class TfishCriteriaItem
+{
 
     protected $__data = array(
         'column' => false,
@@ -31,7 +32,8 @@ class TfishCriteriaItem {
      * @param mixed $value
      * @param string $operator see permittedOperators() for a list
      */
-    function __construct($column, $value, $operator = '=') {
+    function __construct($column, $value, $operator = '=')
+    {
         self::__set('column', $column); // String, alphanumeric and underscore characters only.
         self::__set('value', $value); // String
         self::__set('operator', $operator); // String, whitelisted values only.
@@ -46,7 +48,8 @@ class TfishCriteriaItem {
      * @param string $property name
      * @return mixed|null $property value if it is set; otherwise null.
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -59,7 +62,8 @@ class TfishCriteriaItem {
      * 
      * @return array of permitted operators for use in database queries
      */
-    public function permittedOperators() {
+    public function permittedOperators()
+    {
         return array(
             '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'BETWEEN', 'IS', 'IS NOT',
             'LIKE');
@@ -75,7 +79,8 @@ class TfishCriteriaItem {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
             switch ($property) {
 
@@ -147,7 +152,8 @@ class TfishCriteriaItem {
      * @param string $property name
      * @return bool 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -164,7 +170,8 @@ class TfishCriteriaItem {
      * @param string $property name
      * @return bool true on success false on failure 
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
         } else {

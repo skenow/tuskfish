@@ -47,7 +47,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("ICMS root path not defined");
 
-class TfishAngryTree {
+class TfishAngryTree
+{
 
     private $_parentId;
     public $_myId;
@@ -63,7 +64,8 @@ class TfishAngryTree {
      * @param string $parentId field name of parent object ID
      * @param string $rootId field name of root object ID
      * */
-    function __construct(&$objectArr, $myId, $parentId, $rootId = null) {
+    function __construct(&$objectArr, $myId, $parentId, $rootId = null)
+    {
         $this->_objects = & $objectArr;
         $this->_myId = $myId;
         $this->_parentId = $parentId;
@@ -76,7 +78,8 @@ class TfishAngryTree {
     /**
      * Initialize the object
      * */
-    private function _initialize() {
+    private function _initialize()
+    {
         foreach (array_keys($this->_objects) as $i) {
 
             $id_field = $this->_myId;
@@ -97,7 +100,8 @@ class TfishAngryTree {
      *
      * @return  array   Associative array comprising the tree
      * */
-    public function &getTree() {
+    public function &getTree()
+    {
         return $this->_tree;
     }
 
@@ -107,7 +111,8 @@ class TfishAngryTree {
      * @param   string  $key    ID of the object to retrieve
      * @return  object  Object within the tree
      * */
-    public function &getByKey($key) {
+    public function &getByKey($key)
+    {
         return $this->_tree[$key]['obj'];
     }
 
@@ -117,7 +122,8 @@ class TfishAngryTree {
      * @param   string  $key    ID of the parent object
      * @return  array   Array of children of the parent
      * */
-    public function getFirstChild($key) {
+    public function getFirstChild($key)
+    {
         $ret = array();
         if (isset($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
@@ -134,7 +140,8 @@ class TfishAngryTree {
      * @param   array   $ret    (Empty when called from client) Array of children from previous recursions.
      * @return  array   Array of child nodes.
      * */
-    public function getAllChild($key, $ret = array()) {
+    public function getAllChild($key, $ret = array())
+    {
         if (isset($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
                 $ret[$childkey] = & $this->_tree[$childkey]['obj'];
@@ -156,7 +163,8 @@ class TfishAngryTree {
      * @param   int $uplevel (empty when called from outside) level of recursion
      * @return  array   Array of parent nodes.
      * */
-    public function getAllParent($key, $ret = array(), $uplevel = 1) {
+    public function getAllParent($key, $ret = array(), $uplevel = 1)
+    {
         if (isset($this->_tree[$key]['parent']) && isset($this->_tree[$this->_tree[$key]['parent']]['obj'])) {
             $ret[$uplevel] = & $this->_tree[$this->_tree[$key]['parent']]['obj'];
             $parents = & $this->getAllParent($this->_tree[$key]['parent'], $ret, $uplevel + 1);
@@ -181,7 +189,8 @@ class TfishAngryTree {
      *
      * @access	private
      * */
-    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, $prefix_curr = '') {
+    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, $prefix_curr = '')
+    {
         if ($key > 0) {
             $id_field = $this->_myId;
             $value = $this->_tree[$key]['obj']->$id_field;
@@ -207,7 +216,8 @@ class TfishAngryTree {
      * @param   integer $key             ID of the object to display as the root of select options
      * @return  string  HTML select box
      * */
-    public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '', $addEmptyOption = FALSE, $key = 0) {
+    public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '', $addEmptyOption = FALSE, $key = 0)
+    {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
 
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);
@@ -221,7 +231,8 @@ class TfishAngryTree {
      * @param int $key
      * @return string
      */
-    public function makeParentSelectBox($selected = 0, $key = 0) {
+    public function makeParentSelectBox($selected = 0, $key = 0)
+    {
         $ret = array(0 => TFISH_SELECT_PARENT);
 
         $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-- ');

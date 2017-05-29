@@ -15,9 +15,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishPreference extends TfishAncestralObject {
+class TfishPreference extends TfishAncestralObject
+{
 
-    function __construct() {
+    function __construct()
+    {
         /**
          * Set the permitted properties of this object.
          */
@@ -68,7 +70,8 @@ class TfishPreference extends TfishAncestralObject {
      * @param string $property
      * @return string|int|null
      */
-    public function escape($property) {
+    public function escape($property)
+    {
         if (isset($this->__data[$property])) {
             switch ($property) {
                 default:
@@ -85,7 +88,8 @@ class TfishPreference extends TfishAncestralObject {
      * 
      * @return array of site preferences
      */
-    public static function readPreferences() {
+    public static function readPreferences()
+    {
         $preferences = array();
         $result = TfishDatabase::select('preference');
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -103,7 +107,8 @@ class TfishPreference extends TfishAncestralObject {
      * @param string $property name
      * @param return void
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
 
             // Validate $value against expected data type and business rules.
@@ -264,7 +269,8 @@ class TfishPreference extends TfishAncestralObject {
      * 
      * @param array $_REQUEST
      */
-    public function updatePreferences($dirty_input) {
+    public function updatePreferences($dirty_input)
+    {
         if (!TfishFilter::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
@@ -286,7 +292,8 @@ class TfishPreference extends TfishAncestralObject {
      * 
      * @return bool true on success false on failure
      */
-    private static function writePreferences() {
+    private static function writePreferences()
+    {
         return TfishDatabase::update('preference', $this->__data);
     }
 

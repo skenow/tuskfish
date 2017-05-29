@@ -13,7 +13,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishUtils {
+class TfishUtils
+{
 
     /**
      * Return a list of mimetypes.
@@ -27,7 +28,8 @@ class TfishUtils {
      * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
      * @author		marcan <marcan@impresscms.org>
      */
-    public static function getMimetypes() {
+    public static function getMimetypes()
+    {
         return array(
             "hqx" => "application/mac-binhex40",
             "doc" => "application/msword",
@@ -139,7 +141,8 @@ class TfishUtils {
      * 
      * @return array of timezone offsets
      */
-    public static function getTimezones() {
+    public static function getTimezones()
+    {
         return array(
             '-12' => 'UTC-12:00',
             '-11' => 'UTC-11:00',

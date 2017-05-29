@@ -15,9 +15,11 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishContentHandler {
+class TfishContentHandler
+{
 
-    function __construct() {
+    function __construct()
+    {
         
     }
 
@@ -27,7 +29,8 @@ class TfishContentHandler {
      * @param int $id of content object to delete
      * @return boolean true on success, false on failure
      */
-    public static function delete($id) {
+    public static function delete($id)
+    {
         $clean_id = (int) $id;
         if (!TfishFilter::isInt($clean_id, 1)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -76,7 +79,8 @@ class TfishContentHandler {
      * @param int $id
      * @return boolean true on success, false on failure
      */
-    private static function _deleteImage($filename) {
+    private static function _deleteImage($filename)
+    {
         if ($filename) {
             return TfishFileHandler::deleteFile('image/' . $filename);
         }
@@ -88,7 +92,8 @@ class TfishContentHandler {
      * @param int $id of content object
      * @return boolean true on success, false on failure
      */
-    private static function _deleteMedia($filename) {
+    private static function _deleteMedia($filename)
+    {
         if ($filename) {
             return TfishFileHandler::deleteFile('media/' . $filename);
         }
@@ -105,7 +110,8 @@ class TfishContentHandler {
      * @param object $obj
      * @return boolean
      */
-    public static function insert($obj) {
+    public static function insert($obj)
+    {
         $key_values = $obj->toArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
@@ -169,7 +175,8 @@ class TfishContentHandler {
      * @param string $type
      * @return boolean true if sanctioned otherwise false
      */
-    public static function isSanctionedType($type) {
+    public static function isSanctionedType($type)
+    {
         $type = TfishFilter::trimString($type);
         $sanctioned_types = self::getTypes();
         if (array_key_exists($type, $sanctioned_types)) {
@@ -190,7 +197,8 @@ class TfishContentHandler {
      * 
      * @return array|boolean list of tags if available, false if empty.
      */
-    public static function getActiveTagList($type = null, $online_only = true) {
+    public static function getActiveTagList($type = null, $online_only = true)
+    {
         $tags = $distinct_tags = array();
 
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
@@ -234,7 +242,8 @@ class TfishContentHandler {
      * @param object $criteria TfishCriteria
      * @return int $count
      */
-    public static function getCount($criteria = false) {
+    public static function getCount($criteria = false)
+    {
         if ($criteria && !empty($criteria->limit)) {
             $limit = $criteria->limit;
             $criteria->limit = 0;
@@ -257,7 +266,8 @@ class TfishContentHandler {
      * 
      * @return array of language codes
      */
-    public static function getLanguages() {
+    public static function getLanguages()
+    {
         return array(
             "en" => "English",
             "th" => "Thai",
@@ -270,7 +280,8 @@ class TfishContentHandler {
      * @param TfishCriteria $criteria
      * @return array as id => title of content objects
      */
-    public static function getList($criteria = false) {
+    public static function getList($criteria = false)
+    {
         $content_list = array();
         $columns = array('id', 'title');
 
@@ -301,7 +312,8 @@ class TfishContentHandler {
      * @param int $id of content object
      * @return object|boolean $object on success, false on failure
      */
-    public static function getObject($id) {
+    public static function getObject($id)
+    {
         $clean_id = (int) $id;
         if (TfishFilter::isInt($id, 1)) {
             $criteria = new TfishCriteria();
@@ -322,7 +334,8 @@ class TfishContentHandler {
      * @param object $criteria TfishCriteria
      * @return array of content objects
      */
-    public static function getObjects($criteria = false) {
+    public static function getObjects($criteria = false)
+    {
         $objects = array();
 
         // Set default sorting order by submission time descending.
@@ -382,7 +395,8 @@ class TfishContentHandler {
      * @param int $selected preselected option
      * @return string select box
      */
-    public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS) {
+    public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS)
+    {
         $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int) $selected : null; // Offline (0) or online (1)
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
 
@@ -409,7 +423,8 @@ class TfishContentHandler {
      * @todo move this function over to use TfishAngryTree for more robust tree handling
      * @return array of collection objects
      */
-    public static function getParents() {
+    public static function getParents()
+    {
         $parents = array();
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
@@ -427,7 +442,8 @@ class TfishContentHandler {
      * 
      * @return array of copyright licenses
      */
-    public static function getRights() {
+    public static function getRights()
+    {
         return array(
             '1' => TFISH_RIGHTS_COPYRIGHT,
             '2' => TFISH_RIGHTS_ATTRIBUTION,
@@ -447,7 +463,8 @@ class TfishContentHandler {
      * 
      * @return array of tag objects
      */
-    public static function getTagList($online_only = true) {
+    public static function getTagList($online_only = true)
+    {
         $tags = array();
         $statement = false;
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
@@ -478,7 +495,8 @@ class TfishContentHandler {
      * 
      * @return array tag objects
      */
-    public static function getTags() {
+    public static function getTags()
+    {
         $tags = array();
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
@@ -493,7 +511,8 @@ class TfishContentHandler {
      * @param array $criteria_items
      * @return int|null
      */
-    protected static function getTypeIndex($criteria_items) {
+    protected static function getTypeIndex($criteria_items)
+    {
         foreach ($criteria_items as $key => $item) {
             if ($item->column == 'type') {
                 return $key;
@@ -512,7 +531,8 @@ class TfishContentHandler {
      * 
      * @return array whitelist of permitted content object types
      */
-    public static function getTypes() {
+    public static function getTypes()
+    {
         return array(
             'TfishArticle' => TFISH_TYPE_ARTICLE,
             'TfishAudio' => TFISH_TYPE_AUDIO,
@@ -532,7 +552,8 @@ class TfishContentHandler {
      * @param type $zero_option the default text to show at top of select box
      * @return string select box
      */
-    public static function getTypeSelectBox($selected = null, $zero_option = TFISH_TYPE) {
+    public static function getTypeSelectBox($selected = null, $zero_option = TFISH_TYPE)
+    {
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
         $clean_selected = '';
         $type_list = self::getTypes();
@@ -565,7 +586,8 @@ class TfishContentHandler {
      * 
      * @return array of tag links
      */
-    public static function makeTagLinks($tags, $target_filename = false) {
+    public static function makeTagLinks($tags, $target_filename = false)
+    {
         if (!TfishFilter::isArray($tags)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
@@ -607,7 +629,8 @@ class TfishContentHandler {
      * @param int $offset starting point for retrieving results (pagination)
      * @return array|boolean array of content objects on success, false failure
      */
-    public static function searchContent($search_terms, $andor, $limit, $offset = 0) {
+    public static function searchContent($search_terms, $andor, $limit, $offset = 0)
+    {
         global $tfish_preference;
         $clean_search_terms = array();
         $clean_andor = in_array($andor, array('AND', 'OR', 'exact')) ? TfishFilter::trimString($andor) : 'AND';
@@ -636,7 +659,8 @@ class TfishContentHandler {
         return $results;
     }
 
-    private static function _searchContent($search_terms, $andor, $limit, $offset) {
+    private static function _searchContent($search_terms, $andor, $limit, $offset)
+    {
         $sql = $count = '';
         $search_term_placeholders = $results = array();
         $sql_count = "SELECT count(*) ";
@@ -722,7 +746,8 @@ class TfishContentHandler {
      * @param int $id of content object
      * @return boolean true on success, false on failure
      */
-    public static function toggleOnlineStatus($id) {
+    public static function toggleOnlineStatus($id)
+    {
         $clean_id = (int) $id;
         return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
     }
@@ -739,7 +764,8 @@ class TfishContentHandler {
      * @param array $row
      * @return object|boolean content object on success, false on failure
      */
-    public static function toObject($row) {
+    public static function toObject($row)
+    {
         if (empty($row) || !TfishFilter::isArray($row)) {
             return false;
         }
@@ -784,7 +810,8 @@ class TfishContentHandler {
      * @param object $obj
      * @return boolean true on success, false on failure
      */
-    public static function update($obj) {
+    public static function update($obj)
+    {
         $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
@@ -892,7 +919,8 @@ class TfishContentHandler {
      * @param int $id of content object
      * @return string filename
      */
-    private static function _checkImage($id) {
+    private static function _checkImage($id)
+    {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
         $filename = '';
 
@@ -921,7 +949,8 @@ class TfishContentHandler {
      * @param int $id of content object
      * @return string filename
      */
-    private static function _checkMedia($id) {
+    private static function _checkMedia($id)
+    {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
         $filename = '';
 
@@ -949,7 +978,8 @@ class TfishContentHandler {
      * 
      * @param int $id of content object
      */
-    public static function updateCounter($id) {
+    public static function updateCounter($id)
+    {
         $clean_id = (int) $id;
         return TfishDatabase::updateCounter($clean_id, 'content', 'counter');
     }

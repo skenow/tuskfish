@@ -18,7 +18,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishMetadata {
+class TfishMetadata
+{
 
     private $preference;
     protected $__data = array(
@@ -31,7 +32,8 @@ class TfishMetadata {
         'robots' => '',
         'pagination_elements' => '');
 
-    function __construct($preference) {
+    function __construct($preference)
+    {
         $this->title = $preference->site_name;
         $this->description = $preference->site_description;
         $this->author = $preference->site_author;
@@ -60,7 +62,8 @@ class TfishMetadata {
      * 
      * @return string
      */
-    public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array()) {
+    public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array())
+    {
         // Filter parameters.
         $clean_count = TfishFilter::isInt($count, 1) ? (int) $count : false;
         $clean_limit = TfishFilter::isInt($limit, 1) ? (int) $limit : false;
@@ -95,7 +98,8 @@ class TfishMetadata {
         return $control;
     }
 
-    private function _getPavigationControl($count, $limit, $url, $start, $tag, $extra_params) {
+    private function _getPavigationControl($count, $limit, $url, $start, $tag, $extra_params)
+    {
         // 1. Calculate number of pages, page number of start object and adjust for remainders.
         $page_slots = array();
         $page_count = (int) (($count / $limit));
@@ -188,7 +192,8 @@ class TfishMetadata {
      * @param string $property
      * @return string|boolean escaped preference if set, otherwise false
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return htmlspecialchars($this->__data[$property], ENT_QUOTES, "UTF-8");
         } else {
@@ -202,7 +207,8 @@ class TfishMetadata {
      * @param string $property
      * @param mixed $value
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
             $this->__data[$property] = TfishFilter::trimString($value);
         } else {
@@ -216,7 +222,8 @@ class TfishMetadata {
      * @param string $property
      * @return boolean 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -230,7 +237,8 @@ class TfishMetadata {
      * @param string $property
      * @return boolean
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
         } else {

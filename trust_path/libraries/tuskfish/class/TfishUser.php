@@ -15,7 +15,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishUser {
+class TfishUser
+{
 
     // Permitted properties of this object. Child classes should extend this list (not replace it).
     protected $__data = array(
@@ -26,7 +27,8 @@ class TfishUser {
         'user_group',
     );
 
-    function __construct() {
+    function __construct()
+    {
         
     }
 
@@ -36,7 +38,8 @@ class TfishUser {
      * @param string $property
      * @return mixed|null
      */
-    public function __get($property) {
+    public function __get($property)
+    {
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -50,7 +53,8 @@ class TfishUser {
      * @param string $property
      * @param mixed $value
      */
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         if (isset($this->__data[$property])) {
             $this->__data[$property] = $value;
         } else {
@@ -64,7 +68,8 @@ class TfishUser {
      * @param string $property
      * @return boolean 
      */
-    public function __isset($property) {
+    public function __isset($property)
+    {
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -78,7 +83,8 @@ class TfishUser {
      * @param string $property
      * @return boolean 
      */
-    public function __unset($property) {
+    public function __unset($property)
+    {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
         } else {
