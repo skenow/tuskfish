@@ -88,6 +88,12 @@ class TfishSecurityUtility {
      * @return string
      */
     public static function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '') {
+        
+        $iterations = (int)$iterations;
+        
+        // Force a minimum number of iterations (1).
+        $iterations = $iterations > 0 ? $iterations : 1;
+        
         $password = $site_salt . $password;
         if ($user_salt) {
             $password .= $user_salt;
