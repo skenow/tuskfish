@@ -237,14 +237,15 @@ class TfishSession
     public static function reset()
     {
         $_SESSION = [];
+        $browser_profile = '';
         
-        if (isset($_SESSION['REMOTE_ADDR'])) {
-            $browser_profile .= $_SESSION['REMOTE_ADDR'];
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $browser_profile .= $_SERVER['REMOTE_ADDR'];
         }
-        if (isset($_SESSION['HTTP_USER_AGENT'])) {
-            $browser_profile .= $_SESSION['HTTP_USER_AGENT'];
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $browser_profile .= $_SERVER['HTTP_USER_AGENT'];
         }
-        $_SESSION['browser_profile'] = md5($browser_profile);
+        $_SESSION['browser_profile'] = hash('sha256', $browser_profile);
     }
 
     /**
