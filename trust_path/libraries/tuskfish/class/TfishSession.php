@@ -14,7 +14,8 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishSession {
+class TfishSession
+{
     /**
      * Initialise a user session.
      * 
@@ -31,7 +32,8 @@ class TfishSession {
      * 
      * @return void
      */
-    public static function destroy() {
+    public static function destroy()
+    {
         $_SESSION = [];
         session_destroy();
         session_start();
@@ -46,7 +48,8 @@ class TfishSession {
      * @return bool true if admin false if not
      */
 
-    public static function isAdmin() {
+    public static function isAdmin()
+    {
         if (isset($_SESSION['TFISH_LOGIN']) && $_SESSION['TFISH_LOGIN'] == true) {
             return true;
         } else {
@@ -60,7 +63,8 @@ class TfishSession {
      * @global type $tfish_preference
      * @return boolean
      */
-    public static function isExpired() {
+    public static function isExpired()
+    {
         // Make Tuskfish preferences available.
         global $tfish_preference;
 
@@ -93,23 +97,25 @@ class TfishSession {
      * 
      * @return boolean
      */
-    public static function isHijacked() {
-        if (!isset($_SESSION['IPaddress']) || !isset($_SESSION['userAgent'])) {
-            return true;
-        }
+    public static function isClean()
+    {
+        $browser_profile = '';
 
-        if ($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) {
-            return true;
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $browser_profile .= $_SERVER['REMOTE_ADDR'];
         }
-
-        // User agent comparison can only be made if the agent is actually set. Bots may not set one.
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            if ($_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
-                return true;
-            }
+            $browser_profile .= $_SERVER['HTTP_USER_AGENT'];
+        }
+        $browser_profile = hash('sha256', $browser_profile);
+
+        if ($isset($_SESSION['browser_profile'])) { 
+            return $_SESSION['browser_profile'] === $browser_profile;
         }
 
-        return false;
+        $_SESSION['browser_profile'] = $browser_profile;
+
+        return true;
     }
 
     /**
@@ -121,7 +127,8 @@ class TfishSession {
      * @param string $password
      * @return void
      */
-    public static function login($email, $password) {
+    public static function login($email, $password)
+    {
         // Check email and password have been supplied
         if (empty($email) || empty($password)) {
             // Issue incomplete form warning and redirect to the login page.
@@ -138,7 +145,8 @@ class TfishSession {
         }
     }
 
-    private static function _login($clean_email, $dirty_password) {
+    private static function _login($clean_email, $dirty_password)
+    {
         // Query the database for a matching user
         $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `admin_email` = :clean_email");
         $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
@@ -175,7 +183,8 @@ class TfishSession {
      * @return string login or logout link
      */
 
-    public static function loginLink() {
+    public static function loginLink()
+    {
         if (self::isAdmin()) {
             return '<a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">' . TFISH_LOGOUT . '</a>';
         } else {
@@ -189,7 +198,8 @@ class TfishSession {
      * @param string|bool $url_redirect to redirect the user to. 
      * @return void
      */
-    public static function logout($url_redirect = false) {
+    public static function logout($url_redirect = false)
+    {
         $clean_url = false;
         if ($url_redirect) {
             $clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
@@ -197,7 +207,8 @@ class TfishSession {
         self::_logout($clean_url);
     }
 
-    private static function _logout($clean_url) {
+    private static function _logout($clean_url)
+    {
         // Unset all of the session variables.
         $_SESSION = [];
 
@@ -219,18 +230,21 @@ class TfishSession {
     }
 
     /**
-     * Reset session data after a hijacking check fails.
+     * Reset session data after a hijacking check fails. This will force logout.
      * 
      * @return void
      */
-    public static function reset() {
+    public static function reset()
+    {
         $_SESSION = [];
-        $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
-        if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-        } else {
-            $_SESSION['userAgent'] = false;
+        
+        if (isset($_SESSION['REMOTE_ADDR'])) {
+            $browser_profile .= $_SESSION['REMOTE_ADDR'];
         }
+        if (isset($_SESSION['HTTP_USER_AGENT'])) {
+            $browser_profile .= $_SESSION['HTTP_USER_AGENT'];
+        }
+        $_SESSION['browser_profile'] = md5($browser_profile);
     }
 
     /**
@@ -245,7 +259,8 @@ class TfishSession {
      * 
      * @return void
      */
-    public static function regenerate() {
+    public static function regenerate()
+    {
         // If destroyed flag is set, no need to regenerate ID as it has already been done.
         if (isset($_SESSION['destroyed'])) {
             return;
@@ -258,7 +273,6 @@ class TfishSession {
         session_regenerate_id(false); // Update session ID and keep current session info. Old one is not destroyed.
         $new_session_id = session_id(); // Get the (new) session ID.
         session_write_close(); // Lock the session and close it.
-        // Assign ID to the new session and unset the destroyed flag.
         session_id($new_session_id); // Set the session ID to the new value.
         session_start(); // Now working with the new session. Note that old one still exists and both carry a 'destroyed' flag.
         unset($_SESSION['destroyed']); // Remove the destroyed flag from the new session. Old one will be destroyed next time isExpired() is called on it.
@@ -270,7 +284,8 @@ class TfishSession {
      * @global type $tfish_preference
      * @return void
      */
-    public static function start() {
+    public static function start()
+    {
         // Make Tuskfish preferences available.
         global $tfish_preference;
 
@@ -278,7 +293,7 @@ class TfishSession {
         ini_set('session.use_cookies', 1);
         ini_set('session.use_only_cookies', 1);
 
-        // Session name.
+        // Session name. If the preference has been messed up it will assign one.
         $session_name = isset($tfish_preference->session_name) ? $tfish_preference->session_name : 'tfish';
 
         // Session life time, in seconds. '0' means until the browser is closed.
@@ -306,7 +321,7 @@ class TfishSession {
             self::destroy();
 
         // Check for signs of session hijacking and regenerate if at risk. 10% chance of doing it anyway.
-        if (self::isHijacked()) {
+        if (!self::isClean()) {
             self::reset();
             self::regenerate();
         } elseif (rand(1, 100) <= 10) {
