@@ -109,7 +109,7 @@ class TfishSession
         }
         $browser_profile = hash('sha256', $browser_profile);
 
-        if ($isset($_SESSION['browser_profile'])) {
+        if (isset($_SESSION['browser_profile'])) {
             return $_SESSION['browser_profile'] === $browser_profile;
         }
 
