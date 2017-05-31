@@ -107,6 +107,7 @@ define("TFISH_TYPE_PERMALINKS", "Permalink");
 // Supported content types
 define("TFISH_TYPE_ARTICLE", "Article");
 define("TFISH_TYPE_AUDIO", "Audio");
+define("TFISH_TYPE_BLOCK", "Block");
 define("TFISH_TYPE_COLLECTION", "Collection");
 define("TFISH_TYPE_DOWNLOAD", "Download");
 define("TFISH_TYPE_EVENT", "Event");

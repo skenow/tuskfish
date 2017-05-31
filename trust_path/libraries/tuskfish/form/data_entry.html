@@ -180,46 +180,55 @@
 
     <div class="col-md-12"><hr></div>
     <div class="col-md-12"><h2><?php echo TFISH_META_TAGS; ?><h2></div>
-                <div class="form-group">
+    <div class="form-group">
 
-                    <!-- Meta title -->
-                    <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-                    <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title"></div>
+        <!-- Meta title -->
+        <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
+        <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title"></div>
 
-                    <!-- SEO -->
-                    <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
-                    <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo"></div>
+        <!-- SEO -->
+        <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
+        <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo"></div>
 
-                </div>
+    </div>
 
-                <!-- Meta description -->
-                <div class="form-group">
-                    <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
-                    <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
-                </div>
+    <!-- Meta description -->
+    <div class="form-group">
+        <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
+    </div>
 
-                <!-- Action buttons -->
-                <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
-                <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+    <!-- Action buttons -->
+    <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
+    <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
 
-                <!-- Show or hide fields that are / not used by specific content subclasses -->
-                <script>
-                    var allowedProperties = ['creatorContainer', 'dateContainer',
-                        'file_sizeContainer', 'formatContainer', 'imageContainer', 'languageContainer',
-                        'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer', 'tagsContainer'];
-                    $("#type").change(function () {
-                        $.each(allowedProperties, function (i, value) {
-                            $('#' + value).show();
-                        });
-                        if ($("#type").val() == 'TfishTag') {
-                            var disabledProperties = ['formatContainer', 'file_sizeContainer',
-                                'creatorContainer', 'mediaContainer', 'dateContainer', 'languageContainer',
-                                'rightsContainer', 'publisherContainer', 'tagsContainer'];
-                            $.each(disabledProperties, function (i, value) {
-                                $('#' + value).hide();
-                            });
-                        }
-                    });
-                </script>
+    <!-- Show or hide fields that are / not used by specific content subclasses -->
+    <script>
+        var allowedProperties = ['creatorContainer', 'dateContainer',
+            'file_sizeContainer', 'formatContainer', 'imageContainer', 'languageContainer',
+            'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer', 'tagsContainer'];
+        $("#type").change(function () {
+            $.each(allowedProperties, function (i, value) {
+                $('#' + value).show();
+            });
+            if ($("#type").val() == 'TfishTag') {
+                var disabledProperties = ['formatContainer', 'file_sizeContainer',
+                    'creatorContainer', 'mediaContainer', 'dateContainer', 'languageContainer',
+                    'rightsContainer', 'publisherContainer', 'tagsContainer'];
+                $.each(disabledProperties, function (i, value) {
+                    $('#' + value).hide();
+                });
+            }
+            if ($("#type").val() == 'TfishBlock') {
+                var disabledProperties = [
+                    'teaser', 'media', 'format', 'file_size', 'creator', 'image',
+                    'caption', 'date', 'parent', 'language', 'rights', 'publisher',
+                    'counter', 'meta_title', 'meta_description', 'seo'];
+                $.each(disabledProperties, function (i, value) {
+                    $('#' + value).hide();
+                });
+            }
+        });
+    </script>
 
-                </form>
+    </form>

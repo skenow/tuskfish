@@ -292,6 +292,15 @@
                                     $('#' + value).hide();
                                 });
                             }
+                            if ($("#type").val() == 'TfishBlock') {
+                                var disabledProperties = [
+                                    'teaser', 'media', 'format', 'file_size', 'creator', 'image',
+                                    'caption', 'date', 'parent', 'language', 'rights', 'publisher',
+                                    'counter', 'meta_title', 'meta_description', 'seo'];
+                                $.each(disabledProperties, function (i, value) {
+                                    $('#' + value).hide();
+                                });
+                            }
                         });
                         $('#type').trigger('change');
                     });

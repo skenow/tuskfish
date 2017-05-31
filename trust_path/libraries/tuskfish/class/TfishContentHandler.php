@@ -536,6 +536,7 @@ class TfishContentHandler
         return array(
             'TfishArticle' => TFISH_TYPE_ARTICLE,
             'TfishAudio' => TFISH_TYPE_AUDIO,
+            'TfishBlock' => TFISH_TYPE_BLOCK,
             'TfishCollection' => TFISH_TYPE_COLLECTION,
             'TfishDownload' => TFISH_TYPE_DOWNLOAD,
             'TfishImage' => TFISH_TYPE_IMAGE,
