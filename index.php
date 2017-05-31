@@ -37,7 +37,7 @@ if ($clean_id) {
 
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
-    if (is_object($content) && $content->online == true) {
+    if (is_object($content) && $content->online == true && $content->type != 'TfishBlock') {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
         if ($content->type != 'TfishDownload' && !($content->type == 'TfishCollection' && $content->media)) {
@@ -146,6 +146,7 @@ if ($clean_id) {
         $criteria->tag = array($clean_tag);
     $criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
     $criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
+    $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
     $criteria->add(new TfishCriteriaItem('online', 1));
 
     // Prepare pagination control.
