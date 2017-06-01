@@ -1,7 +1,7 @@
 <div class="alert alert-danger">
     <p><strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($content->title)) { echo $content->escape('title'); } ?></p>
 </div>
-<form class="form-horizontal" action="admin.php" method="post">
+<form class="form-horizontal form-buttons" action="admin.php" method="post">
     <input name="id" value="<?php echo $content->escape('id'); ?>" type="hidden">
     <button name="op" value="delete" type="submit" class="btn btn-primary"><?php echo TFISH_YES; ?></button>
     <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_NO; ?></button>
