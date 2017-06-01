@@ -109,6 +109,7 @@ if ($clean_id) {
                 $criteria->offset = $clean_start;
             $criteria->limit = $tfish_preference->user_pagination;
             $criteria->tag = array($content->id);
+            $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
             $criteria->add(new TfishCriteriaItem('online', 1));
         }
 

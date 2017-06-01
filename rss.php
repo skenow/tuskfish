@@ -53,8 +53,9 @@ if ($clean_id) {
     }
 }
 
-// Do not allow tags or offline content objects to show in the feed.
+// Do not allow tags, blocks or offline content objects to show in the feed.
 $criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
+$criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
 $criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
 $criteria->add(new TfishCriteriaItem('online', 1));
 $content_objects = TfishContentHandler::getObjects($criteria);
