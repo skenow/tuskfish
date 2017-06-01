@@ -14,7 +14,7 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishArticleHandler extends TfishContentHandler
+class TfishBlockHandler extends TfishContentHandler
 {
 
     function __construct()

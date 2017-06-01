@@ -168,6 +168,12 @@ if ($clean_id) {
 }
 
 /**
+$blockObj = TfishBlockHandler::getObject(3);
+$tfish_template->block = $blockObj;
+$tfish_template->block_position = $tfish_template->render('block');
+ */
+
+/**
   //Prepare new $criteria for blocks. Let's try dynamic tagging.
   $criteria = new TfishCriteria();
   if ($clean_tag) $criteria->tag = array($clean_tag);
