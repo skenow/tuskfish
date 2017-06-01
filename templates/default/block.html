@@ -1,0 +1,11 @@
+<?php if ($block): ?>
+
+<?php if ($block->title): ?>
+    <div class="blockTitle"><?php echo $block->escape('title'); ?></div>
+<?php endif; ?>
+
+<?php if ($block->description): ?>
+    <div class="blockDescription"><?php echo $block->escape('description'); ?></div>
+<?php endif; ?>
+
+<?php endif; ?>

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Tuskfish article object class.
+ * Tuskfish static block object class.
  * 
- * Represents a text article such as a new story or blog entry.
+ * Represents a block of content.
  *
  * @copyright	Simon Wilkinson (Crushdepth) 2016
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -14,7 +14,7 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishArticle extends TfishContentObject
+class TfishBlock extends TfishContentObject
 {
 
     public function __construct()

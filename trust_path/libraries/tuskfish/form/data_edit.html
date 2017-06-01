@@ -18,7 +18,7 @@
             </select>
         </div>
 
-        <!-- Date (boostrap-datepicker) -->
+        <!-- Date (bootstrap-datepicker) -->
         <div id="dateContainer">
             <label for="date" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
             <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->date . '"'; } ?>></div>
@@ -63,16 +63,16 @@
     </div>
 
     <!-- Teaser -->
-    <div class="form-group">
+    <div id="teaserContainer" class="form-group">
         <label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
-            <!-- <!-- TinyMCE editor field -->
+            <!-- TinyMCE editor field -->
             <textarea name="teaser" id="teaser" class="form-control text-left" required><?php if (isset($content->teaser)) { echo $content->teaser; } ?></textarea>
         </div>
     </div>
 
     <!-- Description -->
-    <div class="form-group">
+    <div id="descriptionContainer" class="form-group">
         <label for="description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <!-- TinyMCE editor field -->
@@ -145,7 +145,7 @@
 
         </div>
 
-        <div class="form-group">
+        <div id="captionContainer" class="form-group">
 
             <!-- Caption -->
             <label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
@@ -238,72 +238,78 @@
     <?php if ($content->counter): ?>
     <input type="hidden" id="counter" name="counter" value="<?php echo $content->counter; ?>" />
     <?php endif; ?>
+    
     <?php if ($content->format): ?>
     <input type="hidden" id="format" name="format" value="<?php echo $content->format; ?>" />
     <?php endif; ?>
+ 
     <?php if ($content->file_size): ?>
     <input type="hidden" id="file_size" name="file_size" value="<?php echo $content->file_size; ?>" />
     <?php endif; ?>
 
-    <div class="col-xs-12"><hr></div>
-    <div class="col-xs-12"><h2><?php echo TFISH_META_TAGS; ?><h2></div>
-                <div class="form-group">
+    <div id="metaContainer">
+        
+        <div class="col-xs-12"><hr></div>
+        
+        <div class="col-xs-12"><h2><?php echo TFISH_META_TAGS; ?><h2></div>
+        <div class="form-group">
 
-                    <!-- Meta title -->
-                    <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-                    <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
+            <!-- Meta title -->
+            <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
 
-                    <!-- Meta SEO -->
-                    <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
-                    <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->escape('seo') . '"'; } ?>></div>
+            <!-- Meta SEO -->
+            <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->escape('seo') . '"'; } ?>></div>
 
-                </div>
+        </div>
 
-                <!-- Meta description -->
-                <div class="form-group">	
-                    <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
-                    <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
-                </div>
+        <!-- Meta description -->
+        <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
+        
+    </div>
 
-                <!-- Action buttons -->
-                <button class="btn btn-primary" onclick="this.form.elements.op.value = '<?php echo $op; ?>';
-                        submit()"><?php echo $action; ?></button>
-                <button class="btn btn-primary" onclick="this.form.elements.op.value = '';
-                        submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+    <!-- Action buttons -->
+    <button class="btn btn-primary" onclick="this.form.elements.op.value = '<?php echo $op; ?>';
+            submit()"><?php echo $action; ?></button>
+    <button class="btn btn-primary" onclick="this.form.elements.op.value = '';
+            submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
 
-                <!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
-                <input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
+    <!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
+    <input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
 
-                <!-- Show or hide fields that are / not used by specific content subclasses -->
-                <script>
-                    var allowedProperties = ['creatorContainer', 'dateContainer',
-                        'file_sizeContainer', 'formatContainer', 'imageContainer', 'languageContainer',
-                        'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer', 'tagsContainer'];
-                    $(document).ready(function () {
-                        $("#type").bind('change', function () {
-                            $.each(allowedProperties, function (i, value) {
-                                $('#' + value).show();
-                            });
-                            if ($("#type").val() == 'TfishTag') {
-                                var disabledProperties = ['formatContainer', 'file_sizeContainer',
-                                    'creatorContainer', 'mediaContainer', 'dateContainer',
-                                    'languageContainer', 'rightsContainer', 'publisherContainer', 'tagsContainer'];
-                                $.each(disabledProperties, function (i, value) {
-                                    $('#' + value).hide();
-                                });
-                            }
-                            if ($("#type").val() == 'TfishBlock') {
-                                var disabledProperties = [
-                                    'teaser', 'media', 'format', 'file_size', 'creator', 'image',
-                                    'caption', 'date', 'parent', 'language', 'rights', 'publisher',
-                                    'counter', 'meta_title', 'meta_description', 'seo'];
-                                $.each(disabledProperties, function (i, value) {
-                                    $('#' + value).hide();
-                                });
-                            }
-                        });
-                        $('#type').trigger('change');
+    <!-- Show or hide fields that are / not used by specific content subclasses -->
+    <script>
+        var allowedProperties = ['teaserContainer', 'descriptionContainer', 'captionContainer',
+            'creatorContainer', 'dateContainer', 'imageContainer', 'languageContainer',
+            'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer',
+            'tagsContainer', 'metaContainer'];
+        $(document).ready(function () {
+            $("#type").bind('change', function () {
+                $.each(allowedProperties, function (i, value) {
+                    $('#' + value).show();
+                });
+                if ($("#type").val() == 'TfishTag') {
+                    var disabledProperties = [
+                        'creatorContainer', 'mediaContainer', 'dateContainer', 'languageContainer',
+                        'rightsContainer', 'publisherContainer', 'tagsContainer'];
+                    $.each(disabledProperties, function (i, value) {
+                        $('#' + value).hide();
                     });
-                </script>
+                }
+                if ($("#type").val() == 'TfishBlock') {
+                    var disabledProperties = [
+                        'teaserContainer', 'mediaContainer', 'creatorContainer', 'imageContainer',
+                        'captionContainer', 'dateContainer', 'parentContainer', 'languageContainer',
+                        'rightsContainer', 'publisherContainer', 'metaContainer'];
+                    $.each(disabledProperties, function (i, value) {
+                        $('#' + value).hide();
+                    });
+                }
+            });
+            $('#type').trigger('change');
+        });
+    </script>
 
-                </form>
+    </form>
