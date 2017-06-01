@@ -1,7 +1,11 @@
-<form>
-    <input type="hidden" name="op" value="add">
-    <button class="btn btn-primary pull-left" type="submit" formaction="admin.php"><?php echo TFISH_ADD_CONTENT; ?></button>
-</form>
+<div class="form-buttons clearfix">
+    <form>
+        <input type="hidden" name="op" value="add">
+        <button class="btn btn-primary pull-left" type="submit" formaction="admin.php"><?php echo TFISH_ADD_CONTENT; ?></button>
+    </form>
+</div>
+
+<div>
 <table class="table table-striped text-left">
     <thead>
         <tr>
@@ -36,3 +40,4 @@
         <?php } ?>
     </tbody>
 </table>
+</div>

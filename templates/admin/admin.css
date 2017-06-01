@@ -52,7 +52,7 @@ figcaption {
 }
 
 .select_filters {
-    margin: 0 0 0 0;
+    margin: 30px 0px 30px 0px;
 }
 
 .pagination {	
@@ -60,4 +60,8 @@ figcaption {
 
 .collection_pagination {
     margin: -1.5rem 0 1rem 0;
+}
+
+.form-buttons {
+    margin: 30px 0px 30px 0px;
 }

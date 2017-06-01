@@ -71,7 +71,6 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="<?php echo TFISH_URL; ?>">Home</a></li>
                         <li><a href="<?php echo TFISH_URL . 'search.php'; ?>"><?php echo TFISH_SEARCH; ?></a></li>
-                        <li><a href="<?php echo TFISH_URL . 'rss.php'; ?>"><?php echo TFISH_RSS; ?></a></li>
                         <?php if (TfishSession::isAdmin()): ?>
                         <li><a href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
                         <li><a href="<?php echo TFISH_ADMIN_URL . 'password.php'; ?>"><?php echo TFISH_PASSWORD; ?></a></li>
@@ -107,7 +106,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; <?php echo $tfish_preference->site_author; ?> 2017</p>
+                    <p>Copyright &copy; <?php echo $tfish_preference->site_author; ?> 2017.</p>
                 </div>
             </div>
         </footer>
