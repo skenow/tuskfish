@@ -24,6 +24,7 @@ define("TFISH_PASSWORD", "Password");
 define("TFISH_EMAIL", "Email");
 define("TFISH_ACTION", "Action");
 define("TFISH_YOU_ARE_ALREADY_LOGGED_IN", "You are already logged in.");
+define("TFISH_YUBIKEY", "Yubikey");
 
 // admin/admin.php
 define("TFISH_ADMIN", "Admin");

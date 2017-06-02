@@ -124,12 +124,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 "admin_email" => "TEXT",
                 "password_hash" => "TEXT",
                 "user_salt" => "TEXT",
-                "user_group" => "INTEGER"
+                "user_group" => "INTEGER",
+                "yubikey_id" => "TEXT"
             );
 
             TfishDatabase::createTable('user', $user_columns, 'id');
             // Insert admin user's details to database
-            $user_data = array('admin_email' => $clean_vars['admin_email'], 'password_hash' => $password_hash, 'user_salt' => $user_salt, 'user_group' => '1');
+            $user_data = array(
+                'admin_email' => $clean_vars['admin_email'],
+                'password_hash' => $password_hash,
+                'user_salt' => $user_salt,
+                'user_group' => '1',
+                'yubikey_id' => 'cccccccclict'
+                );
             $query = TfishDatabase::insert('user', $user_data);
 
             // Create preference table

@@ -147,13 +147,13 @@ class TfishSession
 
     private static function _login($clean_email, $dirty_password)
     {
-        // Query the database for a matching user
+        // Query the database for a matching user.
         $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `admin_email` = :clean_email");
         $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-        // Authenticate user by calculating their password hash and comparing it to the one on file
+        // Authenticate user by calculating their password hash and comparing it to the one on file.
         if ($user) {
             $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000, TFISH_SITE_SALT, $user['user_salt']);
             if ($password_hash == $user['password_hash']) {
@@ -170,11 +170,86 @@ class TfishSession
                 exit;
             }
         } else {
-            // Issue failed login warning.
-            // Redirect to the login page.
+            // Issue failed login warning and redirect to the login page.
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
+    }
+    
+    /**
+     * Authenticate the user with two factors and establish a session.
+     * 
+     * Requires a Yubikey hardware token as th second factor.
+     * 
+     * @param type $dirty_password
+     * @param type $dirty_otp
+     */
+    public static function twoFactorLogin($dirty_password, $dirty_otp)
+    {
+        // Check password and OTP have been supplied
+        if (empty($dirty_password) || empty($dirty_otp)) {
+            self::logout(TFISH_ADMIN_URL . "yubikey.php");
+            exit;
+        }
+        
+        $dirty_otp = TfishFilter::trimString($dirty_otp);
+        
+        // Yubikey OTP should be 44 characters long.
+        if (mb_strlen($dirty_otp, "UTF-8") != 44) {
+            self::logout(TFISH_ADMIN_URL . "yubikey.php");
+            exit;
+        }
+        
+        // Yubikey OTP should be alphabetic characters only.
+        if (!TfishFilter::isAlpha($dirty_otp)) {
+            self::logout(TFISH_ADMIN_URL . "yubikey.php");
+            exit;
+        }
+        
+        // Public ID is the first 12 characters of the OTP.
+        $dirty_id = mb_substr($dirty_otp, 0, 12, 'UTF-8');
+        
+        self::_login($dirty_id, $dirty_password, $dirty_otp);
+    }
+    
+    private static function _twoFactorLogin($dirty_id, $dirty_password, $dirty_otp)
+    {   
+        $user = false;
+        $first_factor = false;
+        $second_factor = false;
+        
+        // Query the database for a matching user.
+        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `yubikey_id` = :yubikey_id");
+        $statement->bindParam(':yubikey_id', $dirty_id, PDO::PARAM_STR);
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        if (empty($user)) {
+            self::logout(TFISH_ADMIN_URL . "yubikey.php");
+            exit;
+        }
+        
+        // First factor authentication: Calculate password hash and compare to the one on file.
+        $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000, TFISH_SITE_SALT, $user['user_salt']);
+        if ($password_hash == $user['password_hash']) {
+            $first_factor = true;
+        }
+        
+        // Second factor authentication: Submit one-time password to Yubico authentication server.
+        $second_factor = self::verify($dirty_otp);
+        
+        // If both checks are good regenerate session due to priviledge escalation and login.
+        if ($first_factor === true && $second_factor === true) {
+            self::regenerate();
+            $_SESSION['TFISH_LOGIN'] = true;
+            $_SESSION['user_id'] = (int) $user['id']; // Added as a handle for the password change script.
+            header('location: ' . TFISH_ADMIN_URL . "admin.php");
+            exit;
+        }
+        
+        // Otherwise force logout.
+        self::logout(TFISH_ADMIN_URL . "yubikey.php");
+        exit;
     }
 
     /*
@@ -329,5 +404,227 @@ class TfishSession
             self::regenerate();
         }
     }
+    
+    /////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////
+	//	Yubikey API methods, by Tom Corwine (yubico@corwine.org)
+	//	
+	//	verify(string) - Accepts otp from Yubikey. Returns TRUE for authentication success, otherwise FALSE.
+	//	getLastResponse() - Returns response message from verification attempt.
+	//	getTimestampTolerance() - Gets the tolerance (+/-, in seconds) for timestamp verification
+	//	setTimestampTolerance(int) - Sets the tolerance (in seconds, 0-86400) - default 600 (10 minutes).
+	//		Returns TRUE on success and FALSE on failure.
+	//	getCurlTimeout() - Gets the timeout (in seconds) CURL uses before giving up on contacting Yubico's server.
+	//	setCurlTimeout(int) - Sets the CURL timeout (in seconds, 0-600, 0 means indefinitely) - default 10.
+	//		Returns TRUE on success and FALSE on failure.
+	//////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////
+
+	public function getTimestampTolerance()
+	{
+		return self::$_timestampTolerance;
+	}
+
+	public function setTimestampTolerance($int)
+	{
+		if ($int > 0 && $int < 86400)
+		{
+			self::$_timestampTolerance = $int;
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	public function getCurlTimeout()
+	{
+		return self::$_curlTimeout;
+	}
+
+	public function setCurlTimeout($int)
+	{
+		if ($int > 0 && $int < 600)
+		{
+			self::$_curlTimeout = $int;
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	public function getLastResponse()
+	{
+		return self::$_response;
+	}
+
+	public function verify($otp)
+	{
+		unset (self::$_response);
+		unset (self::$_curlResult);
+		unset (self::$_curlError);
+
+		$otp = strtolower ($otp);
+
+		if (!self::$_id)
+		{
+			self::$_response = "ID NOT SET";
+			return FALSE;
+		}
+
+		if (!self::otpIsProperLength($otp))
+		{
+			self::$_response = "BAD OTP LENGTH";
+			return FALSE;
+		}
+
+		if (!self::otpIsModhex($otp))
+		{
+			self::$_response = "OTP NOT MODHEX";
+			return FALSE;
+		}
+
+		$urlParams = "id=".self::$_id."&otp=".$otp;
+
+		$url = self::createSignedRequest($urlParams);
+
+		if (self::curlRequest($url)) //Returns 0 on success
+		{
+			self::$_response = "ERROR CONNECTING TO YUBICO - ".self::$_curlError;
+			return FALSE;
+		}
+
+		foreach (self::$_curlResult as $param)
+		{
+			if (substr ($param, 0, 2) == "h=") $signature = substr (trim ($param), 2);
+			if (substr ($param, 0, 2) == "t=") $timestamp = substr (trim ($param), 2);
+			if (substr ($param, 0, 7) == "status=") $status = substr (trim ($param), 7);
+		}
+
+		// Concatenate string for signature verification
+		$signedMessage = "status=".$status."&t=".$timestamp;
+
+		if (!self::resultSignatureIsGood($signedMessage, $signature))
+		{
+			self::$_response = "BAD RESPONSE SIGNATURE";
+			return FALSE;
+		}
+
+		if (!self::resultTimestampIsGood($timestamp))
+		{
+			self::$_response = "BAD TIMESTAMP";
+			return FALSE;
+		}
+
+		if ($status != "OK")
+		{
+			self::$_response = $status;
+			return FALSE;
+		}
+
+		// Everything went well - We pass
+		self::$_response = "OK";
+		return TRUE;
+	}
+
+	protected function createSignedRequest($urlParams)
+	{
+		if (self::$_signatureKey)
+		{
+			$hash = urlencode (base64_encode (hash_hmac ("sha1", $urlParams, self::$_signatureKey,
+					TRUE)));
+			return "https://api.yubico.com/wsapi/verify?".$urlParams."&h=".$hash;
+		}
+		else
+		{
+			return "https://api.yubico.com/wsapi/verify?".$urlParams;
+		}
+	}
+
+	protected function curlRequest($url)
+	{
+		$ch = curl_init ($url);
+
+		curl_setopt ($ch, CURLOPT_TIMEOUT, self::$_curlTimeout);
+		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, self::$_curlTimeout);
+		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+
+		self::$_curlResult = explode ("\n", curl_exec($ch));
+
+		self::$_curlError = curl_error ($ch);
+		$error = curl_errno ($ch);
+
+		curl_close ($ch);
+
+		return $error;
+	}
+
+	protected function otpIsProperLength($otp)
+	{
+		if (strlen ($otp) == 44)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	protected function otpIsModhex($otp)
+	{
+		$modhexChars = array ("c","b","d","e","f","g","h","i","j","k","l","n","r","t","u","v");
+
+		foreach (str_split ($otp) as $char)
+		{
+			if (!in_array ($char, $modhexChars)) return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	protected function resultTimestampIsGood($timestamp)
+	{
+		// Turn times into 'seconds since Unix Epoch' for easy comparison
+		$now = date ("U");
+		$timestampSeconds = (date_format (date_create (substr ($timestamp, 0, -4)), "U"));
+
+		// If date() functions above fail for any reason, so do we
+		if (!$timestamp || !$now) return FALSE;
+
+		if (($timestampSeconds + self::$_timestampTolerance) > $now &&
+		    ($timestampSeconds - self::$_timestampTolerance) < $now)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	protected function resultSignatureIsGood($signedMessage, $signature)
+	{
+		if (!self::$_signatureKey) return TRUE;
+
+		if (base64_encode (hash_hmac ("sha1", $signedMessage, self::$_signatureKey, TRUE))
+				== $signature)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	///////////////////////////////////////////////////////////////////////
+	///// END Yubikey API methods by Tom Corwine (yubico@corwine.org) /////
+	///////////////////////////////////////////////////////////////////////
 
 }
