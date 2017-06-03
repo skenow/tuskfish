@@ -25,6 +25,7 @@ define("TFISH_EMAIL", "Email");
 define("TFISH_ACTION", "Action");
 define("TFISH_YOU_ARE_ALREADY_LOGGED_IN", "You are already logged in.");
 define("TFISH_YUBIKEY", "Yubikey");
+define("TFISH_YUBIKEY_NO_SIGNATURE_KEY", "No Yubikey signature key in config.php. See the manual for Yubikey setup.");
 
 // admin/admin.php
 define("TFISH_ADMIN", "Admin");

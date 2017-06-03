@@ -4,7 +4,10 @@
  * Yubikey 2-factor authentication script.
  *
  * Replace /admin/login.php with this script to enable 2-factor authentication. You *must* own a
- * Yubikey hardware authentication token to use it though; order them from www.yubico.com.
+ * Yubikey hardware authentication token to use it though; order them from www.yubico.com. Please
+ * see the manual for setup instructions.
+ * 
+ * Do not attempt to use this script without reading the manual.
  * 
  * @copyright   Simon Wilkinson (Crushdepth) 2013-2017
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -78,12 +81,13 @@ if (!empty($_POST['op'])) {
 }
 
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
-$dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubkey_otp'] : false;
+$dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubikey_otp'] : false;
 
 if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
     switch ($clean_op) {
         case "login":
-            TfishSession::twoFactorLogin($dirty_password, $dirty_otp);
+            $yubikey = new TfishYubikeyAuthenticator();
+            TfishSession::twoFactorLogin($dirty_password, $dirty_otp, $yubikey);
             break;
 
         case "logout":
