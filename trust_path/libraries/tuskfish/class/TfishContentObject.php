@@ -629,6 +629,7 @@ class TfishContentObject extends TfishAncestralObject
                     break;
 
                 case "url":
+                    $value = TfishFilter::trimString($value);
                     if ($value == "" || TfishFilter::isUrl($value)) {
                         $this->__data[$property] = $value;
                     } else {

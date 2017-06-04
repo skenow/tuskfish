@@ -82,9 +82,9 @@ class TfishMachine extends TfishTfishAncestralObject
     public function __set($property, $value)
     {
         if (isset($this->__data[$property])) {
-
-            // Validate $value against expected data type and business rules
             $type = $this->__properties[$property];
+            
+            // Validate $value against expected data type and business rules.
             switch ($type) {
                 
                 // allowed_in, allowed_out
@@ -99,10 +99,45 @@ class TfishMachine extends TfishTfishAncestralObject
                 
                 // id, enabled, request_counter.
                 case "int":
+                    $value = (int) $value;
+                    switch ($property) {
+
+                        // 0 or 1.
+                        case "enabled":
+                            if (TfishFilter::isInt($value, 0, 1)) {
+                                $this->__data[$property] = (int) $value;
+                            } else {
+                                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                            }
+                            break;
+
+                        // Minimum value 0.
+                        case "request_counter":
+                        case "id":
+                            if (TfishFilter::isInt($value, 0)) {
+                                $this->__data[$property] = (int) $value;
+                            } else {
+                                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                            }
+
+                            break;
+                    }
                     break;                
                 
                 // title, shared_key.
                 case "string":
+                    $value = TfishFilter::trimString($value);
+                    $this->__data[$property] = TfishFilter::trimString($value);
+                    break;
+                
+                // url
+                case "url":
+                    $value = TfishFilter::trimString($value);
+                    if ($value == "" || TfishFilter::isUrl($value)) {
+                        $this->__data[$property] = $value;
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+                    }
                     break;
             }
         }
