@@ -9,8 +9,7 @@
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @since		1.0
  * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
- * @package		core
- * @todo			Enable RSS feeds for collection objects 
+ * @package		core 
  */
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
@@ -67,15 +66,5 @@ $tfish_template->mimetype_list = $mimetype_list;
 $tfish_template->tag_id = !empty($clean_tag_id) ? '?tag_id=' . (string) $clean_tag_id : '';
 $tfish_template->tfish_main_content = $tfish_template->render('feed');
 
-/**
- * Override page template and metadata here (otherwise default site metadata will display).
- */
-// $tfish_metadata->title = '';
-// $tfish_metadata->description = '';
-// $tfish_metadata->author = '';
-// $tfish_metadata->copyright = '';
-// $tfish_metadata->generator = '';
-// $tfish_metadata->seo = '';
-// $tfish_metadata->robots = '';
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";
