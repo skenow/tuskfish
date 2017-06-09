@@ -5,10 +5,11 @@
  *
  * @copyright	The ImpressCMS Project http://www.impresscms.org/
  * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
- * @category	ICMS
- * @since		1.3
  * @author		marcan <marcan@impresscms.org>
- * @version		SVN: $Id: Utils.php 11448 2011-11-21 16:37:13Z fiammy $
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
+ * @since		1.0
+ * @package		core
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");

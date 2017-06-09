@@ -1,7 +1,7 @@
 <?php
 
 /**
- * MANUAL PASSWORD RESET
+ * Manual password reset script.
  * 
  * So you lost the password and got locked out of your site eh? Well, you can use this script to
  * reset it, but you need to pass a couple of tests to demonstrate ownership of the site, namely:
@@ -20,9 +20,15 @@
  * the 'user' table of the database, replacing the old password hash with your new one, and you are
  * good to go.
  * 
- * I recommend that you run this script on a local webserver for obvious security reasons. But if
- * your site has SSL then practically speaking, you'll probably get away with running it on your
- * live webserver. Just don't forget to delete this file when you're finished, right?
+ * I recommend that you run this script on a local webserver for obvious reasons. But if your site
+ * has SSL then practically speaking, you'll probably get away with running it on your live
+ * webserver. Just don't forget to delete this file when you're finished, right?
+ * 
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @since		1.0
+ * @package		core
  */
 ///////////////////////////////////////////////////////
 //////////////////// CONFIGURATION ////////////////////

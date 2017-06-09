@@ -5,10 +5,10 @@
  * 
  * Includes the main layout template, kills the database connection and flushes the output buffer.
  *
- * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
  * @package		core
  */
 // Include the relevant page template, or the default if not set.

@@ -43,6 +43,9 @@
  * @author		Kazumi Ono 	<onokazu@xoops.org>
  * @author		marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
  * @author		Madfish <simon@isengard.biz>
+ * @version     Release: 1.0
+ * @since		1.0
+ * @package		core
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("ICMS root path not defined");

@@ -8,10 +8,11 @@
  * Note that if a subclass implements magical __get() and __set() methods, the parental versions
  * will NOT be called unless you explicitly do it using parent::__get().
  *
- * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
  * @since		1.0
- * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
  * @package		core
  */
 if (!defined("TFISH_ROOT_PATH"))

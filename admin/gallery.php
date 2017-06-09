@@ -6,10 +6,10 @@
  * Display and filter image content, including offline content and images associated with non-image
  * content objects. Use it to locate and re-use image assets.
  *
- * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
  * @package		core
  */
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.

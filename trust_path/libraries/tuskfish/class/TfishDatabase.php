@@ -11,10 +11,11 @@
  * As the validation conducted by this class is the last line of defense any failures will trigger
  * FATAL ERRORS and angry log entries.
  *
- * @copyright	Simon Wilkinson (Crushdepth) 2013
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
  * @since		1.0
- * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
  * @package		core
  */
 if (!defined("TFISH_ROOT_PATH"))

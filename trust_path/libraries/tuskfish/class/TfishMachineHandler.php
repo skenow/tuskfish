@@ -3,6 +3,8 @@
 /**
  * Tuskfish machine object handler class.
  * 
+ * This class is not yet operational.
+ * 
  * Handles interaction with remote machines and IOT devices, including authentication and integrity
  * checks via HMAC.
  * 
@@ -31,11 +33,12 @@
  * least 256 characters for security reasons. So you may want to adjust the length of your RSOC
  * accordingly.
  *
- * @copyright   Simon Wilkinson (Crushdepth) 2013-2017
- * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
- * @since       1.0
- * @author      Simon Wilkinson (Crushdepth) <simon@isengard.biz>
- * @package     core
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
+ * @since		1.0
+ * @package		core
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");

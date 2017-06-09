@@ -5,10 +5,10 @@
  * 
  * Redirects directory-level access calls to the main administration page, admin.php.
  *
- * @copyright	Simon Wilkinson (Crushdepth) 2013-2016
+ * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @author		Simon Wilkinson (Crushdepth) <simon@isengard.biz>
  * @package		core
  */
 // Need to start a session in order to use session variables
