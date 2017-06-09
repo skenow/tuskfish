@@ -19,11 +19,10 @@ require_once TFISH_PATH . "tfish_header.php";
 // Specify template set, otherwise 'default' will be used.
 // $tfish_template->setTemplate('jumbotron');
 
-/**
- * CONVENTIONS:
- * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
- * 2. Specify the name of the template for the index page, eg. 'articles'.
- */
+// CONVENTIONS:
+// 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
+// 2. Specify the name of the template for the index page, eg. 'articles'.
+
 $content_handler = 'TfishImageHandler';
 $index_template = 'images';
 $target_file_name = 'images';
@@ -36,9 +35,6 @@ $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 
-/**
- * Controller logic.
- */
 // View single object description.
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);

@@ -17,10 +17,9 @@
  */
 require_once "../mainfile.php";
 
-/**
- * tfish_header is manually duplicated on this page but without the site closed check and redirect
- * as that creates a redirect loop. 
- */
+// tfish_header is manually duplicated on this page but without the site closed check and redirect
+// as that creates a redirect loop.
+
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
@@ -56,9 +55,8 @@ $tfish_metadata = new TfishMetadata($tfish_preference);
 // Instantiate the template object so that it will be available globally.
 $tfish_template = new TfishTemplate();
 
-/**
- * End manual duplication of header.
- */
+// End manual duplication of header.
+
 // Specify template set, otherwise 'default' will be used.
 $tfish_template->setTemplate('default');
 

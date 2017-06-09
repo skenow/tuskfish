@@ -18,13 +18,12 @@ require_once TFISH_PATH . "tfish_header.php";
 // Specify template set, otherwise 'default' will be used.
 // $tfish_template->setTemplate('jumbotron');
 
-/**
- * CONFIGURATION:
- * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishVideoHandler'.
- * 2. Specify the name of the template for the index page, eg. 'videos'.
- * 3. The name of this file (without extension) should be the same as the value of the object's 'module' field.
- *    If you want to change the file name, change the module value in the object class as well.
- */
+// CONFIGURATION:
+// 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishVideoHandler'.
+// 2. Specify the name of the template for the index page, eg. 'videos'.
+// 3. The name of this file (without extension) should be the same as the value of the object's 'module' field.
+// If you want to change the file name, change the module value in the object class as well.
+
 $content_handler = 'TfishVideoHandler';
 $index_template = 'videos';
 $target_file_name = 'videos';
@@ -37,9 +36,6 @@ $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 
-/**
- * Controller logic.
- */
 // View single object description.
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);

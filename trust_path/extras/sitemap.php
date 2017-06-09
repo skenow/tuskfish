@@ -22,9 +22,7 @@ require_once TFISH_PATH . "tfish_header.php";
 // Get a generic handler.
 $content_handler = 'TfishContentHandler';
 
-/**
- * Sitemap generation code.
- */
+// Sitemap generation code.
 
 // Initialise.
 $online_content_ids = array();

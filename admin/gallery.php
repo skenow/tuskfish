@@ -19,11 +19,10 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 // Specify template set, otherwise 'default' will be used.
 $tfish_template->setTemplate('gallery');
 
-/**
- * CONVENTIONS:
- * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
- * 2. Specify the name of the template for the index page, eg. 'articles'.
- */
+// CONVENTIONS:
+// 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
+// 2. Specify the name of the template for the index page, eg. 'articles'.
+
 $content_handler = 'TfishContentHandler';
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
@@ -38,9 +37,6 @@ $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 
-/**
- * Controller logic.
- */
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria();
 $criteria->add(new TfishCriteriaItem('image', '', '<>'));

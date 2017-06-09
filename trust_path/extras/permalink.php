@@ -18,14 +18,14 @@ require_once TFISH_PATH . "tfish_header.php";
 // Specify template set, otherwise 'default' will be used.
 $tfish_template->setTemplate('default');
 
-/**
- * CONVENTIONS:
- * 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
- * 2. Specify the name of the template for the index page, eg. 'articles'.
- * 3. (In type-specific pages) the name of this file (without extension) should be the same as the 
- *    value of the object's 'module' field. If you want to change the file name, change the module
- *    value in the object class as well.
- */
+
+// CONVENTIONS:
+// 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
+// 2. Specify the name of the template for the index page, eg. 'articles'.
+// 3. (In type-specific pages) the name of this file (without extension) should be the same as the 
+//    value of the object's 'module' field. If you want to change the file name, change the module
+//    value in the object class as well.
+
 $content_handler = 'TfishContentHandler';
 $target_file_name = 'permalink';
 

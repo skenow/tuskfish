@@ -22,9 +22,7 @@ class TfishBlock_bak2 extends TfishAncestralObject
     {
         parent::__construct();
 
-        /**
-         * Whitelist of official properties and datatypes.
-         */
+        // Whitelist of official properties and datatypes.
         $this->__properties['id'] = 'int'; // Auto-increment, set by database.
         $this->__properties['type'] = 'alpha'; // Content object type eg. TfishArticle etc. [ALPHA]
         $this->__properties['title'] = 'string'; // The headline or name of this content.
@@ -35,16 +33,12 @@ class TfishBlock_bak2 extends TfishAncestralObject
         $this->__properties['handler'] = 'alpha'; // Handler for this object.
         $this->__properties['template'] = 'alnum'; // The template that should be used to display this object.
 
-        /**
-         * Set the permitted properties of this object.
-         */
+        // Set the permitted properties of this object.
         foreach ($this->__properties as $key => $value) {
             $this->__data[$key] = '';
         }
 
-        /**
-         * Set default values of permitted properties.
-         */
+        // Set default values of permitted properties.
         $this->__data['type'] = get_class($this);
         $this->__data['template'] = 'default';
         $this->__data['handler'] = $this->__data['type'] . 'Handler';
