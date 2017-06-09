@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Tuskfish taglink object class.
+ * Taglink object class.
  * 
- * Represents a taglink object.
+ * Taglink objects are used to create relationships between content objects and tag objects, thereby
+ * facilitating retrieval of related content. Taglinks are stored in their own table.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

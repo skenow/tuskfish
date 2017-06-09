@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish permalink script.
+ * Permalink script.
  * 
  * Provides a permalink lookup service for all content objects. Simply supply the ID of the content.
  *

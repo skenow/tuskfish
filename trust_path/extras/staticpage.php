@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Tuskfish static page template script.
+ * Static page template script.
  * 
  * User-facing controller script for presenting a single static content page. Simply make a copy of
- * the file with an arbitrary name and set the id of the content you want to display with a custom
- * page title. 
+ * this file with whatever name you want and set the id of the content you want to display in the
+ * configuration section. 
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -19,10 +19,17 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Specify template set, otherwise 'default' will be used.
 // $tfish_template->setTemplate('jumbotron');
-// CONFIGURATION: Enter the object ID, name of the file you want tags to link to and page title you want to display on this static page.
+
+////////// CONFIGURATION //////////
+// 1. Enter the ID of the content object you want to display on this page.
 $id = 10;
-$target_file_name = 'index'; // Do not include file extension.
+
+// 2. Enter the name of the page you want tags to link back to, without extension.
+$target_file_name = 'index';
+
+// 3. Set the page title.
 $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
+////////// END CONFIGURATION //////////
 
 // View single object description.
 $clean_id = (int) $id;

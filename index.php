@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Tuskfish index page script for the marketing theme.
+ * Tuskfish home page controller script.
  * 
- * User-facing controller script for presenting all content objects other than tags and static content.
+ * Displays a single stream of mixed content (teasers), excluding tags and static content objects.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish parent content object class, represents a single content object.
+ * Parent content object class, represents a single content object.
  *
  * There is only one 'archtype' of content object in Tuskfish; it uses standard Dublin Core metadata
  * fields plus a few more that are common to most content objects. Why? If you look at most common

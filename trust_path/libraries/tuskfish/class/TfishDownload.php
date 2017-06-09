@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish download object class.
+ * Download content object class.
  * 
  * Represents a downloadable file, for example a publication or software archive.
  *

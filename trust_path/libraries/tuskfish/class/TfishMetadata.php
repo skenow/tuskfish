@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish page-level metadata class.
+ * Holds page-level metadata and generates pagination controls.
  * 
  * Generates metadata for the page and pagination control. User-facing controller scripts can
  * override the site-level defaults by uncommenting the options at the bottom of each file. A good

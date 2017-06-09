@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Tuskfish article content object handler.
- * 
- * Provides article-specific handler methods.
+ * Handler class for article content objects.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Tuskfish audio file display script.
- * 
- * User-facing controller script for presenting audio content.
+ * Audio index page script.
+ *
+ * User-facing controller script for presenting a list of audio content in teaser format.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish two-factor authentication class.
+ * Two-factor authentication class.
  * 
  * Handles two-factor authentication via a Yubikey hardware token, available from yubico.com.
  * Set up requires obtaining a Client ID and secret key from Yubico, please refer to the manual for

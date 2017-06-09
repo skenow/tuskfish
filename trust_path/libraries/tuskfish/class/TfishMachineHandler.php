@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish machine object handler class.
+ * Handler class for machine objects.
  * 
  * This class is not yet operational.
  * 

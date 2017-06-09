@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Tuskfish static content object class.
+ * Static content object class.
  * 
- * Represents a static content object (a static content page).
+ * Represents a static content page, such as an 'about' page or staff directory.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

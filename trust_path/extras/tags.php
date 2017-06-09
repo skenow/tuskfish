@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Tuskfish tags script.
+ * Tag index page.
  * 
- * User-facing controller script for presenting tags. Use it to display an index of tags on the system.
+ * User-facing controller script for presenting a list of tags in teaser format.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

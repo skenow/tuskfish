@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish site preference handler class.
+ * Handler class for Tuskfish preference object.
  * 
  * Retrieve and set site configuration data.
  *

@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Tuskfish site preference class.
+ * Holds Tuskfish site configuration data.
  * 
- * Holds site configuration data. A preference object is automatically instantiated on every page
- * via tfish_header.php.
+ * A preference object is automatically instantiated on every page via tfish_header.php.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

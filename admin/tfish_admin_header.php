@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish ADMIN header script, MUST be included on every ADMIN page.
+ * Tuskfish admin header script. Must be included on every admin page.
  * 
  * Identical to tfish_header.php except that it conducts an admin check and denies access if false.
  *

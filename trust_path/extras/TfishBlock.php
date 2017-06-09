@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Tuskfish parent block object class.
+ * Parent block class.
  * 
- * All block classes are descendants of this class. 
+ * All block classes descend from this class. 
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

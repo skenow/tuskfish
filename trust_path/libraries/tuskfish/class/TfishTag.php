@@ -1,9 +1,12 @@
 <?php
 
 /**
- * Tuskfish tag object class.
+ * Tag content object class.
  * 
- * Represents a tag object.
+ * Tags are basically 'subjects' that can be used to label content objects, to facilitate retrieval
+ * of related items. However, tags are content objects in their own right and can be used as a
+ * simple hook to create a section on your website. Tags can be grouped into collections via the
+ * parent field, and tag collections can be used to create custom tag select boxes.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

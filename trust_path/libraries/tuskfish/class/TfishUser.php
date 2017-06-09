@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish user class.
+ * User object class.
  * 
  * Represents a user. Since Tuskfish is a single-user system, this class will probably be deprecated
  * in due course.

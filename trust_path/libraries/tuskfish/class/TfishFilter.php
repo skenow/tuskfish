@@ -1,13 +1,14 @@
 <?php
 
 /**
- * Tuskfish data filter class.
+ * Data filter class.
  * 
- * Provides methods to validate different data types and to conduct range checks. 
- * WARNING: The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE SAFETY. 
- * They are intended for EXCLUSIVE use with PREPARED STATEMENTS and BOUND VALUES to mitigate SQL
- * injection.
-
+ * Provides methods to validate different data types and to conduct range checks.
+ * 
+ * WARNING: The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE
+ * SAFETY in their own right. Use them in conjunction with prepared statements and bound values to
+ * mitigate SQL injection.
+ *
  * 1. Pass ALL STRING type data through the trimString() function first to check for UTF-8 encoding 
  * and basic whitespace & control character removal. Note that this function always returns a string,
  * so DO NOT USE IT ON NON-STRINGS. 

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Tuskfish security utilities class.
+ * Security utilities class.
  * 
- * Provides methods to conduct basic security operations such as validating login, hashing passwords etc.
+ * Provides methods to conduct basic security operations such as generating salts and hashing
+ * passwords etc.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

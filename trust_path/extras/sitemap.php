@@ -1,10 +1,13 @@
 <?php
 
 /**
-* Generates a sitemap for Tuskfish CMS base node IDs. User-facing, online pages only.
-* If you have created custom static pages, you need to add them manually, and also delete the
-* automatically generated entry for that base ID.
-*
+ * Generates a sitemap for Tuskfish CMS base node IDs.
+ * 
+ * Outputs a simple list of URLs for user-facing, online content only. You can submit this to
+ * Google or link to it in your robots.txt to guide search engines. If you have created custom 
+ * static pages with unique file names you will need to add them manually, and also delete the
+ * automatically generated ID-based entry for that object, to avoid duplication.
+ *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>

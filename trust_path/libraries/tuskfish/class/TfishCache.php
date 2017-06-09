@@ -1,24 +1,9 @@
 <?php
 
 /**
- * Tuskfish cache object class.
+ * Handles Tuskfish cache operations.
  * 
- * Handles cache operations - checking if a cached versions of pages exist, generating them if they
- * don't, clearing the cache when asked. Works pretty much the same way the image caching system
- * does, but the image cache will be a subsiduary of this system. Need to build it into the existing
- * output buffering and rendering framework somehow.
- * 
- * Some principles:
- * 
- * Calls to the cache directory need to be locked down to prevent directory traversals and similar
- * shenannigans. It would be best to construct URLs from the parameters passed in, rather than to
- * draw on $_SERVER['REQUEST_URL'], as all the data filtering is already in place. Cache calls for
- * individual content objects can simply be based on ID, nothing else is needed. Index pages are a
- * bit more complicated in that there can be multiple parameters.
- * 
- * Cache timeout should be based on a preference. A minimum value should be enforced in order to
- * prevent admins from setting stupid ones. There should also be an on/off control, and a 'flush'
- * link in the control panel.
+ * The cache can be enabled / disabled and expiry timer set in Tuskfish preferences.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

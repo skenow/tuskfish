@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish parent content object handler class.
+ * Base class for content handler objects.
  * 
  * Provides base content handler methods that are inherited or overridden by subclass-specific
  * content handlers. 

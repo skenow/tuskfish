@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Tuskfish default index page script.
- * 
- * User-facing controller script for presenting all content objects other than tags and static content.
+ * Displays 404 error message and a search box.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

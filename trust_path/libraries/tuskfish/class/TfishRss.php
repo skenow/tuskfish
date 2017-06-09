@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish RSS feed generator class.
+ * RSS feed generator class.
  * 
  * For information about the RSS 2.0 spec see http://cyber.harvard.edu/rss/rss.html
  *

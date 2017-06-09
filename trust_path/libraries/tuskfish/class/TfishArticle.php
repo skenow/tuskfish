@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish article object class.
+ * Article content object class.
  * 
  * Represents a text article such as a new story or blog entry.
  *

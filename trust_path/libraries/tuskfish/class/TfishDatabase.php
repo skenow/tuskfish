@@ -9,7 +9,7 @@
  * It is expected that by the time data trickles down to this class it will have ALREADY BEEN
  * THOROUGHLY VALIDATED AND RANGE CHECKED by user-facing control scripts and internal object checks.
  * As the validation conducted by this class is the last line of defense any failures will trigger
- * FATAL ERRORS and angry log entries.
+ * FATAL errors and angry log entries.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

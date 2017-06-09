@@ -3,7 +3,7 @@
 /**
  * Tuskfish session security class.
  * 
- * Provides functions for managing sessions in a security-concious manner.
+ * Provides functions for managing sessions in a security-conscious manner.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

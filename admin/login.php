@@ -1,7 +1,13 @@
 <?php
 
 /**
- * Tuskfish login script.
+ * Login controller script.
+ * 
+ * Handles password-based login to site. For two-factor authentication with Yubikey hardware tokens
+ * see trust_path/extras/login_two_factor.php.
+ * 
+ * tfish_header is manually duplicated on this page but without the site closed check and redirect
+ * as that creates a redirect loop. 
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -11,10 +17,6 @@
  */
 require_once "../mainfile.php";
 
-/**
- * tfish_header is manually duplicated on this page but without the site closed check and redirect
- * as that creates a redirect loop. 
- */
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 

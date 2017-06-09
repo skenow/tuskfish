@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish admin image manager script.
+ * Admin image manager script.
  * 
  * Display and filter image content, including offline content and images associated with non-image
  * content objects. Use it to locate and re-use image assets.

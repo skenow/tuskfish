@@ -3,6 +3,8 @@
 /**
  * Base Tuskfish machine object class.
  * 
+ * This class is not yet operational.
+ * 
  * Represents a networked computer, sensor or IOT device with which Tuskfish can communicate,
  * either to send instructions and data or to receive them. This class is intended to facilitate
  * interaction between Tuskfish and the IOT, for example to log data or to manage a group of
