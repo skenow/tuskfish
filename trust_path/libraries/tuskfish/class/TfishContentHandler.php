@@ -417,22 +417,6 @@ class TfishContentHandler
     }
 
     /**
-     * Returns a list of collection objects for the data entry/edit forms.
-     * 
-     * @todo move this function over to use TfishAngryTree for more robust tree handling
-     * @return array of collection objects
-     */
-    public static function getParents()
-    {
-        $parents = array();
-        $criteria = new TfishCriteria();
-        $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
-        $parents = TfishContentHandler::getList($criteria);
-
-        return $parents;
-    }
-
-    /**
      * Returns a list of intellectual property rights licenses for the content submission form.
      * 
      * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
@@ -505,23 +489,6 @@ class TfishContentHandler
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
         $tags = self::getObjects($criteria);
         return $tags;
-    }
-
-    /**
-     * Search the filtering criteria ($criteria->items) to see if object type has been set and
-     * return the key.
-     * 
-     * @param array $criteria_items of TfishCriteriaItem objects
-     * @return string|null
-     */
-    protected static function getTypeIndex($criteria_items)
-    {
-        foreach ($criteria_items as $key => $item) {
-            if ($item->column == 'type') {
-                return $key;
-            }
-        }
-        return null;
     }
 
     /**
