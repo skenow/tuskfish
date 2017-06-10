@@ -15,6 +15,14 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    array $item Array of TfishCriteriaItem
+ * @property    array $condition Array of conditions used to join TfishCriteriaItem (AND, OR)
+ * @property    string $groupby column to group results by
+ * @property    int $limit number of records to retrieve
+ * @property    int $offset starting point for retrieving records
+ * @property    string $order sort order
+ * @property    string $ordertype ASC or DESC
+ * @property    array $tag Array of tag IDs
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -23,14 +31,14 @@ class TfishCriteria
 {
 
     protected $__data = array(
-        'item' => array(), // Array of TfishCriteriaItem
-        'condition' => array(), // Array of conditions used to join TfishCriteriaItem (AND, OR)
+        'item' => array(),
+        'condition' => array(), 
         'groupby' => false,
         'limit' => 0,
         'offset' => 0,
         'order' => false,
         'ordertype' => "DESC",
-        'tag' => array() // Array of tag IDs
+        'tag' => array()
     );
 
     function __construct()

@@ -15,6 +15,14 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    string $title meta title of this website
+ * @property    string $description meta description of this website
+ * @property    string $author author of this website
+ * @property    string $copyright copyright notice
+ * @property    string $generator software system that generated this page
+ * @property    string $seo seo-optimisation string to append to page URL
+ * @property    string $robots meta instructions to robots
+ * @property    int $pagination_elements number of slots in pagination control
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");

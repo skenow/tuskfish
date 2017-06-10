@@ -11,6 +11,16 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    string $title Name of channel
+ * @property    string $link URL to website associated with this channel
+ * @property    string $description Sentence describing the channel
+ * @property    string $copyright Copyright license of this channel
+ * @property    string $managingEditor Email of the editor
+ * @property    string $webMaster Email of the webmaster
+ * @property    string $generator Name of software system generating this feed
+ * @property    string $image Image representing channel
+ * @property    array $items Array of content objects
+ * @property    string $template Template for presenting feed, default 'rss'
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -23,16 +33,16 @@ class TfishRss extends TfishAncestralObject
         parent::__construct();
 
         // Whitelist of official channel properties and datatypes.
-        $this->__properties['title'] = 'string'; // Name of channel.
-        $this->__properties['link'] = 'url'; // URL to website associated with this channel.
-        $this->__properties['description'] = 'string'; // Sentence describing the channel.
-        $this->__properties['copyright'] = 'string'; // Copyright license of this channel.
-        $this->__properties['managingEditor'] = 'email'; // Email of the editor.
-        $this->__properties['webMaster'] = 'email'; // Email of the webmaster.
+        $this->__properties['title'] = 'string';
+        $this->__properties['link'] = 'url';
+        $this->__properties['description'] = 'string';
+        $this->__properties['copyright'] = 'string';
+        $this->__properties['managingEditor'] = 'email';
+        $this->__properties['webMaster'] = 'email';
         // $this->__properties['category'] = 'int'; // Todo: Implement tag-specific sub-channels.
-        $this->__properties['generator'] = 'string'; // Auto-increment, set by database.
-        $this->__properties['image'] = 'string'; // Auto-increment, set by database.
-        $this->__properties['items'] = 'array'; // Array of content objects.
+        $this->__properties['generator'] = 'string';
+        $this->__properties['image'] = 'string';
+        $this->__properties['items'] = 'array';
 
         // Set the permitted properties of this object.
         foreach ($this->__properties as $key => $value) {

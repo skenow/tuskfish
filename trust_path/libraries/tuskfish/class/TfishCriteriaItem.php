@@ -13,6 +13,9 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    string $column name of column in database table
+ * @property    mixed $value value to compare
+ * @property    string $operator
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");

@@ -12,6 +12,7 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    string $template_set
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
