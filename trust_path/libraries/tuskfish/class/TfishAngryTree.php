@@ -53,11 +53,20 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishAngryTree
 {
 
-    private $_parentId;
-    public $_myId;
-    private $_rootId = null;
-    public $_tree = array();
+    /** @var array $_objects Array of objects to be assembled into a category tree. */
     public $_objects;
+    
+    /** @var string $_myId Name of object ID field. */
+    public $_myId;
+    
+    /** @var string $_parentId Name of parent object ID field. */
+    private $_parentId;
+    
+    /** @var int $_rootId Name of root object ID, to be used as the root node of the tree. */
+    private $_rootId = null;
+    
+    /** @var object $_tree Associative array that comprises the category tree. */
+    public $_tree = array();
 
     /**
      * Constructor

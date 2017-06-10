@@ -29,8 +29,10 @@ if (!defined("TFISH_ROOT_PATH"))
 
 class TfishMetadata
 {
-
+    
+    /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;
+    
     protected $__data = array(
         'title' => '',
         'description' => '',

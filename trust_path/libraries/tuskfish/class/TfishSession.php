@@ -17,13 +17,6 @@ if (!defined("TFISH_ROOT_PATH"))
 
 class TfishSession
 {
-    // Output
-    private static $_response;
-
-    // Internal
-    private static $_curlResult;
-    private static $_curlError;
-    private static $_curlTimeout;
     
     /**
      * No cloning or instantiation permitted
@@ -200,6 +193,7 @@ class TfishSession
      * 
      * @param string $dirty_password
      * @param string $dirty_otp
+     * @param object $yubikey instance of the TfishYubikeyAuthenticator class
      */
     public static function twoFactorLogin($dirty_password, $dirty_otp, $yubikey)
     {

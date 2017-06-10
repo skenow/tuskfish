@@ -14,6 +14,7 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @properties  array $__data Property values are stored in this arrray.
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -21,9 +22,10 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishAncestralObject
 {
 
-    // Object properties are defined in this array.
+    /** @var array */
     protected $__properties = array();
-    // Object properties are stored in this array.
+    
+    /** @var array Whitelist of content object properties. */
     protected $__data = array();
 
     function __construct()

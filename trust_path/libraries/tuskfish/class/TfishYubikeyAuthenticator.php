@@ -24,16 +24,27 @@ class TfishYubikeyAuthenticator
 {
     
     // Input.
+    /** @var int $_id ID of the Yubikey hardware token (first 12 characters of output). */
     private $_id;
+    
+    /** @var string $_signatureKey Yubikey API key obtained from https://upgrade.yubico.com/getapikey/ */
     private $_signatureKey;
 
     // Output.
+    /** @var string $_response Response message from last verification attempt */
     private $_response;
 
     // Internal.
+    /** @var array $_curlResult Response from cURL request to Yubico authentication server. */
     private $_curlResult;
+    
+    /** @var string $_curlError Error message. */
     private $_curlError;
+    
+    /** @var int $_timestampTolerance Timeout limit (expiry) for authentication requests. */
     private $_timestampTolerance;
+    
+    /** @var int $_curlTimeout Timeout limit when contacting Yubico authentication server. */
     private $_curlTimeout;
 
 	public function __construct()

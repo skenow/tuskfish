@@ -24,6 +24,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishDatabase
 {
 
+    /** @var object $_db Instance of teh PDO base class */
     private static $_db;
 
     /**
