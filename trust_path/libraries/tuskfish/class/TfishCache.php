@@ -39,7 +39,6 @@ class TfishCache
      * 
      * @param string $basename page filename without extension, eg. article. Alphanumeric and underscores only
      * @param array $params URL query string parameters for this page as $key => $value pairs
-     * @return void
      */
     public static function checkCache($basename, $params = array())
     {
@@ -113,7 +112,6 @@ class TfishCache
      * @param string $basename filename of this page, alphanumeric and underscore characters only.
      * @param array $params URL query string parameters for this page as $key => $value pairs
      * @param string $buffer HTML page output from ob_get_contents() 
-     * @return void 
      */
     public static function cachePage($basename, $params, $buffer)
     {

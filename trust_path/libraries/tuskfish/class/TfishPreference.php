@@ -106,7 +106,6 @@ class TfishPreference extends TfishAncestralObject
      * 
      * @param string $property name
      * @param string $value
-     * @param return void
      */
     public function __set($property, $value)
     {

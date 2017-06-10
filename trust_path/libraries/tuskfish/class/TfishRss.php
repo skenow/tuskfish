@@ -59,7 +59,6 @@ class TfishRss extends TfishAncestralObject
      * Make a RSS feed for a collection object.
      * 
      * @param object $obj TfishCollection
-     * @return void
      */
     public function makeFeedForCollection($obj)
     {

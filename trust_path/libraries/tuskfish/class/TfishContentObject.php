@@ -379,7 +379,6 @@ class TfishContentObject extends TfishAncestralObject
      * Note that the supplied data is internally validated by __set().
      * 
      * @param array $dirty_input usually raw form $_REQUEST data.
-     * @return void
      */
     public function loadProperties($dirty_input)
     {
@@ -431,7 +430,6 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * @param string $property name
      * @param mixed $value
-     * @return void
      */
     public function __set($property, $value)
     {

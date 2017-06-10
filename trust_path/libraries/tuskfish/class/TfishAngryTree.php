@@ -189,8 +189,7 @@ class TfishAngryTree
      * @param string $ret result from previous recursions (reference to a string when called from outside)
      * @param string $prefix_orig string to indent items at deeper levels
      * @param string $prefix_curr string to indent the current item
-     * @return void
-     * */
+     */
     private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, $prefix_curr = '')
     {
         if ($key > 0) {

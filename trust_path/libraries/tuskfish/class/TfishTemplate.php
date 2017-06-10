@@ -98,7 +98,6 @@ class TfishTemplate
      * 
      * @param string $property name
      * @param mixed $value
-     * @param return void
      */
     public function __set($property, $value)
     {
@@ -116,7 +115,6 @@ class TfishTemplate
      * object (if content were assigned to $tfish_template->template_set it would mess things up). 
      * 
      * @param string $template alphanumeric and underscore characters only.
-     * @return void
      */
     public function setTemplate($template)
     {

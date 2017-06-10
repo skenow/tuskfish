@@ -116,7 +116,6 @@ class TfishCriteria
      * 
      * @param string $property name
      * @param mixed $value
-     * @param return void
      */
     public function __set($property, $value)
     {

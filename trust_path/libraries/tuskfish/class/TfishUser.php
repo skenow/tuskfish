@@ -61,7 +61,6 @@ class TfishUser
      * 
      * @param string $property
      * @param mixed $value
-     * @return void
      */
     public function __set($property, $value)
     {

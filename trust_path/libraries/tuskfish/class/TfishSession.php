@@ -49,8 +49,6 @@ class TfishSession
 
     /**
      * Unset session variables and destroy the session.
-     * 
-     * @return void
      */
     public static function destroy()
     {
@@ -145,7 +143,6 @@ class TfishSession
      * 
      * @param string $email
      * @param string $password
-     * @return void
      */
     public static function login($email, $password)
     {
@@ -203,7 +200,6 @@ class TfishSession
      * 
      * @param string $dirty_password
      * @param string $dirty_otp
-     * @return void
      */
     public static function twoFactorLogin($dirty_password, $dirty_otp, $yubikey)
     {
@@ -298,7 +294,6 @@ class TfishSession
      * Destroys the current session on logout
      * 
      * @param string $url_redirect to redirect the user to. 
-     * @return void
      */
     public static function logout($url_redirect = false)
     {
@@ -333,8 +328,6 @@ class TfishSession
 
     /**
      * Reset session data after a session hijacking check fails. This will force logout.
-     * 
-     * @return void
      */
     public static function reset()
     {
@@ -359,8 +352,6 @@ class TfishSession
      * Note that it allows the new and  old sessions to co-exist for a short period, this is to 
      * avoid headaches with flaky network connections and asynchronous (AJAX) requests, as explained
      * in the PHP Manual warning: http://php.net/manual/en/function.session-regenerate-id.php
-     * 
-     * @return void
      */
     public static function regenerate()
     {
@@ -385,7 +376,6 @@ class TfishSession
      * Initialises a session and sets session cookie parameters to security-concious values. 
      * 
      * @global object $tfish_preference TfishPreference object
-     * @return void
      */
     public static function start()
     {

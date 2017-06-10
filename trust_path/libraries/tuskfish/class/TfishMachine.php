@@ -75,7 +75,6 @@ class TfishMachine extends TfishTfishAncestralObject
      * 
      * @param string $property name
      * @param mixed $value
-     * @return void
      */
     public function __set($property, $value)
     {
