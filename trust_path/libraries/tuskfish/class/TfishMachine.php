@@ -20,6 +20,14 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    int $id Auto-increment, set by database.
+ * @property    string $title Human readable name of this machine.
+ * @property    string $url The URL and port of the remote device.
+ * @property    string $shared_key Used for HMAC authentication / integrity checks
+ * @property    array $allowed_in Must check contents of array against whitelist.
+ * @property    array $allowed_out Must check contents of array against whitelist.
+ * @property    int $request_counter Track the number of requests to mitigate replay attacks.
+ * @property    int $enabled Permit or deny communications with this machine.
  */
 
 /**
@@ -45,14 +53,14 @@ class TfishMachine extends TfishTfishAncestralObject
         parent::__construct();
         
         // Whitelist of allowed properties and data types.
-        $this->__properties['id'] = 'int'; // Auto-increment, set by database.
-        $this->__properties['title'] = 'string'; // Human readable name of this machine.
-        $this->__properties['url'] = 'url'; // The URL and port of the remote device.
-        $this->__properties['shared_key'] = 'string'; // Used for HMAC authentication / integrity checks
-        $this->__properties['allowed_in'] = 'array'; // Must check contents of array against whitelist.
-        $this->__properties['allowed_out'] = 'array'; // Must check contents of array against whitelist.
-        $this->__properties['request_counter'] = 'array'; // Track the number of requests to mitigate replay attacks.
-        $this->__properties['enabled'] = 'int'; // Permit or deny communications with this machine.
+        $this->__properties['id'] = 'int';
+        $this->__properties['title'] = 'string';
+        $this->__properties['url'] = 'url';
+        $this->__properties['shared_key'] = 'string';
+        $this->__properties['allowed_in'] = 'array';
+        $this->__properties['allowed_out'] = 'array';
+        $this->__properties['request_counter'] = 'array';
+        $this->__properties['enabled'] = 'int';
         
         // Set the permitted properties of this object.
         foreach ($this->__properties as $key => $value) {

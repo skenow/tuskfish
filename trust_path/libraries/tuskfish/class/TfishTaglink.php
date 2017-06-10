@@ -12,6 +12,10 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    int $id ID of this taglink object
+ * @property    int $tag_id ID of the tag object
+ * @property    string $content_type type of content object
+ * @property    string $handler The handler for taglink objects
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -20,11 +24,11 @@ class TfishTaglink
 {
 
     protected $__data = array(
-        'id', // ID of this taglink object
-        'tag_id', // ID of the tag object
-        'content_type', // Type of content object
-        'content_id', // ID of the content object
-        'handler'); // The handler for taglink objects
+        'id',
+        'tag_id', 
+        'content_type', 
+        'content_id',
+        'handler');
 
     function __construct()
     {

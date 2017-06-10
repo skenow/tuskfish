@@ -25,6 +25,8 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
+ * @property    array $__properties whitelist of content object properties
+ * @property    array $__data protected array holding values of whitelisted properties
  */
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
