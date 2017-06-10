@@ -31,7 +31,7 @@ class TfishPreferenceHandler
     }
 
     /**
-     * Gets the value of a particular site preference.
+     * Get the value of a particular site preference.
      * 
      * @param string $pref
      * @return mixed|null
@@ -50,7 +50,7 @@ class TfishPreferenceHandler
      * Updates the site preferences in the database.
      * 
      * @param object $obj TfishPreference
-     * @return boolean
+     * @return bool true on success false on failure
      */
     public static function updatePreferences($obj)
     {

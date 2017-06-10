@@ -33,7 +33,7 @@ class TfishBlockHandler extends TfishContentHandler
      * specific one when you know you want a specific kind of object.
      * 
      * @param TfishCriteria $criteria query composer object
-     * @return array $objects TfishArticle objects
+     * @return array $objects content objects
      */
     public static function getObjects($criteria = false)
     {
@@ -55,7 +55,7 @@ class TfishBlockHandler extends TfishContentHandler
     }
 
     /**
-     * Count TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishBlock objects, optionally matching conditions specified with a TfishCriteria object.
      * 
      * @param TfishCriteria $criteria
      * @return int $count

@@ -22,9 +22,7 @@ class TfishRss extends TfishAncestralObject
     {
         parent::__construct();
 
-        /**
-         * Whitelist of official channel properties and datatypes.
-         */
+        // Whitelist of official channel properties and datatypes.
         $this->__properties['title'] = 'string'; // Name of channel.
         $this->__properties['link'] = 'url'; // URL to website associated with this channel.
         $this->__properties['description'] = 'string'; // Sentence describing the channel.
@@ -36,16 +34,12 @@ class TfishRss extends TfishAncestralObject
         $this->__properties['image'] = 'string'; // Auto-increment, set by database.
         $this->__properties['items'] = 'array'; // Array of content objects.
 
-        /**
-         * Set the permitted properties of this object.
-         */
+        // Set the permitted properties of this object.
         foreach ($this->__properties as $key => $value) {
             $this->__data[$key] = '';
         }
 
-        /**
-         * Set default values of permitted properties.
-         */
+        // Set default values of permitted properties.
         global $tfish_preference;
 
         $this->__data['title'] = $tfish_preference->site_name;
@@ -64,7 +58,8 @@ class TfishRss extends TfishAncestralObject
     /**
      * Make a RSS feed for a collection object.
      * 
-     * @param object $obj collection
+     * @param object $obj TfishCollection
+     * @return void
      */
     public function makeFeedForCollection($obj)
     {

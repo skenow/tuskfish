@@ -68,7 +68,7 @@ class TfishPreference extends TfishAncestralObject
      * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
      * 
      * @param string $property
-     * @return string|int|null
+     * @return string
      */
     public function escape($property)
     {
@@ -99,12 +99,13 @@ class TfishPreference extends TfishAncestralObject
     }
 
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Set the value of a whitelisted property.
      * 
-     * Intercepts direct calls to set the value of an object property. Imposes data type
+     * Intercepts direct calls to set the value of object properties. Imposes data type
      * restrictions and range checks before allowing the properties to be set. 
      * 
      * @param string $property name
+     * @param string $value
      * @param return void
      */
     public function __set($property, $value)

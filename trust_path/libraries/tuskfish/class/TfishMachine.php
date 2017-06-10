@@ -44,9 +44,7 @@ class TfishMachine extends TfishTfishAncestralObject
     {
         parent::__construct();
         
-        /**
-         * Whitelist of allowed properties and data types.
-         */
+        // Whitelist of allowed properties and data types.
         $this->__properties['id'] = 'int'; // Auto-increment, set by database.
         $this->__properties['title'] = 'string'; // Human readable name of this machine.
         $this->__properties['url'] = 'url'; // The URL and port of the remote device.
@@ -56,23 +54,19 @@ class TfishMachine extends TfishTfishAncestralObject
         $this->__properties['request_counter'] = 'array'; // Track the number of requests to mitigate replay attacks.
         $this->__properties['enabled'] = 'int'; // Permit or deny communications with this machine.
         
-        /**
-         * Set the permitted properties of this object.
-         */
+        // Set the permitted properties of this object.
         foreach ($this->__properties as $key => $value) {
             $this->__data[$key] = '';
         }
 
-        /**
-         * Set default values of permitted properties.
-         */
+        // Set default values of permitted properties.
         // Machine communications are disabled by default. You must explicitly enable them to talk
         // to a remote device, for security reasons.
         $this->__data['enabled'] = 0;
     }
     
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Set the value of a whitelisted property.
      * 
      * Intercepts direct calls to set the value of an object property. This method is overridden by
      * child classes to impose data type restrictions and range checks before allowing the property
@@ -80,7 +74,8 @@ class TfishMachine extends TfishTfishAncestralObject
      * own internal validation checks. 
      * 
      * @param string $property name
-     * @param return void
+     * @param mixed $value
+     * @return void
      */
     public function __set($property, $value)
     {

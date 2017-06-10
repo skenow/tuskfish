@@ -25,7 +25,7 @@ class TfishAudioHandler extends TfishContentHandler
     /**
      * Count TfishAudio objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param TfishCriteria $criteria
+     * @param object $criteria TfishCriteria object
      * @return int $count
      */
     public static function getCount($criteria = false)
@@ -50,14 +50,14 @@ class TfishAudioHandler extends TfishContentHandler
     /**
      * Get TfishAudio objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * Note that the article type is automatically set, so when calling
-     * TfishAudioHandler::getObjects($criteria) it is unecessary to set the object type.
-     * However, if you want to use TfishContentHandler::getObjects($criteria) then you do need to
-     * specify the object type, otherwise you will get all types of content returned. it is
-     * acceptable to use either handler, although probably good practice to use the object-
-     * specific one when you know you want a specific kind of object.
+     * Note that the object type is automatically set, so it is unnecessary to set it when calling
+     * TfishAudioHandler::getObjects($criteria). However, if you want to use the generic handler
+     * TfishContentHandler::getObjects($criteria) then you do need to specify the object type,
+     * otherwise you will get all types of content returned. It is acceptable to use either handler,
+     * although good practice to use the type-specific one when you know you want a specific kind of
+     * object.
      * 
-     * @param TfishCriteria $criteria query composer object
+     * @param object $criteria TfishCriteria object
      * @return array $objects TfishAudio objects
      */
     public static function getObjects($criteria = false)

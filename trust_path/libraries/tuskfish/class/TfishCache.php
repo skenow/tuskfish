@@ -37,8 +37,8 @@ class TfishCache
      * request the page be written to cache. This function should be called after tfish_header.php
      * is included.
      * 
-     * @param string $basename alphanumeric and underscore characters only.
-     * @param array $params
+     * @param string $basename page filename without extension, eg. article. Alphanumeric and underscores only
+     * @param array $params URL query string parameters for this page as $key => $value pairs
      * @return void
      */
     public static function checkCache($basename, $params = array())
@@ -65,16 +65,14 @@ class TfishCache
             echo file_get_contents($resolved_path);
             ob_end_flush();
             exit;
-        } else {
-            
         }
     }
 
     /**
      * Calculate the return the name of a cached file, based on input parameters.
      * 
-     * @param int $id
-     * @return string
+     * @param string $basename page filename without extension, eg. article. Alphanumeric and underscores only.
+     * @param array $params URL query string parameters for this page as $key => $value pairs
      */
     private static function _getCachedFileName($basename, $params)
     {
@@ -112,6 +110,10 @@ class TfishCache
      * This function should be called in tfish_footer.php, before ob_end_flush(). Note that
      * warnings are suppressed when trying to open the file.
      * 
+     * @param string $basename filename of this page, alphanumeric and underscore characters only.
+     * @param array $params URL query string parameters for this page as $key => $value pairs
+     * @param string $buffer HTML page output from ob_get_contents() 
+     * @return void 
      */
     public static function cachePage($basename, $params, $buffer)
     {
@@ -141,12 +143,9 @@ class TfishCache
      * 
      * At the moment this is something of a blunt instrument; the entire cache will be cleared
      * if a single object is added, edited or destroyed (this is to ensure that index pages and
-     * pagination controls stay up to date). Later it would be good to be more selective, perhaps
-     * marking individual object pages by their id, to allow them to be distinguished from index
-     * pages. If an index.html is present it will be left in place (to prevent listing the cache
-     * directory).
+     * pagination controls stay up to date). Later it would be good to be more selective.
      * 
-     * @return boolean success or failure.
+     * @return bool success or failure.
      */
     public static function flushCache()
     {

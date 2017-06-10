@@ -34,10 +34,13 @@ class TfishUser
     }
 
     /**
-     * Access an existing object property; intercepts direct external calls to read the value.
+     * Get the value of a property.
+     * 
+     * Intercepts direct calls to access an object property. This method can be overridden to impose
+     * processing logic to the value before returning it.
      * 
      * @param string $property
-     * @return mixed|null
+     * @return mixed|null $property value if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -49,10 +52,16 @@ class TfishUser
     }
 
     /**
-     * Set an existing object property; intercepts direct external calls to set the value.
+     * Set the value of a whitelisted property.
+     * 
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
+     * child classes to impose data type restrictions and range checks before allowing the property
+     * to be set. Tuskfish objects are designed not to trust other components; each conducts its
+     * own internal validation checks. 
      * 
      * @param string $property
      * @param mixed $value
+     * @return void
      */
     public function __set($property, $value)
     {
@@ -64,10 +73,13 @@ class TfishUser
     }
 
     /**
-     * Intercept external isset() calls to correctly read object properties.
+     * Check if a property is set.
      * 
-     * @param string $property
-     * @return boolean 
+     * Intercepts isset() calls to correctly read object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
+     * 
+     * @param string $property name
+     * @return bool 
      */
     public function __isset($property)
     {
@@ -79,15 +91,19 @@ class TfishUser
     }
 
     /**
-     * Intercept external unset() calls to correctly unset object properties
+     * Unsets a property.
      * 
-     * @param string $property
-     * @return boolean 
+     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
+     * 
+     * @param string $property name
+     * @return bool true on success false on failure 
      */
     public function __unset($property)
     {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
+            return true;
         } else {
             return false;
         }

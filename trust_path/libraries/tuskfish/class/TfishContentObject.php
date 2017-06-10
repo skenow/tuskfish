@@ -86,7 +86,7 @@ class TfishContentObject extends TfishAncestralObject
     }
 
     /**
-     * Escapes object properties for output to browser and formats it as human readable (where necessary).
+     * Escapes object properties for output to browser and formats it as human readable.
      * 
      * Use this method to retrieve object properties when you want to send them to the browser.
      * They will be automatically escaped with htmlspecialchars to mitigate cross-site scripting
@@ -95,7 +95,7 @@ class TfishContentObject extends TfishAncestralObject
      * with the HTMLPurifier library, and so *should* be safe.
      * 
      * @param string $property
-     * @return string
+     * @return string human readable value
      */
     public function escape($property)
     {
@@ -173,7 +173,7 @@ class TfishContentObject extends TfishAncestralObject
     }
 
     /**
-     * Resizes and caches image property and returns a URL to the copy.
+     * Resizes and caches an associated image and returns a URL to the cached copy.
      * 
      * Allows arbitrary sized thumbnails to be produced from the object's image property. These are
      * saved in the cache for future lookups. Image proportions are always preserved, so if both
@@ -201,8 +201,9 @@ class TfishContentObject extends TfishAncestralObject
             return false;
         }
 
-        // Check if a cached copy of the requested dimensions already exists in the cache and return URL.
-        // CONVENTION: Thumbnail name should follow the pattern: image_file_name . '-' . $width . 'x' . $height
+        // Check if a cached copy of the requested dimensions already exists in the cache and return
+        // URL. CONVENTION: Thumbnail name should follow the pattern:
+        // image_file_name . '-' . $width . 'x' . $height
         $filename = pathinfo($this->image, PATHINFO_FILENAME);
         $extension = '.' . pathinfo($this->image, PATHINFO_EXTENSION);
         $cached_path = TFISH_PUBLIC_CACHE_PATH . $filename . '-';
@@ -224,14 +225,15 @@ class TfishContentObject extends TfishAncestralObject
 
             // Get the size. Note that:
             // $properties['mime'] holds the mimetype, eg. 'image/jpeg'.
-            // $properties[0] = width, [1] = height, [2] = width = "x" height = "y" which is useful for outputting size attribute.
+            // $properties[0] = width, [1] = height, [2] = width = "x" height = "y" which is useful
+            // for outputting size attribute.
             $properties = getimagesize($original_path);
             if (!$properties) {
                 return false;
             }
 
             /**
-             * Resizing with GD installed.
+             * Resizing image with GD installed.
              */
             // In order to preserve proportions, need to calculate the size of the other dimension.
             if ($clean_width > $clean_height) {
@@ -262,7 +264,9 @@ class TfishContentObject extends TfishAncestralObject
                     }
 
                     /**
-                     * Handle transparency The following code block (only) is a derivative of
+                     * Handle transparency
+                     * 
+                     * The following code block (only) is a derivative of
                      * the PHP_image_resize project by Nimrod007, which is a fork of the
                      * smart_resize_image project by Maxim Chernyak. The source code is available
                      * from the link below, and it is distributed under the following license terms:
@@ -316,10 +320,10 @@ class TfishContentObject extends TfishAncestralObject
                         // Set the flag to save full alpha channel information (as opposed to single colour transparency) when saving png images.
                         imagesavealpha($thumbnail, true);
                     }
-
                     /**
                      * End code derived from PHP_image_resize project.
                      */
+                    
                     // Copy and resize part of an image with resampling.
                     imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
 
@@ -352,7 +356,7 @@ class TfishContentObject extends TfishAncestralObject
      * Generates a URL to access this object in single view mode, either relative to home page or
      * to the subclass-specific page.
      * 
-     * @param boolean $use_subclass_page
+     * @param bool $use_subclass_page
      * @return string
      */
     public function getURL($use_subclass_page = false)
@@ -418,15 +422,16 @@ class TfishContentObject extends TfishAncestralObject
     }
 
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Set the value of a whitelisted property.
      * 
-     * Intercepts direct calls to set the value of an object property. This method is overriden by
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
      * child classes to impose data type restrictions and range checks before allowing the property
      * to be set. Tuskfish objects are designed not to trust other components; each conducts its
      * own internal validation checks. 
      * 
      * @param string $property name
-     * @param return void
+     * @param mixed $value
+     * @return void
      */
     public function __set($property, $value)
     {

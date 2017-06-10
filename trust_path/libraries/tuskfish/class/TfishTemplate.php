@@ -29,7 +29,7 @@ class TfishTemplate
     }
 
     /**
-     * Get the value of an object property.
+     * Get the value of a property.
      * 
      * Intercepts direct calls to access an object property. This method can be modified to impose
      * processing logic to the value before returning it.
@@ -47,13 +47,13 @@ class TfishTemplate
     }
 
     /**
-     * Check if an object property is set.
+     * Check if a property is set.
      * 
      * Intercepts isset() calls to correctly read object properties. Can be modified to add
      * processing logic to specific properties.
      * 
      * @param string $property name
-     * @return bool 
+     * @return bool
      */
     public function __isset($property)
     {
@@ -73,7 +73,7 @@ class TfishTemplate
      * of a parent template object.
      * 
      * @param string $template name file in the /templates/sometemplate directory.
-     * @return string rendered template
+     * @return string HTML rendered template
      */
     public function render($template)
     {
@@ -92,23 +92,26 @@ class TfishTemplate
     }
 
     /**
-     * Set the value of an object property. Will not allow the 'template_set' property to be overridden.
+     * Set the value of an object property.
+     * 
+     * Do not declare variables named $template_set or it will disrupt this method.
      * 
      * @param string $property name
+     * @param mixed $value
      * @param return void
      */
     public function __set($property, $value)
     {
-        /* if ($property == 'template_set') {
-          trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
-          } */
+        //  if ($property == 'template_set') {
+        //      trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
+        //  }
         $this->__data[$property] = $value;
     }
 
     /**
      * Set the template set to be used.
      * 
-     * The template_set must be set through this method. This is a safety measure to prevent
+     * The template_set must be specified through this method. This is a safety measure to prevent
      * someone accidentally overwriting the template set when assigning a variable to the template
      * object (if content were assigned to $tfish_template->template_set it would mess things up). 
      * 
@@ -136,6 +139,7 @@ class TfishTemplate
     {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
+            return true;
         } else {
             return false;
         }

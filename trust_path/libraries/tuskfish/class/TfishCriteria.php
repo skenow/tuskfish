@@ -39,7 +39,7 @@ class TfishCriteria
     }
 
     /**
-     * Add conditions (TfishCriteriaItem) to the query.
+     * Add conditions (TfishCriteriaItem) to a query.
      * 
      * @param object $criteria_item TfishCriteriaItem object
      * @param string $condition used to chain TfishCriteriaItems, "AND" or "OR" only
@@ -51,7 +51,7 @@ class TfishCriteria
     }
 
     /**
-     * Get the value of an object property.
+     * Get the value of a property.
      * 
      * Intercepts direct calls to access an object property. This method can be modified to impose
      * processing logic to the value before returning it.
@@ -69,7 +69,7 @@ class TfishCriteria
     }
 
     /**
-     * Check if an object property is set.
+     * Check if a property is set.
      * 
      * Intercepts isset() calls to correctly read object properties. Can be modified to add
      * processing logic for specific properties.
@@ -109,12 +109,13 @@ class TfishCriteria
     }
 
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Set the value of a property and will not allow non-whitelisted properties to be set.
      * 
      * Intercepts direct calls to set the value of an object property. This method can be modified
      * to impose data type restrictions and range checks before allowing the property to be set.
      * 
      * @param string $property name
+     * @param mixed $value
      * @param return void
      */
     public function __set($property, $value)
@@ -285,7 +286,7 @@ class TfishCriteria
     }
 
     /**
-     * Unsets an object property.
+     * Unsets a property.
      * 
      * Intercepts unset() calls to correctly unset object properties. Can be modified to add
      * processing logic for specific properties.
@@ -297,6 +298,7 @@ class TfishCriteria
     {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
+            return true;
         } else {
             return false;
         }

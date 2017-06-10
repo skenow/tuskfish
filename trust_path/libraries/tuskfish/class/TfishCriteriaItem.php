@@ -78,6 +78,7 @@ class TfishCriteriaItem
      * to be set. 
      * 
      * @param string $property name
+     * @param mixed $value
      * @param return void
      */
     public function __set($property, $value)
@@ -175,6 +176,7 @@ class TfishCriteriaItem
     {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
+            return true;
         } else {
             return false;
         }

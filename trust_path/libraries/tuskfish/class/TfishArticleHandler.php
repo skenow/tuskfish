@@ -55,10 +55,17 @@ class TfishArticleHandler extends TfishContentHandler
     }
 
     /**
-     * Count TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
+     * Get TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param TfishCriteria $criteria
-     * @return int $count
+     * Note that the object type is automatically set, so it is unnecessary to set it when calling
+     * TfishArticleHandler::getObjects($criteria). However, if you want to use the generic handler
+     * TfishContentHandler::getObjects($criteria) then you do need to specify the object type,
+     * otherwise you will get all types of content returned. It is acceptable to use either handler,
+     * although good practice to use the type-specific one when you know you want a specific kind of
+     * object.
+     * 
+     * @param object $criteria TfishCriteria object
+     * @return array $objects TfishArticle objects
      */
     public static function getCount($criteria = false)
     {

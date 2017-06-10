@@ -89,8 +89,31 @@ class TfishContentHandler
         
     }
 
-    // Count the number of machines matching $criteria.
+    /**
+     * Count TfishMachine objects, optionally matching conditions specified with a TfishCriteria object.
+     * 
+     * @param object $criteria TfishCriteria object
+     * @return int $count
+     */
     protected static function getCount($criteria)
+    {
+        
+    }
+    
+    /**
+     * Get TfishMachine objects, optionally matching conditions specified with a TfishCriteria object.
+     * 
+     * Note that the object type is automatically set, so it is unnecessary to set it when calling
+     * TfishVideoHandler::getObjects($criteria). However, if you want to use the generic handler
+     * TfishContentHandler::getObjects($criteria) then you do need to specify the object type,
+     * otherwise you will get all types of content returned. It is acceptable to use either handler,
+     * although good practice to use the type-specific one when you know you want a specific kind of
+     * object.
+     * 
+     * @param object $criteria TfishCriteria object
+     * @return array $objects TfishMachine objects
+     */
+    protected static function getObjects($criteria)
     {
         
     }

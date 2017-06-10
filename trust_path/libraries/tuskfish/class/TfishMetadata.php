@@ -59,9 +59,8 @@ class TfishMetadata
      * @param int $limit
      * @param string $url
      * @param int $start
-     * @param array $query
-     * 
-     * @return string
+     * @param array $extra_params query string to be appended to the URLs (control script params)
+     * @return string HTML pagination control
      */
     public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array())
     {
@@ -127,8 +126,9 @@ class TfishMetadata
         $page_start = $current_page - $offset_int;
 
         // 5. Check if fore exceeds bounds. If so, set start = 1 and extract the range.
-        // 6. Check if aft exceeds bounds. If so set start = $page_count - length.
         $fore_boundcheck = $current_page - $offset_int;
+         
+        // 6. Check if aft exceeds bounds. If so set start = $page_count - length.
         $aft_boundcheck = ($current_page + $offset_float);
 
         // This is the tricky bit - slicing a variable region out of the range.
@@ -188,10 +188,10 @@ class TfishMetadata
     }
 
     /**
-     * Access an existing object property and escape it for output to browser.
+     * Access an existing property and escape it for output to browser.
      * 
      * @param string $property
-     * @return string|boolean escaped preference if set, otherwise false
+     * @return string|bool escaped preference if set, otherwise false
      */
     public function __get($property)
     {
@@ -203,7 +203,7 @@ class TfishMetadata
     }
 
     /**
-     * Set an existing object property
+     * Set an existing property
      * 
      * @param string $property
      * @param mixed $value
@@ -221,7 +221,7 @@ class TfishMetadata
      * Intercept isset() calls to correctly read object properties
      * 
      * @param string $property
-     * @return boolean 
+     * @return bool 
      */
     public function __isset($property)
     {
@@ -236,12 +236,13 @@ class TfishMetadata
      * Intercept unset() calls to correctly unset object properties
      * 
      * @param string $property
-     * @return boolean
+     * @return bool true on success false on failure
      */
     public function __unset($property)
     {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
+            return true;
         } else {
             return false;
         }

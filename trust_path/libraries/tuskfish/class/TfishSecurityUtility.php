@@ -26,7 +26,7 @@ class TfishSecurityUtility
      * and maximisation of search space (one upper and lower case letter, one number, one symbol).
      * 
      * @param string $password
-     * @return array of evaluation warnings.
+     * @return array of string evaluation warnings.
      */
     public static function checkPasswordStrength($password)
     {

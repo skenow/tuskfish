@@ -32,11 +32,11 @@ class TfishAncestralObject
     }
 
     /**
-     * Returns a whitelist of object properties whose values are allowed be set or altered by form input.
+     * Returns a whitelist of object properties whose values are allowed be set.
      * 
      * This function is used to build a list of $allowed_vars for a content object. Child classes
-     * use this list to unset properties they do not use. It is also used by TfishFilter::filterData()
-     * or when screening data before inserting a row in the database.
+     * use this list to unset properties they do not use. It is also used by
+     * TfishFilter::filterData() or when screening data before inserting a row in the database.
      * 
      * @return array of object properties
      */
@@ -49,13 +49,13 @@ class TfishAncestralObject
     }
 
     /**
-     * Get the value of an object property.
+     * Get the value of a property.
      * 
      * Intercepts direct calls to access an object property. This method can be overridden to impose
      * processing logic to the value before returning it.
      * 
      * @param string $property name
-     * @return mixed|boolean $property value if it is set; otherwise null.
+     * @return mixed|null $property value if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -67,15 +67,16 @@ class TfishAncestralObject
     }
 
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Set the value of a whitelisted property.
      * 
-     * Intercepts direct calls to set the value of an object property. This method is overriden by
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
      * child classes to impose data type restrictions and range checks before allowing the property
      * to be set. Tuskfish objects are designed not to trust other components; each conducts its
      * own internal validation checks. 
      * 
      * @param string $property name
-     * @param return void
+     * @param mixed $value
+     * @return void
      */
     public function __set($property, $value)
     {
@@ -106,7 +107,7 @@ class TfishAncestralObject
     }
 
     /**
-     * Unsets an object property.
+     * Unsets a property.
      * 
      * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
      * objects to add processing logic for specific properties.
@@ -134,7 +135,6 @@ class TfishAncestralObject
      * unset by child classes are zeroed (this is important when an object is changed to a
      * different subclass, as the properties used may differ).
      * 
-     * @param object $obj
      * @return array of object property/values.
      */
     public function toArray()

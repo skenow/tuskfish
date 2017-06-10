@@ -43,6 +43,7 @@ class TfishLogger
 
         // Debug only - comment OUT in production site.
         // echo '<p>' . print($message) . '</p>';
+        
         // Debug only - UNCOMMENT in production site.
         return false;
     }

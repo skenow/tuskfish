@@ -23,9 +23,9 @@ class TfishTagHandler extends TfishContentHandler
     }
 
     /**
-     * Count TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishTag objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param TfishCriteria $criteria
+     * @param object $criteria TfishCriteria object
      * @return int $count
      */
     public static function getCount($criteria = false)
@@ -50,15 +50,15 @@ class TfishTagHandler extends TfishContentHandler
     /**
      * Get TfishTag objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * Note that the article type is automatically set, so when calling
-     * TfishTagHandler::getObjects($criteria) it is unecessary to set the object type.
-     * However, if you want to use TfishContentHandler::getObjects($criteria) then you do need to
-     * specify the object type, otherwise you will get all types of content returned. it is
-     * acceptable to use either handler, although probably good practice to use the object-
-     * specific one when you know you want a specific kind of object.
+     * Note that the object type is automatically set, so it is unnecessary to set it when calling
+     * TfishTagHandler::getObjects($criteria). However, if you want to use the generic handler
+     * TfishContentHandler::getObjects($criteria) then you do need to specify the object type,
+     * otherwise you will get all types of content returned. It is acceptable to use either handler,
+     * although good practice to use the type-specific one when you know you want a specific kind of
+     * object.
      * 
-     * @param TfishCriteria $criteria query composer object
-     * @return array $objects TfishArticle objects
+     * @param object $criteria TfishCriteria object
+     * @return array $objects TfishTag objects
      */
     public static function getObjects($criteria = false)
     {
@@ -91,7 +91,7 @@ class TfishTagHandler extends TfishContentHandler
      * @param string $type of content object
      * @param string $zero_option the string that will be displayed for the 'zero' or no selection option.
      * @param bool $online_only get all tags or just those marked online.
-     * @return boolean|string
+     * @return bool|string
      */
     public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS, $online_only = true)
     {
@@ -123,7 +123,9 @@ class TfishTagHandler extends TfishContentHandler
      * 
      * Use this when you need to customise a tag select box. Pass in an array of the tags you want
      * to use as $tag_list as key => value pairs. If you have multiple select boxes on one page then
-     * you need to assign them different keys and listen for matching input parameters.
+     * you need to assign them different keys and listen for matching input parameters. If you have
+     * organised tags into collections, you can run a query to retrieve that subset using the 
+     * parental ID as a selection criteria.
      * 
      * @param int $selected tag
      * @param array $tag_list key => value array of ID => title

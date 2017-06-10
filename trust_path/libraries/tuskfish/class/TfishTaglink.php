@@ -32,10 +32,10 @@ class TfishTaglink
     }
 
     /**
-     * Get the value of an object property.
+     * Get the value of a property.
      * 
-     * Intercepts direct calls to access an object property. This method can be modified to impose
-     * processing logic to specific properties before returning the value.
+     * Intercepts direct calls to access an object property. This method can be overridden to impose
+     * processing logic to the value before returning it.
      * 
      * @param string $property name
      * @return mixed|null $property value if it is set; otherwise null.
@@ -50,13 +50,16 @@ class TfishTaglink
     }
 
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Set the value of a whitelisted property.
      * 
-     * Intercepts direct calls to set the value of an object property. This method can be modified
-     * to impose processing logic to specific properties.
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
+     * child classes to impose data type restrictions and range checks before allowing the property
+     * to be set. Tuskfish objects are designed not to trust other components; each conducts its
+     * own internal validation checks. 
      * 
      * @param string $property name
-     * @param return void
+     * @param mixed $value
+     * @return void
      */
     public function __set($property, $value)
     {
@@ -68,10 +71,10 @@ class TfishTaglink
     }
 
     /**
-     * Check if an object property is set.
+     * Check if a property is set.
      * 
-     * Intercepts isset() calls to correctly read object properties. Can be modified to add
-     * processing logic to specific properties.
+     * Intercepts isset() calls to correctly read object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
      * 
      * @param string $property name
      * @return bool 
@@ -86,10 +89,10 @@ class TfishTaglink
     }
 
     /**
-     * Unsets an object property.
+     * Unsets a property.
      * 
-     * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
-     * processing logic for specific properties.
+     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
      * 
      * @param string $property name
      * @return bool true on success false on failure 
@@ -98,6 +101,7 @@ class TfishTaglink
     {
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
+            return true;
         } else {
             return false;
         }

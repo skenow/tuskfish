@@ -47,14 +47,14 @@ class TfishDatabase
      * @return string
      */
     public static function addBackticks($identifier)
-    { // Finished
+    {
         return '`' . $identifier . '`';
     }
 
     /**
      * Close the connection to the database.
      * 
-     * @return boolean true on success false on failure
+     * @return bool true on success false on failure
      */
     public static function close()
     {
@@ -70,12 +70,12 @@ class TfishDatabase
     /**
      * Establish a connection to the database.
      * 
-     * Connection is deliberately non-persistent (persistance can break things if scripts terminate unexpectedly).
+     * Connection is deliberately non-persistent (persistence can break things if scripts terminate unexpectedly).
      * 
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function connect()
-    { // Finished
+    {
         return self::_connect();
     }
 
@@ -101,10 +101,10 @@ class TfishDatabase
      * automatically be appended with the suffix .db
      * 
      * @param string $db_name
-     * @return string|boolean path to database file on success, false on failure
+     * @return string|bool path to database file on success, false on failure
      */
     public static function create($db_name)
-    { // Finished
+    {
         // Validate input parameters
         $db_name = TfishFilter::trimString($db_name);
         if (TfishFilter::isAlnumUnderscore($db_name)) {
@@ -147,7 +147,7 @@ class TfishDatabase
      * @param string $table_name (alphanumeric) 
      * @param array $columns as column names (keys) and types (values)
      * @param string $primary_key name of field to be used as primary key
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function createTable($table, $columns, $primary_key = null)
     { // Finished
@@ -223,7 +223,7 @@ class TfishDatabase
      * 
      * @param string $table name
      * @param int $id of row to be deleted
-     * @return boolean true on success false on failure
+     * @return bool true on success false on failure
      */
     public static function delete($table, $id)
     { // Finished
@@ -254,7 +254,7 @@ class TfishDatabase
      * 
      * @param string $table name
      * @param object $criteria TfishCriteria object
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function deleteAll($table, $criteria)
     {
@@ -360,7 +360,7 @@ class TfishDatabase
      * This method should be used with database write operations (INSERT, UPDATE, DELETE).
      * 
      * @param object $statement
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function executeTransaction($statement)
     {
@@ -379,12 +379,12 @@ class TfishDatabase
     /**
      * Insert a single row into the database within a transaction.
      * 
-     * @param string $table name
+     * @param string $table
      * @param array $key_values column names and values to be inserted
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function insert($table, $key_values)
-    { // Finished
+    {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
         return self::_insert($clean_table, $clean_keys);
@@ -420,7 +420,7 @@ class TfishDatabase
      * Used primarily to grab the ID of newly created content objects so that their accompanying
      * taglinks can be correctly associated to them.
      * 
-     * @return int|boolean row ID on success, false on failure
+     * @return int|bool row ID on success, false on failure
      */
     public static function lastInsertId()
     {
@@ -432,8 +432,10 @@ class TfishDatabase
     }
 
     /**
-     * Return a PDO statement object that can be used to bind values or parameters and execute
-     * queries, thereby mitigating direct SQL injection attacks.
+     * Return a PDO statement object.
+     * 
+     * Statement object can be used to bind values or parameters and execute queries, thereby
+     * mitigating direct SQL injection attacks.
      * 
      * @param string $sql
      * @return object PDOStatement object on success PDOException object on failure
@@ -455,6 +457,7 @@ class TfishDatabase
      * 
      * @param string $table name
      * @param object $criteria TfishCriteria object
+     * @param array $columns names of database columns to be selected
      * @return object PDOStatement object on success PDOException on failure
      */
     public static function select($table, $criteria = false, $columns = false)
@@ -775,10 +778,10 @@ class TfishDatabase
      * 
      * Note that the $id MUST represent a column called ID for whatever table you want to run it on.
      * 
-     * @param string $table name
      * @param int $id of the row to update.
+     * @param string $table name
      * @param string $column to update
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function toggleBoolean($id, $table, $column)
     {
@@ -805,7 +808,7 @@ class TfishDatabase
     }
 
     /**
-     * Increment a content object's counter field by one.
+     * Increment a content object counter field by one.
      * 
      * Call this method when the full description of an individual content object is viewed, or
      * when a related media file is downloaded.
@@ -813,7 +816,7 @@ class TfishDatabase
      * @param int $id of content object
      * @param string $table name
      * @param string $column name
-     * @return boolean true on success false on failure
+     * @return bool true on success false on failure
      */
     public static function updateCounter($id, $table, $column)
     {
@@ -842,8 +845,9 @@ class TfishDatabase
      * Update a single row in the database.
      * 
      * @param string $table name
+     * @param int $id of row to update
      * @param array $key_values to update
-     * @return boolean true on success, false on failure
+     * @return bool true on success, false on failure
      */
     public static function update($table, $id, $key_values)
     { // Finished

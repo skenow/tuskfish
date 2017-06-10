@@ -43,13 +43,13 @@ class TfishFileHandler
     }
 
     /**
-     * Returns a string of video mimetypes that are permitted for upload.
+     * Returns an array of video mimetypes that are permitted for upload.
      * 
      * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
      * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
      * wide use it is now presumed to refer to audio files only.
      * 
-     * @return string
+     * @return array
      */
     public static function allowedVideoMimetypes()
     {
@@ -65,7 +65,7 @@ class TfishFileHandler
      * 
      * @param string $path
      * @param string $contents
-     * @return boolean
+     * @return bool
      */
     public static function appendFile($path, $contents)
     {
@@ -92,7 +92,7 @@ class TfishFileHandler
      * Deletes the contents of a specific directory, subdirectories are unaffected.
      * 
      * @param string $path
-     * @return boolean true on success false on failure
+     * @return bool true on success false on failure
      */
     public static function clearDirectory($path)
     {
@@ -132,7 +132,7 @@ class TfishFileHandler
     /**
      * Create a new subdirectory in the data_file directory, optionally with parents if they don't exist
      * 
-     * @param string $directory_path relative to the data_file directory
+     * @param string $path relative to the data_file directory
      * @param string $chmod directory permission (chmod) mode
      * @param bool $create_parents makes parent directories if they do not exist
      * @return bool true on success false on failure
@@ -172,13 +172,14 @@ class TfishFileHandler
     /**
      * Create a new file in the data_file directory
      * 
-     * Does NOT check that specified subdirectories exist within data_file,
-     * so create them first if they are needed
+     * Does NOT check that specified subdirectories exist within data_file, so create them first
+     * if they are needed
      * 
-     * @param string $file_name
-     * @param string $contents
-     * $param bool $append
-     * @return boolean true on success, false on failure
+     * @param string $path relative to the data_file directory
+     * @param string $contents of file
+     * @param string $chmod file permissions to apply
+     * $param bool $append append to existing file (true) or write a new one (false)
+     * @return bool true on success, false on failure
      */
     public static function createFile($path, $contents = false, $chmod = 0600, $append = false)
     {
@@ -224,10 +225,10 @@ class TfishFileHandler
 
     /**
      * Prepends the upload directory path to a file or folder name and checks that the path
-     * does not contain directory traversals
+     * does not contain directory traversals.
      *
-     * @param string $file_name
-     * @return string|bool path on success false on failture
+     * @param string $path relative to the data_file directory
+     * @return string|bool path on success false on failure
      */
     private static function _dataFilePath($path)
     {
@@ -250,7 +251,7 @@ class TfishFileHandler
     /**
      * Destroys a directory and all contents recursively relative to the data_file directory.
      * 
-     * @param string $directory_name
+     * @param string $path relative to data_file directory
      * @return bool true on success false on failure
      */
     public static function deleteDirectory($path)
@@ -295,7 +296,7 @@ class TfishFileHandler
     /**
      * Destroys an individual file in the data_file directory
      * 
-     * @param string $file_path
+     * @param string $path relative to the data_file directory
      * @return bool true on success false on failure
      */
     public static function deleteFile($path)
@@ -376,7 +377,7 @@ class TfishFileHandler
      * @param int $id of the associated content object.
      * @param string $filename an alternative name (rename) for the file you wish to transfer,
      * excluding extension.
-     * @return boolean
+     * @return bool
      */
     public static function sendDownload($id, $filename = false)
     {
@@ -462,6 +463,7 @@ class TfishFileHandler
             return self::_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
         }
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
+        
         return false;
     }
 

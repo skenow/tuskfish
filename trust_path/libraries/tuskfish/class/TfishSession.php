@@ -81,7 +81,7 @@ class TfishSession
      * Checks if a session has expired and sets last seen activity flag.
      * 
      * @global type $tfish_preference
-     * @return boolean
+     * @return bool true if expired and false if not
      */
     public static function isExpired()
     {
@@ -112,10 +112,10 @@ class TfishSession
     /**
      * Checks if client IP address or user agent has changed.
      * 
-     * These tests can indicate hijacking but are not definitive; however they do indicate elevated
-     * risk and session should be regenerated as a counter measure.
+     * These tests can indicate session hijacking but are by no means definitive; however they do
+     * indicate elevated risk and the session should be regenerated as a counter measure.
      * 
-     * @return boolean
+     * @return bool true if IP/user agent unchanged, false otherwise
      */
     public static function isClean()
     {
@@ -199,10 +199,11 @@ class TfishSession
     /**
      * Authenticate the user with two factors and establish a session.
      * 
-     * Requires a Yubikey hardware token as th second factor.
+     * Requires a Yubikey hardware token as the second factor.
      * 
-     * @param type $dirty_password
-     * @param type $dirty_otp
+     * @param string $dirty_password
+     * @param string $dirty_otp
+     * @return void
      */
     public static function twoFactorLogin($dirty_password, $dirty_otp, $yubikey)
     {
@@ -296,7 +297,7 @@ class TfishSession
     /**
      * Destroys the current session on logout
      * 
-     * @param string|bool $url_redirect to redirect the user to. 
+     * @param string $url_redirect to redirect the user to. 
      * @return void
      */
     public static function logout($url_redirect = false)
@@ -331,7 +332,7 @@ class TfishSession
     }
 
     /**
-     * Reset session data after a hijacking check fails. This will force logout.
+     * Reset session data after a session hijacking check fails. This will force logout.
      * 
      * @return void
      */
@@ -383,7 +384,7 @@ class TfishSession
     /**
      * Initialises a session and sets session cookie parameters to security-concious values. 
      * 
-     * @global type $tfish_preference
+     * @global object $tfish_preference TfishPreference object
      * @return void
      */
     public static function start()
