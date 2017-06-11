@@ -16,12 +16,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishVideoHandler extends TfishContentHandler
 {
 
-    function __construct()
-    {
-        // Must call parent constructor first.
-        parent::__construct();
-    }
-
     /**
      * Count TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
      * 

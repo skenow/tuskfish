@@ -16,12 +16,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishArticleHandler extends TfishContentHandler
 {
 
-    function __construct()
-    {
-        // Must call parent constructor first.
-        parent::__construct();
-    }
-
     /**
      * Get TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
      * 

@@ -43,7 +43,7 @@
 if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-class TfishContentHandler
+class TfishMachineHandler
 {
 
     // Check the authenticity and integrity of a signal.

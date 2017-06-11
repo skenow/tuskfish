@@ -30,6 +30,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishCriteria
 {
 
+    /** @var array $__data Holds the values of the object's properties for access by magic methods. **/
     protected $__data = array(
         'item' => array(),
         'condition' => array(), 

@@ -16,12 +16,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishTagHandler extends TfishContentHandler
 {
 
-    function __construct()
-    {
-        // Must call parent constructor first.
-        parent::__construct();
-    }
-
     /**
      * Count TfishTag objects, optionally matching conditions specified with a TfishCriteria object.
      * 

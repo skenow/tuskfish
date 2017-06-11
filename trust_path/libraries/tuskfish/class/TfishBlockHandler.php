@@ -16,12 +16,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishBlockHandler extends TfishContentHandler
 {
 
-    function __construct()
-    {
-        // Must call parent constructor first.
-        parent::__construct();
-    }
-
     /**
      * Get TfishBlock objects, optionally matching conditions specified with a TfishCriteria object.
      * 

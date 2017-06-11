@@ -16,12 +16,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishImageHandler extends TfishContentHandler
 {
 
-    function __construct()
-    {
-        // Must call parent constructor first.
-        parent::__construct();
-    }
-
     /**
      * Count TfishImage objects, optionally matching conditions specified with a TfishCriteria object.
      * 

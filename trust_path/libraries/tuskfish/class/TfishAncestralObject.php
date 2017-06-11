@@ -22,10 +22,10 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishAncestralObject
 {
 
-    /** @var array */
+    /** @var array $__properties Whitelist of permitted content object properties. */
     protected $__properties = array();
     
-    /** @var array Whitelist of content object properties. */
+    /** @var array Holds values of permitted content object properties. */
     protected $__data = array();
 
     /**

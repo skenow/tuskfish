@@ -16,12 +16,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishTaglinkHandler extends TfishContentHandler
 {
 
-    function __construct()
-    {
-        // Must call parent constructor first.
-        parent::__construct();
-    }
-
     /**
      * Delete taglinks associated with a particular content object.
      * 
