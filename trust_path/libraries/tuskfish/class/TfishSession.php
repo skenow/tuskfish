@@ -154,6 +154,7 @@ class TfishSession
         }
     }
 
+    /** @internal */
     private static function _login($clean_email, $dirty_password)
     {
         // Query the database for a matching user.
@@ -228,6 +229,7 @@ class TfishSession
         self::_twoFactorLogin($dirty_id, $dirty_password, $dirty_otp, $yubikey);
     }
     
+    /** @internal */
     private static function _twoFactorLogin($dirty_id, $dirty_password, $dirty_otp, $yubikey)
     {
         $user = false;
@@ -299,6 +301,7 @@ class TfishSession
         self::_logout($clean_url);
     }
 
+    /** @internal */
     private static function _logout($clean_url)
     {
         // Unset all of the session variables.

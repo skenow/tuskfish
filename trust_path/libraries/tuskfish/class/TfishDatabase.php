@@ -61,6 +61,7 @@ class TfishDatabase
         return self::_close();
     }
 
+    /** @internal */
     private static function _close()
     {
         self::$_db = null;
@@ -79,6 +80,7 @@ class TfishDatabase
         return self::_connect();
     }
 
+    /** @internal */
     private static function _connect()
     {
         // SQLite just expects a file name, which was defined as a constant during create()
@@ -115,6 +117,7 @@ class TfishDatabase
         }
     }
 
+    /** @internal */
     private static function _create($db_name)
     {
         // Generate a random prefix for the database filename to make it unpredictable.
@@ -195,6 +198,7 @@ class TfishDatabase
         }
     }
 
+    /** @internal */
     private static function _createTable($table_name, $columns, $primary_key = null)
     {
         if (mb_strlen($table_name, 'UTF-8') > 0 && is_array($columns)) {
@@ -232,6 +236,7 @@ class TfishDatabase
         return self::_delete($clean_table, $clean_id);
     }
 
+    /** @internal */
     private static function _delete($table, $id)
     {
         $sql = "DELETE FROM " . self::addBackticks($table) . " WHERE `id` = :id";
@@ -263,6 +268,7 @@ class TfishDatabase
         return self::_deleteAll($clean_table, $clean_criteria);
     }
 
+    /** @internal */
     private static function _deleteAll($table, $criteria)
     {
         // Set table.
@@ -390,6 +396,7 @@ class TfishDatabase
         return self::_insert($clean_table, $clean_keys);
     }
 
+    /** @internal */
     private static function _insert($table, $key_values)
     {
         $pdo_placeholders = '';
@@ -445,6 +452,7 @@ class TfishDatabase
         return self::_preparedStatement($sql);
     }
 
+    /** @internal */
     private static function _preparedStatement($sql)
     {
         return self::$_db->prepare($sql);
@@ -468,6 +476,7 @@ class TfishDatabase
         return self::_select($clean_table, $clean_criteria, $clean_columns);
     }
 
+    /** @internal */
     private static function _select($table, $criteria, $columns)
     {
         // Specify operation.
@@ -596,6 +605,7 @@ class TfishDatabase
         return self::_selectCount($clean_table, $clean_criteria, $clean_column);
     }
 
+    /** @internal */
     private static function _selectCount($table, $criteria, $column)
     {
         // Specify operation and column
@@ -683,6 +693,7 @@ class TfishDatabase
         return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
     }
 
+    /** @internal */
     private static function _selectDistinct($table, $criteria, $columns)
     {
         // Specify operation
@@ -792,6 +803,7 @@ class TfishDatabase
         return self::_toggleBoolean($clean_id, $clean_table, $clean_column);
     }
 
+    /** @internal */
     private static function _toggleBoolean($id, $table, $column)
     {
         $sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
@@ -827,6 +839,7 @@ class TfishDatabase
         return self::_updateCounter($clean_id, $clean_table, $clean_column);
     }
 
+    /** @internal */
     private static function _updateCounter($id, $table, $column)
     {
         $sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
@@ -857,6 +870,7 @@ class TfishDatabase
         return self::_update($clean_table, $clean_id, $clean_keys);
     }
 
+    /** @internal */
     private static function _update($table, $id, $key_values)
     {
         // Prepare the statement
@@ -906,6 +920,7 @@ class TfishDatabase
         return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
     }
 
+    /** @internal */
     private static function _updateAll($table, $key_values, $criteria)
     {
         // Set table.
@@ -995,6 +1010,7 @@ class TfishDatabase
      * If the $criteria for a query include tag(s), the object table must have a JOIN to the
      * taglinks table in order to sort the content.
      * 
+     * @internal
      * @param string $table name
      * @return string $sql query fragment
      */
