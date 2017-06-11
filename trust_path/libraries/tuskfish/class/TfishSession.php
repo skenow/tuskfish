@@ -236,7 +236,9 @@ class TfishSession
         $second_factor = false;
         
         // Query the database for a matching user.
-        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `yubikey_id` = :yubikey_id");
+        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
+                . "`yubikey_id` = :yubikey_id OR "
+                . "`yubikey_id2` = :yubkey_id");
         $statement->bindParam(':yubikey_id', $dirty_id, PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
