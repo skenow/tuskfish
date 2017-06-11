@@ -16,7 +16,10 @@
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
-// Autoload core Tuskfish classes, spl_autoload_register() avoids namespace clashes.
+/**
+ * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * @param string $classname Name of class to autoload. 
+ */
 function tfish_autoload($classname) {
     include TFISH_CLASS_PATH . $classname . '.php';
 }

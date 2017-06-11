@@ -18,7 +18,10 @@ ob_start("ob_gzhandler");
 // Boot!
 require_once "../mainfile.php";
 
-// Autoload core Tuskfish classes, spl_autoload_register() avoids namespace clashes.
+/**
+ * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * @param string $classname Name of class to autoload. 
+ */
 function tfish_autoload($classname) {
     include TFISH_CLASS_PATH . $classname . '.php';
 }
@@ -53,7 +56,7 @@ $tfish_template = new TfishTemplate();
 // Initialise default content variable
 $tfish_content = array('output' => '');
 
-// Helper function to grab the site URL.
+/** Helper function to grab the site URL. */
 function getUrl() {
     $url = @(!isset($_server['HTTPS']) || $_SERVER["HTTPS"] != 'on') ? 'http://' . $_SERVER["SERVER_NAME"] : 'https://' . $_SERVER["SERVER_NAME"];
     $url .= ($_SERVER["SERVER_PORT"] != 80 && $_SERVER["SERVER_PORT"] != 443) ? ":" . $_SERVER["SERVER_PORT"] : "";

@@ -33,6 +33,7 @@ class TfishMetadata
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;
     
+    // @var array Array holding values of this object's properties, accessed via magic methods. */
     protected $__data = array(
         'title' => '',
         'description' => '',
@@ -65,10 +66,11 @@ class TfishMetadata
      * If you want to create pagination controls for other presentation-side libraries add
      * additional methods to this class.
      * 
-     * @param int $count
-     * @param int $limit
-     * @param string $url
-     * @param int $start
+     * @param int $count Number of content objects (pages) matching these parameters
+     * @param int $limit Number of content objects to retrieve in current view
+     * @param string $url Target base URL for pagination control links
+     * @param int $start Position in result set to retrieve content objects from
+     * @param int $tag ID of tag used to filter content
      * @param array $extra_params query string to be appended to the URLs (control script params)
      * @return string HTML pagination control
      */

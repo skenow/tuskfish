@@ -23,7 +23,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishUser
 {
 
-    // Permitted properties of this object. Child classes should extend this list (not replace it).
+    /** @var array $__data Permitted properties of this object. */
     protected $__data = array(
         'id',
         'admin_email',

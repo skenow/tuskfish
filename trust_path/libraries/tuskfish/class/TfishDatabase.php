@@ -27,13 +27,12 @@ class TfishDatabase
     /** @var object $_db Instance of the PDO base class */
     private static $_db;
 
-    /**
-     * No cloning or instantiation permitted
-     */
+    /** Instantiation not permitted. */
     final private function __construct()
     {
     }
 
+    /** No cloning permitted */
     final private function __clone()
     {
     }
@@ -145,7 +144,7 @@ class TfishDatabase
      * Table names may only be alphanumeric characters. Column names are also alphanumeric but may
      * also contain underscores.
      * 
-     * @param string $table_name (alphanumeric) 
+     * @param string $table (alphanumeric) 
      * @param array $columns as column names (keys) and types (values)
      * @param string $primary_key name of field to be used as primary key
      * @return bool true on success, false on failure
@@ -339,7 +338,7 @@ class TfishDatabase
      * get into a query as part of an identifier. But just because we are paranoid they are
      * escaped here anyway.
      * 
-     * @param string $identfier
+     * @param string $identifier
      * @return string
      */
     public static function escapeIdentifier($identifier)

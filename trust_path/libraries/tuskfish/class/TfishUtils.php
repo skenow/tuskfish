@@ -1,7 +1,10 @@
 <?php
 
 /**
- * Provides a variety of utility functions used by the core (lists of timezones, mimetypes etc).
+ * Provides a variety of utility functions used by the core.
+ * 
+ * Holds utility functions that return lists of mimetypes, timezone offsets and similar necessary
+ * trivia.
  *
  * @copyright	The ImpressCMS Project http://www.impresscms.org/
  * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)

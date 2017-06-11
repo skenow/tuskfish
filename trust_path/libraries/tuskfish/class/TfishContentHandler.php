@@ -4,7 +4,10 @@
  * Base class for content handler objects.
  * 
  * Provides base content handler methods that are inherited or overridden by subclass-specific
- * content handlers. 
+ * content handlers. You can use it as a generic handler when you want to retrieve mixed content
+ * types. If you want to retrieve a specific content type it would be better to use the specific
+ * content handler for that type, as it may contain additional functionality for processing or
+ * displaying it.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -386,13 +389,14 @@ class TfishContentHandler
     /**
      * Generates an online/offline select box.
      * 
-     * @param int $selected preselected element
+     * @param int $selected The currently option
+     * @param string $zero_option The text to display in the zero option of the select box
      * @return string HTML select box
      */
     public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS)
     {
         $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int) $selected : null; // Offline (0) or online (1)
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
+        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // 
 
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
         $select_box = '<select class="form-control" name="online" id="online" onchange="this.form.submit()">';
