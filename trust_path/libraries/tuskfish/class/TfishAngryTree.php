@@ -28,6 +28,9 @@
 // URL: http://www.myweb.ne.jp/, http://www.xoops.org/, http://jp.xoops.org/ //
 // Project: The XOOPS Project                                                //
 // ------------------------------------------------------------------------- //
+
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
 /**
  * Represents hierarchical relationships between collections and member content objects.
  * 
@@ -47,9 +50,6 @@
  * @since		1.0
  * @package		core
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("ICMS root path not defined");
-
 class TfishAngryTree
 {
 

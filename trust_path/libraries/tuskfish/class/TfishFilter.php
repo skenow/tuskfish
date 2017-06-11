@@ -1,5 +1,7 @@
 <?php
 
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
 /**
  * Provides methods to validate different data types and to conduct range checks.
  * 
