@@ -78,6 +78,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _appendFile($path, $contents)
     {
         return file_put_contents($path, $contents, FILE_APPEND);
@@ -104,6 +105,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _clearDirectory($path)
     {
         $path = self::_dataFilePath($path);
@@ -149,6 +151,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _createDirectory($path, $chmod, $create_parents)
     {
         $path = self::_dataFilePath($path);
@@ -194,6 +197,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _createFile($path, $contents, $chmod, $append)
     {
         $path = self::_dataFilePath($path);
@@ -264,6 +268,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _deleteDirectory($path)
     {
         $path = self::_dataFilePath($path);
@@ -309,6 +314,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _deleteFile($path)
     {
         $path = self::_dataFilePath($path);
@@ -389,6 +395,7 @@ class TfishFileHandler
         }
     }
 
+    /** @internal */
     private static function _sendDownload($id, $filename)
     {
         $criteria = new TfishCriteria();
@@ -462,6 +469,7 @@ class TfishFileHandler
         return false;
     }
 
+    /** @internal */
     private static function _uploadFile($filename, $fieldname, $extension)
     {
         $filename = time() . '_' . $filename;

@@ -33,7 +33,7 @@ class TfishMetadata
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;
     
-    // @var array $__data Array holding values of this object properties, accessed via magic methods. */
+    /** @var array $__data Array holding values of this object properties, accessed via magic methods. */
     protected $__data = array(
         'title' => '',
         'description' => '',
@@ -44,6 +44,10 @@ class TfishMetadata
         'robots' => '',
         'pagination_elements' => '');
 
+    /** Initialise object properties and default values.
+     * 
+     * @param object $preference Instance of TfishPreference class, holding site preferences
+     */
     function __construct($preference)
     {
         $this->title = $preference->site_name;

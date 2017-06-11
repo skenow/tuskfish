@@ -628,6 +628,7 @@ class TfishContentHandler
         return $results;
     }
 
+    /** @internal */
     private static function _searchContent($search_terms, $andor, $limit, $offset)
     {
         $sql = $count = '';
