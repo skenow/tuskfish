@@ -29,8 +29,8 @@ class TfishTaglinkHandler extends TfishContentHandler
     /**
      * Delete taglinks associated with a particular content object.
      * 
-     * @param int $content_id
-     * @return bool true for success false on failure
+     * @param int $content_id ID of the target content object.
+     * @return bool True for success, false on failure.
      */
     public static function deleteTaglinks($content_id)
     {
@@ -54,10 +54,10 @@ class TfishTaglinkHandler extends TfishContentHandler
      * 
      * Taglinks represent relationships between tags and content objects.
      * 
-     * @param int $content_id of content object
-     * @param string $type alphabetical characters only and whitelisted in TfishTaglinkHandler::getType()
-     * @param array $tags as integers
-     * @return bool true on success false on failure
+     * @param int $content_id ID of content object.
+     * @param string $type Type of content object as whitelisted in TfishTaglinkHandler::getType().
+     * @param array $tags IDs of tags as integers.
+     * @return bool True on success false on failure.
      */
     public static function insertTaglinks($content_id, $type, $tags)
     {
@@ -104,10 +104,10 @@ class TfishTaglinkHandler extends TfishContentHandler
      * 
      * Old taglinks are deleted, newly designated set of taglinks are inserted.
      * 
-     * @param int $id of content object
-     * @param string $type of content object as whitelisted in TfishTaglinkHandler::getType()
-     * @param array $tags as integers
-     * @return bool true on success false on failure
+     * @param int $id ID of target content object.
+     * @param string $type Type of content object as whitelisted in TfishTaglinkHandler::getType().
+     * @param array $tags IDs of tags as integers.
+     * @return bool True on success false on failure.
      */
     public static function updateTaglinks($id, $type, $tags)
     {

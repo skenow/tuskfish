@@ -24,16 +24,16 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
- * @property    string $title Name of channel
- * @property    string $link URL to website associated with this channel
- * @property    string $description Sentence describing the channel
- * @property    string $copyright Copyright license of this channel
- * @property    string $managingEditor Email of the editor
- * @property    string $webMaster Email of the webmaster
- * @property    string $generator Name of software system generating this feed
- * @property    string $image Image representing channel
- * @property    array $items Array of content objects
- * @property    string $template Template for presenting feed, default 'rss'
+ * @property    string $title Name of channel.
+ * @property    string $link URL to website associated with this channel.
+ * @property    string $description Sentence describing the channel.
+ * @property    string $copyright Copyright license of this channel.
+ * @property    string $managingEditor Email of the editor.
+ * @property    string $webMaster Email of the webmaster.
+ * @property    string $generator Name of software system generating this feed.
+ * @property    string $image Image representing channel.
+ * @property    array $items Array of content objects.
+ * @property    string $template Template for presenting feed, default 'rss'.
  */
 class TfishRss extends TfishAncestralObject
 {
@@ -79,7 +79,7 @@ class TfishRss extends TfishAncestralObject
     /**
      * Make a RSS feed for a collection object.
      * 
-     * @param object $obj TfishCollection
+     * @param object $obj TfishCollection object.
      */
     public function makeFeedForCollection($obj)
     {
@@ -93,8 +93,8 @@ class TfishRss extends TfishAncestralObject
      * 
      * For more fine-grained control each property could be dealt with individually.
      * 
-     * @param string $property
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {

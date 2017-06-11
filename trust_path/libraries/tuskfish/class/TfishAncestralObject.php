@@ -34,7 +34,7 @@ class TfishAncestralObject
     /** @var array $__properties Whitelist of permitted content object properties. */
     protected $__properties = array();
     
-    /** @var array Holds values of permitted content object properties. */
+    /** @var array Holds values of permitted content object properties, accessed via magic methods. */
     protected $__data = array();
 
     /**
@@ -44,7 +44,7 @@ class TfishAncestralObject
      * use this list to unset properties they do not use. It is also used by
      * TfishFilter::filterData() or when screening data before inserting a row in the database.
      * 
-     * @return array of object properties
+     * @return array Array of object properties.
      */
     public function getPropertyWhitelist()
     {
@@ -60,8 +60,8 @@ class TfishAncestralObject
      * Intercepts direct calls to access an object property. This method can be overridden to impose
      * processing logic to the value before returning it.
      * 
-     * @param string $property name
-     * @return mixed|null $property value if it is set; otherwise null.
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -80,8 +80,8 @@ class TfishAncestralObject
      * to be set. Tuskfish objects are designed not to trust other components; each conducts its
      * own internal validation checks. 
      * 
-     * @param string $property name
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {
@@ -99,8 +99,8 @@ class TfishAncestralObject
      * Intercepts isset() calls to correctly read object properties. Can be overridden in child
      * objects to add processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool 
+     * @param string $property Name of property to check.
+     * @return bool True if set otherwise false.
      */
     public function __isset($property)
     {
@@ -117,8 +117,8 @@ class TfishAncestralObject
      * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
      * objects to add processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool true on success false on failure 
+     * @param string $property Name of property.
+     * @return bool True on success false on failure.
      */
     public function __unset($property)
     {
@@ -140,7 +140,7 @@ class TfishAncestralObject
      * unset by child classes are zeroed (this is important when an object is changed to a
      * different subclass, as the properties used may differ).
      * 
-     * @return array of object property/values.
+     * @return array Array of object property/values.
      */
     public function toArray()
     {

@@ -38,12 +38,12 @@ class TfishLogger
      * which has security implications. You must therefore CLOSE your site via the admin
      * preferences before doing this. Comment the lines back out before re-opening your site.
      * 
-     * @param int $errno the level of the error raised
-     * @param string $error the error message
-     * @param string $file filename
-     * @param int $line line number the error was raised at
+     * @param int $errno the level of the error raised..
+     * @param string $error the error message.
+     * @param string $file filename.
+     * @param int $line line number the error was raised at.
      * @param array $context active symbol table, ie. an array of every variable in scope when the
-     * error was triggered
+     * error was triggered.
      */
     public static function logErrors($errno = false, $error = false, $file = false, $line = false, $context = false)
     {

@@ -48,8 +48,8 @@ class TfishUser
      * Intercepts direct calls to access an object property. This method can be overridden to impose
      * processing logic to the value before returning it.
      * 
-     * @param string $property
-     * @return mixed|null $property value if it is set; otherwise null.
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -68,8 +68,8 @@ class TfishUser
      * to be set. Tuskfish objects are designed not to trust other components; each conducts its
      * own internal validation checks. 
      * 
-     * @param string $property
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {
@@ -86,8 +86,8 @@ class TfishUser
      * Intercepts isset() calls to correctly read object properties. Can be overridden in child
      * objects to add processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool 
+     * @param string $property Name of property.
+     * @return bool True if set otherwise false.
      */
     public function __isset($property)
     {
@@ -104,8 +104,8 @@ class TfishUser
      * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
      * objects to add processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool true on success false on failure 
+     * @param string $property Name of property.
+     * @return bool True on success false on failure.
      */
     public function __unset($property)
     {

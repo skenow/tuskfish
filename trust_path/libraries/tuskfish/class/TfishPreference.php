@@ -98,8 +98,8 @@ class TfishPreference extends TfishAncestralObject
      * 
      * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
      * 
-     * @param string $property
-     * @return string
+     * @param string $property Name of property.
+     * @return string Value of property escaped for display.
      */
     public function escape($property)
     {
@@ -117,7 +117,7 @@ class TfishPreference extends TfishAncestralObject
     /**
      * Read out the site preferences into an array.
      * 
-     * @return array of site preferences
+     * @return array Array of site preferences.
      */
     public static function readPreferences()
     {
@@ -135,8 +135,8 @@ class TfishPreference extends TfishAncestralObject
      * Intercepts direct calls to set the value of object properties. Imposes data type
      * restrictions and range checks before allowing the properties to be set. 
      * 
-     * @param string $property name
-     * @param string $value
+     * @param string $property Name of property.
+     * @param string $value Value of property.
      */
     public function __set($property, $value)
     {
@@ -298,7 +298,7 @@ class TfishPreference extends TfishAncestralObject
      * 
      * The preference object will conduct its own internal data type validation and range checks.
      * 
-     * @param array $dirty_input Usually $_REQUEST data
+     * @param array $dirty_input Usually $_REQUEST data.
      */
     public function updatePreferences($dirty_input)
     {
@@ -321,7 +321,7 @@ class TfishPreference extends TfishAncestralObject
     /**
      * Save updated preferences to the database.
      * 
-     * @return bool true on success false on failure
+     * @return bool True on success false on failure.
      */
     private static function writePreferences()
     {

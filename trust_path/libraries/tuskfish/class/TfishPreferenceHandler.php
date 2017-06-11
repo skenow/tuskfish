@@ -48,8 +48,8 @@ class TfishPreferenceHandler
     /**
      * Get the value of a particular site preference.
      * 
-     * @param string $pref
-     * @return mixed|null
+     * @param string $pref Name of preference.
+     * @return mixed|null Value of preference if it exists, otherwise null.
      */
     public static function get($pref)
     {
@@ -64,8 +64,8 @@ class TfishPreferenceHandler
     /**
      * Updates the site preferences in the database.
      * 
-     * @param object $obj TfishPreference
-     * @return bool true on success false on failure
+     * @param object $obj TfishPreference object.
+     * @return bool True on success false on failure.
      */
     public static function updatePreferences($obj)
     {

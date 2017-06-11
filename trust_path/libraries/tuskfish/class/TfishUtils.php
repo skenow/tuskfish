@@ -37,7 +37,7 @@ class TfishUtils
      * Feel free to add more if you wish, but do NOT use this as a whitelist of permitted mimetypes,
      * it is just a reference.
      * 
-     * @return array of mimetypes with extension as key.
+     * @return array Array of mimetypes with extension as key.
      * @copyright	The ImpressCMS Project http://www.impresscms.org/
      * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
      * @author		marcan <marcan@impresscms.org>
@@ -153,7 +153,7 @@ class TfishUtils
     /**
      * Provide a list of timezone offsets.
      * 
-     * @return array of timezone offsets
+     * @return array Array of timezone offsets.
      */
     public static function getTimezones()
     {

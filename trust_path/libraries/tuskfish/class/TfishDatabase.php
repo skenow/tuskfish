@@ -53,8 +53,8 @@ class TfishDatabase
      * This method must only be used on TABLE and COLUMN names. Column values must be escaped 
      * through the use of bound parameters.
      * 
-     * @param string $identifier
-     * @return string
+     * @param string $identifier Table or column name.
+     * @return string Identifier encapsulated in backticks.
      */
     public static function addBackticks($identifier)
     {
@@ -64,7 +64,7 @@ class TfishDatabase
     /**
      * Close the connection to the database.
      * 
-     * @return bool true on success false on failure
+     * @return bool True on success false on failure.
      */
     public static function close()
     {
@@ -83,7 +83,7 @@ class TfishDatabase
      * 
      * Connection is deliberately non-persistent (persistence can break things if scripts terminate unexpectedly).
      * 
-     * @return bool true on success, false on failure
+     * @return bool True on success, false on failure.
      */
     public static function connect()
     {
@@ -112,8 +112,8 @@ class TfishDatabase
      * Database name must be alphanumeric and underscore characters only. The database will
      * automatically be appended with the suffix .db
      * 
-     * @param string $db_name
-     * @return string|bool path to database file on success, false on failure
+     * @param string $db_name Database name.
+     * @return string|bool Path to database file on success, false on failure.
      */
     public static function create($db_name)
     {
@@ -157,10 +157,10 @@ class TfishDatabase
      * Table names may only be alphanumeric characters. Column names are also alphanumeric but may
      * also contain underscores.
      * 
-     * @param string $table (alphanumeric) 
-     * @param array $columns as column names (keys) and types (values)
-     * @param string $primary_key name of field to be used as primary key
-     * @return bool true on success, false on failure
+     * @param string $table Table name (alphanumeric characters only). 
+     * @param array $columns Array of column names (keys) and types (values).
+     * @param string $primary_key Name of field to be used as primary key.
+     * @return bool True on success, false on failure.
      */
     public static function createTable($table, $columns, $primary_key = null)
     {
@@ -235,9 +235,9 @@ class TfishDatabase
     /**
      * Delete single row from table based on its ID.
      * 
-     * @param string $table name
-     * @param int $id of row to be deleted
-     * @return bool true on success false on failure
+     * @param string $table Name of table.
+     * @param int $id ID of row to be deleted.
+     * @return bool True on success false on failure.
      */
     public static function delete($table, $id)
     {
@@ -267,9 +267,9 @@ class TfishDatabase
      * cannot use tags as a criteria in deleteAll() (they will simply be ignored). It may be
      * possible to get around this restriction with a loop or subquery.
      * 
-     * @param string $table name
-     * @param object $criteria TfishCriteria object
-     * @return bool true on success, false on failure
+     * @param string $table Name of table.
+     * @param object $criteria TfishCriteria object.
+     * @return bool True on success, false on failure.
      */
     public static function deleteAll($table, $criteria)
     {
@@ -354,8 +354,8 @@ class TfishDatabase
      * get into a query as part of an identifier. But just because we are paranoid they are
      * escaped here anyway.
      * 
-     * @param string $identifier
-     * @return string
+     * @param string $identifier Name of table or column.
+     * @return string Escaped table or column name.
      */
     public static function escapeIdentifier($identifier)
     {
@@ -375,8 +375,8 @@ class TfishDatabase
      * Note that statement execution is within a transaction and rollback will occur if it fails.
      * This method should be used with database write operations (INSERT, UPDATE, DELETE).
      * 
-     * @param object $statement
-     * @return bool true on success, false on failure
+     * @param object $statement Prepared statement.
+     * @return bool True on success, false on failure.
      */
     public static function executeTransaction($statement)
     {
@@ -395,9 +395,9 @@ class TfishDatabase
     /**
      * Insert a single row into the database within a transaction.
      * 
-     * @param string $table
-     * @param array $key_values column names and values to be inserted
-     * @return bool true on success, false on failure
+     * @param string $table Name of table.
+     * @param array $key_values Column names and values to be inserted.
+     * @return bool True on success, false on failure.
      */
     public static function insert($table, $key_values)
     {
@@ -437,7 +437,7 @@ class TfishDatabase
      * Used primarily to grab the ID of newly created content objects so that their accompanying
      * taglinks can be correctly associated to them.
      * 
-     * @return int|bool row ID on success, false on failure
+     * @return int|bool Row ID on success, false on failure.
      */
     public static function lastInsertId()
     {
@@ -454,8 +454,8 @@ class TfishDatabase
      * Statement object can be used to bind values or parameters and execute queries, thereby
      * mitigating direct SQL injection attacks.
      * 
-     * @param string $sql
-     * @return object PDOStatement object on success PDOException object on failure
+     * @param string $sql SQL statement.
+     * @return object PDOStatement object on success PDOException object on failure.
      */
     public static function preparedStatement($sql)
     {
@@ -473,10 +473,10 @@ class TfishDatabase
      * 
      * Returns a PDO statement object, from which results can be extracted with standard PDO calls.
      * 
-     * @param string $table name
-     * @param object $criteria TfishCriteria object
-     * @param array $columns names of database columns to be selected
-     * @return object PDOStatement object on success PDOException on failure
+     * @param string $table Name of table.
+     * @param object $criteria TfishCriteria object.
+     * @param array $columns Names of database columns to be selected.
+     * @return object PDOStatement object on success PDOException on failure.
      */
     public static function select($table, $criteria = false, $columns = false)
     {
@@ -592,10 +592,10 @@ class TfishDatabase
     /**
      * Count the number of rows matching a set of conditions.
      * 
-     * @param string $table name
-     * @param object $criteria TfishCriteria object
-     * @param string $column name
-     * @return int|object row count on success PDOException object on failure
+     * @param string $table Name of table.
+     * @param object $criteria TfishCriteria object.
+     * @param string $column Name of column.
+     * @return int|object Row count on success, PDOException object on failure.
      */
     public static function selectCount($table, $criteria = false, $column = false)
     {
@@ -689,10 +689,10 @@ class TfishDatabase
      * 
      * Use the $columns array to specify which fields you want to filter the results by.
      * 
-     * @param string $table name
-     * @param object $criteria TfishCriteria object
-     * @param array $columns names to filter results by
-     * @return object PDOStatement on success, PDOException on failure
+     * @param string $table Name of table.
+     * @param object $criteria TfishCriteria object.
+     * @param array $columns Name of columns to filter results by.
+     * @return object PDOStatement on success, PDOException on failure.
      */
     public static function selectDistinct($table, $criteria = false, $columns)
     {
@@ -799,10 +799,10 @@ class TfishDatabase
      * 
      * Note that the $id MUST represent a column called ID for whatever table you want to run it on.
      * 
-     * @param int $id of the row to update.
-     * @param string $table name
-     * @param string $column to update
-     * @return bool true on success, false on failure
+     * @param int $id ID of the row to update.
+     * @param string $table Name of table.
+     * @param string $column Name of column to update.
+     * @return bool True on success, false on failure.
      */
     public static function toggleBoolean($id, $table, $column)
     {
@@ -835,10 +835,10 @@ class TfishDatabase
      * Call this method when the full description of an individual content object is viewed, or
      * when a related media file is downloaded.
      * 
-     * @param int $id of content object
-     * @param string $table name
-     * @param string $column name
-     * @return bool true on success false on failure
+     * @param int $id ID of content object.
+     * @param string $table Name of table.
+     * @param string $column Name of column.
+     * @return bool True on success false on failure.
      */
     public static function updateCounter($id, $table, $column)
     {
@@ -867,10 +867,10 @@ class TfishDatabase
     /**
      * Update a single row in the database.
      * 
-     * @param string $table name
-     * @param int $id of row to update
-     * @param array $key_values to update
-     * @return bool true on success, false on failure
+     * @param string $table Name of table.
+     * @param int $id ID of row to update.
+     * @param array $key_values Array of column names and values to update.
+     * @return bool True on success, false on failure.
      */
     public static function update($table, $id, $key_values)
     {
@@ -914,9 +914,9 @@ class TfishDatabase
      * around this limitation with a subquery. But given that the use case would be unusual /
      * marginal it is probably just easier to work around it.
      * 
-     * @param string $table name
-     * @param array $key_values to update
-     * @param object $criteria TfishCriteria object
+     * @param string $table Name of table.
+     * @param array $key_values Array of column names and values to update.
+     * @param object $criteria TfishCriteria object.
      */
     public static function updateAll($table, $key_values, $criteria = false)
     {
@@ -984,8 +984,8 @@ class TfishDatabase
      * unexpected data type (ie. one that clashes with a column type definition) PDO will throw
      * an error.
      * 
-     * @param mixed $data
-     * @return int PDO data type constant
+     * @param mixed $data Input data to be type set.
+     * @return int PDO data type constant.
      */
     public static function setType($data)
     {
@@ -1021,8 +1021,8 @@ class TfishDatabase
      * taglinks table in order to sort the content.
      * 
      * @internal
-     * @param string $table name
-     * @return string $sql query fragment
+     * @param string $table Name of table.
+     * @return string $sql SQL query fragment.
      */
     private static function _renderTagJoin($table)
     {
@@ -1034,8 +1034,8 @@ class TfishDatabase
     /**
      * Validates the properties of a TfishCriteria object to be used in constructing a database query.
      * 
-     * @param object $criteria TfishCriteria
-     * @return object TfishCriteria
+     * @param object $criteria TfishCriteria object.
+     * @return object Validated TfishCriteria object.
      */
     public static function validateCriteriaObject($criteria)
     {
@@ -1108,8 +1108,8 @@ class TfishDatabase
     /**
      * Validate and escape column names to be used in constructing a database query.
      * 
-     * @param array $columns
-     * @return array of valid, escaped column names
+     * @param array $columns Array of unescaped column names.
+     * @return array Array of valid, escaped column names
      */
     public static function validateColumns($columns)
     {
@@ -1135,8 +1135,8 @@ class TfishDatabase
     /**
      * Validates and sanitises an ID to be used in constructing a database query.
      * 
-     * @param int $id
-     * @return int $id
+     * @param int $id Input ID to be tested.
+     * @return int $id Validated ID.
      */
     public static function validateId($id)
     {
@@ -1155,8 +1155,8 @@ class TfishDatabase
      * Keys may only consist of alphanumeric and underscore characters. SQLite identifier delimiters
      * are escaped.
      * 
-     * @param array $key_values
-     * @return array valid and escaped keys.
+     * @param array $key_values Array of unescaped keys.
+     * @return array Array of valid and escaped keys.
      */
     public static function validateKeys($key_values)
     {
@@ -1182,8 +1182,8 @@ class TfishDatabase
     /**
      * Validate and escape a table name to be used in constructing a database query.
      * 
-     * @param string $table_name
-     * @return string valid and escaped table name
+     * @param string $table_name Table name to be checked.
+     * @return string Valid and escaped table name.
      */
     public static function validateTableName($table_name)
     {

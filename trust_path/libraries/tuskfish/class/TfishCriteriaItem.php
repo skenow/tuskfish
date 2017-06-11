@@ -43,9 +43,9 @@ class TfishCriteriaItem
     /**
      * Constructor
      * 
-     * @param string $column of the database table
-     * @param mixed $value
-     * @param string $operator see permittedOperators() for a list
+     * @param string $column of the database table.
+     * @param mixed $value Value of the column.
+     * @param string $operator see permittedOperators() for a list.
      */
     function __construct($column, $value, $operator = '=')
     {
@@ -60,7 +60,7 @@ class TfishCriteriaItem
      * Intercepts direct calls to access an object property. This method can be modified to impose
      * processing logic to the value before returning it.
      * 
-     * @param string $property name
+     * @param string $property Name of property.
      * @return mixed|null $property value if it is set; otherwise null.
      */
     public function __get($property)
@@ -75,7 +75,7 @@ class TfishCriteriaItem
     /**
      * Provides a whitelist of permitted operators for use in database queries.
      * 
-     * @return array of permitted operators for use in database queries
+     * @return array of permitted operators for use in database queries.
      */
     public function permittedOperators()
     {
@@ -91,8 +91,8 @@ class TfishCriteriaItem
      * to impose data type restrictions and range checks before allowing the property
      * to be set. 
      * 
-     * @param string $property name
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {
@@ -164,8 +164,8 @@ class TfishCriteriaItem
      * Intercepts isset() calls to correctly read object properties. Can be modified to add
      * processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool 
+     * @param string $property Name of property.
+     * @return bool True if set otherwise false.
      */
     public function __isset($property)
     {
@@ -182,8 +182,8 @@ class TfishCriteriaItem
      * Intercepts unset() calls to correctly unset object properties. Can be modified to add
      * processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool true on success false on failure 
+     * @param string $property Name of property.
+     * @return bool True on success false on failure 
      */
     public function __unset($property)
     {

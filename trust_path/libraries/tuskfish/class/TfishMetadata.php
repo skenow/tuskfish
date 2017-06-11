@@ -56,7 +56,7 @@ class TfishMetadata
 
     /** Initialise object properties and default values.
      * 
-     * @param object $preference Instance of TfishPreference class, holding site preferences
+     * @param object $preference Instance of TfishPreference class, holding site preferences.
      */
     function __construct($preference)
     {
@@ -80,13 +80,13 @@ class TfishMetadata
      * If you want to create pagination controls for other presentation-side libraries add
      * additional methods to this class.
      * 
-     * @param int $count Number of content objects (pages) matching these parameters
-     * @param int $limit Number of content objects to retrieve in current view
-     * @param string $url Target base URL for pagination control links
-     * @param int $start Position in result set to retrieve content objects from
-     * @param int $tag ID of tag used to filter content
-     * @param array $extra_params query string to be appended to the URLs (control script params)
-     * @return string HTML pagination control
+     * @param int $count Number of content objects (pages) matching these parameters.
+     * @param int $limit Number of content objects to retrieve in current view.
+     * @param string $url Target base URL for pagination control links.
+     * @param int $start Position in result set to retrieve content objects from.
+     * @param int $tag ID of tag used to filter content.
+     * @param array $extra_params query string to be appended to the URLs (control script params).
+     * @return string HTML pagination control.
      */
     public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array())
     {
@@ -217,8 +217,8 @@ class TfishMetadata
     /**
      * Access an existing property and escape it for output to browser.
      * 
-     * @param string $property
-     * @return string|bool escaped preference if set, otherwise false
+     * @param string $property Name of property.
+     * @return string|bool Value of preference escaped for display if set, otherwise false.
      */
     public function __get($property)
     {
@@ -230,10 +230,10 @@ class TfishMetadata
     }
 
     /**
-     * Set an existing property
+     * Set an existing property.
      * 
-     * @param string $property
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value to assign to property.
      */
     public function __set($property, $value)
     {
@@ -247,8 +247,8 @@ class TfishMetadata
     /**
      * Intercept isset() calls to correctly read object properties
      * 
-     * @param string $property
-     * @return bool 
+     * @param string $property Name of property.
+     * @return bool True if set, false if not.
      */
     public function __isset($property)
     {
@@ -262,8 +262,8 @@ class TfishMetadata
     /**
      * Intercept unset() calls to correctly unset object properties
      * 
-     * @param string $property
-     * @return bool true on success false on failure
+     * @param string $property Name of property.
+     * @return bool True on success, false on failure.
      */
     public function __unset($property)
     {

@@ -35,8 +35,8 @@ class TfishSecurityUtility
      * Issues warnings if deficiencies are found. Requires a minimum length of 15 characters
      * and maximisation of search space (one upper and lower case letter, one number, one symbol).
      * 
-     * @param string $password
-     * @return array of string evaluation warnings.
+     * @param string $password Input password.
+     * @return array Array of evaluation warnings as strings.
      */
     public static function checkPasswordStrength($password)
     {
@@ -80,7 +80,7 @@ class TfishSecurityUtility
      * 
      * This is used to salt user passwords, to make them more difficult to brute force crack.
      * 
-     * @param int $length
+     * @param int $length Length of required salt.
      * @return string $salt
      */
     public static function generateSalt($length = 64)
@@ -96,11 +96,11 @@ class TfishSecurityUtility
      * effort that must be spent to brute force or even dictionary attack a hash, because each
      * attempt will consume $iterations more cycles. 
      * 
-     * @param string $password
-     * @param int $iterations to process, you want this to be a large number (100,000 or more).
-     * @param string $site_salt
-     * @param string $user_salt (optional)
-     * @return string
+     * @param string $password Input password.
+     * @param int $iterations Number of iterations to run, you want this to be a large number (100,000 or more).
+     * @param string $site_salt The Tuskfish site salt, found in the configuration file.
+     * @param string $user_salt. The user-specific salt for this user, found in the user database table.
+     * @return string Password hash.
      */
     public static function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '')
     {

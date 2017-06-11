@@ -29,8 +29,8 @@ class TfishStaticHandler extends TfishContentHandler
     /**
      * Count TfishStatic objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param object $criteria TfishCriteria object
-     * @return int $count
+     * @param object $criteria TfishCriteria object.
+     * @return int $count Number of TfishStatic objects that match the criteria.
      */
     public static function getCount($criteria = false)
     {
@@ -61,8 +61,8 @@ class TfishStaticHandler extends TfishContentHandler
      * although good practice to use the type-specific one when you know you want a specific kind of
      * object.
      * 
-     * @param object $criteria TfishCriteria object
-     * @return array $objects TfishStatic objects
+     * @param object $criteria TfishCriteria object.
+     * @return array $objects Array of TfishStatic objects.
      */
     public static function getObjects($criteria = false)
     {

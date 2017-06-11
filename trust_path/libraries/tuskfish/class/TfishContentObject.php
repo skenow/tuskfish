@@ -131,8 +131,8 @@ class TfishContentObject extends TfishAncestralObject
      * which are returned unescaped; these are dedicated HTML fields that have been input-validated
      * with the HTMLPurifier library, and so *should* be safe.
      * 
-     * @param string $property
-     * @return string human readable value
+     * @param string $property Name of property.
+     * @return string human readable value.
      */
     public function escape($property)
     {
@@ -220,9 +220,9 @@ class TfishContentObject extends TfishAncestralObject
      * Usually, you want to produce an image of a specific width or (less commonly) height to meet
      * a template/presentation requirement.
      * 
-     * @param int $width of the cached image output
-     * @param int $height of the cached image output
-     * @return string $url to the cached image
+     * @param int $width of the cached image output.
+     * @param int $height of the cached image output.
+     * @return string $url to the cached image.
      */
     public function getCachedImage($width = 0, $height = 0)
     {
@@ -465,8 +465,8 @@ class TfishContentObject extends TfishAncestralObject
      * to be set. Tuskfish objects are designed not to trust other components; each conducts its
      * own internal validation checks. 
      * 
-     * @param string $property name
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {

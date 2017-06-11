@@ -65,7 +65,7 @@ class TfishSession
      * For added security this could retrieve an encrypted token, preferably the SSL session id,
      * although thats availability seems to depend on server configuration.
      * 
-     * @return bool true if admin false if not
+     * @return bool True if admin false if not.
      */
     public static function isAdmin()
     {
@@ -79,8 +79,8 @@ class TfishSession
     /**
      * Checks if a session has expired and sets last seen activity flag.
      * 
-     * @global type $tfish_preference
-     * @return bool true if expired and false if not
+     * @global type $tfish_preference TfishPreference object.
+     * @return bool True if session has expired, false if not.
      */
     public static function isExpired()
     {
@@ -114,7 +114,7 @@ class TfishSession
      * These tests can indicate session hijacking but are by no means definitive; however they do
      * indicate elevated risk and the session should be regenerated as a counter measure.
      * 
-     * @return bool true if IP/user agent unchanged, false otherwise
+     * @return bool True if IP/user agent are unchanged, false otherwise.
      */
     public static function isClean()
     {
@@ -142,8 +142,8 @@ class TfishSession
      * 
      * Note that the password field is unrestricted content.
      * 
-     * @param string $email
-     * @param string $password
+     * @param string $email Input email.
+     * @param string $password Input password.
      */
     public static function login($email, $password)
     {
@@ -200,9 +200,9 @@ class TfishSession
      * 
      * Requires a Yubikey hardware token as the second factor.
      * 
-     * @param string $dirty_password
-     * @param string $dirty_otp
-     * @param object $yubikey instance of the TfishYubikeyAuthenticator class
+     * @param string $dirty_password Input password.
+     * @param string $dirty_otp Input Yubikey one-time password.
+     * @param object $yubikey Instance of the TfishYubikeyAuthenticator class.
      */
     public static function twoFactorLogin($dirty_password, $dirty_otp, $yubikey)
     {
@@ -284,7 +284,7 @@ class TfishSession
     /**
      * Returns a login or logout link for insertion in the template.
      * 
-     * @return string login or logout link
+     * @return string HTML login or logout link.
      */
     public static function loginLink()
     {
@@ -381,7 +381,7 @@ class TfishSession
     /**
      * Initialises a session and sets session cookie parameters to security-concious values. 
      * 
-     * @global object $tfish_preference TfishPreference object
+     * @global object $tfish_preference TfishPreference object.
      */
     public static function start()
     {

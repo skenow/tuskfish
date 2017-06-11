@@ -41,8 +41,8 @@ class TfishTemplate
      * Intercepts direct calls to access an object property. This method can be modified to impose
      * processing logic to the value before returning it.
      * 
-     * @param string $property name
-     * @return mixed|null $property value if it is set; otherwise null.
+     * @param string $property Name of Property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -59,8 +59,8 @@ class TfishTemplate
      * Intercepts isset() calls to correctly read object properties. Can be modified to add
      * processing logic to specific properties.
      * 
-     * @param string $property name
-     * @return bool
+     * @param string $property Name of property.
+     * @return bool True if set, otherwise false.
      */
     public function __isset($property)
     {
@@ -72,15 +72,15 @@ class TfishTemplate
     }
 
     /**
-     * Renders a html template file for display.
+     * Renders a HTML template file for display.
      * 
      * Extracts all properties assigned to the template object as variables and includes the
      * designated template file. The extracted variables are used to populate the dynamic sections
      * of the template. Templates can be nested by assigning a rendered child template as a property
      * of a parent template object.
      * 
-     * @param string $template name file in the /templates/sometemplate directory.
-     * @return string HTML rendered template
+     * @param string $template Name of the template file in the /templates/sometemplate directory.
+     * @return string Rendered HTML template.
      */
     public function render($template)
     {
@@ -103,8 +103,8 @@ class TfishTemplate
      * 
      * Do not declare variables named $template_set or it will disrupt this method.
      * 
-     * @param string $property name
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value to assign to property.
      */
     public function __set($property, $value)
     {
@@ -121,7 +121,7 @@ class TfishTemplate
      * someone accidentally overwriting the template set when assigning a variable to the template
      * object (if content were assigned to $tfish_template->template_set it would mess things up). 
      * 
-     * @param string $template alphanumeric and underscore characters only.
+     * @param string $template Name of template set (alphanumeric and underscore characters only).
      */
     public function setTemplate($template)
     {
@@ -137,8 +137,8 @@ class TfishTemplate
      * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
      * processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool true on success false on failure 
+     * @param string $property Name of property.
+     * @return bool True on success, false on failure.
      */
     public function __unset($property)
     {

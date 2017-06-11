@@ -35,7 +35,7 @@ class TfishFileHandler
      * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
      * is still acceptable, although it must no longer be used for video files.
      * 
-     * @return array
+     * @return array Array of permitted audio mimetypes in file extension => mimetype format.
      */
     public static function allowedAudioMimetypes()
     {
@@ -54,7 +54,7 @@ class TfishFileHandler
      * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
      * wide use it is now presumed to refer to audio files only.
      * 
-     * @return array
+     * @return array Array of permitted video mimetypes in file extension => mimetype format.
      */
     public static function allowedVideoMimetypes()
     {
@@ -68,9 +68,9 @@ class TfishFileHandler
     /**
      * Append a string to a file.
      * 
-     * @param string $path
-     * @param string $contents
-     * @return bool
+     * @param string $path Path to the target file.
+     * @param string $contents Content to append to the target file.
+     * @return bool True on success false on failure.
      */
     public static function appendFile($path, $contents)
     {
@@ -97,8 +97,8 @@ class TfishFileHandler
     /**
      * Deletes the contents of a specific directory, subdirectories are unaffected.
      * 
-     * @param string $path
-     * @return bool true on success false on failure
+     * @param string $path Path to the target directory.
+     * @return bool True on success false on failure.
      */
     public static function clearDirectory($path)
     {
@@ -139,10 +139,10 @@ class TfishFileHandler
     /**
      * Create a new subdirectory in the data_file directory, optionally with parents if they don't exist
      * 
-     * @param string $path relative to the data_file directory
-     * @param string $chmod directory permission (chmod) mode
-     * @param bool $create_parents makes parent directories if they do not exist
-     * @return bool true on success false on failure
+     * @param string $path relative to the data_file directory.
+     * @param string $chmod directory permission (chmod) mode.
+     * @param bool $create_parents makes parent directories if they do not exist.
+     * @return bool true on success false on failure.
      */
     public static function createDirectory($path, $chmod = 0755, $create_parents = true)
     {
@@ -183,11 +183,11 @@ class TfishFileHandler
      * Does NOT check that specified subdirectories exist within data_file, so create them first
      * if they are needed
      * 
-     * @param string $path relative to the data_file directory
-     * @param string $contents of file
-     * @param string $chmod file permissions to apply
-     * @param bool $append append to existing file (true) or write a new one (false)
-     * @return bool true on success, false on failure
+     * @param string $path relative to the data_file directory.
+     * @param string $contents of file.
+     * @param string $chmod file permissions to apply.
+     * @param bool $append append to existing file (true) or write a new one (false).
+     * @return bool true on success, false on failure.
      */
     public static function createFile($path, $contents = false, $chmod = 0600, $append = false)
     {
@@ -236,8 +236,8 @@ class TfishFileHandler
      * Prepends the upload directory path to a file or folder name and checks that the path
      * does not contain directory traversals.
      *
-     * @param string $path relative to the data_file directory
-     * @return string|bool path on success false on failure
+     * @param string $path relative to the data_file directory.
+     * @return string|bool path on success false on failure.
      */
     private static function _dataFilePath($path)
     {
@@ -260,8 +260,8 @@ class TfishFileHandler
     /**
      * Destroys a directory and all contents recursively relative to the data_file directory.
      * 
-     * @param string $path relative to data_file directory
-     * @return bool true on success false on failure
+     * @param string $path relative to data_file directory.
+     * @return bool true on success false on failure.
      */
     public static function deleteDirectory($path)
     {
@@ -306,8 +306,8 @@ class TfishFileHandler
     /**
      * Destroys an individual file in the data_file directory
      * 
-     * @param string $path relative to the data_file directory
-     * @return bool true on success false on failure
+     * @param string $path relative to the data_file directory.
+     * @return bool true on success false on failure.
      */
     public static function deleteFile($path)
     {
@@ -349,8 +349,8 @@ class TfishFileHandler
      * although uploaded files have execution permissions removed and are stored outside of the
      * web root in order to prevent direct access by browser. 
      * 
-     * @return array of permitted mimetypes as file extensions.
-     * @todo Move this into a static TfishPreference method
+     * @return array of permitted mimetypes as file extensions..
+     * @todo Move this into a static TfishPreference method.
      *
      */
     public static function getPermittedUploadMimetypes()
@@ -388,7 +388,7 @@ class TfishFileHandler
      * @param int $id of the associated content object.
      * @param string $filename an alternative name (rename) for the file you wish to transfer,
      * excluding extension.
-     * @return bool
+     * @return bool True on success false on failure. 
      */
     public static function sendDownload($id, $filename = false)
     {
@@ -458,7 +458,7 @@ class TfishFileHandler
      * 
      * @param string $filename Filename.
      * @param string $fieldname Name of form field associated with this upload (media subdirectory).
-     * @return string|bool $filename on success or false on failure.
+     * @return string|bool Filename on success or false on failure.
      */
     public static function uploadFile($filename, $fieldname)
     {

@@ -29,8 +29,8 @@ class TfishTagHandler extends TfishContentHandler
     /**
      * Count TfishTag objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param object $criteria TfishCriteria object
-     * @return int $count
+     * @param object $criteria TfishCriteria object.
+     * @return int $count Number of TfishTagObjects that match the criteria.
      */
     public static function getCount($criteria = false)
     {
@@ -61,8 +61,8 @@ class TfishTagHandler extends TfishContentHandler
      * although good practice to use the type-specific one when you know you want a specific kind of
      * object.
      * 
-     * @param object $criteria TfishCriteria object
-     * @return array $objects TfishTag objects
+     * @param object $criteria TfishCriteria object.
+     * @return array $objects array of TfishTag objects.
      */
     public static function getObjects($criteria = false)
     {
@@ -91,11 +91,11 @@ class TfishTagHandler extends TfishContentHandler
      * that are not important enough to serve as navigation elements as 'offline'. They are still
      * available, but they won't appear in the select box list.
      * 
-     * @param int $selected
-     * @param string $type of content object
-     * @param string $zero_option the string that will be displayed for the 'zero' or no selection option.
-     * @param bool $online_only get all tags or just those marked online.
-     * @return bool|string
+     * @param int $selected ID of selected option.
+     * @param string $type Type of content object.
+     * @param string $zero_option The string that will be displayed for the 'zero' or no selection option.
+     * @param bool $online_only Get all tags or just those marked online.
+     * @return bool|string False if no tags or a HTML select box if there are.
      */
     public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS, $online_only = true)
     {
@@ -131,11 +131,11 @@ class TfishTagHandler extends TfishContentHandler
      * organised tags into collections, you can run a query to retrieve that subset using the 
      * parental ID as a selection criteria.
      * 
-     * @param int $selected tag
-     * @param array $tag_list key => value array of ID => title
-     * @param string $key_name the input parameter name you want to use as key for this select box. Defaults to 'tag_id'.
-     * @param string $zero_option the string that will be displayed for the 'zero' or no selection option
-     * @return string select box
+     * @param int $selected ID of selected option.
+     * @param array $tag_list Array of options in tag_id => title format.
+     * @param string $key_name The input parameter name you want to use as key for this select box. Defaults to 'tag_id'.
+     * @param string $zero_option The string that will be displayed for the 'zero' or no selection option.
+     * @return string HTML select box.
      */
     public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $key_name = null, $zero_option = TFISH_SELECT_TAGS)
     {

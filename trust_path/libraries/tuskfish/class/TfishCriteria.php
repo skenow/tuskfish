@@ -70,8 +70,8 @@ class TfishCriteria
      * Intercepts direct calls to access an object property. This method can be modified to impose
      * processing logic to the value before returning it.
      * 
-     * @param string $property name
-     * @return mixed|null $property value if it is set; otherwise null.
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -88,7 +88,7 @@ class TfishCriteria
      * Intercepts isset() calls to correctly read object properties. Can be modified to add
      * processing logic for specific properties.
      * 
-     * @param string $property name
+     * @param string $property Name of property.
      * @return bool 
      */
     public function __isset($property)
@@ -106,7 +106,7 @@ class TfishCriteria
      * Used by content object handler subclasses to remove any existing type filter when they may
      * need to set or reset it to a specific type.
      * 
-     * @param int $key of the item array containing the type filter
+     * @param int $key Key of the item array containing the type filter.
      */
     public function killType($key)
     {
@@ -128,8 +128,8 @@ class TfishCriteria
      * Intercepts direct calls to set the value of an object property. This method can be modified
      * to impose data type restrictions and range checks before allowing the property to be set.
      * 
-     * @param string $property name
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {
@@ -213,7 +213,7 @@ class TfishCriteria
      * Enclose column identifiers in backticks to escape them. Link criteria items with AND/OR
      * except on the last iteration ($count-1).
      * 
-     * @return string $sql query fragment
+     * @return string $sql SQL query fragment.
      */
     public function renderSQL()
     {
@@ -241,7 +241,7 @@ class TfishCriteria
      * should be used together; use renderSQL() to create a WHERE clause with named placeholders,
      * and renderPDO() to get a list of the named placeholders so that you can bind values to them.
      * 
-     * @return array $pdo_placeholders
+     * @return array $pdo_placeholders Array of PDO placeholders used for building query.
      */
     public function renderPDO()
     {
@@ -261,7 +261,7 @@ class TfishCriteria
      * with the SQL. These will be used to bind the values in the statement to prevent
      * SQL injection. Note that values are NOT inserted into the SQL directly.
      * 
-     * @return string $sql query fragment
+     * @return string $sql SQL query fragment.
      */
     public function renderTagSQL()
     {
@@ -287,7 +287,7 @@ class TfishCriteria
      * should be used together; use renderTagSQL() to create a WHERE clause with named placeholders,
      * and renderTagPDO() to get a list of the named placeholders so that you can bind values to them.
      * 
-     * @return array $tag_placeholders
+     * @return array $tag_placeholders Array of PDO placeholders used for building query.
      */
     public function renderTagPDO()
     {
@@ -304,8 +304,8 @@ class TfishCriteria
      * Intercepts unset() calls to correctly unset object properties. Can be modified to add
      * processing logic for specific properties.
      * 
-     * @param string $property name
-     * @return bool true on success false on failure 
+     * @param string $property Name of property.
+     * @return bool True on success false on failure.
      */
     public function __unset($property)
     {
