@@ -19,11 +19,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishFileHandler
 {
 
-    public function __construct()
-    {
-        
-    }
-
     /**
      * Returns an array of audio mimetypes that are permitted for content objects.
      * 

@@ -28,11 +28,6 @@ class TfishAncestralObject
     /** @var array Whitelist of content object properties. */
     protected $__data = array();
 
-    function __construct()
-    {
-        
-    }
-
     /**
      * Returns a whitelist of object properties whose values are allowed be set.
      * 

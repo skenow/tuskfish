@@ -24,11 +24,6 @@ class TfishTemplate
         'template_set' => 'default'
     );
 
-    public function __construct()
-    {
-        
-    }
-
     /**
      * Get the value of a property.
      * 

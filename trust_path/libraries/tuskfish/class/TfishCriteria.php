@@ -41,11 +41,6 @@ class TfishCriteria
         'tag' => array()
     );
 
-    function __construct()
-    {
-        
-    }
-
     /**
      * Add conditions (TfishCriteriaItem) to a query.
      * 

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Data filter class.
- * 
  * Provides methods to validate different data types and to conduct range checks.
  * 
  * WARNING: The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE
@@ -157,7 +155,7 @@ class TfishFilter
      * Applies HTMLPurifier to validate and sanitise HTML input. The precise operation can be
      * modified by altering the configuration of HTMLPurifier.
      *
-     * @param string $dirty_text
+     * @param string $dirty_html
      * @param array $config
      * @return string validated HTML content
      */
@@ -380,7 +378,7 @@ class TfishFilter
      * Only accepts http:// protocol and ASCII characters. Other protocols and internationalised
      * domain names will fail validation (limitation of filter).
      *
-     * @param string $dirty_url
+     * @param string $url
      * @return bool true if valid URL otherwise false
      */
     public static function isUrl($url)

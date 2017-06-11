@@ -46,11 +46,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishContentHandler
 {
 
-    function __construct()
-    {
-        
-    }
-
     // Check the authenticity and integrity of a signal.
     protected static function authenticate($dirty_signal)
     {

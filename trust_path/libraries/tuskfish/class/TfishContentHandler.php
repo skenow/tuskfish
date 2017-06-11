@@ -19,11 +19,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishContentHandler
 {
 
-    function __construct()
-    {
-        
-    }
-
     /**
      * Delete a single object from the content table.
      * 

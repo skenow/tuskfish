@@ -18,11 +18,6 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishCache
 {
 
-    public function __construct()
-    {
-        
-    }
-
     /**
      * Check if a cached page exists and has not expired, and displays it.
      * 

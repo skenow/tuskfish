@@ -32,11 +32,6 @@ class TfishUser
         'user_group',
     );
 
-    function __construct()
-    {
-        
-    }
-
     /**
      * Get the value of a property.
      * 

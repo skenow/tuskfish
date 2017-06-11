@@ -24,18 +24,18 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishDatabase
 {
 
-    /** @var object $_db Instance of teh PDO base class */
+    /** @var object $_db Instance of the PDO base class */
     private static $_db;
 
     /**
      * No cloning or instantiation permitted
      */
     final private function __construct()
-    { // Finished
+    {
     }
 
     final private function __clone()
-    { // Finished
+    {
     }
 
     /**
@@ -151,7 +151,7 @@ class TfishDatabase
      * @return bool true on success, false on failure
      */
     public static function createTable($table, $columns, $primary_key = null)
-    { // Finished
+    {
         // Initialise
         $clean_primary_key = null;
         $clean_columns = array();
@@ -227,7 +227,7 @@ class TfishDatabase
      * @return bool true on success false on failure
      */
     public static function delete($table, $id)
-    { // Finished
+    {
         $clean_table = self::validateTableName($table);
         $clean_id = self::validateId($id);
         return self::_delete($clean_table, $clean_id);
@@ -851,7 +851,7 @@ class TfishDatabase
      * @return bool true on success, false on failure
      */
     public static function update($table, $id, $key_values)
-    { // Finished
+    {
         $clean_table = self::validateTableName($table);
         $clean_id = self::validateId($id);
         $clean_keys = self::validateKeys($key_values);

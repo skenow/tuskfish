@@ -18,15 +18,14 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishSession
 {
     
-    /**
-     * No cloning or instantiation permitted
-     */
+    /** No instantiation permitted. */
     final private function __construct()
-    { // Finished
+    {
     }
-
+    
+    /** No cloning permitted */
     final private function __clone()
-    { // Finished
+    {
     }
     
     /**
