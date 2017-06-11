@@ -14,7 +14,7 @@
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once TFISH_PATH . "tfish_header.php";
 
-// CRITICAL - ADMIN CHECK - DENY ACCESS UNLESS LOGGED IN.
+/** CRITICAL - ADMIN CHECK - DENY ACCESS UNLESS LOGGED IN. */
 if (!TfishSession::isAdmin()) {
     TfishSession::logout(TFISH_ADMIN_URL . "login.php");
     exit;

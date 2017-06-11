@@ -22,7 +22,6 @@ $tfish_template->setTemplate('gallery');
 // CONVENTIONS:
 // 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
 // 2. Specify the name of the template for the index page, eg. 'articles'.
-
 $content_handler = 'TfishContentHandler';
 $index_template = 'admin_images';
 $target_file_name = 'gallery';

@@ -13,7 +13,6 @@
  * @package		core
  */
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
-// Site preferences can be accessed via $tfish_preference->key;
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
@@ -22,6 +21,7 @@ $tfish_template->setTemplate('default');
 
 // Validate data and separate the search terms.
 $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
+
 // Search terms passed in from a pagination control link, in which case it has been previously
 // i) encoded and ii) escaped. This process needs to be reversed.
 if (isset($_REQUEST['query'])) {
@@ -39,6 +39,7 @@ if ($clean_op && $clean_terms && $type) {
     $content_handler = new TfishContentHandler();
     $search_results = $content_handler->searchContent($clean_terms, $type, $tfish_preference->search_pagination, $start);
     if ($search_results && $search_results[0] > 0) {
+        
         // Get a count of search results; this is used to build the pagination control.
         $results_count = (int) array_shift($search_results);
         $tfish_template->results_count = $results_count;
