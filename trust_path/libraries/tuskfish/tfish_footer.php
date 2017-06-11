@@ -4,6 +4,7 @@
  * Tuskfish footer script, must be included on every page.
  * 
  * Includes the main layout template, kills the database connection and flushes the output buffer.
+ * The page will not render unless this file is included.
  *
  * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
