@@ -124,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 "password_hash" => "TEXT",
                 "user_salt" => "TEXT",
                 "user_group" => "INTEGER",
-                "yubikey_id" => "TEXT"
+                "yubikey_id" => "TEXT",
+                "yubikey_id2" => "TEXT"
             );
 
             TfishDatabase::createTable('user', $user_columns, 'id');
@@ -134,7 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'password_hash' => $password_hash,
                 'user_salt' => $user_salt,
                 'user_group' => '1',
-                'yubikey_id' => 'cccccccclict'
+                'yubikey_id' => '',
+                'yubikey_id2' => ''
                 );
             $query = TfishDatabase::insert('user', $user_data);
 
