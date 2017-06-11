@@ -19,7 +19,8 @@ if (!defined("TFISH_ROOT_PATH"))
 
 class TfishTemplate
 {
-
+    
+    /** @var array $__data Array holding values of this object's properties. */
     protected $__data = array(
         'template_set' => 'default'
     );

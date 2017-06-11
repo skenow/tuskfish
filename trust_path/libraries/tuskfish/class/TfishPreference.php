@@ -38,6 +38,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishPreference extends TfishAncestralObject
 {
 
+    /** Initialise default properties. */
     function __construct()
     {
         /**
@@ -283,11 +284,11 @@ class TfishPreference extends TfishAncestralObject
     }
 
     /**
-     * Update the preference object using $_REQUEST data.
+     * Update the preference object.
      * 
      * The preference object will conduct its own internal data type validation and range checks.
      * 
-     * @param array $_REQUEST
+     * @param array $dirty_input Usually $_REQUEST data
      */
     public function updatePreferences($dirty_input)
     {

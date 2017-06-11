@@ -45,6 +45,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishArticle extends TfishContentObject
 {
 
+    /** Initialise default property values and unset unneeded ones. */
     public function __construct()
     {
         // Must call parent constructor first.

@@ -23,7 +23,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishUser
 {
 
-    /** @var array $__data Permitted properties of this object. */
+    /** @var array $__data Array holding values of this object's properties. */
     protected $__data = array(
         'id',
         'admin_email',

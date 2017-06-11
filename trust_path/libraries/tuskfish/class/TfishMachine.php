@@ -48,6 +48,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishMachine extends TfishTfishAncestralObject
 {
 
+    /** Initialise default property values and unset unneeded ones. */
     public function __construct()
     {
         parent::__construct();

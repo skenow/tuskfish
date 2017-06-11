@@ -103,10 +103,19 @@ if ($password_quality['strong'] == true) {
     echo '</ul>';
 }
 
+/**
+ * Check password strength
+ * 
+ * Tuskfish requires that passwords should require attackers to search the full keyspace and must
+ * be greater than 14 characters to prevent exhaustive brute force searches.
+ * 
+ * @param string $password
+ * @return array $evaluation Array of error messages
+ */
 function checkPasswordStrength($password) {
     $evaluation = array('strong' => true);
 
-    // Length must be > 15 characters to prevent brute force search of the keyspace.
+    // Length must be > 14 characters to prevent brute force search of the keyspace.
     if (mb_strlen($password, 'UTF-8') < 15) {
         $evaluation['strong'] = false;
         $evaluation[] = 'Too short. Password must be 15 characters or more.';
@@ -139,6 +148,19 @@ function checkPasswordStrength($password) {
     return $evaluation;
 }
 
+/**
+ * Recursively hashes a salted password to harden it against dictionary attacks.
+ * 
+ * Recursively hashing a password a large number of times directly increases the amount of
+ * effort that must be spent to brute force or even dictionary attack a hash, because each
+ * attempt will consume $iterations more cycles. 
+ * 
+ * @param string $password
+ * @param int $iterations Number of iterations to process, you want this to be a large number (100,000 or more).
+ * @param string $site_salt Site salt drawn from trust_path/configuration/config.php
+ * @param string $user_salt User-specific salt as drawn from the user table
+ * @return string
+ */
 function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '') {
     $password = $site_salt . $password;
     if ($user_salt) {

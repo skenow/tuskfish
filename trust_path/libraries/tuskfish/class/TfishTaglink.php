@@ -23,7 +23,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishTaglink
 {
 
-    /** @var array Array holding the values of the taglink object, acccessed via magic methods. */
+    /** @var array Array holding the values of taglink object properties, acccessed via magic methods. */
     protected $__data = array(
         'id',
         'tag_id', 
@@ -31,7 +31,7 @@ class TfishTaglink
         'content_id',
         'handler');
 
-    /** Set default values for this object. */
+    /** Initialise default property values and unset unneeded ones. */
     function __construct()
     {
         $this->__data['type'] = "TfishTaglink";

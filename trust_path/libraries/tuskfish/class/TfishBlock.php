@@ -28,6 +28,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishBlock extends TfishContentObject
 {
 
+    /** Initialise default properties and values. */
     public function __construct()
     {
         // Must call parent constructor first.

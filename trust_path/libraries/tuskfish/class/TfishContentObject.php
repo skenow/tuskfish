@@ -58,6 +58,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfishContentObject extends TfishAncestralObject
 {
 
+    /** Initialise default content object properties and values. */
     function __construct()
     {
         parent::__construct();
