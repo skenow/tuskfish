@@ -33,7 +33,7 @@ class TfishMetadata
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;
     
-    // @var array Array holding values of this object's properties, accessed via magic methods. */
+    // @var array $__data Array holding values of this object properties, accessed via magic methods. */
     protected $__data = array(
         'title' => '',
         'description' => '',

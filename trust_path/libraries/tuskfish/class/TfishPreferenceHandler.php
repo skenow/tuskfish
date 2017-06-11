@@ -21,7 +21,7 @@ class TfishPreferenceHandler
     /** @var object $tfish_preferences Permitted website properties held in instance of TfishPreference */
     private $tfish_preferences;
 
-    /** @param object $preference Instance of TfishPreference class, holds site preference info. */
+    /** @param object $tfish_preferences Instance of TfishPreference class, holds site preference info. */
     function __construct($tfish_preferences)
     {
         if (is_a($tfish_preferences, 'TfishPreference')) {

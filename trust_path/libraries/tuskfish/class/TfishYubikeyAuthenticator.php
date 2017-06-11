@@ -47,6 +47,7 @@ class TfishYubikeyAuthenticator
     /** @var int $_curlTimeout Timeout limit when contacting Yubico authentication server. */
     private $_curlTimeout;
 
+    /** Initialise default property values and unset unneeded ones. */
 	public function __construct()
     {
         if (defined("TFISH_YUBIKEY_ID")) {

@@ -173,7 +173,7 @@ class TfishFileHandler
      * @param string $path relative to the data_file directory
      * @param string $contents of file
      * @param string $chmod file permissions to apply
-     * $param bool $append append to existing file (true) or write a new one (false)
+     * @param bool $append append to existing file (true) or write a new one (false)
      * @return bool true on success, false on failure
      */
     public static function createFile($path, $contents = false, $chmod = 0600, $append = false)
@@ -439,7 +439,7 @@ class TfishFileHandler
     /**
      * Upload a file to the uploads/image or uploads/media directory and set permissions to 644.
      * 
-     * @param string $file Filename.
+     * @param string $filename Filename.
      * @param string $fieldname Name of form field associated with this upload (media subdirectory).
      * @return string|bool $filename on success or false on failure.
      */
