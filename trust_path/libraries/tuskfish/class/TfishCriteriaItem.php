@@ -17,9 +17,6 @@
  * @property    mixed $value value to compare
  * @property    string $operator
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishCriteriaItem
 {
 

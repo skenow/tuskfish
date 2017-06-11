@@ -29,22 +29,6 @@
  * @property    int $request_counter Track the number of requests to mitigate replay attacks.
  * @property    int $enabled Permit or deny communications with this machine.
  */
-
-/**
- * Requirements
- * 
- * 1. Shared secret key for each device, needs to be stored in machine database table.
- * 2. HMAC authentication and integrity check.
- * 3. Vocabulary (whitelist) of commands that can be sent.
- * 4. Vocabulary (whitelist) of commands that can be received.
- * 5. Authority file for each device - which commands is it allowed to use?
- * 6. Each command should probably have a separate method, to keep the control script clean.
- * 7. TfishMachineHandler class to handle the actual HMAC and signalling.
- */
-
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishMachine extends TfishTfishAncestralObject
 {
 

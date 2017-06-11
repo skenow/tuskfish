@@ -16,9 +16,6 @@
  * @package		core
  * @properties  array $__data Property values are stored in this arrray.
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishAncestralObject
 {
 

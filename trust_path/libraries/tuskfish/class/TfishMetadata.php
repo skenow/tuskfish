@@ -24,9 +24,6 @@
  * @property    string $robots meta instructions to robots
  * @property    int $pagination_elements number of slots in pagination control
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishMetadata
 {
     

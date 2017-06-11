@@ -32,9 +32,6 @@
  * @property    int enable_cache Enable site cache
  * @property    int cache_life Expiry timer for site cache (seconds)
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishPreference extends TfishAncestralObject
 {
 

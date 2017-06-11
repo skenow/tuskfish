@@ -22,9 +22,6 @@
  * @property    array $items Array of content objects
  * @property    string $template Template for presenting feed, default 'rss'
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishRss extends TfishAncestralObject
 {
 

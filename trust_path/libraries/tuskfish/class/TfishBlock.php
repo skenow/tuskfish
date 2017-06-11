@@ -11,20 +11,17 @@
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
- * @properties  int $id // Auto-increment, set by database.
- * @properties  string $type // Content object type eg. TfishArticle etc. [ALPHA]
- * @properties  string $title // The name of this content.
- * @properties  string $description // The full article or description of the content. [HTML]
- * @properties  array $tags // Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
- * @properties  int $online // Toggle object on or offline.
- * @properties  int $submission_time // Timestamp representing submission time.
- * @properties  string $handler // Handler for this object (not persistent).
- * @properties  string $template // The template that should be used to display this object (not persistent).
- * @properties  string $module // The module that handles this content type (not persistent).
+ * @properties  int $id Auto-increment, set by database.
+ * @properties  string $type Content object type eg. TfishArticle etc. [ALPHA]
+ * @properties  string $title The name of this content.
+ * @properties  string $description The full article or description of the content. [HTML]
+ * @properties  array $tags Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
+ * @properties  int $online Toggle object on or offline.
+ * @properties  int $submission_time Timestamp representing submission time.
+ * @properties  string $handler Handler for this object (not persistent).
+ * @properties  string $template The template that should be used to display this object (not persistent).
+ * @properties  string $module The module that handles this content type (not persistent).
  */
-if (!defined("TFISH_ROOT_PATH"))
-    die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
-
 class TfishBlock extends TfishContentObject
 {
 
