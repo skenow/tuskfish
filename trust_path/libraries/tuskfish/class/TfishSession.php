@@ -54,7 +54,6 @@ class TfishSession
      * 
      * @return bool true if admin false if not
      */
-
     public static function isAdmin()
     {
         if (isset($_SESSION['TFISH_LOGIN']) && $_SESSION['TFISH_LOGIN'] == true) {
@@ -274,7 +273,6 @@ class TfishSession
      * 
      * @return string login or logout link
      */
-
     public static function loginLink()
     {
         if (self::isAdmin()) {

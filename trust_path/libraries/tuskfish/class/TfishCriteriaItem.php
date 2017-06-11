@@ -20,6 +20,7 @@
 class TfishCriteriaItem
 {
 
+    /** @var array $__data Array holding values of this object properties, accessed via magic methods. */
     protected $__data = array(
         'column' => false,
         'value' => false,
