@@ -59,7 +59,7 @@ class TfishSession
         session_start();
     }
 
-    /*
+    /**
      * Shorthand admin privilages check.
      * 
      * For added security this could retrieve an encrypted token, preferably the SSL session id,
@@ -281,7 +281,7 @@ class TfishSession
         exit;
     }
 
-    /*
+    /**
      * Returns a login or logout link for insertion in the template.
      * 
      * @return string login or logout link
