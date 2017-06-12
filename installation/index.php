@@ -18,6 +18,16 @@ ob_start("ob_gzhandler");
 // Boot!
 require_once "../mainfile.php";
 
+/**
+ * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * @param string $classname Name of class to autoload. 
+ */
+function tfish_autoload($classname) {
+    include TFISH_CLASS_PATH . $classname . '.php';
+}
+
+spl_autoload_register('tfish_autoload');
+
 // Set error reporting levels and custom error handler.
 error_reporting(E_ALL & ~E_NOTICE);
 set_error_handler("TfishLogger::logErrors");

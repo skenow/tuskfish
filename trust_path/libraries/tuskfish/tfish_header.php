@@ -16,6 +16,16 @@
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
+/**
+ * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * @param string $classname Name of class to autoload. 
+ */
+function tfish_autoload($classname) {
+    include TFISH_CLASS_PATH . $classname . '.php';
+}
+
+spl_autoload_register('tfish_autoload');
+
 // HTMLPurifier library is used to validate the teaser and description fields of objects.
 // Note that the HTMLPurifier autoloader must be registered AFTER the Tfish autoloader.
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
