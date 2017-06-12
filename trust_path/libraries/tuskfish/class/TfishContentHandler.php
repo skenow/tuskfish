@@ -499,6 +499,23 @@ class TfishContentHandler
         $tags = self::getObjects($criteria);
         return $tags;
     }
+    
+    /**
+     * Search the filtering criteria ($criteria->items) to see if object type has been set and
+     * return the key.
+     * 
+     * @param array $criteria_items Array of TfishCriteriaItem objects.
+     * @return int|null Key of relevant TfishCriteriaItem or null.
+     */
+    protected static function getTypeIndex($criteria_items)
+    {
+        foreach ($criteria_items as $key => $item) {
+            if ($item->column == 'type') {
+                return $key;
+            }
+        }
+        return null;
+    }
 
     /**
      * Returns a whitelist of permitted content object types, ie. descendants of TfishContentObject.

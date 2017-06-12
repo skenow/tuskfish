@@ -55,6 +55,7 @@ class TfishVideo extends TfishContentObject
     /** Initialise default property values and unset unneeded ones. */
     function __construct()
     {
+        
         // Must call parent constructor first.
         parent::__construct();
 

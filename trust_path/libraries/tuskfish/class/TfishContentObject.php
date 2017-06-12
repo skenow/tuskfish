@@ -71,7 +71,6 @@ class TfishContentObject extends TfishAncestralObject
     /** Initialise default content object properties and values. */
     function __construct()
     {
-        parent::__construct();
 
         /**
          * Whitelist of official properties and datatypes.
