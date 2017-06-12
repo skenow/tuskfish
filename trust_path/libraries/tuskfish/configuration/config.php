@@ -60,4 +60,13 @@ if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
 define("TFISH_LANGUAGE_PATH", TFISH_PATH . "language/");
 define("TFISH_DEFAULT_LANGUAGE", TFISH_LANGUAGE_PATH . "english.php");
 
+/**
+ * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * @param string $classname Name of class to autoload. 
+ */
+function tfish_autoload($classname) {
+    include TFISH_CLASS_PATH . $classname . '.php';
+}
+spl_autoload_register('tfish_autoload');
+
 // Site salt, key and database name are appended here.
