@@ -20,6 +20,9 @@ require_once "../mainfile.php";
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
+// tfish_header is manually duplicated on this page but without the site closed check and redirect
+// as that creates a redirect loop.
+
 /**
  * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
  * @param string $classname Name of class to autoload. 
