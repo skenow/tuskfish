@@ -43,3 +43,11 @@ define("TFISH_CONFIGURATION_PATH", TFISH_PATH . "configuration/config.php");
 
 // Include critical files
 require_once(TFISH_CONFIGURATION_PATH);
+
+/**
+ * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * @param string $classname Name of class to autoload. 
+ */
+function tfish_autoload($classname) {
+    include TFISH_CLASS_PATH . $classname . '.php';
+}
