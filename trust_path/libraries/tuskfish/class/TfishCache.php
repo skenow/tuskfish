@@ -42,8 +42,9 @@ class TfishCache
      * request the page be written to cache. This function should be called after tfish_header.php
      * is included.
      * 
-     * @param string $basename page filename without extension, eg. article. Alphanumeric and underscores only..
-     * @param array $params URL query string parameters for this page as $key => $value pairs.
+     * @param string $basename Page filename without extension, eg. 'article' (alphanumeric and 
+     * underscore characters only).
+     * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
     public static function checkCache($basename, $params = array())
     {
@@ -75,7 +76,8 @@ class TfishCache
     /**
      * Calculate the return the name of a cached file, based on input parameters.
      * 
-     * @param string $basename page filename without extension, eg. article. Alphanumeric and underscores only.
+     * @param string $basename Page filename without extension, eg. 'article'. Alphanumeric and 
+     * underscore characters only.
      * @param array $params URL query string parameters for this page as $key => $value pairs.
      */
     private static function _getCachedFileName($basename, $params)
@@ -114,8 +116,8 @@ class TfishCache
      * This function should be called in tfish_footer.php, before ob_end_flush(). Note that
      * warnings are suppressed when trying to open the file.
      * 
-     * @param string $basename filename of this page, alphanumeric and underscore characters only.
-     * @param array $params URL query string parameters for this page as $key => $value pairs.
+     * @param string $basename Filename of this page, alphanumeric and underscore characters only.
+     * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
     public static function cachePage($basename, $params, $buffer)
@@ -148,7 +150,7 @@ class TfishCache
      * if a single object is added, edited or destroyed (this is to ensure that index pages and
      * pagination controls stay up to date). Later it would be good to be more selective.
      * 
-     * @return bool success or failure.
+     * @return bool True on success, false on failure.
      */
     public static function flushCache()
     {

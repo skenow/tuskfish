@@ -55,8 +55,8 @@ class TfishCriteria
     /**
      * Add conditions (TfishCriteriaItem) to a query.
      * 
-     * @param object $criteria_item TfishCriteriaItem object
-     * @param string $condition used to chain TfishCriteriaItems, "AND" or "OR" only
+     * @param object $criteria_item TfishCriteriaItem object.
+     * @param string $condition Condition used to chain TfishCriteriaItems, "AND" or "OR" only.
      */
     public function add($criteria_item, $condition = "AND")
     {
@@ -89,7 +89,7 @@ class TfishCriteria
      * processing logic for specific properties.
      * 
      * @param string $property Name of property.
-     * @return bool 
+     * @return bool True if set, otherwise false.
      */
     public function __isset($property)
     {
@@ -241,7 +241,7 @@ class TfishCriteria
      * should be used together; use renderSQL() to create a WHERE clause with named placeholders,
      * and renderPDO() to get a list of the named placeholders so that you can bind values to them.
      * 
-     * @return array $pdo_placeholders Array of PDO placeholders used for building query.
+     * @return array $pdo_placeholders Array of PDO placeholders used for building SQL query.
      */
     public function renderPDO()
     {
@@ -287,7 +287,7 @@ class TfishCriteria
      * should be used together; use renderTagSQL() to create a WHERE clause with named placeholders,
      * and renderTagPDO() to get a list of the named placeholders so that you can bind values to them.
      * 
-     * @return array $tag_placeholders Array of PDO placeholders used for building query.
+     * @return array $tag_placeholders Array of PDO placeholders used for building SQL query.
      */
     public function renderTagPDO()
     {

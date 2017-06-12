@@ -43,8 +43,8 @@ class TfishFilter
      * All strings received from external sources must be passed through this function, particularly
      * prior to storage in the database.
      * 
-     * @param string $dirty_string Untrusted input string.
-     * @return bool true if UTF-8 otherwise false.
+     * @param string $dirty_string Input string to check.
+     * @return bool True if string is UTF-8 encoded otherwise false.
      */
     public static function isUtf8($dirty_string)
     {
@@ -70,7 +70,8 @@ class TfishFilter
      * 
      * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspeciachars().
      * If you wish to use the data on a landing page you must decode it with htmlspecialchars_decode()
-     * followed by rawurldecode() in that order.
+     * followed by rawurldecode() in that order. But really, if you are using any characters that
+     * need to be encoded in the first place you should probably just stop. Keep it simple, ok?
      * 
      * @param string $url Unescaped input URL.
      * @return string Encoded and escaped URL.
@@ -95,9 +96,9 @@ class TfishFilter
      * Note that the "int" case does not provide range checks. If you want a specific range then
      * check the range with isInt() manually.
      *
-     * @param array $dirty_vars untrusted input that requires validation.
-     * @param array $allowed_vars whitelist of permitted variables and expected data types.
-     * @return array of filtered values.
+     * @param array $dirty_vars Input that requires validation.
+     * @param array $allowed_vars Whitelist of permitted variables and expected data types.
+     * @return array Array of filtered values.
      */
     public static function filterData($dirty_vars, $allowed_vars)
     {
@@ -185,10 +186,10 @@ class TfishFilter
     }
 
     /**
-     * Check that a string is comprised soley of alphabetical characters.
+     * Check that a string is comprised solely of alphabetical characters.
      *
      * @param string $alpha Input to be tested.
-     * @return bool true if valid alphabetical string, false otherwise.
+     * @return bool True if valid alphabetical string, false otherwise.
      */
     public static function isAlpha($alpha)
     {
@@ -203,7 +204,7 @@ class TfishFilter
      * Check that a string is comprised soley of alphanumeric characters.
      *
      * @param string $alnum Input to be tested.
-     * @return bool true if valid alphanumerical string, false otherwise.
+     * @return bool True if valid alphanumerical string, false otherwise.
      */
     public static function isAlnum($alnum)
     {
@@ -218,7 +219,7 @@ class TfishFilter
      * Check that a string is comprised solely of alphanumeric characters and underscores.
      * 
      * @param string $alnumUnderscore Input to be tested.
-     * @return bool true if valid alphanumerical or underscore string, false otherwise.
+     * @return bool True if valid alphanumerical or underscore string, false otherwise.
      */
     public static function isAlnumUnderscore($alnumUnderscore)
     {
@@ -236,7 +237,7 @@ class TfishFilter
      * not; it does not return the actual value of the parameter.
      *
      * @param bool $bool Input to be tested.
-     * @return bool true if a valid boolean value, false otherwise.
+     * @return bool True if a valid boolean value, false otherwise.
      */
     public static function isBool($bool)
     {
@@ -252,7 +253,7 @@ class TfishFilter
      * Check that a string is comprised solely of digits.
      *
      * @param string $digit Input to be tested.
-     * @return bool true if valid digit string, false otherwise.
+     * @return bool True if valid digit string, false otherwise.
      */
     public static function isDigit($digit)
     {
@@ -270,7 +271,7 @@ class TfishFilter
      * filter IS NOT DATABASE SAFE in of itself.
      *
      * @param string $email Input to be tested.
-     * @return boolean true if valid email address, otherwise false.
+     * @return boolean True if valid email address, otherwise false.
      */
     public static function isEmail($email)
     {
@@ -287,7 +288,7 @@ class TfishFilter
      * Potential problem - is_float() allows exponents.
      *
      * @param float $float Input float to be tested.
-     * @return boolean true if valid float, otherwise false.
+     * @return boolean True if valid float, otherwise false.
      */
     public static function isFloat($float)
     {
@@ -300,7 +301,7 @@ class TfishFilter
      * @param int $int Input to be tested.
      * @param int $min Minimum acceptable value.
      * @param int $max Maximum acceptable value.
-     * @return bool true if valid int and within optional range check, false otherwise.
+     * @return bool True if valid int and within optional range check, false otherwise.
      */
     public static function isInt($int, $min = false, $max = false)
     {
@@ -335,8 +336,8 @@ class TfishFilter
      * Validates IP addresses. Accepts private (but not reserved) ranges. Optionally IPV6.
      *
      * @param string $ip Input to be tested.
-     * @param int $version IP address version (4 or 6).
-     * @return bool true if valid IP address, false otherwise.
+     * @param int $version IP address version ('4' or '6').
+     * @return bool True if valid IP address, false otherwise.
      */
     public static function isIp($ip, $version = false)
     {
@@ -389,7 +390,7 @@ class TfishFilter
      * domain names will fail validation (limitation of filter).
      *
      * @param string $url Input to be tested.
-     * @return bool true if valid URL otherwise false.
+     * @return bool True if valid URL otherwise false.
      */
     public static function isUrl($url)
     {
@@ -405,7 +406,7 @@ class TfishFilter
      * Test if input is an array.
      *
      * @param array $array Input to be tested.
-     * @return bool true if valid array otherwise false.
+     * @return bool True if valid array otherwise false.
      */
     public static function isArray($array)
     {
@@ -416,7 +417,7 @@ class TfishFilter
      * Test if input is an object.
      * 
      * @param object $object Input to be tested.
-     * @return bool true if valid object otherwise false.
+     * @return bool True if valid object otherwise false.
      */
     public static function isObject($object)
     {
@@ -427,7 +428,7 @@ class TfishFilter
      * Tests if the input is null (ie set but without an assigned value) or not.
      * 
      * @param mixed $null Input to be tested.
-     * @return bool true if input is null otherwise false.
+     * @return bool True if input is null otherwise false.
      */
     public static function isNull($null)
     {
@@ -438,7 +439,7 @@ class TfishFilter
      * Tests if input is a resource.
      * 
      * @param resource $resource Input to be tested.
-     * @return bool true if valid resource otherwise false.
+     * @return bool True if valid resource otherwise false.
      */
     public static function isResource($resource)
     {

@@ -34,7 +34,7 @@ class TfishPreferenceHandler
     /** 
      * Initialise default property values.
      * 
-     * @param object $tfish_preferences Instance of TfishPreference class, holds site preference info
+     * @param object $tfish_preferences Instance of TfishPreference class, holds site preference info.
      */
     function __construct($tfish_preferences)
     {

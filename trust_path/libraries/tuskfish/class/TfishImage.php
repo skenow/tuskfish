@@ -77,7 +77,7 @@ class TfishImage extends TfishContentObject
      * This list is also used in update calls to the database to ensure that unused columns are
      * cleared and reset with default values.
      * 
-     * @return array
+     * @return array Array of properties that should be zeroed (unset).
      */
     public function zeroedProperties()
     {

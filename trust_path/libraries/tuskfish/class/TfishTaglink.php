@@ -33,7 +33,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishTaglink
 {
 
-    /** @var array Array holding the values of taglink object properties, acccessed via magic methods. */
+    /** @var array Array holding the values of taglink object properties, accessed via magic methods. */
     protected $__data = array(
         'id',
         'tag_id', 

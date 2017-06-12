@@ -24,26 +24,26 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
- * @property    string $site_name Name of website
- * @property    string $site_description Meta description of website
- * @property    string $site_author Author of website
- * @property    string $site_email Administrative contact email for website
- * @property    string $site_copyright Copyright notice
- * @property    int $close_site Toggle to close this site
- * @property    string $server_timezone Timezone of server location
- * @property    string $site_timezone Timezone for main audience location
- * @property    int $min_search_length Minimum length of search terms
- * @property    int search_pagination Number of search results to show on a page
- * @property    int user_pagination Number of content objects to show on public index page
- * @property    int admin_pagination Number of content objects to show on admin index page
- * @property    int gallery_pagination Number of images to show in admin gallery
- * @property    int pagination_elements Number of slots to include on pagination controls
- * @property    string session_name Name of session
- * @property    int session_life Expiry timer for inactive sessions (minutes)
- * @property    string default_language Default language of site
- * @property    string date_format Format to display dates, as per PHP date() function
- * @property    int enable_cache Enable site cache
- * @property    int cache_life Expiry timer for site cache (seconds)
+ * @property    string $site_name Name of website.
+ * @property    string $site_description Meta description of website.
+ * @property    string $site_author Author of website.
+ * @property    string $site_email Administrative contact email for website.
+ * @property    string $site_copyright Copyright notice.
+ * @property    int $close_site Toggle to close this site.
+ * @property    string $server_timezone Timezone of server location.
+ * @property    string $site_timezone Timezone for main audience location.
+ * @property    int $min_search_length Minimum length of search terms.
+ * @property    int search_pagination Number of search results to show on a page.
+ * @property    int user_pagination Number of content objects to show on public index page.
+ * @property    int admin_pagination Number of content objects to show on admin index page.
+ * @property    int gallery_pagination Number of images to show in admin gallery.
+ * @property    int pagination_elements Number of slots to include on pagination controls.
+ * @property    string session_name Name of session.
+ * @property    int session_life Expiry timer for inactive sessions (minutes).
+ * @property    string default_language Default language of site.
+ * @property    string date_format Format to display dates, as per PHP date() function.
+ * @property    int enable_cache Enable site cache.
+ * @property    int cache_life Expiry timer for site cache (seconds).
  */
 class TfishPreference extends TfishAncestralObject
 {

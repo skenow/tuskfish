@@ -16,7 +16,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * Tuskfish parent data object class.
  * 
  * All content objects are descendants of this class via the first child, TfishContentObject. 
- * Object properties are held in a protected store and accessed via magic methods.
+ * Object properties are held in a protected store ($__data) and accessed via magic methods.
  * Note that if a subclass implements magical __get() and __set() methods, the parental versions
  * will NOT be called unless you explicitly do it using parent::__get().
  *
@@ -26,12 +26,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
- * @properties  array $__data Property values are stored in this arrray.
  */
 class TfishAncestralObject
 {
 
-    /** @var array $__properties Whitelist of permitted content object properties. */
+    /** @var array $__properties Whitelist that defines permitted content object properties. */
     protected $__properties = array();
     
     /** @var array Holds values of permitted content object properties, accessed via magic methods. */
@@ -131,7 +130,7 @@ class TfishAncestralObject
     }
 
     /**
-     * Converts the object to an array suitable for insert/update calls to the database.
+     * Converts a content object to an array suitable for insert/update calls to the database.
      * 
      * Note that the returned array observes the PARENT object's getPropertyWhitelist() as a 
      * restriction on the setting of keys. This whitelist explicitly excludes the handler, 

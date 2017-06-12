@@ -37,17 +37,6 @@ class TfishSession
     final private function __clone()
     {
     }
-    
-    /**
-     * Initialise a user session.
-     * 
-     * @global obj $tfish_preference TfishPreference object
-     * @param string $name
-     * @param int $limit
-     * @param string $path
-     * @param string|null $domain
-     * @param bool|null $https
-     */
 
     /**
      * Unset session variables and destroy the session.
@@ -60,7 +49,7 @@ class TfishSession
     }
 
     /**
-     * Shorthand admin privilages check.
+     * Shorthand admin privileges check.
      * 
      * For added security this could retrieve an encrypted token, preferably the SSL session id,
      * although thats availability seems to depend on server configuration.
@@ -298,7 +287,7 @@ class TfishSession
     /**
      * Destroys the current session on logout
      * 
-     * @param string $url_redirect to redirect the user to. 
+     * @param string $url_redirect The URL to redirect the user to on logging out. 
      */
     public static function logout($url_redirect = false)
     {
@@ -377,9 +366,9 @@ class TfishSession
         session_start(); // Now working with the new session. Note that old one still exists and both carry a 'destroyed' flag.
         unset($_SESSION['destroyed']); // Remove the destroyed flag from the new session. Old one will be destroyed next time isExpired() is called on it.
     }
-
+    
     /**
-     * Initialises a session and sets session cookie parameters to security-concious values. 
+     * Initialises a session and sets session cookie parameters to security-conscious values. 
      * 
      * @global object $tfish_preference TfishPreference object.
      */

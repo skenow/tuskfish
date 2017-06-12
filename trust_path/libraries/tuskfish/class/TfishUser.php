@@ -105,7 +105,7 @@ class TfishUser
      * objects to add processing logic for specific properties.
      * 
      * @param string $property Name of property.
-     * @return bool True on success false on failure.
+     * @return bool True on success, false on failure.
      */
     public function __unset($property)
     {

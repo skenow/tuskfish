@@ -79,8 +79,8 @@ class TfishMachine extends TfishTfishAncestralObject
      * to be set. Tuskfish objects are designed not to trust other components; each conducts its
      * own internal validation checks. 
      * 
-     * @param string $property name
-     * @param mixed $value
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
     public function __set($property, $value)
     {

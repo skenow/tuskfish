@@ -84,9 +84,9 @@ class TfishAngryTree
      * Constructor
      *
      * @param array $objectArr Array of collection objects.
-     * @param string $myId field name of object ID.
-     * @param string $parentId field name of parent object ID.
-     * @param string $rootId field name of root object ID.
+     * @param string $myId Name of object ID field.
+     * @param string $parentId Name of parent object ID field.
+     * @param string $rootId Name of root object ID field.
      * */
     function __construct(&$objectArr, $myId, $parentId, $rootId = null)
     {
@@ -100,8 +100,10 @@ class TfishAngryTree
     }
 
     /**
-     * Initialize the object
-     * */
+     * Initialise the tree.
+     * 
+     * @internal
+     */
     private function _initialize()
     {
         foreach (array_keys($this->_objects) as $i) {
@@ -133,7 +135,7 @@ class TfishAngryTree
      * returns an object from the category tree specified by its id
      *
      * @param   string  $key    ID of the object to retrieve.
-     * @return  object  object within the tree.
+     * @return  object  Object (node) within the tree.
      * */
     public function &getByKey($key)
     {
@@ -141,10 +143,10 @@ class TfishAngryTree
     }
 
     /**
-     * returns an array of all the first child object of an object specified by its id
+     * Returns an array of all the first child objects of a parental object specified by its id.
      *
      * @param   string $key ID of the parent object.
-     * @return  array of children of the parent.
+     * @return  array Array of child objects.
      * */
     public function getFirstChild($key)
     {
@@ -158,11 +160,11 @@ class TfishAngryTree
     }
 
     /**
-     * returns an array of all child objects of an object specified by its id
+     * Returns an array of all child objects of a parental object specified by its ID.
      *
      * @param string $key ID of the parent.
-     * @param array $ret array of children from previous recursions (empty when called from client).
-     * @return array of child nodes.
+     * @param array $ret Array of child objects from previous recursions (empty when called from client).
+     * @return array Array of child nodes.
      * */
     public function getAllChild($key, $ret = array())
     {
@@ -184,9 +186,9 @@ class TfishAngryTree
      * The key of returned array represents how many levels up from the specified object.
      *
      * @param string $key ID of the child object.
-     * @param array $ret result from previous recursions (empty when called from outside).
-     * @param int $uplevel level of recursion (empty when called from outside).
-     * @return array of parent nodes.
+     * @param array $ret Result from previous recursions (empty when called from outside).
+     * @param int $uplevel Level of recursion (empty when called from outside).
+     * @return array Array of parent nodes.
      * */
     public function getAllParent($key, $ret = array(), $uplevel = 1)
     {
@@ -201,15 +203,15 @@ class TfishAngryTree
     }
 
     /**
-     * Make options for a select box from
+     * Make options for a select box from tree.
      *
-     * @param string $fieldName name of the member variable from the node objects that should
+     * @param string $fieldName Name of the member variable from the node objects that should
      * be used as the title for the options.
      * @param string $selected Value to display as selected.
      * @param int $key ID of the object to display as the root of select options.
-     * @param string $ret result from previous recursions (reference to a string when called from outside).
-     * @param string $prefix_orig string to indent items at deeper levels.
-     * @param string $prefix_curr string to indent the current item.
+     * @param string $ret Result from previous recursions (reference to a string when called from outside).
+     * @param string $prefix_orig String to indent items at deeper levels.
+     * @param string $prefix_curr String to indent the current item.
      */
     private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, $prefix_curr = '')
     {
@@ -232,14 +234,14 @@ class TfishAngryTree
      * Returns an indented array of options that can be used to build a HTML select box, indented
      * according to the relative hierarchy.
      *
-     * @param string $name of the select box.
-     * @param string $fieldName of the member variable from the node objects that should be used
-     * as the title for the options.
-     * @param string $prefix string to indent deeper levels.
-     * @param int $selected value to display as selected.
-     * @param bool $addEmptyOption set TRUE to add an empty option with value "0" at the top of the hierarchy.
+     * @param string $name Name of the select box.
+     * @param string $fieldName Name of the member variable from the node objects that should be used
+     * as the title field for the options.
+     * @param string $prefix String to indent deeper levels.
+     * @param int $selected Value to display as selected.
+     * @param bool $addEmptyOption Set TRUE to add an empty option with value "0" at the top of the hierarchy.
      * @param int $key ID of the object to display as the root of select options.
-     * @return array select box options as key => value pairs.
+     * @return array Select box options as ID => title pairs.
      * */
     public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '', $addEmptyOption = FALSE, $key = 0)
     {
@@ -252,7 +254,7 @@ class TfishAngryTree
     /**
      * Make a select box of parent collections from the tree.
      * 
-     * @param int $selected element.
+     * @param int $selected Currently selected option.
      * @param int $key ID of the object to display as root of the select options.
      * @return string HTML select box.
      */

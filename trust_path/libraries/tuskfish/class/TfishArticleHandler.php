@@ -36,7 +36,7 @@ class TfishArticleHandler extends TfishContentHandler
      * acceptable to use either handler, although probably good practice to use the object-
      * specific one when you know you want a specific kind of object.
      * 
-     * @param TfishCriteria $criteria query composer object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
     public static function getObjects($criteria = false)
@@ -68,7 +68,7 @@ class TfishArticleHandler extends TfishContentHandler
      * although good practice to use the type-specific one when you know you want a specific kind of
      * object.
      * 
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
     public static function getCount($criteria = false)

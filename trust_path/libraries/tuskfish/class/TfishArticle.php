@@ -59,7 +59,7 @@ class TfishArticle extends TfishContentObject
         // Must call parent constructor first.
         parent::__construct();
 
-        // Declare the type, template, module and icon for this this class
+        // Declare the type, template, module and icon for this this class.
         $this->__data['type'] = "TfishArticle";
         $this->__data['template'] = "article";
         $this->__data['module'] = "articles";
@@ -78,7 +78,7 @@ class TfishArticle extends TfishContentObject
      * This list is also used in update calls to the database to ensure that unused columns are
      * cleared and reset with default values.
      * 
-     * @return array
+     * @return array Array of properties that should be zeroed (unset).
      */
     public function zeroedProperties()
     {

@@ -28,14 +28,14 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since		1.0
  * @package		core
- * @property    string $title meta title of this website
- * @property    string $description meta description of this website
- * @property    string $author author of this website
- * @property    string $copyright copyright notice
- * @property    string $generator software system that generated this page
- * @property    string $seo seo-optimisation string to append to page URL
- * @property    string $robots meta instructions to robots
- * @property    int $pagination_elements number of slots in pagination control
+ * @property    string $title Meta title of this website.
+ * @property    string $description Meta description of this website.
+ * @property    string $author Author of this website.
+ * @property    string $copyright Copyright notice.
+ * @property    string $generator Software system that generated this page.
+ * @property    string $seo SEO optimisation string to append to page URL.
+ * @property    string $robots Meta instructions to robots.
+ * @property    int $pagination_elements Number of slots in the pagination control.
  */
 class TfishMetadata
 {
@@ -85,7 +85,7 @@ class TfishMetadata
      * @param string $url Target base URL for pagination control links.
      * @param int $start Position in result set to retrieve content objects from.
      * @param int $tag ID of tag used to filter content.
-     * @param array $extra_params query string to be appended to the URLs (control script params).
+     * @param array $extra_params Query string to be appended to the URLs (control script params).
      * @return string HTML pagination control.
      */
     public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array())

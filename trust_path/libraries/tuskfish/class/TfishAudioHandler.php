@@ -29,7 +29,7 @@ class TfishAudioHandler extends TfishContentHandler
     /**
      * Count TfishAudio objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishAudio objects matching conditions.
      */
     public static function getCount($criteria = false)
@@ -61,7 +61,7 @@ class TfishAudioHandler extends TfishContentHandler
      * although good practice to use the type-specific one when you know you want a specific kind of
      * object.
      * 
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishAudio objects.
      */
     public static function getObjects($criteria = false)

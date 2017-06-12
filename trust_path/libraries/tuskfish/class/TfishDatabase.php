@@ -268,7 +268,7 @@ class TfishDatabase
      * possible to get around this restriction with a loop or subquery.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return bool True on success, false on failure.
      */
     public static function deleteAll($table, $criteria)
@@ -474,7 +474,7 @@ class TfishDatabase
      * Returns a PDO statement object, from which results can be extracted with standard PDO calls.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @param array $columns Names of database columns to be selected.
      * @return object PDOStatement object on success PDOException on failure.
      */
@@ -593,7 +593,7 @@ class TfishDatabase
      * Count the number of rows matching a set of conditions.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @param string $column Name of column.
      * @return int|object Row count on success, PDOException object on failure.
      */
@@ -690,7 +690,7 @@ class TfishDatabase
      * Use the $columns array to specify which fields you want to filter the results by.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @param array $columns Name of columns to filter results by.
      * @return object PDOStatement on success, PDOException on failure.
      */
@@ -916,7 +916,7 @@ class TfishDatabase
      * 
      * @param string $table Name of table.
      * @param array $key_values Array of column names and values to update.
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      */
     public static function updateAll($table, $key_values, $criteria = false)
     {

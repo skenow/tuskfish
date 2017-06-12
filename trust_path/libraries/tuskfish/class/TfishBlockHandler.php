@@ -35,7 +35,7 @@ class TfishBlockHandler extends TfishContentHandler
      * acceptable to use either handler, although probably good practice to use the object-
      * specific one when you know you want a specific kind of object.
      * 
-     * @param object $criteria TfishCriteria object
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects content objects.
      */
     public static function getObjects($criteria = false)
@@ -60,7 +60,7 @@ class TfishBlockHandler extends TfishContentHandler
     /**
      * Count TfishBlock objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param object $criteria TfishCriteria object
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Count of TfishBlock objects matching conditions.
      */
     public static function getCount($criteria = false)

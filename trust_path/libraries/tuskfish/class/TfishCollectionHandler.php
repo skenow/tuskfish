@@ -29,7 +29,7 @@ class TfishCollectionHandler extends TfishContentHandler
     /**
      * Count TfishCollection objects, optionally matching conditions specified with a TfishCriteria object.
      * 
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of collection objects matching the criteria.
      */
     public static function getCount($criteria = false)
@@ -61,7 +61,7 @@ class TfishCollectionHandler extends TfishContentHandler
      * although good practice to use the type-specific one when you know you want a specific kind of
      * object.
      * 
-     * @param object $criteria TfishCriteria object.
+     * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishCollection objects.
      */
     public static function getObjects($criteria = false)
@@ -86,7 +86,7 @@ class TfishCollectionHandler extends TfishContentHandler
     /**
      * Get a select box listing a tree of parent (TfishCollection) objects.
      * 
-     * @param int $selected element.
+     * @param int $selected Currently selected option.
      * @return string HTML select box.
      */
     public static function getParentSelectBox($selected = 0)

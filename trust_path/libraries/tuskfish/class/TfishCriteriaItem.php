@@ -43,15 +43,16 @@ class TfishCriteriaItem
     /**
      * Constructor
      * 
-     * @param string $column of the database table.
+     * @param string $column Name of column in database table. Alphanumeric and underscore
+     * characters only.
      * @param mixed $value Value of the column.
-     * @param string $operator see permittedOperators() for a list.
+     * @param string $operator See permittedOperators() for a list of acceptable operators.
      */
     function __construct($column, $value, $operator = '=')
     {
-        self::__set('column', $column); // String, alphanumeric and underscore characters only.
-        self::__set('value', $value); // String
-        self::__set('operator', $operator); // String, whitelisted values only.
+        self::__set('column', $column);
+        self::__set('value', $value);
+        self::__set('operator', $operator);
     }
 
     /**
@@ -61,7 +62,7 @@ class TfishCriteriaItem
      * processing logic to the value before returning it.
      * 
      * @param string $property Name of property.
-     * @return mixed|null $property value if it is set; otherwise null.
+     * @return mixed|null $property Value if it is set; otherwise null.
      */
     public function __get($property)
     {
@@ -75,7 +76,7 @@ class TfishCriteriaItem
     /**
      * Provides a whitelist of permitted operators for use in database queries.
      * 
-     * @return array of permitted operators for use in database queries.
+     * @return array Array of permitted operators for use in database queries.
      */
     public function permittedOperators()
     {
@@ -183,7 +184,7 @@ class TfishCriteriaItem
      * processing logic for specific properties.
      * 
      * @param string $property Name of property.
-     * @return bool True on success false on failure 
+     * @return bool True on success false on failure.
      */
     public function __unset($property)
     {

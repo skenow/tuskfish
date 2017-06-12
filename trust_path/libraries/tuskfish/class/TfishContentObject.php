@@ -76,32 +76,32 @@ class TfishContentObject extends TfishAncestralObject
         /**
          * Whitelist of official properties and datatypes.
          */
-        $this->__properties['id'] = 'int'; // Auto-increment, set by database.
-        $this->__properties['type'] = 'alpha'; // Content object type eg. TfishArticle etc. [ALPHA]
-        $this->__properties['title'] = 'string'; // The headline or name of this content.
-        $this->__properties['teaser'] = 'html'; // A short (one paragraph) summary or abstract for this content. [HTML]
-        $this->__properties['description'] = 'html'; // The full article or description of the content. [HTML]
-        $this->__properties['media'] = 'string'; // An associated download/audio/video file. [FILEPATH OR URL]
-        $this->__properties['format'] = 'string'; // Mimetype
-        $this->__properties['file_size'] = 'int'; // Specify in bytes.
-        $this->__properties['creator'] = 'string'; // Author.
-        $this->__properties['image'] = 'string'; // An associated image file, eg. a screenshot a good way to handle it. [FILEPATH OR URL]
-        $this->__properties['caption'] = 'string'; // Caption of the image file.
-        $this->__properties['date'] = 'string'; // Date of publication expressed as a string.
-        $this->__properties['parent'] = 'int'; // A source work or collection of which this content is part.
-        $this->__properties['language'] = 'string'; // English (future proofing).
-        $this->__properties['rights'] = 'int'; // Intellectual property rights scheme or license under which the work is distributed.
-        $this->__properties['publisher'] = 'string'; // The entity responsible for distributing this work.
-        $this->__properties['tags'] = 'array'; // Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
-        $this->__properties['online'] = 'int'; // Toggle object on or offline.
-        $this->__properties['submission_time'] = 'int'; // Timestamp representing submission time.
-        $this->__properties['counter'] = 'int'; // Number of times this content was viewed or downloaded.
-        $this->__properties['meta_title'] = 'string'; // Set a custom page title for this content.
-        $this->__properties['meta_description'] = 'string'; // Set a custom page meta description for this content.
-        $this->__properties['seo'] = 'string'; // SEO-friendly string; it will be appended to the URL for this content.
-        $this->__properties['handler'] = 'alpha'; // Handler for this object.
-        $this->__properties['template'] = 'alnum'; // The template that should be used to display this object.
-        $this->__properties['module'] = 'string'; // The module that handles this content type
+        $this->__properties['id'] = 'int';
+        $this->__properties['type'] = 'alpha';
+        $this->__properties['title'] = 'string';
+        $this->__properties['teaser'] = 'html';
+        $this->__properties['description'] = 'html';
+        $this->__properties['media'] = 'string';
+        $this->__properties['format'] = 'string';
+        $this->__properties['file_size'] = 'int';
+        $this->__properties['creator'] = 'string';
+        $this->__properties['image'] = 'string';
+        $this->__properties['caption'] = 'string';
+        $this->__properties['date'] = 'string';
+        $this->__properties['parent'] = 'int';
+        $this->__properties['language'] = 'string';
+        $this->__properties['rights'] = 'int';
+        $this->__properties['publisher'] = 'string';
+        $this->__properties['tags'] = 'array';
+        $this->__properties['online'] = 'int';
+        $this->__properties['submission_time'] = 'int';
+        $this->__properties['counter'] = 'int';
+        $this->__properties['meta_title'] = 'string';
+        $this->__properties['meta_description'] = 'string';
+        $this->__properties['seo'] = 'string';
+        $this->__properties['handler'] = 'alpha';
+        $this->__properties['template'] = 'alnum';
+        $this->__properties['module'] = 'string';
 
         /**
          * Set the permitted properties of this object.
@@ -116,7 +116,7 @@ class TfishContentObject extends TfishAncestralObject
         $this->__data['type'] = get_class($this);
         $this->__data['template'] = 'default';
         $this->__data['handler'] = $this->__data['type'] . 'Handler';
-        $this->__data['rights'] = 1; // Change to be from preferences
+        $this->__data['rights'] = 1;
         $this->__data['online'] = 1;
         $this->__data['counter'] = 0;
         $this->__data['tags'] = array();
@@ -132,7 +132,7 @@ class TfishContentObject extends TfishAncestralObject
      * with the HTMLPurifier library, and so *should* be safe.
      * 
      * @param string $property Name of property.
-     * @return string human readable value.
+     * @return string Human readable value escaped for display.
      */
     public function escape($property)
     {
@@ -177,8 +177,12 @@ class TfishContentObject extends TfishAncestralObject
                 case "teaser":
                     // Do a simple string replace to allow TFISH_URL to be used as a constant, making the site portable.
                     $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK, $this->__data[$property]);
-                    //return (string)TfishFilter::filterHtml($tfish_url_enabled); // Output filtering
-                    return $tfish_url_enabled; // Disable output filtering (only do this if enable input filtering of these fields in __set()).
+                    
+                    // Output filtering
+                    // Enabled (only do this if input filtering NOT done in __set()).
+                    //return (string)TfishFilter::filterHtml($tfish_url_enabled);
+                    // Disabled (only do this if enable input filtering of these fields in __set()).
+                    return $tfish_url_enabled; 
                     break;
 
                 case "rights":
@@ -220,9 +224,9 @@ class TfishContentObject extends TfishAncestralObject
      * Usually, you want to produce an image of a specific width or (less commonly) height to meet
      * a template/presentation requirement.
      * 
-     * @param int $width of the cached image output.
-     * @param int $height of the cached image output.
-     * @return string $url to the cached image.
+     * @param int $width Width of the cached image output.
+     * @param int $height Height of the cached image output.
+     * @return string $url URL to the cached image.
      */
     public function getCachedImage($width = 0, $height = 0)
     {
@@ -282,8 +286,10 @@ class TfishContentObject extends TfishAncestralObject
             }
 
             // Get a reference to a new image resource.
-            $thumbnail = imagecreatetruecolor($destination_width, $destination_height); // Creates a blank (black) image RESOURCE of the specified size.
-            // Different image types require different handling. JPEG and PNG support optional quality parameter (TODO: Create a preference).
+            // Creates a blank (black) image RESOURCE of the specified size.
+            $thumbnail = imagecreatetruecolor($destination_width, $destination_height);
+            // Different image types require different handling. JPEG and PNG support optional quality parameter
+            // TODO: Create a preference.
             $result = false;
             switch ($properties['mime']) {
                 case "image/jpeg":
@@ -390,11 +396,15 @@ class TfishContentObject extends TfishAncestralObject
     }
 
     /**
-     * Generates a URL to access this object in single view mode, either relative to home page or
-     * to the subclass-specific page.
+     * Generates a URL to access this object in single view mode.
      * 
-     * @param bool $use_subclass_page
-     * @return string
+     * URL can point , either relative to home page or to a subclass-specific page, for example
+     * you can set up an articles.php page to display only TfishArticle objects. The subclass-
+     * specific pages are found in the trust_path/extras folder. Just drop them into your site root
+     * to use them.
+     * 
+     * @param bool $use_subclass_page Use the subclass-specific page or home page (index.php).
+     * @return string URL to view this object.
      */
     public function getURL($use_subclass_page = false)
     {
@@ -415,7 +425,7 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * Note that the supplied data is internally validated by __set().
      * 
-     * @param array $dirty_input usually raw form $_REQUEST data.
+     * @param array $dirty_input Usually raw form $_REQUEST data.
      */
     public function loadProperties($dirty_input)
     {
@@ -558,8 +568,10 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "html":
                     $value = TfishFilter::trimString($value);
-                    $this->__data[$property] = (string) TfishFilter::filterHtml($value); // Enable input filtering with HTMLPurifier.
-                    //$this->__data[$property] = (string)TfishFilter::trimString($value); // Disable input filtering with HTMLPurifier (only do this if output filtering is enabled in escape()).
+                    // Enable input filtering with HTMLPurifier.
+                    $this->__data[$property] = (string) TfishFilter::filterHtml($value);
+                    // Disable input filtering with HTMLPurifier (only do this if output filtering is enabled in escape()).
+                    //$this->__data[$property] = (string)TfishFilter::trimString($value);
                     break;
 
                 case "int":
@@ -682,7 +694,7 @@ class TfishContentObject extends TfishAncestralObject
             /**
              * If try to set an property that was explicitly unset by a subclass, do nothing.
              * This does happen when trying to pull rows directly into content subclass objects
-             * using PDO (basically the constructor unsets uneeded fields, then PDO tries to set
+             * using PDO (basically the constructor unsets unneeded fields, then PDO tries to set
              * them because each row has the full set of columns). Since this functionality is
              * extremely convenient, we can live without throwing errors on this case. 
              *  

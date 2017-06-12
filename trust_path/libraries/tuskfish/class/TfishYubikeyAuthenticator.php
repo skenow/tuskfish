@@ -247,7 +247,7 @@ class TfishYubikeyAuthenticator
      * Create URL with embedded and signed authentication request for Yubico authentication server.
      * 
      * @param string $urlParams URL parameters.
-     * @return string Yubico authentication server URL with query string parameters attached.
+     * @return string URL to Yubico authentication server with query string parameters attached.
      */
 	protected function createSignedRequest($urlParams)
 	{
