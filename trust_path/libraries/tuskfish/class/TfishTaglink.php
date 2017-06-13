@@ -8,7 +8,7 @@
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since		1.0
- * @package		core
+ * @package		content
  */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -24,7 +24,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since		1.0
- * @package		core
+ * @package		content
  * @property    int $id ID of this taglink object
  * @property    int $tag_id ID of the tag object
  * @property    string $content_type type of content object

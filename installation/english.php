@@ -7,7 +7,7 @@
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @package		core
+ * @package		installation
  */
 define("TFISH_INSTALLATION_TUSKFISH", "Installation");
 define("TFISH_INSTALLATION_PLEASE_NOTE", "Please note");

@@ -11,7 +11,7 @@
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @package		core
+ * @package		content
  */
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";

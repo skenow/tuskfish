@@ -7,7 +7,7 @@
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @package		core
+ * @package		content
  */
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";

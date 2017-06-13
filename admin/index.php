@@ -9,7 +9,7 @@
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0
- * @package		core
+ * @package		admin
  */
 // Need to start a session in order to use session variables
 require_once "../mainfile.php";

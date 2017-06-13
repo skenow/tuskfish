@@ -8,7 +8,7 @@
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since		1.0
- * @package		core
+ * @package		content
  */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -27,7 +27,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since		1.0
- * @package		core
+ * @package		content
  */
 class TfishContentHandler
 {
