@@ -179,7 +179,7 @@ class TfishContentObject extends TfishAncestralObject
                     
                     // Output filtering
                     // Enabled (only do this if input filtering NOT done in __set()).
-                    //return (string)TfishFilter::filterHtml($tfish_url_enabled);
+                    // return (string)TfishFilter::filterHtml($tfish_url_enabled);
                     // Disabled (only do this if enable input filtering of these fields in __set()).
                     return $tfish_url_enabled; 
                     break;
