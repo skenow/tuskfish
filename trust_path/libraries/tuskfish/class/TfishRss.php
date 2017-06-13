@@ -41,7 +41,6 @@ class TfishRss extends TfishAncestralObject
     /** Initialise default property values and unset unneeded ones. */
     public function __construct()
     {
-        parent::__construct();
 
         // Whitelist of official channel properties and datatypes.
         $this->__properties['title'] = 'string';
