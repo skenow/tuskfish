@@ -18,7 +18,6 @@ require_once TFISH_PATH . "tfish_header.php";
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($clean_id) {
     TfishContentHandler::updateCounter($clean_id);
-    //session_write_close();
     TfishFileHandler::sendDownload($clean_id);
 }
 exit;
