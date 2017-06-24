@@ -76,6 +76,15 @@ class TfishCriteriaItem
     /**
      * Provides a whitelist of permitted operators for use in database queries.
      * 
+     * @todo Consider adding support for "IN", "NOT IN", "BETWEEN", "IS" and "IS NOT". This is a bit
+     * messy in PDO if you want to use placeholders because PDO will escape them as a single element
+     * unless you pass in an array and build the query string fragment manually in a loop 
+     * (complicated by the need to distinguish between string and int datatypes). So manual queries
+     * may be easier for now. An alternative approach would be to add an extra parameter to
+     * TfishCriteria that allows a manual query fragment to be passed in and appended as the last
+     * clause of the dynamically generated query string. That would let you handle cases like this
+     * simply, but lose the protection from using 100% bound values in the Tuskfish API, which I am
+     * very reluctant to give up. 
      * @return array Array of permitted operators for use in database queries.
      */
     public function permittedOperators()
