@@ -90,7 +90,7 @@ class TfishCriteriaItem
     public function permittedOperators()
     {
         return array(
-            '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'LIKE');
+            '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
     }
 
     /**
