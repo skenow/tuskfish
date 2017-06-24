@@ -222,8 +222,19 @@ class TfishCriteria
         if ($count) {
             $sql = "(";
             for ($i = 0; $i < $count; $i++) {
-                $sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` "
-                        . $this->item[$i]->operator . " :placeholder" . (string) $i;
+                $sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " . $this->item[$i]->operator;
+                
+                // If the operator is "IN", "NOT IN" or "BETWEEN" then specialised handling is necessary.
+                switch ($this->item[$i]->operator) {
+                    
+                    case "IN":
+                    case "NOT IN":
+                        break;
+                    
+                    default:
+                        $sql .= " :placeholder" . (string) $i;
+                } 
+                
                 if ($i < ($count - 1)) {
                     $sql .= " " . $this->condition[$i] . " ";
                 }

@@ -81,8 +81,7 @@ class TfishCriteriaItem
     public function permittedOperators()
     {
         return array(
-            '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'BETWEEN', 'IS', 'IS NOT',
-            'LIKE');
+            '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'IN', 'NOT IN', 'LIKE');
     }
 
     /**
