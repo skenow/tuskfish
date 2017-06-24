@@ -189,13 +189,13 @@ class TfishFileHandler
      * @param bool $append Append to existing file (true) or write a new one (false).
      * @return bool True on success, false on failure.
      */
-    public static function createFile($path, $contents = false, $chmod = 0600, $append = false)
+    public static function createFile($path, $contents = '', $chmod = 0600, $append = false)
     {
         $clean_path = TfishFilter::trimString($path);
         $clean_contents = TfishFilter::trimString($contents);
         $clean_chmod = TfishFilter::isDigit($chmod) ? $chmod : false;
         $clean_append = TfishFilter::isBool($append) ? $append : null;
-        if ($clean_path && $clean_contents && $clean_chmod && $clean_append) {
+        if ($clean_path && isset($clean_contents) && $clean_chmod && isset($clean_append)) {
             $result = self::_createFile($clean_path, $clean_contents, $clean_chmod, $clean_append);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_CREATE_FILE, E_USER_NOTICE);
@@ -235,6 +235,9 @@ class TfishFileHandler
     /**
      * Prepends the upload directory path to a file or folder name and checks that the path
      * does not contain directory traversals.
+     * 
+     * Note that the running script must have executable permissions on all directories in the
+     * hierarchy, otherwise realpath() will return FALSE (this is a realpath() limitation).
      *
      * @param string $path Path relative to the data_file directory.
      * @return string|bool Path on success, false on failure.
@@ -243,9 +246,8 @@ class TfishFileHandler
     {
         if (mb_strlen($path, 'UTF-8') > 0) {
             $path = rtrim($path, '/');
-
             // Construct the full path and verify that it lies within the data_file directory.			
-            $resolved_path = realpath(TFISH_UPLOADS_PATH . $path);
+            $resolved_path = realpath(TFISH_UPLOADS_PATH);
             if ($resolved_path == TFISH_UPLOADS_PATH . $path) {
                 return $resolved_path; // Path is good.
             } else {
