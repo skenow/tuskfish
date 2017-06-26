@@ -27,7 +27,7 @@ if ($clean_id && $clean_tag_id) {
 
 // Initialise RSS object.
 header('Content-Type: application/rss+xml');
-$rss = new TfishRss();
+$rss = new TfishRss($tfish_preference);
 
 // Prepare a mimetype lookup buffer.
 $mimetype_list = TfishUtils::getMimetypes();

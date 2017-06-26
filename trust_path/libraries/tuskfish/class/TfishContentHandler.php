@@ -622,12 +622,12 @@ class TfishContentHandler
      * @param array $search_terms Array of search terms.
      * @param string $andor Operator to chain search terms (AND or OR).
      * @param int $limit Maximum number of results to retrieve (pagination constraint).
+     * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param int $offset Starting point for retrieving results (pagination constraint).
      * @return array|bool Array of content objects on success, false failure.
      */
-    public static function searchContent($search_terms, $andor, $limit, $offset = 0)
+    public static function searchContent($tfish_preference, $search_terms, $andor, $limit, $offset = 0)
     {
-        global $tfish_preference;
         $clean_search_terms = array();
         $clean_andor = in_array($andor, array('AND', 'OR', 'exact')) ? TfishFilter::trimString($andor) : 'AND';
         $clean_limit = (int) $limit;
@@ -656,7 +656,7 @@ class TfishContentHandler
     }
 
     /** @internal */
-    private static function _searchContent($search_terms, $andor, $limit, $offset)
+    private static function _searchContent($tfish_preference, $search_terms, $andor, $limit, $offset)
     {
         $sql = $count = '';
         $search_term_placeholders = $results = array();
@@ -705,7 +705,6 @@ class TfishContentHandler
 
         // Retrieve the subset of objects actually required.
         if (!$limit) {
-            global $tfish_preference;
             $limit = $tfish_preference->search_pagination;
         }
         $sql .= "LIMIT :limit ";

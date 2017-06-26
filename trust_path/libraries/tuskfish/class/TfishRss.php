@@ -24,6 +24,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since		1.0
  * @package		content
+ * @param       object $tfish_preference TfishPreference object to make site preferences available.
  * @property    string $title Name of channel.
  * @property    string $link URL to website associated with this channel.
  * @property    string $description Sentence describing the channel.
@@ -39,7 +40,7 @@ class TfishRss extends TfishAncestralObject
 {
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct()
+    public function __construct($tfish_preference)
     {
 
         // Whitelist of official channel properties and datatypes.
@@ -60,8 +61,6 @@ class TfishRss extends TfishAncestralObject
         }
 
         // Set default values of permitted properties.
-        global $tfish_preference;
-
         $this->__data['title'] = $tfish_preference->site_name;
         $this->__data['link'] = TFISH_URL . 'rss.php';
         $this->__data['description'] = $tfish_preference->site_description;

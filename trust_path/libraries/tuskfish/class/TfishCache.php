@@ -42,15 +42,13 @@ class TfishCache
      * request the page be written to cache. This function should be called after tfish_header.php
      * is included.
      * 
+     * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param string $basename Page filename without extension, eg. 'article' (alphanumeric and 
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public static function checkCache($basename, $params = array())
+    public static function checkCache($tfish_preference, $basename, $params = array())
     {
-
-        global $tfish_preference;
-
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
             return;
@@ -116,15 +114,13 @@ class TfishCache
      * This function should be called in tfish_footer.php, before ob_end_flush(). Note that
      * warnings are suppressed when trying to open the file.
      * 
+     * @param object $tfish_preference TfishPreference object, to make the site preferences available.
      * @param string $basename Filename of this page, alphanumeric and underscore characters only.
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
-    public static function cachePage($basename, $params, $buffer)
+    public static function cachePage($tfish_preference, $basename, $params, $buffer)
     {
-
-        global $tfish_preference;
-
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
             return;

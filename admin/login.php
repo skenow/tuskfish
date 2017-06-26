@@ -40,7 +40,7 @@ include TFISH_DEFAULT_LANGUAGE;
 $tfish_preference = new TfishPreference();
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site
-TfishSession::start();
+TfishSession::start($tfish_preference);
 
 // Set default page-level metadata values for essential template variables (overwrite as required).
 $tfish_metadata = new TfishMetadata($tfish_preference);

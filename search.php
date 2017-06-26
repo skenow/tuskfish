@@ -37,7 +37,7 @@ $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $clean_terms && $type) {
     $content_handler = new TfishContentHandler();
-    $search_results = $content_handler->searchContent($clean_terms, $type, $tfish_preference->search_pagination, $start);
+    $search_results = $content_handler->searchContent($tfish_preference, $clean_terms, $type, $tfish_preference->search_pagination, $start);
     if ($search_results && $search_results[0] > 0) {
         
         // Get a count of search results; this is used to build the pagination control.
