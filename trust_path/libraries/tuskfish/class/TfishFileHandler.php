@@ -318,7 +318,7 @@ class TfishFileHandler
     }
 
     /**
-     * Destroys an individual file in the data_file directory
+     * Destroys an individual file in the data_file directory.
      * 
      * @param string $path Path relative to the data_file directory.
      * @return bool True on success, false on failure.
@@ -326,7 +326,7 @@ class TfishFileHandler
     public static function deleteFile($path)
     {
         $clean_path = TfishFilter::trimString($path);
-        if (!empty($clean_path)) {
+        if (!empty($clean_path) && !in_array($clean_path, array('.', '..'))) {
             $result = self::_deleteFile($clean_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
