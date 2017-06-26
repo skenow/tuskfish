@@ -246,9 +246,13 @@ class TfishFileHandler
     {
         if (mb_strlen($path, 'UTF-8') > 0) {
             $path = rtrim($path, '/');
-            // Construct the full path and verify that it lies within the data_file directory.			
-            $resolved_path = realpath(TFISH_UPLOADS_PATH);
-            if ($resolved_path == TFISH_UPLOADS_PATH . $path) {
+            $path = TFISH_UPLOADS_PATH . $path;
+            $resolved_path = realpath($path);
+            
+            // Basically this checks for directory traversals. This is a limited use function and
+            // directory traversals are unnecessary. If any are found the input is suspect and
+            // rejected.
+            if ($path == $resolved_path) {
                 return $resolved_path; // Path is good.
             } else {
                 trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
@@ -268,6 +272,13 @@ class TfishFileHandler
     public static function deleteDirectory($path)
     {
         $clean_path = TfishFilter::trimString($path);
+        
+        // Do not allow the upload, image or media directories to be deleted!
+        if (empty($path) || in_array($path, array('image', 'image/', 'media', 'media/'))) {
+            trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
+            return false;
+        }
+        
         if ($clean_path) {
             $result = self::_deleteDirectory($clean_path);
             if (!$result) {
@@ -284,9 +295,10 @@ class TfishFileHandler
     private static function _deleteDirectory($path)
     {
         $path = self::_dataFilePath($path);
+        echo $path . '<br />';
         if ($path) {
             try {
-                $iterator = new RecursiveDirectoryIterator($path);
+                $iterator = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
                 foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
                     if ($file->isDir()) {
                         rmdir($file->getPathname());
