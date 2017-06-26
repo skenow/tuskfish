@@ -274,7 +274,7 @@ class TfishFileHandler
         $clean_path = TfishFilter::trimString($path);
         
         // Do not allow the upload, image or media directories to be deleted!
-        if (empty($path) || in_array($path, array('image', 'image/', 'media', 'media/'))) {
+        if (empty($path) || in_array($path, array('.', '..', 'image', 'image/', 'media', 'media/'))) {
             trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
             return false;
         }
