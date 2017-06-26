@@ -100,10 +100,11 @@ class TfishFileHandler
      * @param string $path Path to the target directory.
      * @return bool True on success false on failure.
      */
+    
     public static function clearDirectory($path)
     {
         $clean_path = TfishFilter::trimString($path);
-        if ($clean_path) {
+        if (!empty($clean_path && !in_array($clean_path, array('.', './', '..', '../' )))) {
             $result = self::_clearDirectory($clean_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
@@ -118,11 +119,11 @@ class TfishFileHandler
     /** @internal */
     private static function _clearDirectory($path)
     {
-        $path = self::_dataFilePath($path);
-        if ($path) {
+        $resolved_path = self::_dataFilePath($path);
+        if ($resolved_path) {
             try {
-                foreach (new DirectoryIterator($path) as $file) {
-                    if ($file->isFile()) {
+                foreach (new DirectoryIterator($resolved_path) as $file) {
+                    if ($file->isFile() && !$file->isDot()) {
                         self::_deleteFile($path . '/' . $file->getFileName());
                     }
                 }
@@ -326,7 +327,7 @@ class TfishFileHandler
     public static function deleteFile($path)
     {
         $clean_path = TfishFilter::trimString($path);
-        if (!empty($clean_path) && !in_array($clean_path, array('.', '..'))) {
+        if (!empty($clean_path) && !in_array($clean_path, array('.', './', '..', '../'))) {
             $result = self::_deleteFile($clean_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
