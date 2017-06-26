@@ -253,7 +253,7 @@ class TfishFileHandler
             // directory traversals are unnecessary. If any are found the input is suspect and
             // rejected.
             if ($path == $resolved_path) {
-                return $resolved_path; // Path is good.
+                return $path; // Path is good.
             } else {
                 trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
                 return false; // Path is bad.
@@ -326,7 +326,7 @@ class TfishFileHandler
     public static function deleteFile($path)
     {
         $clean_path = TfishFilter::trimString($path);
-        if ($clean_path) {
+        if (!empty($clean_path)) {
             $result = self::_deleteFile($clean_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
