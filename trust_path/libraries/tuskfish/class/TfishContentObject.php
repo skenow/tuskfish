@@ -644,6 +644,13 @@ class TfishContentObject extends TfishAncestralObject
                             $this->__data[$property] = $value;
                         }
                     }
+                    
+                    // Check image/media paths for directory traversals and null byte injection.
+                    if ($property == "image" || $property == "media") {
+                        if (TfishFilter::hasTraversalorNullByte($value)) {
+                            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+                        }
+                    }
 
                     if ($property == "format") {
                         switch ($this->__data['type']) {
@@ -677,7 +684,8 @@ class TfishContentObject extends TfishAncestralObject
                             $value = str_replace(' ', '-', $value);
                         }
                     }
-                    $this->__data[$property] = TfishFilter::trimString($value);
+                    
+                    $this->__data[$property] = $value;
                     break;
 
                 case "url":

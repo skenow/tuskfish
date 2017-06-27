@@ -87,6 +87,12 @@ class TfishTemplate
         /* if (array_key_exists('template_set', $this->__data)) {
           trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
           } */
+        
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($template)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+        }
+        
         extract($this->__data);
         if (file_exists(TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html')) {
             ob_start();
@@ -125,6 +131,12 @@ class TfishTemplate
      */
     public function setTemplate($template)
     {
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($template)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+        
         if (TfishFilter::isAlnumUnderscore($template)) {
             $clean_template = TfishFilter::trimString($template);
             $this->__data['template_set'] = $clean_template;

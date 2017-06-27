@@ -198,12 +198,14 @@ class TfishFilter
      * @see https://www.owasp.org/index.php/Path_Traversal.
      * 
      * @param string $path
-     * @return boolean
+     * @return boolean True if a traversal or null byte is found, otherwise false.
      */
     public static function hasTraversalorNullByte($path)
     {
         // List of traversals and null byte encodings.
         $traversals = array(
+            "../",
+            "..\\",
             "%2e%2e%2f", // Represents ../
             "%2e%2e/", // Represents ../
             "..%2f", // Represents ../

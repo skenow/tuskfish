@@ -76,6 +76,12 @@ class TfishFileHandler
      */
     public static function appendFile($path, $contents)
     {
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($path)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+        
         $clean_path = TfishFilter::trimString($path);
         $clean_content = PHP_EOL . TfishFilter::trimString($contents); // NOTE: Calling trim() removes linefeed from the contents.
         if ($clean_path && $clean_content) {
@@ -107,8 +113,14 @@ class TfishFileHandler
     
     public static function clearDirectory($path)
     {
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($path)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+        
         $clean_path = TfishFilter::trimString($path);
-        if (!empty($clean_path && !in_array($clean_path, array('.', './', '..', '../' )))) {
+        if (!empty($clean_path)) {
             $result = self::_clearDirectory($clean_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
@@ -182,13 +194,19 @@ class TfishFileHandler
      */
     public static function deleteDirectory($path)
     {
-        $clean_path = TfishFilter::trimString($path);
-        
         // Do not allow the upload, image or media directories to be deleted!
-        if (empty($path) || in_array($path, array('.', './', '..', '../', 'image', 'image/', 'media', 'media/'))) {
+        if (empty($path)) {
             trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
             return false;
         }
+        
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($path)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+        
+        $clean_path = TfishFilter::trimString($path);
         
         if ($clean_path) {
             $result = self::_deleteDirectory($clean_path);
@@ -238,8 +256,14 @@ class TfishFileHandler
      */
     public static function deleteFile($path)
     {
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($path)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+        
         $clean_path = TfishFilter::trimString($path);
-        if (!empty($clean_path) && !in_array($clean_path, array('.', './', '..', '../'))) {
+        if (!empty($clean_path)) {
             $result = self::_deleteFile($clean_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
@@ -389,6 +413,12 @@ class TfishFileHandler
      */
     public static function uploadFile($filename, $fieldname)
     {
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($filename)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+        
         $filename = TfishFilter::trimString($filename);
         $clean_filename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
 

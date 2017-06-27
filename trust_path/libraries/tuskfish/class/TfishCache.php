@@ -53,6 +53,12 @@ class TfishCache
         if (!$tfish_preference->enable_cache) {
             return;
         }
+        
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($basename)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
 
         // Resolve the file name.
         $file_name = self::_getCachedFileName($basename, $params);
@@ -124,6 +130,12 @@ class TfishCache
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
             return;
+        }
+        
+        // Check for directory traversals and null byte injection.
+        if (TfishFilter::hasTraversalorNullByte($basename)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
         }
 
         // Resolve the file name and verify that the constructed path matches the canonical path.
