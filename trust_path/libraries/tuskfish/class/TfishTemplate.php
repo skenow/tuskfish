@@ -83,11 +83,7 @@ class TfishTemplate
      * @return string Rendered HTML template.
      */
     public function render($template)
-    {
-        /* if (array_key_exists('template_set', $this->__data)) {
-          trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
-          } */
-        
+    {        
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($template)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
@@ -114,9 +110,11 @@ class TfishTemplate
      */
     public function __set($property, $value)
     {
-        //  if ($property == 'template_set') {
-        //      trigger_error(TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE, E_USER_ERROR);
-        //  }
+        if ($property == 'template_set') {
+            $this->setTemplate($value);
+            return;
+        }
+        
         $this->__data[$property] = $value;
     }
 
@@ -125,7 +123,7 @@ class TfishTemplate
      * 
      * The template_set must be specified through this method. This is a safety measure to prevent
      * someone accidentally overwriting the template set when assigning a variable to the template
-     * object (if content were assigned to $tfish_template->template_set it would mess things up). 
+     * object (if content were assigned to $tfish_template->setTemplate() it would mess things up). 
      * 
      * @param string $template Name of template set (alphanumeric and underscore characters only).
      */
@@ -134,7 +132,6 @@ class TfishTemplate
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($template)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
-            return false;
         }
         
         if (TfishFilter::isAlnumUnderscore($template)) {
