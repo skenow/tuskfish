@@ -106,6 +106,13 @@ class TfishMetadata
         // landing page.
         $clean_extra_params = array();
         foreach ($extra_params as $key => $value) {
+            
+            // Check for directory traversals and null byte injection.
+            if (TfishFilter::hasTraversalorNullByte($key) || TfishFilter::hasTraversalorNullByte($value)) {
+                trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+                return false;
+            }
+        
             $clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '=' . TfishFilter::encodeEscapeUrl($value);
             unset($key, $value);
         }
