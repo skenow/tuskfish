@@ -68,6 +68,8 @@ class TfishFileHandler
     /**
      * Append a string to a file.
      * 
+     * Do not set the $path using untrusted data sources, such as user input.
+     * 
      * @param string $path Path to the target file.
      * @param string $contents Content to append to the target file.
      * @return bool True on success false on failure.
@@ -96,6 +98,8 @@ class TfishFileHandler
 
     /**
      * Deletes the contents of a specific directory, subdirectories are unaffected.
+     * 
+     * Do not set the $path using untrusted data sources, such as user input.
      * 
      * @param string $path Path to the target directory.
      * @return bool True on success false on failure.
@@ -171,6 +175,8 @@ class TfishFileHandler
     /**
      * Destroys a directory and all contents recursively relative to the data_file directory.
      * 
+     * Do not set the $path using untrusted data sources, such as user input.
+     * 
      * @param string $path Path relative to data_file directory.
      * @return bool True on success, false on failure.
      */
@@ -224,6 +230,8 @@ class TfishFileHandler
 
     /**
      * Destroys an individual file in the data_file directory.
+     * 
+     * Do not set the $path using untrusted data sources, such as user input.
      * 
      * @param string $path Path relative to the data_file directory.
      * @return bool True on success, false on failure.
