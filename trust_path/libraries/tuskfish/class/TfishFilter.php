@@ -184,6 +184,51 @@ class TfishFilter
             return false;
         }
     }
+    
+    /**
+     * Check if a file path contains traversals (including encoded traversals) or null bytes.
+     * 
+     * Directory traversals are not permitted in Tuskfish method parameters. If a path is found to
+     * contain a traversal it is presumed to be an attack. Encoded traversals are a clear sign of
+     * attempted abuse.
+     * 
+     * In general untrusted data should never be used to construct a file path. This method exists
+     * as a second line safety measure.
+     * 
+     * @see https://www.owasp.org/index.php/Path_Traversal.
+     * 
+     * @param string $path
+     * @return boolean
+     */
+    public static function hasTraversalorNullByte($path)
+    {
+        // List of traversals and null byte encodings.
+        $traversals = array(
+            "%2e%2e%2f", // Represents ../
+            "%2e%2e/", // Represents ../
+            "..%2f", // Represents ../
+            "%2e%2e%5c", // Represents ..\
+            "%2e%2e", // Represents ..\
+            "..%5c", // Represents ..\
+            "%252e%252e%255c", // Represents ..\
+            "..%255c", // Represents ..\
+            "..%c0%af", // Represents ../ (URL encoding)
+            "..%c1%9c", // Represents ..\
+            "%00", // URL-encoded null byte filename terminator.
+            "\0", // C-style null byte (PHP functions are written in C).
+            "0x00" // Hex-encoded null byte.
+        );
+        
+        // Search the path for traversals.
+        foreach ($traversals as $traverse) {
+            if (mb_strripos($path, $traverse, 0, "utf-8")) {
+                return true;
+            }
+        }
+        
+        // No traversals found.
+        return false;
+    }
 
     /**
      * Check that a string is comprised solely of alphabetical characters.
@@ -201,7 +246,7 @@ class TfishFilter
     }
 
     /**
-     * Check that a string is comprised soley of alphanumeric characters.
+     * Check that a string is comprised solely of alphanumeric characters.
      *
      * @param string $alnum Input to be tested.
      * @return bool True if valid alphanumerical string, false otherwise.
