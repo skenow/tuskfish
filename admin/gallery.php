@@ -17,7 +17,7 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('gallery');
+$tfish_template->setTemplate('thumbnail_gallery');
 
 // CONVENTIONS:
 // 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
