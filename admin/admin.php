@@ -15,9 +15,6 @@
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
-// Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('admin');
-
 // Validate input parameters.
 $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
@@ -26,17 +23,17 @@ $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
+// Specify the admin template and the template to be used to preview content (user side template).
+if ($op == 'view') {
+    $tfish_template->setTemplate('default');
+} else {
+    $tfish_template->setTemplate('sb_admin');
+}
+
 // Set target file for intra-collection pagination controls when viewing objects. False will default to your home page.
 $target_file_name = false;
 
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update', 'view', false))) {
-
-    // Specify the admin template and the template to be used to preview content (user side template).
-    if ($op == 'view') {
-        $tfish_template->setTemplate('default');
-    } else {
-        $tfish_template->setTemplate('admin');
-    }
 
     switch ($op) {
 
