@@ -65,3 +65,7 @@ figcaption {
 .form-buttons {
     margin: 30px 0px 30px 0px;
 }
+
+.spacer {
+    margin-bottom: 1.5rem;
+}

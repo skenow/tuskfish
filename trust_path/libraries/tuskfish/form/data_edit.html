@@ -4,7 +4,7 @@
 
         <!-- Type -->
         <label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
-        <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
+        <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9 spacer">
             <select class="form-control" name="type" id="type" required>
                 <?php
                     foreach ($content_types as $key => $type) {
@@ -21,7 +21,7 @@
         <!-- Date (bootstrap-datepicker) -->
         <div id="dateContainer">
             <label for="date" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->date . '"'; } ?>></div>
+            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9 spacer"><input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->date . '"'; } ?>></div>
         </div>
         <script>
             $('#date').datepicker({
@@ -85,7 +85,7 @@
         <!-- Creator -->
         <div id="creatorContainer">
             <label for="creator" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->escape('creator') . '"'; ?>></div>
+            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9 spacer"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->escape('creator') . '"'; ?>></div>
         </div>
 
         <!-- Publisher -->
@@ -188,7 +188,7 @@
         <!-- Rights -->
         <div id="rightsContainer">
             <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9">
+            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9 spacer">
                 <select class="form-control" name="rights" id="rights" required>
                     <?php
                         foreach ($rights as $key => $right) {
@@ -206,7 +206,7 @@
         <!-- Language -->
         <div id="languageContainer">
             <label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
-            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 spacer">
                 <select class="form-control" name="language" id="language" required>
                     <?php
                         foreach ($languages as $key => $value) {
@@ -257,7 +257,7 @@
 
             <!-- Meta title -->
             <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
+            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9 spacer"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
 
             <!-- Meta SEO -->
             <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
