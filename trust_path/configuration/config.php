@@ -23,7 +23,6 @@ define("TFISH_UPLOADS_PATH", TFISH_ROOT_PATH . "uploads/");
 define("TFISH_MEDIA_PATH", TFISH_UPLOADS_PATH . "media/");
 define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');
 
-
 // Constants that make use of the trust path (which is a derivative of the physical path).
 define("TFISH_CLASS_PATH", TFISH_PATH . "class/");
 define("TFISH_DATABASE_PATH", TFISH_TRUST_PATH . "database/");
