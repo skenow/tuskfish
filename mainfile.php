@@ -42,4 +42,4 @@ define("TFISH_PATH", TFISH_TRUST_PATH . "libraries/tuskfish/");
 define("TFISH_CONFIGURATION_PATH", TFISH_TRUST_PATH . "configuration/config.php");
 
 // Include critical files
-require_once(TFISH_CONFIGURATION_PATH);
+require_once TFISH_CONFIGURATION_PATH;
