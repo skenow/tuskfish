@@ -1,0 +1,27 @@
+<!-- Title -->
+<?php if (isset($page_title)): ?>
+<h1><?php echo $page_title; ?></h1>
+<hr>
+<?php endif; ?>
+
+<!-- Select filters -->
+<?php if (isset($select_filters_form)): ?>
+<div class="select_filters text-center"><?php echo $select_filters_form; ?></div>
+<?php endif; ?>
+
+<!-- Top pagination -->
+<?php if (isset($pagination)): ?>
+<div class="text-right">
+    <?php echo $pagination; ?>
+</div>
+<?php endif; ?>
+
+<!-- Main content -->
+<?php if (isset($tfish_main_content)) echo $tfish_main_content; ?>
+
+<!-- Bottom pagination -->
+<?php if (isset($pagination)): ?>
+<div class="text-right">
+    <?php echo $pagination; ?>
+</div>
+<?php endif; ?>

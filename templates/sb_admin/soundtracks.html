@@ -1,0 +1,24 @@
+<!-- Display a list of soundtracks in teaser view -->
+<?php if ($content_objects): ?>
+<?php foreach ($content_objects as $content): ?>
+<div class="clearfix">
+    <div class="text-left">
+        <h3><a href="<?php echo $content->getURL(true); ?>"><?php echo $content->escape('title'); ?></a></h3>
+    </div>
+    <?php if ($content->image): ?>
+    <div class="pull-left">
+        <figure class="figure-left">
+            <a href="<?php echo $content->getURL(true); ?>">
+                <img class="img-responsive" src="<?php echo $content->getCachedImage(100); ?>" 
+                     <?php if ($content->caption): ?>title="<?php echo $content->escape('caption'); ?>" 
+                     alt="<?php echo $content->escape('caption'); ?>"<?php endif; ?> />
+            </a>
+        </figure>
+    </div>
+    <?php endif; ?>
+    <?php if ($content->teaser): ?>
+    <div class="text-left"><?php echo $content->escape('teaser'); ?></div>
+    <?php endif; ?>
+</div>
+<?php endforeach; ?>
+<?php endif; ?>
