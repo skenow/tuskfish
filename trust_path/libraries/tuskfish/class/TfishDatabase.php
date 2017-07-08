@@ -107,7 +107,7 @@ class TfishDatabase
     }
 
     /**
-     * Create an SQLite databse with random prefix and creates a language constant for it.
+     * Create an SQLite database with random prefix and creates a language constant for it.
      * 
      * Database name must be alphanumeric and underscore characters only. The database will
      * automatically be appended with the suffix .db
