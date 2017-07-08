@@ -396,7 +396,7 @@ class TfishSession
         // Set the parameters and start the session.
         session_name($session_name);
         session_set_cookie_params($lifetime, $path, $domain, $secure, $http_only);
-        session_start($tfish_preference);
+        session_start();
 
         // Check if the session has expired.
         if (self::isExpired($tfish_preference))
