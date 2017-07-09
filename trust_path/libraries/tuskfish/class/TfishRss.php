@@ -102,18 +102,20 @@ class TfishRss extends TfishAncestralObject
             $type = $this->__properties[$property];
 
             switch ($type) {
-
                 case "array": // Items
                     if (TfishFilter::isArray($value)) {
                         $clean_items = array();
+                        
                         foreach ($value as $val) {
                             if (is_a('TfishContentObject')) {
                                 $clean_items[] = $val;
                             } else {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
+                            
                             unset($clean_val);
                         }
+                        
                         $this->__data[$property] = $clean_items;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -122,6 +124,7 @@ class TfishRss extends TfishAncestralObject
 
                 case "email":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isEmail($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -143,6 +146,7 @@ class TfishRss extends TfishAncestralObject
 
                 case "url":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isUrl($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -150,6 +154,8 @@ class TfishRss extends TfishAncestralObject
                     }
                     break;
             }
+        } else {
+            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
     }
 

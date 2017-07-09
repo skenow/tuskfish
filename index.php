@@ -38,6 +38,7 @@ if ($clean_id) {
 
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
+    
     if (is_object($content) && $content->online == true && $content->type != 'TfishBlock') {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
@@ -54,10 +55,11 @@ if ($clean_id) {
 
         // Prepare meta information for display.
         $contentInfo = array();
-        if ($content->creator)
-            $contentInfo[] = $content->escape('creator');
-        if ($content->date)
-            $contentInfo[] = $content->escape('date');
+        
+        if ($content->creator) $contentInfo[] = $content->escape('creator');
+        
+        if ($content->date) $contentInfo[] = $content->escape('date');
+        
         if ($content->counter) {
             switch ($content->type) {
                 case "TfishDownload":
@@ -67,24 +69,27 @@ if ($clean_id) {
                     $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
             }
         }
-        if ($content->format)
-            $contentInfo[] = '.' . $content->escape('format');
-        if ($content->file_size)
-            $contentInfo[] = $content->escape('file_size');
+        
+        if ($content->format) $contentInfo[] = '.' . $content->escape('format');
+        
+        if ($content->file_size) $contentInfo[] = $content->escape('file_size');
+        
         if ($content->tags) {
             $tags = $content_handler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
+        
         $tfish_template->contentInfo = implode(' | ', $contentInfo);
-        if ($content->meta_title)
-            $tfish_metadata->title = $content->meta_title;
-        if ($content->meta_description)
-            $tfish_metadata->description = $content->meta_description;
+        
+        if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
+        
+        if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
             $parent = $content_handler::getObject($content->parent);
+            
             if (is_object($parent) && $parent->online) {
                 $tfish_template->parent = $parent;
             }
@@ -99,15 +104,16 @@ if ($clean_id) {
         if ($content->type == 'TfishCollection') {
             $criteria->add(new TfishCriteriaItem('parent', $content->id));
             $criteria->add(new TfishCriteriaItem('online', 1));
-            if ($clean_start)
-                $criteria->offset = $clean_start;
+            
+            if ($clean_start) $criteria->offset = $clean_start;
+            
             $criteria->limit = $tfish_preference->user_pagination;
         }
 
         // If object is a tag, then a different method is required to call the related content.
         if ($content->type == 'TfishTag') {
-            if ($clean_start)
-                $criteria->offset = $clean_start;
+            if ($clean_start) $criteria->offset = $clean_start;
+            
             $criteria->limit = $tfish_preference->user_pagination;
             $criteria->tag = array($content->id);
             $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
@@ -121,6 +127,7 @@ if ($clean_id) {
 
             // Retrieve content objects and assign to template.
             $first_children = TfishContentHandler::getObjects($criteria);
+            
             if (!empty($first_children)) {
                 $tfish_template->first_children = $first_children;
             }
@@ -141,11 +148,13 @@ if ($clean_id) {
 
     // View index page of multiple objects (teasers). Static pages and tags are excluded.
     $criteria = new TfishCriteria();
-    if ($clean_start)
-        $criteria->offset = $clean_start;
+    
+    if ($clean_start) $criteria->offset = $clean_start;
+    
     $criteria->limit = $tfish_preference->user_pagination;
-    if ($clean_tag)
-        $criteria->tag = array($clean_tag);
+    
+    if ($clean_tag) $criteria->tag = array($clean_tag);
+    
     $criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
     $criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
     $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));

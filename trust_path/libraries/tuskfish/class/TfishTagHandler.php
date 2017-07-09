@@ -40,6 +40,7 @@ class TfishTagHandler extends TfishContentHandler
 
         // Unset any pre-existing object type criteria.
         $type_key = self::getTypeIndex($criteria->item);
+        
         if (isset($type_key)) {
             $criteria->killType($type_key);
         }
@@ -72,6 +73,7 @@ class TfishTagHandler extends TfishContentHandler
 
         // Unset any pre-existing object type criteria.
         $type_key = self::getTypeIndex($criteria->item);
+        
         if (isset($type_key)) {
             $criteria->killType($type_key);
         }
@@ -108,14 +110,18 @@ class TfishTagHandler extends TfishContentHandler
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
 
         $tag_list = TfishContentHandler::getActiveTagList($clean_type, $clean_online_only);
+        
         if (!empty($tag_list)) {
             asort($tag_list);
             $tag_list = array(0 => $clean_zero_option) + $tag_list;
             $select_box = '<select class="form-control" name="tag_id" id="tag_id" onchange="this.form.submit()">';
+            
             foreach ($tag_list as $key => $value) {
                 $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
             }
+            
             $select_box .= '</select>';
+            
             return $select_box;
         } else {
             return false;
@@ -146,8 +152,10 @@ class TfishTagHandler extends TfishContentHandler
 
         // Validate input.
         $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1)) ? (int) $selected : null; // ID of a previously selected tag, if any.
+        
         if (TfishFilter::isArray($tag_list) && !empty($tag_list)) {
             asort($tag_list);
+            
             foreach ($tag_list as $key => $value) {
                 $clean_key = (int) $key;
                 $clean_value = TfishFilter::escape(TfishFilter::trimString($value));
@@ -155,15 +163,18 @@ class TfishTagHandler extends TfishContentHandler
                 unset($key, $clean_key, $value, $clean_value);
             }
         }
+        
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
         $clean_key_name = isset($key_name) ? TfishFilter::escape(TfishFilter::trimString($key_name)) : 'tag_id';
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
         $select_box = '<select class="form-control" name="' . $clean_key_name . '" id="' . $clean_key_name . '" onchange="this.form.submit()">';
+        
         foreach ($clean_tag_list as $key => $value) {
             $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
         }
+        
         $select_box .= '</select>';
 
         return $select_box;

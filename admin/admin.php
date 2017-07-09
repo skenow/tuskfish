@@ -34,9 +34,7 @@ if ($op == 'view') {
 $target_file_name = false;
 
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update', 'view', false))) {
-
     switch ($op) {
-
         // Add: Display an empty content object submission form.
         case "add":
             $tfish_template->page_title = TFISH_ADD_CONTENT;
@@ -77,6 +75,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
         case "confirm":
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
+                
                 if (TfishFilter::isInt($clean_id, 1)) {
                     $tfish_template->page_title = TFISH_CONFIRM_DELETE;
                     $tfish_template->content = TfishContentHandler::getObject($clean_id);
@@ -95,6 +94,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
                 $result = TfishContentHandler::delete($clean_id);
+                
                 if ($result) {
                     TfishCache::flushCache();
                     $tfish_template->page_title = TFISH_SUCCESS;
@@ -105,6 +105,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     $tfish_template->alert_class = 'alert-danger';
                     $tfish_template->message = TFISH_OBJECT_DELETION_FAILED;
                 }
+                
                 $tfish_template->back_url = 'admin.php';
                 $tfish_template->form = TFISH_FORM_PATH . "response.html";
                 $tfish_template->tfish_main_content = $tfish_template->render('form');
@@ -117,14 +118,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
         case "edit":
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
+                
                 if (TfishFilter::isInt($clean_id, 1)) {
                     $criteria = new TfishCriteria();
                     $criteria->add(new TfishCriteriaItem('id', $clean_id));
                     $statement = TfishDatabase::select('content', $criteria);
+                    
                     if (!$statement) {
                         trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
                         header("Location: admin.php");
                     }
+                    
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
 
                     // Make a parent tree select box options.
@@ -154,6 +158,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
         // Flush: Flush the cache.
         case "flush":
             $result = TfishCache::flushCache();
+            
             if ($result) {
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
@@ -163,6 +168,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 $tfish_template->alert_class = 'alert-danger';
                 $tfish_template->message = TFISH_CACHE_FLUSH_FAILED;
             }
+            
             $tfish_template->back_url = 'admin.php';
             $tfish_template->form = TFISH_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
@@ -178,15 +184,18 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 
             $clean_type = TfishFilter::trimString($_REQUEST['type']);
             $type_whitelist = TfishContentHandler::getTypes();
+            
             if (!array_key_exists($clean_type, $type_whitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
+            
             $content_object = new $clean_type;
             $content_object->loadProperties($_REQUEST);
 
             // Insert the object
             $result = TfishContentHandler::insert($content_object);
+            
             if ($result) {
                 TfishCache::flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
@@ -197,6 +206,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 $tfish_template->alert_class = 'alert-danger';
                 $tfish_template->message = TFISH_OBJECT_INSERTION_FAILED;
             }
+            
             $tfish_template->back_url = 'admin.php';
             $tfish_template->form = TFISH_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
@@ -207,6 +217,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             $id = (int) $_REQUEST['id'];
             $clean_id = TfishFilter::isInt($id, 1) ? $id : 0;
             $result = TfishContentHandler::toggleOnlineStatus($clean_id);
+            
             if ($result) {
                 TfishCache::flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
@@ -217,6 +228,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 $tfish_template->alert_class = 'alert-danger';
                 $tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
             }
+            
             $tfish_template->back_url = 'admin.php';
             $tfish_template->form = TFISH_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
@@ -228,12 +240,15 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
+            
             $type = TfishFilter::trimString($_REQUEST['type']);
             $type_whitelist = TfishContentHandler::getTypes();
+            
             if (!array_key_exists($type, $type_whitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
+            
             $content_object = new $type;
             $content_object->loadProperties($_REQUEST);
 
@@ -242,6 +257,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             // break the editing form when you populate the values of text fields):
             $fields_to_decode = array('title', 'creator', 'publisher', 'caption', 'meta_title',
                 'seo', 'meta_description');
+            
             foreach ($fields_to_decode as $field) {
                 if (isset($content_object->field)) {
                     $content_object->$field = htmlspecialchars_decode($content_object->field, ENT_QUOTES);
@@ -250,6 +266,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 
             // Update the database row and display a response.
             $result = TfishContentHandler::update($content_object);
+            
             if ($result) {
                 TfishCache::flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
@@ -260,6 +277,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 $tfish_template->alert_class = 'alert-danger';
                 $tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
             }
+            
             $tfish_template->back_url = 'admin.php';
             $tfish_template->form = TFISH_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
@@ -269,15 +287,17 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
         case "view":
             if ($clean_id) {
                 $content = TfishContentHandler::getObject($clean_id);
+                
                 if (is_object($content)) {
                     $tfish_template->content = $content;
 
                     // Prepare meta information for display.
                     $contentInfo = array();
-                    if ($content->creator)
-                        $contentInfo[] = $content->escape('creator');
-                    if ($content->date)
-                        $contentInfo[] = $content->escape('date');
+                    
+                    if ($content->creator) $contentInfo[] = $content->escape('creator');
+                    
+                    if ($content->date) $contentInfo[] = $content->escape('date');
+                    
                     if ($content->counter) {
                         switch ($content->type) {
                             case "TfishDownload": // Display 'downloads' after the counter.
@@ -293,24 +313,29 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                                 $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
                         }
                     }
+                    
                     if ($content->format)
                         $contentInfo[] = '.' . $content->escape('format');
+                    
                     if ($content->file_size)
                         $contentInfo[] = $content->escape('file_size');
+                    
                     if ($content->tags) {
                         $tags = TfishContentHandler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
                         $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
                         $contentInfo[] = $tags;
                     }
+                    
                     $tfish_template->contentInfo = implode(' | ', $contentInfo);
-                    if ($content->meta_title)
-                        $tfish_metadata->title = $content->meta_title;
-                    if ($content->meta_description)
-                        $tfish_metadata->description = $content->meta_description;
+                    
+                    if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
+                    
+                    if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
 
                     // Check if has a parental object; if so display a thumbnail and teaser / link.
                     if (!empty($content->parent)) {
                         $parent = TfishContentHandler::getObject($content->parent);
+                        
                         if (is_object($parent) && $parent->online) {
                             $tfish_template->parent = $parent;
                         }
@@ -325,15 +350,16 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     if ($content->type == 'TfishCollection') {
                         $criteria->add(new TfishCriteriaItem('parent', $content->id));
                         $criteria->add(new TfishCriteriaItem('online', 1));
-                        if ($clean_start)
-                            $criteria->offset = $clean_start;
+                        
+                        if ($clean_start) $criteria->offset = $clean_start;
+                        
                         $criteria->limit = $tfish_preference->user_pagination;
                     }
 
                     // If object is a tag, then a different method is required to call the related content.
                     if ($content->type == 'TfishTag') {
-                        if ($clean_start)
-                            $criteria->offset = $clean_start;
+                        if ($clean_start) $criteria->offset = $clean_start;
+                        
                         $criteria->limit = $tfish_preference->user_pagination;
                         $criteria->tag = array($content->id);
                         $criteria->add(new TfishCriteriaItem('online', 1));
@@ -346,6 +372,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 
                         // Retrieve content objects and assign to template.
                         $first_children = TfishContentHandler::getObjects($criteria);
+                        
                         if (!empty($first_children)) {
                             $tfish_template->first_children = $first_children;
                         }
@@ -364,11 +391,12 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             $criteria = new TfishCriteria;
 
             // Select box filter input.
-            if ($clean_tag)
-                $criteria->tag = array($clean_tag);
+            if ($clean_tag) $criteria->tag = array($clean_tag);
+            
             if (TfishFilter::isInt($clean_online, 0, 1)) {
                 $criteria->add(new TfishCriteriaItem('online', $clean_online));
             }
+            
             if ($clean_type) {
                 if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
                     $criteria->add(new TfishCriteriaItem('type', $clean_type));
@@ -384,22 +412,27 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             $criteria->ordertype = 'DESC';
             $columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
             $result = TfishDatabase::select('content', $criteria, $columns);
+            
             if ($result) {
                 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
             }
+            
             foreach ($rows as &$row) {
                 $row['submission_time'] = date($tfish_preference->date_format, $row['submission_time']);
             }
+            
             $typelist = TfishContentHandler::getTypes();
 
             // Pagination control.
             $count = TfishDatabase::selectCount('content', $criteria);
             $extra_params = array();
+            
             if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
                 $extra_params['online'] = $clean_online;
             }
+            
             if (isset($clean_type)) {
                 $extra_params['type'] = $clean_type;
             }

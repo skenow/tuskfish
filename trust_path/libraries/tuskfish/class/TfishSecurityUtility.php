@@ -111,9 +111,11 @@ class TfishSecurityUtility
         $iterations = $iterations > 0 ? $iterations : 1;
 
         $password = $site_salt . $password;
+        
         if ($user_salt) {
             $password .= $user_salt;
         }
+        
         for ($i = 0; $i < $iterations; $i++) {
             $password = hash('sha256', $password);
         }

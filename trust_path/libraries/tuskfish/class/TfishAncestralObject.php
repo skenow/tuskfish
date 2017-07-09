@@ -145,9 +145,11 @@ class TfishAncestralObject
     {
         $key_values = array();
         $properties = $this->getPropertyWhitelist();
+        
         foreach ($properties as $key => $value) {
             $key_values[$key] = $this->__data[$key];
         }
+        
         return $key_values;
     }
 

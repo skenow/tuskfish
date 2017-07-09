@@ -109,9 +109,11 @@ class TfishSession
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $browser_profile .= $_SERVER['REMOTE_ADDR'];
         }
+        
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $browser_profile .= $_SERVER['HTTP_USER_AGENT'];
         }
+        
         $browser_profile = hash('sha256', $browser_profile);
 
         if (isset($_SESSION['browser_profile'])) {
@@ -140,6 +142,7 @@ class TfishSession
         } else {
             // Sanitise the admin email (which functions as the username in Tuskfish CMS)
             $clean_email = TfishFilter::trimString($email);
+            
             if (TfishFilter::isEmail($clean_email)) {
                 self::_login($clean_email, $password);
             } else {
@@ -246,6 +249,7 @@ class TfishSession
         
         // First factor authentication: Calculate password hash and compare to the one on file.
         $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000, TFISH_SITE_SALT, $user['user_salt']);
+        
         if ($password_hash == $user['password_hash']) {
             $first_factor = true;
         }
@@ -289,9 +293,11 @@ class TfishSession
     public static function logout($url_redirect = false)
     {
         $clean_url = false;
+        
         if ($url_redirect) {
             $clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
         }
+        
         self::_logout($clean_url);
     }
 
@@ -329,9 +335,11 @@ class TfishSession
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $browser_profile .= $_SERVER['REMOTE_ADDR'];
         }
+        
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $browser_profile .= $_SERVER['HTTP_USER_AGENT'];
         }
+        
         $_SESSION['browser_profile'] = hash('sha256', $browser_profile);
     }
 

@@ -107,9 +107,9 @@ class TfishCriteriaItem
     {
         if (isset($this->__data[$property])) {
             switch ($property) {
-
                 case "column": // Alphanumeric and underscore characters only
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlnumUnderscore($value)) {
                         $this->__data['column'] = $value;
                     } else {
@@ -121,8 +121,8 @@ class TfishCriteriaItem
                 case "value":
                     $clean_value;
                     $type = gettype($value);
+                    
                     switch ($type) {
-
                         // Strings are valid but should be trimmed of control characters.
                         case "string":
                             $clean_value = TfishFilter::trimString($value);
@@ -144,12 +144,14 @@ class TfishCriteriaItem
                             trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
                             break;
                     }
+                    
                     $this->__data['value'] = $clean_value;
                     break;
 
                 // The default operator is "=" and this will be used unless something else is set.
                 case "operator":
                     $value = TfishFilter::trimString($value);
+                    
                     if (in_array($value, self::permittedOperators())) {
                         $this->__data['operator'] = $value;
                     } else {

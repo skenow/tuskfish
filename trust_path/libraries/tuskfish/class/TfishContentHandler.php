@@ -41,6 +41,7 @@ class TfishContentHandler
     public static function delete($id)
     {
         $clean_id = (int) $id;
+        
         if (!TfishFilter::isInt($clean_id, 1)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             return false;
@@ -48,10 +49,12 @@ class TfishContentHandler
 
         // Delete associated files.
         $obj = self::getObject($clean_id);
+        
         if (TfishFilter::isObject($obj)) {
             if ($obj->image) {
                 self::_deleteImage($obj->image);
             }
+            
             if ($obj->media) {
                 self::_deleteMedia($obj->media);
             }
@@ -59,6 +62,7 @@ class TfishContentHandler
 
         // Delete associated taglinks.
         $result = TfishTaglinkHandler::deleteTaglinks($clean_id);
+        
         if (!$result) {
             return false;
         }
@@ -68,6 +72,7 @@ class TfishContentHandler
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('parent', $clean_id));
             $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
+            
             if (!$result) {
                 return false;
             }
@@ -75,6 +80,7 @@ class TfishContentHandler
 
         // Delete the object.
         $result = TfishDatabase::delete('content', $clean_id);
+        
         if (!$result) {
             return false;
         }
@@ -128,9 +134,11 @@ class TfishContentHandler
 
         // Process image and media files before inserting the object, as related fields must be set.
         $property_whitelist = $obj->getPropertyWhitelist();
+        
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
             $filename = TfishFilter::trimString($_FILES['image']['name']);
             $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+            
             if ($clean_filename) {
                 $key_values['image'] = $clean_filename;
             }
@@ -139,6 +147,7 @@ class TfishContentHandler
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
             $filename = TfishFilter::trimString($_FILES['media']['name']);
             $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+            
             if ($clean_filename) {
                 $key_values['media'] = $clean_filename;
                 $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
@@ -150,18 +159,19 @@ class TfishContentHandler
 
         // Insert the object into the database.
         $result = TfishDatabase::insert('content', $key_values);
+        
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
             return false;
         } else {
             $content_id = TfishDatabase::lastInsertId();
         }
+        
         unset($key_values, $result);
 
         // Tags are stored separately in the taglinks table. Tags are assembled in one batch before
         // proceeding to insertion; so if one fails a range check all should fail.
         if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
-
             // If the lastInsertId could not be retrieved, then halt execution becuase this data
             // is necessary in order to correctly assign taglinks to content objects.
             if (!$content_id) {
@@ -170,6 +180,7 @@ class TfishContentHandler
             }
 
             $result = TfishTaglinkHandler::insertTaglinks($content_id, $obj->type, $obj->tags);
+            
             if (!$result) {
                 return false;
             }
@@ -190,6 +201,7 @@ class TfishContentHandler
     {
         $type = TfishFilter::trimString($type);
         $sanctioned_types = self::getTypes();
+        
         if (array_key_exists($type, $sanctioned_types)) {
             return true;
         } else {
@@ -213,6 +225,7 @@ class TfishContentHandler
 
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
         $tags = self::getTagList($clean_online_only);
+        
         if (empty($tags)) {
             return false;
         }
@@ -229,6 +242,7 @@ class TfishContentHandler
 
         // Put a check for online status in here.
         $statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
+        
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 if (isset($tags[$row['tag_id']])) {
@@ -255,7 +269,9 @@ class TfishContentHandler
             $limit = $criteria->limit;
             $criteria->limit = 0;
         }
+        
         $count = TfishDatabase::selectCount('content', $criteria);
+        
         if (isset($limit)) {
             $criteria->limit = (int) $limit;
         }
@@ -296,11 +312,13 @@ class TfishContentHandler
         if (!$criteria) {
             $criteria = new TfishCriteria;
         }
+        
         if (!$criteria->order) {
             $criteria->order = 'date';
         }
 
         $statement = TfishDatabase::select('content', $criteria, $columns);
+        
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $content_list[$row['id']] = $row['title'];
@@ -322,16 +340,19 @@ class TfishContentHandler
     public static function getObject($id)
     {
         $clean_id = (int) $id;
+        
         if (TfishFilter::isInt($id, 1)) {
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('id', $clean_id));
             $statement = TfishDatabase::select('content', $criteria);
+            
             if ($statement) {
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
                 $object = self::toObject($row);
                 return $object;
             }
         }
+        
         return false;
     }
 
@@ -349,6 +370,7 @@ class TfishContentHandler
         if (!$criteria) {
             $criteria = new TfishCriteria;
         }
+        
         if (!$criteria->order) {
             $criteria->order = 'date';
         }
@@ -357,9 +379,11 @@ class TfishContentHandler
         if ($statement) {
             // Fetch rows into the appropriate class type, as determined by the first column.
             $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
+            
             while ($object = $statement->fetch()) {
                 $objects[$object->id] = $object;
             }
+            
             unset($statement);
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
@@ -371,12 +395,14 @@ class TfishContentHandler
             $object_ids = array_keys($objects);
 
             $criteria = new TfishCriteria();
+            
             foreach ($object_ids as $id) {
                 $criteria->add(new TfishCriteriaItem('content_id', (int) $id), "OR");
                 unset($id);
             }
 
             $statement = TfishDatabase::select('taglink', $criteria);
+            
             if ($statement) {
                 // Sort tag into multi-dimensional array indexed by content_id.
                 while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -406,10 +432,10 @@ class TfishContentHandler
     public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS)
     {
         $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int) $selected : null; // Offline (0) or online (1)
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // 
-
+        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
         $select_box = '<select class="form-control" name="online" id="online" onchange="this.form.submit()">';
+        
         if (isset($clean_selected)) {
             foreach ($options as $key => $value) {
                 $select_box .= ($key == $clean_selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
@@ -461,15 +487,16 @@ class TfishContentHandler
         $tags = array();
         $statement = false;
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
-
         $columns = array('id', 'title');
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+        
         if ($clean_online_only) {
             $criteria->add(new TfishCriteriaItem('online', true));
         }
 
         $statement = TfishDatabase::select('content', $criteria, $columns);
+        
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $tags[$row['id']] = $row['title'];
@@ -478,6 +505,7 @@ class TfishContentHandler
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
         }
+        
         asort($tags);
 
         return $tags;
@@ -497,6 +525,7 @@ class TfishContentHandler
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
         $tags = self::getObjects($criteria);
+        
         return $tags;
     }
     
@@ -514,6 +543,7 @@ class TfishContentHandler
                 return $key;
             }
         }
+        
         return null;
     }
 
@@ -563,9 +593,11 @@ class TfishContentHandler
 
         $options = array(0 => TFISH_SELECT_TYPE) + $type_list;
         $select_box = '<select class="form-control" name="type" id="type" onchange="this.form.submit()">';
+        
         foreach ($options as $key => $value) {
             $select_box .= ($key == $selected) ? '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>' : '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
         }
+        
         $select_box .= '</select>';
 
         return $select_box;
@@ -601,10 +633,12 @@ class TfishContentHandler
 
         $tag_list = self::getTagList(false);
         $tag_links = array();
+        
         foreach ($tags as $tag) {
             if (TfishFilter::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
                 $tag_links[$tag] = '<a href="' . TfishFilter::escape($clean_filename . $tag) . '">' . TfishFilter::escape($tag_list[$tag]) . '</a>';
             }
+            
             unset($tag);
         }
 
@@ -642,10 +676,12 @@ class TfishContentHandler
         // Trim search terms and discard any that are less than the minimum search length characters.
         foreach ($search_terms as $term) {
             $term = TfishFilter::TrimString($term);
+            
             if (!empty($term) && mb_strlen($term, 'UTF-8') >= $tfish_preference->min_search_length) {
                 $clean_search_terms[] = (string) $term;
             }
         }
+        
         if (!empty($clean_search_terms)) {
             $results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
         } else {
@@ -666,8 +702,10 @@ class TfishContentHandler
 
         $sql = "FROM `content` ";
         $count = count($search_terms);
+        
         if ($count) {
             $sql .= "WHERE ";
+            
             for ($i = 0; $i < $count; $i++) {
                 $search_term_placeholders[$i] = ':search_term' . (string) $i;
                 $sql .= "(";
@@ -678,16 +716,19 @@ class TfishContentHandler
                 $sql .= "`creator` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`publisher` LIKE " . $search_term_placeholders[$i];
                 $sql .= ")";
+                
                 if ($i != ($count - 1)) {
                     $sql .= " " . $andor . " ";
                 }
             }
         }
+        
         $sql .= " AND `online` = 1 AND `type` != 'TfishBlock' ORDER BY `date` DESC ";
         $sql_count .= $sql;
 
         // Bind the search term values and execute the statement.
         $statement = TfishDatabase::preparedStatement($sql_count);
+        
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
@@ -707,17 +748,21 @@ class TfishContentHandler
         if (!$limit) {
             $limit = $tfish_preference->search_pagination;
         }
+        
         $sql .= "LIMIT :limit ";
+        
         if ($offset) {
             $sql .= "OFFSET :offset ";
         }
 
         $sql_search .= $sql;
         $statement = TfishDatabase::preparedStatement($sql_search);
+        
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
                 $statement->bindValue(":limit", (int) $limit, PDO::PARAM_INT);
+                
                 if ($offset) {
                     $statement->bindValue(":offset", (int) $offset, PDO::PARAM_INT);
                 }
@@ -730,9 +775,11 @@ class TfishContentHandler
         // first column of the table.
         $statement->execute();
         $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
+        
         while ($object = $statement->fetch()) {
             $result[$object->id] = $object;
         }
+        
         return $result;
     }
 
@@ -768,6 +815,7 @@ class TfishContentHandler
 
         // Check the content type is whitelisted.
         $type_whitelist = self::getTypes();
+        
         if (!empty($row['type']) && array_key_exists($row['type'], $type_whitelist)) {
             $content_object = new $row['type'];
         } else {
@@ -784,6 +832,7 @@ class TfishContentHandler
                 $criteria = new TfishCriteria();
                 $criteria->add(new TfishCriteriaItem('content_id', (int) $content_object->id));
                 $statement = TfishDatabase::select('taglink', $criteria, array('tag_id'));
+                
                 if ($statement) {
                     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                         $tags[] = $row['tag_id'];
@@ -812,9 +861,11 @@ class TfishContentHandler
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
         $zeroed_properties = $obj->zeroedProperties();
+        
         foreach ($zeroed_properties as $property) {
             $key_values[$property] = null;
         }
+        
         $property_whitelist = $obj->getPropertyWhitelist();
 
         // Tags are stored in a separate table and must be handled in a separate query.
@@ -838,6 +889,7 @@ class TfishContentHandler
                 if (!empty($_FILES['image']['name'])) {
                     $filename = TfishFilter::trimString($_FILES['image']['name']);
                     $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+                    
                     if ($clean_filename) {
                         $key_values['image'] = $clean_filename;
                     }
@@ -867,6 +919,7 @@ class TfishContentHandler
                 if (!empty($_FILES['media']['name'])) {
                     $filename = TfishFilter::trimString($_FILES['media']['name']);
                     $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+                    
                     if ($clean_filename) {
                         $key_values['media'] = $clean_filename;
                         $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
@@ -894,6 +947,7 @@ class TfishContentHandler
 
         // Update tags.
         $result = TfishTaglinkHandler::updateTaglinks($clean_id, $obj->type, $obj->tags);
+        
         if (!$result) {
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
             return false;
@@ -901,9 +955,11 @@ class TfishContentHandler
 
         // Update the content object.
         $result = TfishDatabase::update('content', $clean_id, $key_values);
+        
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
         }
+        
         unset($result);
 
         return true;
@@ -929,6 +985,7 @@ class TfishContentHandler
         $criteria->add(new TfishCriteriaItem('id', $clean_id));
 
         $statement = TfishDatabase::select('content', $criteria, array('image'));
+        
         if ($statement) {
             $row = $statement->fetch(PDO::FETCH_ASSOC);
             $filename = (isset($row['image']) && !empty($row['image'])) ? $row['image'] : false;
@@ -959,6 +1016,7 @@ class TfishContentHandler
         $criteria->add(new TfishCriteriaItem('id', $clean_id));
 
         $statement = TfishDatabase::select('content', $criteria, array('media'));
+        
         if ($statement) {
             $row = $statement->fetch(PDO::FETCH_ASSOC);
             $filename = (isset($row['media']) && !empty($row['media'])) ? $row['media'] : false;

@@ -62,8 +62,10 @@ class TfishCache
 
         // Resolve the file name.
         $file_name = self::_getCachedFileName($basename, $params);
+        
         // Verify that the constructed path matches the canonical path. Exit cache if path is bad.
         $resolved_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
+        
         if ($resolved_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
             return;
         }
@@ -75,6 +77,7 @@ class TfishCache
             ob_end_flush();
             exit;
         }
+        
     }
 
     /**
@@ -86,11 +89,14 @@ class TfishCache
      */
     private static function _getCachedFileName($basename, $params)
     {
-
         $clean_filename = false;
-        $basename = rtrim($basename, '.php'); // Remove the extension.
+        
+        // Remove the extension.
+        $basename = rtrim($basename, '.php');
+        
         // Validate the parameters. All should be treated as alNumUnderscore strings.
         $basename = TfishFilter::trimString($basename);
+        
         if ($basename && TfishFilter::isAlnumUnderscore($basename)) {
             $clean_filename = $basename;
         } else {
@@ -99,7 +105,8 @@ class TfishCache
         }
 
         if (TfishFilter::isArray($params) && !empty($params)) {
-            foreach ($params as $key => $value) {
+            
+            foreach ($params as $key => $value) {  
                 if ($value) {
                     $clean_key = TfishFilter::trimString($key);
                     $clean_value = TfishFilter::trimString($value);
@@ -107,6 +114,7 @@ class TfishCache
                         $clean_filename .= '&' . $clean_key . '=' . $clean_value;
                     }
                 }
+                
                 unset($key, $value, $clean_key, $clean_value);
             }
         }
@@ -164,9 +172,11 @@ class TfishCache
     {
         try {
             $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
+            
             foreach ($directory_iterator as $file) {
                 if ($file->isFile()) {
                     $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
+                    
                     if ($path && file_exists($path)) {
                         try {
                             unlink($path);

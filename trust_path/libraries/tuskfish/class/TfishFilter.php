@@ -111,22 +111,27 @@ class TfishFilter
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isAlpha($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "alnum":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isAlnum($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "alnumunder":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isAlnumUnderscore($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "bool":
                         $dirty_vars[$key] = (bool) $dirty_vars[$key];
                         $clean_vars[$key] = self::isBool($dirty_vars[$key]) ? $dirty_vars[$key] : null;
                         break;
+                    
                     case "digit":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isDigit($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "email": // Checks conformity with email specification; does not escape quotes!
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isEmail($dirty_vars[$key]) ? $dirty_vars[$key] : false;
@@ -135,21 +140,26 @@ class TfishFilter
                         $dirty_vars[$key] = (float) $dirty_vars[$key];
                         $clean_vars[$key] = self::isFloat($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "int":
                         $dirty_vars[$key] = (int) $dirty_vars[$key];
                         $clean_vars[$key] = self::isInt($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "ip": // Accepts both private and public IP ranges but not reserved ranges
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isIp($dirty_vars[$key]) ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "string": // Check for UTF-8 encoding; strip white space and control characters (ASCII < 32).
                         $clean_vars[$key] = self::trimString($dirty_vars[$key]);
                         break;
+                    
                     case "html": // Filter HTML input with the HTMLPurifier library (allowed tags must be configured there).
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::filterHtml($dirty_vars[$key]);
                         break;
+                    
                     case "url": // Checks conformity with email specification; does not escape quotes!
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
                         $clean_vars[$key] = self::isUrl($dirty_vars[$key]) ? $dirty_vars[$key] : false;
@@ -176,6 +186,7 @@ class TfishFilter
             if (class_exists('HTMLPurifier')) {
                 $html_purifier = new HTMLPurifier($config);
                 $clean_html = (string) $html_purifier->purify($dirty_html);
+                
                 return $clean_html;
             } else {
                 return false;
@@ -289,6 +300,7 @@ class TfishFilter
     public static function isBool($bool)
     {
         $result = filter_var($bool, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        
         if (is_null($result)) {
             return false;
         } else {
@@ -446,6 +458,7 @@ class TfishFilter
                 return true;
             }
         }
+        
         return false;
     }
 

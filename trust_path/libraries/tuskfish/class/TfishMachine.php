@@ -95,6 +95,7 @@ class TfishMachine extends TfishTfishAncestralObject
                     if ($property == 'allowed_in') {
                         // Whitelist of allowed inbound commands issued by remote machines.
                     }
+                    
                     if ($property == 'allowed_out') {
                         // Whitelist of allowed outbound commands to remote machines.
                     }

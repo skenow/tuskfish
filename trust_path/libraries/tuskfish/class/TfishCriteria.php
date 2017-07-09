@@ -150,7 +150,6 @@ class TfishCriteria
                     } else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                     }
-
                     break;
 
                 case "condition":
@@ -164,12 +163,12 @@ class TfishCriteria
                 case "order": // string; any property of target object
                 case "groupby": // string; any property of target object
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlnumUnderscore($value)) {
                         $this->__data[$property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     }
-
                     break;
 
                 case "ordertype": // ASC or DESC
@@ -183,6 +182,7 @@ class TfishCriteria
                 case "tag":
                     if (TfishFilter::isArray($value)) {
                         $clean_tags = array();
+                        
                         foreach ($value as $val) {
                             if (TfishFilter::isInt($val, 1)) {
                                 $clean_tags[] = (int) $val;
@@ -191,6 +191,7 @@ class TfishCriteria
                             }
                             unset($val);
                         }
+                        
                         $this->__data['tag'] = $clean_tags;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -219,11 +220,14 @@ class TfishCriteria
     {
         $sql = '';
         $count = count($this->item);
+        
         if ($count) {
             $sql = "(";
+            
             for ($i = 0; $i < $count; $i++) {
                 $sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
                         . $this->item[$i]->operator . " :placeholder" . (string) $i;
+                
                 if ($i < ($count - 1)) {
                     $sql .= " " . $this->condition[$i] . " ";
                 }
@@ -247,6 +251,7 @@ class TfishCriteria
     {
         $pdo_placeholders = array();
         $count = count($this->item);
+        
         for ($i = 0; $i < $count; $i++) {
             $pdo_placeholders[":placeholder" . (string) $i] = $this->item[$i]->value;
         }
@@ -267,16 +272,20 @@ class TfishCriteria
     {
         $sql = '';
         $count = count($this->tag);
+        
         if ($count == 1) {
             $sql .= "`taglink`.`tag_id` = :tag0 ";
         } elseif ($count > 1) {
             $sql .= "`taglink`.`tag_id` IN (";
+            
             for ($i = 0; $i < count($this->tag); $i++) {
                 $sql .= ':tag' . (string) $i . ',';
             }
+            
             $sql = rtrim($sql, ',');
             $sql .= ") ";
         }
+        
         return $sql;
     }
 
@@ -292,9 +301,11 @@ class TfishCriteria
     public function renderTagPDO()
     {
         $tag_placeholders = array();
+        
         for ($i = 0; $i < count($this->tag); $i++) {
             $tag_placeholders[":tag" . (string) $i] = (int) $this->tag[$i];
         }
+        
         return $tag_placeholders;
     }
 

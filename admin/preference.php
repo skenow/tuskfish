@@ -39,6 +39,7 @@ if (in_array($op, array('edit', 'update', false))) {
 
             // Update the database row and display a response.
             $result = TfishPreferenceHandler::updatePreferences($tfish_preference);
+            
             if ($result) {
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
@@ -48,6 +49,7 @@ if (in_array($op, array('edit', 'update', false))) {
                 $tfish_template->alert_class = 'alert-danger';
                 $tfish_template->message = TFISH_PREFERENCES_UPDATE_FAILED;
             }
+            
             $tfish_template->back_url = 'preference.php';
             $tfish_template->form = TFISH_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');

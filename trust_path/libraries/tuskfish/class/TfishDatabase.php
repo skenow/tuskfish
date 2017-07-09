@@ -95,6 +95,7 @@ class TfishDatabase
     {
         // SQLite just expects a file name, which was defined as a constant during create()
         self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
+        
         if (self::$_db) {
             // Set PDO to throw exceptions every time it encounters an error.
             // On production sites it may be best to change the second argument to 
@@ -119,6 +120,7 @@ class TfishDatabase
     {
         // Validate input parameters
         $db_name = TfishFilter::trimString($db_name);
+        
         if (TfishFilter::isAlnumUnderscore($db_name)) {
             return self::_create($db_name . '.db');
         } else {
@@ -140,10 +142,12 @@ class TfishDatabase
             $db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "'
                     . $db_path . '");';
             $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $db_constant);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
                 return false;
             }
+            
             return $db_path;
         } catch (PDOException $e) {
             TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
@@ -170,18 +174,23 @@ class TfishDatabase
 
         // Validate input parameters
         $clean_table = self::validateTableName($table);
+        
         if (TfishFilter::isArray($columns) && !empty($columns)) {
             $type_whitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
+            
             foreach ($columns as $key => $value) {
                 $key = self::escapeIdentifier($key);
+                
                 if (!TfishFilter::isAlnumUnderscore($key)) {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
                 }
+                
                 if (!in_array($value, $type_whitelist)) {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                     exit;
                 }
+                
                 $clean_columns[$key] = $value;
                 unset($key, $value);
             }
@@ -189,11 +198,14 @@ class TfishDatabase
             trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
             exit;
         }
+        
         if ($primary_key) {
             $primary_key = self::escapeIdentifier($primary_key);
+            
             if (array_key_exists($primary_key, $clean_columns)) {
                 $clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key) ? $primary_key : false;
             }
+            
             if (!$clean_primary_key) {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                 exit;
@@ -213,6 +225,7 @@ class TfishDatabase
     {
         if (mb_strlen($table_name, 'UTF-8') > 0 && is_array($columns)) {
             $sql = "CREATE TABLE IF NOT EXISTS `" . $table_name . "` (";
+            
             foreach ($columns as $key => $value) {
                 $sql .= "`" . $key . "` " . $value . "";
                 if ($primary_key && $primary_key == $key) {
@@ -220,10 +233,12 @@ class TfishDatabase
                 }
                 $sql .= ", ";
             }
+            
             $sql = trim($sql, ', ');
             $sql .= ")";
             $statement = self::preparedStatement($sql);
             $statement->execute();
+            
             if ($statement) {
                 return true;
             } else {
@@ -243,6 +258,7 @@ class TfishDatabase
     {
         $clean_table = self::validateTableName($table);
         $clean_id = self::validateId($id);
+        
         return self::_delete($clean_table, $clean_id);
     }
 
@@ -251,11 +267,13 @@ class TfishDatabase
     {
         $sql = "DELETE FROM " . self::addBackticks($table) . " WHERE `id` = :id";
         $statement = self::preparedStatement($sql);
+        
         if ($statement) {
             $statement->bindValue(':id', $id, PDO::PARAM_INT);
         } else {
             return false;
         }
+        
         return self::executeTransaction($statement);
     }
 
@@ -275,6 +293,7 @@ class TfishDatabase
     {
         $clean_table = self::validateTableName($table);
         $clean_criteria = self::validateCriteriaObject($criteria);
+        
         return self::_deleteAll($clean_table, $clean_criteria);
     }
 
@@ -319,13 +338,16 @@ class TfishDatabase
 
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
+        
         if ($criteria) {
             if (!empty($pdo_placeholders)) {
+                
                 foreach ($pdo_placeholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, self::setType($value));
                     unset($placeholder);
                 }
             }
+            
             if ($criteria->limit && $criteria->offset) {
                 $statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
                 $statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
@@ -333,6 +355,7 @@ class TfishDatabase
                 $statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
             }
         }
+        
         return self::executeTransaction($statement);
     }
 
@@ -365,6 +388,7 @@ class TfishDatabase
         $identifier = str_replace('`', '``', $identifier);
         $identifier = str_replace('[', '[[', $identifier);
         $clean_identifier = str_replace(']', ']]', $identifier);
+        
         return $clean_identifier;
     }
 
@@ -389,6 +413,7 @@ class TfishDatabase
             TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
+        
         return true;
     }
 
@@ -403,6 +428,7 @@ class TfishDatabase
     {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
+        
         return self::_insert($clean_table, $clean_keys);
     }
 
@@ -418,16 +444,19 @@ class TfishDatabase
             $sql .= self::addBackticks($key) . ", ";
             unset($key, $value);
         }
+        
         $pdo_placeholders = trim($pdo_placeholders, ', ');
         $sql = trim($sql, ', ');
         $sql .= ") VALUES (" . $pdo_placeholders . ")";
 
         // Prepare the statement and bind the values.
         $statement = self::$_db->prepare($sql);
+        
         foreach ($key_values as $key => $value) {
             $statement->bindValue(":" . $key, $value, self::setType($value));
             unset($key, $value);
         }
+        
         return self::executeTransaction($statement);
     }
 
@@ -483,6 +512,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
         $clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
+        
         return self::_select($clean_table, $clean_criteria, $clean_columns);
     }
 
@@ -497,6 +527,7 @@ class TfishDatabase
             foreach ($columns as $column) {
                 $sql .= '`t1`.' . self::addBackticks($column) . ", ";
             }
+            
             $sql = rtrim($sql, ", ") . " ";
         } else {
             $sql .= "`t1`.* ";
@@ -543,6 +574,7 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
                     $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
@@ -559,6 +591,7 @@ class TfishDatabase
 
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
+        
         if ($criteria && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
@@ -601,8 +634,10 @@ class TfishDatabase
     {
         $clean_table = self::validateTableName($table);
         $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
+        
         if ($column) {
             $column = self::escapeIdentifier($column);
+            
             if (TfishFilter::isAlnumUnderscore($column)) {
                 $clean_column = $column;
             } else {
@@ -612,6 +647,7 @@ class TfishDatabase
         } else {
             $clean_column = "*";
         }
+        
         return self::_selectCount($clean_table, $clean_criteria, $clean_column);
     }
 
@@ -668,6 +704,7 @@ class TfishDatabase
                 }
             }
         }
+        
         if (isset($tag_placeholders) && !empty($tag_placeholders)) {
             foreach ($tag_placeholders as $tag_placeholder => $value) {
                 $statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
@@ -700,6 +737,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
         $clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
+        
         return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
     }
 
@@ -713,6 +751,7 @@ class TfishDatabase
         foreach ($columns as $column) {
             $sql .= '`t1`.' . self::addBackticks($column) . ", ";
         }
+        
         $sql = rtrim($sql, ", ") . " ";
 
         // Set table.
@@ -753,6 +792,7 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
                     $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
@@ -776,6 +816,7 @@ class TfishDatabase
                     unset($placeholder);
                 }
             }
+            
             if ($criteria->limit && $criteria->offset) {
                 $statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
                 $statement->bindValue(':offset', $criteria->offset, PDO::PARAM_INT);
@@ -783,6 +824,7 @@ class TfishDatabase
                 $statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
             }
         }
+        
         if (isset($tag_placeholders) && !empty($tag_placeholders)) {
             foreach ($tag_placeholders as $tag_placeholder => $value) {
                 $statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
@@ -810,6 +852,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_column = self::validateColumns(array($column));
         $clean_column = reset($clean_column);
+        
         return self::_toggleBoolean($clean_id, $clean_table, $clean_column);
     }
 
@@ -822,6 +865,7 @@ class TfishDatabase
 
         // Prepare the statement and bind the ID value.
         $statement = TfishDatabase::preparedStatement($sql);
+        
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
         }
@@ -846,6 +890,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_column = self::validateColumns(array($column));
         $clean_column = reset($clean_column);
+        
         return self::_updateCounter($clean_id, $clean_table, $clean_column);
     }
 
@@ -857,6 +902,7 @@ class TfishDatabase
 
         // Prepare the statement and bind the ID value.
         $statement = TfishDatabase::preparedStatement($sql);
+        
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
         }
@@ -877,6 +923,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_id = self::validateId($id);
         $clean_keys = self::validateKeys($key_values);
+        
         return self::_update($clean_table, $clean_id, $clean_keys);
     }
 
@@ -885,16 +932,20 @@ class TfishDatabase
     {
         // Prepare the statement
         $sql = "UPDATE " . self::addBackticks($table) . " SET ";
+        
         foreach ($key_values as $key => $value) {
             $sql .= self::addBackticks($key) . " = :" . $key . ", ";
         }
+        
         $sql = trim($sql, ", ");
         $sql .= " WHERE `id` = :id";
 
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
+        
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
+            
             foreach ($key_values as $key => $value) {
                 $type = gettype($value);
                 $statement->bindValue(":" . $key, $value, self::setType($type));
@@ -903,6 +954,7 @@ class TfishDatabase
         } else {
             return false;
         }
+        
         return self::executeTransaction($statement);
     }
 
@@ -922,11 +974,13 @@ class TfishDatabase
     {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
+        
         if ($criteria) {
             $clean_criteria = self::validateCriteriaObject($criteria);
         } else {
             $clean_criteria = false;
         }
+        
         return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
     }
 
@@ -940,6 +994,7 @@ class TfishDatabase
         foreach ($key_values as $key => $value) {
             $sql .= self::addBackticks($key) . " = :" . $key . ", ";
         }
+        
         $sql = rtrim($sql, ", ") . " ";
 
         // Set WHERE criteria.
@@ -961,10 +1016,12 @@ class TfishDatabase
 
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
+        
         foreach ($key_values as $key => $value) {
             $statement->bindValue(':' . $key, $value, self::setType($value));
             unset($key, $value);
         }
+        
         if ($criteria) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
@@ -990,6 +1047,7 @@ class TfishDatabase
     public static function setType($data)
     {
         $type = gettype($data);
+        
         switch ($type) {
             case "boolean":
                 return PDO::PARAM_BOOL;
@@ -1043,37 +1101,45 @@ class TfishDatabase
             trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
             exit;
         }
+        
         if ($criteria->item) {
             if (!TfishFilter::isArray($criteria->item)) {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
             }
+            
             if (empty($criteria->condition)) {
                 trigger_error(TFISH_ERROR_REQUIRED_PROPERTY_NOT_SET, E_USER_ERROR);
                 exit;
             }
+            
             if (!TfishFilter::isArray($criteria->condition)) {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
             }
+            
             if (count($criteria->item) != count($criteria->condition)) {
                 trigger_error(TFISH_ERROR_COUNT_MISMATCH, E_USER_ERROR);
                 exit;
             }
+            
             foreach ($criteria->item as $item) {
                 if (!is_a($item, 'TfishCriteriaItem')) {
                     trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);
                     exit;
                 }
+                
                 if (!TfishFilter::isAlnumUnderscore($item->column)) {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
                 }
+                
                 if ($item->operator && !in_array($item->operator, $item->permittedOperators())) {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                     exit;
                 }
             }
+            
             foreach ($criteria->condition as $condition) {
                 if ($condition != "AND" && $condition != "OR") {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -1081,27 +1147,33 @@ class TfishDatabase
                 }
             }
         }
+        
         if ($criteria->groupby && !TfishFilter::isAlnumUnderscore($criteria->groupby)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }
+        
         if ($criteria->limit && !TfishFilter::isInt($criteria->limit, 1)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;
         }
+        
         if ($criteria->offset && !TfishFilter::isInt($criteria->offset, 0)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;
         }
+        
         if ($criteria->order && !TfishFilter::isAlnumUnderscore($criteria->order)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }
+        
         if ($criteria->ordertype &&
                 ($criteria->ordertype != "ASC" && $criteria->ordertype != "DESC")) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
+        
         return $criteria;
     }
 
@@ -1114,17 +1186,21 @@ class TfishDatabase
     public static function validateColumns($columns)
     {
         $clean_columns = array();
+        
         if (TfishFilter::isArray($columns) && !empty($columns)) {
             foreach ($columns as $column) {
                 $column = self::escapeIdentifier($column);
+                
                 if (TfishFilter::isAlnumUnderscore($column)) {
                     $clean_columns[] = $column;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
                 }
+                
                 unset($column);
             }
+            
             return $clean_columns;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -1161,17 +1237,21 @@ class TfishDatabase
     public static function validateKeys($key_values)
     {
         $clean_keys = array();
+        
         if (TfishFilter::isArray($key_values) && !empty($key_values)) {
             foreach ($key_values as $key => $value) {
                 $key = self::escapeIdentifier($key);
+                
                 if (TfishFilter::isAlnumUnderscore($key)) {
                     $clean_keys[$key] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
                 }
+                
                 unset($key, $value);
             }
+            
             return $clean_keys;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
@@ -1188,6 +1268,7 @@ class TfishDatabase
     public static function validateTableName($table_name)
     {
         $table_name = self::escapeIdentifier($table_name);
+        
         if (TfishFilter::isAlnum($table_name)) {
             return $table_name;
         } else {

@@ -93,9 +93,11 @@ class TfishAngryTree
         $this->_objects = & $objectArr;
         $this->_myId = $myId;
         $this->_parentId = $parentId;
+        
         if (isset($rootId)) {
             $this->_rootId = $rootId;
         }
+        
         $this->_initialize();
     }
 
@@ -115,6 +117,7 @@ class TfishAngryTree
             $key2 = $this->_objects[$i]->$parent_id_field;
             $this->_tree[$key1]['parent'] = $key2;
             $this->_tree[$key2]['child'][] = $key1;
+            
             if (isset($this->_rootId)) {
                 $this->_tree[$key1]['root'] = $this->_objects[$i]->getVar($this->_rootId);
             }
@@ -151,11 +154,14 @@ class TfishAngryTree
     public function getFirstChild($key)
     {
         $ret = array();
+        
         if (isset($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
                 $ret[$childkey] = & $this->_tree[$childkey]['obj'];
             }
+            
         }
+        
         return $ret;
     }
 
@@ -172,11 +178,13 @@ class TfishAngryTree
             foreach ($this->_tree[$key]['child'] as $childkey) {
                 $ret[$childkey] = & $this->_tree[$childkey]['obj'];
                 $children = & $this->getAllChild($childkey, $ret);
+                
                 foreach (array_keys($children) as $newkey) {
                     $ret[$newkey] = & $children[$newkey];
                 }
             }
         }
+        
         return $ret;
     }
 
@@ -195,10 +203,12 @@ class TfishAngryTree
         if (isset($this->_tree[$key]['parent']) && isset($this->_tree[$this->_tree[$key]['parent']]['obj'])) {
             $ret[$uplevel] = & $this->_tree[$this->_tree[$key]['parent']]['obj'];
             $parents = & $this->getAllParent($this->_tree[$key]['parent'], $ret, $uplevel + 1);
+            
             foreach (array_keys($parents) as $newkey) {
                 $ret[$newkey] = & $parents[$newkey];
             }
         }
+        
         return $ret;
     }
 
@@ -221,6 +231,7 @@ class TfishAngryTree
             $ret[$value] = $prefix_curr . $this->_tree[$key]['obj']->$fieldName;
             $prefix_curr .= $prefix_orig;
         }
+        
         if (isset($this->_tree[$key]['child']) && !empty($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
                 $this->_makeSelBoxOptions($fieldName, $selected, $childkey, $ret, $prefix_orig, $prefix_curr);
@@ -246,8 +257,8 @@ class TfishAngryTree
     public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '', $addEmptyOption = FALSE, $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
-
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);
+        
         return $ret;
     }
 
@@ -261,8 +272,8 @@ class TfishAngryTree
     public function makeParentSelectBox($selected = 0, $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_PARENT);
-
         $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-- ');
+        
         return $ret;
     }
 

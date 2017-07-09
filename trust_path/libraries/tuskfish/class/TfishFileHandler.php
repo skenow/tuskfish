@@ -84,12 +84,15 @@ class TfishFileHandler
         
         $clean_path = TfishFilter::trimString($path);
         $clean_content = PHP_EOL . TfishFilter::trimString($contents); // NOTE: Calling trim() removes linefeed from the contents.
+        
         if ($clean_path && $clean_content) {
             $result = self::_appendFile($clean_path, $clean_content);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
                 return false;
             }
+            
             return true;
         }
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
@@ -122,13 +125,17 @@ class TfishFileHandler
         $clean_path = TfishFilter::trimString($path);
         if (!empty($clean_path)) {
             $result = self::_clearDirectory($clean_path);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
                 return false;
             }
+            
             return true;
         }
+        
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
+        
         return false;
     }
 
@@ -136,6 +143,7 @@ class TfishFileHandler
     private static function _clearDirectory($path)
     {
         $resolved_path = self::_dataFilePath($path);
+        
         if ($resolved_path) {
             try {
                 foreach (new DirectoryIterator($resolved_path) as $file) {
@@ -180,7 +188,9 @@ class TfishFileHandler
                 return false; // Path is bad.
             }
         }
+        
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
+        
         return false;
     }
 
@@ -214,9 +224,12 @@ class TfishFileHandler
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
                 return false;
             }
+            
             return true;
         }
+        
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
+        
         return false;
     }
 
@@ -224,10 +237,11 @@ class TfishFileHandler
     private static function _deleteDirectory($path)
     {
         $path = self::_dataFilePath($path);
-        echo $path . '<br />';
+        
         if ($path) {
             try {
                 $iterator = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+                
                 foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
                     if ($file->isDir()) {
                         rmdir($file->getPathname());
@@ -242,7 +256,9 @@ class TfishFileHandler
                 return false;
             }
         }
+        
         trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
+        
         return false;
     }
 
@@ -263,15 +279,20 @@ class TfishFileHandler
         }
         
         $clean_path = TfishFilter::trimString($path);
+        
         if (!empty($clean_path)) {
             $result = self::_deleteFile($clean_path);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
                 return false;
             }
+            
             return true;
         }
+        
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
+        
         return false;
     }
 
@@ -279,6 +300,7 @@ class TfishFileHandler
     private static function _deleteFile($path)
     {
         $path = self::_dataFilePath($path);
+        
         if ($path && file_exists($path)) {
             try {
                 unlink($path);
@@ -345,6 +367,7 @@ class TfishFileHandler
     {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : false;
         $clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : false;
+        
         if ($clean_id) {
             $result = self::_sendDownload($clean_id, $clean_filename);
             if ($result == false) {
@@ -362,14 +385,18 @@ class TfishFileHandler
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('id', $id));
         $statement = TfishDatabase::select('content', $criteria);
+        
         if (!$statement) {
             trigger_error(TFISH_ERROR_NO_STATEMENT, E_USER_NOTICE);
             return false;
         }
+        
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $content = TfishContentHandler::toObject($row);
+        
         if ($content && $content->online == true) {
             $media = isset($content->media) ? $content->media : false;
+            
             if ($media && is_readable(TFISH_MEDIA_PATH . $content->media)) {
                 ob_start();
                 $file_path = TFISH_MEDIA_PATH . $content->media;
@@ -428,9 +455,11 @@ class TfishFileHandler
         $mimetype_list = self::getPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
         $clean_extension = array_key_exists($extension, $mimetype_list) ? TfishFilter::trimString($extension) : false;
+        
         if ($clean_filename && $clean_fieldname && $clean_extension) {
             return self::_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
         }
+        
         trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
         
         return false;
@@ -441,6 +470,7 @@ class TfishFileHandler
     {
         $filename = time() . '_' . $filename;
         $upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $extension;
+        
         if ($_FILES[$fieldname]["error"]) {
             switch ($_FILES[$fieldname]["error"]) {
                 case 1: // UPLOAD_ERR_INI_SIZE
@@ -474,6 +504,7 @@ class TfishFileHandler
                     break;
             }
         }
+        
         if (!move_uploaded_file($_FILES[$fieldname]["tmp_name"], $upload_path)) {
             trigger_error(TFISH_ERROR_FILE_UPLOAD_FAILED, E_USER_ERROR);
         } else {
@@ -482,6 +513,7 @@ class TfishFileHandler
                 return $filename . '.' . $extension;
             }
         }
+        
         return false;
     }
 

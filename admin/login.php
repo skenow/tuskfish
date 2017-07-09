@@ -69,10 +69,12 @@ if (!empty($_POST['op'])) {
     $op = TfishFilter::trimString($_GET['op']);
     $clean_op = TfishFilter::isAlpha($op) ? $op : false;
 }
+
 if (isset($_POST['email'])) {
     $email = TfishFilter::trimString($_POST['email']);
     $clean_email = TfishFilter::isEmail($email) ? $email : false;
 }
+
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 
 if (isset($clean_op) && in_array($clean_op, $allowed_options)) {

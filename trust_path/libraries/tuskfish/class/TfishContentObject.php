@@ -139,12 +139,14 @@ class TfishContentObject extends TfishAncestralObject
             switch ($property) {
                 case "date": // Stored in format yyyy-mm-dd
                     $date = new DateTime($this->__data[$property]);
+                    
                     return htmlspecialchars($date->format('j F Y'), ENT_QUOTES, 'UTF-8');
                     break;
 
                 case "file_size": // Convert to human readable.
                     $bytes = (int) $this->__data[$property];
                     $unit = $val = '';
+                    
                     if ($bytes == 0 || $bytes < 1024) {
                         $unit = ' bytes';
                         $val = $bytes;
@@ -158,18 +160,19 @@ class TfishContentObject extends TfishAncestralObject
                         $unit = ' GB';
                         $val = ($bytes / 1073741824);
                     }
+                    
                     $val = round($val, 2);
+                    
                     return $val . ' ' . $unit;
-
                     break;
 
                 case "format": // Output the file extension as user-friendly "mimetype".
                     $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
                     $mimetype = array_search($this->__data[$property], $mimetype_whitelist);
+                    
                     if (!empty($mimetype)) {
                         return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
                     }
-
                     break;
 
                 case "description":
@@ -186,20 +189,24 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "rights":
                     $rights = TfishContentHandler::getRights();
+                    
                     return $rights[$this->__data[$property]];
                     break;
 
                 case "submission_time":
                     $date = date('j F Y', $this->__data[$property]);
+                    
                     return htmlspecialchars($date, ENT_QUOTES, 'UTF-8');
                     break;
 
                 case "tags":
                     $tags = array();
+                    
                     foreach ($this->__data[$property] as $value) {
                         $tags[] = (int) $value;
                         unset($value);
                     }
+                    
                     return $tags;
                     break;
 
@@ -232,6 +239,7 @@ class TfishContentObject extends TfishAncestralObject
         // Validate parameters; and at least one must be set.
         $clean_width = TfishFilter::isInt($width, 1) ? (int) $width : 0;
         $clean_height = TfishFilter::isInt($height, 1) ? (int) $height : 0;
+        
         if (!$clean_width && !$clean_height) {
             return false;
         }
@@ -249,6 +257,7 @@ class TfishContentObject extends TfishAncestralObject
         $cached_path = TFISH_PUBLIC_CACHE_PATH . $filename . '-';
         $cached_url = TFISH_CACHE_URL . $filename . '-';
         $original_path = TFISH_IMAGE_PATH . $filename . $extension;
+        
         if ($clean_width > $clean_height) {
             $cached_path .= $clean_width . 'w' . $extension;
             $cached_url .= $clean_width . 'w' . $extension;
@@ -268,6 +277,7 @@ class TfishContentObject extends TfishAncestralObject
             // $properties[0] = width, [1] = height, [2] = width = "x" height = "y" which is useful
             // for outputting size attribute.
             $properties = getimagesize($original_path);
+            
             if (!$properties) {
                 return false;
             }
@@ -290,6 +300,7 @@ class TfishContentObject extends TfishAncestralObject
             // Different image types require different handling. JPEG and PNG support optional quality parameter
             // TODO: Create a preference.
             $result = false;
+            
             switch ($properties['mime']) {
                 case "image/jpeg":
                     $original = imagecreatefromjpeg($original_path);
@@ -408,10 +419,13 @@ class TfishContentObject extends TfishAncestralObject
     public function getURL($use_subclass_page = false)
     {
         $url = TFISH_URL;
+        
         if ($use_subclass_page) {
             $url .= $this->module . '.php';
         }
+        
         $url .= '?id=' . (int) $this->id;
+        
         if ($this->seo) {
             $url .= '&amp;title=' . TfishFilter::encodeEscapeUrl($this->seo);
         }
@@ -436,6 +450,7 @@ class TfishContentObject extends TfishAncestralObject
         $delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia'])) ? true : false;
 
         $property_whitelist = $this->getPropertyWhitelist();
+        
         foreach ($property_whitelist as $key => $type) {
             if (array_key_exists($key, $dirty_input)) {
                 $this->__set($key, $dirty_input[$key]);
@@ -449,6 +464,7 @@ class TfishContentObject extends TfishAncestralObject
 
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
             $clean_filename = TfishFilter::trimString($_FILES['image']['name']);
+            
             if ($clean_filename) {
                 $this->__set('image', $clean_filename);
             }
@@ -456,6 +472,7 @@ class TfishContentObject extends TfishAncestralObject
 
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
             $clean_filename = TfishFilter::trimString($_FILES['media']['name']);
+            
             if ($clean_filename) {
                 $this->__set('media', $clean_filename);
                 $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
@@ -487,6 +504,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "alpha":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlpha($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -496,6 +514,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "alnum":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlnum($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -505,6 +524,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "alnumunder":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlnumUnderscore($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -516,8 +536,10 @@ class TfishContentObject extends TfishAncestralObject
                 case "array":
                     if (TfishFilter::isArray($value)) {
                         $clean_tags = array();
+                        
                         foreach ($value as $val) {
                             $clean_val = (int) $val;
+                            
                             if (TfishFilter::isInt($clean_val, 1)) {
                                 $clean_tags[] = $clean_val;
                             } else {
@@ -525,6 +547,7 @@ class TfishContentObject extends TfishAncestralObject
                             }
                             unset($clean_val);
                         }
+                        
                         $this->__data[$property] = $clean_tags;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -541,6 +564,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "email":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isEmail($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -550,6 +574,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "digit":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isDigit($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -575,8 +600,8 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "int":
                     $value = (int) $value;
+                    
                     switch ($property) {
-
                         // 0 or 1.
                         case "online":
                             if (TfishFilter::isInt($value, 0, 1)) {
@@ -595,7 +620,6 @@ class TfishContentObject extends TfishAncestralObject
                             } else {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
-
                             break;
 
                         // Parent ID must be different to content ID (cannot declare self as parent).
@@ -603,6 +627,7 @@ class TfishContentObject extends TfishAncestralObject
                             if (!TfishFilter::isInt($value, 0)) {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
+                            
                             if ($value == $this->__data['id'] && $value > 0) {
                                 trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
                             } else {
@@ -636,6 +661,7 @@ class TfishContentObject extends TfishAncestralObject
 
                     if ($property == "date") { // Ensure format complies with DATE_RSS
                         $check_date = date_parse_from_format('Y-m-d', $value);
+                        
                         if ($check_date == false || $check_date['warning_count'] > 0 || $check_date['error_count'] > 0) {
                             // Bad date supplied, default to today.
                             $this->__data[$property] = date(DATE_RSS, time());
@@ -664,6 +690,7 @@ class TfishContentObject extends TfishAncestralObject
                                 $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
                                 break;
                         }
+                        
                         if (empty($value) || in_array($value, $mimetype_whitelist)) {
                             $this->__data[$property] = $value;
                         } else {
@@ -673,6 +700,7 @@ class TfishContentObject extends TfishAncestralObject
 
                     if ($property == "language") {
                         $language_whitelist = TfishContentHandler::getLanguages();
+                        
                         if (!array_key_exists($value, $language_whitelist)) {
                             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                         }
@@ -690,6 +718,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "url":
                     $value = TfishFilter::trimString($value);
+                    
                     if ($value == "" || TfishFilter::isUrl($value)) {
                         $this->__data[$property] = $value;
                     } else {

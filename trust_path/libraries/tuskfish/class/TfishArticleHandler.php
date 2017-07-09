@@ -47,6 +47,7 @@ class TfishArticleHandler extends TfishContentHandler
 
         // Unset any pre-existing object type criteria.
         $type_key = self::getTypeIndex($criteria->item);
+        
         if (isset($type_key)) {
             $criteria->killType($type_key);
         }
@@ -79,6 +80,7 @@ class TfishArticleHandler extends TfishContentHandler
 
         // Unset any pre-existing object type criteria.
         $type_key = self::getTypeIndex($criteria->item);
+        
         if (isset($type_key)) {
             $criteria->killType($type_key);
         }

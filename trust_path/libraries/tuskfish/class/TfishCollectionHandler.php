@@ -40,6 +40,7 @@ class TfishCollectionHandler extends TfishContentHandler
 
         // Unset any pre-existing object type criteria.
         $type_key = self::getTypeIndex($criteria->item);
+        
         if (isset($type_key)) {
             $criteria->killType($type_key);
         }
@@ -72,6 +73,7 @@ class TfishCollectionHandler extends TfishContentHandler
 
         // Unset any pre-existing object type criteria.
         $type_key = self::getTypeIndex($criteria->item);
+        
         if (isset($type_key)) {
             $criteria->killType($type_key);
         }
@@ -103,8 +105,10 @@ class TfishCollectionHandler extends TfishContentHandler
         $options = $options + self::getList($criteria);
 
         $select_box = '<select id="parent" name="parent" class="form-control">';
+        
         if (!empty($options)) {
             foreach ($options as $key => $value) {
+                
                 if ($key == $clean_selected) {
                     $select_box .= '<option value="' . $key . '" selected>' . $value . '</option>';
                 } else {
@@ -112,6 +116,7 @@ class TfishCollectionHandler extends TfishContentHandler
                 }
             }
         }
+        
         $select_box .= '</select>';
 
         return $select_box;

@@ -105,6 +105,7 @@ class TfishMetadata
         // actually *want* to use such input you will need to decode it prior to use on the
         // landing page.
         $clean_extra_params = array();
+        
         foreach ($extra_params as $key => $value) {
             
             // Check for directory traversals and null byte injection.
@@ -116,16 +117,19 @@ class TfishMetadata
             $clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '=' . TfishFilter::encodeEscapeUrl($value);
             unset($key, $value);
         }
+        
         $clean_extra_params = !empty($clean_extra_params) ? TfishFilter::escape(implode("&", $clean_extra_params)) : '';
 
         // If the count is zero there is no need for a pagination control.
         if ($clean_count == 0) {
             return false;
         }
+        
         // If any parameter fails a range check throw an error.
         if ($clean_limit === false || $clean_url === false) {
             trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
         }
+        
         $control = $this->_getPavigationControl($clean_count, $clean_limit, $clean_url, $clean_start, $clean_tag, $clean_extra_params);
 
         return $control;
@@ -138,9 +142,11 @@ class TfishMetadata
         $page_slots = array();
         $page_count = (int) (($count / $limit));
         $remainder = $count % $limit;
+        
         if ($remainder) {
             $page_count += 1;
         }
+        
         $page_range = range(1, $page_count);
 
         // No need for pagination control if only one page.
@@ -191,21 +197,26 @@ class TfishMetadata
 
         // Prepare the query string.
         $query = $start_arg = $tag_arg = '';
+        
         foreach ($page_slots as $key => $slot) {
             $start = (int) ($key * $limit);
 
             // Set the arguments.
             if ($start || $tag || $extra_params) {
                 $arg_array = array();
+                
                 if (!empty($start)) {
                     $arg_array[] = 'start=' . $start;
                 }
+                
                 if (!empty($tag)) {
                     $arg_array[] = 'tag_id=' . $tag;
                 }
+                
                 if (!empty($extra_params)) {
                     $arg_array[] = $extra_params;
                 }
+                
                 $query = '?' . implode('&amp;', $arg_array);
             }
 
@@ -214,8 +225,10 @@ class TfishMetadata
             } else {
                 $control .= '<li><a href="' . $url . $query . '">' . $slot . '</a></li>';
             }
+            
             unset($query, $key, $slot);
         }
+        
         $control .= '</ul>';
 
         return $control;

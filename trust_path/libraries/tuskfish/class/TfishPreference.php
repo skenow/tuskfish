@@ -89,6 +89,7 @@ class TfishPreference extends TfishAncestralObject
                     $this->__set($key, $value);
                 }
             }
+            
             unset($key, $value);
         }
     }
@@ -123,9 +124,11 @@ class TfishPreference extends TfishAncestralObject
     {
         $preferences = array();
         $result = TfishDatabase::select('preference');
+        
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $preferences[$row['title']] = $row['value'];
         }
+        
         return $preferences;
     }
 
@@ -147,12 +150,15 @@ class TfishPreference extends TfishAncestralObject
             switch ($type) {
                 case "alpha":
                     $value = TfishFilter::trimString($value);
+                    
                     if ($property == "language") {
                         $language_whitelist = TfishContentHandler::getLanguages();
+                        
                         if (!array_key_exists($value, $language_whitelist)) {
                             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                         }
                     }
+                    
                     if (TfishFilter::isAlpha($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -162,6 +168,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "alnum":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlnum($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -171,6 +178,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "alnumunder":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isAlnumUnderscore($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -188,6 +196,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "email":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isEmail($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -197,6 +206,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "digit":
                     $value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isDigit($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -220,7 +230,6 @@ class TfishPreference extends TfishAncestralObject
                 case "int":
                     $value = (int) $value;
                     switch ($property) {
-
                         // 0 or 1.
                         case "close_site":
                         case "enable_cache":
@@ -267,6 +276,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "ip":
                     $value = TfishFilter::trimString($value);
+                    
                     if ($value == "" || TfishFilter::isIp($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -280,6 +290,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "url":
                     $value = TfishFilter::trimString($value);
+                    
                     if ($value == "" || TfishFilter::isUrl($value)) {
                         $this->__data[$property] = $value;
                     } else {
@@ -314,6 +325,7 @@ class TfishPreference extends TfishAncestralObject
             if (array_key_exists($key, $dirty_input)) {
                 $this->__set($key, $dirty_input[$key]);
             }
+            
             unset($key, $type);
         }
     }

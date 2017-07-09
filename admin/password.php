@@ -25,10 +25,8 @@ $dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword
 
 // Display a passord reset form, or the results of a submission.
 if (in_array($op, array('submit', false))) {
-
     switch ($op) {
         case "submit":
-
             $error = [];
             $password_quality = [];
 
@@ -56,6 +54,7 @@ if (in_array($op, array('submit', false))) {
 
             // Check that password meets minimum strength requirements.
             $password_quality = TfishSecurityUtility::checkPasswordStrength($dirty_password);
+            
             if ($password_quality['strong'] == false) {
                 unset($password_quality['strong']);
                 foreach ($password_quality as $key => $problem) {
@@ -79,6 +78,7 @@ if (in_array($op, array('submit', false))) {
 
                 if ($password_hash) {
                     $result = TfishDatabase::update('user', $user_id, array('password_hash' => $password_hash));
+                    
                     if ($result) {
                         $tfish_template->tfish_main_content = '<p>' . TFISH_PASSWORD_CHANGED_SUCCESSFULLY . '</p>';
                     } else {

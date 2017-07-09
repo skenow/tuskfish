@@ -93,6 +93,7 @@ class TfishTemplate
         if (file_exists(TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html')) {
             ob_start();
             include TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html';
+            
             return ob_get_clean();
         } else {
             echo TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html';

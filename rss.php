@@ -21,6 +21,7 @@ $tfish_template->setTemplate('rss');
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0; // ID of a collection object.
 $clean_tag_id = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
+
 if ($clean_id && $clean_tag_id) {
     $clean_tag_id = false;
 }
@@ -38,6 +39,7 @@ $criteria->order = 'submission_time';
 $criteria->ordertype = 'DESC';
 $criteria->offset = 0;
 $criteria->limit = $tfish_preference->user_pagination;
+
 if ($clean_tag_id) {
     $criteria->tag = array($clean_tag_id);
     $rss->link .= '?tag_id=' . $clean_tag_id;
@@ -46,6 +48,7 @@ if ($clean_tag_id) {
 // Optionally make a feed specific to a collection object.
 if ($clean_id) {
     $collection = TfishContentHandler::getObject($clean_id);
+    
     if ($collection && TfishFilter::isObject($collection)) {
         $rss->makeFeedForCollection($collection);
         $criteria->add(new TfishCriteriaItem('parent', $clean_id));

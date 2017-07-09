@@ -31,6 +31,7 @@ if (isset($_REQUEST['query'])) {
 } else { // Search terms entered directly into the search form.
     $clean_terms = isset($_REQUEST['search_terms']) ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
 }
+
 $type = isset($_REQUEST['search_type']) ? TfishFilter::trimString($_REQUEST['search_type']) : false;
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
@@ -38,6 +39,7 @@ $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 if ($clean_op && $clean_terms && $type) {
     $content_handler = new TfishContentHandler();
     $search_results = $content_handler->searchContent($tfish_preference, $clean_terms, $type, $tfish_preference->search_pagination, $start);
+    
     if ($search_results && $search_results[0] > 0) {
         
         // Get a count of search results; this is used to build the pagination control.
@@ -74,4 +76,5 @@ $tfish_metadata->description = TFISH_SEARCH_DESCRIPTION;
 // $tfish_metadata->seo = '';
 // $tfish_metadata->robots = '';
 // Include page template and flush buffer
+
 require_once TFISH_PATH . "tfish_footer.php";

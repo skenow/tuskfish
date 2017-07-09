@@ -77,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Check password length and quality
         $password_quality = TfishSecurityUtility::checkPasswordStrength($clean_vars['admin_password']);
+        
         if ($password_quality['strong'] == true) {
-
             // Salt and iteratively hash the password 100,000 times to resist brute force attacks
             $site_salt = TfishSecurityUtility::generateSalt(64);
             $user_salt = TfishSecurityUtility::generateSalt(64);
@@ -87,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Append site salt to config.php
             $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "' . $site_salt . '");';
             $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);
                 exit;
@@ -95,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Append HMAC key to config.php
             $hmac_key = 'if (!defined("TFISH_KEY")) define("TFISH_KEY", "' . $clean_vars['hmac_key'] . '");';
             $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $hmac_key);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);
                 exit;
@@ -105,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ////////////////////////////////////
             // Create the database
             $db_path = TfishDatabase::create($clean_vars['db_name']);
+            
             if ($db_path) {
                 if (!defined("TFISH_DATABASE"))
                     define("TFISH_DATABASE", $db_path);
@@ -164,6 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 array('title' => 'enable_cache', 'value' => '0'),
                 array('title' => 'cache_life', 'value' => '86400')
             );
+            
             foreach ($preference_data as $preference) {
                 TfishDatabase::insert('preference', $preference, 'id');
             }
@@ -249,9 +253,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_WEAK_PASSWORD . '</p>';
             unset($password_quality['strong']);
             $tfish_content['output'] .= '<ul>';
+            
             foreach ($password_quality as $weakness) {
                 $tfish_content['output'] .= '<li>' . $weakness . '</li>';
             }
+            
             $tfish_content['output'] .= '</ul>';
             $tfish_template->output = $tfish_content['output'];
             $tfish_template->form = "db_credentials_form.html";

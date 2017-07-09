@@ -79,11 +79,13 @@ class TfishPreferenceHandler
             $statement->bindValue(':value', $value, TfishDatabase::setType($value));
             unset($sql, $key, $value);
             $result = TfishDatabase::executeTransaction($statement);
+            
             if (!$result) {
                 trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
                 return false;
             }
         }
+        
         return true;
     }
 

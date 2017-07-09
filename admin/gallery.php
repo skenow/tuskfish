@@ -43,9 +43,11 @@ $criteria->add(new TfishCriteriaItem('image', '', '<>'));
 // Optional selection criteria.
 if ($clean_tag)
     $criteria->tag = array($clean_tag);
+
 if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
     $criteria->add(new TfishCriteriaItem('online', $clean_online));
 }
+
 if ($clean_type) {
     if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
         $criteria->add(new TfishCriteriaItem('type', $clean_type));
@@ -57,17 +59,19 @@ if ($clean_type) {
 // Prepare pagination control.
 $count = $content_handler::getCount($criteria);
 $extra_params = array();
+
 if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
     $extra_params['online'] = $clean_online;
 }
+
 if (isset($clean_type)) {
     $extra_params['type'] = $clean_type;
 }
+
 $tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, $extra_params);
 
 // Set offset and limit.
-if ($clean_start)
-    $criteria->offset = $clean_start;
+if ($clean_start) $criteria->offset = $clean_start;
 $criteria->limit = $tfish_preference->gallery_pagination;
 
 // Prepare select filters.

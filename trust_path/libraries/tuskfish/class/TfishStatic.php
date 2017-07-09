@@ -68,6 +68,7 @@ class TfishStatic extends TfishContentObject
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();
+        
         foreach ($zeroedProperties as $property) {
             unset($this->__properties[$property], $this->__data[$property]);
         }
