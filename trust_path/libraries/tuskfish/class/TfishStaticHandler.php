@@ -27,7 +27,8 @@ class TfishStaticHandler extends TfishContentHandler
 {
 
     /**
-     * Count TfishStatic objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishStatic objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishStatic objects that match the criteria.
@@ -53,7 +54,8 @@ class TfishStaticHandler extends TfishContentHandler
     }
 
     /**
-     * Get TfishStatic objects, optionally matching conditions specified with a TfishCriteria object.
+     * Get TfishStatic objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * Note that the object type is automatically set, so it is unnecessary to set it when calling
      * TfishStaticHandler::getObjects($criteria). However, if you want to use the generic handler

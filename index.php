@@ -41,8 +41,10 @@ if ($clean_id) {
     
     if (is_object($content) && $content->online == true && $content->type != 'TfishBlock') {
 
-        // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
-        if ($content->type != 'TfishDownload' && !($content->type == 'TfishCollection' && $content->media)) {
+        // Update view counter and assign object to template. Only increment counter for
+        // non-downloadable objects.
+        if ($content->type != 'TfishDownload' && !($content->type == 'TfishCollection' 
+                && $content->media)) {
             $content->counter += 1;
             $content_handler::updateCounter($clean_id);
         }
@@ -74,8 +76,9 @@ if ($clean_id) {
         
         if ($content->file_size) $contentInfo[] = $content->escape('file_size');
         
+        // For a content type-specific page use $content->tags, $content->template
         if ($content->tags) {
-            $tags = $content_handler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
+            $tags = $content_handler::makeTagLinks($content->tags, false);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
@@ -100,7 +103,7 @@ if ($clean_id) {
         $criteria->order = 'date';
         $criteria->ordertype = 'DESC';
 
-        // If object is a collection check if has child objects; if so display thumbnails and teasers / links.
+        // If object is a collection check if has child objects; if so display teasers / links.
         if ($content->type == 'TfishCollection') {
             $criteria->add(new TfishCriteriaItem('parent', $content->id));
             $criteria->add(new TfishCriteriaItem('online', 1));
@@ -123,7 +126,9 @@ if ($clean_id) {
         // Prepare pagination control.
         if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
             $first_child_count = TfishContentHandler::getCount($criteria);
-            $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count, $tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+            $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl(
+                    $first_child_count, $tfish_preference->user_pagination, $target_file_name,
+                    $clean_start, 0, array('id' => $clean_id));
 
             // Retrieve content objects and assign to template.
             $first_children = TfishContentHandler::getObjects($criteria);
@@ -162,7 +167,8 @@ if ($clean_id) {
 
     // Prepare pagination control.
     $count = $content_handler::getCount($criteria);
-    $tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
+    $tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
+            $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 
     // Retrieve content objects and assign to template.
     $criteria->order = 'date';

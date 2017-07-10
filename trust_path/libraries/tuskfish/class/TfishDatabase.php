@@ -81,7 +81,8 @@ class TfishDatabase
     /**
      * Establish a connection to the database.
      * 
-     * Connection is deliberately non-persistent (persistence can break things if scripts terminate unexpectedly).
+     * Connection is deliberately non-persistent (persistence can break things if scripts terminate
+     * unexpectedly).
      * 
      * @return bool True on success, false on failure.
      */
@@ -203,7 +204,8 @@ class TfishDatabase
             $primary_key = self::escapeIdentifier($primary_key);
             
             if (array_key_exists($primary_key, $clean_columns)) {
-                $clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key) ? $primary_key : false;
+                $clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key)
+                        ? $primary_key : false;
             }
             
             if (!$clean_primary_key) {
@@ -280,7 +282,7 @@ class TfishDatabase
     /**
      * Delete multiple rows from a table according to criteria.
      * 
-     * For safety reasons criteria are required; the function will not unconditionally empty a table.
+     * For safety reasons criteria are required; the function will not unconditionally empty table.
      * Note that SQLite does not support DELETE with INNER JOIN or table alias. Therefore, you
      * cannot use tags as a criteria in deleteAll() (they will simply be ignored). It may be
      * possible to get around this restriction with a loop or subquery.
@@ -320,7 +322,8 @@ class TfishDatabase
 
             // Set the order (sort) column and order (default is ascending).
             if ($criteria->order) {
-                $sql .= "ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+                $sql .= "ORDER BY `t1`." 
+                        . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
@@ -567,12 +570,14 @@ class TfishDatabase
 
             // Set GROUP BY.
             if ($criteria->groupby) {
-                $sql .= " GROUP BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->groupby));
+                $sql .= " GROUP BY `t1`."
+                        . self::addBackticks(self::escapeIdentifier($criteria->groupby));
             }
 
             // Set the order (sort) column and order (default is ascending).
             if ($criteria->order) {
-                $sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+                $sql .= " ORDER BY `t1`."
+                        . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->order != 'submission_time') {
@@ -785,12 +790,14 @@ class TfishDatabase
 
             // Set GROUP BY.
             if ($criteria->groupby) {
-                $sql .= " GROUP BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->groupby));
+                $sql .= " GROUP BY `t1`."
+                        . self::addBackticks(self::escapeIdentifier($criteria->groupby));
             }
 
             // Set the order (sort) column and type (default is ascending)
             if ($criteria->order) {
-                $sql .= " ORDER BY `t1`." . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+                $sql .= " ORDER BY `t1`."
+                        . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->order != 'submission_time') {
@@ -1090,7 +1097,7 @@ class TfishDatabase
     }
 
     /**
-     * Validates the properties of a TfishCriteria object to be used in constructing a database query.
+     * Validates the properties of a TfishCriteria object to be used in constructing a query.
      * 
      * @param object $criteria TfishCriteria object.
      * @return object Validated TfishCriteria object.

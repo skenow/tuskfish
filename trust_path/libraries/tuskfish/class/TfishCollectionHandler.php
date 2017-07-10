@@ -27,7 +27,8 @@ class TfishCollectionHandler extends TfishContentHandler
 {
 
     /**
-     * Count TfishCollection objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishCollection objects, optionally matching conditions specified with a TfishCriteria\
+     * object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of collection objects matching the criteria.
@@ -53,14 +54,15 @@ class TfishCollectionHandler extends TfishContentHandler
     }
 
     /**
-     * Get TfishCollection objects, optionally matching conditions specified with a TfishCriteria object.
+     * Get TfishCollection objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * Note that the object type is automatically set, so it is unnecessary to set it when calling
-     * TfishCollectionHandler::getObjects($criteria). However, if you want to use the generic handler
-     * TfishContentHandler::getObjects($criteria) then you do need to specify the object type,
-     * otherwise you will get all types of content returned. It is acceptable to use either handler,
-     * although good practice to use the type-specific one when you know you want a specific kind of
-     * object.
+     * TfishCollectionHandler::getObjects($criteria). However, if you want to use the generic
+     * handler TfishContentHandler::getObjects($criteria) then you do need to specify the object
+     * type, otherwise you will get all types of content returned. It is acceptable to use either
+     * handler, although good practice to use the type-specific one when you know you want a
+     * specific kind of object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishCollection objects.

@@ -48,8 +48,10 @@ $tfish_content = array('output' => '');
 
 /** Helper function to grab the site URL. */
 function getUrl() {
-    $url = @(!isset($_server['HTTPS']) || $_SERVER["HTTPS"] != 'on') ? 'http://' . $_SERVER["SERVER_NAME"] : 'https://' . $_SERVER["SERVER_NAME"];
-    $url .= ($_SERVER["SERVER_PORT"] != 80 && $_SERVER["SERVER_PORT"] != 443) ? ":" . $_SERVER["SERVER_PORT"] : "";
+    $url = @(!isset($_server['HTTPS']) || $_SERVER["HTTPS"] != 'on') ? 'http://'
+            . $_SERVER["SERVER_NAME"] : 'https://' . $_SERVER["SERVER_NAME"];
+    $url .= ($_SERVER["SERVER_PORT"] != 80 && $_SERVER["SERVER_PORT"] != 443) ? ":"
+            . $_SERVER["SERVER_PORT"] : "";
     $url .= '/';
     return $url;
 }
@@ -57,7 +59,10 @@ function getUrl() {
 // Test and save database credentials
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Display blank form
-    if (empty($_POST['db_name']) || empty($_POST['admin_email']) || empty($_POST['admin_password']) || empty($_POST['hmac_key'])) {
+    if (empty($_POST['db_name']) 
+            || empty($_POST['admin_email'])
+            || empty($_POST['admin_password']) 
+            || empty($_POST['hmac_key'])) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE_FORM . '</p>';
         $tfish_template->output = $tfish_content['output'];
         $tfish_template->form = "db_credentials_form.html";
@@ -82,10 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Salt and iteratively hash the password 100,000 times to resist brute force attacks
             $site_salt = TfishSecurityUtility::generateSalt(64);
             $user_salt = TfishSecurityUtility::generateSalt(64);
-            $password_hash = TfishSecurityUtility::recursivelyHashPassword($clean_vars['admin_password'], 100000, $site_salt, $user_salt);
+            $password_hash = TfishSecurityUtility::recursivelyHashPassword($clean_vars['admin_password'],
+                    100000, $site_salt, $user_salt);
 
             // Append site salt to config.php
-            $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "' . $site_salt . '");';
+            $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
+                    . $site_salt . '");';
             $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
             
             if (!$result) {
@@ -94,7 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Append HMAC key to config.php
-            $hmac_key = 'if (!defined("TFISH_KEY")) define("TFISH_KEY", "' . $clean_vars['hmac_key'] . '");';
+            $hmac_key = 'if (!defined("TFISH_KEY")) define("TFISH_KEY", "' . $clean_vars['hmac_key']
+                    . '");';
             $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $hmac_key);
             
             if (!$result) {

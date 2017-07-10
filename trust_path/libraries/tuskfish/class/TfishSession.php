@@ -156,20 +156,23 @@ class TfishSession
     private static function _login($clean_email, $dirty_password)
     {
         // Query the database for a matching user.
-        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE `admin_email` = :clean_email");
+        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
+                . "`admin_email` = :clean_email");
         $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
         // Authenticate user by calculating their password hash and comparing it to the one on file.
         if ($user) {
-            $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000, TFISH_SITE_SALT, $user['user_salt']);
+            $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
+                    TFISH_SITE_SALT, $user['user_salt']);
             if ($password_hash == $user['password_hash']) {
 
                 // Regenerate session due to priviledge escalation
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
-                $_SESSION['user_id'] = (int) $user['id']; // Added as a handle for the password change script.
+                // Added as a handle for the password change script.
+                $_SESSION['user_id'] = (int) $user['id'];
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
@@ -248,7 +251,8 @@ class TfishSession
         }
         
         // First factor authentication: Calculate password hash and compare to the one on file.
-        $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000, TFISH_SITE_SALT, $user['user_salt']);
+        $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
+                TFISH_SITE_SALT, $user['user_salt']);
         
         if ($password_hash == $user['password_hash']) {
             $first_factor = true;
@@ -261,7 +265,8 @@ class TfishSession
         if ($first_factor === true && $second_factor === true) {
             self::regenerate();
             $_SESSION['TFISH_LOGIN'] = true;
-            $_SESSION['user_id'] = (int) $user['id']; // Added as a handle for the password change script.
+            // Added as a handle for the password change script.
+            $_SESSION['user_id'] = (int) $user['id'];
             header('location: ' . TFISH_ADMIN_URL . "admin.php");
             exit;
         }
@@ -310,7 +315,8 @@ class TfishSession
         // Destroy the session cookie, DESTROY IT ISILDUR!
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"],
+                    $params["secure"], $params["httponly"]);
         }
 
         // Destroy the session and redirect
@@ -364,12 +370,20 @@ class TfishSession
         $_SESSION['destroyed'] = time() + 10;
 
         // Create new session.
-        session_regenerate_id(false); // Update session ID and keep current session info. Old one is not destroyed.
-        $new_session_id = session_id(); // Get the (new) session ID.
-        session_write_close(); // Lock the session and close it.
-        session_id($new_session_id); // Set the session ID to the new value.
-        session_start(); // Now working with the new session. Note that old one still exists and both carry a 'destroyed' flag.
-        unset($_SESSION['destroyed']); // Remove the destroyed flag from the new session. Old one will be destroyed next time isExpired() is called on it.
+        // Update ID and keep current session info. Old one is not destroyed.
+        session_regenerate_id(false);
+        // Get the (new) session ID.
+        $new_session_id = session_id();
+        // Lock the session and close it.
+        session_write_close();
+        // Set the session ID to the new value.
+        session_id($new_session_id);
+        // Now working with the new session. Note that old one still exists and both carry a
+        // 'destroyed' flag.
+        session_start();
+        // Remove the destroyed flag from the new session. Old one will be destroyed next time
+        // isExpired() is called on it.
+        unset($_SESSION['destroyed']);
     }
     
     /**
@@ -384,15 +398,18 @@ class TfishSession
         ini_set('session.use_only_cookies', 1);
 
         // Session name. If the preference has been messed up it will assign one.
-        $session_name = isset($tfish_preference->session_name) ? $tfish_preference->session_name : 'tfish';
+        $session_name = isset($tfish_preference->session_name)
+                ? $tfish_preference->session_name : 'tfish';
 
         // Session life time, in seconds. '0' means until the browser is closed.
         $lifetime = $tfish_preference->session_lifetime;
 
-        // Path on the domain where the cookie will work. Use a single slash for all paths (default, as there are admin checks in some templates).
+        // Path on the domain where the cookie will work. Use a single slash for all paths (default,
+        // as there are admin checks in some templates).
         $path = '/';
 
-        // Cookie domain, for example www.php.net. To make cookies visible on all subdomains (default) prefix with dot eg. '.php.net'
+        // Cookie domain, for example www.php.net. To make cookies visible on all subdomains
+        // (default) prefix with dot eg. '.php.net'
         $domain = isset($domain) ? $domain : ltrim($_SERVER['SERVER_NAME'], 'www');
 
         // If true the cookie will only be sent over secure connections.
@@ -410,7 +427,8 @@ class TfishSession
         if (self::isExpired($tfish_preference))
             self::destroy();
 
-        // Check for signs of session hijacking and regenerate if at risk. 10% chance of doing it anyway.
+        // Check for signs of session hijacking and regenerate if at risk. 10% chance of doing it
+        // anyway.
         if (!self::isClean()) {
             self::reset();
             self::regenerate();

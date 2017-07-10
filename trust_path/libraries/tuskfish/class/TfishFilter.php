@@ -69,9 +69,10 @@ class TfishFilter
      * URL-encode and escape a string for use in a URL.
      * 
      * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspeciachars().
-     * If you wish to use the data on a landing page you must decode it with htmlspecialchars_decode()
-     * followed by rawurldecode() in that order. But really, if you are using any characters that
-     * need to be encoded in the first place you should probably just stop. Keep it simple, ok?
+     * If you wish to use the data on a landing page you must decode it with
+     * htmlspecialchars_decode() followed by rawurldecode() in that order. But really, if you are
+     * using any characters that need to be encoded in the first place you should probably just
+     * stop. Keep it simple, ok?
      * 
      * @param string $url Unescaped input URL.
      * @return string Encoded and escaped URL.
@@ -109,36 +110,44 @@ class TfishFilter
                 switch ($type) {
                     case "alpha":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isAlpha($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isAlpha($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                     
                     case "alnum":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isAlnum($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isAlnum($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                     
                     case "alnumunder":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isAlnumUnderscore($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isAlnumUnderscore($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                     
                     case "bool":
                         $dirty_vars[$key] = (bool) $dirty_vars[$key];
-                        $clean_vars[$key] = self::isBool($dirty_vars[$key]) ? $dirty_vars[$key] : null;
+                        $clean_vars[$key] = self::isBool($dirty_vars[$key])
+                                ? $dirty_vars[$key] : null;
                         break;
                     
                     case "digit":
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isDigit($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isDigit($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                     
                     case "email": // Checks conformity with email specification; does not escape quotes!
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isEmail($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isEmail($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
+                    
                     case "float":
                         $dirty_vars[$key] = (float) $dirty_vars[$key];
-                        $clean_vars[$key] = self::isFloat($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isFloat($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                     
                     case "int":
@@ -148,7 +157,8 @@ class TfishFilter
                     
                     case "ip": // Accepts both private and public IP ranges but not reserved ranges
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isIp($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isIp($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                     
                     case "string": // Check for UTF-8 encoding; strip white space and control characters (ASCII < 32).
@@ -162,7 +172,8 @@ class TfishFilter
                     
                     case "url": // Checks conformity with email specification; does not escape quotes!
                         $dirty_vars[$key] = self::trimString($dirty_vars[$key]);
-                        $clean_vars[$key] = self::isUrl($dirty_vars[$key]) ? $dirty_vars[$key] : false;
+                        $clean_vars[$key] = self::isUrl($dirty_vars[$key])
+                                ? $dirty_vars[$key] : false;
                         break;
                 }
             }
@@ -401,13 +412,15 @@ class TfishFilter
     public static function isIp($ip, $version = false)
     {
         if ($version == 6) {
-            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_RES_RANGE) === false) {
+            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
+                    | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_RES_RANGE) === false) {
+            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4
+                    | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
             } else {
                 return false;
@@ -453,8 +466,10 @@ class TfishFilter
      */
     public static function isUrl($url)
     {
-        if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED)) {
-            if (mb_substr($url, 0, 7, 'UTF-8') == 'http://' || mb_substr($url, 0, 8, 'UTF-8') == 'https://') {
+        if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED
+                | FILTER_FLAG_HOST_REQUIRED)) {
+            if (mb_substr($url, 0, 7, 'UTF-8') == 'http://'
+                    || mb_substr($url, 0, 8, 'UTF-8') == 'https://') {
                 return true;
             }
         }

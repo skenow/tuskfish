@@ -45,9 +45,10 @@ define("TFISH_IMAGE_URL", TFISH_URL . "uploads/image/");
 // trailing slash is omitted for ease of reading in the editor.
 define("TFISH_LINK", rtrim('/', TFISH_URL));
 
-// RSS enclosure URL - the spec requires that the URL use http protocol, as https will invalidate feed.
+// RSS enclosure URL - spec requires that the URL use http protocol, as https will invalidate feed.
 if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
-    define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST) . "/enclosure.php?id=");
+    define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST)
+            . "/enclosure.php?id=");
 } else {
     define("TFISH_ENCLOSURE_URL", TFISH_URL . "enclosure.php?id=");
 }

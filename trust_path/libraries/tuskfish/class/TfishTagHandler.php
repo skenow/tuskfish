@@ -95,18 +95,25 @@ class TfishTagHandler extends TfishContentHandler
      * 
      * @param int $selected ID of selected option.
      * @param string $type Type of content object.
-     * @param string $zero_option The string that will be displayed for the 'zero' or no selection option.
+     * @param string $zero_option The string that will be displayed for the 'zero' or no selection
+     * option.
      * @param bool $online_only Get all tags or just those marked online.
      * @return bool|string False if no tags or a HTML select box if there are.
      */
-    public static function getTagSelectBox($selected = null, $type = null, $zero_option = TFISH_SELECT_TAGS, $online_only = true)
+    public static function getTagSelectBox($selected = null, $type = null,
+            $zero_option = TFISH_SELECT_TAGS, $online_only = true)
     {
         $select_box = '';
         $tag_list = array();
 
-        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1)) ? (int) $selected : null; // ID of a previously selected tag, if any.
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
-        $clean_type = TfishContentHandler::isSanctionedType($type) ? TfishFilter::trimString($type) : null;  // Used to filter tags relevant to a specific content subclass, eg. TfishArticle.
+        // ID of a previously selected tag, if any.
+        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1))
+                ? (int) $selected : null;
+        // The text to display in the zero option of the select box.
+        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        // Used to filter tags relevant to a specific content subclass, eg. TfishArticle.
+        $clean_type = TfishContentHandler::isSanctionedType($type)
+                ? TfishFilter::trimString($type) : null;
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
 
         $tag_list = TfishContentHandler::getActiveTagList($clean_type, $clean_online_only);
@@ -114,10 +121,13 @@ class TfishTagHandler extends TfishContentHandler
         if (!empty($tag_list)) {
             asort($tag_list);
             $tag_list = array(0 => $clean_zero_option) + $tag_list;
-            $select_box = '<select class="form-control" name="tag_id" id="tag_id" onchange="this.form.submit()">';
+            $select_box = '<select class="form-control" name="tag_id" id="tag_id"'
+                    . 'onchange="this.form.submit()">';
             
             foreach ($tag_list as $key => $value) {
-                $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+                $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>'
+                        . $value . '</option>' : '<option value="' . $key . '">' . $value
+                        . '</option>';
             }
             
             $select_box .= '</select>';
@@ -139,11 +149,14 @@ class TfishTagHandler extends TfishContentHandler
      * 
      * @param int $selected ID of selected option.
      * @param array $tag_list Array of options in tag_id => title format.
-     * @param string $key_name The input parameter name you want to use as key for this select box. Defaults to 'tag_id'.
-     * @param string $zero_option The string that will be displayed for the 'zero' or no selection option.
+     * @param string $key_name The input parameter name you want to use as key for this select box.
+     * Defaults to 'tag_id'.
+     * @param string $zero_option The string that will be displayed for the 'zero' or no selection
+     * option.
      * @return string HTML select box.
      */
-    public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(), $key_name = null, $zero_option = TFISH_SELECT_TAGS)
+    public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(),
+            $key_name = null, $zero_option = TFISH_SELECT_TAGS)
     {
         // Initialise variables.
         $select_box = '';
@@ -151,7 +164,9 @@ class TfishTagHandler extends TfishContentHandler
         $clean_tag_list = array();
 
         // Validate input.
-        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1)) ? (int) $selected : null; // ID of a previously selected tag, if any.
+        // ID of a previously selected tag, if any.
+        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1))
+                ? (int) $selected : null;
         
         if (TfishFilter::isArray($tag_list) && !empty($tag_list)) {
             asort($tag_list);
@@ -164,15 +179,19 @@ class TfishTagHandler extends TfishContentHandler
             }
         }
         
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
-        $clean_key_name = isset($key_name) ? TfishFilter::escape(TfishFilter::trimString($key_name)) : 'tag_id';
+        // The text to display in the zero option of the select box.
+        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        $clean_key_name = isset($key_name)
+                ? TfishFilter::escape(TfishFilter::trimString($key_name)) : 'tag_id';
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
-        $select_box = '<select class="form-control" name="' . $clean_key_name . '" id="' . $clean_key_name . '" onchange="this.form.submit()">';
+        $select_box = '<select class="form-control" name="' . $clean_key_name . '" id="'
+                . $clean_key_name . '" onchange="this.form.submit()">';
         
         foreach ($clean_tag_list as $key => $value) {
-            $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+            $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value
+                    . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
         }
         
         $select_box .= '</select>';

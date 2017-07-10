@@ -27,7 +27,8 @@ class TfishVideoHandler extends TfishContentHandler
 {
 
     /**
-     * Count TfishVideo objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishVideo objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishVideo objects that match the criteria.

@@ -61,7 +61,7 @@ $tfish_template->page_title = TFISH_LOGIN;
 $clean_op = $clean_email = $dirty_password = false;
 $allowed_options = array("login", "logout", "");
 
-// Collect and sanitise parameters. Note that password is NOT sanitised and therefore it is dangerous.
+// Collect and sanitise parameters. Note that password is NEVER sanitised and therefore dangerous.
 if (!empty($_POST['op'])) {
     $op = TfishFilter::trimString($_POST['op']);
     $clean_op = TfishFilter::isAlpha($op) ? $op : false;
@@ -87,7 +87,7 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
             TfishSession::logout(TFISH_ADMIN_URL . 'login.php');
             break;
 
-        // Display the login form or a logout link, depending on whether the user is signed in or not
+        // Display the login form or a logout link, depending on whether the user is signed in.
         default:
             $tfish_template->tfish_main_content = $tfish_template->render('login');
             break;

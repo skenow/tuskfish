@@ -36,7 +36,8 @@ class TfishYubikeyAuthenticator
     /** @var int $_id ID of the Yubikey hardware token (first 12 characters of output). */
     private $_id;
 
-    /** @var string $_signatureKey Yubikey API key obtained from https://upgrade.yubico.com/getapikey/ */
+    /** @var string $_signatureKey Yubikey API key obtained from
+     * https://upgrade.yubico.com/getapikey/ */
     private $_signatureKey;
     // Output.
     /** @var string $_response Response message from last verification attempt */
@@ -87,14 +88,17 @@ class TfishYubikeyAuthenticator
     //	
     //	@license GNU General Public License (GPL) V2
     //	
-    //	verify(string) - Accepts otp from Yubikey. Returns TRUE for authentication success, otherwise FALSE.
+    //	verify(string) - Accepts otp from Yubikey. Returns TRUE for authentication success,
+    //	otherwise FALSE.
     //	getLastResponse() - Returns response message from verification attempt.
-    //	getTimestampTolerance() - Gets the tolerance (+/-, in seconds) for timestamp verification
-    //	setTimestampTolerance(int) - Sets the tolerance (in seconds, 0-86400) - default 600 (10 minutes).
-    //		Returns TRUE on success and FALSE on failure.
-    //	getCurlTimeout() - Gets the timeout (in seconds) CURL uses before giving up on contacting Yubico's server.
-    //	setCurlTimeout(int) - Sets the CURL timeout (in seconds, 0-600, 0 means indefinitely) - default 10.
-    //		Returns TRUE on success and FALSE on failure.
+    //	getTimestampTolerance() - Gets the tolerance (+/-, in seconds) for timestamp
+    //	verification
+    //	setTimestampTolerance(int) - Sets the tolerance (in seconds, 0-86400) - default 600
+    //	(10 minutes). Returns TRUE on success and FALSE on failure.
+    //	getCurlTimeout() - Gets the timeout (in seconds) CURL uses before giving up on contacting
+    //	Yubico's server.
+    //	setCurlTimeout(int) - Sets the CURL timeout (in seconds, 0-600, 0 means indefinitely)
+    //	- default 10.Returns TRUE on success and FALSE on failure.
     //////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////
 
@@ -205,8 +209,10 @@ class TfishYubikeyAuthenticator
         foreach ($this->_curlResult as $param) {
             if (substr($param, 0, 2) == "h=")
                 $signature = substr(trim($param), 2);
+            
             if (substr($param, 0, 2) == "t=")
                 $timestamp = substr(trim($param), 2);
+            
             if (substr($param, 0, 7) == "status=")
                 $status = substr(trim($param), 7);
         }
@@ -231,6 +237,7 @@ class TfishYubikeyAuthenticator
 
         // Everything went well - We pass
         $this->_response = "OK";
+        
         return true;
     }
 
@@ -243,7 +250,8 @@ class TfishYubikeyAuthenticator
     protected function createSignedRequest($urlParams)
     {
         if ($this->_signatureKey) {
-            $hash = urlencode(base64_encode(hash_hmac("sha1", $urlParams, $this->_signatureKey, true)));
+            $hash = urlencode(base64_encode(hash_hmac("sha1", $urlParams, $this->_signatureKey,
+                    true)));
             return "https://api.yubico.com/wsapi/verify?" . $urlParams . "&h=" . $hash;
         } else {
             return "https://api.yubico.com/wsapi/verify?" . $urlParams;
@@ -300,7 +308,8 @@ class TfishYubikeyAuthenticator
      */
     protected function otpIsModhex($otp)
     {
-        $modhexChars = array("c", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n", "r", "t", "u", "v");
+        $modhexChars = array("c", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n", "r", "t",
+            "u", "v");
 
         foreach (str_split($otp) as $char) {
             if (!in_array($char, $modhexChars))
@@ -346,7 +355,8 @@ class TfishYubikeyAuthenticator
         if (!$this->_signatureKey)
             return true;
 
-        if (base64_encode(hash_hmac("sha1", $signedMessage, $this->_signatureKey, true)) == $signature) {
+        if (base64_encode(hash_hmac("sha1", $signedMessage, $this->_signatureKey, true))
+                == $signature) {
             return true;
         } else {
             return false;

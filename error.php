@@ -14,7 +14,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('marketing'); // Specify the template subdirectory for this template set.
+$tfish_template->setTemplate('marketing');
 
 $tfish_template->page_title = TFISH_ERROR;
 $tfish_template->error_message = TFISH_SORRY_WE_ENCOUNTERED_AN_ERROR;

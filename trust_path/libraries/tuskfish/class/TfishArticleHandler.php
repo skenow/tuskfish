@@ -27,7 +27,7 @@ class TfishArticleHandler extends TfishContentHandler
 {
 
     /**
-     * Get TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
+     * Get TfishArticle objects, optionally matching conditions specified in a TfishCriteria object.
      * 
      * Note that the article type is automatically set, so when calling
      * TfishArticleHandler::getObjects($criteria) it is unecessary to set the object type.
@@ -60,7 +60,7 @@ class TfishArticleHandler extends TfishContentHandler
     }
 
     /**
-     * Get TfishArticle objects, optionally matching conditions specified with a TfishCriteria object.
+     * Get TfishArticle objects, optionally matching conditions specified in a TfishCriteria object.
      * 
      * Note that the object type is automatically set, so it is unnecessary to set it when calling
      * TfishArticleHandler::getObjects($criteria). However, if you want to use the generic handler

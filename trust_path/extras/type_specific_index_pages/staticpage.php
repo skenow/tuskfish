@@ -35,8 +35,8 @@ $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
 $clean_id = (int) $id;
 if ($clean_id) {
     $content = TfishStaticHandler::getObject($clean_id);
+    
     if (is_object($content) && $content->online == true) {
-
         // Update view counter and assign object to template.
         $content->counter += 1;
         TfishStaticHandler::updateCounter($clean_id);
@@ -44,26 +44,34 @@ if ($clean_id) {
 
         // Prepare meta information for display.
         $contentInfo = array();
+        
         if ($content->creator)
             $contentInfo[] = $content->escape('creator');
+        
         if ($content->date)
             $contentInfo[] = $content->escape('date');
+        
         if ($content->counter)
             $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+        
+        // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
-            $tags = TfishStaticHandler::makeTagLinks($content->tags, $target_file_name); // For a content type-specific page use $content->tags, $content->template
+            $tags = TfishStaticHandler::makeTagLinks($content->tags, $target_file_name);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
         $tfish_template->contentInfo = implode(' | ', $contentInfo);
+        
         if ($content->meta_title)
             $tfish_metadata->title = $content->meta_title;
+        
         if ($content->meta_description)
             $tfish_metadata->description = $content->meta_description;
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
             $parent = TfishStaticHandler::getObject($content->parent);
+            
             if (is_object($parent) && $parent->online) {
                 $tfish_template->parent = $parent;
             }

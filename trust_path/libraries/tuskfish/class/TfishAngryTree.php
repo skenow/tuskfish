@@ -169,7 +169,7 @@ class TfishAngryTree
      * Returns an array of all child objects of a parental object specified by its ID.
      *
      * @param string $key ID of the parent.
-     * @param array $ret Array of child objects from previous recursions (empty when called from client).
+     * @param array $ret Array of child objects from previous recursions (empty if called from client).
      * @return array Array of child nodes.
      * */
     public function getAllChild($key, $ret = array())
@@ -200,7 +200,8 @@ class TfishAngryTree
      * */
     public function getAllParent($key, $ret = array(), $uplevel = 1)
     {
-        if (isset($this->_tree[$key]['parent']) && isset($this->_tree[$this->_tree[$key]['parent']]['obj'])) {
+        if (isset($this->_tree[$key]['parent']) 
+                && isset($this->_tree[$this->_tree[$key]['parent']]['obj'])) {
             $ret[$uplevel] = & $this->_tree[$this->_tree[$key]['parent']]['obj'];
             $parents = & $this->getAllParent($this->_tree[$key]['parent'], $ret, $uplevel + 1);
             
@@ -223,7 +224,8 @@ class TfishAngryTree
      * @param string $prefix_orig String to indent items at deeper levels.
      * @param string $prefix_curr String to indent the current item.
      */
-    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, $prefix_curr = '')
+    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, 
+            $prefix_curr = '')
     {
         if ($key > 0) {
             $id_field = $this->_myId;
@@ -234,7 +236,8 @@ class TfishAngryTree
         
         if (isset($this->_tree[$key]['child']) && !empty($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
-                $this->_makeSelBoxOptions($fieldName, $selected, $childkey, $ret, $prefix_orig, $prefix_curr);
+                $this->_makeSelBoxOptions($fieldName, $selected, $childkey, $ret, $prefix_orig,
+                        $prefix_curr);
             }
         }
     }
@@ -246,15 +249,17 @@ class TfishAngryTree
      * according to the relative hierarchy.
      *
      * @param string $name Name of the select box.
-     * @param string $fieldName Name of the member variable from the node objects that should be used
-     * as the title field for the options.
+     * @param string $fieldName Name of the member variable from the node objects that should be 
+     * used as the title field for the options.
      * @param string $prefix String to indent deeper levels.
      * @param int $selected Value to display as selected.
-     * @param bool $addEmptyOption Set TRUE to add an empty option with value "0" at the top of the hierarchy.
+     * @param bool $addEmptyOption Set TRUE to add an empty option with value "0" at the top of the
+     * hierarchy.
      * @param int $key ID of the object to display as the root of select options.
      * @return array Select box options as ID => title pairs.
      * */
-    public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '', $addEmptyOption = FALSE, $key = 0)
+    public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '',
+            $addEmptyOption = FALSE, $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);

@@ -45,7 +45,8 @@ class TfishLogger
      * @param array $context Active symbol table, ie. an array of every variable in scope when the
      * error was triggered.
      */
-    public static function logErrors($errno = false, $error = false, $file = false, $line = false, $context = false)
+    public static function logErrors($errno = false, $error = false, $file = false, $line = false,
+            $context = false)
     {
         $message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";
         $message .= "[$file:$line]\r\n";

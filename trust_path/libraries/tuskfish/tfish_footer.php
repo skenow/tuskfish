@@ -14,7 +14,8 @@
  */
 // Include the relevant page template, or the default if not set.
 if ($tfish_template && !empty($tfish_template->template_set)) {
-    include_once TFISH_TEMPLATES_PATH . $tfish_template->template_set . "/" . $tfish_template->template_set . ".html";
+    include_once TFISH_TEMPLATES_PATH . $tfish_template->template_set . "/"
+            . $tfish_template->template_set . ".html";
 } else {
     include_once TFISH_TEMPLATES_PATH . "default/default.html";
 }

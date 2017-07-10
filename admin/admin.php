@@ -20,7 +20,8 @@ $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
-$clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
+$clean_type = isset($_GET['type']) && !empty($_GET['type'])
+        ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 // Specify the admin template and the template to be used to preview content (user side template).
@@ -30,10 +31,12 @@ if ($op == 'view') {
     $tfish_template->setTemplate('sb_admin');
 }
 
-// Set target file for intra-collection pagination controls when viewing objects. False will default to your home page.
+// Set target file for intra-collection pagination controls when viewing objects. False will 
+// default to your home page.
 $target_file_name = false;
 
-if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update', 'view', false))) {
+if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update',
+    'view', false))) {
     switch ($op) {
         // Add: Display an empty content object submission form.
         case "add":
@@ -144,7 +147,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     $tfish_template->rights = TfishContentHandler::getRights();
                     $tfish_template->languages = TfishContentHandler::getLanguages();
                     $tfish_template->tags = TfishContentHandler::getTagList(false);
-                    $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox($row['parent']);
+                    $tfish_template->parent_select_options = 
+                            $parent_tree->makeParentSelectBox($row['parent']);
                     $tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
                     $tfish_template->tfish_main_content = $tfish_template->render('form');
                 } else {
@@ -174,7 +178,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
-        // Submit: Determine object type, instantiate, validate input, populate properties  and and
+        // Submit: Determine object type, instantiate, validate input, populate properties  and
         // insert a new content object.
         case "submit":
             if (empty($_REQUEST['type'])) {
@@ -260,7 +264,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             
             foreach ($fields_to_decode as $field) {
                 if (isset($content_object->field)) {
-                    $content_object->$field = htmlspecialchars_decode($content_object->field, ENT_QUOTES);
+                    $content_object->$field = htmlspecialchars_decode($content_object->field,
+                            ENT_QUOTES);
                 }
             }
 
@@ -301,14 +306,20 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     if ($content->counter) {
                         switch ($content->type) {
                             case "TfishDownload": // Display 'downloads' after the counter.
-                                $contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+                                $contentInfo[] = $content->escape('counter') . ' '
+                                    . TFISH_DOWNLOADS;
                                 break;
-                            case "TfishCollection": // Display 'downloads' after the counter if there is an attached media file; otherwise 'views'.
+                            
+                            // Display 'downloads' after the counter if there is an attached media
+                            // file; otherwise 'views'.
+                            case "TfishCollection":
                                 if ($content->media) {
-                                    $contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+                                    $contentInfo[] = $content->escape('counter') . ' '
+                                            . TFISH_DOWNLOADS;
                                     break;
                                 }
                                 break;
+                                
                             default: // Display 'views' after the counter.
                                 $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
                         }
@@ -320,8 +331,9 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     if ($content->file_size)
                         $contentInfo[] = $content->escape('file_size');
                     
+                    // For a content type-specific page use $content->tags, $content->template.
                     if ($content->tags) {
-                        $tags = TfishContentHandler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
+                        $tags = TfishContentHandler::makeTagLinks($content->tags, false);
                         $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
                         $contentInfo[] = $tags;
                     }
@@ -330,7 +342,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     
                     if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
                     
-                    if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
+                    if ($content->meta_description) $tfish_metadata->description 
+                        = $content->meta_description;
 
                     // Check if has a parental object; if so display a thumbnail and teaser / link.
                     if (!empty($content->parent)) {
@@ -346,7 +359,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     $criteria->order = 'date';
                     $criteria->ordertype = 'DESC';
 
-                    // If object is a collection check if has child objects; if so display thumbnails and teasers / links.
+                    // If object is a collection check if has child objects; if so display
+                    // thumbnails and teasers / links.
                     if ($content->type == 'TfishCollection') {
                         $criteria->add(new TfishCriteriaItem('parent', $content->id));
                         $criteria->add(new TfishCriteriaItem('online', 1));
@@ -356,7 +370,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                         $criteria->limit = $tfish_preference->user_pagination;
                     }
 
-                    // If object is a tag, then a different method is required to call the related content.
+                    // If object is a tag, then a different method is required to call the related
+                    // content.
                     if ($content->type == 'TfishTag') {
                         if ($clean_start) $criteria->offset = $clean_start;
                         
@@ -368,7 +383,14 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     // Prepare pagination control.
                     if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
                         $first_child_count = TfishContentHandler::getCount($criteria);
-                        $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count, $tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+                        $tfish_template->collection_pagination = 
+                                $tfish_metadata->getPaginationControl(
+                                        $first_child_count, 
+                                        $tfish_preference->user_pagination,
+                                        $target_file_name,
+                                        $clean_start,
+                                        0,
+                                        array('id' => $clean_id));
 
                         // Retrieve content objects and assign to template.
                         $first_children = TfishContentHandler::getObjects($criteria);
@@ -379,7 +401,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     }
 
                     // Render template.
-                    $tfish_template->tfish_main_content = $tfish_template->render($content->template);
+                    $tfish_template->tfish_main_content
+                            = $tfish_template->render($content->template);
                 } else {
                     $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
                 }
@@ -420,7 +443,8 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             }
             
             foreach ($rows as &$row) {
-                $row['submission_time'] = date($tfish_preference->date_format, $row['submission_time']);
+                $row['submission_time']
+                        = date($tfish_preference->date_format, $row['submission_time']);
             }
             
             $typelist = TfishContentHandler::getTypes();
@@ -436,7 +460,13 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             if (isset($clean_type)) {
                 $extra_params['type'] = $clean_type;
             }
-            $tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->admin_pagination, 'admin', $clean_start, $clean_tag, $extra_params);
+            $tfish_template->pagination = $tfish_metadata->getPaginationControl(
+                    $count,
+                    $tfish_preference->admin_pagination,
+                    'admin',
+                    $clean_start,
+                    $clean_tag,
+                    $extra_params);
 
             // Prepare select filters.
             $tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag, false);

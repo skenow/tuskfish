@@ -27,7 +27,8 @@ class TfishImageHandler extends TfishContentHandler
 {
 
     /**
-     * Count TfishImage objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishImage objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishImage objects matching conditions.

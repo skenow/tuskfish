@@ -81,7 +81,8 @@ class TfishMachineHandler
         
     }
     
-    // Checks if a request has expired based on the machine's counter, to guard against replay attacks.
+    // Checks if a request has expired based on the machine's counter, to guard against replay
+    // attacks.
     protected static function checkRequestCounter($id, $counter)
     {
         
@@ -95,7 +96,8 @@ class TfishMachineHandler
     }
 
     /**
-     * Count TfishMachine objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishMachine objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * @param object $criteria TfishCriteria object
      * @return int $count
@@ -106,7 +108,8 @@ class TfishMachineHandler
     }
     
     /**
-     * Get TfishMachine objects, optionally matching conditions specified with a TfishCriteria object.
+     * Get TfishMachine objects, optionally matching conditions specified with a TfishCriteria
+     * object.
      * 
      * Note that the object type is automatically set, so it is unnecessary to set it when calling
      * TfishVideoHandler::getObjects($criteria). However, if you want to use the generic handler
@@ -126,10 +129,10 @@ class TfishMachineHandler
     /**
 	 * Checks if the remote command HMAC matches that calculated by Tuskfish using pre-shared key
 	 * 
-	 * The remote device supplies a HMAC of the command parameters calculated using a pre-shared key.
-	 * Straylight also calculates the HMAC locally. If the HMACs match, the integrity and
-     * authenticity of the remote command is validated and Tuskfish will execute it. If the HMACs
-     * do not match, then the command is discarded as invalid.
+	 * The remote device supplies a HMAC of the command parameters calculated using a pre-shared
+     * key. Also calculates the HMAC locally. If the HMACs match, the integrity and authenticity of
+     * the remote command is validated and Tuskfish will execute it. If the HMACs do not match, then
+     * the command is discarded as invalid.
 	 * 
 	 * Note that in order for the HMACs to match, the remote client must use EXACTLY the same data 
 	 * in exactly the same order as the Straylight module when calculating the HMAC. You can get the

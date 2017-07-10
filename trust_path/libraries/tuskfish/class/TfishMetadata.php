@@ -75,7 +75,8 @@ class TfishMetadata
      * 
      * $query is an array of arbitrary query string parameters. Note that these need to be passed
      * in as an array of key => value pairs, and you should build this yourself using known and
-     * whitelisted values. Do not pass through random query strings someone gave you on the internetz.
+     * whitelisted values. Do not pass through random query strings someone gave you on the
+     * internetz.
      * 
      * If you want to create pagination controls for other presentation-side libraries add
      * additional methods to this class.
@@ -88,13 +89,15 @@ class TfishMetadata
      * @param array $extra_params Query string to be appended to the URLs (control script params).
      * @return string HTML pagination control.
      */
-    public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0, $extra_params = array())
+    public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0,
+            $extra_params = array())
     {
         // Filter parameters.
         $clean_count = TfishFilter::isInt($count, 1) ? (int) $count : false;
         $clean_limit = TfishFilter::isInt($limit, 1) ? (int) $limit : false;
         $clean_start = TfishFilter::isInt($start, 0) ? (int) $start : 0;
-        $clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::trimString($url) . '.php' : TFISH_URL;
+        $clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::trimString($url)
+                . '.php' : TFISH_URL;
         $clean_tag = TfishFilter::isInt($tag) ? (int) $tag : 0;
 
         // $extra_params is a potential XSS attack vector.
@@ -109,16 +112,19 @@ class TfishMetadata
         foreach ($extra_params as $key => $value) {
             
             // Check for directory traversals and null byte injection.
-            if (TfishFilter::hasTraversalorNullByte($key) || TfishFilter::hasTraversalorNullByte($value)) {
+            if (TfishFilter::hasTraversalorNullByte($key)
+                    || TfishFilter::hasTraversalorNullByte($value)) {
                 trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                 return false;
             }
         
-            $clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '=' . TfishFilter::encodeEscapeUrl($value);
+            $clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '='
+                    . TfishFilter::encodeEscapeUrl($value);
             unset($key, $value);
         }
         
-        $clean_extra_params = !empty($clean_extra_params) ? TfishFilter::escape(implode("&", $clean_extra_params)) : '';
+        $clean_extra_params = !empty($clean_extra_params)
+                ? TfishFilter::escape(implode("&", $clean_extra_params)) : '';
 
         // If the count is zero there is no need for a pagination control.
         if ($clean_count == 0) {
@@ -130,7 +136,8 @@ class TfishMetadata
             trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
         }
         
-        $control = $this->_getPavigationControl($clean_count, $clean_limit, $clean_url, $clean_start, $clean_tag, $clean_extra_params);
+        $control = $this->_getPavigationControl($clean_count, $clean_limit, $clean_url,
+                $clean_start, $clean_tag, $clean_extra_params);
 
         return $control;
     }
@@ -158,7 +165,8 @@ class TfishMetadata
         $current_page = (int) (($start / $limit) + 1);
 
         // 3. Calculate length of pagination control (number of slots).
-        $elements = ($this->pagination_elements > $page_count) ? $page_count : $this->pagination_elements;
+        $elements = ($this->pagination_elements > $page_count)
+                ? $page_count : $this->pagination_elements;
 
         // 4. Calculate the fore offset and initial (pre-adjustment) starting position.
         $offset_int = (int) (($elements - 1) / 2);
@@ -183,7 +191,8 @@ class TfishMetadata
             $page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
         }
 
-        // 7. Substitute in the 'first' and 'last' page elements and sort the array back into numerical order.
+        // 7. Substitute in the 'first' and 'last' page elements and sort the array back into
+        // numerical order.
         end($page_slots);
         unset($page_slots[key($page_slots)]);
         $page_slots[($page_count - 1)] = TFISH_PAGINATION_LAST;
@@ -221,7 +230,8 @@ class TfishMetadata
             }
 
             if (($key + 1) == $current_page) {
-                $control .= '<li class="active"><a href="' . $url . $query . '">' . $slot . '</a></li>';
+                $control .= '<li class="active"><a href="' . $url . $query . '">' . $slot
+                        . '</a></li>';
             } else {
                 $control .= '<li><a href="' . $url . $query . '">' . $slot . '</a></li>';
             }

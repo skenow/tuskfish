@@ -29,7 +29,8 @@ if (isset($_REQUEST['query'])) {
     $terms = rawurldecode($terms);
     $clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
-    $clean_terms = isset($_REQUEST['search_terms']) ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
+    $clean_terms = isset($_REQUEST['search_terms'])
+            ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
 }
 
 $type = isset($_REQUEST['search_type']) ? TfishFilter::trimString($_REQUEST['search_type']) : false;
@@ -38,7 +39,8 @@ $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $clean_terms && $type) {
     $content_handler = new TfishContentHandler();
-    $search_results = $content_handler->searchContent($tfish_preference, $clean_terms, $type, $tfish_preference->search_pagination, $start);
+    $search_results = $content_handler->searchContent($tfish_preference, $clean_terms, $type,
+            $tfish_preference->search_pagination, $start);
     
     if ($search_results && $search_results[0] > 0) {
         
@@ -52,7 +54,8 @@ if ($clean_op && $clean_terms && $type) {
             'op' => 'search',
             'search_type' => $type,
             'query' => $clean_terms);
-        $tfish_template->pagination = $tfish_metadata->getPaginationControl($results_count, $tfish_preference->search_pagination, 'search', $start, false, $query_parameters);
+        $tfish_template->pagination = $tfish_metadata->getPaginationControl($results_count,
+                $tfish_preference->search_pagination, 'search', $start, false, $query_parameters);
     } else {
         $tfish_template->search_results = false;
     }

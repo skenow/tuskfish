@@ -85,7 +85,8 @@ class TfishSecurityUtility
      */
     public static function generateSalt($length = 64)
     {
-        $salt = mb_substr(base64_encode(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)), 0, $length, 'UTF-8');
+        $salt = mb_substr(base64_encode(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)), 0, $length,
+                'UTF-8');
         return $salt;
     }
 
@@ -97,12 +98,15 @@ class TfishSecurityUtility
      * attempt will consume $iterations more cycles. 
      * 
      * @param string $password Input password.
-     * @param int $iterations Number of iterations to run, you want this to be a large number (100,000 or more).
+     * @param int $iterations Number of iterations to run, you want this to be a large number
+     * (100,000 or more).
      * @param string $site_salt The Tuskfish site salt, found in the configuration file.
-     * @param string $user_salt The user-specific salt for this user, found in the user database table.
+     * @param string $user_salt The user-specific salt for this user, found in the user database
+     * table.
      * @return string Password hash.
      */
-    public static function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '')
+    public static function recursivelyHashPassword($password, $iterations, $site_salt,
+            $user_salt = '')
     {
 
         $iterations = (int) $iterations;

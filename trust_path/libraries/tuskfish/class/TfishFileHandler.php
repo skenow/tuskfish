@@ -83,7 +83,8 @@ class TfishFileHandler
         }
         
         $clean_path = TfishFilter::trimString($path);
-        $clean_content = PHP_EOL . TfishFilter::trimString($contents); // NOTE: Calling trim() removes linefeed from the contents.
+        // NOTE: Calling trim() removes linefeed from the contents.
+        $clean_content = PHP_EOL . TfishFilter::trimString($contents);
         
         if ($clean_path && $clean_content) {
             $result = self::_appendFile($clean_path, $clean_content);
@@ -152,7 +153,8 @@ class TfishFileHandler
                     }
                 }
             } catch (Exception $e) {
-                TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+                TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(),
+                        $e->getLine());
                 return false;
             }
             return true;
@@ -240,9 +242,11 @@ class TfishFileHandler
         
         if ($path) {
             try {
-                $iterator = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+                $iterator = new RecursiveDirectoryIterator(
+                        $path,RecursiveDirectoryIterator::SKIP_DOTS);
                 
-                foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
+                foreach (new RecursiveIteratorIterator(
+                        $iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
                     if ($file->isDir()) {
                         rmdir($file->getPathname());
                     } else {
@@ -252,7 +256,8 @@ class TfishFileHandler
                 rmdir($path);
                 return true;
             } catch (Exception $e) {
-                TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+                TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(),
+                        $e->getLine());
                 return false;
             }
         }
@@ -305,7 +310,8 @@ class TfishFileHandler
             try {
                 unlink($path);
             } catch (Exeption $e) {
-                TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+                TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(),
+                        $e->getLine());
             }
         } else {
             trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
@@ -415,7 +421,8 @@ class TfishFileHandler
                 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
                 // Set file-specific headers.
-                header('Content-Disposition: attachment; filename="' . $filename . '.' . $file_extension . '"');
+                header('Content-Disposition: attachment; filename="' . $filename . '.'
+                        . $file_extension . '"');
                 //header('Content-Type: application/octet-stream');
                 header("Content-Type: " . $mimetype);
                 header("Content-Length: " . $file_size);
@@ -459,7 +466,8 @@ class TfishFileHandler
 
         $mimetype_list = self::getPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
-        $clean_extension = array_key_exists($extension, $mimetype_list) ? TfishFilter::trimString($extension) : false;
+        $clean_extension = array_key_exists($extension, $mimetype_list)
+                ? TfishFilter::trimString($extension) : false;
         
         if ($clean_filename && $clean_fieldname && $clean_extension) {
             return self::_uploadFile($clean_filename, $clean_fieldname, $clean_extension);

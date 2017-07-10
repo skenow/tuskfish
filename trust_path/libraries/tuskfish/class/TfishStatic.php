@@ -64,7 +64,8 @@ class TfishStatic extends TfishContentObject
         $this->__data['type'] = "TfishStatic";
         $this->__data['template'] = "static";
         $this->__data['module'] = "permalink";
-        $this->__data['icon'] = '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>';
+        $this->__data['icon'] = '<span class="glyphicon glyphicon-menu-hamburger"'
+                . 'aria-hidden="true"></span>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();

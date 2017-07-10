@@ -178,8 +178,10 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "description":
                 case "teaser":
-                    // Do a simple string replace to allow TFISH_URL to be used as a constant, making the site portable.
-                    $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK, $this->__data[$property]);
+                    // Do a simple string replace to allow TFISH_URL to be used as a constant,
+                    // making the site portable.
+                    $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
+                            $this->__data[$property]);
                     
                     // Output filtering
                     // Enabled (only do this if input filtering NOT done in __set()).
@@ -298,15 +300,18 @@ class TfishContentObject extends TfishAncestralObject
             // Get a reference to a new image resource.
             // Creates a blank (black) image RESOURCE of the specified size.
             $thumbnail = imagecreatetruecolor($destination_width, $destination_height);
-            // Different image types require different handling. JPEG and PNG support optional quality parameter
+            // Different image types require different handling. JPEG and PNG support optional
+            // quality parameter
             // TODO: Create a preference.
             $result = false;
             
             switch ($properties['mime']) {
                 case "image/jpeg":
                     $original = imagecreatefromjpeg($original_path);
-                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
-                    $result = imagejpeg($thumbnail, $cached_path, 80); // Optional third quality argument 0-99, higher is better quality.
+                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width,
+                            $destination_height, $properties[0], $properties[1]);
+                    // Optional third quality argument 0-99, higher is better quality.
+                    $result = imagejpeg($thumbnail, $cached_path, 80);
                     break;
 
                 case "image/png":
@@ -347,16 +352,21 @@ class TfishContentObject extends TfishAncestralObject
                      * 
                      * https://github.com/Nimrod007/PHP_image_resize 
                      */
-                    // Sets the transparent colour in the given image, using a colour identifier created with imagecolorallocate().
+                    // Sets the transparent colour in the given image, using a colour identifier
+                    // created with imagecolorallocate().
                     $transparency = imagecolortransparent($original);
                     $number_of_colours = imagecolorstotal($original);
 
                     if ($transparency >= 0 && $transparency < $number_of_colours) {
                         // Get the colours for an index.
                         $transparent_colour = imagecolorsforindex($original, $transparency);
-                        // Allocate a colour for an image. The first call to imagecolorallocate() fills the background colour in palette-based images created using imagecreate().
-                        $transparency = imagecolorallocate($thumbnail, $transparent_colour['red'], $transparent_colour['green'], $transparent_colour['blue']);
-                        // Flood fill with the given colour starting at the given coordinate (0,0 is top left).
+                        // Allocate a colour for an image. The first call to imagecolorallocate() 
+                        // fills the background colour in palette-based images created using 
+                        // imagecreate().
+                        $transparency = imagecolorallocate($thumbnail, $transparent_colour['red'],
+                                $transparent_colour['green'], $transparent_colour['blue']);
+                        // Flood fill with the given colour starting at the given coordinate
+                        // (0,0 is top left).
                         imagefill($thumbnail, 0, 0, $transparency);
                         // Define a colour as transparent.
                         imagecolortransparent($thumbnail, $transparency);
@@ -371,7 +381,8 @@ class TfishContentObject extends TfishAncestralObject
                         $colour = imagecolorallocatealpha($thumbnail, 0, 0, 0, 127);
                         // Flood fill again.
                         imagefill($thumbnail, 0, 0, $colour);
-                        // Set the flag to save full alpha channel information (as opposed to single colour transparency) when saving png images.
+                        // Set the flag to save full alpha channel information (as opposed to single
+                        // colour transparency) when saving png images.
                         imagesavealpha($thumbnail, true);
                     }
                     /**
@@ -379,13 +390,15 @@ class TfishContentObject extends TfishAncestralObject
                      */
                     
                     // Copy and resize part of an image with resampling.
-                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width, $destination_height, $properties[0], $properties[1]);
+                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width,
+                            $destination_height, $properties[0], $properties[1]);
 
                     // Output a useable png or gif from the image resource.
                     if ($properties['mime'] == "image/gif") {
                         $result = imagegif($thumbnail, $cached_path);
                     } else {
-                        // Quality is controlled through an optional third argument (0-9, lower is better).
+                        // Quality is controlled through an optional third argument (0-9, lower is
+                        // better).
                         $result = imagepng($thumbnail, $cached_path, 0);
                     }
                     break;
@@ -447,8 +460,10 @@ class TfishContentObject extends TfishAncestralObject
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
 
-        $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage'])) ? true : false;
-        $delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia'])) ? true : false;
+        $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
+                ? true : false;
+        $delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia']))
+                ? true : false;
 
         // Note that handler, template and module are not accessible through this method.
         $property_whitelist = $this->getPropertyWhitelist();
@@ -596,7 +611,8 @@ class TfishContentObject extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     // Enable input filtering with HTMLPurifier.
                     $this->__data[$property] = (string) TfishFilter::filterHtml($value);
-                    // Disable input filtering with HTMLPurifier (only do this if output filtering is enabled in escape()).
+                    // Disable input filtering with HTMLPurifier (only do this if output filtering
+                    // is enabled in escape()).
                     //$this->__data[$property] = (string)TfishFilter::trimString($value);
                     break;
 
@@ -664,7 +680,9 @@ class TfishContentObject extends TfishAncestralObject
                     if ($property == "date") { // Ensure format complies with DATE_RSS
                         $check_date = date_parse_from_format('Y-m-d', $value);
                         
-                        if ($check_date == false || $check_date['warning_count'] > 0 || $check_date['error_count'] > 0) {
+                        if ($check_date == false 
+                                || $check_date['warning_count'] > 0
+                                || $check_date['error_count'] > 0) {
                             // Bad date supplied, default to today.
                             $this->__data[$property] = date(DATE_RSS, time());
                             trigger_error(TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY, E_USER_WARNING);

@@ -20,21 +20,24 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 $tfish_template->setTemplate('thumbnail_gallery');
 
 // CONVENTIONS:
-// 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
+// 1. Specify the class name of the handler for the object type this page will handle,
+// eg. 'TfishArticleHandler'.
 // 2. Specify the name of the template for the index page, eg. 'articles'.
 $content_handler = 'TfishContentHandler';
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
 
 // Page title.
-$tfish_template->page_title = '<i class="fa fa-file-image-o" aria-hidden="true"></i> ' . TFISH_IMAGE_GALLERY;
+$tfish_template->page_title = '<i class="fa fa-file-image-o" aria-hidden="true"></i> '
+        . TFISH_IMAGE_GALLERY;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
-$clean_type = isset($_GET['type']) && !empty($_GET['type']) ? TfishFilter::trimString($_GET['type']) : null;
+$clean_type = isset($_GET['type']) && !empty($_GET['type']) 
+        ? TfishFilter::trimString($_GET['type']) : null;
 
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria();
@@ -68,7 +71,9 @@ if (isset($clean_type)) {
     $extra_params['type'] = $clean_type;
 }
 
-$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, $tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, $extra_params);
+$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
+        $tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, 
+        $extra_params);
 
 // Set offset and limit.
 if ($clean_start) $criteria->offset = $clean_start;

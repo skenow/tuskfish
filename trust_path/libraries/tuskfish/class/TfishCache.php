@@ -72,7 +72,8 @@ class TfishCache
 
         // Path is good, so check if the file actually exists and has not expired. If so, flush
         // the output buffer to screen. This buffer was opened in tfish_header.
-        if (file_exists($resolved_path) && (filemtime($resolved_path) > (time() - $tfish_preference->cache_life))) {
+        if (file_exists($resolved_path) && (filemtime($resolved_path) > 
+                (time() - $tfish_preference->cache_life))) {
             echo file_get_contents($resolved_path);
             ob_end_flush();
             exit;
@@ -110,7 +111,8 @@ class TfishCache
                 if ($value) {
                     $clean_key = TfishFilter::trimString($key);
                     $clean_value = TfishFilter::trimString($value);
-                    if (TfishFilter::isAlnumUnderscore($clean_key) && TfishFilter::isAlnumUnderscore($clean_value)) {
+                    if (TfishFilter::isAlnumUnderscore($clean_key)
+                            && TfishFilter::isAlnumUnderscore($clean_value)) {
                         $clean_filename .= '&' . $clean_key . '=' . $clean_value;
                     }
                 }
@@ -128,7 +130,8 @@ class TfishCache
      * This function should be called in tfish_footer.php, before ob_end_flush(). Note that
      * warnings are suppressed when trying to open the file.
      * 
-     * @param object $tfish_preference TfishPreference object, to make the site preferences available.
+     * @param object $tfish_preference TfishPreference object, to make the site preferences
+     * available.
      * @param string $basename Filename of this page, alphanumeric and underscore characters only.
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
@@ -181,7 +184,8 @@ class TfishCache
                         try {
                             unlink($path);
                         } catch (Exeption $e) {
-                            TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+                            TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(),
+                                    $e->getLine());
                         }
                     } else {
                         trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);

@@ -59,7 +59,7 @@ class TfishBlockHandler extends TfishContentHandler
     }
 
     /**
-     * Count TfishBlock objects, optionally matching conditions specified with a TfishCriteria object.
+     * Count TfishBlock objects, optionally matching conditions specified in a TfishCriteria object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Count of TfishBlock objects matching conditions.

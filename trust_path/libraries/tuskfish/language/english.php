@@ -26,7 +26,8 @@ define("TFISH_EMAIL", "Email");
 define("TFISH_ACTION", "Action");
 define("TFISH_YOU_ARE_ALREADY_LOGGED_IN", "You are already logged in.");
 define("TFISH_YUBIKEY", "Yubikey");
-define("TFISH_YUBIKEY_NO_SIGNATURE_KEY", "No Yubikey signature key in config.php. See the manual for Yubikey setup.");
+define("TFISH_YUBIKEY_NO_SIGNATURE_KEY", "No Yubikey signature key in config.php. See the manual "
+        . "for Yubikey setup.");
 
 // admin/admin.php
 define("TFISH_ADMIN", "Admin");
@@ -54,11 +55,15 @@ define("TFISH_CONFIRM_PASSWORD", "Re-enter new password to confirm");
 define("TFISH_USER_SALT_UNAVAILABLE", "User salt unavailable, cannot proceed.");
 define("TFISH_ENTER_PASSWORD_TWICE", "You must enter the new password twice for confirmation.");
 define("TFISH_PASSWORDS_DO_NOT_MATCH", "Passwords do not match, please try again.");
-define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "Password must be at least 15 characters long to resist exhaustive searches of the keyspace.");
-define("TFISH_PASSWORD_LOWER_CASE_WEAKNESS", "Password must include at least one lower case letter.");
-define("TFISH_PASSWORD_UPPER_CASE_WEAKNESS", "Password must include at least one upper case letter.");
+define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "Password must be at least 15 characters long to "
+        . "resist exhaustive searches of the keyspace.");
+define("TFISH_PASSWORD_LOWER_CASE_WEAKNESS", "Password must include at least one lower case "
+        . "letter.");
+define("TFISH_PASSWORD_UPPER_CASE_WEAKNESS", "Password must include at least one upper case "
+        . "letter.");
 define("TFISH_PASSWORD_NUMBERIC_WEAKNESS", "Password must include at least one number.");
-define("TFISH_PASSWORD_SYMBOLIC_WEAKNESS", "Password must include at least one non-alphanumeric character.");
+define("TFISH_PASSWORD_SYMBOLIC_WEAKNESS", "Password must include at least one non-alphanumeric "
+        . "character.");
 define("TFISH_PASSWORD_CHANGE_FAILED", "Sorry, password change failed.");
 define("TFISH_PASSWORD_CHANGED_SUCCESSFULLY", "Password successfully changed.");
 
@@ -83,7 +88,8 @@ define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
 define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout");
 define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");
 define("TFISH_PREFERENCE_DEFAULT_LANGUAGE", "Default language");
-define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see <a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>");
+define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see "
+        . "<a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>");
 define("TFISH_PREFERENCE_PAGINATION_ELEMENTS", "Max. pagination elements");
 define("TFISH_PREFERENCE_USER_PAGINATION", "User-side pagination");
 define("TFISH_PREFERENCE_SITE_DESCRIPTION", "Site description");
@@ -168,7 +174,7 @@ define("TFISH_ONLINE", "Online");
 define("TFISH_OFFLINE", "Offline");
 define("TFISH_SUBMISSION_TIME", "Submitted");
 define("TFISH_COUNTER", "Counter");
-define("TFISH_VIEWS", "views"); // Alternative representation of counter, which may be more approppriate in some contexts.
+define("TFISH_VIEWS", "views"); // Alternative representation of counter (type-dependent context).
 define("TFISH_META_TITLE", "Title");
 define("TFISH_META_DESCRIPTION", "Description");
 define("TFISH_SEO", "SEO");
@@ -190,8 +196,10 @@ define("TFISH_RIGHTS_ATTRIBUTION", "Creative Commons Attribution.");
 define("TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE", "Creative Commons Attribution-ShareAlike.");
 define("TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS", "Creative Commons Attribution-NoDerivs");
 define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL", "Creative Commons Attribution-NonCommercial.");
-define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE", "Creative Commons Attribution-NonCommercial-ShareAlike.");
-define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS", "Creative Commons Attribution-NonCommercial-NoDerivs.");
+define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE", "Creative Commons "
+        . "Attribution-NonCommercial-ShareAlike.");
+define("TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS", "Creative Commons "
+        . "Attribution-NonCommercial-NoDerivs.");
 define("TFISH_RIGHTS_GPL2", "GNU General Public License Version 2.");
 define("TFISH_RIGHTS_GPL3", "GNU General Public License Version 3.");
 define("TFISH_RIGHTS_PUBLIC_DOMAIN", "Public domain.");
@@ -262,14 +270,19 @@ define("TFISH_CANNOT_OVERWRITE_TEMPLATE_VARIABLE", "Cannot overwrite template va
 define("TFISH_ERROR_PAGINATION_PARAMETER_ERROR", "Pagination control parameter error.");
 define("TFISH_ERROR_NO_SUCH_CONTENT", "Sorry, this content is not available.");
 define("TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY", "Bad date supplied, defaulting to today.");
-define("TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE", "Please configure this page to point to a static content object.");
+define("TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE", "Please configure this page to point to a "
+        . "static content object.");
 define("TFISH_ERROR_ROOT_PATH_NOT_DEFINED", "TFISH_ROOT_PATH not defined.");
-define("TFISH_ERROR_CIRCULAR_PARENT_REFERENCE", "Circular reference: Content object cannot declare self as parent.");
-define("TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE", "File path contains a traversal or null byte (illegal value).");
+define("TFISH_ERROR_CIRCULAR_PARENT_REFERENCE", "Circular reference: Content object cannot declare "
+        . "self as parent.");
+define("TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE", "File path contains a traversal or null byte (illegal "
+        . "value).");
 
 // File upload error messages.
-define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini size.");
-define("TFISH_ERROR_UPLOAD_ERR_FORM_SIZE", "Upload failed: File exceeds maximum size permitted in form.");
+define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini "
+        . "size.");
+define("TFISH_ERROR_UPLOAD_ERR_FORM_SIZE", "Upload failed: File exceeds maximum size permitted in "
+        . "form.");
 define("TFISH_ERROR_UPLOAD_ERR_PARTIAL", "Upload failed: File upload incomplete (partial).");
 define("TFISH_ERROR_UPLOAD_ERR_NO_FILE", "Upload failed: No file to upload.");
 define("TFISH_ERROR_UPLOAD_ERR_NO_TMP_DIR", "Upload failed: No temporary upload directory.");

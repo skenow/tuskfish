@@ -210,7 +210,7 @@ class TfishContentHandler
     }
 
     /**
-     * Get a list of tags actually in use by other content objects, optionally filtered by content type.
+     * Get a list of tags actually in use by other content objects, optionally filtered by type.
      * 
      * Used primarily to build select box controls. Use $online_only to select only those tags that
      * are marked as online (true), or all tags (false).
@@ -231,7 +231,8 @@ class TfishContentHandler
         }
 
         // Restrict tag list to those actually in use.
-        $clean_type = (isset($type) && self::isSanctionedType($type)) ? TfishFilter::trimString($type) : null;
+        $clean_type = (isset($type) && self::isSanctionedType($type))
+                ? TfishFilter::trimString($type) : null;
 
         $criteria = new TfishCriteria();
 
@@ -431,14 +432,18 @@ class TfishContentHandler
      */
     public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS)
     {
-        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) ? (int) $selected : null; // Offline (0) or online (1)
+        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) 
+                ? (int) $selected : null; // Offline (0) or online (1)
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
-        $select_box = '<select class="form-control" name="online" id="online" onchange="this.form.submit()">';
+        $select_box = '<select class="form-control" name="online" id="online"'
+                . 'onchange="this.form.submit()">';
         
         if (isset($clean_selected)) {
             foreach ($options as $key => $value) {
-                $select_box .= ($key == $clean_selected) ? '<option value="' . $key . '" selected>' . $value . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+                $select_box .= ($key == $clean_selected) ? '<option value="' . $key . '" selected>' 
+                        . $value . '</option>' : '<option value="' . $key . '">' . $value 
+                        . '</option>';
             }
         } else { // Nothing selected
             $select_box .= '<option value="2" selected>' . TFISH_SELECT_STATUS . '</option>';
@@ -581,7 +586,8 @@ class TfishContentHandler
      */
     public static function getTypeSelectBox($selected = null, $zero_option = TFISH_TYPE)
     {
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option)); // The text to display in the zero option of the select box.
+        // The text to display in the zero option of the select box.
+        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
         $clean_selected = '';
         $type_list = self::getTypes();
 
@@ -592,10 +598,13 @@ class TfishContentHandler
         }
 
         $options = array(0 => TFISH_SELECT_TYPE) + $type_list;
-        $select_box = '<select class="form-control" name="type" id="type" onchange="this.form.submit()">';
+        $select_box = '<select class="form-control" name="type" id="type" '
+                . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {
-            $select_box .= ($key == $selected) ? '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>' : '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
+            $select_box .= ($key == $selected) ? '<option value="' . TfishFilter::escape($key)
+                    . '" selected>' . TfishFilter::escape($value) . '</option>' : '<option value="'
+                . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
         }
         
         $select_box .= '</select>';
@@ -627,7 +636,8 @@ class TfishContentHandler
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             } else {
                 $target_filename = TfishFilter::trimString($target_filename);
-                $clean_filename = TFISH_URL . TfishFilter::escape($target_filename) . '.php?tag_id=';
+                $clean_filename = TFISH_URL . TfishFilter::escape($target_filename)
+                        . '.php?tag_id=';
             }
         }
 
@@ -636,7 +646,8 @@ class TfishContentHandler
         
         foreach ($tags as $tag) {
             if (TfishFilter::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
-                $tag_links[$tag] = '<a href="' . TfishFilter::escape($clean_filename . $tag) . '">' . TfishFilter::escape($tag_list[$tag]) . '</a>';
+                $tag_links[$tag] = '<a href="' . TfishFilter::escape($clean_filename . $tag) . '">'
+                        . TfishFilter::escape($tag_list[$tag]) . '</a>';
             }
             
             unset($tag);
@@ -651,7 +662,8 @@ class TfishContentHandler
      * Search terms are passed through to the database query without modification. Escaping is
      * handled through use of a PDO prepared statement with named placeholders; search terms are
      * inserted indirectly by binding them to the placeholders. Search terms must NEVER be inserted
-     * into a query directly, otherwise you may as well do us all a favour and go shoot yourself now.
+     * into a query directly (creates an SQL injection vulnerability), otherwise do us all a favour
+     * and go shoot yourself now.
      *
      * @param array $search_terms Array of search terms.
      * @param string $andor Operator to chain search terms (AND or OR).
@@ -660,10 +672,12 @@ class TfishContentHandler
      * @param int $offset Starting point for retrieving results (pagination constraint).
      * @return array|bool Array of content objects on success, false failure.
      */
-    public static function searchContent($tfish_preference, $search_terms, $andor, $limit, $offset = 0)
+    public static function searchContent($tfish_preference, $search_terms, $andor, $limit,
+            $offset = 0)
     {
         $clean_search_terms = array();
-        $clean_andor = in_array($andor, array('AND', 'OR', 'exact')) ? TfishFilter::trimString($andor) : 'AND';
+        $clean_andor = in_array($andor, array('AND', 'OR', 'exact'))
+                ? TfishFilter::trimString($andor) : 'AND';
         $clean_limit = (int) $limit;
         $clean_offset = (int) $offset;
 
@@ -683,7 +697,8 @@ class TfishContentHandler
         }
         
         if (!empty($clean_search_terms)) {
-            $results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit, $clean_offset);
+            $results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit,
+                    $clean_offset);
         } else {
             $results = false;
         }
@@ -692,7 +707,8 @@ class TfishContentHandler
     }
 
     /** @internal */
-    private static function _searchContent($tfish_preference, $search_terms, $andor, $limit, $offset)
+    private static function _searchContent($tfish_preference, $search_terms, $andor, $limit,
+            $offset)
     {
         $sql = $count = '';
         $search_term_placeholders = $results = array();
@@ -731,7 +747,8 @@ class TfishContentHandler
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
-                $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
+                $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%",
+                        PDO::PARAM_STR);
             }
         } else {
             return false;
@@ -760,7 +777,8 @@ class TfishContentHandler
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
-                $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%", PDO::PARAM_STR);
+                $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%",
+                        PDO::PARAM_STR);
                 $statement->bindValue(":limit", (int) $limit, PDO::PARAM_INT);
                 
                 if ($offset) {
@@ -900,8 +918,11 @@ class TfishContentHandler
                 $key_values['image'] = '';
             }
 
-            // If the updated object has no image attached, or has been instructed to delete attached image, delete any old image files.
-            if ((!isset($key_values['image']) || empty($key_values['image'])) || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) && $existing_image) {
+            // If the updated object has no image attached, or has been instructed to delete
+            // attached image, delete any old image files.
+            if ((!isset($key_values['image'])
+                    || empty($key_values['image'])) || (isset($_POST['deleteImage'])
+                            && !empty($_POST['deleteImage'])) && $existing_image) {
                 $key_values['image'] = '';
                 self::_deleteImage($existing_image);
             }
@@ -937,7 +958,9 @@ class TfishContentHandler
             }
 
             // If the updated object has no media attached, delete any old media files.
-            if ((!isset($key_values['media']) || empty($key_values['media'])) || (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])) && $existing_media) {
+            if ((!isset($key_values['media']) || empty($key_values['media']))
+                    || (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia']))
+                    && $existing_media) {
                 $key_values['media'] = '';
                 $key_values['format'] = '';
                 $key_values['file_size'] = '';
