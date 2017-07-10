@@ -41,7 +41,7 @@ class TfishPreferenceHandler
         if (is_a($tfish_preferences, 'TfishPreference')) {
             $this->preferences = $tfish_preferences;
         } else {
-            trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
     }
 
@@ -53,6 +53,8 @@ class TfishPreferenceHandler
      */
     public static function get($pref)
     {
+        $pref = TfishFilter::trimString($pref);
+        
         if (TfishFilter::isAlnumUnderscore($pref)) {
             return $this->tfish_preferences->$pref;
         } else {
@@ -73,7 +75,7 @@ class TfishPreferenceHandler
         if (is_a($obj, 'TfishPreference')) {
             $key_values = $obj->toArray();
         } else {
-            trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
 
         foreach ($key_values as $key => $value) {

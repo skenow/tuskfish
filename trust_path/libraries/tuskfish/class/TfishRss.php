@@ -44,7 +44,7 @@ class TfishRss extends TfishAncestralObject
     {
         
         if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
 
         // Whitelist of official channel properties and datatypes.
@@ -86,7 +86,7 @@ class TfishRss extends TfishAncestralObject
     public function makeFeedForCollection($obj)
     {
         if (!is_a($obj, 'TfishCollection')) {
-            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
         $this->__set('title', $obj->title);
@@ -104,11 +104,11 @@ class TfishRss extends TfishAncestralObject
      */
     public function __set($property, $value)
     {
-        $property = TfishFilter::trimString($property);
+        $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$property])) {
+        if (isset($this->__data[$clean_property])) {
             // Validate $value against expected data type and business rules.
-            $type = $this->__properties[$property];
+            $type = $this->__properties[$clean_property];
 
             switch ($type) {
                 case "array": // Items
@@ -125,7 +125,7 @@ class TfishRss extends TfishAncestralObject
                             unset($clean_val);
                         }
                         
-                        $this->__data[$property] = $clean_items;
+                        $this->__data[$clean_property] = $clean_items;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                     }
@@ -135,7 +135,7 @@ class TfishRss extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isEmail($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
                     }
@@ -143,21 +143,21 @@ class TfishRss extends TfishAncestralObject
 
                 case "int": // Tags, minimum value 1.
                     if (TfishFilter::isInt($value, 1)) {
-                        $this->__data[$property] = (int) $value;
+                        $this->__data[$clean_property] = (int) $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                     }
                     break;
 
                 case "string":
-                    $this->__data[$property] = TfishFilter::trimString($value);
+                    $this->__data[$clean_property] = TfishFilter::trimString($value);
                     break;
 
                 case "url":
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isUrl($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
                     }

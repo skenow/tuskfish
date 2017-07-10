@@ -66,8 +66,10 @@ class TfishCriteriaItem
      */
     public function __get($property)
     {
-        if (isset($this->__data[$property])) {
-            return $this->__data[$property];
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return $this->__data[$clean_property];
         } else {
             return null;
         }
@@ -105,8 +107,10 @@ class TfishCriteriaItem
      */
     public function __set($property, $value)
     {
-        if (isset($this->__data[$property])) {
-            switch ($property) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            switch ($clean_property) {
                 case "column": // Alphanumeric and underscore characters only
                     $value = TfishFilter::trimString($value);
                     
@@ -180,7 +184,9 @@ class TfishCriteriaItem
      */
     public function __isset($property)
     {
-        if (isset($this->__data[$property])) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
             return true;
         } else {
             return false;
@@ -198,8 +204,10 @@ class TfishCriteriaItem
      */
     public function __unset($property)
     {
-        if (isset($this->__data[$property])) {
-            unset($this->__data[$property]);
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            unset($this->__data[$clean_property]);
             return true;
         } else {
             return false;

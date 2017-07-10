@@ -127,6 +127,10 @@ class TfishContentHandler
      */
     public static function insert($obj)
     {
+        if (!is_a($obj, 'TfishContentObject')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $key_values = $obj->toArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
@@ -683,6 +687,10 @@ class TfishContentHandler
     public static function searchContent($tfish_preference, $search_terms, $andor, $limit,
             $offset = 0)
     {
+        if (!is_a($tfish_preference, 'TfishPreference')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $clean_search_terms = array();
         $clean_andor = in_array($andor, array('AND', 'OR', 'exact'))
                 ? TfishFilter::trimString($andor) : 'AND';
@@ -883,6 +891,10 @@ class TfishContentHandler
      */
     public static function update($obj)
     {
+        if (!is_a($obj, 'TfishContentObject')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.

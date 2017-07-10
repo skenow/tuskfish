@@ -53,8 +53,10 @@ class TfishUser
      */
     public function __get($property)
     {
-        if (isset($this->__data[$property])) {
-            return $this->__data[$property];
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return $this->__data[$clean_property];
         } else {
             return null;
         }
@@ -73,8 +75,10 @@ class TfishUser
      */
     public function __set($property, $value)
     {
-        if (isset($this->__data[$property])) {
-            $this->__data[$property] = $value;
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            $this->__data[$clean_property] = $value;
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
@@ -91,7 +95,9 @@ class TfishUser
      */
     public function __isset($property)
     {
-        if (isset($this->__data[$property])) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
             return true;
         } else {
             return false;
@@ -109,8 +115,10 @@ class TfishUser
      */
     public function __unset($property)
     {
-        if (isset($this->__data[$property])) {
-            unset($this->__data[$property]);
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            unset($this->__data[$clean_property]);
             return true;
         } else {
             return false;

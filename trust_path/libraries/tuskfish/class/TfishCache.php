@@ -49,6 +49,11 @@ class TfishCache
      */
     public static function checkCache($tfish_preference, $basename, $params = array())
     {
+        // Validate is a TfishPreference object.
+        if (!is_a($tfish_preference, 'TfishPreference')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
             return;
@@ -138,6 +143,11 @@ class TfishCache
      */
     public static function cachePage($tfish_preference, $basename, $params, $buffer)
     {
+        // Validate is a TfishPreference object.
+        if (!is_a($tfish_preference, 'TfishPreference')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
             return;

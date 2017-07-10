@@ -48,6 +48,12 @@ class TfishLogger
     public static function logErrors($errno = false, $error = false, $file = false, $line = false,
             $context = false)
     {
+        if ($errno) $errno = TfishFilter::trimString($errno);
+        if ($error) $error = TfishFilter::trimString($error);
+        if ($file) $file = Tfishfilter::trimString($file);
+        if ($line) $line = TfishFilter::trimString($line);
+        // $context not in use.
+        
         $message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";
         $message .= "[$file:$line]\r\n";
         error_log($message, 3, TFISH_ERROR_LOG_PATH);

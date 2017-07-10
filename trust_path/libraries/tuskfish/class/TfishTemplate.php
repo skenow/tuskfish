@@ -46,10 +46,10 @@ class TfishTemplate
      */
     public function __get($property)
     {
-        $property = TfishFilter::trimString($property);
+        $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$property])) {
-            return $this->__data[$property];
+        if (isset($this->__data[$clean_property])) {
+            return $this->__data[$clean_property];
         } else {
             return null;
         }
@@ -66,9 +66,9 @@ class TfishTemplate
      */
     public function __isset($property)
     {
-        $property = TfishFilter::trimString($property);
+        $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$property])) {
+        if (isset($this->__data[$clean_property])) {
             return true;
         } else {
             return false;
@@ -118,14 +118,14 @@ class TfishTemplate
      */
     public function __set($property, $value)
     {
-        $property = TfishFilter::trimString($property);
+        $clean_property = TfishFilter::trimString($property);
         
-        if ($property == 'template_set') {
+        if ($clean_property == 'template_set') {
             $this->setTemplate($value);
             return;
         }
         
-        $this->__data[$property] = $value;
+        $this->__data[$clean_property] = $value;
     }
 
     /**
@@ -161,10 +161,10 @@ class TfishTemplate
      */
     public function __unset($property)
     {
-        $property = TfishFilter::trimString($property);
+        $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$property])) {
-            unset($this->__data[$property]);
+        if (isset($this->__data[$clean_property])) {
+            unset($this->__data[$clean_property]);
             return true;
         } else {
             return false;

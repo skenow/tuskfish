@@ -75,8 +75,10 @@ class TfishCriteria
      */
     public function __get($property)
     {
-        if (isset($this->__data[$property])) {
-            return $this->__data[$property];
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return $this->__data[$clean_property];
         } else {
             return null;
         }
@@ -93,7 +95,9 @@ class TfishCriteria
      */
     public function __isset($property)
     {
-        if (isset($this->__data[$property])) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
             return true;
         } else {
             return false;
@@ -133,8 +137,10 @@ class TfishCriteria
      */
     public function __set($property, $value)
     {
-        if (isset($this->__data[$property])) {
-            switch ($property) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            switch ($clean_property) {
                 case "item": // Array of TfishCriteriaItem objects
                     if (is_a($value, 'TfishCriteriaItem')) {
                         $this->__data['item'][] = $value;
@@ -146,7 +152,7 @@ class TfishCriteria
                 case "limit": // int
                 case "offset": // int
                     if (TfishFilter::isInt($value, 0)) {
-                        $this->__data[$property] = (int) $value;
+                        $this->__data[$clean_property] = (int) $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                     }
@@ -165,7 +171,7 @@ class TfishCriteria
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isAlnumUnderscore($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     }
@@ -321,8 +327,10 @@ class TfishCriteria
      */
     public function __unset($property)
     {
-        if (isset($this->__data[$property])) {
-            unset($this->__data[$property]);
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            unset($this->__data[$clean_property]);
             return true;
         } else {
             return false;

@@ -75,7 +75,7 @@ class TfishSession
     {
         // Validate is a TfishPreference object.
         if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
         // Check if session carries a destroyed flag and kill it if the grace timer has expired.
@@ -399,7 +399,7 @@ class TfishSession
     public static function start($tfish_preference)
     {
         if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
         // Force session to use cookies to prevent the session ID being passed in the URL.

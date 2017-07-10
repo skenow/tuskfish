@@ -81,6 +81,7 @@ class TfishPreference extends TfishAncestralObject
         }
 
         $preferences = self::readPreferences();
+        
         foreach ($preferences as $key => $value) {
             if (isset($this->__data[$key])) {
                 if ($this->__properties[$key] == 'int') {
@@ -104,10 +105,12 @@ class TfishPreference extends TfishAncestralObject
      */
     public function escape($property)
     {
-        if (isset($this->__data[$property])) {
-            switch ($property) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            switch ($clean_property) {
                 default:
-                    return htmlspecialchars($this->__data[$property], ENT_QUOTES, 'UTF-8');
+                    return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8');
                     break;
             }
         } else {
@@ -143,15 +146,17 @@ class TfishPreference extends TfishAncestralObject
      */
     public function __set($property, $value)
     {
-        if (isset($this->__data[$property])) {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
 
             // Validate $value against expected data type and business rules.
-            $type = $this->__properties[$property];
+            $type = $this->__properties[$clean_property];
             switch ($type) {
                 case "alpha":
                     $value = TfishFilter::trimString($value);
                     
-                    if ($property == "language") {
+                    if ($clean_property == "language") {
                         $language_whitelist = TfishContentHandler::getLanguages();
                         
                         if (!array_key_exists($value, $language_whitelist)) {
@@ -160,7 +165,7 @@ class TfishPreference extends TfishAncestralObject
                     }
                     
                     if (TfishFilter::isAlpha($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
                     }
@@ -170,7 +175,7 @@ class TfishPreference extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isAlnum($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
                     }
@@ -180,7 +185,7 @@ class TfishPreference extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isAlnumUnderscore($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     }
@@ -188,7 +193,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "bool":
                     if (TfishFilter::isBool($value)) {
-                        $this->__data[$property] = (bool) $value;
+                        $this->__data[$clean_property] = (bool) $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_BOOL, E_USER_ERROR);
                     }
@@ -198,7 +203,7 @@ class TfishPreference extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isEmail($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
                     }
@@ -208,7 +213,7 @@ class TfishPreference extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     
                     if (TfishFilter::isDigit($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_DIGIT, E_USER_ERROR);
                     }
@@ -216,7 +221,7 @@ class TfishPreference extends TfishAncestralObject
 
                 case "float":
                     if (TfishFilter::isFloat($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_FLOAT, E_USER_ERROR);
                     }
@@ -224,17 +229,17 @@ class TfishPreference extends TfishAncestralObject
 
                 case "html":
                     $value = TfishFilter::trimString($value);
-                    $this->__data[$property] = (string) TfishFilter::filterHtml($value);
+                    $this->__data[$clean_property] = (string) TfishFilter::filterHtml($value);
                     break;
 
                 case "int":
                     $value = (int) $value;
-                    switch ($property) {
+                    switch ($clean_property) {
                         // 0 or 1.
                         case "close_site":
                         case "enable_cache":
                             if (TfishFilter::isInt($value, 0, 1)) {
-                                $this->__data[$property] = (int) $value;
+                                $this->__data[$clean_property] = (int) $value;
                             } else {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
@@ -244,7 +249,7 @@ class TfishPreference extends TfishAncestralObject
                         case "search_pagination":
                         case "session_life":
                             if (TfishFilter::isInt($value, 0)) {
-                                $this->__data[$property] = (int) $value;
+                                $this->__data[$clean_property] = (int) $value;
                             } else {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
@@ -256,7 +261,7 @@ class TfishPreference extends TfishAncestralObject
                         case "user_pagination":
                         case "cache_life":
                             if (TfishFilter::isInt($value, 1)) {
-                                $this->__data[$property] = (int) $value;
+                                $this->__data[$clean_property] = (int) $value;
                             } else {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
@@ -266,7 +271,7 @@ class TfishPreference extends TfishAncestralObject
                         case "min_search_length":
                         case "pagination_elements":
                             if (TfishFilter::isInt($value, 3)) {
-                                $this->__data[$property] = (int) $value;
+                                $this->__data[$clean_property] = (int) $value;
                             } else {
                                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                             }
@@ -278,21 +283,21 @@ class TfishPreference extends TfishAncestralObject
                     $value = TfishFilter::trimString($value);
                     
                     if ($value == "" || TfishFilter::isIp($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_IP, E_USER_ERROR);
                     }
                     break;
 
                 case "string":
-                    $this->__data[$property] = TfishFilter::trimString($value);
+                    $this->__data[$clean_property] = TfishFilter::trimString($value);
                     break;
 
                 case "url":
                     $value = TfishFilter::trimString($value);
                     
                     if ($value == "" || TfishFilter::isUrl($value)) {
-                        $this->__data[$property] = $value;
+                        $this->__data[$clean_property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
                     }
