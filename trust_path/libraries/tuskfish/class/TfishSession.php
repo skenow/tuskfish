@@ -73,6 +73,11 @@ class TfishSession
      */
     public static function isExpired($tfish_preference)
     {
+        // Validate is a TfishPreference object.
+        if (!is_a($tfish_preference, 'TfishPreference')) {
+            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+        }
+        
         // Check if session carries a destroyed flag and kill it if the grace timer has expired.
         if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
             return true;
@@ -393,6 +398,10 @@ class TfishSession
      */
     public static function start($tfish_preference)
     {
+        if (!is_a($tfish_preference, 'TfishPreference')) {
+            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+        }
+        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', 1);
         ini_set('session.use_only_cookies', 1);

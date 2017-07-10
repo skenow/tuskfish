@@ -42,6 +42,10 @@ class TfishRss extends TfishAncestralObject
     /** Initialise default property values and unset unneeded ones. */
     public function __construct($tfish_preference)
     {
+        
+        if (!is_a($tfish_preference, 'TfishPreference')) {
+            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+        }
 
         // Whitelist of official channel properties and datatypes.
         $this->__properties['title'] = 'string';
@@ -81,6 +85,10 @@ class TfishRss extends TfishAncestralObject
      */
     public function makeFeedForCollection($obj)
     {
+        if (!is_a($obj, 'TfishCollection')) {
+            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+        }
+        
         $this->__set('title', $obj->title);
         $this->__set('link', TFISH_RSS_URL . '?id=' . (int) $obj->id);
         $this->__set('description', $obj->teaser);
@@ -96,8 +104,9 @@ class TfishRss extends TfishAncestralObject
      */
     public function __set($property, $value)
     {
+        $property = TfishFilter::trimString($property);
+        
         if (isset($this->__data[$property])) {
-
             // Validate $value against expected data type and business rules.
             $type = $this->__properties[$property];
 

@@ -70,7 +70,11 @@ class TfishPreferenceHandler
     public static function updatePreferences($obj)
     {
         // Convert object to array of key => values.
-        $key_values = $obj->toArray();
+        if (is_a($obj, 'TfishPreference')) {
+            $key_values = $obj->toArray();
+        } else {
+            trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+        }
 
         foreach ($key_values as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";

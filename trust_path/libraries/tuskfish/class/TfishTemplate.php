@@ -46,6 +46,8 @@ class TfishTemplate
      */
     public function __get($property)
     {
+        $property = TfishFilter::trimString($property);
+        
         if (isset($this->__data[$property])) {
             return $this->__data[$property];
         } else {
@@ -64,6 +66,8 @@ class TfishTemplate
      */
     public function __isset($property)
     {
+        $property = TfishFilter::trimString($property);
+        
         if (isset($this->__data[$property])) {
             return true;
         } else {
@@ -83,7 +87,9 @@ class TfishTemplate
      * @return string Rendered HTML template.
      */
     public function render($template)
-    {        
+    {
+        $template = TfishFilter::trimString($template);
+        
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($template)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
@@ -112,6 +118,8 @@ class TfishTemplate
      */
     public function __set($property, $value)
     {
+        $property = TfishFilter::trimString($property);
+        
         if ($property == 'template_set') {
             $this->setTemplate($value);
             return;
@@ -153,6 +161,8 @@ class TfishTemplate
      */
     public function __unset($property)
     {
+        $property = TfishFilter::trimString($property);
+        
         if (isset($this->__data[$property])) {
             unset($this->__data[$property]);
             return true;
