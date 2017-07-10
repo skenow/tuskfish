@@ -71,7 +71,6 @@ class TfishContentObject extends TfishAncestralObject
     /** Initialise default content object properties and values. */
     function __construct()
     {
-
         /**
          * Whitelist of official properties and datatypes.
          */
@@ -99,7 +98,7 @@ class TfishContentObject extends TfishAncestralObject
         $this->__properties['meta_description'] = 'string';
         $this->__properties['seo'] = 'string';
         $this->__properties['handler'] = 'alpha';
-        $this->__properties['template'] = 'alnum';
+        $this->__properties['template'] = 'alnumunder';
         $this->__properties['module'] = 'string';
 
         /**
@@ -135,6 +134,8 @@ class TfishContentObject extends TfishAncestralObject
      */
     public function escape($property)
     {
+        $property = TfishFilter::trimString($property);
+        
         if (isset($this->__data[$property])) {
             switch ($property) {
                 case "date": // Stored in format yyyy-mm-dd
@@ -449,6 +450,7 @@ class TfishContentObject extends TfishAncestralObject
         $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage'])) ? true : false;
         $delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia'])) ? true : false;
 
+        // Note that handler, template and module are not accessible through this method.
         $property_whitelist = $this->getPropertyWhitelist();
         
         foreach ($property_whitelist as $key => $type) {
