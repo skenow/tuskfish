@@ -140,7 +140,7 @@ class TfishSession
             // Issue incomplete form warning and redirect to the login page.
             self::logout(TFISH_ADMIN_URL . "login.php");
         } else {
-            // Sanitise the admin email (which functions as the username in Tuskfish CMS)
+            // Validate the admin email (which functions as the username in Tuskfish CMS)
             $clean_email = TfishFilter::trimString($email);
             
             if (TfishFilter::isEmail($clean_email)) {

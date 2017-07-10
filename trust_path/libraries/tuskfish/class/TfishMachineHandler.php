@@ -104,7 +104,11 @@ class TfishMachineHandler
      */
     protected static function getCount($criteria)
     {
-        
+        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        } else {
+            $criteria = new TfishCriteria();
+        }
     }
     
     /**
@@ -123,7 +127,11 @@ class TfishMachineHandler
      */
     protected static function getObjects($criteria)
     {
-        
+        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        } else {
+            $criteria = new TfishCriteria();
+        }
     }
     
     /**

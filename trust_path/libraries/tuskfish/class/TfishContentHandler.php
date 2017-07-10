@@ -266,6 +266,10 @@ class TfishContentHandler
      */
     public static function getCount($criteria = false)
     {
+        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        }        
+        
         if ($criteria && !empty($criteria->limit)) {
             $limit = $criteria->limit;
             $criteria->limit = 0;
@@ -310,8 +314,10 @@ class TfishContentHandler
         $columns = array('id', 'title');
 
         // Set default sorting order by submission time descending.
-        if (!$criteria) {
-            $criteria = new TfishCriteria;
+        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        } else {
+            $criteria = new TfishCriteria();
         }
         
         if (!$criteria->order) {
@@ -368,8 +374,10 @@ class TfishContentHandler
         $objects = array();
 
         // Set default sorting order by submission time descending.
-        if (!$criteria) {
-            $criteria = new TfishCriteria;
+        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        } else {
+            $criteria = new TfishCriteria();
         }
         
         if (!$criteria->order) {
