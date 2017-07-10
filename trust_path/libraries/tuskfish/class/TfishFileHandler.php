@@ -443,14 +443,19 @@ class TfishFileHandler
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($filename)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
-            return false;
+            exit;
         }
         
         $filename = TfishFilter::trimString($filename);
         $clean_filename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
-
-        $fieldname = TfishFilter::trimString($fieldname);
-        $clean_fieldname = TfishFilter::isAlnum($fieldname) ? $fieldname : false;
+        
+        // Check that target directory is whitelisted (locked to uploads/image or uploads/media).
+        if ($fieldname === 'image' || $fieldname === 'media') {
+            $clean_fieldname = TfishFilter::trimString($fieldname);
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE);
+            exit;
+        }
 
         $mimetype_list = self::getPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
