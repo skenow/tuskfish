@@ -139,75 +139,77 @@ class TfishCriteria
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            switch ($clean_property) {
-                case "item": // Array of TfishCriteriaItem objects
-                    if (is_a($value, 'TfishCriteriaItem')) {
-                        $this->__data['item'][] = $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);
-                    }
-                    break;
-
-                case "limit": // int
-                case "offset": // int
-                    if (TfishFilter::isInt($value, 0)) {
-                        $this->__data[$clean_property] = (int) $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                    }
-                    break;
-
-                case "condition":
-                    if ($value === "AND" || $value === "OR") {
-                        $this->__data['condition'][] = TfishFilter::trimString($value);
-                    } else {
-                        trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                    }
-                    break;
-
-                case "order": // string; any property of target object
-                case "groupby": // string; any property of target object
-                    $value = TfishFilter::trimString($value);
-                    
-                    if (TfishFilter::isAlnumUnderscore($value)) {
-                        $this->__data[$clean_property] = $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-                    }
-                    break;
-
-                case "ordertype": // ASC or DESC
-                    if ($value == "ASC") {
-                        $this->__data['ordertype'] = "ASC";
-                    } else {
-                        $this->__data['ordertype'] = "DESC";
-                    }
-                    break;
-
-                case "tag":
-                    if (TfishFilter::isArray($value)) {
-                        $clean_tags = array();
-                        
-                        foreach ($value as $val) {
-                            if (TfishFilter::isInt($val, 1)) {
-                                $clean_tags[] = (int) $val;
-                            } else {
-                                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                            }
-                            unset($val);
-                        }
-                        
-                        $this->__data['tag'] = $clean_tags;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-                    }
-                    break;
-            }
-            return true;
-        } else {
+        // Check that property is whitelisted.
+        if (!isset($this->__data[$clean_property])) {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
+
+        switch ($clean_property) {
+            case "item": // Array of TfishCriteriaItem objects
+                if (is_a($value, 'TfishCriteriaItem')) {
+                    $this->__data['item'][] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);
+                }
+                break;
+
+            case "limit": // int
+            case "offset": // int
+                if (TfishFilter::isInt($value, 0)) {
+                    $this->__data[$clean_property] = (int) $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+                break;
+
+            case "condition":
+                if ($value === "AND" || $value === "OR") {
+                    $this->__data['condition'][] = TfishFilter::trimString($value);
+                } else {
+                    trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+                }
+                break;
+
+            case "order": // string; any property of target object
+            case "groupby": // string; any property of target object
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isAlnumUnderscore($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+                }
+                break;
+
+            case "ordertype": // ASC or DESC
+                if ($value == "ASC") {
+                    $this->__data['ordertype'] = "ASC";
+                } else {
+                    $this->__data['ordertype'] = "DESC";
+                }
+                break;
+
+            case "tag":
+                if (TfishFilter::isArray($value)) {
+                    $clean_tags = array();
+
+                    foreach ($value as $val) {
+                        if (TfishFilter::isInt($val, 1)) {
+                            $clean_tags[] = (int) $val;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+                        unset($val);
+                    }
+
+                    $this->__data['tag'] = $clean_tags;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+                }
+                break;
+        }
+
+        return true;
     }
 
     /**
