@@ -713,7 +713,7 @@ class TfishContentHandler
         }
         
         if (!empty($clean_search_terms)) {
-            $results = self::_searchContent($clean_search_terms, $clean_andor, $clean_limit,
+            $results = self::_searchContent($tfish_preference, $clean_search_terms, $clean_andor, $clean_limit,
                     $clean_offset);
         } else {
             $results = false;
