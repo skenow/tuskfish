@@ -136,89 +136,89 @@ class TfishContentObject extends TfishAncestralObject
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            switch ($clean_property) {
-                case "date": // Stored in format yyyy-mm-dd
-                    $date = new DateTime($this->__data[$clean_property]);
-                    
-                    return htmlspecialchars($date->format('j F Y'), ENT_QUOTES, 'UTF-8');
-                    break;
-
-                case "file_size": // Convert to human readable.
-                    $bytes = (int) $this->__data[$clean_property];
-                    $unit = $val = '';
-                    
-                    if ($bytes == 0 || $bytes < 1024) {
-                        $unit = ' bytes';
-                        $val = $bytes;
-                    } elseif ($bytes > 1023 && $bytes < 1048576) {
-                        $unit = ' KB';
-                        $val = ($bytes / 1024);
-                    } elseif ($bytes > 1048575 && $bytes < 1073741824) {
-                        $unit = ' MB';
-                        $val = ($bytes / 1048576);
-                    } else {
-                        $unit = ' GB';
-                        $val = ($bytes / 1073741824);
-                    }
-                    
-                    $val = round($val, 2);
-                    
-                    return $val . ' ' . $unit;
-                    break;
-
-                case "format": // Output the file extension as user-friendly "mimetype".
-                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                    $mimetype = array_search($this->__data[$clean_property], $mimetype_whitelist);
-                    
-                    if (!empty($mimetype)) {
-                        return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
-                    }
-                    break;
-
-                case "description":
-                case "teaser":
-                    // Do a simple string replace to allow TFISH_URL to be used as a constant,
-                    // making the site portable.
-                    $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
-                            $this->__data[$clean_property]);
-                    
-                    // Output filtering
-                    // Enabled (only do this if input filtering NOT done in __set()).
-                    // return (string)TfishFilter::filterHtml($tfish_url_enabled);
-                    // Disabled (only do this if enable input filtering of these fields in __set()).
-                    return $tfish_url_enabled; 
-                    break;
-
-                case "rights":
-                    $rights = TfishContentHandler::getRights();
-                    
-                    return $rights[$this->__data[$clean_property]];
-                    break;
-
-                case "submission_time":
-                    $date = date('j F Y', $this->__data[$clean_property]);
-                    
-                    return htmlspecialchars($date, ENT_QUOTES, 'UTF-8');
-                    break;
-
-                case "tags":
-                    $tags = array();
-                    
-                    foreach ($this->__data[$clean_property] as $value) {
-                        $tags[] = (int) $value;
-                        unset($value);
-                    }
-                    
-                    return $tags;
-                    break;
-
-                default:
-                    return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8');
-                    break;
-            }
-        } else {
+        if (!isset($this->__data[$clean_property])) {
             return null;
+        }
+
+        switch ($clean_property) {
+            case "date": // Stored in format yyyy-mm-dd
+                $date = new DateTime($this->__data[$clean_property]);
+
+                return htmlspecialchars($date->format('j F Y'), ENT_QUOTES, 'UTF-8');
+                break;
+
+            case "file_size": // Convert to human readable.
+                $bytes = (int) $this->__data[$clean_property];
+                $unit = $val = '';
+
+                if ($bytes == 0 || $bytes < 1024) {
+                    $unit = ' bytes';
+                    $val = $bytes;
+                } elseif ($bytes > 1023 && $bytes < 1048576) {
+                    $unit = ' KB';
+                    $val = ($bytes / 1024);
+                } elseif ($bytes > 1048575 && $bytes < 1073741824) {
+                    $unit = ' MB';
+                    $val = ($bytes / 1048576);
+                } else {
+                    $unit = ' GB';
+                    $val = ($bytes / 1073741824);
+                }
+
+                $val = round($val, 2);
+
+                return $val . ' ' . $unit;
+                break;
+
+            case "format": // Output the file extension as user-friendly "mimetype".
+                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                $mimetype = array_search($this->__data[$clean_property], $mimetype_whitelist);
+
+                if (!empty($mimetype)) {
+                    return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
+                }
+                break;
+
+            case "description":
+            case "teaser":
+                // Do a simple string replace to allow TFISH_URL to be used as a constant,
+                // making the site portable.
+                $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
+                        $this->__data[$clean_property]);
+
+                // Output filtering
+                // Enabled (only do this if input filtering NOT done in __set()).
+                // return (string)TfishFilter::filterHtml($tfish_url_enabled);
+                // Disabled (only do this if enable input filtering of these fields in __set()).
+                return $tfish_url_enabled; 
+                break;
+
+            case "rights":
+                $rights = TfishContentHandler::getRights();
+
+                return $rights[$this->__data[$clean_property]];
+                break;
+
+            case "submission_time":
+                $date = date('j F Y', $this->__data[$clean_property]);
+
+                return htmlspecialchars($date, ENT_QUOTES, 'UTF-8');
+                break;
+
+            case "tags":
+                $tags = array();
+
+                foreach ($this->__data[$clean_property] as $value) {
+                    $tags[] = (int) $value;
+                    unset($value);
+                }
+
+                return $tags;
+                break;
+
+            default:
+                return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8');
+                break;
         }
     }
 
