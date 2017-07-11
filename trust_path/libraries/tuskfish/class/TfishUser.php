@@ -78,7 +78,50 @@ class TfishUser
         $clean_property = TfishFilter::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
-            $this->__data[$clean_property] = $value;
+            switch ($clean_property) {
+                case "id":
+                    if (TfishFilter::isInt($value, 1)) {
+                        $clean_value = (int) $value;
+                        $this->__data[$clean_property] = $clean_value;
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                    }
+                    break;
+                
+                case "admin_email":
+                    $clean_value = TfishFilter::trimString($value);
+                    if (TfishFilter::isEmail($clean_value)) {
+                        $this->__data[$clean_property] = $clean_value;
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+                    }
+                    break;
+                
+                case "password_hash":
+                    $clean_value = TfishFilter::trimString($value);
+                    $this->__data[$clean_property] = $clean_value;
+                    break;
+                
+                case "user_salt":
+                    $clean_value = TfishFilter::trimString($value);
+                    $this->__data[$clean_property] = $clean_value;
+                    break;
+                
+                case "user_group":
+                    $clean_value = (int) $value;
+                    if (TfishFilter::isInt($clean_value, 1)) {
+                        $this->__data[$clean_property] = $clean_value;
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                    }
+                    break;
+                
+                case "yubikey_id":
+                case "yubikey_id2":
+                    $clean_value = TfishFilter::trimString($value);
+                    $this->__data[$clean_property] = $clean_value;
+                    break;
+            }
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
