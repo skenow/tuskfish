@@ -271,11 +271,29 @@ class TfishMetadata
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            $this->__data[$clean_property] = TfishFilter::trimString($value);
-        } else {
+        // Check that property is whitelisted.
+        if (!isset($this->__data[$clean_property])) {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
+        
+        // Validate properties against expectations and business rules.
+        switch ($clean_property) {
+            case "title":
+            case "description":
+            case "author":
+            case "copyright":
+            case "generator":
+            case "seo":
+            case "robots":
+                $this->__data[$clean_property] = TfishFilter::trimString($value);
+                break;
+            
+            case "pagination_elements":
+                if (TfishFilter::isInt($value, 3)) {
+                    $this->__data[$clean_property] = (int) $value;
+                }
+                break;
+        }        
     }
 
     /**
