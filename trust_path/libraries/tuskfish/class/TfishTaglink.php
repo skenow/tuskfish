@@ -89,20 +89,16 @@ class TfishTaglink
         switch ($clean_property) {
             // Minimum value 0.
             case "id":
-                $clean_value = (int) $value;
-
-                if (TfishFilter::isInt($clean_value, 0)) {
-                    $this->__data[$clean_property] = $clean_value;
+                if (TfishFilter::isInt($value, 0)) {
+                    $this->__data[$clean_property] = (int) $value;
                 }
                 break;
 
             // Minimum value 1.
             case "tag_id":
             case "content_id":
-                $clean_value = (int) $value;
-
-                if (TfishFilter::isInt($clean_value, 1)) {
-                    $this->__data[$clean_property] = $clean_value;
+                if (TfishFilter::isInt($value, 1)) {
+                    $this->__data[$clean_property] = (int) $value;
                 }                    
                 break;
 
