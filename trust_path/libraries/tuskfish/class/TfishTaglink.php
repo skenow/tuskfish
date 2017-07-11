@@ -82,11 +82,43 @@ class TfishTaglink
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            $this->__data[$clean_property] = $value;
-        } else {
+        if (!isset($this->__data[$clean_property])) {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
+            
+        switch ($clean_property) {
+            // Minimum value 0.
+            case "id":
+                $clean_value = (int) $value;
+
+                if (TfishFilter::isInt($clean_value, 0)) {
+                    $this->__data[$clean_property] = $clean_value;
+                }
+                break;
+
+            // Minimum value 1.
+            case "tag_id":
+            case "content_id":
+                $clean_value = (int) $value;
+
+                if (TfishFilter::isInt($clean_value, 1)) {
+                    $this->__data[$clean_property] = $clean_value;
+                }                    
+                break;
+
+            case "content_type":
+                $clean_value = TfishFilter::trimString($value);
+                
+                if (TfishContentHandler::isSanctionedType($clean_value)) {
+                    $this->__data[$clean_property] = $clean_value;
+                } else {
+                    trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+                }
+                
+                break;
+
+            // Handler is not permitted to be changed.
+        }            
     }
 
     /**
