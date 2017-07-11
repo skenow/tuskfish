@@ -90,6 +90,7 @@ class TfishUser
                 
                 case "admin_email":
                     $clean_value = TfishFilter::trimString($value);
+                    
                     if (TfishFilter::isEmail($clean_value)) {
                         $this->__data[$clean_property] = $clean_value;
                     } else {
@@ -107,10 +108,9 @@ class TfishUser
                     $this->__data[$clean_property] = $clean_value;
                     break;
                 
-                case "user_group":
-                    $clean_value = (int) $value;
-                    if (TfishFilter::isInt($clean_value, 1)) {
-                        $this->__data[$clean_property] = $clean_value;
+                case "user_group":                    
+                    if (TfishFilter::isInt($value, 1)) {
+                        $this->__data[$clean_property] = (int) $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                     }
