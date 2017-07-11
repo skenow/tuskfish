@@ -106,65 +106,66 @@ class TfishRss extends TfishAncestralObject
     {
         $clean_property = TfishFilter::trimString($property);
         
+        // Check that property is whitelisted.
         if (isset($this->__data[$clean_property])) {
-            // Validate $value against expected data type and business rules.
             $type = $this->__properties[$clean_property];
-
-            switch ($type) {
-                case "array": // Items
-                    if (TfishFilter::isArray($value)) {
-                        $clean_items = array();
-                        
-                        foreach ($value as $val) {
-                            if (is_a('TfishContentObject')) {
-                                $clean_items[] = $val;
-                            } else {
-                                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                            }
-                            
-                            unset($clean_val);
-                        }
-                        
-                        $this->__data[$clean_property] = $clean_items;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-                    }
-                    break;
-
-                case "email":
-                    $value = TfishFilter::trimString($value);
-                    
-                    if (TfishFilter::isEmail($value)) {
-                        $this->__data[$clean_property] = $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-                    }
-                    break;
-
-                case "int": // Tags, minimum value 1.
-                    if (TfishFilter::isInt($value, 1)) {
-                        $this->__data[$clean_property] = (int) $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                    }
-                    break;
-
-                case "string":
-                    $this->__data[$clean_property] = TfishFilter::trimString($value);
-                    break;
-
-                case "url":
-                    $value = TfishFilter::trimString($value);
-                    
-                    if (TfishFilter::isUrl($value)) {
-                        $this->__data[$clean_property] = $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
-                    }
-                    break;
-            }
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+        }
+            
+        // Validate $value against expected data type and business rules.
+        switch ($type) {
+            case "array": // Items
+                if (TfishFilter::isArray($value)) {
+                    $clean_items = array();
+
+                    foreach ($value as $val) {
+                        if (is_a('TfishContentObject')) {
+                            $clean_items[] = $val;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+
+                        unset($clean_val);
+                    }
+
+                    $this->__data[$clean_property] = $clean_items;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+                }
+                break;
+
+            case "email":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isEmail($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+                }
+                break;
+
+            case "int": // Tags, minimum value 1.
+                if (TfishFilter::isInt($value, 1)) {
+                    $this->__data[$clean_property] = (int) $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+                break;
+
+            case "string":
+                $this->__data[$clean_property] = TfishFilter::trimString($value);
+                break;
+
+            case "url":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isUrl($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+                }
+                break;
         }
     }
 
