@@ -186,7 +186,7 @@ class TfishYubikeyAuthenticator
         unset($this->_curlResult);
         unset($this->_curlError);
 
-        $otp = strtolower($otp);
+        $otp = mb_strtolower($otp, "UTF-8");
 
         if (!$this->_id) {
             $this->_response = "ID NOT SET";
@@ -213,13 +213,13 @@ class TfishYubikeyAuthenticator
         }
 
         foreach ($this->_curlResult as $param) {
-            if (substr($param, 0, 2) == "h=")
+            if (mb_substr($param, 0, 2, "UTF-8") == "h=")
                 $signature = substr(trim($param), 2);
             
-            if (substr($param, 0, 2) == "t=")
+            if (mb_substr($param, 0, 2, "UTF-8") == "t=")
                 $timestamp = substr(trim($param), 2);
             
-            if (substr($param, 0, 7) == "status=")
+            if (mb_substr($param, 0, 7, "UTF-8") == "status=")
                 $status = substr(trim($param), 7);
         }
 
@@ -309,7 +309,7 @@ class TfishYubikeyAuthenticator
     {
         $otp = TfishFilter::trimString($otp);
         
-        if (strlen($otp) == 44) {
+        if (mb_strlen($otp, "UTF-8") == 44) {
             return true;
         } else {
             return false;
@@ -348,7 +348,7 @@ class TfishYubikeyAuthenticator
         
         // Turn times into 'seconds since Unix Epoch' for easy comparison
         $now = date("U");
-        $timestampSeconds = (date_format(date_create(substr($timestamp, 0, -4)), "U"));
+        $timestampSeconds = (date_format(date_create(mb_substr($timestamp, 0, -4, "UTF-8")), "U"));
 
         // If date() functions above fail for any reason, so do we
         if (!$timestamp || !$now)
@@ -372,7 +372,7 @@ class TfishYubikeyAuthenticator
     protected function resultSignatureIsGood($signedMessage, $signature)
     {
         $signedMessage = TfishFilter::trimString($signedMessage);
-        $signature = TfishFilter::trimSTring($signature);
+        $signature = TfishFilter::trimString($signature);
         
         if (!$this->_signatureKey)
             return true;
