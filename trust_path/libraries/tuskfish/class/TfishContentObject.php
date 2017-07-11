@@ -616,6 +616,8 @@ class TfishContentObject extends TfishAncestralObject
                 break;
 
             case "float":
+                $value = (float) $value;
+                
                 if (TfishFilter::isFloat($value)) {
                     $this->__data[$clean_property] = $value;
                 } else {
@@ -639,7 +641,7 @@ class TfishContentObject extends TfishAncestralObject
                     // 0 or 1.
                     case "online":
                         if (TfishFilter::isInt($value, 0, 1)) {
-                            $this->__data[$clean_property] = (int) $value;
+                            $this->__data[$clean_property] = $value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
@@ -650,7 +652,7 @@ class TfishContentObject extends TfishAncestralObject
                     case "file_size":
                     case "id":
                         if (TfishFilter::isInt($value, 0)) {
-                            $this->__data[$clean_property] = (int) $value;
+                            $this->__data[$clean_property] = $value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
@@ -665,7 +667,7 @@ class TfishContentObject extends TfishAncestralObject
                         if ($value == $this->__data['id'] && $value > 0) {
                             trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
                         } else {
-                            $this->__data[$clean_property] = (int) $value;
+                            $this->__data[$clean_property] = $value;
                         }
                         break;
 
@@ -673,7 +675,7 @@ class TfishContentObject extends TfishAncestralObject
                     case "rights":
                     case "submission_time":
                         if (TfishFilter::isInt($value, 1)) {
-                            $this->__data[$clean_property] = (int) $value;
+                            $this->__data[$clean_property] = $value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }

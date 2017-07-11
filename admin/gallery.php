@@ -21,8 +21,8 @@ $tfish_template->setTemplate('thumbnail_gallery');
 
 // CONVENTIONS:
 // 1. Specify the class name of the handler for the object type this page will handle,
-// eg. 'TfishArticleHandler'.
-// 2. Specify the name of the template for the index page, eg. 'articles'.
+// eg. 'TfishImageHandler'.
+// 2. Specify the name of the template for the index page, eg. 'gallery'.
 $content_handler = 'TfishContentHandler';
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
@@ -48,7 +48,7 @@ if ($clean_tag)
     $criteria->tag = array($clean_tag);
 
 if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
-    $criteria->add(new TfishCriteriaItem('online', $clean_online));
+    $criteria->add(new TfishCriteriaItem('online', 1));
 }
 
 if ($clean_type) {

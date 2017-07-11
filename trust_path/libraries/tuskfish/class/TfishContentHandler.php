@@ -270,9 +270,13 @@ class TfishContentHandler
      */
     public static function getCount($criteria = false)
     {
-        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
+        if (!$criteria) {
+            $criteria = new TfishCriteria();
+        }
+        
+        if (!is_a($criteria, 'TfishCriteria')) {
             trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-        }        
+        }      
         
         if ($criteria && !empty($criteria->limit)) {
             $limit = $criteria->limit;
@@ -317,13 +321,15 @@ class TfishContentHandler
         $content_list = array();
         $columns = array('id', 'title');
 
-        // Set default sorting order by submission time descending.
-        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-        } else {
+        if (!$criteria) {
             $criteria = new TfishCriteria();
         }
         
+        if (!is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        }
+        
+        // Set default sorting order by submission time descending.
         if (!$criteria->order) {
             $criteria->order = 'date';
         }
@@ -376,14 +382,16 @@ class TfishContentHandler
     public static function getObjects($criteria = false)
     {
         $objects = array();
-
-        // Set default sorting order by submission time descending.
-        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-        } else {
+        
+        if (!$criteria) {
             $criteria = new TfishCriteria();
         }
         
+        if (!is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        }
+
+        // Set default sorting order by submission time descending.        
         if (!$criteria->order) {
             $criteria->order = 'date';
         }

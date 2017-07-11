@@ -35,10 +35,12 @@ class TfishDownloadHandler extends TfishContentHandler
      */
     public static function getCount($criteria = false)
     {
-        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-        } else {
+        if (!$criteria) {
             $criteria = new TfishCriteria();
+        }
+        
+        if (!is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -71,10 +73,12 @@ class TfishDownloadHandler extends TfishContentHandler
      */
     public static function getObjects($criteria = false)
     {
-        if ($criteria && !is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-        } else {
+        if (!$criteria) {
             $criteria = new TfishCriteria();
+        }
+        
+        if (!is_a($criteria, 'TfishCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.

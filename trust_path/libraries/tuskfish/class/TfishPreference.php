@@ -196,8 +196,10 @@ class TfishPreference extends TfishAncestralObject
                 break;
 
             case "bool":
-                if (TfishFilter::isBool($value)) {
-                    $this->__data[$clean_property] = (bool) $value;
+                $clean_value = (bool) $value;
+                
+                if (TfishFilter::isBool($clean_value)) {
+                    $this->__data[$clean_property] = (bool) $clean_value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_BOOL, E_USER_ERROR);
                 }
@@ -224,8 +226,10 @@ class TfishPreference extends TfishAncestralObject
                 break;
 
             case "float":
-                if (TfishFilter::isFloat($value)) {
-                    $this->__data[$clean_property] = (float) $value;
+                $clean_value = (float) $value;
+                
+                if (TfishFilter::isFloat($clean_value)) {
+                    $this->__data[$clean_property] = $clean_value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_FLOAT, E_USER_ERROR);
                 }
@@ -237,12 +241,14 @@ class TfishPreference extends TfishAncestralObject
                 break;
 
             case "int":
+                $clean_value = (int) $value;
+                
                 switch ($clean_property) {
                     // 0 or 1.
                     case "close_site":
                     case "enable_cache":
-                        if (TfishFilter::isInt($value, 0, 1)) {
-                            $this->__data[$clean_property] = (int) $value;
+                        if (TfishFilter::isInt($clean_value, 0, 1)) {
+                            $this->__data[$clean_property] = $clean_value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
@@ -251,8 +257,8 @@ class TfishPreference extends TfishAncestralObject
                     // Minimum value 0.
                     case "search_pagination":
                     case "session_life":
-                        if (TfishFilter::isInt($value, 0)) {
-                            $this->__data[$clean_property] = (int) $value;
+                        if (TfishFilter::isInt($clean_value, 0)) {
+                            $this->__data[$clean_property] = $clean_value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
@@ -263,8 +269,8 @@ class TfishPreference extends TfishAncestralObject
                     case "gallery_pagination":
                     case "user_pagination":
                     case "cache_life":
-                        if (TfishFilter::isInt($value, 1)) {
-                            $this->__data[$clean_property] = (int) $value;
+                        if (TfishFilter::isInt($clean_value, 1)) {
+                            $this->__data[$clean_property] = $clean_value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
@@ -273,8 +279,8 @@ class TfishPreference extends TfishAncestralObject
                     // Minimum value 3.
                     case "min_search_length":
                     case "pagination_elements":
-                        if (TfishFilter::isInt($value, 3)) {
-                            $this->__data[$clean_property] = (int) $value;
+                        if (TfishFilter::isInt($clean_value, 3)) {
+                            $this->__data[$clean_property] = $clean_value;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
