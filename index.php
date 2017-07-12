@@ -19,7 +19,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishContentHandler';
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('portfolio');
+$tfish_template->setTemplate('stylish_portfolio');
 $target_file_name = 'index';
 $index_template = 'single_stream';
 
