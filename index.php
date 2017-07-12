@@ -34,6 +34,7 @@ $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' =
 
 $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_RSS_URL;
 
+// Retrieve a single object if an ID is set.
 if ($clean_id) {
 
     // Retrieve target object.
@@ -72,7 +73,7 @@ if ($clean_id) {
             }
         }
         
-        if ($content->format) $contentInfo[] = '.' . $content->escape('format');
+        if ($content->format)$contentInfo[] = '.' . $content->escape('format');
         
         if ($content->file_size) $contentInfo[] = $content->escape('file_size');
         
@@ -143,6 +144,7 @@ if ($clean_id) {
     } else {
         $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
     }
+// Otherwise retrieve an index page list of teasers.
 } else {
 
     // Check if cached page is available.
@@ -151,7 +153,7 @@ if ($clean_id) {
     // Page title, customise it as you see fit.
     $tfish_template->page_title = TFISH_LATEST_POSTS;
 
-    // View index page of multiple objects (teasers). Static pages and tags are excluded.
+    // Exclude static pages, tags and blocks from the index page.
     $criteria = new TfishCriteria();
     
     if ($clean_start) $criteria->offset = $clean_start;
