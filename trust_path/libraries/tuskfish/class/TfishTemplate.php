@@ -103,7 +103,7 @@ class TfishTemplate
                     . '.html';
             return ob_get_clean();
         } else {
-            echo TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template . '.html';
+            echo $this->__data['template_set'] . '/' . $template . '.html'; // Helps debug.
             trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
         }
     }
