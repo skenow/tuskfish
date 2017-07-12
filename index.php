@@ -19,7 +19,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishContentHandler';
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('blog_home');
+$tfish_template->setTemplate('blog_post');
 $target_file_name = 'index';
 $index_template = 'single_stream';
 
