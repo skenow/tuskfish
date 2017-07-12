@@ -19,7 +19,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishContentHandler';
 
 // Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('clean_blog');
+$tfish_template->setTemplate('new_age');
 $target_file_name = 'index';
 $index_template = 'single_stream';
 
