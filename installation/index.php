@@ -25,9 +25,9 @@ set_error_handler("TfishLogger::logErrors");
 // Include installation language files
 include_once "./english.php";
 
-// Set template
+// Set theme.
 $tfish_template = new TfishTemplate();
-$tfish_template->setTemplate('admin');
+$tfish_template->setTheme('admin');
 
 // No preferences available yet, so just set up a preference analogue
 $tfish_preference = new stdClass();
@@ -39,9 +39,6 @@ $tfish_preference->generator = 'Tuskfish CMS';
 $tfish_preference->seo = '';
 $tfish_preference->robots = 'noindex,nofollow';
 $tfish_preference->pagination_elements = '5';
-
-// Instantiate the template object so that it will be available globally.
-$tfish_template = new TfishTemplate();
 
 // Initialise default content variable
 $tfish_content = array('output' => '');

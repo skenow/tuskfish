@@ -15,8 +15,8 @@
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
-// Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('sb_admin');
+// Specify theme set, otherwise 'default' will be used.
+$tfish_template->setTheme('sb_admin');
 
 // Validate input parameters. Note that passwords are not sanitised in any way.
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;

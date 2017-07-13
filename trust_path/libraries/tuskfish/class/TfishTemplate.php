@@ -25,14 +25,14 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since		1.0
  * @package		content
- * @property    string $template_set The template set in use on this page.
+ * @property    string $theme The theme (template set) in use on this page.
  */
 class TfishTemplate
 {
     
     /** @var array $__data Array holding values of this object's properties. */
     protected $__data = array(
-        'template_set' => 'default'
+        'theme' => 'default'
     );
 
     /**
@@ -83,7 +83,7 @@ class TfishTemplate
      * of the template. Templates can be nested by assigning a rendered child template as a property
      * of a parent template object.
      * 
-     * @param string $template Name of the template file in the /templates/sometemplate directory.
+     * @param string $template Name of the template file in the /themes/sometemplate directory.
      * @return string Rendered HTML template.
      */
     public function render($template)
@@ -96,14 +96,14 @@ class TfishTemplate
         }
         
         extract($this->__data);
-        if (file_exists(TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template
+        if (file_exists(TFISH_THEMES_PATH . $this->__data['theme'] . '/' . $template
                 . '.html')) {
             ob_start();
-            include TFISH_TEMPLATES_PATH . $this->__data['template_set'] . '/' . $template
+            include TFISH_THEMES_PATH . $this->__data['theme'] . '/' . $template
                     . '.html';
             return ob_get_clean();
         } else {
-            echo $this->__data['template_set'] . '/' . $template . '.html'; // Helps debug.
+            echo $this->__data['theme'] . '/' . $template . '.html'; // Helps debug.
             trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
         }
     }
@@ -111,7 +111,7 @@ class TfishTemplate
     /**
      * Set the value of an object property.
      * 
-     * Do not declare variables named $template_set or it will disrupt this method.
+     * Do not declare variables named $theme or it will disrupt this method.
      * 
      * @param string $property Name of property.
      * @param mixed $value Value to assign to property.
@@ -120,8 +120,8 @@ class TfishTemplate
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if ($clean_property == 'template_set') {
-            $this->setTemplate($value);
+        if ($clean_property == 'theme') {
+            $this->setTheme($value);
             return;
         }
         
@@ -129,24 +129,24 @@ class TfishTemplate
     }
 
     /**
-     * Set the template set to be used.
+     * Set the theme (template set) to be used.
      * 
-     * The template_set must be specified through this method. This is a safety measure to prevent
+     * The theme must be specified through this method. This is a safety measure to prevent
      * someone accidentally overwriting the template set when assigning a variable to the template
-     * object (if content were assigned to $tfish_template->setTemplate() it would mess things up). 
+     * object (if content were assigned to $tfish_template->setTheme() it would mess things up). 
      * 
-     * @param string $template Name of template set (alphanumeric and underscore characters only).
+     * @param string $theme Name of theme (alphanumeric and underscore characters only).
      */
-    public function setTemplate($template)
+    public function setTheme($theme)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishFilter::hasTraversalorNullByte($template)) {
+        if (TfishFilter::hasTraversalorNullByte($theme)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
-        if (TfishFilter::isAlnumUnderscore($template)) {
-            $clean_template = TfishFilter::trimString($template);
-            $this->__data['template_set'] = $clean_template;
+        if (TfishFilter::isAlnumUnderscore($theme)) {
+            $clean_theme = TfishFilter::trimString($theme);
+            $this->__data['theme'] = $clean_theme;
         }
     }
 

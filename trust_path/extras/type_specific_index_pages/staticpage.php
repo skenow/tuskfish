@@ -17,8 +17,8 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify template set, otherwise 'default' will be used.
-// $tfish_template->setTemplate('jumbotron');
+// Specify theme set, otherwise 'default' will be used.
+// $tfish_template->setTheme('jumbotron');
 
 ////////// CONFIGURATION //////////
 // 1. Enter the ID of the content object you want to display on this page.

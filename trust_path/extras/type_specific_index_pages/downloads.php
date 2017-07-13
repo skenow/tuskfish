@@ -17,8 +17,8 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('default');
+// Specify theme, otherwise 'default' will be used.
+$tfish_template->setTheme('default');
 
 
 // CONVENTIONS:

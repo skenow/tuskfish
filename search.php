@@ -16,8 +16,8 @@
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('default');
+// Specify theme set, otherwise 'default' will be used.
+$tfish_template->setTheme('default');
 
 // Validate data and separate the search terms.
 $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;

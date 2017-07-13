@@ -25,13 +25,13 @@ https://alex-d.github.io/Trumbowyg/
 2. Add the following link in the head section of the layout file your are using for your admin pages:
 
 <!-- Trumbowyg editor -->
-<link rel="stylesheet" href="<?php echo TFISH_TEMPLATES_URL . '/trumbowyg/dist/ui/trumbowyg.min.css'; ?>">
+<link rel="stylesheet" href="<?php echo TFISH_THEMES_URL . '/trumbowyg/dist/ui/trumbowyg.min.css'; ?>">
 
 3. Add the following link at the bottom of the body section of the layout file. Make sure it comes
 after the jQuery link, as it requires jQuery to run:
 
 <!-- Trumbowyg editor -->
-<script src="<?php echo TFISH_TEMPLATES_URL . '/trumbowyg/dist/trumbowyg.min.js'; ?>"></script>
+<script src="<?php echo TFISH_THEMES_URL . '/trumbowyg/dist/trumbowyg.min.js'; ?>"></script>
 
 4. Open /trust_path/libraries/tuskfish/forms/data_entry.html and data_edit.html. Locate the teaser
 and description fields. If these currently use textarea inputs, delete them and replace with a

@@ -24,11 +24,11 @@ $clean_type = isset($_GET['type']) && !empty($_GET['type'])
         ? TfishFilter::trimString($_GET['type']) : null;
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
-// Specify the admin template and the template to be used to preview content (user side template).
+// Specify the admin theme and the template to be used to preview content (user side template).
 if ($op == 'view') {
-    $tfish_template->setTemplate('default');
+    $tfish_template->setTheme('default');
 } else {
-    $tfish_template->setTemplate('sb_admin');
+    $tfish_template->setTheme('sb_admin');
 }
 
 // Set target file for intra-collection pagination controls when viewing objects. False will 

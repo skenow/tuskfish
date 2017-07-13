@@ -51,8 +51,8 @@ $tfish_template = new TfishTemplate();
 /**
  * End manual duplication of header.
  */
-// Specify template set, otherwise 'default' will be used.
-$tfish_template->setTemplate('default');
+// Specify theme, otherwise 'default' will be used.
+$tfish_template->setTheme('default');
 
 // Page title.
 $tfish_template->page_title = TFISH_LOGIN;
