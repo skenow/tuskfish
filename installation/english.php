@@ -9,6 +9,7 @@
  * @since		1.0
  * @package		installation
  */
+define("TFISH_CMS", "Tuskfish CMS");
 define("TFISH_INSTALLATION_TUSKFISH", "Installation");
 define("TFISH_INSTALLATION_PLEASE_NOTE", "Please note");
 define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on the following 
