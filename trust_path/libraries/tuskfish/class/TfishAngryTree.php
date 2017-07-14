@@ -32,13 +32,13 @@
 /**
  * TfishAngryTree class file.
  * 
- * @copyright	XOOPS.org (https://xoops.org) 2000
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
- * @author		Kazumi Ono 	<onokazu@xoops.org>
- * @author		marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
- * @author		Simon Wilkinson <simon@isengard.biz>
- * @since		1.0
- * @package		core
+ * @copyright   XOOPS.org (https://xoops.org) 2000
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Kazumi Ono 	<onokazu@xoops.org>
+ * @author      marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @since       1.0
+ * @package     core
  */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -53,14 +53,14 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * 
  * As for the name, don't ask.
  *
- * @copyright	http://smartfactory.ca The SmartFactory
- * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
- * @author		Kazumi Ono 	<onokazu@xoops.org>
- * @author		marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
- * @author		Madfish <simon@isengard.biz>
+ * @copyright   http://smartfactory.ca The SmartFactory
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
+ * @author      Kazumi Ono 	<onokazu@xoops.org>
+ * @author      marcan aka Marc-André Lanciault <marcan@smartfactory.ca>
+ * @author      Madfish <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		core
+ * @since       1.0
+ * @package     core
  */
 class TfishAngryTree
 {

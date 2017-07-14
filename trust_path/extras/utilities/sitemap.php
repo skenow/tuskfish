@@ -8,11 +8,11 @@
  * static pages with unique file names you will need to add them manually, and also delete the
  * automatically generated ID-based entry for that object, to avoid duplication.
  *
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
- * @since		1.0
- * @package		core
+ * @since       1.0
+ * @package     core
 */
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.

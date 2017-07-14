@@ -5,11 +5,11 @@
  * 
  * Provides a permalink lookup service for all content objects. Simply supply the ID of the content.
  *
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
- * @since		1.0
- * @package		core
+ * @since       1.0
+ * @package     core
  */
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
@@ -17,7 +17,6 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
-
 
 // CONVENTIONS:
 // 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.

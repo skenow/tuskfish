@@ -7,11 +7,11 @@
  * class autoloading, includes language constants, HTMLPufifier and starts the session and compressed
  * output buffer.
  *
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
- * @since		1.0
- * @package		core
+ * @since       1.0
+ * @package     core
  */
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");

@@ -2,12 +2,12 @@
 /**
  * TfishTag class file.
  * 
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		content
+ * @since       1.0
+ * @package     content
  */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -20,12 +20,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * simple hook to create a section on your website. Tags can be grouped into collections via the
  * parent field, and tag collections can be used to create custom tag select boxes.
  *
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		content
+ * @since       1.0
+ * @package     content
  * @properties  int $id Auto-increment, set by database.
  * @properties  string $type Content object type eg. TfishArticle etc. [ALPHA]
  * @properties  string $title The name of this content.

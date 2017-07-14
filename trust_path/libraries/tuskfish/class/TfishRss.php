@@ -3,12 +3,12 @@
 /**
  * TfishRss class file.
  * 
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		content
+ * @since       1.0
+ * @package     content
  */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -18,12 +18,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * 
  * For information about the RSS 2.0 spec see http://cyber.harvard.edu/rss/rss.html
  *
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		content
+ * @since       1.0
+ * @package     content
  * @param       object $tfish_preference TfishPreference object to make site preferences available.
  * @property    string $title Name of channel.
  * @property    string $link URL to website associated with this channel.

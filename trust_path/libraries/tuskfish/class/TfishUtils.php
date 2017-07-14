@@ -3,12 +3,12 @@
 /**
  * TfishUtils class file.
  * 
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
- * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		utilities
+ * @since       1.0
+ * @package     utilities
  */
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
@@ -19,13 +19,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * Holds utility functions that return lists of mimetypes, timezone offsets and similar necessary
  * trivia.
  *
- * @copyright	The ImpressCMS Project http://www.impresscms.org/
- * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
- * @author		marcan <marcan@impresscms.org>
+ * @copyright   The ImpressCMS Project http://www.impresscms.org/
+ * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
+ * @author      marcan <marcan@impresscms.org>
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since		1.0
- * @package		utilities
+ * @since       1.0
+ * @package     utilities
  */
 class TfishUtils
 {
