@@ -28,7 +28,7 @@ $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 if ($op == 'view') {
     $tfish_template->setTheme('default');
 } else {
-    $tfish_template->setTheme('sb_admin');
+    $tfish_template->setTheme('admin');
 }
 
 // Set target file for intra-collection pagination controls when viewing objects. False will 
