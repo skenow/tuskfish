@@ -34,6 +34,10 @@ $tfish_template->page_title = TFISH_TYPE_TAGS;
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 
+// Set cache parameters.
+$basename = basename(__FILE__);
+$cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
+
 // View single object description.
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);
@@ -42,6 +46,11 @@ if ($clean_id) {
         // Update view counter and assign object to template.
         $content->counter += 1;
         $content_handler::updateCounter($clean_id);
+        
+        // Check if cached page is available.
+        TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+        
+        // Assign content to template.
         $tfish_template->content = $content;
 
         // Prepare meta information for display.
@@ -59,6 +68,9 @@ if ($clean_id) {
 
 // View index page of multiple objects (teasers).
 } else {
+    // Check if cached page is available.
+    TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+    
     // Set criteria for selecting content objects.
     $criteria = new TfishCriteria();
     

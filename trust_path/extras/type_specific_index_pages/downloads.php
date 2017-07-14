@@ -38,12 +38,19 @@ $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 
+// Set cache parameters.
+$basename = basename(__FILE__);
+$cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
+
 // View single object description.
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);
     
-    if (is_object($content) && $content->online == true) {
-        // Assign object to template. Counter is only updated when a file download is triggered.
+    if (is_object($content) && $content->online == true) {        
+        // Check if cached page is available.
+        TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+        
+        // Assign content to template. Counter is only updated when a file download is triggered.
         $tfish_template->content = $content;
 
         // Prepare meta information for display.
@@ -101,6 +108,9 @@ if ($clean_id) {
 
 // View index page of multiple objects (teasers).
 } else {
+    // Check if cached page is available.
+    TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+    
     // Set criteria for selecting content objects.
     $criteria = new TfishCriteria();
     
