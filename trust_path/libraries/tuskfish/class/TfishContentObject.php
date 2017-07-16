@@ -422,20 +422,22 @@ class TfishContentObject extends TfishAncestralObject
     /**
      * Generates a URL to access this object in single view mode.
      * 
-     * URL can point , either relative to home page or to a subclass-specific page, for example
-     * you can set up an articles.php page to display only TfishArticle objects. The subclass-
-     * specific pages are found in the trust_path/extras folder. Just drop them into your site root
-     * to use them.
+     * URL can point relative to either the home page (index.php) or to an arbitrary page in the
+     * web root. For example, you can set up an articles.php page to display only TfishArticle
+     * objects. The subclass-specific pages are found in the trust_path/extras folder. Just drop
+     * them into your site root to use them. Or you could rename 'articles.php' to 'blog.php' and
+     * set 'blog' as the $target_file_name.
      * 
-     * @param bool $use_subclass_page Use the subclass-specific page or home page (index.php).
+     * @param bool $custom_page Use an arbitrary target page or the home page (index.php).
      * @return string URL to view this object.
      */
-    public function getURL($use_subclass_page = false)
+    public function getURL($custom_page = false)
     {
         $url = TFISH_URL;
-        
-        if ($use_subclass_page) {
-            $url .= $this->module . '.php';
+
+        if ($use_custom_page) {
+            $url .= TfishFilter::isAlnumUnderscore($custom_page)
+                    ? TfishFilter::trimString($custom_page) . '.php' : '';
         }
         
         $url .= '?id=' . (int) $this->id;
