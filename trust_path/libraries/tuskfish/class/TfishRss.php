@@ -66,7 +66,7 @@ class TfishRss extends TfishAncestralObject
 
         // Set default values of permitted properties.
         $this->__data['title'] = $tfish_preference->site_name;
-        $this->__data['link'] = TFISH_URL . 'rss.php';
+        $this->__data['link'] = TFISH_RSS_URL;
         $this->__data['description'] = $tfish_preference->site_description;
         $this->__data['copyright'] = $tfish_preference->site_copyright;
         $this->__data['managingEditor'] = $tfish_preference->site_email;

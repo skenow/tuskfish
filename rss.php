@@ -17,7 +17,7 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('rss');
-$target_file_name = 'index';
+$tfish_template->target_file_name = '';
 
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0; // ID of a collection object.

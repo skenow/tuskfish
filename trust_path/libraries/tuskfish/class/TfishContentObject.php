@@ -422,19 +422,23 @@ class TfishContentObject extends TfishAncestralObject
     /**
      * Generates a URL to access this object in single view mode.
      * 
-     * URL can point relative to either the home page (index.php) or to an arbitrary page in the
-     * web root. For example, you can set up an articles.php page to display only TfishArticle
-     * objects. The subclass-specific pages are found in the trust_path/extras folder. Just drop
-     * them into your site root to use them. Or you could rename 'articles.php' to 'blog.php' and
-     * set 'blog' as the $target_file_name.
+     * URL can point relative to either the home page (index.php, or other custom content stream
+     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
+     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
+     * for a landing page (this requires you to append the name of the new page to the 
+     * TFISH_PERMALINK_URL constant).
+     * 
+     * You can set up an articles.php page to display only TfishArticle objects. The 
+     * subclass-specific pages are found in the trust_path/extras folder. Just drop
+     * them into your site root to use them.
      * 
      * @param bool $custom_page Use an arbitrary target page or the home page (index.php).
      * @return string URL to view this object.
      */
     public function getURL($custom_page = false)
     {
-        $url = TFISH_URL;
-
+        $url = empty($custom_page) ? TFISH_PERMALINK_URL : TFISH_URL;
+        
         if ($custom_page) {
             $url .= TfishFilter::isAlnumUnderscore($custom_page)
                     ? TfishFilter::trimString($custom_page) . '.php' : '';
