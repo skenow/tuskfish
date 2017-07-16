@@ -435,7 +435,7 @@ class TfishContentObject extends TfishAncestralObject
     {
         $url = TFISH_URL;
 
-        if ($use_custom_page) {
+        if ($custom_page) {
             $url .= TfishFilter::isAlnumUnderscore($custom_page)
                     ? TfishFilter::trimString($custom_page) . '.php' : '';
         }
