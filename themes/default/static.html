@@ -52,11 +52,11 @@
 <?php if (!empty($parent)): ?>
 <div class="text-left">
     <h3><?php echo TFISH_RELATED; ?></h3>
-    <h4><a href="<?php echo $parent->getURL(false); ?>"><?php echo $parent->escape('title'); ?></a></h4>
+    <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->escape('title'); ?></a></h4>
     <?php if ($parent->image): ?>
     <div class="pull-left">
         <figure class="figure-left">
-            <a href="<?php echo $parent->getURL(false); ?>">
+            <a href="<?php echo $parent->getURL($target_file_name); ?>">
                 <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
                      <?php if ($parent->caption): ?>
                      title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
