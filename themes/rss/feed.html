@@ -13,7 +13,7 @@
             <?php if ($item->title): ?>
             <title><?php echo $item->escape('title'); ?></title>
             <?php endif; ?>
-            <link><?php echo $item->getURL(true); ?></link>
+            <link><?php echo $item->getURL($target_file_name); ?></link>
             <?php if ($item->teaser): ?>
             <description><![CDATA[<?php echo $item->teaser; ?>]]></description>
             <?php endif; ?>
