@@ -40,8 +40,7 @@ class TfishAncestralObject
      * Returns a whitelist of object properties whose values are allowed be set.
      * 
      * This function is used to build a list of $allowed_vars for a content object. Child classes
-     * use this list to unset properties they do not use. It is also used by
-     * TfishFilter::filterData() or when screening data before inserting a row in the database.
+     * use this list to unset properties they do not use.
      * 
      * @return array Array of object properties.
      */
