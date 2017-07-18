@@ -16,9 +16,6 @@
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
-// Lock charset to UTF-8.
-header('Content-Type: text/html; charset=utf-8');
-
 // HTMLPurifier library is used to validate the teaser and description fields of objects.
 // Note that the HTMLPurifier autoloader must be registered AFTER the Tfish autoloader.
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
