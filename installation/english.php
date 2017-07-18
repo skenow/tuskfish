@@ -48,7 +48,7 @@ define("TFISH_INSTALLATION_SOME_EMAIL", "youremail@somedomain.com");
 define("TFISH_INSTALLATION_ADMIN_PASSWORD", "Admin password");
 define("TFISH_INSTALLATION_USER_SALT", "User password salt");
 define("TFISH_INSTALLATION_SITE_SALT", "Site password salt");
-define("TFISH_INSTALLATION_KEY", "HMAC key (63 characters)");
+define("TFISH_INSTALLATION_KEY", "HMAC key (63 alphanumeric characters)");
 define("TFISH_INSTALLATION_GRC", "Get one from: https://grc.com/passwords/");
 define("TFISH_INSTALLATION_STRONG_PASSWORD", "Password is strong.");
 define("TFISH_INSTALLATION_PASSWORD_REQUIREMENTS", "> 14 characters: Letters, numbers and symbols");
@@ -70,6 +70,10 @@ define("TFISH_SUBMIT", "Submit");
 // Errors
 define("TFISH_ERROR_BAD_PATH", "Bad file path.");
 define("TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY.", "Failed to delete directory");
+define("TFISH_INSTALLATION_DB_ALNUMUNDERSCORE", "Database name restricted to alphanumeric and underscore characters.");
+define("TFISH_INSTALLATION_BAD_EMAIL", "Bad email address.");
+define("TFISH_INSTALLATION_HMAC_ALNUM", "HMAC restricted to alphanumeric characters.");
+define("TFISH_INSTALLATION_HMAC_LENGTH", "HMAC should be 63 characters in length, exactly.");
 
 // Constants used in theme, to prevent errors.
 define("TFISH_SEARCH", "Search");

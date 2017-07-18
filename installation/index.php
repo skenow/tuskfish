@@ -54,7 +54,7 @@ function getUrl() {
 }
 
 // Test and save database credentials
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ////////////////////////////////////
     ////////// VALIDATE INPUT //////////
     ////////////////////////////////////
@@ -88,11 +88,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!TfishFilter::isAlnum($hmac_key)) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_HMAC_ALNUM . '</p>';
     }
+    if (mb_strlen($hmac_key, "UTF-8") != 63) {
+        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_HMAC_LENGTH . '</p>';
+    }
 
     // Check password length and quality
     $password_quality = TfishSecurityUtility::checkPasswordStrength($admin_password);
 
-    if (!$password_quality) {
+    if ($password_quality['strong'] == false) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_WEAK_PASSWORD . '</p>';
         unset($password_quality['strong']);
         $tfish_content['output'] .= '<ul>';
