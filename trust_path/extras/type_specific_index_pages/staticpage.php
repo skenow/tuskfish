@@ -24,7 +24,7 @@ require_once TFISH_PATH . "tfish_header.php";
 // 1. Enter the ID of the content object you want to display on this page.
 $id = 10;
 
-// 2. Enter the name of the page you want tags to link back to, without extension.
+// 2. Enter the name of the page you want headings and tags to link back to, without extension.
 $target_file_name = 'index';
 
 // 3. Set the page title.

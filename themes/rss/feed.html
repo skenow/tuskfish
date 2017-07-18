@@ -13,7 +13,7 @@
             <?php if ($item->title): ?>
             <title><?php echo $item->escape('title'); ?></title>
             <?php endif; ?>
-            <link><?php echo $item->getURL(true); ?></link>
+            <link><?php echo $item->getURL($target_file_name); ?></link>
             <?php if ($item->teaser): ?>
             <description><![CDATA[<?php echo $item->teaser; ?>]]></description>
             <?php endif; ?>
@@ -25,7 +25,7 @@
             <?php if ($item->submission_time): ?>
             <pubDate><?php echo TfishFilter::escape(gmdate(DATE_RSS, ($item->submission_time))); ?></pubDate>
             <?php endif; ?>
-            <guid isPermaLink="true"><?php echo TfishFilter::escape(TFISH_PERMALINK_URL . $item->id); ?></guid>
+            <guid isPermaLink="true"><?php echo TfishFilter::escape(TFISH_PERMALINK_URL . '?id=' . $item->id); ?></guid>
         </item>
         <?php endforeach; ?>
         <?php endif; ?>
