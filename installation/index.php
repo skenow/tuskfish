@@ -29,7 +29,7 @@ include_once "./english.php";
 $tfish_template = new TfishTemplate();
 $tfish_template->setTheme('admin');
 
-// No preferences available yet, so just set up a preference analogue
+// No preferences available yet, so just set up a preference analogue.
 $tfish_preference = new stdClass();
 $tfish_preference->site_name = 'Tuskfish CMS';
 $tfish_preference->site_description = 'A cutting edge micro-CMS';
@@ -40,7 +40,7 @@ $tfish_preference->seo = '';
 $tfish_preference->robots = 'noindex,nofollow';
 $tfish_preference->pagination_elements = '5';
 
-// Initialise default content variable
+// Initialise default content variable.
 $tfish_content = array('output' => '');
 
 /** Helper function to grab the site URL. */
@@ -53,8 +53,9 @@ function getUrl() {
     return $url;
 }
 
-// Test and save database credentials
+// Test and save database credentials.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
     ////////////////////////////////////
     ////////// VALIDATE INPUT //////////
     ////////////////////////////////////
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_HMAC_LENGTH . '</p>';
     }
 
-    // Check password length and quality
+    // Check password length and quality.
     $password_quality = TfishSecurityUtility::checkPasswordStrength($admin_password);
 
     if ($password_quality['strong'] == false) {
@@ -111,20 +112,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($tfish_content['output'])) {
         $tfish_content['output'] = '<h1>' . TFISH_INSTALLATION_WARNING . '</h1>'
                 . $tfish_content['output'];
-        
         $tfish_template->output = $tfish_content['output'];
         $tfish_template->form = "db_credentials_form.html";
         $tfish_template->tfish_main_content = $tfish_template->render('form');
         
     // All input validated, proceed to process and set up database.    
     } else {
-        // Salt and iteratively hash the password 100,000 times to resist brute force attacks
+        // Salt and iteratively hash the password 100,000 times to resist brute force attacks.
         $site_salt = TfishSecurityUtility::generateSalt(64);
         $user_salt = TfishSecurityUtility::generateSalt(64);
         $password_hash = TfishSecurityUtility::recursivelyHashPassword($admin_password, 100000,
                 $site_salt, $user_salt);
 
-        // Append site salt to config.php
+        // Append site salt to config.php.
         $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
                 . $site_salt . '");';
         $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        // Append HMAC key to config.php
+        // Append HMAC key to config.php.
         $hmac_key = 'if (!defined("TFISH_KEY")) define("TFISH_KEY", "' . $hmac_key . '");';
         $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $hmac_key);
 
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 define("TFISH_DATABASE", $db_path);
         }
 
-        // Create user table
+        // Create user table.
         $user_columns = array(
             "id" => "INTEGER",
             "admin_email" => "TEXT",
@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
 
         TfishDatabase::createTable('user', $user_columns, 'id');
-        // Insert admin user's details to database
+        // Insert admin user's details to database.
         $user_data = array(
             'admin_email' => $admin_email,
             'password_hash' => $password_hash,
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             );
         $query = TfishDatabase::insert('user', $user_data);
 
-        // Create preference table
+        // Create preference table.
         $preference_columns = array(
             "id" => "INTEGER",
             "title" => "TEXT",
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
         TfishDatabase::createTable('preference', $preference_columns, 'id');
 
-        // Insert default preferences to database
+        // Insert default preferences to database.
         $preference_data = array(
             array('title' => 'site_name', 'value' => 'Tuskfish CMS'),
             array('title' => 'site_description', 'value' => 'A cutting edge micro CMS'),
@@ -213,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             TfishDatabase::insert('preference', $preference, 'id');
         }
 
-        // Create session table
+        // Create session table.
         $session_columns = array(
             "id" => "INTEGER",
             "last_active" => "INTEGER",
@@ -249,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "seo" => "TEXT"); // SEO-friendly string; it will be appended to the URL for this content.
         TfishDatabase::createTable('content', $content_columns, 'id');
 
-        // Insert a "General" tag content object
+        // Insert a "General" tag content object.
         $content_data = array(
             "type" => "TfishTag",
             "title" => "General",
@@ -264,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "seo" => "general");
         $query = TfishDatabase::insert('content', $content_data);
 
-        // Create taglink table
+        // Create taglink table.
         $taglink_columns = array(
             "id" => "INTEGER",
             "tag_id" => "INTEGER",
@@ -272,10 +272,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "content_id" => "INTEGER");
         TfishDatabase::createTable('taglink', $taglink_columns, 'id');
 
-        // Close database
+        // Close database.
         TfishDatabase::close();
 
-        // Report on status of database creation
+        // Report on status of database creation.
         if ($db_path && $query) {
             $tfish_content['output'] .= '<h3>' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3>';
             $tfish_content['output'] .= TFISH_INSTALLATION_SECURITY_INSTRUCTIONS;
@@ -283,7 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $tfish_template->form = "success.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
         } else {
-            // If database creation failed, complain and display data entry form again
+            // If database creation failed, complain and display data entry form again.
             $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DATABASE_FAILED . '</p>';
             $tfish_template->output = $tfish_content['output'];
             $tfish_template->form = "db_credentials_form.html";
@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 } else {
-    // Display data entry form
+    // Display data entry form.
     $tfish_template->page_title = TFISH_INSTALLATION_TUSKFISH;
     $tfish_template->tfish_url = getUrl();
     $tfish_template->tfish_root_path = realpath('../') . '/';
