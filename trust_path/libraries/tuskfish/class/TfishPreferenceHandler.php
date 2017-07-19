@@ -92,6 +92,9 @@ class TfishPreferenceHandler
             }
         }
         
+        // Flush the cache.
+        TfishCache::flushCache();
+        
         return true;
     }
 
