@@ -112,7 +112,7 @@ class TfishContentObject extends TfishAncestralObject
          * Set default values of permitted properties.
          */
         $this->__data['type'] = get_class($this);
-        $this->__data['template'] = 'default';
+        $this->__data['template'] = '';
         $this->__data['handler'] = $this->__data['type'] . 'Handler';
         $this->__data['rights'] = 1;
         $this->__data['online'] = 1;
