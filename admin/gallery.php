@@ -26,7 +26,7 @@ $tfish_template->setTheme('thumbnail_gallery');
 $content_handler = 'TfishContentHandler';
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
-$tfish_template->target_file_name = $target_file_name;
+$tfish_template->target_file_name = 'index';
 
 // Page title.
 $tfish_template->page_title = '<i class="fa fa-file-image-o" aria-hidden="true"></i> '
