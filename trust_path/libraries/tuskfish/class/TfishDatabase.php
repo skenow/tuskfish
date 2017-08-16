@@ -14,7 +14,7 @@
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Tuskfish database handler class.
+ * Tuskfish database handler class (singleton).
  * 
  * Implements PDO and makes exclusive use of prepared statements with bound values to mitigate SQL
  * injection attacks. Table and column identifiers are also escaped.
@@ -44,6 +44,11 @@ class TfishDatabase
 
     /** No cloning permitted */
     final private function __clone()
+    {
+    }
+    
+    /** No serialisation */
+    final private function __wakeup()
     {
     }
 
