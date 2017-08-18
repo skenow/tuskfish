@@ -66,7 +66,42 @@ class TfishTag extends TfishContentObject
             unset($this->__properties[$property], $this->__data[$property]);
         }
     }
-
+    
+    /**
+     * Set the value of a whitelisted property.
+     * 
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
+     * child classes to impose data type restrictions and range checks on custom subclass
+     * properties.
+     * 
+     * If you have added some custom properties to this content subclass that need to be type
+     * and/or range checked before permitting assignment, add a switch above the call to the parent
+     * method. Structure it so that any case not explicitly handled will fall through to the parent
+     * method, while explicit cases will be handled here.
+     * 
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
+     */
+    public function __set($property, $value)
+    {
+        parent::__set($property, $value);
+    }
+    
+    /**
+     * Converts properties to human readable form in preparation for output.
+     * 
+     * If you have added some custom properties to this content subclass that need to be formatted
+     * for output, add a switch above the call to the parent method. Structure it so that any case
+     * not explicitly handled will fall through to the parent method, while explicit cases will
+     * return a formatted value.
+     * 
+     * @param string $clean_property Name of content object property to be formatted.
+     */
+    protected function makeHumanReadable($clean_property)
+    {
+        return parent::makeHumanReadable($clean_property);
+    }
+    
     /**
      * Returns an array of base object properties that are not used by this subclass.
      * 
@@ -87,41 +122,6 @@ class TfishTag extends TfishContentObject
             'rights',
             'publisher',
             'tags');
-    }
-    
-    /**
-     * Converts properties to human readable form in preparation for output.
-     * 
-     * If you have added some custom properties to this content subclass that need to be formatted
-     * for output, add a switch above the call to the parent method. Structure it so that any case
-     * not explicitly handled will fall through to the parent method, while explicit cases will
-     * return a formatted value.
-     * 
-     * @param string $clean_property Name of content object property to be formatted.
-     */
-    protected function makeHumanReadable($clean_property)
-    {
-        return parent::makeHumanReadable($clean_property);
-    }
-    
-    /**
-     * Set the value of a whitelisted property.
-     * 
-     * Intercepts direct calls to set the value of an object property. This method is overridden by
-     * child classes to impose data type restrictions and range checks on custom subclass
-     * properties.
-     * 
-     * If you have added some custom properties to this content subclass that need to be type
-     * and/or range checked before permitting assignment, add a switch above the call to the parent
-     * method. Structure it so that any case not explicitly handled will fall through to the parent
-     * method, while explicit cases will be handled here.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set($property, $value)
-    {
-        parent::__set($property, $value);
     }
 
 }
