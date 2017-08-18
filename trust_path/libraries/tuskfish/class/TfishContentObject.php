@@ -119,32 +119,24 @@ class TfishContentObject extends TfishAncestralObject
         $this->__data['counter'] = 0;
         $this->__data['tags'] = array();
     }
-
+    
     /**
-     * Escapes object properties for output to browser and formats it as human readable.
+     * Converts properties to human readable form in preparation for output.
      * 
-     * Use this method to retrieve object properties when you want to send them to the browser.
-     * They will be automatically escaped with htmlspecialchars to mitigate cross-site scripting
-     * attacks. Note that the method specifically excludes the teaser and description fields, 
-     * which are returned unescaped; these are dedicated HTML fields that have been input-validated
-     * with the HTMLPurifier library, and so *should* be safe.
+     * This method is overridden in child subclasses, to allow for the possibility of handling
+     * additional properties. The overrides refer back to this parent method for handling base
+     * (standard) properties of this parent class.
      * 
      * @param string $property Name of property.
-     * @return string Human readable value escaped for display.
+     * @return string Property formatted to human readable form for output.
      */
-    public function escape($property)
+    protected function makeHumanReadable($clean_property)
     {
-        $clean_property = TfishFilter::trimString($property);
-        
-        if (!isset($this->__data[$clean_property])) {
-            return null;
-        }
-
         switch ($clean_property) {
             case "date": // Stored in format yyyy-mm-dd
                 $date = new DateTime($this->__data[$clean_property]);
-
-                return htmlspecialchars($date->format('j F Y'), ENT_QUOTES, 'UTF-8');
+                
+                return $date->format('j F Y');
                 break;
 
             case "file_size": // Convert to human readable.
@@ -175,7 +167,7 @@ class TfishContentObject extends TfishAncestralObject
                 $mimetype = array_search($this->__data[$clean_property], $mimetype_whitelist);
 
                 if (!empty($mimetype)) {
-                    return htmlspecialchars($mimetype, ENT_QUOTES, 'UTF-8');
+                    return $mimetype;
                 }
                 break;
 
@@ -186,10 +178,6 @@ class TfishContentObject extends TfishAncestralObject
                 $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
                         $this->__data[$clean_property]);
 
-                // Output filtering
-                // Enabled (only do this if input filtering NOT done in __set()).
-                // return (string)TfishFilter::filterHtml($tfish_url_enabled);
-                // Disabled (only do this if enable input filtering of these fields in __set()).
                 return $tfish_url_enabled; 
                 break;
 
@@ -202,7 +190,7 @@ class TfishContentObject extends TfishAncestralObject
             case "submission_time":
                 $date = date('j F Y', $this->__data[$clean_property]);
 
-                return htmlspecialchars($date, ENT_QUOTES, 'UTF-8');
+                return $date;
                 break;
 
             case "tags":
@@ -215,11 +203,47 @@ class TfishContentObject extends TfishAncestralObject
 
                 return $tags;
                 break;
-
+                
+            // No special handling required. Return unmodified value.
             default:
-                return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8');
+                return $this->__data[$clean_property];
                 break;
         }
+    }
+
+    /**
+     * Escapes object properties for output to browser.
+     * 
+     * Use this method to retrieve object properties when you want to send them to the browser.
+     * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
+     * attacks. Note that the method specifically excludes the teaser and description fields, 
+     * which are returned unescaped; these are dedicated HTML fields that have been input-validated
+     * with the HTMLPurifier library, and so *should* be safe.
+     * 
+     * @param string $property Name of property.
+     * @return string Human readable value escaped for display.
+     */
+    public function escape($property)
+    {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (!isset($this->__data[$clean_property])) {
+            return null;
+        }
+        
+        // Convert properties to human readable form.
+        $clean_property = $this->makeHumanReadable($property);
+        
+        // HTML properties (such as teaser and description) are input filtered with HTMLPurifier
+        // elsewhere. They cannot be treated with htmlspecialchars() in any case as that would break
+        // their tags. If you want to apply output filtering to HTML properties override this method
+        // in the relevant subclass. Note that any custom HTML properties you add to a subclass
+        // need to be input filtered.
+        if ($this->__properties[$clean_property] == 'html') {
+            return $this->__data[$clean_property];
+        }
+        
+        return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8');
     }
 
     /**

@@ -97,5 +97,20 @@ class TfishCollection extends TfishContentObject
     {
         return array();
     }
+    
+    /**
+     * Converts properties to human readable form in preparation for output.
+     * 
+     * If you have added some custom properties to this content subclass that need to be formatted
+     * for output, add a switch above the call to the parent method. Structure it so that any case
+     * not explicitly handled will fall through to the parent method, while explict cases will
+     * return a formatted value.
+     * 
+     * @param string $clean_property Name of content object property to be formatted.
+     */
+    protected function makeHumanReadable($clean_property)
+    {
+        return parent::makeHumanReadable($clean_property);
+    }
 
 }
