@@ -99,5 +99,25 @@ class TfishImage extends TfishContentObject
     {
         return parent::makeHumanReadable($clean_property);
     }
+    
+    /**
+     * Set the value of a whitelisted property.
+     * 
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
+     * child classes to impose data type restrictions and range checks on custom subclass
+     * properties.
+     * 
+     * If you have added some custom properties to this content sublcass that need to be type
+     * and/or range checked before permitting assignment, add a switch above the call to the parent
+     * method. Structure it so that any case not explicitly handled will fall through to the parent
+     * method, while explicit cases will be handled here.
+     * 
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
+     */
+    public function __set($property, $value)
+    {
+        parent::__set($property, $value);
+    }
 
 }
