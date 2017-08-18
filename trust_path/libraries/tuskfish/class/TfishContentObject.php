@@ -231,9 +231,6 @@ class TfishContentObject extends TfishAncestralObject
             return null;
         }
         
-        // Convert properties to human readable form.
-        $clean_property = $this->makeHumanReadable($property);
-        
         // HTML properties (such as teaser and description) are input filtered with HTMLPurifier
         // elsewhere. They cannot be treated with htmlspecialchars() in any case as that would break
         // their tags. If you want to apply output filtering to HTML properties override this method
@@ -243,7 +240,10 @@ class TfishContentObject extends TfishAncestralObject
             return $this->__data[$clean_property];
         }
         
-        return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8');
+        // Convert properties to human readable form.
+        $human_readable_property = $this->makeHumanReadable($property);
+        
+        return htmlspecialchars($human_readable_property, ENT_QUOTES, 'UTF-8');
     }
 
     /**
