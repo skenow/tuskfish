@@ -732,10 +732,8 @@ class TfishContentObject extends TfishAncestralObject
                             || $check_date['warning_count'] > 0
                             || $check_date['error_count'] > 0) {
                         // Bad date supplied, default to today.
-                        $this->__data[$clean_property] = date(DATE_RSS, time());
+                        $value = date(DATE_RSS, time());
                         trigger_error(TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY, E_USER_WARNING);
-                    } else {
-                        $this->__data[$clean_property] = $value;
                     }
                 }
 
@@ -759,9 +757,7 @@ class TfishContentObject extends TfishAncestralObject
                             break;
                     }
 
-                    if (empty($value) || in_array($value, $mimetype_whitelist)) {
-                        $this->__data[$clean_property] = $value;
-                    } else {
+                    if (!empty($value) && !in_array($value, $mimetype_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
                     }
                 }
@@ -778,6 +774,8 @@ class TfishContentObject extends TfishAncestralObject
                 if ($clean_property == "seo") {
                     if (TfishFilter::isUtf8($value)) {
                         $value = str_replace(' ', '-', $value);
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
                     }
                 }
 

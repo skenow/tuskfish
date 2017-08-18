@@ -277,6 +277,7 @@ define("TFISH_ERROR_CIRCULAR_PARENT_REFERENCE", "Circular reference: Content obj
         . "self as parent.");
 define("TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE", "File path contains a traversal or null byte (illegal "
         . "value).");
+define("TFISH_ERROR_NOT_UTF8", "Not UTF-8, illegal character set.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini "
