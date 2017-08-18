@@ -93,7 +93,7 @@ class TfishStatic extends TfishContentObject
      * 
      * If you have added some custom properties to this content subclass that need to be formatted
      * for output, add a switch above the call to the parent method. Structure it so that any case
-     * not explicitly handled will fall through to the parent method, while explict cases will
+     * not explicitly handled will fall through to the parent method, while explicit cases will
      * return a formatted value.
      * 
      * @param string $clean_property Name of content object property to be formatted.
@@ -110,7 +110,7 @@ class TfishStatic extends TfishContentObject
      * child classes to impose data type restrictions and range checks on custom subclass
      * properties.
      * 
-     * If you have added some custom properties to this content sublcass that need to be type
+     * If you have added some custom properties to this content subclass that need to be type
      * and/or range checked before permitting assignment, add a switch above the call to the parent
      * method. Structure it so that any case not explicitly handled will fall through to the parent
      * method, while explicit cases will be handled here.
