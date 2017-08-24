@@ -162,6 +162,7 @@ function checkPasswordStrength($password) {
  * @return string
  */
 function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '') {
+    $iterations = (int) $iterations;
     $password = $site_salt . $password;
     if ($user_salt) {
         $password .= $user_salt;
