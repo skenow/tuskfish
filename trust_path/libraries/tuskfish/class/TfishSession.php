@@ -169,7 +169,6 @@ class TfishSession
 
         // Authenticate user by calculating their password hash and comparing it to the one on file.
         if ($user) {
-            
             // If the user has previous failed login atttempts sleep to frustrate brute force attacks.
             if ($user['login_errors']) {
                 sleep($user['login_errors']);
@@ -191,14 +190,13 @@ class TfishSession
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
-                // Issue failed login warning, destroy session and redirect to the login page.
-                // Increment failed login counter
+                // Increment failed login counter, destroy session and redirect to the login page.
+                TfishDatabase::updateCounter($user['id'], 'user', 'login_errors');
                 self::logout(TFISH_ADMIN_URL . "login.php");
                 exit;
             }
         } else {
-            // Increment failed login counter and redirect to login page.
-            TfishDatabase::updateCounter($user['id'], 'user', 'login_errors');
+            // Redirect to login page.
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
