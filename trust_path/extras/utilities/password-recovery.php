@@ -106,8 +106,8 @@ if ($password_quality['strong'] == true) {
 /**
  * Check password strength
  * 
- * Tuskfish requires that passwords should require attackers to search the full keyspace and must
- * be greater than 14 characters to prevent exhaustive brute force searches.
+ * Tuskfish requires that passwords be minimum length of 15 characters to prevent exhaustive brute 
+ * force searches.
  * 
  * @param string $password
  * @return array $evaluation Array of error messages
@@ -121,6 +121,7 @@ function checkPasswordStrength($password) {
         $evaluation[] = 'Too short. Password must be 15 characters or more.';
     }
 
+    /**
     // Must contain at least one upper case letter.
     if (!preg_match('/[A-Z]/', $password)) {
         $evaluation['strong'] = false;
@@ -144,6 +145,7 @@ function checkPasswordStrength($password) {
         $evaluation['strong'] = false;
         $evaluation[] = 'Must include at least one non-alphanumeric symbol (!@#$%^&?,;:[] etc).';
     }
+     */
 
     return $evaluation;
 }

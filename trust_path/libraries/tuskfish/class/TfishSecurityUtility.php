@@ -32,8 +32,7 @@ class TfishSecurityUtility
     /**
      * Evaluates the strength of a password to resist brute force cracking.
      * 
-     * Issues warnings if deficiencies are found. Requires a minimum length of 15 characters
-     * and maximisation of search space (one upper and lower case letter, one number, one symbol).
+     * Issues warnings if deficiencies are found. Requires a minimum length of 15 characters.
      * 
      * @param string $password Input password.
      * @return array Array of evaluation warnings as strings.
@@ -47,7 +46,7 @@ class TfishSecurityUtility
             $evaluation['strong'] = false;
             $evaluation[] = TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS;
         }
-
+        /**
         // Must contain at least one upper case letter.
         if (!preg_match('/[A-Z]/', $password)) {
             $evaluation['strong'] = false;
@@ -71,6 +70,7 @@ class TfishSecurityUtility
             $evaluation['strong'] = false;
             $evaluation[] = TFISH_PASSWORD_SYMBOLIC_WEAKNESS;
         }
+         */
 
         return $evaluation;
     }
