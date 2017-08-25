@@ -169,24 +169,36 @@ class TfishSession
 
         // Authenticate user by calculating their password hash and comparing it to the one on file.
         if ($user) {
+            
+            // If the user has previous failed login atttempts sleep to frustrate brute force attacks.
+            if ($user['login_errors']) {
+                sleep($user['login_errors']);
+            }
+            
             $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
                     TFISH_SITE_SALT, $user['user_salt']);
+            
+            // If login successful regenerate session due to privilege escalation.
             if ($password_hash == $user['password_hash']) {
-
-                // Regenerate session due to priviledge escalation
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
-                // Added as a handle for the password change script.
                 $_SESSION['user_id'] = (int) $user['id'];
+                
+                // Reset failed login counter to zero.
+                TfishDatabase::update('user', $user['id'], array('login_errors' => 0));
+                
+                // Redirect to admin page.
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
                 // Issue failed login warning, destroy session and redirect to the login page.
+                // Increment failed login counter
                 self::logout(TFISH_ADMIN_URL . "login.php");
                 exit;
             }
         } else {
-            // Issue failed login warning and redirect to the login page.
+            // Increment failed login counter and redirect to login page.
+            TfishDatabase::updateCounter($user['id'], 'user', 'login_errors');
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }

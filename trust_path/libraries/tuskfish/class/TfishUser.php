@@ -40,6 +40,9 @@ class TfishUser
         'password_hash',
         'user_salt',
         'user_group',
+        'yubikey_id',
+        'yubikey_id2',
+        'login_errors'
     );
 
     /**
@@ -120,6 +123,14 @@ class TfishUser
                 case "yubikey_id2":
                     $clean_value = TfishFilter::trimString($value);
                     $this->__data[$clean_property] = $clean_value;
+                    break;
+                
+                case "login_errors":
+                    if (TfishFilter::isInt($value, 0)) {
+                        $this->__data[$clean_property] = (int) $value;
+                    }  else {
+                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                    }
                     break;
             }
         } else {
