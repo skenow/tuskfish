@@ -102,7 +102,7 @@ class TfishTagHandler extends TfishContentHandler
      * available, but they won't appear in the select box list.
      * 
      * @param int $selected ID of selected option.
-     * @param string $type Type of content object.
+     * @param string $type Type of content object, eg. TfishArticle.
      * @param string $zero_option The string that will be displayed for the 'zero' or no selection
      * option.
      * @param bool $online_only Get all tags or just those marked online.
@@ -114,36 +114,22 @@ class TfishTagHandler extends TfishContentHandler
         $select_box = '';
         $tag_list = array();
 
-        // ID of a previously selected tag, if any.
         $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1))
                 ? (int) $selected : null;
-        // The text to display in the zero option of the select box.
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
-        // Used to filter tags relevant to a specific content subclass, eg. TfishArticle.
         $clean_type = TfishContentHandler::isSanctionedType($type)
                 ? TfishFilter::trimString($type) : null;
         $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
 
         $tag_list = TfishContentHandler::getActiveTagList($clean_type, $clean_online_only);
         
-        if (!empty($tag_list)) {
-            asort($tag_list);
-            $tag_list = array(0 => $clean_zero_option) + $tag_list;
-            $select_box = '<select class="form-control" name="tag_id" id="tag_id"'
-                    . ' onchange="this.form.submit()">';
-            
-            foreach ($tag_list as $key => $value) {
-                $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>'
-                        . $value . '</option>' : '<option value="' . $key . '">' . $value
-                        . '</option>';
-            }
-            
-            $select_box .= '</select>';
-            
-            return $select_box;
+        if ($tag_list) {
+            $select_box = self::getArbitraryTagSelectBox($clean_selected, $tag_list, 'tag_id', $clean_zero_option);
         } else {
-            return false;
+            $select_box = false;
         }
+        
+        return $select_box;
     }
 
     /**
