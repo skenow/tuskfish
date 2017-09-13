@@ -32,7 +32,9 @@ $clean_temperature = isset($_POST['temperature']) ? (float) $_POST['temperature'
  * 
  * HMAC may be a viable options (I think there is a library, but don't know how reliable it is).
  * A pre-shared key (and a cache of data points) could be stored on the Ethernet shield's SD card.
- * The possibility of the key being lifted by someone with physical access can't be discounted, an
+ * However, the possibility of the key being lifted by someone with physical access can't be
+ * discounted, so machines that don't have protected physical access should not be allowed to do
+ * anything risky.
  * 
  * There is some talk of developing lightweight crypto standards and libraries for small devices
  * but it hasn't really progressed far yet.
