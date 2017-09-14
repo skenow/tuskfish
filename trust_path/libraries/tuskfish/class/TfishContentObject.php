@@ -231,17 +231,17 @@ class TfishContentObject extends TfishAncestralObject
             return null;
         }
         
+        // Convert properties to human readable form, where necessary.
+        $human_readable_property = $this->makeHumanReadable($property);
+        
         // HTML properties (such as teaser and description) are input filtered with HTMLPurifier
         // elsewhere. They cannot be treated with htmlspecialchars() in any case as that would break
         // their tags. If you want to apply output filtering to HTML properties override this method
         // in the relevant subclass. Note that any custom HTML properties you add to a subclass
         // need to be input filtered.
         if ($this->__properties[$clean_property] == 'html') {
-            return $this->__data[$clean_property];
+            return $human_readable_property;
         }
-        
-        // Convert properties to human readable form.
-        $human_readable_property = $this->makeHumanReadable($property);
         
         return htmlspecialchars($human_readable_property, ENT_QUOTES, 'UTF-8');
     }
