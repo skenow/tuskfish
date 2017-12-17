@@ -14,10 +14,9 @@
  */
 // Include the relevant page template, or the default if not set.
 if ($tfish_template && !empty($tfish_template->theme)) {
-    include_once TFISH_THEMES_PATH . $tfish_template->theme . "/"
-            . $tfish_template->theme . ".html";
+    include_once TFISH_THEMES_PATH . $tfish_template->theme . "/theme.html";
 } else {
-    include_once TFISH_THEMES_PATH . "default/default.html";
+    include_once TFISH_THEMES_PATH . "default/theme.html";
 }
 
 // Close the database connection.
