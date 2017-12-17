@@ -18,7 +18,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 define("TFISH_ADMIN_PATH", TFISH_ROOT_PATH . "admin/");
 define("TFISH_PUBLIC_CACHE_PATH", TFISH_ROOT_PATH . "cache/");
 define("TFISH_THEMES_PATH", TFISH_ROOT_PATH . "themes/");
-define("TFISH_THEMES_BLOCK_PATH", TFISH_ROOT_PATH . "themes/blocks/");
+define("TFISH_JS_PATH", TFISH_ROOT_PATH . "js/");
 define("TFISH_UPLOADS_PATH", TFISH_ROOT_PATH . "uploads/");
 define("TFISH_MEDIA_PATH", TFISH_UPLOADS_PATH . "media/");
 define("TFISH_IMAGE_PATH", TFISH_UPLOADS_PATH . 'image/');
