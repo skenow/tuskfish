@@ -35,6 +35,7 @@ define("TFISH_PRIVATE_CACHE_PATH", TFISH_TRUST_PATH . "cache/");
 define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
 define("TFISH_CACHE_URL", TFISH_URL . "cache/");
 define("TFISH_THEMES_URL", TFISH_URL . "themes/");
+define("TFISH_JS_URL", TFISH_URL . "js/");
 define("TFISH_RSS_URL", TFISH_URL . "rss.php");
 define("TFISH_PERMALINK_URL", TFISH_URL);
 define("TFISH_MEDIA_URL", TFISH_URL . "uploads/media/");
