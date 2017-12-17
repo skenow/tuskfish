@@ -902,6 +902,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_column = self::validateColumns(array($column));
         $clean_column = reset($clean_column);
+        
         return self::_updateCounter($clean_id, $clean_table, $clean_column);
     }
 
@@ -917,7 +918,7 @@ class TfishDatabase
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
         }
-        
+
         return self::executeTransaction($statement);
     }
 
