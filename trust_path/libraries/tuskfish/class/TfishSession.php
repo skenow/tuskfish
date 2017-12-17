@@ -185,10 +185,9 @@ class TfishSession
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
                 $_SESSION['user_id'] = (int) $user['id'];
-                
+
                 // Reset failed login counter to zero.
                 TfishDatabase::update('user', $user['id'], array('login_errors' => 0));
-                
                 // Redirect to admin page.
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
