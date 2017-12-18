@@ -67,7 +67,7 @@
         <label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <!-- TinyMCE editor field -->
-            <textarea name="teaser" id="teaser" class="form-control text-left" required><?php if (isset($content->teaser)) { echo $content->teaser; } ?></textarea>
+            <textarea name="teaser" id="teaser" class="form-control text-left" required><?php if (isset($content->teaser)) { echo $content->escape('teaser', true); } ?></textarea>
         </div>
     </div>
 
@@ -76,7 +76,7 @@
         <label for="description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
             <!-- TinyMCE editor field -->
-            <textarea name="description" id="description" class="form-control text-left" required><?php if (isset($content->description)) { echo $content->description; } ?></textarea>
+            <textarea name="description" id="description" class="form-control text-left" required><?php if (isset($content->description)) { echo $content->escape('description', true); } ?></textarea>
         </div>
     </div>
 

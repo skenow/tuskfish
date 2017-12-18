@@ -216,14 +216,17 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * Use this method to retrieve object properties when you want to send them to the browser.
      * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
-     * attacks. Note that the method specifically excludes the teaser and description fields, 
+     * attacks. Note that the method excludes the teaser and description fields by default, 
      * which are returned unescaped; these are dedicated HTML fields that have been input-validated
-     * with the HTMLPurifier library, and so *should* be safe.
+     * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
+     * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
+     * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
      * 
      * @param string $property Name of property.
+     * @param string $escape_html Whether to escape HTML fields (teaser, description as well).
      * @return string Human readable value escaped for display.
      */
-    public function escape($property)
+    public function escape($property, $escape_html = false)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -239,7 +242,7 @@ class TfishContentObject extends TfishAncestralObject
         // their tags. If you want to apply output filtering to HTML properties override this method
         // in the relevant subclass. Note that any custom HTML properties you add to a subclass
         // need to be input filtered.
-        if ($this->__properties[$clean_property] == 'html') {
+        if ($this->__properties[$clean_property] == 'html' && !$escape_html) {
             return $human_readable_property;
         }
         
