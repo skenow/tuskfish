@@ -25,7 +25,7 @@ $clean_type = isset($_GET['type']) && !empty($_GET['type'])
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 // Specify the admin theme and the template to be used to preview content (user side template).
-if ($op == 'view') {
+if ($op === 'view') {
     $tfish_template->setTheme('default');
 } else {
     $tfish_template->setTheme('admin');
@@ -361,7 +361,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 
                     // If object is a collection check if has child objects; if so display
                     // thumbnails and teasers / links.
-                    if ($content->type == 'TfishCollection') {
+                    if ($content->type === 'TfishCollection') {
                         $criteria->add(new TfishCriteriaItem('parent', $content->id));
                         $criteria->add(new TfishCriteriaItem('online', 1));
                         
@@ -372,7 +372,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 
                     // If object is a tag, then a different method is required to call the related
                     // content.
-                    if ($content->type == 'TfishTag') {
+                    if ($content->type === 'TfishTag') {
                         if ($clean_start) $criteria->offset = $clean_start;
                         
                         $criteria->limit = $tfish_preference->user_pagination;
@@ -381,7 +381,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     }
 
                     // Prepare pagination control.
-                    if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
+                    if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
                         $first_child_count = TfishContentHandler::getCount($criteria);
                         $tfish_template->collection_pagination = 
                                 $tfish_metadata->getPaginationControl(

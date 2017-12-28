@@ -55,7 +55,7 @@ if (in_array($op, array('submit', false))) {
             // Check that password meets minimum strength requirements.
             $password_quality = TfishSecurityUtility::checkPasswordStrength($dirty_password);
             
-            if ($password_quality['strong'] == false) {
+            if ($password_quality['strong'] === false) {
                 unset($password_quality['strong']);
                 foreach ($password_quality as $key => $problem) {
                     $error[] = $problem;

@@ -40,11 +40,11 @@ if ($clean_id) {
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
     
-    if (is_object($content) && $content->online == true && $content->type != 'TfishBlock') {
+    if (is_object($content) && $content->online === true && $content->type !== 'TfishBlock') {
 
         // Update view counter and assign object to template. Only increment counter for
         // non-downloadable objects.
-        if ($content->type != 'TfishDownload' && !($content->type == 'TfishCollection' 
+        if ($content->type != 'TfishDownload' && !($content->type === 'TfishCollection' 
                 && $content->media)) {
             $content->counter += 1;
             $content_handler::updateCounter($clean_id);
@@ -105,7 +105,7 @@ if ($clean_id) {
         $criteria->ordertype = 'DESC';
 
         // If object is a collection check if has child objects; if so display teasers / links.
-        if ($content->type == 'TfishCollection') {
+        if ($content->type === 'TfishCollection') {
             $criteria->add(new TfishCriteriaItem('parent', $content->id));
             $criteria->add(new TfishCriteriaItem('online', 1));
             
@@ -115,7 +115,7 @@ if ($clean_id) {
         }
 
         // If object is a tag, then a different method is required to call the related content.
-        if ($content->type == 'TfishTag') {
+        if ($content->type === 'TfishTag') {
             if ($clean_start) $criteria->offset = $clean_start;
             
             $criteria->limit = $tfish_preference->user_pagination;
@@ -125,7 +125,7 @@ if ($clean_id) {
         }
 
         // Prepare pagination control.
-        if ($content->type == 'TfishCollection' || $content->type == 'TfishTag') {
+        if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
             $first_child_count = TfishContentHandler::getCount($criteria);
             $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl(
                     $first_child_count, $tfish_preference->user_pagination, $target_file_name,
