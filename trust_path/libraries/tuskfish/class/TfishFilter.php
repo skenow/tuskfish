@@ -364,8 +364,8 @@ class TfishFilter
     /**
      * Validate URL.
      * 
-     * Only accepts http:// protocol and ASCII characters. Other protocols and internationalised
-     * domain names will fail validation (limitation of filter).
+     * Only accepts http:// and https:// protocol and ASCII characters. Other protocols
+     * and internationalised domain names will fail validation (limitation of filter).
      *
      * @param string $url Input to be tested.
      * @return bool True if valid URL otherwise false.
