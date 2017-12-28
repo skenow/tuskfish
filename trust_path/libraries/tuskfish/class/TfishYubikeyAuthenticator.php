@@ -64,7 +64,7 @@ class TfishYubikeyAuthenticator
 
         if (defined("TFISH_YUBIKEY_SIGNATURE_KEY")) {
 
-            if (mb_strlen(TFISH_YUBIKEY_SIGNATURE_KEY, "UTF-8") == 28) {
+            if (mb_strlen(TFISH_YUBIKEY_SIGNATURE_KEY, "UTF-8") === 28) {
                 $this->_signatureKey = base64_decode(TFISH_YUBIKEY_SIGNATURE_KEY);
             }
         } else {
@@ -213,13 +213,13 @@ class TfishYubikeyAuthenticator
         }
 
         foreach ($this->_curlResult as $param) {
-            if (mb_substr($param, 0, 2, "UTF-8") == "h=")
+            if (mb_substr($param, 0, 2, "UTF-8") === "h=")
                 $signature = substr(trim($param), 2);
             
-            if (mb_substr($param, 0, 2, "UTF-8") == "t=")
+            if (mb_substr($param, 0, 2, "UTF-8") === "t=")
                 $timestamp = substr(trim($param), 2);
             
-            if (mb_substr($param, 0, 7, "UTF-8") == "status=")
+            if (mb_substr($param, 0, 7, "UTF-8") === "status=")
                 $status = substr(trim($param), 7);
         }
 
@@ -309,7 +309,7 @@ class TfishYubikeyAuthenticator
     {
         $otp = TfishFilter::trimString($otp);
         
-        if (mb_strlen($otp, "UTF-8") == 44) {
+        if (mb_strlen($otp, "UTF-8") === 44) {
             return true;
         } else {
             return false;
@@ -378,7 +378,7 @@ class TfishYubikeyAuthenticator
             return true;
 
         if (base64_encode(hash_hmac("sha1", $signedMessage, $this->_signatureKey, true))
-                == $signature) {
+                === $signature) {
             return true;
         } else {
             return false;

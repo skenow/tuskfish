@@ -8,7 +8,7 @@
             <select class="form-control" name="type" id="type" required>
                 <?php
                     foreach ($content_types as $key => $type) {
-                        if ($content->type == $key) {
+                        if ($content->type === $key) {
                             echo '<option value="' . $key . '" selected>' . $type . '</option>';
                         } else {
                             echo '<option value="' . $key . '">' . $type . '</option>';
@@ -104,9 +104,9 @@
             <div class="col-lg-11 col-md-10 col-sm-9 col-xs-9">
                 <select class="form-control" name="parent" id="parent" required>
                     <?php foreach ($parent_select_options as $key => $option): ?>
-                        <?php if ($key == $content->id): ?>
+                        <?php if ($key === $content->id): ?>
                             <option value="<?php echo $key; ?>" disabled><?php echo $option; ?></option>
-                        <?php elseif ($key == $content->parent): ?>
+                        <?php elseif ($key === $content->parent): ?>
                             <option value="<?php echo $key; ?>" selected><?php echo $option; ?></option>
                         <?php else: ?>
                             <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
@@ -192,7 +192,7 @@
                 <select class="form-control" name="rights" id="rights" required>
                     <?php
                         foreach ($rights as $key => $right) {
-                            if ($content->rights == $key) {
+                            if ($content->rights === $key) {
                                 echo '<option value="' . $key . '" selected>' . $right . '</option>';
                             } else {
                                 echo '<option value="' . $key . '">' . $right . '</option>';
@@ -210,7 +210,7 @@
                 <select class="form-control" name="language" id="language" required>
                     <?php
                         foreach ($languages as $key => $value) {
-                            if (isset($content->language) && $content->language == $key) {
+                            if (isset($content->language) && $content->language === $key) {
                                 echo '<option value="' . $key . '" selected>' . $value . '</option>';
                             } else {
                                 echo '<option value="' . $key . '">' . $value . '</option>';
@@ -225,10 +225,10 @@
         <label for="online" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
             <label for="online" class="radio-inline">
-                <input type="radio" name="online" value="1" checked id="online" <?php if ($content->online == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_ONLINE; ?>
+                <input type="radio" name="online" value="1" checked id="online" <?php if ($content->online) { echo 'checked="checked"'; } ?>><?php echo TFISH_ONLINE; ?>
             </label>
             <label for="online" class="radio-inline">
-                <input type="radio" name="online" value="0" id="online" <?php if ($content->online == 0) { echo 'checked="checked"'; } ?>><?php echo TFISH_OFFLINE; ?>
+                <input type="radio" name="online" value="0" id="online" <?php if (!$content->online) { echo 'checked="checked"'; } ?>><?php echo TFISH_OFFLINE; ?>
             </label>
         </div>
     </div>
@@ -295,7 +295,7 @@
                 $.each(allowedProperties, function (i, value) {
                     $('#' + value).show();
                 });
-                if ($("#type").val() == 'TfishTag') {
+                if ($("#type").val() === 'TfishTag') {
                     var disabledProperties = [
                         'creatorContainer', 'mediaContainer', 'dateContainer', 'languageContainer',
                         'rightsContainer', 'publisherContainer', 'tagsContainer'];
@@ -303,7 +303,7 @@
                         $('#' + value).hide();
                     });
                 }
-                if ($("#type").val() == 'TfishBlock') {
+                if ($("#type").val() === 'TfishBlock') {
                     var disabledProperties = [
                         'teaserContainer', 'mediaContainer', 'creatorContainer', 'imageContainer',
                         'captionContainer', 'dateContainer', 'parentContainer', 'languageContainer',

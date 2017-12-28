@@ -35,10 +35,10 @@
         <label for="close_site" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_CLOSE_SITE; ?>:</label>
         <div class="control-label col-lg-9 col-md-8 col-sm-8">
             <label class="radio-inline pull-left">
-                <input class="pull-left" type="radio" name="close_site" value="1" id="close_site" <?php if ($preferences['close_site'] == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
+                <input class="pull-left" type="radio" name="close_site" value="1" id="close_site" <?php if ($preferences['close_site']) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
             </label>
             <label for="close_site" class="radio-inline pull-left">
-                <input type="radio" name="close_site" value="0" id="close_site" <?php if ($preferences['close_site'] == 0) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
+                <input type="radio" name="close_site" value="0" id="close_site" <?php if (!$preferences['close_site']) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
             </label>
         </div>
 
@@ -50,7 +50,7 @@
             <select class="form-control" name="server_timezone" id="server_timezone" required>
                 <?php
                     foreach ($timezones as $key => $value) {
-                        if ($preferences['server_timezone'] == $key) {
+                        if ($preferences['server_timezone'] === $key) {
                             echo '<option value="' . $key . '" selected>' . $value . '</option>';
                         } else {
                             echo '<option value="' . $key . '">' . $value . '</option>';
@@ -67,7 +67,7 @@
             <select class="form-control" name="site_timezone" id="site_timezone" required>
                 <?php
                     foreach ($timezones as $key => $value) {
-                        if ($preferences['site_timezone'] == $key) {
+                        if ($preferences['site_timezone'] === $key) {
                             echo '<option value="' . $key . '" selected>' . $value . '</option>';
                         } else {
                             echo '<option value="' . $key . '">' . $value . '</option>';
@@ -132,7 +132,7 @@
             <select class="form-control" name="default_language" id="default_language" required>
                 <?php
                     foreach ($languages as $key => $value) {
-                        if (isset($preferences['default_language']) && $preferences['default_language'] == $key) {
+                        if (isset($preferences['default_language']) && $preferences['default_language'] === $key) {
                             echo '<option value="' . $key . '" selected>' . $value . '</option>';
                         } else {
                             echo '<option value="' . $key . '">' . $value . '</option>';
@@ -152,10 +152,10 @@
         <label for="enable_cache" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_ENABLE_CACHE; ?>:</label>
         <div class="control-label col-lg-9 col-md-8 col-sm-8">
             <label class="radio-inline pull-left">
-                <input class="pull-left" type="radio" name="enable_cache" value="1" id="enable_cache" <?php if ($preferences['enable_cache'] == 1) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
+                <input class="pull-left" type="radio" name="enable_cache" value="1" id="enable_cache" <?php if ($preferences['enable_cache']) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
             </label>
             <label for="enable_cache" class="radio-inline pull-left">
-                <input type="radio" name="enable_cache" value="0" id="enable_cache" <?php if ($preferences['enable_cache'] == 0) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
+                <input type="radio" name="enable_cache" value="0" id="enable_cache" <?php if (!$preferences['enable_cache']) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
             </label>
         </div>
 

@@ -58,7 +58,7 @@ class TfishSession
      */
     public static function isAdmin()
     {
-        if (isset($_SESSION['TFISH_LOGIN']) && $_SESSION['TFISH_LOGIN'] == true) {
+        if (isset($_SESSION['TFISH_LOGIN']) && $_SESSION['TFISH_LOGIN'] === true) {
             return true;
         } else {
             return false;
@@ -86,7 +86,7 @@ class TfishSession
         // Check for "last seen" timestamp.
         $last_seen = isset($_SESSION['last_seen']) ? (int) $_SESSION['last_seen'] : false;
 
-        // Check expiry (but not if session_life == 0).
+        // Check expiry (but not if session_life === 0).
         if ($last_seen && $tfish_preference->session_life > 0) {
             if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_life * 60)) {
                 return true;
@@ -181,7 +181,7 @@ class TfishSession
                     TFISH_SITE_SALT, $user['user_salt']);
             
             // If login successful regenerate session due to privilege escalation.
-            if ($password_hash == $user['password_hash']) {
+            if ($password_hash === $user['password_hash']) {
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
                 $_SESSION['user_id'] = (int) $user['id'];
@@ -272,7 +272,7 @@ class TfishSession
         $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
                 TFISH_SITE_SALT, $user['user_salt']);
         
-        if ($password_hash == $user['password_hash']) {
+        if ($password_hash === $user['password_hash']) {
             $first_factor = true;
         }
         

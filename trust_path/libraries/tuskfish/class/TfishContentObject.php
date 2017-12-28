@@ -143,7 +143,7 @@ class TfishContentObject extends TfishAncestralObject
                 $bytes = (int) $this->__data[$clean_property];
                 $unit = $val = '';
 
-                if ($bytes == 0 || $bytes < 1024) {
+                if ($bytes === 0 || $bytes < 1024) {
                     $unit = ' bytes';
                     $val = $bytes;
                 } elseif ($bytes > 1023 && $bytes < 1048576) {
@@ -242,7 +242,7 @@ class TfishContentObject extends TfishAncestralObject
         // their tags. If you want to apply output filtering to HTML properties override this method
         // in the relevant subclass. Note that any custom HTML properties you add to a subclass
         // need to be input filtered.
-        if ($this->__properties[$clean_property] == 'html' && !$escape_html) {
+        if ($this->__properties[$clean_property] === 'html' && !$escape_html) {
             return $human_readable_property;
         }
         
@@ -343,7 +343,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 case "image/png":
                 case "image/gif":
-                    if ($properties['mime'] == "image/gif") {
+                    if ($properties['mime'] === "image/gif") {
                         $original = imagecreatefromgif($original_path);
                     } else {
                         $original = imagecreatefrompng($original_path);
@@ -401,7 +401,7 @@ class TfishContentObject extends TfishAncestralObject
 
                     // Bugfix from original: Changed next block to be an independent if, instead of
                     // an elseif linked to previous block. Otherwise PNG transparency doesn't work.
-                    if ($properties['mime'] == "image/png") {
+                    if ($properties['mime'] === "image/png") {
                         // Set the blending mode for an image.
                         imagealphablending($thumbnail, false);
                         // Allocate a colour for an image ($image, $red, $green, $blue, $alpha).
@@ -421,7 +421,7 @@ class TfishContentObject extends TfishAncestralObject
                             $destination_height, $properties[0], $properties[1]);
 
                     // Output a useable png or gif from the image resource.
-                    if ($properties['mime'] == "image/gif") {
+                    if ($properties['mime'] === "image/gif") {
                         $result = imagegif($thumbnail, $cached_path);
                     } else {
                         // Quality is controlled through an optional third argument (0-9, lower is
@@ -697,7 +697,7 @@ class TfishContentObject extends TfishAncestralObject
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                         }
 
-                        if ($value == $this->__data['id'] && $value > 0) {
+                        if ($value === $this->__data['id'] && $value > 0) {
                             trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
                         } else {
                             $this->__data[$clean_property] = $value;
@@ -718,7 +718,7 @@ class TfishContentObject extends TfishAncestralObject
 
             case "ip":
                 $value = TfishFilter::trimString($value);
-                if ($value == "" || TfishFilter::isIp($value)) {
+                if ($value === "" || TfishFilter::isIp($value)) {
                     $this->__data[$clean_property] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_IP, E_USER_ERROR);
@@ -728,11 +728,10 @@ class TfishContentObject extends TfishAncestralObject
             case "string":
                 $value = TfishFilter::trimString($value);
 
-                if ($clean_property == "date") { // Ensure format complies with DATE_RSS
+                if ($clean_property === "date") { // Ensure format complies with DATE_RSS
                     $check_date = date_parse_from_format('Y-m-d', $value);
 
-                    if ($check_date == false 
-                            || $check_date['warning_count'] > 0
+                    if (!$check_date || $check_date['warning_count'] > 0
                             || $check_date['error_count'] > 0) {
                         // Bad date supplied, default to today.
                         $value = date(DATE_RSS, time());
@@ -741,13 +740,13 @@ class TfishContentObject extends TfishAncestralObject
                 }
 
                 // Check image/media paths for directory traversals and null byte injection.
-                if ($clean_property == "image" || $clean_property == "media") {
+                if ($clean_property === "image" || $clean_property === "media") {
                     if (TfishFilter::hasTraversalorNullByte($value)) {
                         trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                     }
                 }
 
-                if ($clean_property == "format") {
+                if ($clean_property === "format") {
                     switch ($this->__data['type']) {
                         case "TfishAudio":
                             $mimetype_whitelist = TfishFileHandler::allowedAudioMimetypes();
@@ -765,7 +764,7 @@ class TfishContentObject extends TfishAncestralObject
                     }
                 }
 
-                if ($clean_property == "language") {
+                if ($clean_property === "language") {
                     $language_whitelist = TfishContentHandler::getLanguages();
 
                     if (!array_key_exists($value, $language_whitelist)) {
@@ -774,7 +773,7 @@ class TfishContentObject extends TfishAncestralObject
                 }
 
                 // Replace spaces with dashes.
-                if ($clean_property == "seo") {
+                if ($clean_property === "seo") {
                     if (TfishFilter::isUtf8($value)) {
                         $value = str_replace(' ', '-', $value);
                     } else {
@@ -788,7 +787,7 @@ class TfishContentObject extends TfishAncestralObject
             case "url":
                 $value = TfishFilter::trimString($value);
 
-                if ($value == "" || TfishFilter::isUrl($value)) {
+                if ($value === "" || TfishFilter::isUrl($value)) {
                     $this->__data[$clean_property] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);

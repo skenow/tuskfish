@@ -235,7 +235,7 @@ class TfishDatabase
             
             foreach ($columns as $key => $value) {
                 $sql .= "`" . $key . "` " . $value . "";
-                if ($primary_key && $primary_key == $key) {
+                if ($primary_key && $primary_key === $key) {
                     $sql .= " PRIMARY KEY";
                 }
                 $sql .= ", ";
@@ -329,10 +329,10 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= "ORDER BY `t1`." 
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                    $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -583,11 +583,11 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                    $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -803,11 +803,11 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->ordertype == "DESC" ? "DESC" : "ASC";
+                    $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
                 }
             }
 

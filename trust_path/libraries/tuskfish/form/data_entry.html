@@ -154,7 +154,7 @@
                     <?php
                         global $tfish_preference;
                         foreach ($languages as $key => $value) {
-                            if ($tfish_preference->default_language == $key) {
+                            if ($tfish_preference->default_language === $key) {
                                 echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
                             } else {
                                 echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
@@ -220,7 +220,7 @@
             $.each(allowedProperties, function (i, value) {
                 $('#' + value).show();
             });
-            if ($("#type").val() == 'TfishTag') {
+            if ($("#type").val() === 'TfishTag') {
                 var disabledProperties = [
                     'creatorContainer', 'mediaContainer', 'dateContainer', 'languageContainer',
                     'rightsContainer', 'publisherContainer', 'tagsContainer'];
@@ -228,7 +228,7 @@
                     $('#' + value).hide();
                 });
             }
-            if ($("#type").val() == 'TfishBlock') {
+            if ($("#type").val() === 'TfishBlock') {
                 var disabledProperties = [
                     'teaserContainer', 'mediaContainer', 'creatorContainer', 'imageContainer',
                     'captionContainer', 'dateContainer', 'parentContainer', 'languageContainer',

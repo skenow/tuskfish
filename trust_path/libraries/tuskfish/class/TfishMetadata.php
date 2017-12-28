@@ -93,8 +93,8 @@ class TfishMetadata
             $extra_params = array())
     {
         // Filter parameters.
-        $clean_count = TfishFilter::isInt($count, 1) ? (int) $count : false;
-        $clean_limit = TfishFilter::isInt($limit, 1) ? (int) $limit : false;
+        $clean_count = TfishFilter::isInt($count, 1) ? (int) $count : 0;
+        $clean_limit = TfishFilter::isInt($limit, 1) ? (int) $limit : 0;
         $clean_start = TfishFilter::isInt($start, 0) ? (int) $start : 0;
         $clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::trimString($url)
                 . '.php' : TFISH_URL;
@@ -127,7 +127,7 @@ class TfishMetadata
                 ? TfishFilter::escape(implode("&", $clean_extra_params)) : '';
 
         // If the count is zero there is no need for a pagination control.
-        if ($clean_count == 0) {
+        if ($clean_count === 0) {
             return false;
         }
         
@@ -157,7 +157,7 @@ class TfishMetadata
         $page_range = range(1, $page_count);
 
         // No need for pagination control if only one page.
-        if ($page_count == 1) {
+        if ($page_count === 1) {
             return false;
         }
 
@@ -180,7 +180,7 @@ class TfishMetadata
         $aft_boundcheck = ($current_page + $offset_float);
 
         // This is the tricky bit - slicing a variable region out of the range.
-        if ($page_count == $elements) {
+        if ($page_count === $elements) {
             $page_slots = $page_range;
         } elseif ($fore_boundcheck < 1) {
             $page_slots = array_slice($page_range, 0, $elements, true);
@@ -229,7 +229,7 @@ class TfishMetadata
                 $query = '?' . implode('&amp;', $arg_array);
             }
 
-            if (($key + 1) == $current_page) {
+            if (($key + 1) === $current_page) {
                 $control .= '<li class="active"><a href="' . $url . $query . '">' . $slot
                         . '</a></li>';
             } else {

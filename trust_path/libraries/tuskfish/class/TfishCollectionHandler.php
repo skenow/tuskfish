@@ -119,7 +119,7 @@ class TfishCollectionHandler extends TfishContentHandler
         if (!empty($options)) {
             foreach ($options as $key => $value) {
                 
-                if ($key == $clean_selected) {
+                if ($key === $clean_selected) {
                     $select_box .= '<option value="' . $key . '" selected>' . $value . '</option>';
                 } else {
                     $select_box .= '<option value="' . $key . '">' . $value . '</option>';

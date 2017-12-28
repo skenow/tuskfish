@@ -182,7 +182,7 @@ class TfishCriteria
                 break;
 
             case "ordertype": // ASC or DESC
-                if ($value == "ASC") {
+                if ($value === "ASC") {
                     $this->__data['ordertype'] = "ASC";
                 } else {
                     $this->__data['ordertype'] = "DESC";
@@ -281,7 +281,7 @@ class TfishCriteria
         $sql = '';
         $count = count($this->tag);
         
-        if ($count == 1) {
+        if ($count === 1) {
             $sql .= "`taglink`.`tag_id` = :tag0 ";
         } elseif ($count > 1) {
             $sql .= "`taglink`.`tag_id` IN (";

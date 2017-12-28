@@ -183,7 +183,7 @@ class TfishFileHandler
             // Basically this checks for directory traversals. This is a limited use function and
             // directory traversals are unnecessary. If any are found the input is suspect and
             // rejected.
-            if ($path == $resolved_path) {
+            if ($path === $resolved_path) {
                 return $path; // Path is good.
             } else {
                 trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
@@ -376,7 +376,7 @@ class TfishFileHandler
         
         if ($clean_id) {
             $result = self::_sendDownload($clean_id, $clean_filename);
-            if ($result == false) {
+            if ($result === false) {
                 return false;
             }
             return true;
@@ -400,7 +400,7 @@ class TfishFileHandler
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $content = TfishContentHandler::toObject($row);
         
-        if ($content && $content->online == true) {
+        if ($content && $content->online) {
             $media = isset($content->media) ? $content->media : false;
             
             if ($media && is_readable(TFISH_MEDIA_PATH . $content->media)) {

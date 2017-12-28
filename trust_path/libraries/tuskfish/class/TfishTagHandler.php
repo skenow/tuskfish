@@ -184,7 +184,7 @@ class TfishTagHandler extends TfishContentHandler
                 . $clean_key_name . '" onchange="this.form.submit()">';
         
         foreach ($clean_tag_list as $key => $value) {
-            $select_box .= ($key == $selected) ? '<option value="' . $key . '" selected>' . $value
+            $select_box .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
                     . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
         }
         

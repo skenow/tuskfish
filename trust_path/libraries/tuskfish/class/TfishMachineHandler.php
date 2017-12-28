@@ -65,7 +65,7 @@ class TfishMachineHandler
 		$this->checkCounter();
 		$this->checkHmac();
 		$this->authenticated = $this->check_sanity();
-		if ($this->authenticated == true) {
+		if ($this->authenticated === true) {
 			$this->executeCommand($clean_command);
 		}
     }
@@ -171,7 +171,7 @@ class TfishMachineHandler
          * 
          * $local_hash = mb_substr($hash, 0, 32, "UTF-8");
          * 
-         * if ($local_hash == $remote_hash) {
+         * if ($local_hash === $remote_hash) {
          *     // Good signal: Authenticity and integrity of communication established.
          * } else {
          *     // Bad signal: May be spoofed or modified, discard.

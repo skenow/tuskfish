@@ -120,7 +120,7 @@ class TfishTemplate
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if ($clean_property == 'theme') {
+        if ($clean_property === 'theme') {
             $this->setTheme($value);
             return;
         }

@@ -92,11 +92,11 @@ class TfishMachine extends TfishTfishAncestralObject
                 
                 // allowed_in, allowed_out
                 case "array":
-                    if ($property == 'allowed_in') {
+                    if ($property === 'allowed_in') {
                         // Whitelist of allowed inbound commands issued by remote machines.
                     }
                     
-                    if ($property == 'allowed_out') {
+                    if ($property === 'allowed_out') {
                         // Whitelist of allowed outbound commands to remote machines.
                     }
                     break;
@@ -137,7 +137,7 @@ class TfishMachine extends TfishTfishAncestralObject
                 // url
                 case "url":
                     $value = TfishFilter::trimString($value);
-                    if ($value == "" || TfishFilter::isUrl($value)) {
+                    if ($value === "" || TfishFilter::isUrl($value)) {
                         $this->__data[$property] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);

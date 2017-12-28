@@ -68,7 +68,7 @@ class TfishContentHandler
         }
 
         // If object is a collection delete related parent references in child objects.
-        if ($obj->type == 'TfishCollection') {
+        if ($obj->type === 'TfishCollection') {
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('parent', $clean_id));
             $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
@@ -461,7 +461,7 @@ class TfishContentHandler
         
         if (isset($clean_selected)) {
             foreach ($options as $key => $value) {
-                $select_box .= ($key == $clean_selected) ? '<option value="' . $key . '" selected>' 
+                $select_box .= ($key === $clean_selected) ? '<option value="' . $key . '" selected>' 
                         . $value . '</option>' : '<option value="' . $key . '">' . $value 
                         . '</option>';
             }
@@ -564,7 +564,7 @@ class TfishContentHandler
     protected static function getTypeIndex($criteria_items)
     {
         foreach ($criteria_items as $key => $item) {
-            if ($item->column == 'type') {
+            if ($item->column === 'type') {
                 return $key;
             }
         }
@@ -622,7 +622,7 @@ class TfishContentHandler
                 . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {
-            $select_box .= ($key == $selected) ? '<option value="' . TfishFilter::escape($key)
+            $select_box .= ($key === $selected) ? '<option value="' . TfishFilter::escape($key)
                     . '" selected>' . TfishFilter::escape($value) . '</option>' : '<option value="'
                 . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
         }
@@ -705,7 +705,7 @@ class TfishContentHandler
         $clean_limit = (int) $limit;
         $clean_offset = (int) $offset;
 
-        if ($clean_andor == 'AND' || $clean_andor == 'OR') {
+        if ($clean_andor === 'AND' || $clean_andor === 'OR') {
             $search_terms = explode(" ", $search_terms);
         } else {
             $search_terms = array($search_terms);
