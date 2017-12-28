@@ -408,24 +408,26 @@ class TfishFilter
     }
     
     /**
-     * Strip trailing whitespace, control characters, check UTF-8 character set and cast to string.
+     * Cast to string, check UTF-8 character set and strip trailing whitespace and control characters.
      * 
-     * Removes trailing whitespace and control characters (ASCII < 32), checks for UTF-8 character
+     * Removes trailing whitespace and control characters (ASCII <= 32), checks for UTF-8 character
      * set and casts input to a string. Note that the data returned by this function still
-     * requires escaping at the point of use; it is not database safe.
+     * requires escaping at the point of use; it is not database or XSS safe.
      * 
      * As the input is cast to a string do NOT apply this function to non-string types (int, float,
      * bool, object, resource, null, array, etc).
      * 
-     * @param string $dirty_text Input to be tested.
+     * @param string $dirty_string Input to be tested.
      * @return string Trimmed and UTF-8 validated string.
      */
-    public static function trimString($dirty_text)
+    public static function trimString($dirty_string)
     {
-        if (self::isUtf8($dirty_text)) {
-            // Trims all control characters plus space (ASCII 0-32 inclusive)
-            return (string) trim($dirty_text, "\x00..\x20");
-            // Trim non-breaking space in UTF-8
+        $dirty_string = (string) $dirty_string;
+        
+        if (self::isUtf8($dirty_string)) {
+            // Trims all control characters plus space (ASCII / UTF-8 points 0-32 inclusive).
+            return trim($dirty_string, "\x00..\x20");
+            // Trim non-breaking space in UTF-8.
             // trim($data, chr(0xC2).chr(0xA0));
             // Combined trim?
             // trim($data, "\x00..\x20chr(0xC2).chr(0xA0)");
