@@ -36,7 +36,7 @@ $clean_id = (int) $id;
 if ($clean_id) {
     $content = TfishStaticHandler::getObject($clean_id);
     
-    if (is_object($content) && $content->online == true) {
+    if (is_object($content) && $content->online) {
         // Update view counter and assign object to template.
         $content->counter += 1;
         TfishStaticHandler::updateCounter($clean_id);

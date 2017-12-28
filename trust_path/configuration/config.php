@@ -47,7 +47,7 @@ define("TFISH_IMAGE_URL", TFISH_URL . "uploads/image/");
 define("TFISH_LINK", rtrim(TFISH_URL, '/'));
 
 // RSS enclosure URL - spec requires that the URL use http protocol, as https will invalidate feed.
-if (parse_url(TFISH_URL, PHP_URL_SCHEME) == 'https') {
+if (parse_url(TFISH_URL, PHP_URL_SCHEME) === 'https') {
     define("TFISH_ENCLOSURE_URL", "http://" . parse_url(TFISH_URL, PHP_URL_HOST)
             . "/enclosure.php?id=");
 } else {

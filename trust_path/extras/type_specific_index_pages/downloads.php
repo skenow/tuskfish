@@ -46,7 +46,7 @@ $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' =
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);
     
-    if (is_object($content) && $content->online == true) {        
+    if (is_object($content) && $content->online) {        
         // Check if cached page is available.
         TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
         

@@ -45,7 +45,7 @@ $clean_temperature = isset($_POST['temperature']) ? (float) $_POST['temperature'
 $authorised_machine = '';
 
 // If the machine is authorised to submit data, log the data point to a dedicated data table.
-if ($clean_machine_id == $authorised_machine && $clean_temperature) {
+if ($clean_machine_id === $authorised_machine && $clean_temperature) {
     // Log data point to database.
 }
 

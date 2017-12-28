@@ -79,7 +79,7 @@ if (empty($new_password) || empty($site_salt) || empty($user_salt)) {
 
 // Check password strength.
 $password_quality = checkPasswordStrength($new_password);
-if ($password_quality['strong'] == true) {
+if ($password_quality['strong'] === true) {
 
     // Salt and iteratively hash the password 100,000 times to resist brute force attacks
     $password_hash = recursivelyHashPassword($new_password, 100000, $site_salt, $user_salt);

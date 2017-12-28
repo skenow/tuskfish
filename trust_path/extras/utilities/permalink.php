@@ -38,7 +38,7 @@ $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 // View single object description.
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);
-    if (is_object($content) && $content->online == true) {
+    if (is_object($content) && $content->online) {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
         if ($content->type != 'TfishDownload') {

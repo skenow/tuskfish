@@ -43,7 +43,7 @@ $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' =
 if ($clean_id) {
     $content = $content_handler::getObject($clean_id);
     
-    if (is_object($content) && $content->online == true) {
+    if (is_object($content) && $content->online) {
         // Update view counter (if not a downloadable resource) and assign object to template.
         if (!$content->media) {
             $content->counter += 1;
