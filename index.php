@@ -40,7 +40,7 @@ if ($clean_id) {
     // Retrieve target object.
     $content = $content_handler::getObject($clean_id);
     
-    if (is_object($content) && $content->online === true && $content->type !== 'TfishBlock') {
+    if (is_object($content) && $content->online && $content->type !== 'TfishBlock') {
 
         // Update view counter and assign object to template. Only increment counter for
         // non-downloadable objects.
