@@ -316,15 +316,16 @@ class TfishFilter
      */
     public static function isIp($ip, $version = false)
     {
-        if ($version == 6) {
-            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
+        $clean_ip = (int) $ip;
+        if ($version === 6) {
+            if (!filter_var($clean_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
                     | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4
+            if (!filter_var($clean_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4
                     | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
             } else {
@@ -373,8 +374,8 @@ class TfishFilter
     {
         if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED
                 | FILTER_FLAG_HOST_REQUIRED)) {
-            if (mb_substr($url, 0, 7, 'UTF-8') == 'http://'
-                    || mb_substr($url, 0, 8, 'UTF-8') == 'https://') {
+            if (mb_substr($url, 0, 7, 'UTF-8') === 'http://'
+                    || mb_substr($url, 0, 8, 'UTF-8') === 'https://') {
                 return true;
             }
         }
