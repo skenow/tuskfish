@@ -36,21 +36,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishFilter
 {
-
-    /**
-     * Check if the character encoding of text is UTF-8.
-     * 
-     * All strings received from external sources must be passed through this function, particularly
-     * prior to storage in the database.
-     * 
-     * @param string $dirty_string Input string to check.
-     * @return bool True if string is UTF-8 encoded otherwise false.
-     */
-    public static function isUtf8($dirty_string)
-    {
-        return mb_check_encoding($dirty_string, 'UTF-8');
-    }
-
     /**
      * Escape data for display to mitigate XSS attacks.
      * 
@@ -68,7 +53,7 @@ class TfishFilter
     /**
      * URL-encode and escape a string for use in a URL.
      * 
-     * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspeciachars().
+     * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspecialchars().
      * If you wish to use the data on a landing page you must decode it with
      * htmlspecialchars_decode() followed by rawurldecode() in that order. But really, if you are
      * using any characters that need to be encoded in the first place you should probably just
@@ -161,6 +146,9 @@ class TfishFilter
 
     /**
      * Check that a string is comprised solely of alphabetical characters.
+     * 
+     * Tolerates vanilla ASCII only. Accented regional characters are rejected. This method is
+     * designed to be used to check database identifiers or object property names.
      *
      * @param string $alpha Input to be tested.
      * @return bool True if valid alphabetical string, false otherwise.
@@ -176,6 +164,9 @@ class TfishFilter
 
     /**
      * Check that a string is comprised solely of alphanumeric characters.
+     * 
+     * Accented regional characters are rejected. This method is designed to be used to check
+     * database identifiers or object property names.
      *
      * @param string $alnum Input to be tested.
      * @return bool True if valid alphanumerical string, false otherwise.
@@ -191,6 +182,9 @@ class TfishFilter
 
     /**
      * Check that a string is comprised solely of alphanumeric characters and underscores.
+     * 
+     * Accented regional characters are rejected. This method is designed to be used to check
+     * database identifiers or object property names.
      * 
      * @param string $alnumUnderscore Input to be tested.
      * @return bool True if valid alphanumerical or underscore string, false otherwise.
@@ -260,7 +254,7 @@ class TfishFilter
     /**
      * Validate float (decimal point allowed).
      * 
-     * Potential problem - is_float() allows exponents.
+     * Note that is_float() allows exponents.
      *
      * @param float $float Input float to be tested.
      * @return boolean True if valid float, otherwise false.
@@ -316,16 +310,15 @@ class TfishFilter
      */
     public static function isIp($ip, $version = false)
     {
-        $clean_ip = (int) $ip;
         if ($version === 6) {
-            if (!filter_var($clean_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
+            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
                     | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            if (!filter_var($clean_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4
+            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4
                     | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;
             } else {
@@ -333,32 +326,19 @@ class TfishFilter
             }
         }
     }
-
+    
     /**
-     * Strip trailing whitespace, control characters, check UTF-8 character set and cast to string.
+     * Check if the character encoding of text is UTF-8.
      * 
-     * Removes trailing whitespace and control characters (ASCII < 32), checks for UTF-8 character
-     * set and casts input to a string. Note that the data returned by this function still
-     * requires escaping at the point of use; it is not database safe.
+     * All strings received from external sources must be passed through this function, particularly
+     * prior to storage in the database.
      * 
-     * As the input is cast to a string do NOT apply this function to non-string types (int, float,
-     * bool, object, resource, null, array, etc).
-     * 
-     * @param string $dirty_text Input to be tested.
-     * @return string Trimmed and UTF-8 validated string.
+     * @param string $dirty_string Input string to check.
+     * @return bool True if string is UTF-8 encoded otherwise false.
      */
-    public static function trimString($dirty_text)
+    public static function isUtf8($dirty_string)
     {
-        if (self::isUtf8($dirty_text)) {
-            // Trims all control characters plus space (ASCII 0-32 inclusive)
-            return (string) trim($dirty_text, "\x00..\x20");
-            // Trim non-breaking space in UTF-8
-            // trim($data, chr(0xC2).chr(0xA0));
-            // Combined trim?
-            // trim($data, "\x00..\x20chr(0xC2).chr(0xA0)");
-        } else {
-            return false;
-        }
+        return mb_check_encoding($dirty_string, 'UTF-8');
     }
 
     /**
@@ -425,6 +405,33 @@ class TfishFilter
     public static function isResource($resource)
     {
         return is_resource($resource);
+    }
+    
+    /**
+     * Strip trailing whitespace, control characters, check UTF-8 character set and cast to string.
+     * 
+     * Removes trailing whitespace and control characters (ASCII < 32), checks for UTF-8 character
+     * set and casts input to a string. Note that the data returned by this function still
+     * requires escaping at the point of use; it is not database safe.
+     * 
+     * As the input is cast to a string do NOT apply this function to non-string types (int, float,
+     * bool, object, resource, null, array, etc).
+     * 
+     * @param string $dirty_text Input to be tested.
+     * @return string Trimmed and UTF-8 validated string.
+     */
+    public static function trimString($dirty_text)
+    {
+        if (self::isUtf8($dirty_text)) {
+            // Trims all control characters plus space (ASCII 0-32 inclusive)
+            return (string) trim($dirty_text, "\x00..\x20");
+            // Trim non-breaking space in UTF-8
+            // trim($data, chr(0xC2).chr(0xA0));
+            // Combined trim?
+            // trim($data, "\x00..\x20chr(0xC2).chr(0xA0)");
+        } else {
+            return false;
+        }
     }
 
 }
