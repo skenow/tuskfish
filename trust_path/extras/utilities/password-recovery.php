@@ -30,6 +30,10 @@
  * @since       1.0
  * @package     core
  */
+
+// Enable strict type declaration.
+declare(strict_types=1);
+
 ///////////////////////////////////////////////////////
 //////////////////// CONFIGURATION ////////////////////
 ///////////////////////////////////////////////////////
@@ -112,7 +116,7 @@ if ($password_quality['strong'] === true) {
  * @param string $password
  * @return array $evaluation Array of error messages
  */
-function checkPasswordStrength($password) {
+function checkPasswordStrength(string $password) {
     $evaluation = array('strong' => true);
 
     // Length must be > 14 characters to prevent brute force search of the keyspace.
@@ -163,7 +167,7 @@ function checkPasswordStrength($password) {
  * @param string $user_salt User-specific salt as drawn from the user table
  * @return string
  */
-function recursivelyHashPassword($password, $iterations, $site_salt, $user_salt = '') {
+function recursivelyHashPassword(string $password, int $iterations, string $site_salt, string $user_salt = '') {
     $iterations = (int) $iterations;
     $password = $site_salt . $password;
     if ($user_salt) {
