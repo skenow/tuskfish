@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -108,8 +111,8 @@ class TfishTagHandler extends TfishContentHandler
      * @param bool $online_only Get all tags or just those marked online.
      * @return bool|string False if no tags or a HTML select box if there are.
      */
-    public static function getTagSelectBox($selected = null, $type = null,
-            $zero_option = TFISH_SELECT_TAGS, $online_only = true)
+    public static function getTagSelectBox(int $selected = null, string $type = null,
+            string $zero_option = TFISH_SELECT_TAGS, bool $online_only = true)
     {
         $select_box = '';
         $tag_list = array();

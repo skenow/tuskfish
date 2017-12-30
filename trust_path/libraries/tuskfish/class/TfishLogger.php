@@ -11,6 +11,9 @@
  * @package     core
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -46,8 +49,8 @@ class TfishLogger
      * @param array $context Active symbol table, ie. an array of every variable in scope when the
      * error was triggered.
      */
-    public static function logErrors($errno = false, $error = false, $file = false, $line = false,
-            $context = false)
+    public static function logErrors(int $errno = false, string $error = false,
+            string $file = false, int $line = false, array $context = false)
     {
         if ($errno) $errno = TfishFilter::trimString($errno);
         if ($error) $error = TfishFilter::trimString($error);

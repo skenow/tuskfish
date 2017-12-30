@@ -11,6 +11,9 @@
  * @package     core
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -74,7 +77,7 @@ class TfishFileHandler
      * @param string $contents Content to append to the target file.
      * @return bool True on success false on failure.
      */
-    public static function appendFile($path, $contents)
+    public static function appendFile(string $path, string $contents)
     {
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($path)) {
@@ -101,7 +104,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _appendFile($path, $contents)
+    private static function _appendFile(string $path, string $contents)
     {
         return file_put_contents($path, $contents, FILE_APPEND);
     }
@@ -115,7 +118,7 @@ class TfishFileHandler
      * @return bool True on success false on failure.
      */
     
-    public static function clearDirectory($path)
+    public static function clearDirectory(string $path)
     {
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($path)) {
@@ -141,7 +144,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _clearDirectory($path)
+    private static function _clearDirectory(string $path)
     {
         $resolved_path = self::_dataFilePath($path);
         
@@ -173,7 +176,7 @@ class TfishFileHandler
      * @param string $path Path relative to the data_file directory.
      * @return string|bool Path on success, false on failure.
      */
-    private static function _dataFilePath($path)
+    private static function _dataFilePath(string $path)
     {
         if (mb_strlen($path, 'UTF-8') > 0) {
             $path = rtrim($path, '/');
@@ -204,7 +207,7 @@ class TfishFileHandler
      * @param string $path Path relative to data_file directory.
      * @return bool True on success, false on failure.
      */
-    public static function deleteDirectory($path)
+    public static function deleteDirectory(string $path)
     {
         // Do not allow the upload, image or media directories to be deleted!
         if (empty($path)) {
@@ -236,7 +239,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _deleteDirectory($path)
+    private static function _deleteDirectory(string $path)
     {
         $path = self::_dataFilePath($path);
         
@@ -275,7 +278,7 @@ class TfishFileHandler
      * @param string $path Path relative to the data_file directory.
      * @return bool True on success, false on failure.
      */
-    public static function deleteFile($path)
+    public static function deleteFile(string $path)
     {
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($path)) {
@@ -302,7 +305,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _deleteFile($path)
+    private static function _deleteFile(string $path)
     {
         $path = self::_dataFilePath($path);
         
@@ -369,7 +372,7 @@ class TfishFileHandler
      * excluding extension.
      * @return bool True on success, false on failure. 
      */
-    public static function sendDownload($id, $filename = false)
+    public static function sendDownload(int $id, string $filename = false)
     {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : false;
         $clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : false;
@@ -386,7 +389,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _sendDownload($id, $filename)
+    private static function _sendDownload(int $id, string $filename)
     {
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('id', $id));
@@ -445,7 +448,7 @@ class TfishFileHandler
      * @param string $fieldname Name of form field associated with this upload (media subdirectory).
      * @return string|bool Filename on success, false on failure.
      */
-    public static function uploadFile($filename, $fieldname)
+    public static function uploadFile(string $filename, string $fieldname)
     {
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($filename)) {
@@ -479,7 +482,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _uploadFile($filename, $fieldname, $extension)
+    private static function _uploadFile(string $filename, string $fieldname, string $extension)
     {
         $filename = time() . '_' . $filename;
         $upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $extension;

@@ -11,6 +11,9 @@
  * @package     security
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -71,7 +74,7 @@ class TfishSession
      * @param object $tfish_preference TfishPreference object.
      * @return bool True if session has expired, false if not.
      */
-    public static function isExpired($tfish_preference)
+    public static function isExpired(TfishPreference $tfish_preference)
     {
         // Validate is a TfishPreference object.
         if (!is_a($tfish_preference, 'TfishPreference')) {
@@ -141,7 +144,7 @@ class TfishSession
      * @param string $email Input email.
      * @param string $password Input password.
      */
-    public static function login($email, $password)
+    public static function login(string $email, string $password)
     {
         // Check email and password have been supplied
         if (empty($email) || empty($password)) {
@@ -161,7 +164,7 @@ class TfishSession
     }
 
     /** @internal */
-    private static function _login($clean_email, $dirty_password)
+    private static function _login(string $clean_email, string $dirty_password)
     {
         // Query the database for a matching user.
         $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
@@ -214,7 +217,7 @@ class TfishSession
      * @param string $dirty_otp Input Yubikey one-time password.
      * @param object $yubikey Instance of the TfishYubikeyAuthenticator class.
      */
-    public static function twoFactorLogin($dirty_password, $dirty_otp, $yubikey)
+    public static function twoFactorLogin(string $dirty_password, string $dirty_otp, $yubikey)
     {
         // Check password, OTP and Yubikey have been supplied
         if (empty($dirty_password) || empty($dirty_otp) || empty($yubikey)) {
@@ -249,7 +252,8 @@ class TfishSession
     }
     
     /** @internal */
-    private static function _twoFactorLogin($dirty_id, $dirty_password, $dirty_otp, $yubikey)
+    private static function _twoFactorLogin($dirty_id, string $dirty_password, string $dirty_otp,
+            TfishYubikeyAuthenticator $yubikey)
     {
         $user = false;
         $first_factor = false;
@@ -313,7 +317,7 @@ class TfishSession
      * 
      * @param string $url_redirect The URL to redirect the user to on logging out. 
      */
-    public static function logout($url_redirect = false)
+    public static function logout(string $url_redirect = false)
     {
         $clean_url = false;
         
@@ -325,7 +329,7 @@ class TfishSession
     }
 
     /** @internal */
-    private static function _logout($clean_url)
+    private static function _logout(string $clean_url)
     {
         // Unset all of the session variables.
         $_SESSION = [];
@@ -409,7 +413,7 @@ class TfishSession
      * 
      * @param object $tfish_preference TfishPreference object.
      */
-    public static function start($tfish_preference)
+    public static function start(TfishPreference $tfish_preference)
     {
         if (!is_a($tfish_preference, 'TfishPreference')) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);

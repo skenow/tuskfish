@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -35,7 +38,7 @@ class TfishPostHandler extends TfishContentHandler
      * preserved. If there are no children then the post will be hard-deleted as
      * it has no useful function.
      */
-    public static function deletePost($id)
+    public static function deletePost(int $id)
     {
         // Check if post exists.
         
@@ -58,7 +61,7 @@ class TfishPostHandler extends TfishContentHandler
      * @param int $id ID of parent post.
      * @return array $objects TfishPost objects.
      */
-    public static function getThread($post_id, $child_levels = 0)
+    public static function getThread(int $post_id, int $child_levels = 0)
     {
         
     }
@@ -73,7 +76,7 @@ class TfishPostHandler extends TfishContentHandler
      * @param type $post_id
      * @param type $forum_id
      */
-    public static function moveThread($post_id, $forum_id)
+    public static function moveThread(int $post_id, int $forum_id)
     {
         
     }

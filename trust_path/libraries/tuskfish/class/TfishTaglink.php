@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -56,7 +59,7 @@ class TfishTaglink
      * @param string $property Name of property.
      * @return mixed|null $property Value if property is set; otherwise null.
      */
-    public function __get($property)
+    public function __get(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -78,7 +81,7 @@ class TfishTaglink
      * @param string $property Name of property.
      * @param mixed $value Value of property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -126,7 +129,7 @@ class TfishTaglink
      * @param string $property Name of property.
      * @return bool True if set, otherwise false.
      */
-    public function __isset($property)
+    public function __isset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -146,7 +149,7 @@ class TfishTaglink
      * @param string $property Name of property.
      * @return bool True on success, false on failure.
      */
-    public function __unset($property)
+    public function __unset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         

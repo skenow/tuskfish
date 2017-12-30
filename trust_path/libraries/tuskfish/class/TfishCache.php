@@ -11,6 +11,9 @@
  * @package     core
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -47,7 +50,7 @@ class TfishCache
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public static function checkCache($tfish_preference, $basename, $params = array())
+    public static function checkCache(string $tfish_preference, string $basename, array $params = array())
     {
         // Validate is a TfishPreference object.
         if (!is_a($tfish_preference, 'TfishPreference')) {
@@ -93,7 +96,7 @@ class TfishCache
      * underscore characters only.
      * @param array $params URL query string parameters for this page as $key => $value pairs.
      */
-    private static function _getCachedFileName($basename, $params)
+    private static function _getCachedFileName(string $basename, array $params)
     {
         $clean_filename = false;
         
@@ -141,7 +144,8 @@ class TfishCache
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
-    public static function cachePage($tfish_preference, $basename, $params, $buffer)
+    public static function cachePage(string $tfish_preference, string $basename, array $params,
+            string $buffer)
     {
         // Validate is a TfishPreference object.
         if (!is_a($tfish_preference, 'TfishPreference')) {

@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -40,7 +43,7 @@ class TfishRss extends TfishAncestralObject
 {
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct($tfish_preference)
+    public function __construct(TfishPreference $tfish_preference)
     {
         
         if (!is_a($tfish_preference, 'TfishPreference')) {
@@ -83,7 +86,7 @@ class TfishRss extends TfishAncestralObject
      * 
      * @param object $obj TfishCollection object.
      */
-    public function makeFeedForCollection($obj)
+    public function makeFeedForCollection(TfishCollection $obj)
     {
         if (!is_a($obj, 'TfishCollection')) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
@@ -102,7 +105,7 @@ class TfishRss extends TfishAncestralObject
      * @param string $property Name of property.
      * @param mixed $value Value of property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         $clean_property = TfishFilter::trimString($property);
         

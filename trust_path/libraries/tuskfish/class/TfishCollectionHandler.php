@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -101,7 +104,7 @@ class TfishCollectionHandler extends TfishContentHandler
      * @param int $selected Currently selected option.
      * @return string HTML select box.
      */
-    public static function getParentSelectBox($selected = 0)
+    public static function getParentSelectBox(int $selected = 0)
     {
         $selected = (int) $selected;
         $clean_selected = TfishFilter::isInt($selected, 1) ? $selected : 0;

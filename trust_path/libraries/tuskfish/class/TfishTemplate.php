@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -44,7 +47,7 @@ class TfishTemplate
      * @param string $property Name of Property.
      * @return mixed|null $property Value of property if it is set; otherwise null.
      */
-    public function __get($property)
+    public function __get(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -64,7 +67,7 @@ class TfishTemplate
      * @param string $property Name of property.
      * @return bool True if set, otherwise false.
      */
-    public function __isset($property)
+    public function __isset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -86,7 +89,7 @@ class TfishTemplate
      * @param string $template Name of the template file in the /themes/sometemplate directory.
      * @return string Rendered HTML template.
      */
-    public function render($template)
+    public function render(string $template)
     {
         $template = TfishFilter::trimString($template);
         
@@ -116,7 +119,7 @@ class TfishTemplate
      * @param string $property Name of property.
      * @param mixed $value Value to assign to property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -137,7 +140,7 @@ class TfishTemplate
      * 
      * @param string $theme Name of theme (alphanumeric and underscore characters only).
      */
-    public function setTheme($theme)
+    public function setTheme(string $theme)
     {
         // Check for directory traversals and null byte injection.
         if (TfishFilter::hasTraversalorNullByte($theme)) {
@@ -159,7 +162,7 @@ class TfishTemplate
      * @param string $property Name of property.
      * @return bool True on success, false on failure.
      */
-    public function __unset($property)
+    public function __unset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         

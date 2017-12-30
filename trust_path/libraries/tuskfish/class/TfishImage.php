@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -87,7 +90,7 @@ class TfishImage extends TfishContentObject
      * @param string $property Name of property.
      * @param mixed $value Value of property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         parent::__set($property, $value);
     }
@@ -102,7 +105,7 @@ class TfishImage extends TfishContentObject
      * 
      * @param string $clean_property Name of content object property to be formatted.
      */
-    protected function makeHumanReadable($clean_property)
+    protected function makeHumanReadable(string $clean_property)
     {
         return parent::makeHumanReadable($clean_property);
     }

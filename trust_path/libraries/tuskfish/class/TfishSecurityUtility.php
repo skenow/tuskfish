@@ -11,6 +11,9 @@
  * @package     security
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -37,7 +40,7 @@ class TfishSecurityUtility
      * @param string $password Input password.
      * @return array Array of evaluation warnings as strings.
      */
-    public static function checkPasswordStrength($password)
+    public static function checkPasswordStrength(string $password)
     {
         $evaluation = array('strong' => true);
 
@@ -83,7 +86,7 @@ class TfishSecurityUtility
      * @param int $length Length of required salt.
      * @return string $salt
      */
-    public static function generateSalt($length = 64)
+    public static function generateSalt(int $length = 64)
     {
         $salt = mb_substr(base64_encode(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)), 0, $length,
                 'UTF-8');
@@ -105,8 +108,8 @@ class TfishSecurityUtility
      * table.
      * @return string Password hash.
      */
-    public static function recursivelyHashPassword($password, $iterations, $site_salt,
-            $user_salt = '')
+    public static function recursivelyHashPassword(string $password, int $iterations,
+            string $site_salt, string $user_salt = '')
     {
 
         $iterations = (int) $iterations;

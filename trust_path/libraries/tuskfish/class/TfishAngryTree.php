@@ -40,6 +40,8 @@
  * @since       1.0
  * @package     core
  */
+// Enable strict type declaration.
+declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
@@ -88,7 +90,7 @@ class TfishAngryTree
      * @param string $parentId Name of parent object ID field.
      * @param string $rootId Name of root object ID field.
      * */
-    function __construct(&$objectArr, $myId, $parentId, $rootId = null)
+    function __construct(array &$objectArr, string $myId, string $parentId, string $rootId = null)
     {
         $this->_objects = & $objectArr;
         $this->_myId = $myId;
@@ -140,7 +142,7 @@ class TfishAngryTree
      * @param   string  $key    ID of the object to retrieve.
      * @return  object  Object (node) within the tree.
      * */
-    public function &getByKey($key)
+    public function &getByKey(int $key)
     {
         return $this->_tree[$key]['obj'];
     }
@@ -172,7 +174,7 @@ class TfishAngryTree
      * @param array $ret Array of child objects from previous recursions (empty if called from client).
      * @return array Array of child nodes.
      * */
-    public function getAllChild($key, $ret = array())
+    public function getAllChild(int $key, array $ret = array())
     {
         if (isset($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
@@ -198,7 +200,7 @@ class TfishAngryTree
      * @param int $uplevel Level of recursion (empty when called from outside).
      * @return array Array of parent nodes.
      * */
-    public function getAllParent($key, $ret = array(), $uplevel = 1)
+    public function getAllParent(int $key, array $ret = array(), int $uplevel = 1)
     {
         if (isset($this->_tree[$key]['parent']) 
                 && isset($this->_tree[$this->_tree[$key]['parent']]['obj'])) {
@@ -224,8 +226,8 @@ class TfishAngryTree
      * @param string $prefix_orig String to indent items at deeper levels.
      * @param string $prefix_curr String to indent the current item.
      */
-    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret, $prefix_orig, 
-            $prefix_curr = '')
+    private function _makeSelBoxOptions(string $fieldName, string $selected, int $key, string &$ret,
+                string $prefix_orig, string $prefix_curr = '')
     {
         if ($key > 0) {
             $id_field = $this->_myId;
@@ -258,8 +260,8 @@ class TfishAngryTree
      * @param int $key ID of the object to display as the root of select options.
      * @return array Select box options as ID => title pairs.
      * */
-    public function makeSelBox($name, $fieldName, $prefix = '-- ', $selected = '',
-            $addEmptyOption = FALSE, $key = 0)
+    public function makeSelBox(string $name, string $fieldName, string $prefix = '-- ',
+        int $selected = '', bool $addEmptyOption = FALSE, int $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);
@@ -274,7 +276,7 @@ class TfishAngryTree
      * @param int $key ID of the object to display as root of the select options.
      * @return string HTML select box.
      */
-    public function makeParentSelectBox($selected = 0, $key = 0)
+    public function makeParentSelectBox(int $selected = 0, int $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_PARENT);
         $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-- ');

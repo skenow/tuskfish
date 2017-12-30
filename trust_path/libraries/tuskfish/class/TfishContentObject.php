@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -130,7 +133,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param string $property Name of property.
      * @return string Property formatted to human readable form for output.
      */
-    protected function makeHumanReadable($clean_property)
+    protected function makeHumanReadable(string $clean_property)
     {
         switch ($clean_property) {
             case "date": // Stored in format yyyy-mm-dd
@@ -226,7 +229,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param string $escape_html Whether to escape HTML fields (teaser, description as well).
      * @return string Human readable value escaped for display.
      */
-    public function escape($property, $escape_html = false)
+    public function escape(string $property, string $escape_html = false)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -264,7 +267,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param int $height Height of the cached image output.
      * @return string $url URL to the cached image.
      */
-    public function getCachedImage($width = 0, $height = 0)
+    public function getCachedImage(int $width = 0, int $height = 0)
     {
         // Validate parameters; and at least one must be set.
         $clean_width = TfishFilter::isInt($width, 1) ? (int) $width : 0;
@@ -462,7 +465,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param bool $custom_page Use an arbitrary target page or the home page (index.php).
      * @return string URL to view this object.
      */
-    public function getURL($custom_page = false)
+    public function getURL(bool $custom_page = false)
     {
         $url = empty($custom_page) ? TFISH_PERMALINK_URL : TFISH_URL;
         
@@ -487,11 +490,8 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * @param array $dirty_input Usually raw form $_REQUEST data.
      */
-    public function loadProperties($dirty_input)
+    public function loadProperties(array $dirty_input)
     {
-        if (!TfishFilter::isArray($dirty_input)) {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
 
         $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
                 ? true : false;
@@ -544,7 +544,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param string $property Name of property.
      * @param mixed $value Value of property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         $clean_property = TfishFilter::trimString($property);
         

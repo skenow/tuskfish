@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -38,7 +41,7 @@ class TfishContentHandler
      * @param int $id ID of content object to delete.
      * @return bool True on success, false on failure.
      */
-    public static function delete($id)
+    public static function delete(int $id)
     {
         $clean_id = (int) $id;
         
@@ -94,7 +97,7 @@ class TfishContentHandler
      * @param string $filename Name of file.
      * @return bool True on success, false on failure.
      */
-    private static function _deleteImage($filename)
+    private static function _deleteImage(string $filename)
     {
         if ($filename) {
             return TfishFileHandler::deleteFile('image/' . $filename);
@@ -107,7 +110,7 @@ class TfishContentHandler
      * @param string $filename Name of file.
      * @return bool True on success, false on failure.
      */
-    private static function _deleteMedia($filename)
+    private static function _deleteMedia(string $filename)
     {
         if ($filename) {
             return TfishFileHandler::deleteFile('media/' . $filename);
@@ -201,7 +204,7 @@ class TfishContentHandler
      * @param string $type Type of content object.
      * @return bool True if sanctioned type otherwise false.
      */
-    public static function isSanctionedType($type)
+    public static function isSanctionedType(string $type)
     {
         $type = TfishFilter::trimString($type);
         $sanctioned_types = self::getTypes();
@@ -223,7 +226,7 @@ class TfishContentHandler
      * @param bool $online_only True if marked as online, false if marked as offline.
      * @return array|bool List of tags if available, false if empty.
      */
-    public static function getActiveTagList($type = null, $online_only = true)
+    public static function getActiveTagList(string $type = null, bool $online_only = true)
     {
         $tags = $distinct_tags = array();
 
@@ -354,7 +357,7 @@ class TfishContentHandler
      * @param int $id ID of content object.
      * @return object|bool $object Object on success, false on failure.
      */
-    public static function getObject($id)
+    public static function getObject(int $id)
     {
         $clean_id = (int) $id;
         
@@ -450,7 +453,8 @@ class TfishContentHandler
      * @param string $zero_option The text to display in the zero option of the select box.
      * @return string HTML select box.
      */
-    public static function getOnlineSelectBox($selected = null, $zero_option = TFISH_ONLINE_STATUS)
+    public static function getOnlineSelectBox(int $selected = null,
+            string $zero_option = TFISH_ONLINE_STATUS)
     {
         $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) 
                 ? (int) $selected : null; // Offline (0) or online (1)
@@ -507,7 +511,7 @@ class TfishContentHandler
      * @param bool Get tags marked online only.
      * @return array Array of tag IDs and titles.
      */
-    public static function getTagList($online_only = true)
+    public static function getTagList(bool $online_only = true)
     {
         $tags = array();
         $statement = false;
@@ -561,7 +565,7 @@ class TfishContentHandler
      * @param array $criteria_items Array of TfishCriteriaItem objects.
      * @return int|null Key of relevant TfishCriteriaItem or null.
      */
-    protected static function getTypeIndex($criteria_items)
+    protected static function getTypeIndex(array $criteria_items)
     {
         foreach ($criteria_items as $key => $item) {
             if ($item->column === 'type') {
@@ -604,7 +608,7 @@ class TfishContentHandler
      * @param string $zero_option The default text to show at top of select box.
      * @return string HTML select box.
      */
-    public static function getTypeSelectBox($selected = null, $zero_option = TFISH_TYPE)
+    public static function getTypeSelectBox(string $selected = null, string $zero_option = TFISH_TYPE)
     {
         // The text to display in the zero option of the select box.
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
@@ -643,7 +647,7 @@ class TfishContentHandler
      * @param string $target_filename Name of file for tag links to point at.
      * @return array Array of HTML tag links.
      */
-    public static function makeTagLinks($tags, $target_filename = false)
+    public static function makeTagLinks(array $tags, string $target_filename = false)
     {
         if (!TfishFilter::isArray($tags)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -685,19 +689,16 @@ class TfishContentHandler
      * into a query directly (creates an SQL injection vulnerability), otherwise do us all a favour
      * and go shoot yourself now.
      *
+     * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param array $search_terms Array of search terms.
      * @param string $andor Operator to chain search terms (AND or OR).
      * @param int $limit Maximum number of results to retrieve (pagination constraint).
-     * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param int $offset Starting point for retrieving results (pagination constraint).
      * @return array|bool Array of content objects on success, false failure.
      */
-    public static function searchContent($tfish_preference, $search_terms, $andor, $limit,
-            $offset = 0)
+    public static function searchContent(TfishPreference $tfish_preference, array $search_terms,
+            string $andor, int $limit, int $offset = 0)
     {
-        if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
         
         $clean_search_terms = array();
         $clean_andor = in_array($andor, array('AND', 'OR', 'exact'))
@@ -731,8 +732,8 @@ class TfishContentHandler
     }
 
     /** @internal */
-    private static function _searchContent($tfish_preference, $search_terms, $andor, $limit,
-            $offset)
+    private static function _searchContent(TfishPreference $tfish_preference, array $search_terms,
+            string $andor, int $limit, int $offset)
     {
         $sql = $count = '';
         $search_term_placeholders = $results = array();
@@ -831,7 +832,7 @@ class TfishContentHandler
      * @param int $id ID of content object.
      * @return boolean True on success, false on failure.
      */
-    public static function toggleOnlineStatus($id)
+    public static function toggleOnlineStatus(int $id)
     {
         $clean_id = (int) $id;
         return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
@@ -849,7 +850,7 @@ class TfishContentHandler
      * @param array $row Array of result set from database.
      * @return object|bool Content object on success, false on failure.
      */
-    public static function toObject($row)
+    public static function toObject(array $row)
     {
         if (empty($row) || !TfishFilter::isArray($row)) {
             return false;
@@ -1022,7 +1023,7 @@ class TfishContentHandler
      * @param int $id ID of content object.
      * @return string Filename of associated image property.
      */
-    private static function _checkImage($id)
+    private static function _checkImage(int $id)
     {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
         $filename = '';
@@ -1053,7 +1054,7 @@ class TfishContentHandler
      * @param int $id ID of content object.
      * @return string Filename of associated media property.
      */
-    private static function _checkMedia($id)
+    private static function _checkMedia(int $id)
     {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
         $filename = '';
@@ -1083,7 +1084,7 @@ class TfishContentHandler
      * 
      * @param int $id ID of content object.
      */
-    public static function updateCounter($id)
+    public static function updateCounter(int $id)
     {
         $clean_id = (int) $id;
         return TfishDatabase::updateCounter($clean_id, 'content', 'counter');

@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -58,7 +61,7 @@ class TfishMetadata
      * 
      * @param object $preference Instance of TfishPreference class, holding site preferences.
      */
-    function __construct($preference)
+    function __construct(TfishPreference $preference)
     {
         $this->title = $preference->site_name;
         $this->description = $preference->site_description;
@@ -89,8 +92,8 @@ class TfishMetadata
      * @param array $extra_params Query string to be appended to the URLs (control script params).
      * @return string HTML pagination control.
      */
-    public function getPaginationControl($count, $limit, $url, $start = 0, $tag = 0,
-            $extra_params = array())
+    public function getPaginationControl(int $count, int $limit, string $url, int $start = 0,
+            int $tag = 0, array $extra_params = array())
     {
         // Filter parameters.
         $clean_count = TfishFilter::isInt($count, 1) ? (int) $count : 0;
@@ -143,7 +146,8 @@ class TfishMetadata
     }
 
     /** @internal */
-    private function _getPavigationControl($count, $limit, $url, $start, $tag, $extra_params)
+    private function _getPavigationControl(int $count, int $limit, string $url, int $start,
+            int $tag, array $extra_params)
     {
         // 1. Calculate number of pages, page number of start object and adjust for remainders.
         $page_slots = array();
@@ -250,7 +254,7 @@ class TfishMetadata
      * @param string $property Name of property.
      * @return string|bool Value of preference escaped for display if set, otherwise false.
      */
-    public function __get($property)
+    public function __get(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -267,7 +271,7 @@ class TfishMetadata
      * @param string $property Name of property.
      * @param mixed $value Value to assign to property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -302,7 +306,7 @@ class TfishMetadata
      * @param string $property Name of property.
      * @return bool True if set, false if not.
      */
-    public function __isset($property)
+    public function __isset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -319,7 +323,7 @@ class TfishMetadata
      * @param string $property Name of property.
      * @return bool True on success, false on failure.
      */
-    public function __unset($property)
+    public function __unset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         

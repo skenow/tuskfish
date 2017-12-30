@@ -11,6 +11,9 @@
  * @package     security
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -62,7 +65,7 @@ class TfishFilter
      * @param string $url Unescaped input URL.
      * @return string Encoded and escaped URL.
      */
-    public static function encodeEscapeUrl($url)
+    public static function encodeEscapeUrl(string $url)
     {
         $url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
         $url = rawurlencode($url); // Encode characters to make them URL safe.
@@ -81,7 +84,7 @@ class TfishFilter
      * @param array $config HTMPurifier configuration options (see HTMLPurifier documentation).
      * @return string Validated HTML content.
      */
-    public static function filterHtml($dirty_html, $config = false)
+    public static function filterHtml(string $dirty_html, array $config = false)
     {
         if (self::isUtf8($dirty_html)) {
             if (class_exists('HTMLPurifier')) {
@@ -112,7 +115,7 @@ class TfishFilter
      * @param string $path
      * @return boolean True if a traversal or null byte is found, otherwise false.
      */
-    public static function hasTraversalorNullByte($path)
+    public static function hasTraversalorNullByte(string $path)
     {
         // List of traversals and null byte encodings.
         $traversals = array(
@@ -153,7 +156,7 @@ class TfishFilter
      * @param string $alpha Input to be tested.
      * @return bool True if valid alphabetical string, false otherwise.
      */
-    public static function isAlpha($alpha)
+    public static function isAlpha(string $alpha)
     {
         if (mb_strlen($alpha, 'UTF-8') > 0) {
             return preg_match('/[^a-z]/i', $alpha) ? false : true;
@@ -171,7 +174,7 @@ class TfishFilter
      * @param string $alnum Input to be tested.
      * @return bool True if valid alphanumerical string, false otherwise.
      */
-    public static function isAlnum($alnum)
+    public static function isAlnum(string $alnum)
     {
         if (mb_strlen($alnum, 'UTF-8') > 0) {
             return preg_match('/[^a-z0-9]/i', $alnum) ? false : true;
@@ -189,7 +192,7 @@ class TfishFilter
      * @param string $alnumUnderscore Input to be tested.
      * @return bool True if valid alphanumerical or underscore string, false otherwise.
      */
-    public static function isAlnumUnderscore($alnumUnderscore)
+    public static function isAlnumUnderscore(string $alnumUnderscore)
     {
         if (mb_strlen($alnumUnderscore, 'UTF-8') > 0) {
             return preg_match('/[^a-z0-9_]/i', $alnumUnderscore) ? false : true;
@@ -224,7 +227,7 @@ class TfishFilter
      * @param string $digit Input to be tested.
      * @return bool True if valid digit string, false otherwise.
      */
-    public static function isDigit($digit)
+    public static function isDigit(string $digit)
     {
         if (mb_strlen($digit, 'UTF-8') > 0) {
             return preg_match('/[^0-9]/', $digit) ? false : true;
@@ -242,7 +245,7 @@ class TfishFilter
      * @param string $email Input to be tested.
      * @return boolean True if valid email address, otherwise false.
      */
-    public static function isEmail($email)
+    public static function isEmail(string $email)
     {
         if (mb_strlen($email, 'UTF-8') > 2) {
             return filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -272,7 +275,7 @@ class TfishFilter
      * @param int $max Maximum acceptable value.
      * @return bool True if valid int and within optional range check, false otherwise.
      */
-    public static function isInt($int, $min = false, $max = false)
+    public static function isInt($int, int $min = false, int $max = false)
     {
         $clean_int = is_int($int) ? (int) $int : false;
         $clean_min = is_int($min) ? (int) $min : false;
@@ -308,7 +311,7 @@ class TfishFilter
      * @param int $version IP address version ('4' or '6').
      * @return bool True if valid IP address, false otherwise.
      */
-    public static function isIp($ip, $version = false)
+    public static function isIp(string $ip, int $version = false)
     {
         if ($version === 6) {
             if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
@@ -336,7 +339,7 @@ class TfishFilter
      * @param string $dirty_string Input string to check.
      * @return bool True if string is UTF-8 encoded otherwise false.
      */
-    public static function isUtf8($dirty_string)
+    public static function isUtf8(string $dirty_string)
     {
         return mb_check_encoding($dirty_string, 'UTF-8');
     }
@@ -350,7 +353,7 @@ class TfishFilter
      * @param string $url Input to be tested.
      * @return bool True if valid URL otherwise false.
      */
-    public static function isUrl($url)
+    public static function isUrl(string $url)
     {
         if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED
                 | FILTER_FLAG_HOST_REQUIRED)) {
@@ -420,7 +423,7 @@ class TfishFilter
      * @param string $dirty_string Input to be tested.
      * @return string Trimmed and UTF-8 validated string.
      */
-    public static function trimString($dirty_string)
+    public static function trimString(string $dirty_string)
     {
         $dirty_string = (string) $dirty_string;
         

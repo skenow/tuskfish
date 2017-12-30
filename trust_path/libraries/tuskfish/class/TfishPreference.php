@@ -11,6 +11,9 @@
  * @package     core
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -103,7 +106,7 @@ class TfishPreference extends TfishAncestralObject
      * @param string $property Name of property.
      * @return string Value of property escaped for display.
      */
-    public function escape($property)
+    public function escape(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -144,7 +147,7 @@ class TfishPreference extends TfishAncestralObject
      * @param string $property Name of property.
      * @param string $value Value of property.
      */
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -323,7 +326,7 @@ class TfishPreference extends TfishAncestralObject
      * 
      * @param array $dirty_input Usually $_REQUEST data.
      */
-    public function updatePreferences($dirty_input)
+    public function updatePreferences(array $dirty_input)
     {
         if (!TfishFilter::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);

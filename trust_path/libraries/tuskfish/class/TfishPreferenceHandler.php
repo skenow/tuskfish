@@ -11,6 +11,9 @@
  * @package     core
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -36,7 +39,7 @@ class TfishPreferenceHandler
      * 
      * @param object $tfish_preferences Instance of TfishPreference class, holds site preference info.
      */
-    function __construct($tfish_preferences)
+    function __construct(TfishPreference $tfish_preferences)
     {
         if (is_a($tfish_preferences, 'TfishPreference')) {
             $this->preferences = $tfish_preferences;
@@ -51,7 +54,7 @@ class TfishPreferenceHandler
      * @param string $pref Name of preference.
      * @return mixed|null Value of preference if it exists, otherwise null.
      */
-    public static function get($pref)
+    public static function get(string $pref)
     {
         $pref = TfishFilter::trimString($pref);
         
@@ -69,7 +72,7 @@ class TfishPreferenceHandler
      * @param object $obj TfishPreference object.
      * @return bool True on success false on failure.
      */
-    public static function updatePreferences($obj)
+    public static function updatePreferences(TfishPreference $obj)
     {
         // Convert object to array of key => values.
         if (is_a($obj, 'TfishPreference')) {

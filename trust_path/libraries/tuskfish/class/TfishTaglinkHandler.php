@@ -11,6 +11,9 @@
  * @package     content
  */
 
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
@@ -32,7 +35,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param int $content_id ID of the target content object.
      * @return bool True for success, false on failure.
      */
-    public static function deleteTaglinks($content_id)
+    public static function deleteTaglinks(int $content_id)
     {
         if (TfishFilter::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
@@ -61,7 +64,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public static function insertTaglinks($content_id, $type, $tags)
+    public static function insertTaglinks(int $content_id, string $type, array $tags)
     {
         if (TfishFilter::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
@@ -116,7 +119,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public static function updateTaglinks($id, $type, $tags)
+    public static function updateTaglinks(int $id, string $type, array $tags)
     {
         // Validate ID.
         if (TfishFilter::isInt($id, 1)) {
