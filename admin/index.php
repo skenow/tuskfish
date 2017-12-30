@@ -11,6 +11,9 @@
  * @since       1.0
  * @package     admin
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Need to start a session in order to use session variables
 require_once "../mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";

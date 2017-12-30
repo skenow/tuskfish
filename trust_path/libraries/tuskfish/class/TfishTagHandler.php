@@ -35,14 +35,10 @@ class TfishTagHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishTagObjects that match the criteria.
      */
-    public static function getCount($criteria = false)
+    public static function getCount(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -72,14 +68,10 @@ class TfishTagHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects Array of TfishTag objects.
      */
-    public static function getObjects($criteria = false)
+    public static function getObjects(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -111,7 +103,7 @@ class TfishTagHandler extends TfishContentHandler
      * @param bool $online_only Get all tags or just those marked online.
      * @return bool|string False if no tags or a HTML select box if there are.
      */
-    public static function getTagSelectBox(int $selected = null, string $type = null,
+    public static function getTagSelectBox(int $selected = null, string $type = '',
             string $zero_option = TFISH_SELECT_TAGS, bool $online_only = true)
     {
         $select_box = '';

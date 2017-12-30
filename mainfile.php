@@ -28,6 +28,9 @@
  * If you have problems please see the installation section of the Tuskfish User Manual for a
  * more detailed explanation. 
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 ////////////////////////////////////////////////////////////
 ////////// You must configure the following paths //////////
 ////////////////////////////////////////////////////////////

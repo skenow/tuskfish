@@ -12,6 +12,9 @@
  * @since		1.0
  * @package		content
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
@@ -56,7 +59,7 @@ if ($clean_op && $clean_terms && $type) {
             'search_type' => $type,
             'query' => $clean_terms);
         $tfish_template->pagination = $tfish_metadata->getPaginationControl($results_count,
-                $tfish_preference->search_pagination, 'search', $start, false, $query_parameters);
+                $tfish_preference->search_pagination, 'search', $start, 0, $query_parameters);
     } else {
         $tfish_template->search_results = false;
     }

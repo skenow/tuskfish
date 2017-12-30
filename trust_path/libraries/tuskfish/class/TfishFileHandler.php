@@ -372,7 +372,7 @@ class TfishFileHandler
      * excluding extension.
      * @return bool True on success, false on failure. 
      */
-    public static function sendDownload(int $id, string $filename = false)
+    public static function sendDownload(int $id, string $filename = '')
     {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : false;
         $clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : false;

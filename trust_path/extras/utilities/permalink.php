@@ -11,6 +11,9 @@
  * @since       1.0
  * @package     core
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
@@ -60,7 +63,7 @@ if ($clean_id) {
         if ($content->file_size)
             $contentInfo[] = $content->escape('file_size');
         if ($content->tags) {
-            $tags = $content_handler::makeTagLinks($content->tags, false); // For a content type-specific page use $content->tags, $content->template
+            $tags = $content_handler::makeTagLinks($content->tags); // For a content type-specific page use $content->tags, $content->template
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
@@ -91,7 +94,9 @@ if ($clean_id) {
 
         // Prepare pagination control.
         $first_child_count = TfishContentHandler::getCount($criteria);
-        $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl($first_child_count, $tfish_preference->user_pagination, $target_file_name, $clean_start, 0, array('id' => $clean_id));
+        $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl(
+                $first_child_count, $tfish_preference->user_pagination, $target_file_name,
+                $clean_start, 0, array('id' => $clean_id));
 
         // Retrieve content objects and assign to template.
         $first_children = TfishContentHandler::getObjects($criteria);

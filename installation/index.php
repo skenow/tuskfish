@@ -12,6 +12,10 @@
  * @since		1.0
  * @package		installation
  */
+
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Enable strict type declaration.
 declare(strict_types=1);
 

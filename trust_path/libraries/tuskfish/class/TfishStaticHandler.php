@@ -36,14 +36,10 @@ class TfishStaticHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishStatic objects that match the criteria.
      */
-    public static function getCount($criteria = false)
+    public static function getCount(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -74,14 +70,10 @@ class TfishStaticHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects Array of TfishStatic objects.
      */
-    public static function getObjects($criteria = false)
+    public static function getObjects(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.

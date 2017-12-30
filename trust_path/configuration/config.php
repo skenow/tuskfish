@@ -12,6 +12,10 @@
  * @since       1.0
  * @package     core
  */
+
+// Enable strict type declaration.
+declare(strict_types=1);
+
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 // Constants that make use of the physical path.
@@ -65,7 +69,7 @@ define("TFISH_DEFAULT_LANGUAGE", TFISH_LANGUAGE_PATH . "english.php");
  * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
  * @param string $classname Name of class to autoload. 
  */
-function tfish_autoload($classname) {
+function tfish_autoload(string $classname) {
     include TFISH_CLASS_PATH . $classname . '.php';
 }
 spl_autoload_register('tfish_autoload');

@@ -153,7 +153,7 @@ class TfishAngryTree
      * @param   string $key ID of the parent object.
      * @return  array Array of child objects.
      * */
-    public function getFirstChild($key)
+    public function getFirstChild(int $key)
     {
         $ret = array();
         

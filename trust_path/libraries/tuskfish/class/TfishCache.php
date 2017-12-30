@@ -50,12 +50,8 @@ class TfishCache
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public static function checkCache(string $tfish_preference, string $basename, array $params = array())
+    public static function checkCache(TfishPreference $tfish_preference, string $basename, array $params = array())
     {
-        // Validate is a TfishPreference object.
-        if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
         
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
@@ -144,14 +140,9 @@ class TfishCache
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
-    public static function cachePage(string $tfish_preference, string $basename, array $params,
-            string $buffer)
-    {
-        // Validate is a TfishPreference object.
-        if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
+    public static function cachePage(TfishPreference $tfish_preference, string $basename,
+            array $params, string $buffer)
+    {        
         // Abort if cache is disabled.
         if (!$tfish_preference->enable_cache) {
             return;

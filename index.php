@@ -11,6 +11,9 @@
  * @since       1.0
  * @package     content
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
@@ -79,7 +82,7 @@ if ($clean_id) {
         
         // For a content type-specific page use $content->tags, $content->template
         if ($content->tags) {
-            $tags = $content_handler::makeTagLinks($content->tags, false);
+            $tags = $content_handler::makeTagLinks($content->tags);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }

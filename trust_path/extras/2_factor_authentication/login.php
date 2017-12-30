@@ -15,6 +15,9 @@
  * @since       1.0
  * @package     core
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 require_once "../mainfile.php";
 
 // tfish_header is manually duplicated on this page but without the site closed check and redirect

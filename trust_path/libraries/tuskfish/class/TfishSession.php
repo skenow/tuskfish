@@ -76,10 +76,6 @@ class TfishSession
      */
     public static function isExpired(TfishPreference $tfish_preference)
     {
-        // Validate is a TfishPreference object.
-        if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
         
         // Check if session carries a destroyed flag and kill it if the grace timer has expired.
         if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
@@ -414,11 +410,7 @@ class TfishSession
      * @param object $tfish_preference TfishPreference object.
      */
     public static function start(TfishPreference $tfish_preference)
-    {
-        if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
+    {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', 1);
         ini_set('session.use_only_cookies', 1);

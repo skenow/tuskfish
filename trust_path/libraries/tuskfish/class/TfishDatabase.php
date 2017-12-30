@@ -208,15 +208,15 @@ class TfishDatabase
             exit;
         }
         
-        if ($primary_key) {
+        if (isset($primary_key)) {
             $primary_key = self::escapeIdentifier($primary_key);
             
             if (array_key_exists($primary_key, $clean_columns)) {
                 $clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key)
-                        ? $primary_key : false;
+                        ? $primary_key : null;
             }
             
-            if (!$clean_primary_key) {
+            if (!isset($clean_primary_key)) {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                 exit;
             }
@@ -239,7 +239,7 @@ class TfishDatabase
             
             foreach ($columns as $key => $value) {
                 $sql .= "`" . $key . "` " . $value . "";
-                if ($primary_key && $primary_key === $key) {
+                if (isset($primary_key) && $primary_key === $key) {
                     $sql .= " PRIMARY KEY";
                 }
                 $sql .= ", ";
@@ -414,7 +414,7 @@ class TfishDatabase
      * @param object $statement Prepared statement.
      * @return bool True on success, false on failure.
      */
-    public static function executeTransaction($statement)
+    public static function executeTransaction(PDOStatement $statement)
     {
         try {
             self::$_db->beginTransaction();
@@ -519,17 +519,17 @@ class TfishDatabase
      * @param array $columns Names of database columns to be selected.
      * @return object PDOStatement object on success PDOException on failure.
      */
-    public static function select(string $table, $criteria = false, array $columns = false)
+    public static function select(string $table, TfishCriteria $criteria = null, array $columns = null)
     {
         $clean_table = self::validateTableName($table);
-        $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
-        $clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
+        $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
+        $clean_columns = isset($columns) ? self::validateColumns($columns) : array();
         
         return self::_select($clean_table, $clean_criteria, $clean_columns);
     }
 
     /** @internal */
-    private static function _select(string $table, $criteria, array $columns)
+    private static function _select(string $table, TfishCriteria $criteria, array $columns)
     {
         // Specify operation.
         $sql = "SELECT ";
@@ -549,12 +549,12 @@ class TfishDatabase
         $sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
 
         // Check if a tag filter has been applied (JOIN is required).
-        if ($criteria && !empty($criteria->tag)) {
+        if (isset($criteria) && !empty($criteria->tag)) {
             $sql .= self::_renderTagJoin($table);
         }
 
         // Set WHERE criteria.
-        if ($criteria) {
+        if (isset($criteria)) {
             if (!empty($criteria->item) || !empty($criteria->tag)) {
                 $sql .= "WHERE ";
             }
@@ -606,7 +606,7 @@ class TfishDatabase
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
         
-        if ($criteria && $statement) {
+        if (isset($criteria) && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, self::setType($value));
@@ -644,10 +644,10 @@ class TfishDatabase
      * @param string $column Name of column.
      * @return int|object Row count on success, PDOException object on failure.
      */
-    public static function selectCount(string $table, $criteria = false, string $column = false)
+    public static function selectCount(string $table, TfishCriteria $criteria = null, string $column = '')
     {
         $clean_table = self::validateTableName($table);
-        $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
+        $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
         
         if ($column) {
             $column = self::escapeIdentifier($column);
@@ -666,7 +666,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _selectCount(string $table, $criteria, string $column)
+    private static function _selectCount(string $table, TfishCriteria $criteria, string $column)
     {
         // Specify operation and column
         $sql = "SELECT COUNT(";
@@ -677,12 +677,12 @@ class TfishDatabase
         $sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
 
         // Check if a tag filter has been applied (JOIN is required).
-        if ($criteria && !empty($criteria->tag)) {
+        if (isset($criteria) && !empty($criteria->tag)) {
             $sql .= self::_renderTagJoin($table);
         }
 
         // Set WHERE criteria.
-        if ($criteria) {
+        if (isset($criteria)) {
 
             if (!empty($criteria->item) || !empty($criteria->tag)) {
                 $sql .= "WHERE ";
@@ -710,7 +710,7 @@ class TfishDatabase
 
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
-        if ($criteria && $statement) {
+        if (isset($criteria) && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, self::setType($value));
@@ -745,18 +745,18 @@ class TfishDatabase
      * @param array $columns Name of columns to filter results by.
      * @return object PDOStatement on success, PDOException on failure.
      */
-    public static function selectDistinct(string $table, $criteria = false, array $columns)
+    public static function selectDistinct(string $table, TfishCriteria $criteria = null, array $columns)
     {
         // Validate the tablename (alphanumeric characters only).
         $clean_table = self::validateTableName($table);
-        $clean_criteria = !empty($criteria) ? self::validateCriteriaObject($criteria) : false;
-        $clean_columns = !empty($columns) ? self::validateColumns($columns) : false;
+        $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
+        $clean_columns = !empty($columns) ? self::validateColumns($columns) : array();
         
         return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
     }
 
     /** @internal */
-    private static function _selectDistinct(string $table, $criteria, array $columns)
+    private static function _selectDistinct(string $table, TfishCriteria $criteria, array $columns)
     {
         // Specify operation
         $sql = "SELECT DISTINCT ";
@@ -772,7 +772,7 @@ class TfishDatabase
         $sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
 
         // Set parameters.
-        if ($criteria) {
+        if (isset($criteria)) {
 
             if (!empty($criteria->item) || !empty($criteria->tag)) {
                 $sql .= "WHERE ";
@@ -825,7 +825,7 @@ class TfishDatabase
 
         // Prepare the statement and bind the values.
         $statement = self::preparedStatement($sql);
-        if ($criteria && $statement) {
+        if (isset($criteria) && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, self::setType($value));
@@ -986,22 +986,22 @@ class TfishDatabase
      * @param array $key_values Array of column names and values to update.
      * @param object $criteria TfishCriteria object used to build conditional database query.
      */
-    public static function updateAll(string $table, array $key_values, $criteria = false)
+    public static function updateAll(string $table, array $key_values, TfishCriteria $criteria = null)
     {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
         
-        if ($criteria) {
+        if (isset($criteria)) {
             $clean_criteria = self::validateCriteriaObject($criteria);
         } else {
-            $clean_criteria = false;
+            $clean_criteria = null;
         }
         
         return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
     }
 
     /** @internal */
-    private static function _updateAll(string $table, array $key_values, $criteria)
+    private static function _updateAll(string $table, array $key_values, TfishCriteria $criteria)
     {
         // Set table.
         $sql = "UPDATE " . self::addBackticks($table) . " SET ";
@@ -1014,7 +1014,7 @@ class TfishDatabase
         $sql = rtrim($sql, ", ") . " ";
 
         // Set WHERE criteria.
-        if ($criteria) {
+        if (isset($criteria)) {
 
             if (!empty($criteria->item)) {
                 $sql .= "WHERE ";
@@ -1038,7 +1038,7 @@ class TfishDatabase
             unset($key, $value);
         }
         
-        if ($criteria) {
+        if (isset($criteria)) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, self::setType($value));
@@ -1113,10 +1113,6 @@ class TfishDatabase
      */
     public static function validateCriteriaObject(TfishCriteria $criteria)
     {
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-            exit;
-        }
         
         if ($criteria->item) {
             if (!TfishFilter::isArray($criteria->item)) {

@@ -12,6 +12,9 @@
  * @since       1.0
  * @package     core
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Include the relevant page template, or the default if not set.
 if ($tfish_template && !empty($tfish_template->theme)) {
     include_once TFISH_THEMES_PATH . $tfish_template->theme . "/theme.html";

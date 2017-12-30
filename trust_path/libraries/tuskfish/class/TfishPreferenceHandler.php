@@ -41,11 +41,7 @@ class TfishPreferenceHandler
      */
     function __construct(TfishPreference $tfish_preferences)
     {
-        if (is_a($tfish_preferences, 'TfishPreference')) {
-            $this->preferences = $tfish_preferences;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
+        $this->preferences = $tfish_preferences;
     }
 
     /**

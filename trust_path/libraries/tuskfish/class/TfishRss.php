@@ -45,10 +45,6 @@ class TfishRss extends TfishAncestralObject
     /** Initialise default property values and unset unneeded ones. */
     public function __construct(TfishPreference $tfish_preference)
     {
-        
-        if (!is_a($tfish_preference, 'TfishPreference')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
 
         // Whitelist of official channel properties and datatypes.
         $this->__properties['title'] = 'string';

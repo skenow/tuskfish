@@ -15,6 +15,9 @@
  * @since       1.0
  * @package     admin
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 require_once "../mainfile.php";
 
 // Initialise output buffering with gzip compression.

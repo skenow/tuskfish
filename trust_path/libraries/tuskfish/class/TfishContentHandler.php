@@ -128,11 +128,8 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public static function insert($obj)
+    public static function insert(TfishContentObject $obj)
     {
-        if (!is_a($obj, 'TfishContentObject')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
         
         $key_values = $obj->toArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
@@ -271,15 +268,11 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of objects matching conditions.
      */
-    public static function getCount($criteria = false)
+    public static function getCount(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
-        }      
         
         if ($criteria && !empty($criteria->limit)) {
             $limit = $criteria->limit;
@@ -319,17 +312,13 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
-    public static function getList($criteria = false)
+    public static function getList(TfishCriteria $criteria = null)
     {
         $content_list = array();
         $columns = array('id', 'title');
 
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         // Set default sorting order by submission time descending.
@@ -382,16 +371,12 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array of content objects.
      */
-    public static function getObjects($criteria = false)
+    public static function getObjects(TfishCriteria $criteria = null)
     {
         $objects = array();
         
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Set default sorting order by submission time descending.        
@@ -608,14 +593,14 @@ class TfishContentHandler
      * @param string $zero_option The default text to show at top of select box.
      * @return string HTML select box.
      */
-    public static function getTypeSelectBox(string $selected = null, string $zero_option = TFISH_TYPE)
+    public static function getTypeSelectBox(string $selected = '', string $zero_option = TFISH_TYPE)
     {
         // The text to display in the zero option of the select box.
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
         $clean_selected = '';
         $type_list = self::getTypes();
 
-        if (isset($selected) && TfishFilter::isAlnumUnderscore($selected)) {
+        if ($selected && TfishFilter::isAlnumUnderscore($selected)) {
             if (array_key_exists($selected, $type_list)) {
                 $clean_selected = TfishFilter::trimString($selected);
             }
@@ -626,7 +611,7 @@ class TfishContentHandler
                 . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {
-            $select_box .= ($key === $selected) ? '<option value="' . TfishFilter::escape($key)
+            $select_box .= ($key === $clean_selected) ? '<option value="' . TfishFilter::escape($key)
                     . '" selected>' . TfishFilter::escape($value) . '</option>' : '<option value="'
                 . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
         }
@@ -647,11 +632,8 @@ class TfishContentHandler
      * @param string $target_filename Name of file for tag links to point at.
      * @return array Array of HTML tag links.
      */
-    public static function makeTagLinks(array $tags, string $target_filename = false)
+    public static function makeTagLinks(array $tags, string $target_filename = '')
     {
-        if (!TfishFilter::isArray($tags)) {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
 
         if (empty($target_filename)) {
             $clean_filename = TFISH_URL . '?tag_id=';
@@ -898,11 +880,8 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public static function update($obj)
+    public static function update(TfishContentObject $obj)
     {
-        if (!is_a($obj, 'TfishContentObject')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
         
         $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();

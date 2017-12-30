@@ -117,7 +117,6 @@ class TfishCriteria
      */
     public function killType(int $key)
     {
-        $key = (int) $key;
 
         if (isset($this->__data['item'][$key])) {
             unset($this->__data['item'][$key]);
@@ -330,7 +329,7 @@ class TfishCriteria
      * @param string $property Name of property.
      * @return bool True on success false on failure.
      */
-    public function __unset($property)
+    public function __unset(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         

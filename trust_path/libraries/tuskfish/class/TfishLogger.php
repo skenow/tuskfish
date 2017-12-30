@@ -49,13 +49,13 @@ class TfishLogger
      * @param array $context Active symbol table, ie. an array of every variable in scope when the
      * error was triggered.
      */
-    public static function logErrors(int $errno = false, string $error = false,
-            string $file = false, int $line = false, array $context = false)
+    public static function logErrors(int $errno = null, string $error = '',
+            string $file = '', int $line = null, array $context = array())
     {
-        if ($errno) $errno = TfishFilter::trimString($errno);
-        if ($error) $error = TfishFilter::trimString($error);
-        if ($file) $file = Tfishfilter::trimString($file);
-        if ($line) $line = TfishFilter::trimString($line);
+        $errno = isset($errno) ? TfishFilter::trimString($errno) : TFISH_ERROR_UNSPECIFIED;
+        $error = !empty($error) ? TfishFilter::trimString($error) : TFISH_ERROR_UNSPECIFIED;
+        $file = !empty($file) ? Tfishfilter::trimString($file) : TFISH_ERROR_UNSPECIFIED;
+        $line = isset($line) ? TfishFilter::trimString($line) : TFISH_ERROR_UNSPECIFIED;
         // $context not in use.
         
         $message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";

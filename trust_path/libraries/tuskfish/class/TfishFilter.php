@@ -84,7 +84,7 @@ class TfishFilter
      * @param array $config HTMPurifier configuration options (see HTMLPurifier documentation).
      * @return string Validated HTML content.
      */
-    public static function filterHtml(string $dirty_html, array $config = false)
+    public static function filterHtml(string $dirty_html, array $config = array())
     {
         if (self::isUtf8($dirty_html)) {
             if (class_exists('HTMLPurifier')) {
@@ -275,11 +275,11 @@ class TfishFilter
      * @param int $max Maximum acceptable value.
      * @return bool True if valid int and within optional range check, false otherwise.
      */
-    public static function isInt($int, int $min = false, int $max = false)
+    public static function isInt($int, int $min = null, int $max = null)
     {
-        $clean_int = is_int($int) ? (int) $int : false;
-        $clean_min = is_int($min) ? (int) $min : false;
-        $clean_max = is_int($max) ? (int) $max : false;
+        $clean_int = is_int($int) ? (int) $int : null;
+        $clean_min = is_int($min) ? (int) $min : null;
+        $clean_max = is_int($max) ? (int) $max : null;
 
         // Range check on minimum and maximum value.
         if (is_int($clean_int) && is_int($clean_min) && is_int($clean_max)) {
@@ -287,17 +287,17 @@ class TfishFilter
         }
 
         // Range check on minimum value.
-        if (is_int($clean_int) && is_int($clean_min) && ($clean_max === false)) {
+        if (is_int($clean_int) && is_int($clean_min) && !isset($clean_max)) {
             return $clean_int >= $clean_min ? true : false;
         }
 
         // Range check on maximum value.
-        if (is_int($clean_int) && ($clean_min === false) && is_int($clean_max)) {
+        if (is_int($clean_int) && !isset($clean_min) && is_int($clean_max)) {
             return $clean_int <= $clean_max ? true : false;
         }
 
         // Simple use case, no range check.
-        if (is_int($clean_int) && ($clean_min === false) && ($clean_max === false)) {
+        if (is_int($clean_int) && !isset($clean_min) && !isset($clean_max)) {
             return true;
         } else {
             return false;
@@ -311,9 +311,9 @@ class TfishFilter
      * @param int $version IP address version ('4' or '6').
      * @return bool True if valid IP address, false otherwise.
      */
-    public static function isIp(string $ip, int $version = false)
+    public static function isIp(string $ip, int $version = null)
     {
-        if ($version === 6) {
+        if (isset($version) && $version === 6) {
             if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
                     | FILTER_FLAG_NO_RES_RANGE) === false) {
                 return true;

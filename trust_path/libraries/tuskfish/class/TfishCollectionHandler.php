@@ -36,14 +36,10 @@ class TfishCollectionHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of collection objects matching the criteria.
      */
-    public static function getCount($criteria = false)
+    public static function getCount(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -74,14 +70,10 @@ class TfishCollectionHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishCollection objects.
      */
-    public static function getObjects($criteria = false)
+    public static function getObjects(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -106,7 +98,6 @@ class TfishCollectionHandler extends TfishContentHandler
      */
     public static function getParentSelectBox(int $selected = 0)
     {
-        $selected = (int) $selected;
         $clean_selected = TfishFilter::isInt($selected, 1) ? $selected : 0;
         $options = array(0 => TFISH_SELECT_PARENT);
         $select_box = '';

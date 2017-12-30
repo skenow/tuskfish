@@ -11,6 +11,9 @@
  * @since       1.0
  * @package     admin
  */
+// Enable strict type declaration.
+declare(strict_types=1);
+
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
@@ -333,7 +336,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     
                     // For a content type-specific page use $content->tags, $content->template.
                     if ($content->tags) {
-                        $tags = TfishContentHandler::makeTagLinks($content->tags, false);
+                        $tags = TfishContentHandler::makeTagLinks($content->tags);
                         $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
                         $contentInfo[] = $tags;
                     }
@@ -469,7 +472,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     $extra_params);
 
             // Prepare select filters.
-            $tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag, false);
+            $tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
             $type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
             $online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
             $tfish_template->select_action = 'admin.php';

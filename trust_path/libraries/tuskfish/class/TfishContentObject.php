@@ -229,7 +229,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param string $escape_html Whether to escape HTML fields (teaser, description as well).
      * @return string Human readable value escaped for display.
      */
-    public function escape(string $property, string $escape_html = false)
+    public function escape(string $property, bool $escape_html = false)
     {
         $clean_property = TfishFilter::trimString($property);
         
@@ -462,10 +462,10 @@ class TfishContentObject extends TfishAncestralObject
      * subclass-specific pages are found in the trust_path/extras folder. Just drop
      * them into your site root to use them.
      * 
-     * @param bool $custom_page Use an arbitrary target page or the home page (index.php).
+     * @param string $custom_page Use an arbitrary target page or the home page (index.php).
      * @return string URL to view this object.
      */
-    public function getURL(bool $custom_page = false)
+    public function getURL(string $custom_page = '')
     {
         $url = empty($custom_page) ? TFISH_PERMALINK_URL : TFISH_URL;
         

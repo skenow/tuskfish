@@ -33,7 +33,7 @@ class TfishArticleHandler extends TfishContentHandler
      * Get TfishArticle objects, optionally matching conditions specified in a TfishCriteria object.
      * 
      * Note that the article type is automatically set, so when calling
-     * TfishArticleHandler::getObjects($criteria) it is unecessary to set the object type.
+     * TfishArticleHandler::getObjects($criteria) it is unnecessary to set the object type.
      * However, if you want to use TfishContentHandler::getObjects($criteria) then you do need to
      * specify the object type, otherwise you will get all types of content returned. it is
      * acceptable to use either handler, although probably good practice to use the object-
@@ -42,14 +42,10 @@ class TfishArticleHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
-    public static function getObjects($criteria = false)
+    public static function getObjects(TfishCriteria $criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
@@ -79,14 +75,10 @@ class TfishArticleHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
-    public static function getCount($criteria = false)
+    public static function getCount($criteria = null)
     {
-        if (!$criteria) {
+        if (!isset($criteria)) {
             $criteria = new TfishCriteria();
-        }
-        
-        if (!is_a($criteria, 'TfishCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
 
         // Unset any pre-existing object type criteria.
