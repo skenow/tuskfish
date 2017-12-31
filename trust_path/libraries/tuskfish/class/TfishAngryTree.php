@@ -220,13 +220,13 @@ class TfishAngryTree
      *
      * @param string $fieldName Name of the member variable from the node objects that should
      * be used as the title for the options.
-     * @param string $selected Value to display as selected.
+     * @param int $selected Value to display as selected.
      * @param int $key ID of the object to display as the root of select options.
      * @param string $ret Result from previous recursions (reference to a string when called from outside).
      * @param string $prefix_orig String to indent items at deeper levels.
      * @param string $prefix_curr String to indent the current item.
      */
-    private function _makeSelBoxOptions(string $fieldName, string $selected, int $key, string &$ret,
+    private function _makeSelBoxOptions(string $fieldName, int $selected, int $key, &$ret,
                 string $prefix_orig, string $prefix_curr = '')
     {
         if ($key > 0) {
@@ -261,7 +261,7 @@ class TfishAngryTree
      * @return array Select box options as ID => title pairs.
      * */
     public function makeSelBox(string $name, string $fieldName, string $prefix = '-- ',
-        int $selected = '', bool $addEmptyOption = FALSE, int $key = 0)
+        int $selected = 0, bool $addEmptyOption = FALSE, int $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);

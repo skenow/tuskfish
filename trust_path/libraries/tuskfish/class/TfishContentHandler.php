@@ -593,10 +593,15 @@ class TfishContentHandler
      * @param string $zero_option The default text to show at top of select box.
      * @return string HTML select box.
      */
-    public static function getTypeSelectBox(string $selected = '', string $zero_option = TFISH_TYPE)
+    public static function getTypeSelectBox(string $selected = '', string $zero_option = null)
     {
         // The text to display in the zero option of the select box.
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        if (isset($zero_option)) {
+            $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        } else {
+            $clean_zero_option = TFISH_TYPE;
+        }
+        
         $clean_selected = '';
         $type_list = self::getTypes();
 

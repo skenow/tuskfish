@@ -147,7 +147,7 @@ class TfishMetadata
 
     /** @internal */
     private function _getPavigationControl(int $count, int $limit, string $url, int $start,
-            int $tag, array $extra_params)
+            int $tag, string $extra_params)
     {
         // 1. Calculate number of pages, page number of start object and adjust for remainders.
         $page_slots = array();

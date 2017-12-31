@@ -24,7 +24,7 @@ $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type'])
-        ? TfishFilter::trimString($_GET['type']) : null;
+        ? TfishFilter::trimString($_GET['type']) : '';
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 // Specify the admin theme and the template to be used to preview content (user side template).
@@ -447,7 +447,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             
             foreach ($rows as &$row) {
                 $row['submission_time']
-                        = date($tfish_preference->date_format, $row['submission_time']);
+                        = date($tfish_preference->date_format, (int) $row['submission_time']);
             }
             
             $typelist = TfishContentHandler::getTypes();
@@ -463,6 +463,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             if (isset($clean_type)) {
                 $extra_params['type'] = $clean_type;
             }
+            
             $tfish_template->pagination = $tfish_metadata->getPaginationControl(
                     $count,
                     $tfish_preference->admin_pagination,

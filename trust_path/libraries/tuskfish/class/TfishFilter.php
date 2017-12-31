@@ -42,14 +42,16 @@ class TfishFilter
     /**
      * Escape data for display to mitigate XSS attacks.
      * 
-     * Applies htmlentities to text fields destined for output / display to limit XSS attacks.
-     * Encoding of quotes and use of UTF-8 character set is hardcoded in.
+     * Casts to string and applies htmlentities to text fields destined for output / display to
+     * limit XSS attacks. Encoding of quotes and use of UTF-8 character set is hardcoded in.
      *
      * @param string $output Unescaped string intended for display.
      * @return string Escaped output string safe for display.
      */
     public static function escape($output)
     {
+        $output = (string) $output;
+        
         if (isset($output)) {
             return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
         } else {

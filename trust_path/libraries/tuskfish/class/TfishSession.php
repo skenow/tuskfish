@@ -186,14 +186,14 @@ class TfishSession
                 $_SESSION['user_id'] = (int) $user['id'];
                 
                 // Reset failed login counter to zero.
-                TfishDatabase::update('user', $user['id'], array('login_errors' => 0));
+                TfishDatabase::update('user', (int) $user['id'], array('login_errors' => 0));
                 
                 // Redirect to admin page.
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
                 // Increment failed login counter, destroy session and redirect to the login page.
-                TfishDatabase::updateCounter($user['id'], 'user', 'login_errors');
+                TfishDatabase::updateCounter((int) $user['id'], 'user', 'login_errors');
                 self::logout(TFISH_ADMIN_URL . "login.php");
                 exit;
             }

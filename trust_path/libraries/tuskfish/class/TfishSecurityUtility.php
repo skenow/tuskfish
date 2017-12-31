@@ -95,7 +95,7 @@ class TfishSecurityUtility
          *         'UTF-8');
          */
         
-        $salt = random_bytes($length);
+        $salt = base64_encode(random_bytes($length));
         
         return $salt;
     }
