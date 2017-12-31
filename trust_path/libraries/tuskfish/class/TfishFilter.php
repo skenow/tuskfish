@@ -50,7 +50,11 @@ class TfishFilter
      */
     public static function escape($output)
     {
-        return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
+        if (isset($output)) {
+            return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -423,7 +427,7 @@ class TfishFilter
      * @param string $dirty_string Input to be tested.
      * @return string Trimmed and UTF-8 validated string.
      */
-    public static function trimString(string $dirty_string)
+    public static function trimString($dirty_string)
     {
         $dirty_string = (string) $dirty_string;
         

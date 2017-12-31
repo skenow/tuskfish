@@ -313,12 +313,12 @@ class TfishSession
      * 
      * @param string $url_redirect The URL to redirect the user to on logging out. 
      */
-    public static function logout(string $url_redirect = false)
+    public static function logout(string $url_redirect = null)
     {
-        $clean_url = false;
+        $clean_url = null;
         
-        if ($url_redirect) {
-            $clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : false;
+        if (isset($url_redirect)) {
+            $clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : null;
         }
         
         self::_logout($clean_url);

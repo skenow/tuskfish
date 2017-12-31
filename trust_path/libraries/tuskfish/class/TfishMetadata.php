@@ -61,7 +61,7 @@ class TfishMetadata
      * 
      * @param object $preference Instance of TfishPreference class, holding site preferences.
      */
-    function __construct(TfishPreference $preference)
+    function __construct($preference)
     {
         $this->title = $preference->site_name;
         $this->description = $preference->site_description;
