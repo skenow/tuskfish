@@ -529,7 +529,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _select(string $table, TfishCriteria $criteria, array $columns)
+    private static function _select(string $table, TfishCriteria $criteria = null, array $columns)
     {
         // Specify operation.
         $sql = "SELECT ";

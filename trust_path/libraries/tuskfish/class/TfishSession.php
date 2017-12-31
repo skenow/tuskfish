@@ -414,8 +414,8 @@ class TfishSession
     public static function start(TfishPreference $tfish_preference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
-        ini_set('session.use_cookies', 1);
-        ini_set('session.use_only_cookies', 1);
+        ini_set('session.use_cookies', '1');
+        ini_set('session.use_only_cookies', '1');
 
         // Session name. If the preference has been messed up it will assign one.
         $session_name = isset($tfish_preference->session_name)

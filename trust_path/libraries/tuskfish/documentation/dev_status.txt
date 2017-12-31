@@ -48,11 +48,11 @@ THINGS THAT NEED TO CHANGE FOR PRODUCTION CODE
 
 On a development server just turn displaying errors on:
 
-ini_set('display_errors', 1);
+ini_set('display_errors', '1');
 While on a production server turn displaying errors off while logging errors on:
 
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 
 Set PDO in exception mode.
 Do not use try..catch to report errors.
