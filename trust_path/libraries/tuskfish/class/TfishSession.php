@@ -207,7 +207,9 @@ class TfishSession
     /**
      * Authenticate the user with two factors and establish a session.
      * 
-     * Requires a Yubikey hardware token as the second factor.
+     * Requires a Yubikey hardware token as the second factor. Note that the authenticator type
+     * is not declared, as the desired response is to logout and redirect, rather than to throw
+     * an error.
      * 
      * @param string $dirty_password Input password.
      * @param string $dirty_otp Input Yubikey one-time password.
