@@ -677,13 +677,13 @@ class TfishContentHandler
      * and go shoot yourself now.
      *
      * @param object $tfish_preference TfishPreference object, to make site preferences available.
-     * @param array $search_terms Array of search terms.
+     * @param string $search_terms Array of search terms.
      * @param string $andor Operator to chain search terms (AND or OR).
      * @param int $limit Maximum number of results to retrieve (pagination constraint).
      * @param int $offset Starting point for retrieving results (pagination constraint).
      * @return array|bool Array of content objects on success, false failure.
      */
-    public static function searchContent(TfishPreference $tfish_preference, array $search_terms,
+    public static function searchContent(TfishPreference $tfish_preference, string $search_terms,
             string $andor, int $limit, int $offset = 0)
     {
         
