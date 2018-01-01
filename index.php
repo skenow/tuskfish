@@ -23,8 +23,9 @@ $content_handler = 'TfishContentHandler';
 
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
-$target_file_name = 'index';
 $index_template = 'single_stream';
+$target_file_name = 'index';
+$tfish_template->target_file_name = $target_file_name;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
