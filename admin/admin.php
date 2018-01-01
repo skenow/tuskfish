@@ -37,6 +37,7 @@ if ($op === 'view') {
 // Set target file for intra-collection pagination controls when viewing objects. False will 
 // default to your home page.
 $target_file_name = '';
+$tfish_template->target_file_name = $target_file_name;
 
 if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update',
     'view', false))) {
