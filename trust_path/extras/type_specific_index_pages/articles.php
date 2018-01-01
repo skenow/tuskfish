@@ -29,6 +29,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishArticleHandler';
 $index_template = 'articles';
 $target_file_name = 'articles';
+$tfish_template->target_file_name = $target_file_name;
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_ARTICLES;

@@ -29,6 +29,7 @@ $id = 10;
 
 // 2. Enter the name of the page you want headings and tags to link back to, without extension.
 $target_file_name = 'index';
+$tfish_template->target_file_name = $target_file_name;
 
 // 3. Set the page title.
 $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;

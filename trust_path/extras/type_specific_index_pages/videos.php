@@ -32,6 +32,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishVideoHandler';
 $index_template = 'videos';
 $target_file_name = 'videos';
+$tfish_template->target_file_name = $target_file_name;
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_VIDEOS;

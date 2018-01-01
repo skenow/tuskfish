@@ -32,6 +32,7 @@ $tfish_template->setTheme('default');
 $content_handler = 'TfishDownloadHandler';
 $index_template = 'downloads';
 $target_file_name = 'downloads';
+$tfish_template->target_file_name = $target_file_name;
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_DOWNLOADS;

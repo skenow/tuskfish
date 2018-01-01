@@ -30,6 +30,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishImageHandler';
 $index_template = 'images';
 $target_file_name = 'images';
+$tfish_template->target_file_name = $target_file_name;
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_IMAGES;

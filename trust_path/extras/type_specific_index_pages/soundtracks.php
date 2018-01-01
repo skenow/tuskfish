@@ -29,6 +29,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishAudioHandler';
 $index_template = 'soundtracks';
 $target_file_name = 'soundtracks';
+$tfish_template->target_file_name = $target_file_name;
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_AUDIO_FILES;

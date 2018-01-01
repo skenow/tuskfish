@@ -29,6 +29,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishCollectionHandler';
 $index_template = 'collections';
 $target_file_name = 'collections';
+$tfish_template->target_file_name = $target_file_name;
 
 // Page title.
 $tfish_template->page_title = TFISH_TYPE_COLLECTIONS;
