@@ -151,7 +151,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     $tfish_template->languages = TfishContentHandler::getLanguages();
                     $tfish_template->tags = TfishContentHandler::getTagList(false);
                     $tfish_template->parent_select_options = 
-                            $parent_tree->makeParentSelectBox($row['parent']);
+                            $parent_tree->makeParentSelectBox((int) $row['parent']);
                     $tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
                     $tfish_template->tfish_main_content = $tfish_template->render('form');
                 } else {

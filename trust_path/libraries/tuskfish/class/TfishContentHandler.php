@@ -1014,7 +1014,7 @@ class TfishContentHandler
 
         // Objects without an ID have not yet been inserted into the database.
         if (empty($clean_id)) {
-            return false;
+            return '';
         }
 
         $criteria = new TfishCriteria;
@@ -1024,7 +1024,7 @@ class TfishContentHandler
         
         if ($statement) {
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            $filename = (isset($row['image']) && !empty($row['image'])) ? $row['image'] : false;
+            $filename = (isset($row['image']) && !empty($row['image'])) ? $row['image'] : '';
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
         }
@@ -1045,7 +1045,7 @@ class TfishContentHandler
 
         // Objects without an ID have not yet been inserted into the database.
         if (empty($clean_id)) {
-            return false;
+            return '';
         }
 
         $criteria = new TfishCriteria;
@@ -1055,7 +1055,7 @@ class TfishContentHandler
         
         if ($statement) {
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            $filename = (isset($row['media']) && !empty($row['media'])) ? $row['media'] : false;
+            $filename = (isset($row['media']) && !empty($row['media'])) ? $row['media'] : '';
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
         }
