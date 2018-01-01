@@ -116,13 +116,13 @@ class TfishMetadata
             
             // Check for directory traversals and null byte injection.
             if (TfishFilter::hasTraversalorNullByte($key)
-                    || TfishFilter::hasTraversalorNullByte($value)) {
+                    || TfishFilter::hasTraversalorNullByte((string) $value)) {
                 trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                 return false;
             }
         
             $clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '='
-                    . TfishFilter::encodeEscapeUrl($value);
+                    . TfishFilter::encodeEscapeUrl((string) $value);
             unset($key, $value);
         }
         
