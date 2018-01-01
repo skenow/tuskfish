@@ -561,6 +561,9 @@ class TfishContentObject extends TfishAncestralObject
             if (!in_array($property, $this->zeroedProperties())) {
                 trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
             }
+            
+            // If it's not set, no need to process further.
+            return;
         }
             
         // Validate $value against expected data type and business rules
