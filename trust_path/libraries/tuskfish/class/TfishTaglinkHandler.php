@@ -119,7 +119,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public static function updateTaglinks(int $id, string $type, array $tags)
+    public static function updateTaglinks(int $id, string $type, array $tags = null)
     {
         // Validate ID.
         if (TfishFilter::isInt($id, 1)) {
