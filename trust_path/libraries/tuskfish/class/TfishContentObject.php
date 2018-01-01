@@ -237,8 +237,8 @@ class TfishContentObject extends TfishAncestralObject
             return null;
         }
         
-        // Convert properties to human readable form, where necessary.
-        $human_readable_property = $this->makeHumanReadable($property);
+        // Cast properties to string and human readable form, where necessary.
+        $human_readable_property = (string) $this->makeHumanReadable($clean_property);
         
         // HTML properties (such as teaser and description) are input filtered with HTMLPurifier
         // elsewhere. They cannot be treated with htmlspecialchars() in any case as that would break
