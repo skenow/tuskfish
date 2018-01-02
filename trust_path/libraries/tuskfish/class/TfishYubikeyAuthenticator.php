@@ -24,6 +24,9 @@ if (!defined("TFISH_ROOT_PATH"))
  * Set up requires obtaining a Client ID and secret key from Yubico, please refer to the manual for
  * instructions on how to set it up.
  * 
+ * Note that the Yubikey authentication methods within this class are Copyright Tom Corwine and
+ * distributed under the GPL (V2). Please see the separate copyright block within the class file.
+ * 
  * Do not attempt to use this file without reading the manual.
  * 
  * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
