@@ -375,7 +375,7 @@ class TfishFileHandler
     public static function sendDownload(int $id, string $filename = '')
     {
         $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : false;
-        $clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : false;
+        $clean_filename = !empty($filename) ? TfishFilter::trimString($filename) : '';
         
         if ($clean_id) {
             $result = self::_sendDownload($clean_id, $clean_filename);
