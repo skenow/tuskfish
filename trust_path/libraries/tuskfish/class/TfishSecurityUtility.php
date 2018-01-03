@@ -90,14 +90,7 @@ class TfishSecurityUtility
      * @return string $salt
      */
     public static function generateSalt(int $length = 64)
-    {
-        /**
-         * mcrypt was Deprecated in PHP 7.2.
-         *
-         * $salt = mb_substr(base64_encode(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)), 0, $length,
-         *         'UTF-8');
-         */
-        
+    {        
         $salt = base64_encode(random_bytes($length));
         
         return $salt;
