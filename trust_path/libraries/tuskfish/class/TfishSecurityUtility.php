@@ -36,6 +36,9 @@ class TfishSecurityUtility
      * Evaluates the strength of a password to resist brute force cracking.
      * 
      * Issues warnings if deficiencies are found. Requires a minimum length of 15 characters.
+     * Due to revision of advice on best practices most requirements have been relaxed, as user
+     * behaviour tends to be counter-productive. Basically, it's up to you, the admin, to choose
+     * a sane password.
      * 
      * @param string $password Input password.
      * @return array Array of evaluation warnings as strings.
