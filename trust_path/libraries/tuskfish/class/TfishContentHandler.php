@@ -677,7 +677,7 @@ class TfishContentHandler
      * and go shoot yourself now.
      *
      * @param object $tfish_preference TfishPreference object, to make site preferences available.
-     * @param string $search_terms Array of search terms.
+     * @param string $search_terms Search terms.
      * @param string $andor Operator to chain search terms (AND or OR).
      * @param int $limit Maximum number of results to retrieve (pagination constraint).
      * @param int $offset Starting point for retrieving results (pagination constraint).

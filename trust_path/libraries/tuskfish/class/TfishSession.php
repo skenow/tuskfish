@@ -250,7 +250,7 @@ class TfishSession
     }
     
     /** @internal */
-    private static function _twoFactorLogin($dirty_id, string $dirty_password, string $dirty_otp,
+    private static function _twoFactorLogin(string $dirty_id, string $dirty_password, string $dirty_otp,
             TfishYubikeyAuthenticator $yubikey)
     {
         $user = false;

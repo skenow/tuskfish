@@ -219,8 +219,10 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * Use this method to retrieve object properties when you want to send them to the browser.
      * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
-     * attacks. Note that the method excludes the teaser and description fields by default, 
-     * which are returned unescaped; these are dedicated HTML fields that have been input-validated
+     * attacks.
+     * 
+     * Note that the method excludes the teaser and description fields by default, which are 
+     * returned unescaped; these are dedicated HTML fields that have been input-validated
      * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
      * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
      * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.

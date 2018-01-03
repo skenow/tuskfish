@@ -445,7 +445,7 @@ class TfishFileHandler
      * Upload a file to the uploads/image or uploads/media directory and set permissions to 644.
      * 
      * @param string $filename Filename.
-     * @param string $fieldname Name of form field associated with this upload (media subdirectory).
+     * @param string $fieldname Name of form field associated with this upload ('image' or 'media').
      * @return string|bool Filename on success, false on failure.
      */
     public static function uploadFile(string $filename, string $fieldname)

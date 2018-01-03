@@ -50,7 +50,8 @@ class TfishCache
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public static function checkCache(TfishPreference $tfish_preference, string $basename, array $params = array())
+    public static function checkCache(TfishPreference $tfish_preference, string $basename,
+            array $params = array())
     {
         
         // Abort if cache is disabled.

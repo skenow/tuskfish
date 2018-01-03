@@ -127,7 +127,7 @@ class TfishAngryTree
     }
 
     /**
-     * Get a category tree
+     * Get a category tree.
      *
      * @return  array   Associative array comprising the tree.
      * */
@@ -137,7 +137,7 @@ class TfishAngryTree
     }
 
     /**
-     * returns an object from the category tree specified by its id
+     * returns an object from the category tree specified by its id.
      *
      * @param   string  $key    ID of the object to retrieve.
      * @return  object  Object (node) within the tree.
@@ -261,7 +261,7 @@ class TfishAngryTree
      * @return array Select box options as ID => title pairs.
      * */
     public function makeSelBox(string $name, string $fieldName, string $prefix = '-- ',
-        int $selected = 0, bool $addEmptyOption = FALSE, int $key = 0)
+        int $selected = 0, bool $addEmptyOption = false, int $key = 0)
     {
         $ret = array(0 => TFISH_SELECT_BOX_ZERO_OPTION);
         $this->_makeSelBoxOptions($fieldName, $selected, $key, $ret, $prefix);

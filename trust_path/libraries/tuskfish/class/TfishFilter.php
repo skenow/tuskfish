@@ -66,7 +66,7 @@ class TfishFilter
      * If you wish to use the data on a landing page you must decode it with
      * htmlspecialchars_decode() followed by rawurldecode() in that order. But really, if you are
      * using any characters that need to be encoded in the first place you should probably just
-     * stop. Keep it simple, ok?
+     * stop.
      * 
      * @param string $url Unescaped input URL.
      * @return string Encoded and escaped URL.
@@ -246,7 +246,7 @@ class TfishFilter
      * Check if an email address is valid.
      * 
      * Note that single quotes ' are a valid character in email addresses, so the output of this 
-     * filter IS NOT DATABASE SAFE in of itself.
+     * filter does NOT indicate that the value is database safe.
      *
      * @param string $email Input to be tested.
      * @return boolean True if valid email address, otherwise false.
@@ -354,7 +354,7 @@ class TfishFilter
      * Validate URL.
      * 
      * Only accepts http:// and https:// protocol and ASCII characters. Other protocols
-     * and internationalised domain names will fail validation (limitation of filter).
+     * and internationalised domain names will fail validation due to limitation of filter.
      *
      * @param string $url Input to be tested.
      * @return bool True if valid URL otherwise false.
@@ -417,7 +417,7 @@ class TfishFilter
     }
     
     /**
-     * Cast to string, check UTF-8 character set and strip trailing whitespace and control characters.
+     * Cast to string, check UTF-8 encoding and strip trailing whitespace and control characters.
      * 
      * Removes trailing whitespace and control characters (ASCII <= 32), checks for UTF-8 character
      * set and casts input to a string. Note that the data returned by this function still
