@@ -34,7 +34,7 @@ $tfish_template = new TfishTemplate();
 $tfish_template->setTheme('admin');
 
 // TfishPreference is not available yet, so just set up an analogue for use with installation.
-class TfishPreference extends TfishAncestralObject
+class TfishPreference
 {
     function __construct() {}    
 }
