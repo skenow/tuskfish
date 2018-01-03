@@ -50,7 +50,11 @@ $tfish_preference->pagination_elements = '5';
 // Initialise default content variable.
 $tfish_content = array('output' => '');
 
-/** Helper function to grab the site URL. */
+/**
+ * Helper function to grab the site URL and protocol during installation.
+ * 
+ * @return string Site URL.
+ */
 function getUrl() {
     $url = @(!isset($_server['HTTPS']) || $_SERVER["HTTPS"] != 'on') ? 'http://'
             . $_SERVER["SERVER_NAME"] : 'https://' . $_SERVER["SERVER_NAME"];
