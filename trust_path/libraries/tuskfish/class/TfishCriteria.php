@@ -33,11 +33,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @package     database
  * @property    array $item Array of TfishCriteriaItem
  * @property    array $condition Array of conditions used to join TfishCriteriaItem (AND, OR)
- * @property    string $groupby column to group results by
- * @property    int $limit number of records to retrieve
- * @property    int $offset starting point for retrieving records
- * @property    string $order sort order
- * @property    string $ordertype ASC or DESC
+ * @property    string $groupby Column to group results by
+ * @property    int $limit Number of records to retrieve
+ * @property    int $offset Starting point for retrieving records
+ * @property    string $order Sort order
+ * @property    string $ordertype Sort ascending (ASC) or descending(DESC)
  * @property    array $tag Array of tag IDs
  */
 class TfishCriteria
