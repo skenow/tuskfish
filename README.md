@@ -13,10 +13,17 @@ The project emphasis is on creating the simplest and most lightweight code base 
   jQuery, Boostrap and HTMLPurifier.
 
 Features include:
-* Publish articles, file downloads, images, audio, video, static pages and collections with one simple form.
-* Organise your content with tags and collections.
+* Publish a mixed stream of articles, file downloads, images, audio, video, static pages and collections with one simple form.
+* Organise your content with tags, collections and content types.
+* Bootstrap-based templates with responsive, mobile-first themes.
+* Native PHP template engine; easily create new template sets.
+* PHP 7, HTML5 and SQLite database.
 * Single admin system: There is no user rights management system to worry about. They don't have any.
 * SQLite database: There is no database server to worry about.
 * Exclusive use of prepared statements with bound values and parameters as protection against SQL injection.
 * Minimal public-facing code base: Most of the code lives outside the web root.
-* Bootstrap ready.
+* Tiny core library < 350 KB in size.
+
+System requirements
+* PHP 7.2 or higher with pdo_sqlite.so extension enabled (PDO_SQLITE driver).
+* Apache webserver.
