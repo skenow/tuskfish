@@ -45,7 +45,7 @@ class TfishFilter
      * Casts to string and applies htmlentities to text fields destined for output / display to
      * limit XSS attacks. Encoding of quotes and use of UTF-8 character set is hardcoded in.
      *
-     * @param string $output Unescaped string intended for display.
+     * @param mixed $output Unescaped string intended for display.
      * @return string Escaped output string safe for display.
      */
     public static function escape($output)
@@ -213,7 +213,7 @@ class TfishFilter
      * Be careful with the return value; this method simply determines if a value is boolean or
      * not; it does not return the actual value of the parameter.
      *
-     * @param bool $bool Input to be tested.
+     * @param mixed $bool Input to be tested.
      * @return bool True if a valid boolean value, false otherwise.
      */
     public static function isBool($bool)
@@ -265,7 +265,7 @@ class TfishFilter
      * 
      * Note that is_float() allows exponents.
      *
-     * @param float $float Input float to be tested.
+     * @param mixed $float Input to be tested.
      * @return boolean True if valid float, otherwise false.
      */
     public static function isFloat($float)
@@ -276,7 +276,7 @@ class TfishFilter
     /**
      * Validate integer, optionally include range check.
      * 
-     * @param int $int Input to be tested.
+     * @param mixed $int Input to be tested.
      * @param int $min Minimum acceptable value.
      * @param int $max Maximum acceptable value.
      * @return bool True if valid int and within optional range check, false otherwise.
@@ -375,7 +375,7 @@ class TfishFilter
     /**
      * Test if input is an array.
      *
-     * @param array $array Input to be tested.
+     * @param mixed $array Input to be tested.
      * @return bool True if valid array otherwise false.
      */
     public static function isArray($array)
@@ -386,7 +386,7 @@ class TfishFilter
     /**
      * Test if input is an object.
      * 
-     * @param object $object Input to be tested.
+     * @param mixed $object Input to be tested.
      * @return bool True if valid object otherwise false.
      */
     public static function isObject($object)
@@ -408,7 +408,7 @@ class TfishFilter
     /**
      * Tests if input is a resource.
      * 
-     * @param resource $resource Input to be tested.
+     * @param mixed $resource Input to be tested.
      * @return bool True if valid resource otherwise false.
      */
     public static function isResource($resource)
@@ -426,7 +426,7 @@ class TfishFilter
      * As the input is cast to a string do NOT apply this function to non-string types (int, float,
      * bool, object, resource, null, array, etc).
      * 
-     * @param string $dirty_string Input to be tested.
+     * @param mixed $dirty_string Input to be trimmed.
      * @return string Trimmed and UTF-8 validated string.
      */
     public static function trimString($dirty_string)

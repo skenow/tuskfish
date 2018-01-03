@@ -75,7 +75,7 @@ class TfishArticleHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
-    public static function getCount($criteria = null)
+    public static function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();

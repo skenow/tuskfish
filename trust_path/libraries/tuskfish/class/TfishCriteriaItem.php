@@ -29,9 +29,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     database
- * @property    string $column name of column in database table
- * @property    mixed $value value to compare
- * @property    string $operator
+ * @property    string $column Name of column in database table
+ * @property    mixed $value Value to compare
+ * @property    string $operator The operator to use for evaluation (=, +, >, < etc)
  */
 class TfishCriteriaItem
 {
@@ -44,7 +44,7 @@ class TfishCriteriaItem
     );
 
     /**
-     * Constructor
+     * Constructor.
      * 
      * @param string $column Name of column in database table. Alphanumeric and underscore
      * characters only.
@@ -90,6 +90,7 @@ class TfishCriteriaItem
      * clause of the dynamically generated query string. That would let you handle cases like this
      * simply, but lose the protection from using 100% bound values in the Tuskfish API, which I am
      * very reluctant to give up. 
+     * 
      * @return array Array of permitted operators for use in database queries.
      */
     public function permittedOperators()

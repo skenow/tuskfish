@@ -145,7 +145,7 @@ class TfishPreference extends TfishAncestralObject
      * restrictions and range checks before allowing the properties to be set. 
      * 
      * @param string $property Name of property.
-     * @param string $value Value of property.
+     * @param mixed $value Value of property.
      */
     public function __set(string $property, $value)
     {
