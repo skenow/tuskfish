@@ -684,7 +684,7 @@ class TfishContentHandler
      * @return array|bool Array of content objects on success, false failure.
      */
     public static function searchContent(TfishPreference $tfish_preference, string $search_terms,
-            string $andor, int $limit, int $offset = 0)
+            string $andor, int $limit = 0, int $offset = 0)
     {
         
         $clean_search_terms = array();
