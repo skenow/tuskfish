@@ -16,9 +16,6 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-// Enable strict type declaration.
-declare(strict_types=1);
-
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
@@ -36,8 +33,13 @@ include_once "./english.php";
 $tfish_template = new TfishTemplate();
 $tfish_template->setTheme('admin');
 
-// No preferences available yet, so just set up a preference analogue.
-$tfish_preference = new stdClass();
+// TfishPreference is not available yet, so just set up an analogue for use with installation.
+class TfishPreference extends TfishAncestralObject
+{
+    function __construct() {}    
+}
+
+$tfish_preference = new TfishPreference();
 $tfish_preference->site_name = 'Tuskfish CMS';
 $tfish_preference->site_description = 'A cutting edge micro-CMS';
 $tfish_preference->site_author = '';

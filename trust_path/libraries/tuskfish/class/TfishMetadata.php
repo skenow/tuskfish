@@ -59,9 +59,9 @@ class TfishMetadata
 
     /** Initialise object properties and default values.
      * 
-     * @param object $preference Instance of TfishPreference class, holding site preferences.
+     * @param TfishPreference $preference Instance of TfishPreference, holding site preferences.
      */
-    function __construct($preference)
+    function __construct(TfishPreference $preference)
     {
         $this->title = $preference->site_name;
         $this->description = $preference->site_description;
