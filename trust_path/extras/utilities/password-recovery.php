@@ -113,8 +113,8 @@ if ($password_quality['strong'] === true) {
  * Tuskfish requires that passwords be minimum length of 15 characters to prevent exhaustive brute 
  * force searches.
  * 
- * @param string $password
- * @return array $evaluation Array of error messages
+ * @param string $password Password to be evaluated.
+ * @return array $evaluation Array of error messages.
  */
 function checkPasswordStrength(string $password) {
     $evaluation = array('strong' => true);
@@ -155,19 +155,21 @@ function checkPasswordStrength(string $password) {
 }
 
 /**
- * Recursively hashes a salted password to harden it against dictionary attacks.
+ * Recursively hashes a salted password to harden it against cracking.
  * 
  * Recursively hashing a password a large number of times directly increases the amount of
- * effort that must be spent to brute force or even dictionary attack a hash, because each
+ * effort that must be spent to brute force or dictionary attack a hash, because each
  * attempt will consume $iterations more cycles. 
  * 
- * @param string $password
- * @param int $iterations Number of iterations to process, you want this to be a large number (100,000 or more).
+ * @param string $password Password to be hashed.
+ * @param int $iterations Number of iterations to process, you want this to be a large number
+ *  (100,000 or more).
  * @param string $site_salt Site salt drawn from trust_path/configuration/config.php
  * @param string $user_salt User-specific salt as drawn from the user table
  * @return string
  */
-function recursivelyHashPassword(string $password, int $iterations, string $site_salt, string $user_salt = '') {
+function recursivelyHashPassword(string $password, int $iterations, string $site_salt,
+        string $user_salt = '') {
     $iterations = (int) $iterations;
     $password = $site_salt . $password;
     if ($user_salt) {
