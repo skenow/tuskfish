@@ -84,16 +84,31 @@ class TfishFilter
      * Validate (and to some extent, "sanitise") HTML input to conform with whitelisted tags.
      * 
      * Applies HTMLPurifier to validate and sanitise HTML input. The precise operation can be
-     * modified by altering the configuration of HTMLPurifier.
+     * modified by altering the configuration of HTMLPurifier. Default options are to mandate
+     * UTF-8 encoding and to enable HTML5-style IDs (anchor targets).
      *
      * @param string $dirty_html Unvalidated HTML input.
-     * @param array $config HTMPurifier configuration options (see HTMLPurifier documentation).
+     * @param array $config_options HTMLPurifier configuration options (see HTMLPurifier documentation).
      * @return string Validated HTML content.
      */
-    public static function filterHtml(string $dirty_html, array $config = array())
+    public static function filterHtml(string $dirty_html, array $config_options = array())
     {
         if (self::isUtf8($dirty_html)) {
             if (class_exists('HTMLPurifier')) {
+                
+                // Set default configuration options.
+                $config = HTMLPurifier_Config::createDefault();
+                $config->set('Core.Encoding', 'UTF-8');
+                $config->set('Attr.EnableID', true);
+                $config->set('Attr.ID.HTML5', true);
+                
+                // Set optional configuration options.
+                if ($config_options) {
+                    foreach ($config_options as $key => $value) {
+                        $config->set($key, $value);
+                    }
+                }
+                
                 $html_purifier = new HTMLPurifier($config);
                 $clean_html = (string) $html_purifier->purify($dirty_html);
                 
