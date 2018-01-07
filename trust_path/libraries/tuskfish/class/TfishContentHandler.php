@@ -675,8 +675,9 @@ class TfishContentHandler
      * Search terms must NEVER be inserted into a query directly (creates an SQL injection
      * vulnerability), otherwise do us all a favour and go shoot yourself now.
      * 
-     * Search terms have entity encoding (htmlspecialchars) applied to ensure consistency with
-     * text nodes in the database (otherwise searches involving entities will not return results).
+     * Search terms have entity encoding (htmlspecialchars) applied on the teaser and description
+     * fields (only) to ensure consistency with the entity encoding treatment that these HTML fields
+     * have been subjected to, otherwise searches involving entities will not return results.
      *
      * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param string $search_terms Search terms.
@@ -740,8 +741,10 @@ class TfishContentHandler
                 $search_term_placeholders[$i] = ':search_term' . (string) $i;
                 $sql .= "(";
                 $sql .= "`title` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`teaser` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`description` LIKE " . $search_term_placeholders[$i] . " OR ";
+                $sql .= "`teaser` LIKE " . htmlspecialchars($search_term_placeholders[$i], 
+                        ENT_NOQUOTES, "UTF-8", false) . " OR ";
+                $sql .= "`description` LIKE " . htmlspecialchars($search_term_placeholders[$i],
+                        ENT_NOQUOTES, "UTF-8", false) . " OR ";
                 $sql .= "`caption` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`creator` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`publisher` LIKE " . $search_term_placeholders[$i];
