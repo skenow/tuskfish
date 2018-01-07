@@ -36,7 +36,7 @@ define("TFISH_INSTALLATION_HOME_PAGE", "home page");
 define("TFISH_INSTALLATION_COMPLETE", "Installation complete!");
 define("TFISH_INSTALLATION_SECURE_YOUR_SITE", "Secure your site");
 define("TFISH_INSTALLATION_SECURITY_INSTRUCTIONS", "<ul>"
-        . "<li>Delete the installation directory.</li>"
+        . "<li><strong>Delete</strong> the /installation directory.</li>"
         . "<li>Set the file permissions for mainfile.php to <strong>0400</strong>.</li>"
         . "<li>Set the file permissions for trust_path/database/yourdatabase.db to "
         . "<strong>0600</strong>.</li>"
