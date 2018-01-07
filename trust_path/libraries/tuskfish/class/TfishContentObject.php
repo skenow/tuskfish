@@ -226,7 +226,6 @@ class TfishContentObject extends TfishAncestralObject
      * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
      * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
      * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
-     * Quotes are not encoded (they should only be encoded within attribute values).
      * 
      * @param string $property Name of property.
      * @param string $escape_html Whether to escape HTML fields (teaser, description as well).
@@ -730,22 +729,6 @@ class TfishContentObject extends TfishAncestralObject
 
             case "string":
                 $value = TfishFilter::trimString($value);
-                
-                // Strings that are (potentially) searchable need to be entity encoded for
-                // consistency. Note that double encoding is disabled because it is unhelpful.
-                $searchable_strings = array('title', 'creator', 'caption', 'publisher');
-                
-                if (in_array($property, $searchable_strings)) {
-                    $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8', false);
-                }
-                
-                // Meta tag strings need to be handled slightly differently as they are used within
-                // attributes, so the quotes must be encoded in order to prevent breakage.
-                $meta_strings = array('meta_title', 'meta_description', 'seo');
-                
-                if (in_array($property, $meta_strings)) {
-                    $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
-                }
 
                 if ($clean_property === "date") { // Ensure format complies with DATE_RSS
                     $check_date = date_parse_from_format('Y-m-d', $value);

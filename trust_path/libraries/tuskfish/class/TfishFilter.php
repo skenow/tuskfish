@@ -43,10 +43,7 @@ class TfishFilter
      * Escape data for display to mitigate XSS attacks.
      * 
      * Casts to string and applies htmlentities to text fields destined for output / display to
-     * limit XSS attacks. Use of UTF-8 character set and non-encoding of quotes is hardcoded in.
-     * 
-     * Note that output from this function should not be used within attributes, as failure to 
-     * encode double quotes would cause breakage in that situation.
+     * limit XSS attacks. Encoding of quotes and use of UTF-8 character set is hardcoded in.
      *
      * @param mixed $output Unescaped string intended for display.
      * @return string Escaped output string safe for display.
@@ -454,6 +451,10 @@ class TfishFilter
         if (self::isUtf8($dirty_string)) {
             // Trims all control characters plus space (ASCII / UTF-8 points 0-32 inclusive).
             return trim($dirty_string, "\x00..\x20");
+            // Trim non-breaking space in UTF-8.
+            // trim($data, chr(0xC2).chr(0xA0));
+            // Combined trim?
+            // trim($data, "\x00..\x20chr(0xC2).chr(0xA0)");
         } else {
             return false;
         }

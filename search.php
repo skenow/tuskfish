@@ -31,7 +31,7 @@ $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : 
 if (isset($_REQUEST['query'])) {
     $terms = TfishFilter::trimString($_REQUEST['query']);
     $terms = rawurldecode($terms);
-    $clean_terms = htmlspecialchars_decode($terms, ENT_NOQUOTES);
+    $clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
     $clean_terms = isset($_REQUEST['search_terms'])
             ? TfishFilter::trimString($_REQUEST['search_terms']) : false;
