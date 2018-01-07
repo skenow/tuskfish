@@ -48,6 +48,7 @@ $tfish_preference->generator = 'Tuskfish CMS';
 $tfish_preference->seo = '';
 $tfish_preference->robots = 'noindex,nofollow';
 $tfish_preference->pagination_elements = '5';
+$tfish_template->tfish_url = getUrl();
 
 // Initialise default content variable.
 $tfish_content = array('output' => '');
@@ -287,7 +288,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     // Display data entry form.
     $tfish_template->page_title = TFISH_INSTALLATION_TUSKFISH;
-    $tfish_template->tfish_url = getUrl();
     $tfish_template->tfish_root_path = realpath('../') . '/';
     $tfish_template->form = "db_credentials_form.html";
     $tfish_template->tfish_main_content = $tfish_template->render('form');

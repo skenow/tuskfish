@@ -42,9 +42,12 @@ define("TFISH_INSTALLATION_SECURITY_INSTRUCTIONS", "<ul>"
         . "<strong>0600</strong>.</li>"
         . "<li>Set the file permissions for trust_path/configuration/config.php to "
         . "<strong>0400</strong>.</li>"
+        . "<li>Please note that you may need to use the cPanel File Manager or shell access to set "
+        . "file permissions to these levels.</li>"
         . "</ul>"
-        . "<p>Please note that you may need to use the cPanel File Manager or shell access to set "
-        . "file permissions to these levels.</p>");
+        . "<p>Please <strong><a href='../admin/login.php'>login</a></strong> and configure your "
+        . "site preferences. The <strong><a href='https://tuskfish.biz/?id=15' "
+        . "target='_blank'>Tuskfish User Manual</a></strong> is available to help you. </p>");
 define("TFISH_INSTALLATION_DIRECTORY_DELETED", "Successfully removed the installation directory.");
 define("TFISH_INSTALLATION_REMOVE_DIRECTORY", "Removal of the installation directory failed. Please "
         . "delete it manually as it can be used to overwrite your site.");
