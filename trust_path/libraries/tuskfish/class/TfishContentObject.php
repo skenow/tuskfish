@@ -252,7 +252,7 @@ class TfishContentObject extends TfishAncestralObject
             return $human_readable_property;
         }
         
-        return htmlspecialchars($human_readable_property, ENT_NOQUOTES, 'UTF-8');
+        return htmlspecialchars($human_readable_property, ENT_NOQUOTES, 'UTF-8', false);
     }
 
     /**
@@ -731,12 +731,14 @@ class TfishContentObject extends TfishAncestralObject
             case "string":
                 $value = TfishFilter::trimString($value);
                 
-                // Strings that are (potentially) searchable need to be entity encoded for consistency.
+                // Strings that are (potentially) searchable need to be entity encoded for
+                // consistency. Note that double encoding is disabled because it is a stupid
+                // behaviour.
                 $searchable_strings = array('title', 'creator', 'caption', 'publisher',
                     'meta_title', 'meta_description', 'seo');
                 
                 if (in_array($property, $searchable_strings)) {
-                    $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+                    $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8', false);
                 }
 
                 if ($clean_property === "date") { // Ensure format complies with DATE_RSS

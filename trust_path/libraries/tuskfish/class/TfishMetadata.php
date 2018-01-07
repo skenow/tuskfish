@@ -259,7 +259,7 @@ class TfishMetadata
         $clean_property = TfishFilter::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
-            return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, "UTF-8");
+            return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, "UTF-8", false);
         } else {
             return null;
         }

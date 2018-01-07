@@ -54,7 +54,7 @@ class TfishFilter
         $output = (string) $output;
         
         if (isset($output)) {
-            return htmlspecialchars($output, ENT_NOQUOTES, 'UTF-8');
+            return htmlspecialchars($output, ENT_NOQUOTES, 'UTF-8', false);
         } else {
             return '';
         }
