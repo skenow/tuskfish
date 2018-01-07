@@ -730,6 +730,14 @@ class TfishContentObject extends TfishAncestralObject
 
             case "string":
                 $value = TfishFilter::trimString($value);
+                
+                // Strings that are (potentially) searchable need to be entity encoded for consistency.
+                $searchable_strings = array('title', 'creator', 'caption', 'publisher',
+                    'meta_title', 'meta_description', 'seo');
+                
+                if (in_array($property, $searchable_strings)) {
+                    $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+                }
 
                 if ($clean_property === "date") { // Ensure format complies with DATE_RSS
                     $check_date = date_parse_from_format('Y-m-d', $value);
