@@ -692,6 +692,25 @@ class TfishContentHandler
                 ? TfishFilter::trimString($andor) : 'AND';
         $clean_limit = (int) $limit;
         $clean_offset = (int) $offset;
+        
+        /**
+         * Inconsistency in encoding of certain entities needs sorting out.
+         * 
+         * In "raw" encoding mode (the least annoying), TinyMCE automatically encodes XML default 
+         * entities & < > within text nodes (note that < > are only encoded within text nodes, and
+         * ' " are only encoded within attribute values.
+         * 
+         * Strings in plaintext properties (where TinyMCE is not used) are text nodes and must be
+         * encoded in the same manner for consistency. The way to do this is to pass them through
+         * htmlspecialchars() with the ENT_NOQUOTES flag set (quotes not encoded).
+         * 
+         * Problem: To locate content containing these entities, the search terms must also
+         * be encoded in an identical manner before the search is run. Since the search terms
+         * constitute text nodes, they should also be passed through htmlspecialchars() with the
+         * ENT_NOQUOTES flag set.
+         * 
+         */
+        $search_terms = TfishFilter::escape($search_terms);
 
         if ($clean_andor === 'AND' || $clean_andor === 'OR') {
             $search_terms = explode(" ", $search_terms);

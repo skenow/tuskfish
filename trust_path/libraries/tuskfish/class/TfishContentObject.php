@@ -226,6 +226,7 @@ class TfishContentObject extends TfishAncestralObject
      * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
      * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
      * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
+     * Quotes are not encoded (they should only be encoded within attribute values).
      * 
      * @param string $property Name of property.
      * @param string $escape_html Whether to escape HTML fields (teaser, description as well).
@@ -251,7 +252,7 @@ class TfishContentObject extends TfishAncestralObject
             return $human_readable_property;
         }
         
-        return htmlspecialchars($human_readable_property, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($human_readable_property, ENT_NOQUOTES, 'UTF-8');
     }
 
     /**

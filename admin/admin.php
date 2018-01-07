@@ -269,7 +269,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             foreach ($fields_to_decode as $field) {
                 if (isset($content_object->field)) {
                     $content_object->$field = htmlspecialchars_decode($content_object->field,
-                            ENT_QUOTES);
+                            ENT_NOQUOTES);
                 }
             }
 
