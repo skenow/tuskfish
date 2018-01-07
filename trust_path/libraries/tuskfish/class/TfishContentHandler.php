@@ -741,10 +741,8 @@ class TfishContentHandler
                 $search_term_placeholders[$i] = ':search_term' . (string) $i;
                 $sql .= "(";
                 $sql .= "`title` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`teaser` LIKE " . htmlspecialchars($search_term_placeholders[$i], 
-                        ENT_NOQUOTES, "UTF-8", false) . " OR ";
-                $sql .= "`description` LIKE " . htmlspecialchars($search_term_placeholders[$i],
-                        ENT_NOQUOTES, "UTF-8", false) . " OR ";
+                $sql .= "`teaser` LIKE " . $search_term_placeholders[$i] . " OR ";
+                $sql .= "`description` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`caption` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`creator` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`publisher` LIKE " . $search_term_placeholders[$i];
