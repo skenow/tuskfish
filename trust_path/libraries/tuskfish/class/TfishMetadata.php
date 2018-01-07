@@ -289,12 +289,15 @@ class TfishMetadata
             case "generator":
             case "seo":
             case "robots":
-                $this->__data[$clean_property] = TfishFilter::trimString($value);
+                $clean_value = TfishFilter::trimString($value);
+                $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_NOQUOTES,
+                        "UTF-8", false);
                 break;
             
             case "pagination_elements":
                 if (TfishFilter::isInt($value, 3)) {
-                    $this->__data[$clean_property] = (int) $value;
+                    $clean_value = (int) $value;
+                    $this->__data[$clean_property] = $clean_value;
                 }
                 break;
         }        
