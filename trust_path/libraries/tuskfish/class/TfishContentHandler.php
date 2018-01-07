@@ -670,11 +670,13 @@ class TfishContentHandler
     /**
      * Provides global search functionality for content objects.
      * 
-     * Search terms are passed through to the database query without modification. Escaping is
-     * handled through use of a PDO prepared statement with named placeholders; search terms are
-     * inserted indirectly by binding them to the placeholders. Search terms must NEVER be inserted
-     * into a query directly (creates an SQL injection vulnerability), otherwise do us all a favour
-     * and go shoot yourself now.
+     * Escaping of search terms is handled through use of a PDO prepared statement with named 
+     * placeholders; search terms are inserted indirectly by binding them to the placeholders.
+     * Search terms must NEVER be inserted into a query directly (creates an SQL injection
+     * vulnerability), otherwise do us all a favour and go shoot yourself now.
+     * 
+     * Search terms have entity encoding (htmlspecialchars) applied to ensure consistency with
+     * text nodes in the database (otherwise searches involving entities will not return results).
      *
      * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param string $search_terms Search terms.
@@ -697,8 +699,7 @@ class TfishContentHandler
          * Inconsistency in encoding of certain entities needs sorting out.
          * 
          * In "raw" encoding mode (the least annoying), TinyMCE automatically encodes XML default 
-         * entities & < > within text nodes (note that < > are only encoded within text nodes, and
-         * ' " are only encoded within attribute values.
+         * entities & < > within text nodes, and ' " but only within attribute values.
          * 
          * Strings in plaintext properties (where TinyMCE is not used) are text nodes and must be
          * encoded in the same manner for consistency. The way to do this is to pass them through
