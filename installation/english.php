@@ -17,8 +17,6 @@ define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on
 	<ol>
 	<li>Using a <b>strong</b> password (> 14 characters, at least one upper and lower case letter,
 	number and symbol, no names or words that can be found in <em>any</em> dictionary).</li>
-	<li>Using a <b>random, alphanumeric</b>, 63 character HMAC key (just grab one from 
-    <b><a href='https://grc.com/passwords/'> grc.com</a></b>). Please use the last box on the page.</li>
 	<li>Putting your trust_path folder <b>outside the web root</b> (eg. outside of public_html), so
 	that it is not accessible via browser. You can rename it if you want.</li>
 	</ol>
@@ -55,7 +53,6 @@ define("TFISH_INSTALLATION_SOME_EMAIL", "youremail@somedomain.com");
 define("TFISH_INSTALLATION_ADMIN_PASSWORD", "Admin password");
 define("TFISH_INSTALLATION_USER_SALT", "User password salt");
 define("TFISH_INSTALLATION_SITE_SALT", "Site password salt");
-define("TFISH_INSTALLATION_KEY", "HMAC key (63 alphanumeric characters)");
 define("TFISH_INSTALLATION_GRC", "Get one from: https://grc.com/passwords/");
 define("TFISH_INSTALLATION_STRONG_PASSWORD", "Password is strong.");
 define("TFISH_INSTALLATION_PASSWORD_REQUIREMENTS", "> 14 characters: Letters, numbers and symbols");
@@ -81,8 +78,6 @@ define("TFISH_ERROR_BAD_PATH", "Bad file path.");
 define("TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY.", "Failed to delete directory");
 define("TFISH_INSTALLATION_DB_ALNUMUNDERSCORE", "Database name is restricted to <strong>alphanumeric and underscore</strong> characters.");
 define("TFISH_INSTALLATION_BAD_EMAIL", "Bad email address.");
-define("TFISH_INSTALLATION_HMAC_ALNUM", "HMAC is restricted to <strong>alphanumeric</strong> characters.");
-define("TFISH_INSTALLATION_HMAC_LENGTH", "HMAC must be <strong>63 characters</strong> in length, exactly.");
 
 // Constants used in theme, to prevent errors.
 define("TFISH_SEARCH", "Search");

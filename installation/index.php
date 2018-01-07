@@ -74,8 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ////////////////////////////////////
     
     // Check that form was completed.
-    if (empty($_POST['db_name']) || empty($_POST['admin_email']) || empty($_POST['admin_password']) 
-            || empty($_POST['hmac_key'])) {
+    if (empty($_POST['db_name']) || empty($_POST['admin_email']) || empty($_POST['admin_password'])) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE_FORM . '</p>';
     }
 
@@ -94,17 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // There are no restrictions on what characters you use for a password. Only only on what you
     // don't use!
     $admin_password = TfishFilter::trimString($_POST['admin_password']);
-
-    // HMAC key must be alphanumeric characters only. Actually it's only quotes that cause a
-    // problem as they break strings unless you escape them, and I don't want to get into the
-    // business of escaping keys at this stage. Maybe later.
-    $hmac_key = TfishFilter::trimString($_POST['hmac_key']);
-    if (!TfishFilter::isAlnum($hmac_key)) {
-        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_HMAC_ALNUM . '</p>';
-    }
-    if (mb_strlen($hmac_key, "UTF-8") != 63) {
-        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_HMAC_LENGTH . '</p>';
-    }
 
     // Check password length and quality.
     $password_quality = TfishSecurityUtility::checkPasswordStrength($admin_password);
@@ -141,15 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
                 . $site_salt . '");';
         $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
-
-        if (!$result) {
-            trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);
-            exit;
-        }
-
-        // Append HMAC key to config.php.
-        $hmac_key = 'if (!defined("TFISH_KEY")) define("TFISH_KEY", "' . $hmac_key . '");';
-        $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $hmac_key);
 
         if (!$result) {
             trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);
