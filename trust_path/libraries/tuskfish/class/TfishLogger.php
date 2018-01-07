@@ -62,7 +62,7 @@ class TfishLogger
         $message .= "[$file:$line]\r\n";
         error_log($message, 3, TFISH_ERROR_LOG_PATH);
 
-        // Debug only - comment OUT in production site.
+        // Debug only - comment OUT in production site to display errors on screen.
         // echo '<p>' . print($message) . '</p>';
         
         // Debug only - UNCOMMENT in production site.
