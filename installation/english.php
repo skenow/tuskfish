@@ -36,11 +36,11 @@ define("TFISH_INSTALLATION_HOME_PAGE", "home page");
 define("TFISH_INSTALLATION_COMPLETE", "Installation complete!");
 define("TFISH_INSTALLATION_SECURE_YOUR_SITE", "Secure your site");
 define("TFISH_INSTALLATION_SECURITY_INSTRUCTIONS", "<ul>"
-        . "<li><strong>Delete</strong> the /installation directory.</li>"
-        . "<li>Set the file permissions for mainfile.php to <strong>0400</strong>.</li>"
-        . "<li>Set the file permissions for trust_path/database/yourdatabase.db to "
+        . "<li><strong>Delete</strong> the <strong>/installation</strong> directory.</li>"
+        . "<li>Set the file permissions for <strong>/mainfile.php</strong> to <strong>0400</strong>.</li>"
+        . "<li>Set the file permissions for trust_path/database/<strong>yourdatabase.db</strong> to "
         . "<strong>0600</strong>.</li>"
-        . "<li>Set the file permissions for trust_path/configuration/config.php to "
+        . "<li>Set the file permissions for trust_path/configuration/<strong>config.php</strong> to "
         . "<strong>0400</strong>.</li>"
         . "<li>Please note that you may need to use the cPanel File Manager or shell access to set "
         . "file permissions to these levels.</li>"
