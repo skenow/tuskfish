@@ -253,13 +253,16 @@ class TfishMetadata
      * 
      * @param string $property Name of property.
      * @return string|bool Value of preference escaped for display if set, otherwise false.
+     * 
+     * Note that the ENT_QUOTES flag must be set on htmlspecialchars() as these properties are
+     * used within attributes of meta tags, so a double quote would cause breakage.
      */
     public function __get(string $property)
     {
         $clean_property = TfishFilter::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
-            return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, "UTF-8", false);
+            return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, "UTF-8", false);
         } else {
             return null;
         }
@@ -270,6 +273,9 @@ class TfishMetadata
      * 
      * @param string $property Name of property.
      * @param mixed $value Value to assign to property.
+     * 
+     * Note that htmlspecialchars() should use the ENT_QUOTES flag, as most of these values are
+     * used within attributes of meta tags, and a double quote would break them.
      */
     public function __set(string $property, $value)
     {
@@ -290,7 +296,7 @@ class TfishMetadata
             case "seo":
             case "robots":
                 $clean_value = TfishFilter::trimString($value);
-                $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_NOQUOTES,
+                $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_QUOTES,
                         "UTF-8", false);
                 break;
             

@@ -43,8 +43,10 @@ class TfishFilter
      * Escape data for display to mitigate XSS attacks.
      * 
      * Casts to string and applies htmlentities to text fields destined for output / display to
-     * limit XSS attacks. Use of UTF-8 character set and non-encoding of quotes is hardcoded in
-     * (quotes should not be encoded within text nodes, only within attributes).
+     * limit XSS attacks. Use of UTF-8 character set and non-encoding of quotes is hardcoded in.
+     * 
+     * Note that output from this function should not be used within attributes, as failure to 
+     * encode double quotes would cause breakage in that situation.
      *
      * @param mixed $output Unescaped string intended for display.
      * @return string Escaped output string safe for display.
@@ -61,7 +63,7 @@ class TfishFilter
     }
 
     /**
-     * URL-encode and escape a string for use in a URL.
+     * URL-encode and escape a query string for use in a URL.
      * 
      * Trims, checks for UTF-8 compliance, rawurlencodes and then escapes with htmlspecialchars().
      * If you wish to use the data on a landing page you must decode it with

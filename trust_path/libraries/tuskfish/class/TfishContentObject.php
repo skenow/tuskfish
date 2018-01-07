@@ -732,13 +732,19 @@ class TfishContentObject extends TfishAncestralObject
                 $value = TfishFilter::trimString($value);
                 
                 // Strings that are (potentially) searchable need to be entity encoded for
-                // consistency. Note that double encoding is disabled because it is a stupid
-                // behaviour.
-                $searchable_strings = array('title', 'creator', 'caption', 'publisher',
-                    'meta_title', 'meta_description', 'seo');
+                // consistency. Note that double encoding is disabled because it is unhelpful.
+                $searchable_strings = array('title', 'creator', 'caption', 'publisher');
                 
                 if (in_array($property, $searchable_strings)) {
                     $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8', false);
+                }
+                
+                // Meta tag strings need to be handled slightly differently as they are used within
+                // attributes, so the quotes must be encoded in order to prevent breakage.
+                $meta_strings = array('meta_title', 'meta_description', 'seo');
+                
+                if (in_array($property, $meta_strings)) {
+                    $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
                 }
 
                 if ($clean_property === "date") { // Ensure format complies with DATE_RSS

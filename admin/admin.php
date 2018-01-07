@@ -261,8 +261,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             $content_object->loadProperties($_REQUEST);
 
             // As this object is being sent to storage, need to decode some entities that got
-            // encoded for display, specifically quotes (if you don't encode quotes they will
-            // break the editing form when you populate the values of text fields):
+            // encoded for display.
             $fields_to_decode = array('title', 'creator', 'publisher', 'caption', 'meta_title',
                 'seo', 'meta_description');
             
@@ -270,6 +269,16 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 if (isset($content_object->field)) {
                     $content_object->$field = htmlspecialchars_decode($content_object->field,
                             ENT_NOQUOTES);
+                }
+            }
+            
+            // Properties that are used within attributes must have quotes encoded.
+            $fields_to_decode = array('meta_title', 'seo', 'meta_description');
+            
+            foreach ($fields_to_decode as $field) {
+                if (isset($content_object->field)) {
+                    $content_object->$field = htmlspecialchars_decode($content_object->field,
+                            ENT_QUOTES);
                 }
             }
 
