@@ -690,16 +690,22 @@ class TfishContentHandler
             string $andor, int $limit = 0, int $offset = 0)
     {
         
-        $clean_search_terms = array();
+        $clean_search_terms = $escaped_search_terms = $clean_escaped_search_terms = array();
         $clean_andor = in_array($andor, array('AND', 'OR', 'exact'))
                 ? TfishFilter::trimString($andor) : 'AND';
         $clean_limit = (int) $limit;
         $clean_offset = (int) $offset;
+        
+        // Create an escaped copy of the search terms that will be used to search the HTML teaser
+        // and description fields.
+        $escaped_search_terms = htmlspecialchars($search_terms, ENT_NOQUOTES, "UTF-8");
 
         if ($clean_andor === 'AND' || $clean_andor === 'OR') {
             $search_terms = explode(" ", $search_terms);
+            $escaped_search_terms = explode(" ", $escaped_search_terms);
         } else {
             $search_terms = array($search_terms);
+            $escaped_search_terms = array($escaped_search_terms);
         }
 
         // Trim search terms and discard any that are less than the minimum search length characters.
@@ -711,9 +717,18 @@ class TfishContentHandler
             }
         }
         
+        foreach ($escaped_search_terms as $escaped_term) {
+            $escaped_term = TfishFilter::TrimString($escaped_term);
+            
+            if (!empty($escaped_term) && mb_strlen($escaped_term, 'UTF-8')
+                    >= $tfish_preference->min_search_length) {
+                $clean_escaped_search_terms[] = (string) $escaped_term;
+            }
+        }
+        
         if (!empty($clean_search_terms)) {
-            $results = self::_searchContent($tfish_preference, $clean_search_terms, $clean_andor,
-                    $clean_limit, $clean_offset);
+            $results = self::_searchContent($tfish_preference, $clean_search_terms,
+                    $clean_escaped_search_terms, $clean_andor, $clean_limit, $clean_offset);
         } else {
             $results = false;
         }
@@ -723,10 +738,11 @@ class TfishContentHandler
 
     /** @internal */
     private static function _searchContent(TfishPreference $tfish_preference, array $search_terms,
-            string $andor, int $limit, int $offset)
+            array $escaped_terms, string $andor, int $limit, int $offset)
     {
         $sql = $count = '';
-        $search_term_placeholders = $results = array();
+        $search_term_placeholders = $escaped_term_placeholders = $results = array();
+        
         $sql_count = "SELECT count(*) ";
         $sql_search = "SELECT * ";
         $result = array();
@@ -739,10 +755,11 @@ class TfishContentHandler
             
             for ($i = 0; $i < $count; $i++) {
                 $search_term_placeholders[$i] = ':search_term' . (string) $i;
+                $escaped_term_placeholders[$i] = ':escaped_search_term' . (string) $i;
                 $sql .= "(";
                 $sql .= "`title` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`teaser` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`description` LIKE " . $search_term_placeholders[$i] . " OR ";
+                $sql .= "`teaser` LIKE " . $escaped_term_placeholders[$i] . " OR ";
+                $sql .= "`description` LIKE " . $escaped_term_placeholders[$i] . " OR ";
                 $sql .= "`caption` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`creator` LIKE " . $search_term_placeholders[$i] . " OR ";
                 $sql .= "`publisher` LIKE " . $search_term_placeholders[$i];
@@ -763,6 +780,8 @@ class TfishContentHandler
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%",
+                        PDO::PARAM_STR);
+                $statement->bindValue($escaped_term_placeholders[$i], "%" . $escaped_terms[$i] . "%",
                         PDO::PARAM_STR);
             }
         } else {
