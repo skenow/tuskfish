@@ -262,13 +262,12 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
 
             // As this object is being sent to storage, need to decode some entities that got
             // encoded for display.
-            $fields_to_decode = array('title', 'creator', 'publisher', 'caption', 'meta_title',
-                'seo', 'meta_description');
+            $fields_to_decode = array('title', 'creator', 'publisher', 'caption');
             
             foreach ($fields_to_decode as $field) {
                 if (isset($content_object->field)) {
                     $content_object->$field = htmlspecialchars_decode($content_object->field,
-                            ENT_QUOTES);
+                            ENT_NOQUOTES);
                 }
             }
             

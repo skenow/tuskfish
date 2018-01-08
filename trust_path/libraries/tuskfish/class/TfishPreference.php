@@ -102,6 +102,8 @@ class TfishPreference extends TfishAncestralObject
      * Escape a property for on-screen display to prevent XSS.
      * 
      * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
+     * Note that preference values should not be directly assigned to meta tags; they should be
+     * assigned to $tfish_metadata instead, which will handle any escaping necessary.
      * 
      * @param string $property Name of property.
      * @return string Value of property escaped for display.
