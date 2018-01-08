@@ -707,7 +707,7 @@ class TfishContentHandler
             $search_terms = array($search_terms);
             $escaped_search_terms = array($escaped_search_terms);
         }
-
+        
         // Trim search terms and discard any that are less than the minimum search length characters.
         foreach ($search_terms as $term) {
             $term = TfishFilter::TrimString($term);
@@ -773,7 +773,7 @@ class TfishContentHandler
         
         $sql .= " AND `online` = 1 AND `type` != 'TfishBlock' ORDER BY `date` DESC ";
         $sql_count .= $sql;
-
+        
         // Bind the search term values and execute the statement.
         $statement = TfishDatabase::preparedStatement($sql_count);
         
@@ -813,6 +813,8 @@ class TfishContentHandler
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($search_term_placeholders[$i], "%" . $search_terms[$i] . "%",
                         PDO::PARAM_STR);
+                $statement->bindValue($escaped_term_placeholders[$i], "%" . $escaped_terms[$i]
+                        . "%", PDO::PARAM_STR);
                 $statement->bindValue(":limit", (int) $limit, PDO::PARAM_INT);
                 
                 if ($offset) {
