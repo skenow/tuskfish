@@ -113,6 +113,12 @@
         <div class="control-label col-lg-9 col-md-8 col-sm-8">
             <input type="number" min="3" class="form-control" name="pagination_elements" id="pagination_elements" <?php if (isset($preferences['pagination_elements'])) { echo 'value="' . $preferences['pagination_elements'] . '"'; } ?> required>
         </div>
+        
+        <!-- Number of posts to be included in RSS feeds -->
+        <label for="rss_posts" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_RSS_POSTS; ?>:</label>
+        <div class="control-label col-lg-9 col-md-8 col-sm-8">
+            <input type="number" min="1" class="form-control" name="rss_posts" id="rss_posts" <?php if (isset($preferences['rss_posts'])) { echo 'value="' . $preferences['rss_posts'] . '"'; } ?> required>
+        </div>
 
         <!-- Session name -->
         <label for="session_name" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_SESSION_NAME; ?>:</label>

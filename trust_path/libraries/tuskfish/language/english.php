@@ -302,3 +302,6 @@ define("TFISH_DOWNLOADS", "Downloads");
 define("TFISH_FLUSH_CACHE", "Flush cache");
 define("TFISH_CACHE_WAS_FLUSHED", "Cache was flushed.");
 define("TFISH_CACHE_FLUSH_FAILED", "Cache flush failed.");
+
+// RC 1.
+define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");

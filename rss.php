@@ -37,12 +37,13 @@ $rss = new TfishRss($tfish_preference);
 // Prepare a mimetype lookup buffer.
 $mimetype_list = TfishUtils::getMimetypes();
 
-// Add items to feed.
+// Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
+// set a different limit here if you wish.
 $criteria = new TfishCriteria();
 $criteria->order = 'submission_time';
 $criteria->ordertype = 'DESC';
 $criteria->offset = 0;
-$criteria->limit = $tfish_preference->user_pagination;
+$criteria->limit = $tfish_preference->rss_posts;
 
 if ($clean_tag_id) {
     $criteria->tag = array($clean_tag_id);
