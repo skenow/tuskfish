@@ -190,52 +190,6 @@ if ($clean_id) {
 }
 
 /**
-$blockObj = TfishBlockHandler::getObject(3);
-$tfish_template->block = $blockObj;
-$tfish_template->block_position = $tfish_template->render('block');
- */
-
-/**
-  //Prepare new $criteria for blocks. Let's try dynamic tagging.
-  $criteria = new TfishCriteria();
-  if ($clean_tag) $criteria->tag = array($clean_tag);
-  $criteria->add(new TfishCriteriaItem('online', 1));
-
-  // Prepare blocks for centre-top-zone.
-  $centre_top_blocks = array();
-  $block_list = new TfishBlockList('Top left block');
-  $block_list->build($criteria);
-  $centre_top_blocks[] = $block_list->render();
-
-  $block_list2 = new TfishBlockList('Top centre block');
-  $criteria->ordertype = 'ASC';
-  $block_list2->build($criteria);
-  $centre_top_blocks[] = $block_list2->render();
-
-  $block_list3 = new TfishBlockList('Top right block');
-  $block_list3->build($criteria);
-  $centre_top_blocks[] = $block_list3->render();
-
-  $tfish_template->centre_top_blocks = $centre_top_blocks;
-
-  // Prepare blocks for centre-bottom-zone.
-  $centre_bottom_blocks = array();
-  $block_list = new TfishBlockList('Bottom left block');
-  $block_list->build($criteria);
-  $centre_bottom_blocks[] = $block_list->render();
-
-  $block_list2 = new TfishBlockList('Bottom centre block');
-  $criteria->ordertype = 'ASC';
-  $block_list2->build($criteria);
-  $centre_bottom_blocks[] = $block_list2->render();
-
-  $block_list3 = new TfishBlockList('Bottom right block');
-  $block_list3->build($criteria);
-  $centre_bottom_blocks[] = $block_list3->render();
-
-  $tfish_template->centre_bottom_blocks = $centre_bottom_blocks;
- */
-/**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
 // $tfish_metadata->title = '';
