@@ -1,75 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="<?php echo TfishFilter::escape($tfish_preference->default_language); ?>">
 <head>
-
     <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<meta name="description" content="<?php echo $tfish_metadata->description; ?>">
-	<meta name="author" content="<?php echo $tfish_metadata->author; ?>">
-	<meta name="generator" content="<?php echo $tfish_metadata->generator; ?>">
-	<meta name="robots" content="<?php echo $tfish_metadata->robots; ?>">
-	<link rel="icon" href="../../favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="<?php echo $tfish_metadata->description; ?>">
+    <meta name="author" content="<?php echo $tfish_metadata->author; ?>">
+    <meta name="dcterms.rights" content="<?php echo $tfish_metadata->copyright; ?>">
+    <meta name="generator" content="<?php echo $tfish_metadata->generator; ?>">
+    <meta name="robots" content="<?php echo $tfish_metadata->robots; ?>">
+    <link rel="icon" href="../../favicon.ico">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo TFISH_URL . 'rss.php'; ?>" />
+    <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
 
     <title><?php echo $tfish_metadata->title; ?></title>
 
-    <!-- Bootstrap CSS -->
+    <!-- jQuery -->
+    <script src="<?php echo TFISH_JS_URL . 'jquery/jquery.min.js'; ?>"></script>
+
+    <!-- Bootstrap -->
     <link href="<?php echo TFISH_JS_URL . 'bootstrap/css/bootstrap.min.css'; ?>" rel="stylesheet">
+    <script src="<?php echo TFISH_JS_URL . 'bootstrap/js/bootstrap.min.js'; ?>"></script>
 
-    <!-- Custom CSS for this template set -->
+    <!-- Custom styles for this template -->
     <link href="<?php echo TFISH_THEMES_URL . 'thumbnail_gallery/css/style.css'; ?>" rel="stylesheet">
-
 </head>
 
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo TFISH_CMS; ?></a>
+                <a class="navbar-brand" href="<?php echo TFISH_URL; ?>">Tuskfish CMS</a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-						<a href="<?php echo TFISH_URL; ?>">Home</a>
-					</li>
-					<li>
-						<a href="<?php echo TFISH_URL . 'search.php'; ?>"><?php echo TFISH_SEARCH; ?></a>
-					</li>
-					<?php if (TfishSession::isAdmin()): ?>
-					<li>
-						<a href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a>
-					</li>
-					<li>
-						<a href="<?php echo TFISH_ADMIN_URL . 'password.php'; ?>"><?php echo TFISH_PASSWORD; ?></a>
-					</li>
-					<li>
-						<a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a>
-					</li>
-					<li>
-						<a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=flush'; ?>"><?php echo TFISH_FLUSH_CACHE; ?></a>
-					</li>
-					<li>
-						<a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a>
-					</li>
-					<?php endif; ?>
-					<li><?php echo TfishSession::loginLink(); ?></li>
+                    <li class="active"><a href="<?php echo TFISH_URL; ?>">Home</a></li>
+                    <li><a href="<?php echo TFISH_URL . 'search.php'; ?>"><?php echo TFISH_SEARCH; ?></a></li>
+                    <li><a href="<?php echo TFISH_URL . 'rss.php'; ?>"><?php echo TFISH_RSS; ?></a></li>
+                    <?php if (TfishSession::isAdmin()): ?>
+                    <li><a href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
+                    <li><a href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
+                    <li><a href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
+                    <?php endif; ?>
+                    <li><?php echo TfishSession::loginLink(); ?></li>
                 </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
+            </div><!--/.nav-collapse -->
+        </div><!-- /.container -->
     </nav>
 
     <!-- Page Content -->
