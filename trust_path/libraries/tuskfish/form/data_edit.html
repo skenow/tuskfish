@@ -3,8 +3,8 @@
     <div class="form-group">
 
         <!-- Type -->
-        <label for="type" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
-        <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9 spacer">
+        <label for="type" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
+        <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer">
             <select class="form-control" name="type" id="type" required>
                 <?php
                     foreach ($content_types as $key => $type) {
@@ -20,8 +20,8 @@
 
         <!-- Date (bootstrap-datepicker) -->
         <div id="dateContainer">
-            <label for="date" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9 spacer"><input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->date . '"'; } ?>></div>
+            <label for="date" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
+            <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->date . '"'; } ?>></div>
         </div>
         <script>
             $('#date').datepicker({
@@ -36,8 +36,8 @@
 
         <!-- Tags -->
         <div id="tagsContainer">
-            <label for="tags" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TAGS; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9">
+            <label for="tags" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TAGS; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9">
                 <select multiple size="5" class="form-control" name="tags[]" id="tags">
                     <?php
                         foreach ($tags as $tag_id => $tag_title) {
@@ -56,16 +56,16 @@
 
     <!-- Title -->
     <div class="form-group">
-        <label for="title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TITLE; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+        <label for="title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TITLE; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
             <input type="text" class="form-control" name="title" id="title" <?php if (isset($content->title)) echo 'value="' . $content->escape('title') . '"'; ?> required>
         </div>
     </div>
 
     <!-- Teaser -->
     <div id="teaserContainer" class="form-group">
-        <label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+        <label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
             <!-- TinyMCE editor field -->
             <textarea name="teaser" id="teaser" class="form-control text-left" required><?php if (isset($content->teaser)) { echo $content->escape('teaser', true); } ?></textarea>
         </div>
@@ -73,8 +73,8 @@
 
     <!-- Description -->
     <div id="descriptionContainer" class="form-group">
-        <label for="description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+        <label for="description" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
             <!-- TinyMCE editor field -->
             <textarea name="description" id="description" class="form-control text-left" required><?php if (isset($content->description)) { echo $content->escape('description', true); } ?></textarea>
         </div>
@@ -84,14 +84,14 @@
 
         <!-- Creator -->
         <div id="creatorContainer">
-            <label for="creator" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9 spacer"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->escape('creator') . '"'; ?>></div>
+            <label for="creator" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->escape('creator') . '"'; ?>></div>
         </div>
 
         <!-- Publisher -->
         <div id="publisherContainer">
-            <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . $content->escape('publisher') . '"'; ?>></div>
+            <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9"><input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . $content->escape('publisher') . '"'; ?>></div>
         </div>
 
     </div>
@@ -100,8 +100,8 @@
     <div class="form-group">
 
         <div id="parentContainer">
-            <label for="parent" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
-            <div class="col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <label for="parent" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
+            <div class="col-lg-11 col-md-10 col-sm-10 col-xs-9">
                 <select class="form-control" name="parent" id="parent" required>
                     <?php foreach ($parent_select_options as $key => $option): ?>
                         <?php if ($key === $content->id): ?>
@@ -122,9 +122,9 @@
 
             <!-- Image -->
 
-            <label for="image" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
+            <label for="image" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
             <?php if (isset($content->image) && !empty($content->image)): ?>
-            <div class="control-label col-lg-9 col-md-8 col-sm-6 col-xs-6">
+            <div class="control-label col-lg-9 col-md-8 col-sm-7 col-xs-6">
                 <input id="image" name="image" type="file" data-preview-file-type="image" >
             </div>
             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
@@ -148,8 +148,8 @@
         <div id="captionContainer" class="form-group">
 
             <!-- Caption -->
-            <label for="caption" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
-            <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <label for="caption" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
+            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
                 <input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) echo 'value="' . $content->escape('caption') . '"'; ?>>
             </div>
 
@@ -160,16 +160,16 @@
         <div class="form-group">
 
             <!-- Media -->
-            <label for="media" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
+            <label for="media" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
             <?php if (isset($content->media) && !empty($content->media)): ?>
-            <div class="control-label col-lg-9 col-md-8 col-sm-6 col-xs-6">
+            <div class="control-label col-lg-9 col-md-8 col-sm-7 col-xs-6">
                 <input id="media" name="media" type="file" data-preview-file-type="text" >
             </div>
             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
                 <div class="checkbox"><label><input id="deleteMedia" name="deleteMedia" type="checkbox" value="1"><b><?php echo TFISH_DELETE_MEDIA; ?></b></label></div>
             </div>
             <?php else: ?>
-            <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9">
+            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
                 <input id="media" name="media" type="file">
             </div>
             <?php endif; ?>
@@ -187,8 +187,8 @@
 
         <!-- Rights -->
         <div id="rightsContainer">
-            <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-9 col-xs-9 spacer">
+            <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer">
                 <select class="form-control" name="rights" id="rights" required>
                     <?php
                         foreach ($rights as $key => $right) {
@@ -205,8 +205,8 @@
 
         <!-- Language -->
         <div id="languageContainer">
-            <label for="language" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
-            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 spacer">
+            <label for="language" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
+            <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer">
                 <select class="form-control" name="language" id="language" required>
                     <?php
                         foreach ($languages as $key => $value) {
@@ -222,8 +222,8 @@
         </div>
 
         <!-- Online -->
-        <label for="online" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
-        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+        <label for="online" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
+        <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer">
             <label for="online" class="radio-inline">
                 <input type="radio" name="online" value="1" checked id="online" <?php if ($content->online) { echo 'checked="checked"'; } ?>><?php echo TFISH_ONLINE; ?>
             </label>
@@ -256,19 +256,19 @@
         <div class="form-group">
 
             <!-- Meta title -->
-            <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9 spacer"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
+            <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . $content->escape('meta_title') . '"'; } ?>></div>
 
             <!-- Meta SEO -->
-            <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-9 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->escape('seo') . '"'; } ?>></div>
+            <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
+            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9"><input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->escape('seo') . '"'; } ?>></div>
             
         </div>
         
         <!-- Meta description -->
         <div class="form-group">
-            <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-3 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
-            <div class="control-label col-lg-11 col-md-10 col-sm-9 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
+            <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
+            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . $content->escape('meta_description') . '"'; } ?>></div>
         </div>
         
     </div>

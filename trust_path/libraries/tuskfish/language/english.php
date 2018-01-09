@@ -178,8 +178,8 @@ define("TFISH_VIEWS", "views"); // Alternative representation of counter (type-d
 define("TFISH_META_TITLE", "Title");
 define("TFISH_META_DESCRIPTION", "Description");
 define("TFISH_SEO", "SEO");
-define("TFISH_DELETE_IMAGE", "Delete image");
-define("TFISH_DELETE_MEDIA", "Delete media");
+define("TFISH_DELETE_IMAGE", "Delete");
+define("TFISH_DELETE_MEDIA", "Delete");
 
 // Page titles.
 define("TFISH_IMAGE_GALLERY", "Gallery");
