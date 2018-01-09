@@ -156,7 +156,7 @@
 
         <!-- Enable cache -->
         <label for="enable_cache" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_ENABLE_CACHE; ?>:</label>
-        <div class="control-label col-lg-9 col-md-8 col-sm-8">
+        <div class="control-label col-lg-9 col-md-8 col-sm-8 clearfix">
             <label class="radio-inline pull-left">
                 <input class="pull-left" type="radio" name="enable_cache" value="1" id="enable_cache" <?php if ($preferences['enable_cache']) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
             </label>
@@ -164,7 +164,7 @@
                 <input type="radio" name="enable_cache" value="0" id="enable_cache" <?php if (!$preferences['enable_cache']) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
             </label>
         </div>
-
+        
         <!-- Cache life -->
         <label for="cache_life" class="control-label col-lg-3 col-md-4 col-sm-4"><?php echo TFISH_PREFERENCE_CACHE_LIFE; ?>:</label>
         <div class="control-label col-lg-9 col-md-8 col-sm-8">
