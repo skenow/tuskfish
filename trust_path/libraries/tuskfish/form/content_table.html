@@ -9,11 +9,11 @@
 <table class="table table-striped text-left">
     <thead>
         <tr>
-            <th><?php echo TFISH_ID; ?></th>
+            <th class="hidden-xs"><?php echo TFISH_ID; ?></th>
             <th><?php echo TFISH_TYPE; ?></th>
             <th><?php echo TFISH_TITLE; ?></th>
-            <th><?php echo TFISH_SUBMISSION_TIME; ?></th>
-            <th><?php echo TFISH_COUNTER; ?></th>
+            <th class="hidden-xs"><?php echo TFISH_SUBMISSION_TIME; ?></th>
+            <th class="hidden-xs"><?php echo TFISH_COUNTER; ?></th>
             <th><?php echo TFISH_ONLINE_STATUS; ?></th>
             <th colspan="2"><?php echo TFISH_ACTION; ?></th>
         </tr>
@@ -21,11 +21,11 @@
     <tbody>
         <?php foreach($rows as &$row) { ?>
         <tr>
-            <td><?php echo TfishFilter::escape($row['id']); ?></td>
+            <td class="hidden-xs"><?php echo TfishFilter::escape($row['id']); ?></td>
             <td><?php echo TfishFilter::escape($typelist[$row['type']]); ?></td>
             <td><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=view&amp;id=' . TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['title']); ?></a></td>
-            <td><?php echo TfishFilter::escape($row['submission_time']); ?></td>
-            <td><?php echo TfishFilter::escape($row['counter']); ?></td>
+            <td class="hidden-xs"><?php echo TfishFilter::escape($row['submission_time']); ?></td>
+            <td class="hidden-xs"><?php echo TfishFilter::escape($row['counter']); ?></td>
             <?php if ($row['online']): ?>
             <td><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><?php echo TFISH_ONLINE; ?></a></td>
             <?php else: ?>
