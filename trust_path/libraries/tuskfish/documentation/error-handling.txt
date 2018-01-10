@@ -1,8 +1,0 @@
-ERROR HANDLING POLICY
-=====================
-
-Trying to handle errors in a consistent and appropriate manner:
-
-1. User-facing control scripts (via TfishFilter testing): Redirect to a polite error message page and log a notice.
-2. Object internal type/validation checks: Soft redirect or hard stop depending on seriousness (security risk or just broken).
-3. Database methods: Hard stop and log error, no exceptions.
