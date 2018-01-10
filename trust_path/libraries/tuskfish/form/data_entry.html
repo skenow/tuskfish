@@ -1,4 +1,5 @@
 <form class="form-horizontal" action="admin.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
+    
     <div class="form-group">
 
         <!-- Type -->
@@ -44,7 +45,7 @@
     </div>
 
     <!-- Title -->
-    <div class="form-group">
+    <div id="titleContainer" class="form-group">
         <label for="title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TITLE; ?>:</label>
         <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="title" id="title" required></div>
     </div>
@@ -84,54 +85,47 @@
 
     </div>
 
-    <div class="form-group">
 
-        <!-- Parent -->
-        <div id="parentContainer">
-            <label for="parent" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
-            <div class="col-lg-11 col-md-10 col-sm-10 col-xs-9">
-                <select class="form-control" name="parent" id="parent" required>
-                    <?php foreach ($parent_select_options as $key => $option): ?>
-                    <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+    <!-- Parent -->
+    <div id="parentContainer" class="form-group">
+        <label for="parent" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
+        <div class="col-lg-11 col-md-10 col-sm-10 col-xs-9">
+            <select class="form-control" name="parent" id="parent" required>
+                <?php foreach ($parent_select_options as $key => $option): ?>
+                <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
-
     </div>
 
     <!-- Image -->
-    <div id="imageContainer">
-        <div class="form-group">
+    <div id="imageContainer" class="form-group">
             
-            <label for="image" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
-            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
-                <input id="image" name="image" type="file" data-preview-file-type="text" >
-            </div>
-            <script>$("#image").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
-
+        <label for="image" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
+            <input id="image" name="image" type="file" data-preview-file-type="text" >
         </div>
+        <script>$("#image").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
 
-        <!-- Caption -->
-        <div id="captionContainer" class="form-group">
+    </div>
 
-            <label for="caption" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
-            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="caption" id="caption"></div>
+    <!-- Caption -->
+    <div id="captionContainer" class="form-group">
 
-        </div>
+        <label for="caption" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="caption" id="caption"></div>
+
     </div>
 
     <!-- Media -->
-    <div id="mediaContainer">
-        <div class="form-group">
+    <div id="mediaContainer" class="form-group">
 
-            <label for="media" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
-            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
-                <input id="media" name="media" type="file" data-preview-file-type="text" >
-            </div>
-            <script>$("#media").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
-
-        </div>    
+        <label for="media" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
+            <input id="media" name="media" type="file" data-preview-file-type="text" >
+        </div>
+        <script>$("#media").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
+  
     </div>
 
     <div class="form-group">
@@ -177,35 +171,32 @@
         </div>
 
     </div>
-    
-    <div id="metaContainer">
-        
-        <div class="col-md-12">
-            <h2><?php echo TFISH_META_TAGS; ?><h2>
-            <hr>
-        </div>
-                    
-        <div class="form-group">
+          
+    <div class="col-md-12">
+        <h2><?php echo TFISH_META_TAGS; ?><h2>
+        <hr>
+    </div>
 
-            <!-- Meta title -->
-            <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="meta_title" id="meta_title"></div>
+    <div id="metaTitle" class="form-group">
 
-            <!-- SEO -->
-            <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9"><input type="text" class="form-control" name="seo" id="seo"></div>
+        <!-- Meta title -->
+        <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
+        <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="meta_title" id="meta_title"></div>
 
-        </div>
+        <!-- SEO -->
+        <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
+        <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9"><input type="text" class="form-control" name="seo" id="seo"></div>
 
-        <!-- Meta description -->
-        <div class="form-group">
-            <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
-            <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
-        </div>
+    </div>
+
+    <!-- Meta description -->
+    <div id="metaDescription" class="form-group">
+        <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
+        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
     </div>
 
     <!-- Action buttons -->
-    <div class="form-button clearfix col-lg-offset-1 col-md-offset-2 col-sm-offset-3 col-xs-offset-3">
+    <div class="form-button clearfix col-lg-offset-1 col-md-offset-2 col-sm-offset-2 col-xs-offset-3">
         <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
         <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
     </div>
