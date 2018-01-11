@@ -11,6 +11,7 @@
  * @since       1.0
  * @package     admin
  */
+
 // Enable strict type declaration.
 declare(strict_types=1);
 
