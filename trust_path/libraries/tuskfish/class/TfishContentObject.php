@@ -228,30 +228,35 @@ class TfishContentObject extends TfishAncestralObject
      * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
      * 
      * @param string $property Name of property.
-     * @param string $escape_html Whether to escape HTML fields (teaser, description as well).
+     * @param string $escape_html Whether to escape HTML fields (teaser, description).
      * @return string Human readable value escaped for display.
      */
     public function escape(string $property, bool $escape_html = false)
     {
         $clean_property = TfishFilter::trimString($property);
         
+        // If property is not set return null.
         if (!isset($this->__data[$clean_property])) {
             return null;
         }
         
-        // Cast properties to string and human readable form, where necessary.
-        $human_readable_property = (string) $this->makeHumanReadable($clean_property);
+        // Output for editor: HTML should be escaped but TFISH_LINK should NOT be converted to URL.
+        if ($this->__properties[$clean_property] === 'html' && $escape_html === true) {
+            
+            return htmlspecialchars((string) $this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8',
+                    false);
+        }        
         
-        // HTML properties (such as teaser and description) are input filtered with HTMLPurifier
-        // elsewhere. They cannot be treated with htmlspecialchars() in any case as that would break
-        // their tags. If you want to apply output filtering to HTML properties override this method
-        // in the relevant subclass. Note that any custom HTML properties you add to a subclass
-        // need to be input filtered.
-        if ($this->__properties[$clean_property] === 'html' && !$escape_html) {
-            return $human_readable_property;
+        // Format all other data for display and convert TFISH_LINK to URL.
+        $human_readable_data = (string) $this->makeHumanReadable($clean_property);
+                
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
+        if ($this->__properties[$clean_property] === 'html' && $escape_html === false) {
+            return $human_readable_data;
         }
         
-        return htmlspecialchars($human_readable_property, ENT_NOQUOTES, 'UTF-8', false);
+        // All other cases: Escape data for display.        
+        return htmlspecialchars($human_readable_data, ENT_NOQUOTES, 'UTF-8', false);
     }
 
     /**
