@@ -63,7 +63,7 @@
             <select class="form-control" name="server_timezone" id="server_timezone" required>
                 <?php
                     foreach ($timezones as $key => $value) {
-                        if ($preferences['server_timezone'] === $key) {
+                        if ((int) $preferences['server_timezone'] === $key) {
                             echo '<option value="' . $key . '" selected>' . $value . '</option>';
                         } else {
                             echo '<option value="' . $key . '">' . $value . '</option>';
