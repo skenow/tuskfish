@@ -37,6 +37,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
  * @properties  string $module The module that handles this content type (not persistent).
+ * @properties  string $icon The Font Awesome icon representing this content type (not persistent).
  */
 class TfishBlock extends TfishContentObject
 {
