@@ -3,7 +3,7 @@
 
 <!-- Title and meta information -->
 <div class="text-left">
-    <h2><a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_RSS; ?>" class="fas fa-rss"></i></a>
+    <h2>
         <?php if ($content->media): ?>
         <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
         <?php else: ?>
@@ -12,6 +12,7 @@
     </h2>
     <?php if ($contentInfo): ?>
     <p>
+        <a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_RSS; ?>" class="fas fa-rss"></i></a>
         <?php if (TfishSession::isAdmin()): ?>
         <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
         <?php endif; ?>

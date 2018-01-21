@@ -3,7 +3,7 @@
 
 <!-- Title and meta information -->
 <div class="text-left">
-    <h2><a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_RSS; ?>" class="fas fa-rss"></i></a>
+    <h2>
         <?php if ($content->media): ?>
         <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->escape('title'); ?></a>
         <?php else: ?>
@@ -11,7 +11,10 @@
         <?php endif; ?>
     </h2>
     <?php if ($contentInfo): ?>
-    <p><em><?php echo $contentInfo; ?></em></p>
+    <p>
+        <a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_RSS; ?>" class="fas fa-rss"></i></a>
+        <em><?php echo $contentInfo; ?></em>
+    </p>
     <?php endif; ?>
 </div>
 
