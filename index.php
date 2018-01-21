@@ -22,7 +22,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $content_handler = 'TfishContentHandler';
 
 // Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('agency');
+$tfish_template->setTheme('default');
 $index_template = 'single_stream';
 $target_file_name = 'index';
 $tfish_template->target_file_name = $target_file_name;
