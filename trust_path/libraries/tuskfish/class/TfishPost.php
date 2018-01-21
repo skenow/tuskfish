@@ -47,7 +47,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
  * @properties  string $module The module that handles this content type (not persistent).
- * @properties  string $icon The Font Awesome icon representing this content type (not persistent).
  */
 class TfishPost extends TfishContentObject
 {
@@ -62,7 +61,6 @@ class TfishPost extends TfishContentObject
         $this->__data['type'] = "TfishPost";
         $this->__data['template'] = "post";
         $this->__data['module'] = "forum";
-        $this->__data['icon'] = '<span class="glyphicon glyphicon-book" aria-hidden="true"></span>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();

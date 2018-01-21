@@ -68,7 +68,7 @@ class TfishDownload extends TfishContentObject
         $this->__data['type'] = "download";
         $this->__data['template'] = "download";
         $this->__data['module'] = "downloads";
-        $this->__data['icon'] = '<i class="fas fa-download"></i>';
+        $this->__data['icon'] = '<i title="<?php echo TFISH_TYPE_DOWNLOAD; ?>" class="fas fa-download"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();

@@ -66,7 +66,7 @@ class TfishImage extends TfishContentObject
         $this->__data['type'] = "TfishImage";
         $this->__data['template'] = "image";
         $this->__data['module'] = "images";
-        $this->__data['icon'] = '<i class="fas fa-image"></i>';
+        $this->__data['icon'] = '<i title="<?php echo TFISH_TYPE_IMAGE; ?>" class="fas fa-image"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();
