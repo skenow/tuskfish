@@ -173,7 +173,7 @@ class TfishSession
         if ($user) {
             // If the user has previous failed login atttempts sleep to frustrate brute force attacks.
             if ($user['login_errors']) {
-                sleep($user['login_errors']);
+                sleep((int) $user['login_errors']);
             }
             
             $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
