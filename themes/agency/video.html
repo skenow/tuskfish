@@ -12,7 +12,7 @@
     <?php if ($contentInfo): ?>
     <p>
         <?php if (TfishSession::isAdmin()): ?>
-        <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i class="fas fa-edit" aria-hidden></i></a>
+        <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
         <?php endif; ?>
         <em><?php echo $contentInfo; ?></em>
     </p>

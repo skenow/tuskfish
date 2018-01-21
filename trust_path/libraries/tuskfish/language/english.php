@@ -298,6 +298,7 @@ define("TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO", "Your browser does not support th
  */
 
 // Beta 1.
+define("TFISH_DOWNLOAD", "Download");
 define("TFISH_DOWNLOADS", "Downloads");
 define("TFISH_FLUSH_CACHE", "Flush cache");
 define("TFISH_CACHE_WAS_FLUSHED", "Cache was flushed.");
