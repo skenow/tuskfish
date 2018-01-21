@@ -66,7 +66,7 @@ class TfishVideo extends TfishContentObject
         $this->__data['type'] = "TfishVideo";
         $this->__data['template'] = "video";
         $this->__data['module'] = "videos";
-        $this->__data['icon'] = '<i title="<?php echo TFISH_TYPE_VIDEO; ?>" class="fas fa-video"></i>';
+        $this->__data['icon'] = '<i class="fas fa-video"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();
