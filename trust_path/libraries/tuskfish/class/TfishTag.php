@@ -61,7 +61,7 @@ class TfishTag extends TfishContentObject
         $this->__data['type'] = "TfishTag";
         $this->__data['template'] = "tag";
         $this->__data['module'] = "tags";
-        $this->__data['icon'] = '<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>';
+        $this->__data['icon'] = '<i class="fas fa-tag"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();

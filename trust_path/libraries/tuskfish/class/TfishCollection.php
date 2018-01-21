@@ -78,8 +78,7 @@ class TfishCollection extends TfishContentObject
         $this->__data['type'] = "TfishCollection";
         $this->__data['template'] = "collection";
         $this->__data['module'] = "collections";
-        $this->__data['icon'] = '<span class="glyphicon glyphicon-folder-open"'
-                . 'aria-hidden="true"></span>';
+        $this->__data['icon'] = '<i class="fas fa-folder-open"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();

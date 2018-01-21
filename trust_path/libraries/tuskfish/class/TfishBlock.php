@@ -52,8 +52,7 @@ class TfishBlock extends TfishContentObject
         $this->__data['type'] = "TfishBlock";
         $this->__data['template'] = "block";
         $this->__data['module'] = "blocks";
-        $this->__data['icon'] = '<span class="glyphicon glyphicon-th-large"'
-                . 'aria-hidden="true"></span>';
+        $this->__data['icon'] = '<i class="fas fa-cube"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $zeroedProperties = $this->zeroedProperties();
