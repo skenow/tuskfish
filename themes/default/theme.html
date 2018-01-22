@@ -58,6 +58,11 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
+          <?php if (TfishSession::isAdmin()): ?>
+            <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
+            <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
+            <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
+          <?php endif; ?>
           <li class="nav-item">
             <a class="nav-link" href="<?php echo TFISH_RSS_URL; ?>"><i class="fas fa-rss"></i></a>
           </li>
@@ -85,7 +90,7 @@
       <!-- Footer -->
       <div>
           <footer>
-              <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018.</p>
+              <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
           </footer>
       </div>
 
