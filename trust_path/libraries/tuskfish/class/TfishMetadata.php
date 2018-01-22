@@ -206,7 +206,7 @@ class TfishMetadata
         ksort($page_slots);
 
         // Construct a HTML pagination control.
-        $control = '<ul class="pagination">';
+        $control = '<nav aria-label="Page navigation"><ul class="pagination">';
 
         // Prepare the query string.
         $query = $start_arg = $tag_arg = '';
@@ -234,16 +234,17 @@ class TfishMetadata
             }
 
             if (($key + 1) === $current_page) {
-                $control .= '<li class="active"><a href="' . $url . $query . '">' . $slot
-                        . '</a></li>';
+                $control .= '<li class="page-item active"><a class="page-link" href="' . $url 
+                        . $query . '">' . $slot . '</a></li>';
             } else {
-                $control .= '<li><a href="' . $url . $query . '">' . $slot . '</a></li>';
+                $control .= '<li class="page-item"><a class="page-link" href="' . $url . $query 
+                        . '">' . $slot . '</a></li>';
             }
             
             unset($query, $key, $slot);
         }
         
-        $control .= '</ul>';
+        $control .= '</ul></nav>';
 
         return $control;
     }

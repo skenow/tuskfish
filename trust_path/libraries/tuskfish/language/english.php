@@ -101,6 +101,7 @@ define("TFISH_PREFERENCE_SESSION_LIFE", "Session life (minutes)");
 
 // Search
 define("TFISH_SEARCH", "Search");
+define("TFISH_KEYWORDS", "Keywords");
 define("TFISH_SEARCH_DESCRIPTION", "Search the contents of this website");
 define("TFISH_SEARCH_ENTER_TERMS", "Enter search terms");
 define("TFISH_SEARCH_ALL", "All (AND)");

@@ -1,9 +1,11 @@
-body {
-  padding-top: 5rem;
+@media (min-width: 1200px) {
+    .container {
+        max-width: 970px;
+    }
 }
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+
+body {
+    padding-top: 50px;
 }
 
 video {
