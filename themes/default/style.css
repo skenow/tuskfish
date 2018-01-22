@@ -59,10 +59,11 @@ figcaption {
 }
 
 .select_filters {
-    margin: 0 0 0 0;
+    margin: 2rem 0 0 0;
 }
 
-.pagination {	
+.pagination {
+    margin: 2rem 0 0 0;
 }
 
 .collection_pagination {

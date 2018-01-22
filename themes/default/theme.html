@@ -74,26 +74,20 @@
     <main role="main" class="container">
 
       <div class="starter-template">
-        
-        <!-- Centre top blocks -->
-        <div><?php echo $tfish_template->render('centre_top_zone'); ?></div>
 
-        <!-- Centre page -->
-        <div><?php echo $tfish_template->render('main'); ?></div>
-
-        <!-- Centre bottom blocks -->
-        <div><?php echo $tfish_template->render('centre_bottom_zone'); ?></div>
+        <!-- Main page -->
+        <div>
+            <?php echo $tfish_template->render('main'); ?>
+        </div>
         
       </div>
         
       <!-- Footer -->
-      <footer>
-          <div class="row">
-              <div class="col-lg-12">
-                  <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018.</p>
-              </div>
-          </div>
-      </footer>
+      <div>
+          <footer>
+              <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018.</p>
+          </footer>
+      </div>
 
     </main><!-- /.container -->
     

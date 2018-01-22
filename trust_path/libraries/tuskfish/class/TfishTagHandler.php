@@ -175,7 +175,7 @@ class TfishTagHandler extends TfishContentHandler
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
-        $select_box = '<select class="form-control" name="' . $clean_key_name . '" id="'
+        $select_box = '<select class="form-control custom-select" name="' . $clean_key_name . '" id="'
                 . $clean_key_name . '" onchange="this.form.submit()">';
         
         foreach ($clean_tag_list as $key => $value) {
