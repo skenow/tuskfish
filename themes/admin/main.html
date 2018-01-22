@@ -1,27 +1,44 @@
-<!-- Title -->
+<!-- Page title -->
 <?php if (isset($page_title)): ?>
-<h1><?php echo $page_title; ?></h1>
-<hr>
+<div class="row">
+    <div class="mx-auto">
+        <h1><?php echo $page_title; ?></h1>
+    </div>
+</div>
 <?php endif; ?>
 
 <!-- Select filters -->
 <?php if (isset($select_filters_form)): ?>
-<div class="select_filters text-center"><?php echo $select_filters_form; ?></div>
+<div class="row">
+    <div class="select_filters mx-auto clearfix">
+        <?php echo $select_filters_form; ?>
+    </div>
+</div>
 <?php endif; ?>
 
-<!-- Top pagination -->
+<!-- Top pagination control -->
 <?php if (isset($pagination)): ?>
-<div class="text-right">
-    <?php echo $pagination; ?>
+<div class="row">
+    <div class="ml-auto clearfix">
+        <?php echo $pagination; ?>
+    </div>
 </div>
 <?php endif; ?>
 
 <!-- Main content -->
-<?php if (isset($tfish_main_content)) echo $tfish_main_content; ?>
+<?php if (isset($tfish_main_content)): ?>
+<div class="row">
+    <div class="mx-auto clearfix">
+        <?php echo $tfish_main_content; ?>
+    </div>
+</div>
+<?php endif; ?>
 
-<!-- Bottom pagination -->
+<!-- Bottom pagination control -->
 <?php if (isset($pagination)): ?>
-<div class="text-right">
-    <?php echo $pagination; ?>
+<div class="row">
+    <div class="ml-auto clearfix">
+        <?php echo $pagination; ?>
+    </div>
 </div>
 <?php endif; ?>

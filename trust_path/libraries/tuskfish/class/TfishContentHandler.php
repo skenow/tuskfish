@@ -445,7 +445,7 @@ class TfishContentHandler
                 ? (int) $selected : null; // Offline (0) or online (1)
         $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
-        $select_box = '<select class="form-control" name="online" id="online"'
+        $select_box = '<select class="form-control custom-select" name="online" id="online" '
                 . 'onchange="this.form.submit()">';
         
         if (isset($clean_selected)) {
@@ -612,7 +612,7 @@ class TfishContentHandler
         }
 
         $options = array(0 => TFISH_SELECT_TYPE) + $type_list;
-        $select_box = '<select class="form-control" name="type" id="type" '
+        $select_box = '<select class="form-control custom-select" name="type" id="type" '
                 . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {

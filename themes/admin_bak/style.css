@@ -1,9 +1,5 @@
 body {
-  padding-top: 5rem;
-}
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+    padding-top: 50px;
 }
 
 video {
@@ -12,8 +8,7 @@ video {
 }
 
 .starter-template {
-    padding: 40px 15px;
-    text-align: center;
+    padding: 40px 0px 0px 0px;
 }
 
 /* Figure and figcaption styles make captions wrap to figure width */
@@ -22,8 +17,6 @@ figure {
 }
 
 figure img {
-    border-style: solid;
-    border-width: 1px;
     display: block;
     width: 100%;
 }
@@ -59,27 +52,20 @@ figcaption {
 }
 
 .select_filters {
-    margin: 2rem 0 0 0;
+    margin: 30px 0px 30px 0px;
 }
 
-.pagination {
-    margin: 2rem 0 0 0;
+.pagination {	
 }
 
 .collection_pagination {
     margin: -1.5rem 0 1rem 0;
 }
 
-.clearfix-left {
-    display: table;
-    content: " ";
-    display: table;
-    clear:left;
+.form-buttons {
+    margin: 30px 0px 30px 0px;
 }
 
-.clearfix-right {
-    display: table;
-    content: " ";
-    display: table;
-    clear:right;
+.spacer {
+    margin-bottom: 1.5rem;
 }

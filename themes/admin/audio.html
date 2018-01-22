@@ -4,13 +4,18 @@
 <div class="text-left">
     <h2>
         <?php if ($content->media): ?>
-        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->escape('title'); ?></a>
+        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
         <?php else: ?>
-        <?php echo $content->escape('title'); ?>
+        <?php echo $content->icon . ' ' . $content->escape('title'); ?>
         <?php endif; ?>
     </h2>
     <?php if ($contentInfo): ?>
-    <p><em><?php echo $contentInfo; ?></em></p>
+    <p>
+        <?php if (TfishSession::isAdmin()): ?>
+        <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+        <?php endif; ?>
+        <em><?php echo $contentInfo; ?></em>
+    </p>
     <?php endif; ?>
 </div>
 
@@ -68,15 +73,18 @@
 <?php if (!empty($parent)): ?>
 <div class="text-left">
     <h3><?php echo TFISH_RELATED; ?></h3>
-    <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->escape('title'); ?></a></h4>
+    <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
     <?php if ($parent->image): ?>
     <div class="pull-left">
         <figure class="figure-left">
             <a href="<?php echo $parent->getURL($target_file_name); ?>">
                 <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
-                     <?php if ($parent->caption): ?>title="<?php echo $parent->escape('caption'); ?>" 
-                     alt="<?php echo $parent->escape('caption'); ?>"<?php endif; ?> />
-            </a>
+                     <?php if ($parent->caption): ?>
+                     title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
+                     <?php else: ?>
+                     alt=""
+                     <?php endif; ?>
+                     /></a>
         </figure>
     </div>
     <?php endif; ?>

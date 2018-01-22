@@ -1,0 +1,29 @@
+<!-- Display a single tag object -->
+<?php if ($content): ?>
+
+<!-- Title and meta information -->
+<div class="text-left">
+    <h2><?php echo $content->escape('title'); ?></h2>
+</div>
+
+<!-- Image -->
+<?php if ($content->image): ?>
+<div>
+    <figure class="figure-centre">
+        <img class="img-responsive center-block" src="<?php echo $content->getCachedImage(1170); ?>" 
+             <?php if ($content->caption): ?>
+             title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+             <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+        <?php else: ?>
+        alt="" />
+        <?php endif; ?>
+    </figure>
+</div>
+<?php endif; ?>
+
+<!-- Description -->
+<div class="text-left">
+    <?php if ($content->description) echo $content->escape('description'); ?>
+</div>
+
+<?php endif; ?>
