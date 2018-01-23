@@ -61,24 +61,24 @@ $tfish_template->setTheme('default');
 $tfish_template->page_title = TFISH_LOGIN;
 
 // Initialise and whitelist allowed parameters
-$clean_op = $clean_email = $dirty_password = false;
+$clean_op = $clean_email = $dirty_password = '';
 $allowed_options = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NEVER sanitised and therefore dangerous.
 if (!empty($_POST['op'])) {
     $op = TfishFilter::trimString($_POST['op']);
-    $clean_op = TfishFilter::isAlpha($op) ? $op : false;
+    $clean_op = TfishFilter::isAlpha($op) ? $op : '';
 } elseif (!empty($_GET['op'])) {
     $op = TfishFilter::trimString($_GET['op']);
-    $clean_op = TfishFilter::isAlpha($op) ? $op : false;
+    $clean_op = TfishFilter::isAlpha($op) ? $op : '';
 }
 
 if (isset($_POST['email'])) {
     $email = TfishFilter::trimString($_POST['email']);
-    $clean_email = TfishFilter::isEmail($email) ? $email : false;
+    $clean_email = TfishFilter::isEmail($email) ? $email : '';
 }
 
-$dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
+$dirty_password = isset($_POST['password']) ? $_POST['password'] : '';
 
 if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
     switch ($clean_op) {
