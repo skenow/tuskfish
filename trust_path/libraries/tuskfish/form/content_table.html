@@ -9,11 +9,11 @@
 <table class="table table-bordered table-striped table-hover text-left">
     <thead>
         <tr>
-            <th class="d-sm-none d-md-block"><?php echo TFISH_ID; ?></th>
+            <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_ID; ?></th>
             <th><?php echo TFISH_TYPE; ?></th>
             <th><?php echo TFISH_TITLE; ?></th>
-            <th class="d-sm-none d-md-block"><?php echo TFISH_SUBMISSION_TIME; ?></th>
-            <th class="d-sm-none d-md-block"><?php echo TFISH_COUNTER; ?></th>
+            <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_SUBMISSION_TIME; ?></th>
+            <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_COUNTER; ?></th>
             <th><?php echo TFISH_ONLINE_STATUS; ?></th>
             <th colspan="2"><?php echo TFISH_ACTION; ?></th>
         </tr>
@@ -21,11 +21,11 @@
     <tbody>
         <?php foreach($rows as &$row) { ?>
         <tr>
-            <td class="d-sm-none d-md-block"><?php echo TfishFilter::escape($row['id']); ?></td>
+            <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['id']); ?></td>
             <td><?php echo TfishFilter::escape($typelist[$row['type']]); ?></td>
             <td><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=view&amp;id=' . TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['title']); ?></a></td>
-            <td class="d-sm-none d-md-block"><?php echo TfishFilter::escape($row['submission_time']); ?></td>
-            <td class="d-sm-none d-md-block"><?php echo TfishFilter::escape($row['counter']); ?></td>
+            <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['submission_time']); ?></td>
+            <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['counter']); ?></td>
             <?php if ($row['online']): ?>
             <td><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><?php echo TFISH_ONLINE; ?></a></td>
             <?php else: ?>
