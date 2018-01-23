@@ -59,7 +59,8 @@ figcaption {
 }
 
 .select_filters {
-    margin: 2rem 0 0 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .pagination {

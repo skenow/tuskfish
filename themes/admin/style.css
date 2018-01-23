@@ -83,3 +83,7 @@ figcaption {
     display: table;
     clear:right;
 }
+
+.add-content {
+    margin: 2rem 0 2rem 0;
+}
