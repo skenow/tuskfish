@@ -14,8 +14,8 @@
             <th><?php echo TFISH_TITLE; ?></th>
             <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_SUBMISSION_TIME; ?></th>
             <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_COUNTER; ?></th>
-            <th><?php echo TFISH_ONLINE_STATUS; ?></th>
-            <th colspan="2"><?php echo TFISH_ACTION; ?></th>
+            <th class="text-center"><?php echo TFISH_ONLINE; ?></th>
+            <th colspan="2" class="text-center"><?php echo TFISH_ACTION; ?></th>
         </tr>
     </thead>
     <tbody>
@@ -27,14 +27,14 @@
             <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['submission_time']); ?></td>
             <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['counter']); ?></td>
             <?php if ($row['online']): ?>
-            <td><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><?php echo TFISH_ONLINE; ?></a></td>
+            <td class="text-center"><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-check"></i></a></td>
             <?php else: ?>
-            <td><a class="text-danger" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><b><?php echo TFISH_OFFLINE; ?></b></a></td>
+            <td class="text-center"><a class="text-danger" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-times"></i></a></td>
             <?php endif; ?>
-            <td><a href="admin.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
-                    <?php echo TFISH_EDIT; ?></a></td>
-            <td><a href="admin.php?op=confirm&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
-                    <?php echo TFISH_DELETE; ?></a></td>
+            <td class="text-center"><a href="admin.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
+                    <i class="fas fa-edit"></i></a></td>
+            <td class="text-center"><a href="admin.php?op=confirm&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
+                    <i class="fas fa-trash-alt"></i></a></td>
             <?php unset($row); ?>
         </tr>
         <?php } ?>
