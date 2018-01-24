@@ -20,7 +20,7 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('thumbnail_gallery');
+$tfish_template->setTheme('gallery');
 
 // CONVENTIONS:
 // 1. Specify the class name of the handler for the object type this page will handle,

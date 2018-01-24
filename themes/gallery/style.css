@@ -7,9 +7,8 @@ body {
   text-align: center;
 }
 
-video {
-    max-width: 100%;
-    height: auto;
+.img-thumbnail {
+    margin-bottom: 2rem;
 }
 
 /* Figure and figcaption styles make captions wrap to figure width */
@@ -66,14 +65,6 @@ figcaption {
 
 .rights {
     font-style: italic;
-}
-
-.audio-player {
-    margin: 2rem 0;
-}
-
-.video-player {
-    margin: 2rem 0;
 }
 
 .collection_pagination {

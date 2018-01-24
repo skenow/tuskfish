@@ -1,19 +1,10 @@
 body {
   padding-top: 5rem;
 }
+
 .starter-template {
-  padding: 3rem 1.5rem;
+  padding-top: 3rem;
   text-align: center;
-}
-
-video {
-    max-width: 100%;
-    height: auto;
-}
-
-.starter-template {
-    padding: 40px 15px;
-    text-align: center;
 }
 
 /* Figure and figcaption styles make captions wrap to figure width */
@@ -37,7 +28,9 @@ video {
     margin-bottom: 2rem;
 }
 
-pagination-bottom {}
+pagination-bottom {
+    margin-bottom: 2rem;
+}
 
 figure {
     display: table;
@@ -70,16 +63,4 @@ figcaption {
 
 .rights {
     font-style: italic;
-}
-
-.audio-player {
-    margin: 2rem 0;
-}
-
-.video-player {
-    margin: 2rem 0;
-}
-
-.collection_pagination {
-    margin: -1.5rem 0 1rem 0;
 }
