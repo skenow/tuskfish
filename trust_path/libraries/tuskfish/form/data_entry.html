@@ -1,149 +1,119 @@
 <form class="form-horizontal" action="admin.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
     
-    <div class="form-group">
+    <div class="row">
+    
+      <!-- Type -->
+      <div class="col-md-6 col-lg-4 mb-3 text-left" id="typeContainer">
+        <label for="type"><strong><?php echo TFISH_TYPE; ?></strong></label>
+        <select class="form-control" name="type" id="type" required>
+            <?php
+                foreach ($content_types as $key => $type) {
+                    echo '<option value="' . TfishFilter::escape($key) . '">'
+                    . TfishFilter::escape($type) . '</option>';
+                }
+            ?>
+        </select>
+      </div>
 
-        <!-- Type -->
-        <label for="type" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TYPE; ?>:</label>
-        <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer">
-            <select class="form-control" name="type" id="type" required>
-                <?php foreach ($content_types as $key => $type) {
-                echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($type) . '</option>';
-                } ?>
+      <!-- Date (bootstrap-datepicker) -->
+      <div class="col-md-6 col-lg-4 mb-3 text-left" id="dateContainer">
+          <label for="date"><strong><?php echo TFISH_DATE; ?></strong></label>
+          <input type="text" class="form-control" name="date" id="date">
+      </div>
+      <script>
+        $('#date').datepicker({
+            format: 'yyyy-mm-dd',
+            todayHighlight: 'true',
+            todayBtn: 'linked',
+            startView: 'years'
+        });
+        $('#date').datepicker('setDate', new Date());
+        $('#date').datepicker('update');
+      </script>
+    
+        <!-- Tags -->
+        <div class="col-md-6 col-lg-4 mb-3 text-left" id="tagsContainer">
+            <label for="tags"><strong><?php echo TFISH_TAGS; ?></strong></label>
+            <select multiple size="5" class="form-control" name="tags[]" id="tags">
+                <?php
+                    foreach ($tags as $tag_id => $tag_title) {
+                        echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
+                    }
+                ?>
             </select>
         </div>
 
-        <!-- Date (bootstrap-datepicker) -->
-        <div id="dateContainer">
-            <label for="date" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_DATE; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="date" id="date"></div>
-        </div>
-        <script>
-            $('#date').datepicker({
-                format: 'yyyy-mm-dd',
-                todayHighlight: 'true',
-                todayBtn: 'linked',
-                startView: 'years'
-            });
-            $('#date').datepicker('setDate', new Date());
-            $('#date').datepicker('update');
-        </script>
-
-        <!-- Tags -->
-        <div id="tagsContainer">
-            <label for="tags" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3 spacer"><?php echo TFISH_TAGS; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9">
-                <select multiple size="5" class="form-control" name="tags[]" id="tags">
-                    <?php
-                        foreach ($tags as $tag_id => $tag_title) {
-                            echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
-                        }
-                    ?>
-                </select>
-            </div>
+        <!-- Title -->
+        <div class="col-12 mb-3 text-left" id="titleContainer">
+            <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
+            <input type="text" class="form-control" name="title" id="title">
         </div>
 
-    </div>
-
-    <!-- Title -->
-    <div id="titleContainer" class="form-group">
-        <label for="title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TITLE; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="title" id="title" required></div>
-    </div>
-
-    <!-- Teaser -->
-    <div id="teaserContainer" class="form-group">
-        <label for="teaser" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_TEASER; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
-            <!-- TinyMCE editor field -->
-            <textarea id="teaser" name="teaser" class="text-left"></textarea>
+        <!-- Teaser -->
+        <div class="col-12 mb-3 text-left" id="teaserContainer">
+            <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
+            <textarea id="teaser" name="teaser" class="form-control text-left"></textarea>
         </div>
-    </div>
 
-    <!-- Description -->
-    <div id="descriptionContainer" class="form-group">
-        <label for="description" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_DESCRIPTION; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
-            <!-- TinyMCE editor field -->
-            <textarea id="description" name="description" class="text-left"></textarea>
-        </div>        
-    </div>
-
-    <div class="form-group">
+        <!-- Description -->
+        <div class="col-12 mb-3 text-left" id="descriptionContainer">
+            <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
+            <textarea id="description" name="description" class="form-control text-left"></textarea>
+        </div>
 
         <!-- Creator (author) -->
-        <div id="creatorContainer">
-            <label for="creator" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_CREATOR; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="creator" id="creator"></div>
+        <div class="col-md-6 mb-3 text-left" id="creatorContainer">
+            <label for="creator"><strong><?php echo TFISH_CREATOR; ?></strong></label>
+            <input type="text" class="form-control" name="creator" id="creator">
         </div>
 
         <!-- Publisher -->
-        <div id="publisherContainer">
-            <label for="publisher" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_PUBLISHER; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="publisher" id="publisher" 
-                value="<?php global $tfish_preference; echo TfishFilter::escape($tfish_preference->site_author); ?>"></div>
+        <div class="col-md-6 mb-3 text-left" id="publisherContainer">
+            <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
+            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfish_preference; echo TfishFilter::escape($tfish_preference->site_author); ?>">
         </div>
 
-    </div>
-
-
-    <!-- Parent -->
-    <div id="parentContainer" class="form-group">
-        <label for="parent" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_PARENT; ?>:</label>
-        <div class="col-lg-11 col-md-10 col-sm-10 col-xs-9">
+        <!-- Parent -->
+        <div class="col-12 mb-3 text-left" id="parentContainer">
+            <label for="publisher"><strong><?php echo TFISH_PARENT; ?></strong></label>
             <select class="form-control" name="parent" id="parent" required>
-                <?php foreach ($parent_select_options as $key => $option): ?>
+            <?php foreach ($parent_select_options as $key => $option): ?>
                 <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </select>
         </div>
-    </div>
 
-    <!-- Image -->
-    <div id="imageContainer" class="form-group">
-            
-        <label for="image" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_IMAGE; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
+        <!-- Image -->
+        <div class="col-md-6 mb-3 text-left" id="imageContainer">
+            <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
             <input id="image" name="image" type="file" data-preview-file-type="text" >
         </div>
         <script>$("#image").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
 
-    </div>
-
-    <!-- Caption -->
-    <div id="captionContainer" class="form-group">
-
-        <label for="caption" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_CAPTION; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="caption" id="caption"></div>
-
-    </div>
-
-    <!-- Media -->
-    <div id="mediaContainer" class="form-group">
-
-        <label for="media" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_MEDIA; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9">
+        <!-- Media -->
+        <div class="col-md-6 mb-3 text-left" id="mediaContainer">
+            <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
             <input id="media" name="media" type="file" data-preview-file-type="text" >
         </div>
         <script>$("#media").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
-  
-    </div>
 
-    <div class="form-group">
+        <!-- Caption -->
+        <div class="col-md-6 mb-3 text-left" id="captionContainer">
+            <label for="caption"><strong><?php echo TFISH_CAPTION; ?></strong></label>
+            <input type="text" class="form-control" name="caption" id="caption">
+        </div>
 
         <!-- Rights -->
-        <div id="rightsContainer">
-            <label for="rights" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_RIGHTS; ?>:</label>
-            <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer">
-                <select class="form-control" name="rights" id="rights" required>
-                    <?php foreach ($rights as $key => $right) { echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
-                </select>
-            </div>
+        <div class="col-md-6 mb-3 text-left" id="rightsContainer">
+            <label for="rights"><strong><?php echo TFISH_RIGHTS; ?></strong></label>
+            <select class="form-control" name="rights" id="rights" required>
+                <?php foreach ($rights as $key => $right) { echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
+            </select>
         </div>
 
         <!-- Language -->
-        <div id="languageContainer">
-            <label for="language" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_LANGUAGE; ?>:</label>
-            <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer">
+        <div class="col-md-6 mb-3 text-left" id="languageContainer">
+            <label for="language"><strong><?php echo TFISH_LANGUAGE; ?></strong></label>
                 <select class="form-control" name="language" id="language" required>
                     <?php
                         global $tfish_preference;
@@ -156,47 +126,48 @@
                         }
                     ?>
                 </select>
+        </div>
+
+        <!-- Online status -->
+        <div class="col-md-6 mb-3 text-left" id="onlineContainer">
+            <p><strong><?php echo TFISH_ONLINE_STATUS; ?></strong></p>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="online" name="online" value="1" checked class="custom-control-input" required>
+                <label class="custom-control-label" for="online"><?php echo TFISH_ONLINE; ?></label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="offline" name="online" value="0" class="custom-control-input" required>
+                <label class="custom-control-label" for="offline"><?php echo TFISH_OFFLINE; ?></label>
             </div>
         </div>
-        
-        <!-- Online status -->
-        <label for="online" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_ONLINE_STATUS; ?>:</label>
-        <div class="col-lg-2 col-md-4 col-sm-10 col-xs-9 spacer">
-            <label for="online" class="radio-inline">
-                <input type="radio" name="online" value="1" checked id="online"><?php echo TFISH_ONLINE; ?>
-            </label>
-            <label for="online" class="radio-inline">
-                <input type="radio" name="online" value="0" id="online"><?php echo TFISH_OFFLINE; ?>
-            </label>
+
+        <div class="col-md-12">
+            <h2><?php echo TFISH_META_TAGS; ?><h2>
+            <hr>
         </div>
 
-    </div>
-          
-    <div class="col-md-12">
-        <h2><?php echo TFISH_META_TAGS; ?><h2>
-        <hr>
-    </div>
-
-    <div id="metaTitle" class="form-group">
-
         <!-- Meta title -->
-        <label for="meta_title" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_TITLE; ?>:</label>
-        <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9 spacer"><input type="text" class="form-control" name="meta_title" id="meta_title"></div>
+        <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
+            <label for="meta_title"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
+            <input type="text" class="form-control" name="meta_title" id="meta_title">
+        </div>
 
         <!-- SEO -->
-        <label for="seo" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_SEO; ?>:</label>
-        <div class="col-lg-5 col-md-4 col-sm-10 col-xs-9"><input type="text" class="form-control" name="seo" id="seo"></div>
+        <div class="col-md-6 mb-3 text-left" id="seoContainer">
+            <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
+            <input type="text" class="form-control" name="seo" id="seo">
+        </div>
 
-    </div>
-
-    <!-- Meta description -->
-    <div id="metaDescription" class="form-group">
-        <label for="meta_description" class="control-label col-lg-1 col-md-2 col-sm-2 col-xs-3"><?php echo TFISH_META_DESCRIPTION; ?>:</label>
-        <div class="control-label col-lg-11 col-md-10 col-sm-10 col-xs-9"><input type="text" class="form-control" name="meta_description" id="meta_description"></div>
-    </div>
-
+        <!-- Meta description -->
+        <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
+            <label for="meta_description"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
+            <input type="text" class="form-control" name="meta_description" id="meta_description">
+        </div>
+    
+    </div> <!-- /row -->
+    
     <!-- Action buttons -->
-    <div class="form-button clearfix col-lg-offset-1 col-md-offset-2 col-sm-offset-2 col-xs-offset-3">
+    <div class="float-left clearfix">
         <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
         <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
     </div>
