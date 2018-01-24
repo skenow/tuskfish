@@ -5,9 +5,6 @@
       <div class="col-12 mb-3 text-left">
         <label for="site_name"><strong><?php echo TFISH_PREFERENCE_SITE_NAME; ?></strong></label>
         <input type="text" class="form-control" name="site_name" id="firstName" <?php if (isset($preferences['site_name'])) { echo 'value="' . $preferences['site_name'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Site name is required.
-        </div>
       </div>
     </div>
     
@@ -16,9 +13,6 @@
       <div class="col-12 mb-3 text-left">
         <label for="site_description"><strong><?php echo TFISH_PREFERENCE_SITE_DESCRIPTION; ?></strong></label>
         <input type="text" class="form-control" name="site_description" id="site_description" <?php if (isset($preferences['site_description'])) { echo 'value="' . $preferences['site_description'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Site description is required.
-        </div>
       </div>
     </div>
     
@@ -28,18 +22,12 @@
       <div class="col-6 mb-3 text-left">
         <label for="site_author"><strong><?php echo TFISH_PREFERENCE_SITE_AUTHOR; ?></strong></label>
         <input type="text" class="form-control" name="site_author" id="site_author" <?php if (isset($preferences['site_author'])) { echo 'value="' . $preferences['site_author'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Site author is required.
-        </div>
       </div>
         
       <!-- Site email -->
       <div class="col-6 mb-3 text-left">
         <label for="site_email"><strong><?php echo TFISH_PREFERENCE_SITE_EMAIL; ?></strong></label>
         <input type="text" class="form-control" name="site_email" id="site_email" <?php if (isset($preferences['site_email'])) { echo 'value="' . $preferences['site_email'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Site email is required.
-        </div>
       </div>
       
     </div>
@@ -50,25 +38,21 @@
       <div class="col-8 mb-3 text-left">
         <label for="site_copyright"><strong><?php echo TFISH_PREFERENCE_SITE_COPYRIGHT; ?></strong></label>
         <input type="text" class="form-control" name="site_copyright" id="site_copyright" <?php if (isset($preferences['site_copyright'])) { echo 'value="' . $preferences['site_copyright'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Site copyright is required.
-        </div>
       </div>
         
-      <!-- Close site -->
+      <!-- Close site -->      
       <div class="col-4 mb-3 text-left">
-        <label for="close_site"><strong><?php echo TFISH_PREFERENCE_CLOSE_SITE; ?></strong></label>
-        <label class="radio-inline pull-left">
-                <input class="pull-left" type="radio" name="close_site" value="1" id="close_site" <?php if ($preferences['close_site']) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
-            </label>
-            <label for="close_site" class="radio-inline pull-left">
-                <input type="radio" name="close_site" value="0" id="close_site" <?php if (!$preferences['close_site']) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
-            </label>
-        <div class="invalid-feedback">
-          Close site is required.
+        <p><strong><?php echo TFISH_PREFERENCE_CLOSE_SITE; ?></strong></p>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="closed" name="close_site" value="1" class="custom-control-input" <?php if ($preferences['close_site']) { echo 'checked'; } ?> required>
+          <label class="custom-control-label" for="closed"><?php echo TFISH_YES; ?></label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="open" name="close_site" value="0" class="custom-control-input" <?php if (!$preferences['close_site']) { echo 'checked'; } ?> required>
+          <label class="custom-control-label" for="open"><?php echo TFISH_NO; ?></label>
         </div>
       </div>
-      
+
     </div>
     
     <div class="row">
@@ -76,7 +60,7 @@
       <!-- Server timezone -->
       <div class="col-4 mb-3 text-left">
         <label for="server_timezone"><strong><?php echo TFISH_PREFERENCE_SERVER_TIMEZONE; ?></strong></label>
-        <select class="form-control" name="server_timezone" id="server_timezone" required>
+        <select class="form-control custom-select" name="server_timezone" id="server_timezone" required>
             <?php
                 foreach ($timezones as $key => $value) {
                     if ((int) $preferences['server_timezone'] === $key) {
@@ -88,15 +72,12 @@
                 }
             ?>
         </select>
-        <div class="invalid-feedback">
-          Server timezone is required.
-        </div>
       </div>
         
       <!-- Site timezone -->
       <div class="col-4 mb-3 text-left">
         <label for="site_timezone"><strong><?php echo TFISH_PREFERENCE_SITE_TIMEZONE; ?></strong></label>
-        <select class="form-control" name="site_timezone" id="site_timezone" required>
+        <select class="form-control custom-select" name="site_timezone" id="site_timezone" required>
             <?php
                 foreach ($timezones as $key => $value) {
                     if ($preferences['site_timezone'] === $key) {
@@ -108,18 +89,12 @@
                 }
             ?>
         </select>
-        <div class="invalid-feedback">
-          Site timezone is required.
-        </div>
       </div>
       
       <!-- Minimum search length -->
       <div class="col-4 mb-3 text-left">
         <label for="min_search_length"><strong><?php echo TFISH_PREFERENCE_MIN_SEARCH_LENGTH; ?></strong></label>
         <input type="number" min="3" class="form-control" name="min_search_length" id="min_search_length" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . $preferences['min_search_length'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Site name is required.
-        </div>
       </div>
       
     </div>
@@ -130,27 +105,18 @@
       <div class="col-4 mb-3 text-left">
         <label for="search_pagination"><strong><?php echo TFISH_PREFERENCE_SEARCH_PAGINATION; ?></strong></label>
         <input type="number" min="1" class="form-control" name="search_pagination" id="search_pagination" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . $preferences['search_pagination'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Search pagination is required.
-        </div>
       </div>
       
       <!-- User pagination -->
       <div class="col-4 mb-3 text-left">
         <label for="user_pagination"><strong><?php echo TFISH_PREFERENCE_USER_PAGINATION; ?></strong></label>
         <input type="number" min="1" class="form-control" name="user_pagination" id="user_pagination" <?php if (isset($preferences['user_pagination'])) { echo 'value="' . $preferences['user_pagination'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          User pagination is required.
-        </div>
       </div>
       
       <!-- Admin pagination -->
       <div class="col-4 mb-3 text-left">
         <label for="admin_pagination"><strong><?php echo TFISH_PREFERENCE_ADMIN_PAGINATION; ?></strong></label>
         <input type="number" min="1" class="form-control" name="admin_pagination" id="admin_pagination" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . $preferences['admin_pagination'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Admin pagination is required.
-        </div>
       </div>
 
     </div>
@@ -161,27 +127,18 @@
       <div class="col-4 mb-3 text-left">
         <label for="gallery_pagination"><strong><?php echo TFISH_PREFERENCE_GALLERY_PAGINATION; ?></strong></label>
         <input type="number" min="1" class="form-control" name="gallery_pagination" id="gallery_pagination" <?php if (isset($preferences['gallery_pagination'])) { echo 'value="' . $preferences['gallery_pagination'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Gallery pagination is required.
-        </div>
       </div>
       
       <!-- Maximum number of elements in the pagination control -->
       <div class="col-4 mb-3 text-left">
         <label for="pagination_elements"><strong><?php echo TFISH_PREFERENCE_PAGINATION_ELEMENTS; ?></strong></label>
         <input type="number" min="3" class="form-control" name="pagination_elements" id="pagination_elements" <?php if (isset($preferences['pagination_elements'])) { echo 'value="' . $preferences['pagination_elements'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Pagination elements is required.
-        </div>
       </div>
       
       <!-- Number of posts to be included in RSS feeds -->
       <div class="col-4 mb-3 text-left">
         <label for="rss_posts"><strong><?php echo TFISH_PREFERENCE_RSS_POSTS; ?></strong></label>
         <input type="number" min="3" class="form-control" name="rss_posts" id="rss_posts" <?php if (isset($preferences['rss_posts'])) { echo 'value="' . $preferences['rss_posts'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Pagination elements is required.
-        </div>
       </div>
         
     </div>
@@ -192,24 +149,18 @@
       <div class="col-4 mb-3 text-left">
         <label for="session_name"><strong><?php echo TFISH_PREFERENCE_SESSION_NAME; ?></strong></label>
         <input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . $preferences['session_name'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Session name is required.
-        </div>
       </div>
         
       <!-- Session life -->
       <div class="col-4 mb-3 text-left">
         <label for="session_life"><strong><?php echo TFISH_PREFERENCE_SESSION_LIFE; ?></strong></label>
         <input type="number" min="0" class="form-control" name="session_life" id="session_life" <?php if (isset($preferences['session_life'])) { echo 'value="' . $preferences['session_life'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Session life is required.
-        </div>
       </div>
       
       <!-- Default language -->
       <div class="col-4 mb-3 text-left">
         <label for="default_language"><strong><?php echo TFISH_PREFERENCE_DEFAULT_LANGUAGE; ?></strong></label>
-        <select class="form-control" name="default_language" id="default_language" required>
+        <select class="form-control custom-select" name="default_language" id="default_language" required>
             <?php
                 foreach ($languages as $key => $value) {
                     if (isset($preferences['default_language']) && $preferences['default_language'] === $key) {
@@ -219,10 +170,7 @@
                     }
                 }
             ?>
-            </select>
-        <div class="invalid-feedback">
-          Default language is required.
-        </div>
+        </select>
       </div>
       
     </div>
@@ -233,32 +181,25 @@
         <div class="col-4 mb-3 text-left">
         <label for="site_name"><strong><?php echo TFISH_PREFERENCE_DATE_FORMAT; ?></strong></label>
         <input type="text" class="form-control" name="date_format" id="date_format" <?php if (isset($preferences['date_format'])) { echo 'value="' . $preferences['date_format'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Date format is required.
-        </div>
       </div>
         
         <!-- Enable cache -->
         <div class="col-4 mb-3 text-left">
-        <label for="close_site"><strong><?php echo TFISH_PREFERENCE_ENABLE_CACHE; ?></strong></label>
-        <label class="radio-inline pull-left">
-                <input class="pull-left" type="radio" name="enable_cache" value="1" id="enable_cache" <?php if ($preferences['enable_cache']) { echo 'checked="checked"'; } ?>><?php echo TFISH_YES; ?>
-            </label>
-            <label for="enable_cache" class="radio-inline pull-left">
-                <input type="radio" name="enable_cache" value="0" id="enable_cache" <?php if (!$preferences['enable_cache']) { echo 'checked="checked"'; } ?>><?php echo TFISH_NO; ?>
-            </label>
-        <div class="invalid-feedback">
-          Enable cache is required.
+          <p><strong><?php echo TFISH_PREFERENCE_ENABLE_CACHE; ?></strong></p>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="enabled" name="enable_cache" value="1" class="custom-control-input" <?php if ($preferences['enable_cache']) { echo 'checked'; } ?> required>
+            <label class="custom-control-label" for="enabled"><?php echo TFISH_YES; ?></label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="disabled" name="enable_cache" value="0" class="custom-control-input" <?php if (!$preferences['enable_cache']) { echo 'checked'; } ?> required>
+            <label class="custom-control-label" for="disabled"><?php echo TFISH_NO; ?></label>
+          </div>
         </div>
-      </div>
         
         <!-- Cache life -->
         <div class="col-4 mb-3 text-left">
         <label for="cache_life"><strong><?php echo TFISH_PREFERENCE_CACHE_LIFE; ?></strong></label>
         <input type="number" min="1" class="form-control" name="cache_life" id="cache_life" <?php if (isset($preferences['cache_life'])) { echo 'value="' . $preferences['cache_life'] . '"'; } ?> required>
-        <div class="invalid-feedback">
-          Cache life is required.
-        </div>
       </div>
         
     </div>        
