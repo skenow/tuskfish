@@ -88,8 +88,8 @@ define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
 define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout");
 define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");
 define("TFISH_PREFERENCE_DEFAULT_LANGUAGE", "Default language");
-define("TFISH_PREFERENCE_DATE_FORMAT", "Date format (see "
-        . "<a href=\"http://php.net/manual/en/function.date.php\">PHP manual)</a>");
+define("TFISH_PREFERENCE_DATE_FORMAT", 
+        "<a href=\"http://php.net/manual/en/function.date.php\">Date format</a>");
 define("TFISH_PREFERENCE_PAGINATION_ELEMENTS", "Max. pagination elements");
 define("TFISH_PREFERENCE_USER_PAGINATION", "User-side pagination");
 define("TFISH_PREFERENCE_SITE_DESCRIPTION", "Site description");
