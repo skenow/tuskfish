@@ -141,7 +141,7 @@
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12" id="metaHeader">
             <h2><?php echo TFISH_META_TAGS; ?><h2>
             <hr>
         </div>
@@ -177,7 +177,8 @@
         var allowedProperties = ['teaserContainer', 'descriptionContainer', 'captionContainer',
             'creatorContainer', 'dateContainer', 'imageContainer', 'languageContainer',
             'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer',
-            'tagsContainer', 'metaContainer'];
+            'tagsContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
+            'metaDescriptionContainer'];
         $("#type").change(function () {
             $.each(allowedProperties, function (i, value) {
                 $('#' + value).show();
@@ -194,7 +195,8 @@
                 var disabledProperties = [
                     'teaserContainer', 'mediaContainer', 'creatorContainer', 'imageContainer',
                     'captionContainer', 'dateContainer', 'parentContainer', 'languageContainer',
-                    'rightsContainer', 'publisherContainer', 'metaContainer'];
+                    'rightsContainer', 'publisherContainer', 'metaHeader', 'metaTitleContainer',
+                    'seoContainer', 'metaDescriptionContainer'];
                 $.each(disabledProperties, function (i, value) {
                     $('#' + value).hide();
                 });
