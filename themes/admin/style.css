@@ -17,6 +17,28 @@ video {
 }
 
 /* Figure and figcaption styles make captions wrap to figure width */
+.page-title {
+    margin-bottom: 2rem;
+}
+
+.select_filters {
+    margin-bottom: 2rem;
+}
+
+.pagination-top {
+    margin-bottom: 1rem;
+}
+
+.add-content {
+    margin-bottom: 2rem;
+}
+
+.main-content {
+    margin-bottom: 2rem;
+}
+
+pagination-bottom {}
+
 figure {
     display: table;
 }
@@ -58,32 +80,6 @@ figcaption {
     margin: 2rem 0;
 }
 
-.select_filters {
-    margin: 2rem 0 0 0;
-}
-
-.pagination {
-    margin: 2rem 0 0 0;
-}
-
 .collection_pagination {
     margin: -1.5rem 0 1rem 0;
-}
-
-.clearfix-left {
-    display: table;
-    content: " ";
-    display: table;
-    clear:left;
-}
-
-.clearfix-right {
-    display: table;
-    content: " ";
-    display: table;
-    clear:right;
-}
-
-.add-content {
-    margin: 2rem 0 2rem 0;
 }

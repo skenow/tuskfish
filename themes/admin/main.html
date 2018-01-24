@@ -2,7 +2,7 @@
 <?php if (isset($page_title)): ?>
 <div class="row">
     <div class="mx-auto">
-        <h1><?php echo $page_title; ?></h1>
+        <h1 class="page-title"><?php echo $page_title; ?></h1>
     </div>
 </div>
 <?php endif; ?>
@@ -19,16 +19,16 @@
 <!-- Top pagination control -->
 <?php if (isset($pagination)): ?>
 <div class="row">
-    <div class="ml-auto clearfix">
+    <div class="pagination-top ml-auto clearfix">
         <?php echo $pagination; ?>
     </div>
 </div>
 <?php endif; ?>
 
-<!-- Main content -->
+<!-- Main content of page -->
 <?php if (isset($tfish_main_content)): ?>
 <div class="row">
-    <div class="mx-auto clearfix">
+    <div class="main-content col-12 clearfix">
         <?php echo $tfish_main_content; ?>
     </div>
 </div>
@@ -37,7 +37,7 @@
 <!-- Bottom pagination control -->
 <?php if (isset($pagination)): ?>
 <div class="row">
-    <div class="ml-auto clearfix">
+    <div class="ml-auto clearfix pagination-bottom">
         <?php echo $pagination; ?>
     </div>
 </div>
