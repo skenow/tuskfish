@@ -1,33 +1,36 @@
+<!-- Advanced search form -->
 <form class="form-horizontal" action="search.php" method="post" role="form" accept-charset="UTF-8">
-    <div class="form-group">
-        <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <input type="text" class="form-control" name="search_terms" id="search_terms"
-                   <?php if (isset($terms) && !empty($terms)): ?>
-                   value="<?php echo htmlspecialchars($terms, ENT_QUOTES, "UTF-8", false); ?>"
-                   <?php else: ?>
-                   placeholder="<?php echo TFISH_SEARCH_ENTER_TERMS; ?>" 
-                   <?php endif; ?>				   
-                   required>
-        </div>
+    
+    <!-- Search terms -->
+    <div class="col-md-6 offset-md-3 form-group input-group">
+      <input type="search_terms" class="form-control is-valid" name="search_terms" id="search_terms" 
+          <?php if (isset($terms) && !empty($terms)): ?>
+            value="<?php echo htmlspecialchars($terms, ENT_QUOTES, "UTF-8", false); ?>"
+          <?php else: ?>
+            placeholder="<?php echo TFISH_SEARCH_ENTER_TERMS; ?>" 
+          <?php endif; ?>				   
+      required>
     </div>
-    <div class="form-group">
-        <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <select class="form-control" name="search_type" id="search_type">
-                <option <?php if (isset($type) && $type === "AND") echo "selected"; ?> value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
-                <option <?php if (isset($type) && $type === "OR") echo "selected"; ?> value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
-                <option <?php if (isset($type) && $type === "exact") echo "selected"; ?> value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>	
-            </select>
-        </div>
+    
+    <!-- Search type -->
+    <div class="col-md-6 offset-md-3 form-group input-group">
+      <select class="form-control is-valid" name="search_type" id="search_type">
+        <option <?php if (isset($type) && $type === "AND") echo "selected"; ?> value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
+        <option <?php if (isset($type) && $type === "OR") echo "selected"; ?> value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
+        <option <?php if (isset($type) && $type === "exact") echo "selected"; ?> value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>	
+        </select>
     </div>
-    <div class="form-group">
+    
+    <!-- Submit -->
+    <div class="form-group col-md-6 offset-md-3 clearfix">
         <input type="hidden" name="op" value="search" />
-        <div class="col-lg-offset-3 col-lg-4 col-md-offset-3 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <button type="submit" class="btn btn-primary pull-left"><?php echo TFISH_SEARCH ?></button>
-        </div>
+        <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SEARCH ?></button>
     </div>
+    
 </form>
 
 <?php if (isset($search_results)): ?>
+<!-- Search results -->
 <hr>
 <div class="text-left">
     <?php if (!empty($search_results)): ?>
@@ -36,7 +39,7 @@
     <div class="clearfix">
         <h3><a href="<?php echo $object->getURL($target_file_name); ?>"><?php echo $object->icon; ?> <?php echo $object->escape('title'); ?></a></h3>
         <?php if ($object->image): ?>
-        <div class="pull-left">
+        <div class="float-left">
             <figure class="figure-left">
                 <a href="<?php echo $object->getURL($target_file_name); ?>">
                     <img class="img-responsive" src="<?php echo $object->getCachedImage(100); ?>" 
