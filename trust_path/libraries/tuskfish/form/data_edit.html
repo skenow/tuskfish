@@ -8,7 +8,7 @@
         <!-- Type -->
         <div class="col-md-6 col-lg-4 mb-3 text-left" id="typeContainer">
           <label for="type"><strong><?php echo TFISH_TYPE; ?></strong></label>
-          <select class="form-control" name="type" id="type" required>
+          <select class="form-control custom-select" name="type" id="type" required>
                 <?php
                   foreach ($content_types as $key => $type) {
                       if ($content->type === $key) {
@@ -40,7 +40,7 @@
         <!-- Tags -->
         <div class="col-md-6 col-lg-4 mb-3 text-left" id="tagsContainer">
             <label for="tags"><strong><?php echo TFISH_TAGS; ?></strong></label>
-            <select multiple size="5" class="form-control" name="tags[]" id="tags">
+            <select multiple size="5" class="form-control custom-select" name="tags[]" id="tags">
                 <?php
                     foreach ($tags as $tag_id => $tag_title) {
                         if (isset($content->tags) && in_array($tag_id, $content->tags)) {
@@ -86,7 +86,7 @@
         <!-- Parent -->
         <div class="col-12 mb-3 text-left" id="parentContainer">
             <label for="publisher"><strong><?php echo TFISH_PARENT; ?></strong></label>
-            <select class="form-control" name="parent" id="parent" required>
+            <select class="form-control custom-select" name="parent" id="parent" required>
             <?php foreach ($parent_select_options as $key => $option): ?>
                 <?php if ($key === $content->id): ?>
                     <option value="<?php echo $key; ?>" disabled><?php echo $option; ?></option>
@@ -141,7 +141,7 @@
         <!-- Rights -->
         <div class="col-md-6 mb-3 text-left" id="rightsContainer">
             <label for="rights"><strong><?php echo TFISH_RIGHTS; ?></strong></label>
-            <select class="form-control" name="rights" id="rights" required>
+            <select class="form-control custom-select" name="rights" id="rights" required>
                 <?php
                     foreach ($rights as $key => $right) {
                         if ($content->rights === $key) {
@@ -157,7 +157,7 @@
         <!-- Language -->
         <div class="col-md-6 mb-3 text-left" id="languageContainer">
             <label for="language"><strong><?php echo TFISH_LANGUAGE; ?></strong></label>
-                <select class="form-control" name="language" id="language" required>
+                <select class="form-control custom-select" name="language" id="language" required>
                     <?php
                         foreach ($languages as $key => $value) {
                             if (isset($content->language) && $content->language === $key) {
