@@ -80,18 +80,29 @@ if (in_array($op, array('submit', false))) {
                 $password_hash = '';
                 $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 
                         100000, TFISH_SITE_SALT, $user['user_salt']);
+                $tfish_template->back_url = 'admin.php';
+                    $tfish_template->form = TFISH_FORM_PATH . "response.html";
 
                 if ($password_hash) {
                     $result = TfishDatabase::update('user', $user_id, 
                             array('password_hash' => $password_hash));
                     
+                    // Display response.
+                    $tfish_template->back_url = 'admin.php';
+                    $tfish_template->form = TFISH_FORM_PATH . "response.html";
+                    
                     if ($result) {
-                        $tfish_template->tfish_main_content = '<p>' 
-                                . TFISH_PASSWORD_CHANGED_SUCCESSFULLY . '</p>';
+                        $tfish_template->page_title = TFISH_SUCCESS;
+                        $tfish_template->alert_class = 'alert-success';
+                        $tfish_template->message = TFISH_PASSWORD_CHANGED_SUCCESSFULLY;
+                        
                     } else {
-                        $tfish_template->tfish_main_content = '<p>' 
-                                . TFISH_PASSWORD_CHANGE_FAILED . '</p>';
+                        $tfish_template->page_title = TFISH_FAILED;
+                        $tfish_template->alert_class = 'alert-danger';
+                        $tfish_template->message = TFISH_PASSWORD_CHANGE_FAILED;
                     }
+                    
+                    $tfish_template->tfish_main_content = $tfish_template->render('form');
                 }
             }
             break;
