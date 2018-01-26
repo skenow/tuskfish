@@ -1,24 +1,35 @@
-<form class="form-horizontal" action="login.php" method="post" role="form">
+<!-- Display the two-factor authentication form -->
+
+<?php if (!TfishSession::isAdmin()): ?>
+
+<form class="form-horizontal" action="login.php" method="post" role="form" accept-charset="UTF-8">
     
-    <div class="form-group has-success has-feedback">
-        <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <input type="password" class="form-control" name="password" id="password" placeholder="<?php echo TFISH_PASSWORD; ?>" required>
-            <span class="fas fa-user form-control-feedback"></span>
+    <!-- Password -->
+    <div class="col-md-4 offset-md-4 form-group input-group">
+        <input type="password" class="form-control" name="password" id="password" placeholder="<?php echo TFISH_PASSWORD; ?>" required>
+        <div class="input-group-append">
+            <span class="input-group-text" id="password-addon"><i class="fas fa-lock"></i></span>
         </div>
     </div>
     
-    <div class="form-group has-success has-feedback">
-        <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <input type="password" class="form-control" name="yubikey_otp" id="yubikey_otp" placeholder="<?php echo TFISH_YUBIKEY; ?>" required>
-            <span class="fas fa-terminal form-control-feedback"></span>
+    <!-- Yubikey -->
+    <div class="col-md-4 offset-md-4 form-group input-group">
+        <input type="password" class="form-control" name="yubikey_otp" id="yubikey_otp" placeholder="<?php echo TFISH_YUBIKEY; ?>" required>
+        <div class="input-group-append">
+            <span class="input-group-text" id="password-addon"><i class="fas fa-key"></i></span>
         </div>
     </div>
 
-    <div class="form-group">
+    <!-- Submit -->
+    <div class="form-group has-success has-feedback col-md-4 offset-md-4">
         <input type="hidden" name="op" value="login" />
-        <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
-            <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SUBMIT ?></button>
-        </div>
+        <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SUBMIT ?></button>
     </div>
     
 </form>
+
+<?php else: ?>
+
+<p><?php echo TFISH_YOU_ARE_ALREADY_LOGGED_IN . ' <a href="' . TFISH_URL . 'admin/login.php?op=logout">' . TFISH_LOGOUT . '.</a>'; ?></p>
+
+<?php endif; ?>
