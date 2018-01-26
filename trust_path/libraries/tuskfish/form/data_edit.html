@@ -100,15 +100,24 @@
         </div>
 
         <!-- Image -->
-        <div class="col-md-6 mb-3 text-left" id="imageContainer">
-            <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-            <?php if (isset($content->image) && !empty($content->image)): ?>
+        <?php if (isset($content->image) && !empty($content->image)): ?>
+            <div class="col-md-5 mb-3 text-left" id="imageContainer">
+                <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
                 <input id="image" name="image" type="file" data-preview-file-type="image" >
-                <div class="checkbox"><label><input id="deleteImage" name="deleteImage" type="checkbox" value="1"><b><?php echo TFISH_DELETE_IMAGE; ?></b></label></div>
-            <?php else: ?>
+            </div>
+            <div class="col-md-1 mb-3 text-left">
+                <p><strong><?php echo TFISH_DELETE_IMAGE; ?></strong></p>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="deleteImage" value="1">
+                    <label class="custom-control-label" for="deleteImage"></label>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="col-md-6 mb-3 text-left" id="imageContainer">
+                <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
                 <input id="image" name="image" type="file" data-preview-file-type="image" >
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
         <script>$("#image").fileinput({
                 'showUpload': false,
                 'previewFileType': 'image',
@@ -117,15 +126,24 @@
         </script>
 
         <!-- Media -->
-        <div class="col-md-6 mb-3 text-left" id="mediaContainer">
-            <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
-            <?php if (isset($content->media) && !empty($content->media)): ?>
+        <?php if (isset($content->media) && !empty($content->media)): ?>
+            <div class="col-md-5 mb-3 text-left" id="mediaContainer">
+                <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
                 <input id="media" name="media" type="file" data-preview-file-type="text" >
-                <div class="checkbox"><label><input id="deleteMedia" name="deleteMedia" type="checkbox" value="1"><b><?php echo TFISH_DELETE_MEDIA; ?></b></label></div>
+            </div>
+            <div class="col-md-1 mb-3 text-left">
+                <p><strong><?php echo TFISH_DELETE_MEDIA; ?></strong></p>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="deleteMedia" value="1">
+                    <label class="custom-control-label" for="deleteMedia"></label>
+                </div>
+            </div>
             <?php else: ?>
-                <input id="media" name="media" type="file">
+                <div class="col-md-6 mb-3 text-left" id="mediaContainer">
+                    <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
+                    <input id="media" name="media" type="file">
+                </div>
             <?php endif; ?>
-        </div>
         <script>$("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': 'any',
