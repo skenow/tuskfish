@@ -23,7 +23,7 @@
 
 <!-- Image with link to download media attachment -->
 <?php if ($content->image): ?>
-<div class="pull-right figure-right">
+<div class="float-right figure-right">
     <figure>
         <?php if ($content->media): ?>
         <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
@@ -76,7 +76,7 @@
         <h3><?php echo TFISH_RELATED; ?></h3>
         <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
         <?php if ($parent->image): ?>
-        <div class="pull-left">
+        <div class="float-left">
             <figure class="figure-left">
                 <a href="<?php echo $parent->getURL($target_file_name); ?>">
                     <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
@@ -97,7 +97,7 @@
 <!-- Display child works -->    
 <?php if (!empty($first_children)): ?>
 <?php if (isset($collection_pagination)): ?>
-<div class="pull-right collection_pagination clearfix">
+<div class="float-right collection_pagination clearfix">
     <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>
@@ -109,7 +109,7 @@
     <div class="clearfix">
         <h4><a href="<?php echo $child->getURL($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escape('title'); ?></a></h4>
         <?php if ($child->image): ?>
-        <div class="pull-left">
+        <div class="float-left">
             <figure class="figure-left">
                 <a href="<?php echo $child->getURL($target_file_name); ?>">
                     <img class="img-responsive" src="<?php echo $child->getCachedImage(100); ?>" 
@@ -129,7 +129,7 @@
 
 <!-- Intra-collection pagination -->
 <?php if (isset($collection_pagination)): ?>
-<div class="pull-right collection_pagination clearfix">
+<div class="float-right collection_pagination clearfix">
     <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>
