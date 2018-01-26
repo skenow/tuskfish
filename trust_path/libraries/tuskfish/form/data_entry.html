@@ -34,7 +34,7 @@
         <!-- Tags -->
         <div class="col-md-6 col-lg-4 mb-3 text-left" id="tagsContainer">
             <label for="tags"><strong><?php echo TFISH_TAGS; ?></strong></label>
-            <select multiple size="5" class="form-control" name="tags[]" id="tags">
+            <select multiple class="form-control custom-select" size="5"  name="tags[]" id="tags">
                 <?php
                     foreach ($tags as $tag_id => $tag_title) {
                         echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
