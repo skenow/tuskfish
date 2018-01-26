@@ -10,5 +10,5 @@
  * @package     core
  */
 
-$tfish_version = 'Tuskfish 1.0 Release Candidate 3';
-$tfish_released = '10 January 2018';
+$tfish_version = 'Tuskfish 1.0 Release Candidate 4';
+$tfish_released = '26 January 2018';
