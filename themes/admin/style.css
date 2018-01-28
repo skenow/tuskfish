@@ -46,7 +46,6 @@ figure img {
 figcaption {
     display: table-caption;
     caption-side: bottom;
-    margin-bottom: 1rem;
 }​
 
 .figure-centre {
@@ -54,11 +53,11 @@ figcaption {
 }
 
 .figure-left {
-    margin: 0 2rem 0.5rem 0;
+    margin: 0 1rem 0.2rem 0;
 }
 
 .figure-right {
-    margin: 0 0 0.5rem 2rem;
+    margin: 0 0 0.2rem 1rem;
 }
 
 .rights {
