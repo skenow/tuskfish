@@ -1,43 +1,41 @@
 <div class="form-buttons clearfix">
-    <form>
-        <input type="hidden" name="op" value="add">
-        <button class="btn btn-primary float-left add-content" type="submit" formaction="admin.php"><?php echo TFISH_ADD_CONTENT; ?></button>
-    </form>
+  <form>
+    <input type="hidden" name="op" value="add">
+    <button class="btn btn-primary float-left add-content" type="submit" formaction="admin.php"><?php echo TFISH_ADD_CONTENT; ?></button>
+  </form>
 </div>
 
 <div class="clearfix">
 <table class="table table-bordered table-striped table-hover text-left">
-    <thead>
-        <tr>
-            <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_ID; ?></th>
-            <th><?php echo TFISH_TYPE; ?></th>
-            <th><?php echo TFISH_TITLE; ?></th>
-            <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_SUBMISSION_TIME; ?></th>
-            <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_COUNTER; ?></th>
-            <th class="text-center"><?php echo TFISH_ONLINE; ?></th>
-            <th colspan="2" class="text-center"><?php echo TFISH_ACTION; ?></th>
-        </tr>
+  <thead>
+    <tr>
+      <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_ID; ?></th>
+      <th><?php echo TFISH_TYPE; ?></th>
+      <th><?php echo TFISH_TITLE; ?></th>
+      <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_SUBMISSION_TIME; ?></th>
+      <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_COUNTER; ?></th>
+      <th class="text-center"><?php echo TFISH_ONLINE; ?></th>
+      <th colspan="2" class="text-center"><?php echo TFISH_ACTION; ?></th>
+    </tr>
     </thead>
-    <tbody>
-        <?php foreach($rows as &$row) { ?>
-        <tr>
-            <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['id']); ?></td>
-            <td><?php echo TfishFilter::escape($typelist[$row['type']]); ?></td>
-            <td><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=view&amp;id=' . TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['title']); ?></a></td>
-            <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['submission_time']); ?></td>
-            <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['counter']); ?></td>
-            <?php if ($row['online']): ?>
-            <td class="text-center"><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-check"></i></a></td>
-            <?php else: ?>
-            <td class="text-center"><a class="text-danger" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-times"></i></a></td>
-            <?php endif; ?>
-            <td class="text-center"><a href="admin.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
-                    <i class="fas fa-edit"></i></a></td>
-            <td class="text-center"><a href="admin.php?op=confirm&amp;id=<?php echo TfishFilter::escape($row['id']); ?>">
-                    <i class="fas fa-trash-alt"></i></a></td>
-            <?php unset($row); ?>
-        </tr>
-        <?php } ?>
-    </tbody>
+  <tbody>
+  <?php foreach($rows as &$row): ?>
+    <tr>
+      <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['id']); ?></td>
+      <td><?php echo TfishFilter::escape($typelist[$row['type']]); ?></td>
+      <td><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=view&amp;id=' . TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['title']); ?></a></td>
+      <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['submission_time']); ?></td>
+      <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TfishFilter::escape($row['counter']); ?></td>
+      <?php if ($row['online']): ?>
+      <td class="text-center"><a class="text-success" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-check"></i></a></td>
+      <?php else: ?>
+      <td class="text-center"><a class="text-danger" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-times"></i></a></td>
+      <?php endif; ?>
+      <td class="text-center"><a href="admin.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-edit"></i></a></td>
+      <td class="text-center"><a href="admin.php?op=confirm&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-trash-alt"></i></a></td>
+      <?php unset($row); ?>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
 </table>
 </div>

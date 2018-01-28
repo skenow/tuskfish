@@ -54,8 +54,9 @@
 
   <body>
 
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escape('site_name'); ?></a>
+      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escape('site_name'); ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -85,19 +86,17 @@
 
       <div class="starter-template">
 
-        <!-- Main page -->
-        <div>
-            <?php echo $tfish_template->render('main'); ?>
-        </div>
-        
+      <!-- Main page -->
+      <?php echo $tfish_template->render('main'); ?>
+                
       </div>
         
       <!-- Footer -->
-      <div>
-          <footer>
-              <hr>
-              <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
-          </footer>
+      <div class="row">
+        <hr class="col-12">
+        <footer class="clearfix">
+          <p class="text-left">Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
+        </footer>
       </div>
 
     </main><!-- /.container -->
