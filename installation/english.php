@@ -11,24 +11,11 @@
  */
 define("TFISH_CMS", "Tuskfish CMS");
 define("TFISH_INSTALLATION_TUSKFISH", "Installation");
-define("TFISH_INSTALLATION_PLEASE_NOTE", "Please note");
-define("TFISH_INSTALLATION_SECURITY", "<p>The security of your website hinges on the following 
-	things:</p>
-	<ol>
-	<li>Using a <b>strong</b> password (> 14 characters, at least one upper and lower case letter,
-	number and symbol, no names or words that can be found in <em>any</em> dictionary).</li>
-	<li>Putting your trust_path folder <b>outside the web root</b> (eg. outside of public_html), so
-	that it is not accessible via browser. You can rename it if you want.</li>
-	</ol>
-	<p>Further instructions on securing your site will be displayed when installation is complete.</p>");
-
+define("TFISH_INSTALLATION_GUIDE", "Please refer to the <a href=\"https://tuskfish.biz/?id=17\""
+        . "target=\"_blank\">Installation Guide</a> for detailed instructions.");
 define("TFISH_INSTALLATION_DESCRIPTION", "Script to install the Tuskfish CMS. Delete from server "
         . "after use.");
-define("TFISH_INSTALLATION_ENTER_DB_NAME", "Please enter a name for your database and the "
-        . "administrator's email/password below.");
-define("TFISH_INSTALLATION_DB_NAME", "Database name");
-define("TFISH_INSTALLATION_ALNUMUNDER", "Alphanumeric and underscore characters only");
-define("TFISH_INSTALLATION_COMPLETE_FORM", "Please enter a database name and resubmit the form.");
+define("TFISH_INSTALLATION_DB_NAME", "Database name (no spaces or symbols)");
 define("TFISH_INSTALLATION_DATABASE_SUCCESS", "Database successfully created.");
 define("TFISH_INSTALLATION_DATABASE_FAILED", "Failed to create database. Please check the script "
         . "has write permission to /your_trust_path/database");
@@ -38,27 +25,26 @@ define("TFISH_INSTALLATION_SECURE_YOUR_SITE", "Secure your site");
 define("TFISH_INSTALLATION_SECURITY_INSTRUCTIONS", "<ul>"
         . "<li><strong>Delete</strong> the <strong>/installation</strong> directory.</li>"
         . "<li>Set the file permissions for <strong>/mainfile.php</strong> to <strong>0400</strong>.</li>"
-        . "<li>Set the file permissions for trust_path/database/<strong>yourdatabase.db</strong> to "
+        . "<li>Set the file permissions for your_trust_path/database/<strong>yourdatabase.db</strong> to "
         . "<strong>0600</strong>.</li>"
-        . "<li>Set the file permissions for trust_path/configuration/<strong>config.php</strong> to "
+        . "<li>Set the file permissions for you_trust_path/configuration/<strong>config.php</strong> to "
         . "<strong>0400</strong>.</li>"
         . "<li>Please note that you may need to use the cPanel File Manager or shell access to set "
         . "file permissions to these levels.</li>"
         . "</ul>"
         . "<p>Please <strong><a href='../admin/login.php'>login</a></strong> and configure your "
-        . "site preferences. The <strong><a href='https://tuskfish.biz/?id=15' "
+        . "site preferences. The <strong><a href='https://tuskfish.biz/?id=41' "
         . "target='_blank'>Tuskfish User Manual</a></strong> is available to help you. </p>");
 define("TFISH_INSTALLATION_DIRECTORY_DELETED", "Successfully removed the installation directory.");
 define("TFISH_INSTALLATION_REMOVE_DIRECTORY", "Removal of the installation directory failed. Please "
         . "delete it manually as it can be used to overwrite your site.");
 define("TFISH_INSTALLATION_ADMIN_EMAIL", "Admin email address");
 define("TFISH_INSTALLATION_SOME_EMAIL", "youremail@somedomain.com");
-define("TFISH_INSTALLATION_ADMIN_PASSWORD", "Admin password");
+define("TFISH_INSTALLATION_ADMIN_PASSWORD", "Admin password (minimum 15 characters)");
 define("TFISH_INSTALLATION_USER_SALT", "User password salt");
 define("TFISH_INSTALLATION_SITE_SALT", "Site password salt");
 define("TFISH_INSTALLATION_GRC", "Get one from: https://grc.com/passwords/");
 define("TFISH_INSTALLATION_STRONG_PASSWORD", "Password is strong.");
-define("TFISH_INSTALLATION_PASSWORD_REQUIREMENTS", "> 14 characters: Letters, numbers and symbols");
 define("TFISH_INSTALLATION_URL", "Domain with trailing slash");
 define("TFISH_INSTALLATION_ROOT_PATH", "File path to web root");
 define("TFISH_INSTALLATION_TRUST_PATH", "File path to trust_path");
@@ -85,3 +71,4 @@ define("TFISH_INSTALLATION_BAD_EMAIL", "Bad email address.");
 // Constants used in theme, to prevent errors.
 define("TFISH_SEARCH", "Search");
 define("TFISH_RSS", "RSS");
+define("TFISH_KEYWORDS", "Keywords");

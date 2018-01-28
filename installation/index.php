@@ -31,13 +31,29 @@ include_once "./english.php";
 
 // Set theme.
 $tfish_template = new TfishTemplate();
-$tfish_template->setTheme('admin');
+$tfish_template->setTheme('default');
 
 // TfishPreference is not available yet, so just set up an analogue for use with installation.
 /** @internal */
 class TfishPreference
 {
-    function __construct() {}    
+    function __construct() {}
+    
+    public function escape(string $property)
+    {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            switch ($clean_property) {
+                default:
+                    return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8',
+                            false);
+                    break;
+            }
+        } else {
+            return null;
+        }
+    }
 }
 
 $tfish_preference = new TfishPreference();
@@ -113,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Report errors.
     if (!empty($tfish_content['output'])) {
-        $tfish_content['output'] = '<h1>' . TFISH_INSTALLATION_WARNING . '</h1>'
+        $tfish_content['output'] = '<h1 class="text-center">' . TFISH_INSTALLATION_WARNING . '</h1>'
                 . $tfish_content['output'];
         $tfish_template->output = $tfish_content['output'];
         $tfish_template->form = "db_credentials_form.html";
@@ -274,6 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Report on status of database creation.
         if ($db_path && $query) {
+            $tfish_template->page_title = "Installation complete";
             $tfish_content['output'] .= '<h3>' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3>';
             $tfish_content['output'] .= TFISH_INSTALLATION_SECURITY_INSTRUCTIONS;
             $tfish_template->output = $tfish_content['output'];
