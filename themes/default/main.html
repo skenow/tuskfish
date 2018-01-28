@@ -1,8 +1,10 @@
 <!-- Page title -->
 <?php if (isset($page_title)): ?>
 <div class="row">
-  <div class="mx-auto">
-    <h1 class="page-title mx-auto"><?php echo $page_title; ?></h1>
+  <div class="col-12">
+    <div class="text-center">
+      <h1 class="page-title"><?php echo $page_title; ?></h1>
+    </div>
   </div>
 </div>
 <?php endif; ?>
@@ -11,7 +13,9 @@
 <?php if (isset($pagination)): ?>
 <div class="row">
   <div class="col-12">
-    <div class="pagination-top clearfix float-right"><?php echo $pagination; ?></div>
+    <div class="pagination-top clearfix float-right">
+      <?php echo $pagination; ?>
+    </div>
   </div>
 </div>
 <?php endif; ?>
@@ -19,8 +23,10 @@
 <!-- Tag select control -->
 <?php if (isset($select_filters_form)): ?>
 <div class="row">
-  <div class="select_filters mx-auto clearfix">
-    <?php echo $select_filters_form; ?>
+  <div class="col-12">
+    <div class="select_filters clearfix">
+      <?php echo $select_filters_form; ?>
+    </div>
   </div>
 </div>
 <?php endif; ?>
