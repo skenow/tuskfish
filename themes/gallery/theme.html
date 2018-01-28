@@ -34,7 +34,7 @@
   <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escape('site_name'); ?></a>
+      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escape('site_name'); ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -42,18 +42,16 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <?php if (TfishSession::isAdmin()): ?>
-            <li class="nav-item active"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
-            <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
-            <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
+          <li class="nav-item active"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
+          <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
+          <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
           <?php endif; ?>
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo TFISH_RSS_URL; ?>"><i class="fas fa-rss"></i></a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_RSS_URL; ?>"><i class="fas fa-rss"></i></a></li>
         </ul>
-          <form class="form-inline my-2 my-lg-0" method="post" accept-charset="UTF-8" action="<?php echo TFISH_URL . 'search.php'; ?>">
-              <input class="form-control mr-sm-2" id="search_terms" name="search_terms" type="text" placeholder="<?php echo TFISH_KEYWORDS; ?>" aria-label="<?php echo TFISH_KEYWORDS; ?>">
-              <input type="hidden" name="op" value="search" />
-              <input type="hidden" name="search_type" value="AND" />
+        <form class="form-inline my-2 my-lg-0" method="post" accept-charset="UTF-8" action="<?php echo TFISH_URL . 'search.php'; ?>">
+          <input class="form-control mr-sm-2" id="search_terms" name="search_terms" type="text" placeholder="<?php echo TFISH_KEYWORDS; ?>" aria-label="<?php echo TFISH_KEYWORDS; ?>">
+          <input type="hidden" name="op" value="search" />
+          <input type="hidden" name="search_type" value="AND" />
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><?php echo TFISH_SEARCH; ?></button>
         </form>
       </div>
@@ -64,18 +62,18 @@
       <div class="starter-template">
 
         <!-- Main page -->
-        <div>
-            <?php echo $tfish_template->render('main'); ?>
+        <?php echo $tfish_template->render('main'); ?>
+        
+        <!-- Footer -->
+        <div class="row">
+          <div class="col-12">
+            <hr>
+            <footer class="clearfix">
+              <p class="text-left">Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
+            </footer>
+          </div>
         </div>
         
-      </div>
-        
-      <!-- Footer -->
-      <div>
-          <footer>
-              <hr>
-              <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
-          </footer>
       </div>
 
     </main><!-- /.container -->

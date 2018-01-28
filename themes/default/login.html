@@ -4,27 +4,28 @@
 
 <form action="login.php" method="post" role="form" accept-charset="UTF-8">
     
-    <!--- Email -->
-    <div class="col-md-4 offset-md-4 form-group input-group">
-        <input type="email" class="form-control is-valid" name="email" id="email" placeholder="<?php echo TFISH_EMAIL; ?>" required>
-        <div class="input-group-append">
-            <span class="input-group-text" id="email-addon"><i class="fas fa-at"></i></span>
-        </div>
+  <!--- Email -->
+  <div class="col-md-4 offset-md-4 form-group input-group">
+    <input type="email" class="form-control is-valid" name="email" id="email" placeholder="<?php echo TFISH_EMAIL; ?>" required>
+    <div class="input-group-append">
+      <span class="input-group-text" id="email-addon"><i class="fas fa-at"></i></span>
     </div>
+  </div>
+
+  <!-- Password -->
+  <div class="col-md-4 offset-md-4 form-group input-group">
+    <input type="password" class="form-control is-valid" name="password" id="password" placeholder="<?php echo TFISH_PASSWORD; ?>" required>
+    <div class="input-group-append">
+      <span class="input-group-text" id="password-addon"><i class="fas fa-lock"></i></span>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="col-md-4 offset-md-4 form-group input-group">
+    <input type="hidden" name="op" value="login" />
+    <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SUBMIT ?></button>
+  </div>
     
-    <!-- Password -->
-    <div class="col-md-4 offset-md-4 form-group input-group">
-        <input type="password" class="form-control is-valid" name="password" id="password" placeholder="<?php echo TFISH_PASSWORD; ?>" required>
-        <div class="input-group-append">
-            <span class="input-group-text" id="password-addon"><i class="fas fa-lock"></i></span>
-        </div>
-    </div>
-    
-    <!-- Submit -->
-    <div class="form-group col-md-4 offset-md-4">
-        <input type="hidden" name="op" value="login" />
-        <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SUBMIT ?></button>
-    </div>
 </form>
 
 <?php else: ?>
