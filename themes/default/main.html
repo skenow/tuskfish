@@ -2,7 +2,7 @@
 <?php if (isset($page_title)): ?>
 <div class="row">
   <div class="mx-auto">
-    <h1 class="page-title"><?php echo $page_title; ?></h1>
+    <h1 class="page-title mx-auto"><?php echo $page_title; ?></h1>
   </div>
 </div>
 <?php endif; ?>
@@ -10,8 +10,8 @@
 <!-- Top pagination control -->
 <?php if (isset($pagination)): ?>
 <div class="row">
-  <div class="pagination-top ml-auto clearfix">
-    <?php echo $pagination; ?>
+  <div class="col-12">
+    <div class="pagination-top clearfix float-right"><?php echo $pagination; ?></div>
   </div>
 </div>
 <?php endif; ?>
@@ -37,8 +37,10 @@
 <!-- Bottom pagination control -->
 <?php if (isset($pagination)): ?>
 <div class="row">
-  <div class="pagination-bottom ml-auto clearfix">
-    <?php echo $pagination; ?>
+  <div class="col-12">
+    <div class="pagination-bottom float-right clearfix">
+      <?php echo $pagination; ?>
+    </div>
   </div>
 </div>
 <?php endif; ?>
