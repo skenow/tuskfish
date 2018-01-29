@@ -3,7 +3,9 @@
 </div>
 
 <div class="col-12">
-  <div>
-    <button name="op" value="" type="submit" class="btn btn-primary" onclick="history.go(-2)"><?php echo TFISH_BACK; ?></button>
-  </div>
+  <form class="form-horizontal" method="post" role="form" action="<?php echo $back_url; ?>">
+    <div>
+      <button type="submit" class="btn btn-primary"><?php echo TFISH_BACK; ?></button>
+    </div>
+  </form>
 </div>
