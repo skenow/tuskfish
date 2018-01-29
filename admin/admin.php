@@ -289,6 +289,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
                 $tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
+                $tfish_template->id = $content_object->id;
             } else {
                 $tfish_template->page_title = TFISH_FAILED;
                 $tfish_template->alert_class = 'alert-danger';
@@ -296,7 +297,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             }
             
             $tfish_template->back_url = 'admin.php';
-            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->form = TFISH_FORM_PATH . "response_edit.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 

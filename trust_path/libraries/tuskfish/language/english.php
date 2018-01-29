@@ -307,3 +307,6 @@ define("TFISH_CACHE_FLUSH_FAILED", "Cache flush failed.");
 
 // RC 1.
 define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
+
+// RC 4.
+define("TFISH_VIEW", "View");
