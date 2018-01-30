@@ -86,16 +86,25 @@
         <!-- Image -->
         <div class="col-md-6 mb-3 text-left" id="imageContainer">
             <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-            <input id="image" name="image" type="file" data-preview-file-type="text" >
+            <input id="image" name="image" type="file" data-preview-file-type="text">
         </div>
-        <script>$("#image").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
+        <script>$("#image").fileinput({
+            'showUpload': false,
+            'previewFileType': "any",
+            'allowedFileExtensions': ["gif", "jpg", "png"]});
+        </script>
 
         <!-- Media -->
         <div class="col-md-6 mb-3 text-left" id="mediaContainer">
             <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
             <input id="media" name="media" type="file" data-preview-file-type="text" >
         </div>
-        <script>$("#media").fileinput({'showUpload': false, 'previewFileType': 'any'});</script>
+        <script>$("#media").fileinput({
+            'showUpload': false,
+            'previewFileType': 'any',
+            'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
+                "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"]});
+        </script>
 
         <!-- Caption -->
         <div class="col-md-6 mb-3 text-left" id="captionContainer">

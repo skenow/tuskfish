@@ -752,11 +752,32 @@ class TfishContentObject extends TfishAncestralObject
                         trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                     }
                 }
+                
+                // Check image file is a permitted mimetype.
+                if ($clean_property === "image") {
+                    $mimetype_whitelist = TfishFileHandler::allowedImageMimetypes();
+                    $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
+                    if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
+                        trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+                    }
+                }
+                
+                // Check media file is a permitted mimetype.
+                if ($clean_property === "media") {
+                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                    $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
+                    if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
+                        trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+                    }
+                }
 
                 if ($clean_property === "format") {
                     switch ($this->__data['type']) {
                         case "TfishAudio":
                             $mimetype_whitelist = TfishFileHandler::allowedAudioMimetypes();
+                            break;
+                        case "TfishImage":
+                            $mimetype_whitelist = TfishFileHandler::allowedImageMimetypes();
                             break;
                         case "TfishVideo":
                             $mimetype_whitelist = TfishFileHandler::allowedVideoMimetypes();

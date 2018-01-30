@@ -119,10 +119,10 @@
             </div>
         <?php endif; ?>
         <script>$("#image").fileinput({
-                'showUpload': false,
-                'previewFileType': 'image',
-                'initialCaption': '<?php if (isset($content->image)) echo $content->image; ?>',
-            });
+            'showUpload': false,
+            'previewFileType': "any",
+            'allowedFileExtensions': ["gif", "jpg", "png"],
+            'initialCaption': '<?php if (isset($content->image)) echo $content->image; ?>'});
         </script>
 
         <!-- Media -->
@@ -144,11 +144,13 @@
                     <input id="media" name="media" type="file">
                 </div>
             <?php endif; ?>
-        <script>$("#media").fileinput({
+            <script>$("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': 'any',
+                'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
+                    "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"],
                 'initialCaption': '<?php if (isset($content->media)) echo $content->media; ?>'});
-        </script>
+            </script>
         
         <!-- Caption -->
         <div class="col-md-6 mb-3 text-left" id="captionContainer">

@@ -49,6 +49,20 @@ class TfishFileHandler
             "wav" => "audio/x-wav"
         );
     }
+    
+    /**
+     * Returns an array of image mimetypes that are permitted for content objects.
+     * 
+     * @return array Array of permitted image mimetypes in file extension => mimetype format.
+     */
+    public static function allowedImageMimetypes()
+    {
+        return array(
+            "gif" => "image/gif",
+            "jpg" => "image/jpeg",
+            "png" => "image/png"
+        );
+    }            
 
     /**
      * Returns an array of video mimetypes that are permitted for upload.
