@@ -533,7 +533,7 @@ class TfishContentObject extends TfishAncestralObject
             if ($clean_filename) {
                 $this->__set('media', $clean_filename);
                 $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+                $extension = mb_strtolower(pathinfo($clean_filename, PATHINFO_EXTENSION), 'UTF-8');
                 $this->__set('format', $mimetype_whitelist[$extension]);
                 $this->__set('file_size', $_FILES['media']['size']);
             }

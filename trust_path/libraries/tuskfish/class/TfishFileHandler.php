@@ -476,8 +476,12 @@ class TfishFileHandler
             return self::_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
         }
         
-        trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
-        
+        if (!$clean_extension) {
+            trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_NOTICE);
+        } else {
+            trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_NOTICE);
+        }
+
         return false;
     }
 
