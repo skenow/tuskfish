@@ -90,8 +90,9 @@
         </div>
         <script>$("#image").fileinput({
             'showUpload': false,
-            'previewFileType': "any",
-            'allowedFileExtensions': ["gif", "jpg", "png"]});
+            'allowedFileExtensions': ["gif", "jpg", "png"],
+            'previewFileType': ["image"],
+            'theme': "fa"});
         </script>
 
         <!-- Media -->
@@ -101,9 +102,10 @@
         </div>
         <script>$("#media").fileinput({
             'showUpload': false,
-            'previewFileType': 'any',
+            'previewFileType': ['any'],
             'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
-                "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"]});
+                "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"],
+            'theme': "fa"});
         </script>
 
         <!-- Caption -->
