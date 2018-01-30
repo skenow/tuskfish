@@ -65,6 +65,7 @@ $tfish_preference->generator = 'Tuskfish CMS';
 $tfish_preference->seo = '';
 $tfish_preference->robots = 'noindex,nofollow';
 $tfish_preference->pagination_elements = '5';
+$tfish_preference->enable_cache = 0;
 $tfish_template->tfish_url = getUrl();
 
 // Initialise default content variable.
