@@ -15,9 +15,9 @@
 
     $.fn.fileinputThemes.fa = {
         fileActionSettings: {
-            removeIcon: '<i class="fas fa-trash"></i>',
+            removeIcon: '<i class="fas fa-trash-alt"></i>',
             uploadIcon: '<i class="fas fa-upload"></i>',
-            uploadRetryIcon: '<i class="fas fa-repeat"></i>',
+            uploadRetryIcon: '<i class="fas fa-redo"></i>',
             zoomIcon: '<i class="fas fa-search-plus"></i>',
             dragIcon: '<i class="fas fa-bars"></i>',
             indicatorNew: '<i class="fas fa-plus-circle text-warning"></i>',
@@ -38,7 +38,7 @@
         },
         previewFileIcon: '<i class="fas fa-file"></i>',
         browseIcon: '<i class="fas fa-folder-open"></i>',
-        removeIcon: '<i class="fas fa-trash"></i>',
+        removeIcon: '<i class="fas fa-trash-alt"></i>',
         cancelIcon: '<i class="fas fa-ban"></i>',
         uploadIcon: '<i class="fas fa-upload"></i>',
         msgValidationErrorIcon: '<i class="fas fa-exclamation-circle"></i> '
