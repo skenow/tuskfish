@@ -32,9 +32,10 @@
     <script>tinymce.init({
             selector: "textarea",
             entity_encoding: "raw",
-            plugins: "code,anchor,link,charmap,codesample,image,media,emoticons,visualblocks,table,hr,wordcount,lists,autosave,fullscreen",
+            plugins: "anchor,autosave,charmap,code,codesample,colorpicker,emoticons,hr,image,link,lists,media,paste,table,textcolor,wordcount",
             menubar: "view,insert,table",
-            toolbar: "code | undo redo | styleselect | bold italic removeformat | bullist numlist | link unlink | image media codesample | alignleft aligncenter alignright | table | superscript subscript charmap hr | emoticons visualblocks fullscreen",
+            toolbar: "code | cut copy paste | styleselect | bold italic underline superscript subscript removeformat | link unlink anchor | bullist numlist blockquote | alignleft aligncenter alignright alignjustify | forecolor | image media charmap hr emoticons | table | codesample | undo redo",
+            pasteastext: true,
             image_caption: true
         });
     </script>
