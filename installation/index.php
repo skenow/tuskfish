@@ -289,8 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Report on status of database creation.
         if ($db_path && $query) {
-            $tfish_template->page_title = "Installation complete";
-            $tfish_content['output'] .= '<h3>' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3>';
+            $tfish_template->page_title = '<i class="fas fa-check"></i> ' . TFISH_INSTALLATION_COMPLETE;
+            $tfish_content['output'] .= '<h3><i class="fas fa-lock"></i> ' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3>';
             $tfish_content['output'] .= TFISH_INSTALLATION_SECURITY_INSTRUCTIONS;
             $tfish_template->output = $tfish_content['output'];
             $tfish_template->form = "success.html";
