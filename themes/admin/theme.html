@@ -66,14 +66,13 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <?php if (TfishSession::isAdmin()): ?>
-            <li class="nav-item active"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
-            <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
-            <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'password.php'; ?>"><?php echo TFISH_PASSWORD; ?></a></li>
+          <li class="nav-item active"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
             <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a></li>
+            <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'password.php'; ?>"><?php echo TFISH_PASSWORD; ?></a></li>
+            <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
+            <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=flush'; ?>"><?php echo TFISH_FLUSH_CACHE; ?></a></li>
+            <li class="nav-item"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'login.php?op=logout'; ?>"><?php echo TFISH_LOGOUT; ?></a></li>
           <?php endif; ?>
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo TFISH_RSS_URL; ?>"><i class="fas fa-rss"></i></a>
-          </li>
         </ul>
           <form class="form-inline my-2 my-lg-0" method="post" accept-charset="UTF-8" action="<?php echo TFISH_URL . 'search.php'; ?>">
               <input class="form-control mr-sm-2" id="search_terms" name="search_terms" type="text" placeholder="<?php echo TFISH_KEYWORDS; ?>" aria-label="<?php echo TFISH_KEYWORDS; ?>">
@@ -98,7 +97,7 @@
         <div class="col-12">
           <hr>
           <footer class="clearfix">
-            <p class="text-left">Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
+            <p class="text-left">Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018</p>
           </footer>
           </div>
       </div>
