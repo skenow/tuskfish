@@ -115,7 +115,7 @@
             'showUpload': false,
             'allowedFileExtensions': ["gif", "jpg", "png"],
             'previewFileType': ["image"],
-            'initialPreview': '<?php if (isset($content->image)) echo TFISH_IMAGE_URL . $content->image; ?>',
+            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . $content->image; ?>',
             'initialPreviewAsData': true,
             'initialPreviewShowDelete': false,
             'initialCaption': '<?php if (isset($content->image)) echo $content->image; ?>',
@@ -144,7 +144,7 @@
             <script>$("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': ["any"],
-                'initialPreview': '<?php echo TFISH_MEDIA_URL . $content->media; ?>',
+                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->media; ?>',
                 'initialPreviewAsData': true,
                 'initialPreviewShowDelete': false,
                 'initialCaption': '<?php echo $content->media; ?>',
