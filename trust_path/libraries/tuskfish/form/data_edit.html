@@ -101,17 +101,10 @@
 
         <!-- Image -->
         <?php if (isset($content->image) && !empty($content->image)): ?>
-            <div class="col-md-5 mb-3 text-left" id="imageContainer">
-                <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-                <input id="image" name="image" type="file" data-preview-file-type="image" >
-            </div>
-            <div class="col-md-1 mb-3 text-left">
-                <p><strong><?php echo TFISH_DELETE_IMAGE; ?></strong></p>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="deleteImage" id="deleteImage" value="1">
-                    <label class="custom-control-label" for="deleteImage"></label>
-                </div>
-            </div>
+        <div class="col-md-6 mb-4 text-left" id="imageContainer">
+            <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
+            <input id="image" name="image" type="file" data-preview-file-type="image" >
+        </div>
         <?php else: ?>
             <div class="col-md-6 mb-3 text-left" id="imageContainer">
                 <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
@@ -127,23 +120,23 @@
             'initialPreviewShowDelete': false,
             'initialCaption': '<?php if (isset($content->image)) echo $content->image; ?>',
             'theme': "fa"});
-        </script>
 
+            $('#image').on('fileclear', function(tf_deleteImage) {
+                document.getElementById("deleteImage").value = "1";
+            });
+        </script>
+        
+        <!-- Delete image -->
+        <input type="hidden" name="deleteImage" id="deleteImage" value="0">
+        
         <!-- Media -->
         <?php if (isset($content->media) && !empty($content->media)): ?>
-            <div class="col-md-5 mb-3 text-left" id="mediaContainer">
+            <div class="col-md-6 mb-4 text-left" id="mediaContainer">
                 <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
                 <input id="media" name="media" type="file" data-preview-file-type="text" >
             </div>
-            <div class="col-md-1 mb-3 text-left">
-                <p><strong><?php echo TFISH_DELETE_MEDIA; ?></strong></p>
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="deleteMedia" id="deleteMedia" value="1">
-                    <label class="custom-control-label" for="deleteMedia"></label>
-                </div>
-            </div>
             <?php else: ?>
-                <div class="col-md-6 mb-3 text-left" id="mediaContainer">
+                <div class="col-md-6 mb-4 text-left" id="mediaContainer">
                     <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
                     <input id="media" name="media" type="file">
                 </div>
@@ -158,7 +151,14 @@
                 'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
                     "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"],
                 'theme': "fa"});
+    
+                $('#media').on('fileclear', function(tf_deleteMedia) {
+                    document.getElementById("deleteMedia").value = "1";
+                });
             </script>
+            
+            <!-- Delete media -->
+            <input type="hidden" name="deleteMedia" id="deleteMedia" value="0">
         
         <!-- Caption -->
         <div class="col-md-6 mb-3 text-left" id="captionContainer">
