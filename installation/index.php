@@ -31,7 +31,7 @@ include_once "./english.php";
 
 // Set theme.
 $tfish_template = new TfishTemplate();
-$tfish_template->setTheme('default');
+$tfish_template->setTheme('signin');
 
 // TfishPreference is not available yet, so just set up an analogue for use with installation.
 /** @internal */
@@ -61,9 +61,7 @@ $tfish_preference->site_name = 'Tuskfish CMS';
 $tfish_preference->site_description = 'A cutting edge micro-CMS';
 $tfish_preference->site_author = '';
 $tfish_preference->site_copyright = '';
-$tfish_preference->generator = 'Tuskfish CMS';
 $tfish_preference->seo = '';
-$tfish_preference->robots = 'noindex,nofollow';
 $tfish_preference->pagination_elements = '5';
 $tfish_preference->enable_cache = 0;
 $tfish_template->tfish_url = getUrl();
@@ -318,6 +316,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  */
 $tfish_metadata = new TfishMetadata($tfish_preference);
 $tfish_metadata->title = TFISH_INSTALLATION_TUSKFISH;
-$tfish_metadata->description = TFISH_INSTALLATION_DESCRIPTION;
+$tfish_metadata->description = '';
+$tfish_metadata->robots = 'noindex,nofollow';
+$tfish_metadata->generator = ''; // Do not advertise an installation script.
 
 require_once TFISH_PATH . "tfish_footer.php";
