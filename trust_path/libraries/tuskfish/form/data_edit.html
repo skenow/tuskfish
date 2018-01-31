@@ -122,6 +122,9 @@
             'showUpload': false,
             'allowedFileExtensions': ["gif", "jpg", "png"],
             'previewFileType': ["image"],
+            'initialPreview': '<?php if (isset($content->image)) echo TFISH_IMAGE_URL . $content->image; ?>',
+            'initialPreviewAsData': true,
+            'initialPreviewShowDelete': false,
             'initialCaption': '<?php if (isset($content->image)) echo $content->image; ?>',
             'theme': "fa"});
         </script>
@@ -148,9 +151,12 @@
             <script>$("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': ["any"],
+                'initialPreview': '<?php echo TFISH_MEDIA_URL . $content->media; ?>',
+                'initialPreviewAsData': true,
+                'initialPreviewShowDelete': false,
+                'initialCaption': '<?php echo $content->media; ?>',
                 'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
                     "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"],
-                'initialCaption': '<?php if (isset($content->media)) echo $content->media; ?>',
                 'theme': "fa"});
             </script>
         
