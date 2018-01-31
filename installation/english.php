@@ -23,18 +23,18 @@ define("TFISH_INSTALLATION_HOME_PAGE", "home page");
 define("TFISH_INSTALLATION_COMPLETE", "Installation complete!");
 define("TFISH_INSTALLATION_SECURE_YOUR_SITE", "Secure your site");
 define("TFISH_INSTALLATION_SECURITY_INSTRUCTIONS", "<ul>"
-        . "<li><strong>Delete</strong> the <strong>/installation</strong> directory.</li>"
-        . "<li>Set the file permissions for <strong>/mainfile.php</strong> to <strong>0400</strong>.</li>"
-        . "<li>Set the file permissions for your_trust_path/database/<strong>yourdatabase.db</strong> to "
+        . "<li><strong>Delete</strong> the /public_html/<strong>installation/</strong> directory.</li>"
+        . "<li>Set the file permissions for /public_html/<strong>mainfile.php</strong> to <strong>0400</strong>.</li>"
+        . "<li>Set the file permissions for /your_trust_path/database/<strong>yourdatabase.db</strong> to "
         . "<strong>0600</strong>.</li>"
-        . "<li>Set the file permissions for you_trust_path/configuration/<strong>config.php</strong> to "
+        . "<li>Set the file permissions for /your_trust_path/configuration/<strong>config.php</strong> to "
         . "<strong>0400</strong>.</li>"
-        . "<li>Please note that you may need to use the cPanel File Manager or shell access to set "
-        . "file permissions to these levels.</li>"
         . "</ul>"
-        . "<p>Please <strong><a href='../admin/login.php'>login</a></strong> and configure your "
+        . "<p>Please note that you may need to use the cPanel File Manager or shell access to set "
+        . "file permissions to these levels, as your FTP client probably can't.</p>"
+        . "<p>Then please <strong><a href='../admin/login.php'>login</a></strong> and configure your "
         . "site preferences. The <strong><a href='https://tuskfish.biz/?id=41' "
-        . "target='_blank'>Tuskfish User Manual</a></strong> is available to help you. </p>");
+        . "target='_blank'>Tuskfish User Manual</a></strong> can help you. </p>");
 define("TFISH_INSTALLATION_DIRECTORY_DELETED", "Successfully removed the installation directory.");
 define("TFISH_INSTALLATION_REMOVE_DIRECTORY", "Removal of the installation directory failed. Please "
         . "delete it manually as it can be used to overwrite your site.");
