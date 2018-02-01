@@ -33,22 +33,26 @@
 
   <body>
 
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">Navbar</a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escape('site_name'); ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <?php if (TfishSession::isAdmin()): ?>
+          <li class="nav-item active"><a class="nav-link"  href="<?php echo TFISH_ADMIN_URL . 'admin.php'; ?>"><?php echo TFISH_ADMIN; ?></a></li>
+          <?php endif; ?>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
+            <a class="nav-link" href="#">Link</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
@@ -58,10 +62,15 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo TFISH_RSS_URL; ?>"><i class="fas fa-rss"></i></a>
+          </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <form class="form-inline my-2 my-lg-0" method="post" accept-charset="UTF-8" action="<?php echo TFISH_URL . 'search.php'; ?>">
+            <input class="form-control mr-sm-2" id="search_terms" name="search_terms" type="text" placeholder="<?php echo TFISH_KEYWORDS; ?>" aria-label="<?php echo TFISH_KEYWORDS; ?>">
+            <input type="hidden" name="op" value="search" />
+            <input type="hidden" name="search_type" value="AND" />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><?php echo TFISH_SEARCH; ?></button>
         </form>
       </div>
     </nav>
@@ -104,7 +113,7 @@
     </main>
 
     <footer class="container">
-      <p>&copy; Company 2017-2018</p>
+      <p>Copyright &copy; <?php echo $tfish_preference->escape('site_author'); ?> 2018 | <?php echo TfishSession::loginLink(); ?></p>
     </footer>
 
   </body>
