@@ -21,8 +21,9 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Specify theme set, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
+
+// Specify the landing page that search results should point to. Default (blank) is index.php.
 $tfish_template->target_file_name = '';
-$tfish_template->target_file_name = $target_file_name;
 
 // Validate data and separate the search terms.
 $clean_op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
