@@ -822,6 +822,16 @@ class TfishContentObject extends TfishAncestralObject
                     trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
                 }
                 break;
+            
+            // Alnumunderscore characters only.
+            case "template":
+            case "module":
+                $value = TfishFilter::trimString($value);
+                
+                if (TfishFilter::isAlnumUnderscore($value)) {
+                    $this->__data[$clean_property] = $value;
+                }
+                break;
         }
     }
 
