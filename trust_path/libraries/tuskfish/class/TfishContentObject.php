@@ -246,7 +246,7 @@ class TfishContentObject extends TfishAncestralObject
         if ($this->__properties[$clean_property] === 'html' && $escape_html === true) {
             
             return htmlspecialchars((string) $this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8',
-                    false);
+                    true);
         }        
         
         // Format all other data for display and convert TFISH_LINK to URL.
