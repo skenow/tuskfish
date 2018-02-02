@@ -115,10 +115,11 @@
             'showUpload': false,
             'allowedFileExtensions': ["gif", "jpg", "png"],
             'previewFileType': ["image"],
-            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . $content->image; ?>',
+            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . $content->escape("image"); ?>',
             'initialPreviewAsData': true,
             'initialPreviewShowDelete': false,
-            'initialCaption': '<?php if (isset($content->image)) echo $content->image; ?>',
+            'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_IMAGE_URL . $content->escape("image"); ?>',
+            'initialCaption': '<?php if (isset($content->image)) echo $content->escape("image"); ?>',
             'theme': "fa"});
 
             $('#image').on('fileclear', function(tf_deleteImage) {
@@ -144,10 +145,11 @@
             <script>$("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': ["any"],
-                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->media; ?>',
+                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
                 'initialPreviewAsData': true,
                 'initialPreviewShowDelete': false,
-                'initialCaption': '<?php echo $content->media; ?>',
+                'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                'initialCaption': '<?php echo $content->escape("media"); ?>',
                 'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
                     "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"],
                 'theme': "fa"});
