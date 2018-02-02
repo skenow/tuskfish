@@ -135,7 +135,6 @@ class TfishContentHandler
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
         unset($key_values['tags']);
-        unset($key_values['icon']); // Icon is defined in class file and not resident in database.
 
         // Process image and media files before inserting the object, as related fields must be set.
         $property_whitelist = $obj->getPropertyWhitelist();
@@ -916,7 +915,7 @@ class TfishContentHandler
         $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
-        $zeroed_properties = $obj->zeroedProperties() + array('icon'); // Icon is not persistable.
+        $zeroed_properties = $obj->zeroedProperties();
         
         foreach ($zeroed_properties as $property) {
             $key_values[$property] = null;
