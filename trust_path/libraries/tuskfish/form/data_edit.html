@@ -150,8 +150,9 @@
                 'initialPreviewShowDelete': false,
                 'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
                 'initialCaption': '<?php echo $content->escape("media"); ?>',
-                'allowedFileExtensions': ["docx","gif","gz","jpg","mp3","mp4","odt",
-                    "oga","ogg","ogv","pdf","png","tar","wav","webm","zip"],
+                'allowedFileExtensions': ["doc","docx","gif","gz","jpg","mp3","mp4","odt", "ods",
+                        "odp", "oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm",
+                        "xls", "xlsx", "zip"],
                 'theme': "fa"});
     
                 $('#media').on('fileclear', function(tf_deleteMedia) {
