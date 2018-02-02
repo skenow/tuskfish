@@ -42,14 +42,16 @@ class TfishAncestralObject
      * Returns a whitelist of object properties whose values are allowed be set.
      * 
      * This function is used to build a list of $allowed_vars for a content object. Child classes
-     * use this list to unset properties they do not use.
+     * use this list to unset properties they do not use. Properties that are not resident in the
+     * database are also unset here (handler, template, module and icon).
      * 
      * @return array Array of object properties.
      */
     public function getPropertyWhitelist()
     {
         $properties = $this->__properties;
-        unset($properties['handler'], $properties['template'], $properties['module']);
+        unset($properties['handler'], $properties['template'], $properties['module'],
+                $properties['icon']);
 
         return $properties;
     }

@@ -67,6 +67,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
  * @properties  string $module The module that handles this content type (not persistent).
+ * @properties  string $icon The vector icon that represents this object type (not persistent).
  */
 class TfishContentObject extends TfishAncestralObject
 {
@@ -103,6 +104,7 @@ class TfishContentObject extends TfishAncestralObject
         $this->__properties['handler'] = 'alpha';
         $this->__properties['template'] = 'alnumunder';
         $this->__properties['module'] = 'string';
+        $this->__properties['icon'] = 'html';
 
         /**
          * Set the permitted properties of this object.
