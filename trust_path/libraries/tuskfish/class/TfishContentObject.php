@@ -103,6 +103,7 @@ class TfishContentObject extends TfishAncestralObject
         $this->__properties['handler'] = 'alpha';
         $this->__properties['template'] = 'alnumunder';
         $this->__properties['module'] = 'string';
+        $this->__properties['icon'] = 'html';
 
         /**
          * Set the permitted properties of this object.
