@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="<?php echo $tfish_preference->escape('default_language'); ?>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
+    <meta name="description" content="<?php echo $tfish_metadata->description; ?>">
+    <meta name="author" content="<?php echo $tfish_metadata->author; ?>">
+    <meta name="dcterms.rights" content="<?php echo $tfish_metadata->copyright; ?>">
+    <meta name="generator" content="<?php echo $tfish_metadata->generator; ?>">
+    <meta name="robots" content="<?php echo $tfish_metadata->robots; ?>">
+    <link rel="icon" href="../../favicon.ico">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo TFISH_URL . 'rss.php'; ?>" />
+    <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
+
+    <title><?php echo $tfish_metadata->title; ?></title>
+    
+    <!-- jQuery -->
+    <script src="<?php echo TFISH_JS_URL . 'jquery/jquery.min.js'; ?>"></script>
+    
+    <!-- Popper -->
+    <script src="<?php echo TFISH_JS_URL . 'popper/popper.min.js'; ?>"></script>
+    
+    <!-- Bootstrap -->
+    <link href="<?php echo TFISH_JS_URL . 'bootstrap/css/bootstrap.min.css'; ?>" rel="stylesheet">
+    <script src="<?php echo TFISH_JS_URL . 'bootstrap/js/bootstrap.min.js'; ?>"></script>
+    
+    <!-- Font Awesome -->
+    <script defer src="<?php echo TFISH_JS_URL . 'fontawesome/fontawesome-all.min.js'; ?>"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="<?php echo TFISH_THEMES_URL . 'pricing/style.css'; ?>" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+      <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escape('site_name'); ?></a></h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="#">Features</a>
+        <a class="p-2 text-dark" href="#">Enterprise</a>
+        <a class="p-2 text-dark" href="#">Support</a>
+        <a class="p-2 text-dark" href="#">Pricing</a>
+      </nav>
+      <a class="btn btn-outline-primary" href="#">Sign up</a>
+    </div>
+
+    <div class="container">
+        
+      <!-- Main page -->
+      <?php echo $tfish_template->render('main'); ?>
+
+      <!-- Footer -->
+      <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class="col-12 col-md">
+            <img class="mb-2" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+            <small class="d-block mb-3 text-muted">Copyright &copy; 2018 | <?php echo TfishSession::loginLink(); ?></small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Features</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Cool stuff</a></li>
+              <li><a class="text-muted" href="#">Random feature</a></li>
+              <li><a class="text-muted" href="#">Team feature</a></li>
+              <li><a class="text-muted" href="#">Stuff for developers</a></li>
+              <li><a class="text-muted" href="#">Another one</a></li>
+              <li><a class="text-muted" href="#">Last time</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Resources</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Resource</a></li>
+              <li><a class="text-muted" href="#">Resource name</a></li>
+              <li><a class="text-muted" href="#">Another resource</a></li>
+              <li><a class="text-muted" href="#">Final resource</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>About</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Team</a></li>
+              <li><a class="text-muted" href="#">Locations</a></li>
+              <li><a class="text-muted" href="#">Privacy</a></li>
+              <li><a class="text-muted" href="#">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="<?php echo TFISH_THEMES_URL . 'assets/js/vendor/holder.min.js'; ?>"></script>
+    <script>
+      Holder.addTheme('thumb', {
+        bg: '#55595c',
+        fg: '#eceeef',
+        text: 'Thumbnail'
+      });
+    </script>
+  </body>
+</html>

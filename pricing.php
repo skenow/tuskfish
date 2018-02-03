@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tuskfish home page controller script for the Jumbotron theme.
+ * Tuskfish home page controller script for the Pricing theme.
  *
  * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -17,18 +17,13 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('jumbotron');
+$tfish_template->setTheme('pricing');
 
 // Page title, customise it as you see fit.
-$tfish_template->page_title = "Cover your page";
+$tfish_template->page_title = "Pricing";
 
-// Set main page content (lead).
-$tfish_template->lead = 'Cover is a one-page template for building simple and beautiful home pages.'
-        . ' Download, edit the text, and add your own fullscreen background photo to make it your '
-        . 'own.';
-
-// Set button text.
-$tfish_template->button_text = "Learn more";
+// Set template.
+$tfish_template->tfish_main_content = $tfish_template->render('main');
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
