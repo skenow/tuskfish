@@ -226,7 +226,7 @@ class TfishYubikeyAuthenticator
                 $signature = substr(trim($param), 2);
             
             if (mb_substr($param, 0, 2, "UTF-8") === "t=")
-                $timestamp = (int) substr(trim($param), 2);
+                $timestamp = substr(trim($param), 2);
             
             if (mb_substr($param, 0, 7, "UTF-8") === "status=")
                 $status = substr(trim($param), 7);
@@ -348,11 +348,13 @@ class TfishYubikeyAuthenticator
     /**
      * Check timestamp is within tolerance.
      * 
-     * @param int $timestamp Timestamp to check.
+     * @param string $timestamp Timestamp to check.
      * @return bool True if timestamp is within tolerance, otherwise false.
      */
-    protected function resultTimestampIsGood(int $timestamp)
-    {        
+    protected function resultTimestampIsGood(string $timestamp)
+    {
+    	$timestamp = TfishFilter::trimString($timestamp);
+    
         // Turn times into 'seconds since Unix Epoch' for easy comparison
         $now = date("U");
         $timestampSeconds = (int) (date_format(date_create(mb_substr($timestamp, 0, -4, "UTF-8")), "U"));
