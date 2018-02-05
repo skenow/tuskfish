@@ -55,7 +55,7 @@ $tfish_template = new TfishTemplate();
  * End manual duplication of header.
  */
 // Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('default');
+$tfish_template->setTheme('signin');
 
 // Page title.
 $tfish_template->page_title = TFISH_LOGIN;
