@@ -242,15 +242,15 @@ class TfishContentObject extends TfishAncestralObject
             return null;
         }
         
+        // Format all data for display and convert TFISH_LINK to URL.
+        $human_readable_data = (string) $this->makeHumanReadable($clean_property);
+        
         // Output for editor: HTML should be escaped but TFISH_LINK should NOT be converted to URL.
         if ($this->__properties[$clean_property] === 'html' && $escape_html === true) {
             
-            return htmlspecialchars((string) $this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8',
+            return htmlspecialchars($human_readable_data, ENT_NOQUOTES, 'UTF-8',
                     true);
-        }        
-        
-        // Format all other data for display and convert TFISH_LINK to URL.
-        $human_readable_data = (string) $this->makeHumanReadable($clean_property);
+        }
                 
         // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
         if ($this->__properties[$clean_property] === 'html' && $escape_html === false) {
