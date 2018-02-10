@@ -6,10 +6,12 @@
     <h2><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></h2>
     <?php if ($contentInfo): ?>
     <p>
+        <span class="small">
         <?php if (TfishSession::isAdmin()): ?>
         <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
         <?php endif; ?>
-        <em><?php echo $contentInfo; ?></em>
+        <?php echo $contentInfo; ?>
+        </span>
     </p>
     <?php endif; ?>
 </div>

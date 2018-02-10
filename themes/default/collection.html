@@ -12,11 +12,13 @@
     </h2>
     <?php if ($contentInfo): ?>
     <p>
+        <span class="small">
         <a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_RSS; ?>" class="fas fa-rss"></i></a> 
         <?php if (TfishSession::isAdmin()): ?>
         <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
         <?php endif; ?>
-        <em><?php echo $contentInfo; ?></em>
+        <?php echo $contentInfo; ?>
+        </span>
     </p>
     <?php endif; ?>
 </div>
