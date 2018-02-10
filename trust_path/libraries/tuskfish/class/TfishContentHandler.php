@@ -349,6 +349,7 @@ class TfishContentHandler
     public static function getObject(int $id)
     {
         $clean_id = (int) $id;
+        $row = $object = '';
         
         if (TfishFilter::isInt($id, 1)) {
             $criteria = new TfishCriteria();
@@ -357,6 +358,9 @@ class TfishContentHandler
             
             if ($statement) {
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
+            }
+            
+            if ($row) {
                 $object = self::toObject($row);
                 return $object;
             }
