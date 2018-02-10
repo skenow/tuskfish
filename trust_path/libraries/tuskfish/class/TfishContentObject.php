@@ -521,16 +521,17 @@ class TfishContentObject extends TfishAncestralObject
             $this->__set('date', date(DATE_RSS, time()));
         }
         
-        // Convert URLs to TFISH_LINK for insertion or update, to aid portability.
+        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
         if (array_key_exists('teaser', $property_whitelist) && !empty($dirty_input['teaser'])) {
-            $tfish_url_enabled = str_replace(TFISH_URL, 'TFISH_LINK',
-                        $this->__data[$clean_property]);
+            $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['teaser']);
+            $this->__set('teaser', $teaser);
         }
         
-        if (array_key_exists('description', $property_whitelist) 
+        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
+        if (array_key_exists('description', $property_whitelist)
                 && !empty($dirty_input['description'])) {
-            $tfish_url_enabled = str_replace(TFISH_URL, 'TFISH_LINK',
-                        $this->__data[$clean_property]);
+            $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['description']);
+            $this->__set('description', $description);
         }
 
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
