@@ -310,3 +310,4 @@ define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
 
 // RC 4.
 define("TFISH_VIEW", "View");
+define("TFISH_SETTINGS", "Settings");
