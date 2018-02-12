@@ -1,8 +1,8 @@
 <!-- Display a single audio soundtrack object -->
 <?php if ($content): ?>
 <!-- Title and meta information -->
-<div class="text-left">
-  <h2>
+<div>
+  <h2 class="title">
     <?php if ($content->media): ?>
     <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
     <?php else: ?>
@@ -10,7 +10,7 @@
     <?php endif; ?>
     </h2>
     <?php if ($contentInfo): ?>
-    <p>
+    <p class="content-info">
       <span class="small">
       <?php if (TfishSession::isAdmin()): ?>
       <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
@@ -36,7 +36,7 @@
   <figure>
     <?php if ($content->media): ?>
     <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-      <img class="img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
+      <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
       <?php if ($content->caption): ?>
         title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
       <?php else: ?>
@@ -47,10 +47,10 @@
     <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
       <?php endif; ?>
     <?php else: ?>
-      <img class="img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
+      <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
       <?php if ($content->caption): ?>
         title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-        <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+        <figcaption><em><?php echo $content->escape('caption'); ?></em></figcaption>
       <?php else: ?>
         alt="" />
       <?php endif; ?>
@@ -60,27 +60,27 @@
 <?php endif; ?>
 
 <!-- Description -->
-<div class="text-left">
+<div class="description">
   <?php if ($content->description) echo $content->escape('description'); ?>
 </div>
 
 <!-- Rights -->
 <?php if ($content->rights): ?>
 <div>
-  <p class="text-left rights"><?php echo $content->escape('rights'); ?></p>
+  <p class="rights"><?php echo $content->escape('rights'); ?></p>
 </div>
 <?php endif; ?>
 
 <!-- Display parent work -->
 <?php if (!empty($parent)): ?>
-<div class="text-left">
+<div>
   <h3><?php echo TFISH_RELATED; ?></h3>
-  <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
+  <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
   <?php if ($parent->image): ?>
   <div class="float-left">
     <figure class="figure-left">
     <a href="<?php echo $parent->getURL($target_file_name); ?>">
-    <img class="img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
+    <img class="image img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
     <?php if ($parent->caption): ?>
       title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
     <?php else: ?>
@@ -90,7 +90,9 @@
     </figure>
   </div>
   <?php endif; ?>
-  <?php echo $parent->escape('teaser'); ?>
+  <div class="teaser">
+    <?php echo $parent->escape('teaser'); ?>
+  </div>
 </div>
 <?php endif; ?>
 <?php endif; ?>

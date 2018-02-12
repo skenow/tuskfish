@@ -14,6 +14,10 @@ body {
     margin-bottom: 2rem;
 }
 
+.audio-player {
+    margin: 2rem 0;
+}
+
 .collection_pagination {
     margin: -1.5rem 0 1rem 0;
 }
@@ -26,6 +30,15 @@ body {
 
 .select_filters {
     margin-bottom: 2rem;
+}
+
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+.video-player {
+    margin: 2rem 0;
 }
 
 /** Zone styles */
@@ -67,17 +80,21 @@ body {
 
 .online {}
 
-.audio-player {
-    margin: 2rem 0;
-}
+.content-info {}
 
-video {
-    max-width: 100%;
-    height: auto;
-}
+.copyright {} /* Site footer */
 
-.video-player {
-    margin: 2rem 0;
+/* Other */
+.block-title {}
+
+.block-description {}
+
+.child-title {}
+
+.child-teaser {}
+
+.error-message {
+    
 }
 
 /* Figure and figcaption styles make captions wrap to figure width */

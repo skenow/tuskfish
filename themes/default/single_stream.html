@@ -3,13 +3,13 @@
   <?php foreach ($content_objects as $content): ?>
     <div class="clearfix">
 	  <div>
-		<h3 class="text-left"><a href="<?php echo $content->getURL($target_file_name); ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a></h3>
+		<h3 class="title"><a href="<?php echo $content->getURL($target_file_name); ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a></h3>
 	  </div>
       <?php if ($content->image): ?>
       <div class="float-left">
         <figure class="figure-left">
         <a href="<?php echo $content->getURL($target_file_name); ?>">
-        <img class="img-fluid" src="<?php echo $content->getCachedImage(150); ?>" 
+        <img class="image img-fluid" src="<?php echo $content->getCachedImage(150); ?>" 
           <?php if ($content->caption): ?>title="<?php echo $content->escape('caption'); ?>" 
             alt="<?php echo $content->escape('caption'); ?>"<?php endif; ?> />
         </a>
@@ -17,7 +17,7 @@
       </div>
       <?php endif; ?>
       <?php if ($content->teaser): ?>
-        <div class="text-left"><?php echo $content->escape('teaser'); ?></div>
+        <div class="teaser"><?php echo $content->escape('teaser'); ?></div>
       <?php endif; ?>
     </div>
 	<?php endforeach; ?>
