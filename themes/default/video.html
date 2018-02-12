@@ -2,57 +2,57 @@
 <?php if ($content): ?>
 <!-- Title and meta information -->
 <div class="text-left">
-    <h2>
-        <?php if ($content->media): ?>
-        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
-        <?php else: ?>
-        <?php echo $content->icon . ' ' . $content->escape('title'); ?>
-        <?php endif; ?>
-    </h2>
-    <?php if ($contentInfo): ?>
-    <p>
-        <span class="small">
-        <?php if (TfishSession::isAdmin()): ?>
-        <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
-        <?php endif; ?>
-        <?php echo $contentInfo; ?>
-        </span>
-    </p>
+  <h2>
+    <?php if ($content->media): ?>
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
+    <?php else: ?>
+    <?php echo $content->icon . ' ' . $content->escape('title'); ?>
     <?php endif; ?>
+  </h2>
+  <?php if ($contentInfo): ?>
+  <p>
+    <span class="small">
+    <?php if (TfishSession::isAdmin()): ?>
+    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+    <?php endif; ?>
+    <?php echo $contentInfo; ?>
+    </span>
+  </p>
+  <?php endif; ?>
 </div>
 
 <?php if ($content->media): ?>
 <div class="video-player">
-    <video controls>
-        <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo $content->format; ?>">
-        <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO; ?>
-    </video>
+  <video controls>
+    <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo $content->format; ?>">
+    <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO; ?>
+  </video>
 </div>
 <?php endif; ?>
 
 <!-- Image with link to download media attachment -->
 <?php if ($content->image): ?>
 <div class="float-right figure-right">
-    <figure>
-        <?php if ($content->media): ?>
-        <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
-            <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
-                 <?php if ($content->caption): ?>
-                 title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-                 <?php else: ?>
-                 alt="" />
-                 <?php endif; ?>
-        </a>
+  <figure>
+    <?php if ($content->media): ?>
+      <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
+        <img class="img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
         <?php if ($content->caption): ?>
-        <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+            title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+        <?php else: ?>
+            alt="" />
         <?php endif; ?>
+      </a>
+      <?php if ($content->caption): ?>
+      <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+      <?php endif; ?>
+      <?php else: ?>
+      <img class="img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
+        <?php if ($content->caption): ?>
+          title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+        <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
         <?php else: ?>
-        <img class="img-responsive" src="<?php echo $content->getCachedImage(400); ?>" 
-             <?php if ($content->caption): ?>
-             title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-             <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
-        <?php else: ?>
-        alt="" />
+          alt="" />
         <?php endif; ?>
         <?php endif; ?>                
     </figure>
@@ -61,36 +61,36 @@
 
 <!-- Description -->
 <div class="text-left">
-    <?php if ($content->description) echo $content->escape('description'); ?>
+  <?php if ($content->description) echo $content->escape('description'); ?>
 </div>
 
 <!-- Rights -->
 <?php if ($content->rights): ?>
-<div class="text-left">
-    <p class="rights"><?php echo $content->escape('rights'); ?></p>
+<div>
+  <p class="text-left rights"><?php echo $content->escape('rights'); ?></p>
 </div>
 <?php endif; ?>
 
 <!-- Display parent work -->
 <?php if (!empty($parent)): ?>
 <div class="text-left">
-    <h3><?php echo TFISH_RELATED; ?></h3>
-    <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
-    <?php if ($parent->image): ?>
-    <div class="float-left">
-        <figure class="figure-left">
-            <a href="<?php echo $parent->getURL($target_file_name); ?>">
-                <img class="img-responsive" src="<?php echo $parent->getCachedImage(100); ?>" 
-                     <?php if ($parent->caption): ?>
-                     title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
-                     <?php else: ?>
-                     alt=""
-                     <?php endif; ?>
-                     /></a>
-        </figure>
-    </div>
-    <?php endif; ?>
-    <?php echo $parent->escape('teaser'); ?>
+  <h3><?php echo TFISH_RELATED; ?></h3>
+  <h4><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
+  <?php if ($parent->image): ?>
+  <div class="float-left">
+    <figure class="figure-left">
+      <a href="<?php echo $parent->getURL($target_file_name); ?>">
+      <img class="img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
+      <?php if ($parent->caption): ?>
+        title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
+      <?php else: ?>
+        alt=""
+      <?php endif; ?>
+        /></a>
+    </figure>
+  </div>
+  <?php endif; ?>
+  <?php echo $parent->escape('teaser'); ?>
 </div>
 <?php endif; ?>
 <?php endif; ?>

@@ -5,7 +5,7 @@
 <form class="form-horizontal" action="login.php" method="post" role="form" accept-charset="UTF-8">
     
     <!-- Password -->
-    <div class="col-md-4 offset-md-4 form-group input-group">
+    <div class="col col-md-4 offset-md-4 form-group input-group">
         <input type="password" class="form-control is-valid" name="password" id="password" placeholder="<?php echo TFISH_PASSWORD; ?>" required>
         <div class="input-group-append">
             <span class="input-group-text" id="password-addon"><i class="fas fa-lock"></i></span>
@@ -13,7 +13,7 @@
     </div>
     
     <!-- Yubikey -->
-    <div class="col-md-4 offset-md-4 form-group input-group">
+    <div class="col col-md-4 offset-md-4 form-group input-group">
         <input type="password" class="form-control is-valid" name="yubikey_otp" id="yubikey_otp" placeholder="<?php echo TFISH_YUBIKEY; ?>" required>
         <div class="input-group-append">
             <span class="input-group-text" id="password-addon"><i class="fas fa-key"></i></span>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Submit -->
-    <div class="form-group col-md-4 offset-md-4">
+    <div class="form-group col col-md-4 offset-md-4">
         <input type="hidden" name="op" value="login" />
         <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SUBMIT ?></button>
     </div>
