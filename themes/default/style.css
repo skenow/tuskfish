@@ -28,9 +28,7 @@ body {
     margin-bottom: 1rem;
 }
 
-.select_filters {
-    margin-bottom: 2rem;
-}
+.select_filters {}
 
 video {
     max-width: 100%;
