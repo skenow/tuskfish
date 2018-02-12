@@ -1,21 +1,8 @@
 <!-- Page title -->
 <?php if (isset($page_title)): ?>
 <div class="row">
-  <div class="col-12">
-    <div class="text-center">
-      <h1 class="page-title"><?php echo $page_title; ?></h1>
-    </div>
-  </div>
-</div>
-<?php endif; ?>
-
-<!-- Top pagination control -->
-<?php if (isset($pagination)): ?>
-<div class="row">
-  <div class="col-12">
-    <div class="pagination-top clearfix float-right">
-      <?php echo $pagination; ?>
-    </div>
+  <div class="col">
+    <h1 class="page-title"><?php echo $page_title; ?></h1>
   </div>
 </div>
 <?php endif; ?>
@@ -23,18 +10,25 @@
 <!-- Tag select control -->
 <?php if (isset($select_filters_form)): ?>
 <div class="row">
-  <div class="col-12">
-    <div class="col-md-5 col-lg-3 select_filters mx-auto clearfix">
+    <div class="col col-md-5 col-lg-3 select_filters mx-auto clearfix">
       <?php echo $select_filters_form; ?>
     </div>
-  </div>
 </div>
+<?php endif; ?>
+
+<!-- Top pagination control -->
+<?php if (isset($pagination)): ?>
+<div class="row">
+    <div class="col d-flex justify-content-end pagination-top clearfix">
+      <?php echo $pagination; ?>
+    </div>
+  </div>
 <?php endif; ?>
 
 <!-- Main content of page -->
 <?php if (isset($tfish_main_content)): ?>
 <div class="row">
-  <div class="col-12 main-content clearfix">
+  <div class="col main-content clearfix">
     <?php echo $tfish_main_content; ?>
   </div>
 </div>
@@ -43,10 +37,8 @@
 <!-- Bottom pagination control -->
 <?php if (isset($pagination)): ?>
 <div class="row">
-  <div class="col-12">
-    <div class="pagination-bottom float-right clearfix">
+    <div class="col d-flex justify-content-end pagination-bottom clearfix">
       <?php echo $pagination; ?>
     </div>
-  </div>
 </div>
 <?php endif; ?>
