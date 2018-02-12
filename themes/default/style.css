@@ -1,3 +1,5 @@
+/** Template layout styles */
+
 body {
   padding-top: 5rem;
 }
@@ -7,25 +9,27 @@ body {
   text-align: center;
 }
 
-video {
-    max-width: 100%;
-    height: auto;
+/** Control styles */
+.add-content {
+    margin-bottom: 2rem;
 }
 
-/* Figure and figcaption styles make captions wrap to figure width */
-.page-title {
-    margin-bottom: 2rem;
+.collection_pagination {
+    margin: -1.5rem 0 1rem 0;
+}
+
+.pagination-bottom {}
+
+.pagination-top {
+    margin-bottom: 1rem;
 }
 
 .select_filters {
     margin-bottom: 2rem;
 }
 
-.pagination-top {
-    margin-bottom: 1rem;
-}
-
-.add-content {
+/** Zone styles */
+.page-title {
     margin-bottom: 2rem;
 }
 
@@ -33,8 +37,50 @@ video {
     margin-bottom: 2rem;
 }
 
-pagination-bottom {}
+/** Content styles */
 
+.title {}
+
+.date {}
+
+.teaser {}
+
+.description {}
+
+.author {}
+
+.publisher {}
+
+.parent {}
+
+.image {}
+
+.media {}
+
+.caption {}
+
+.rights {
+    font-style: italic;
+}
+
+.language {}
+
+.online {}
+
+.audio-player {
+    margin: 2rem 0;
+}
+
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+.video-player {
+    margin: 2rem 0;
+}
+
+/* Figure and figcaption styles make captions wrap to figure width */
 figure {
     display: table;
 }
@@ -61,20 +107,4 @@ figcaption {
 
 .figure-right {
     margin: 0 0 0.2rem 1rem;
-}
-
-.rights {
-    font-style: italic;
-}
-
-.audio-player {
-    margin: 2rem 0;
-}
-
-.video-player {
-    margin: 2rem 0;
-}
-
-.collection_pagination {
-    margin: -1.5rem 0 1rem 0;
 }
