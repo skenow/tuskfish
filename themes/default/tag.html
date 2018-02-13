@@ -40,7 +40,7 @@
 <?php if (!empty($parent)): ?>
 <div class="clearfix">
   <div>
-    <h3><?php echo TFISH_RELATED; ?></h3>
+    <h3 class="mb-3"><?php echo TFISH_RELATED; ?></h3>
     <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
     <?php if ($parent->image): ?>
     <div class="float-left">
@@ -66,12 +66,12 @@
 <!-- Display other works linked to this tag -->    
 <?php if (!empty($first_children)): ?>
 <?php if (isset($collection_pagination)): ?>
-<div class="d-flex justify-content-end collection_pagination clearfix">
+<div class="d-flex justify-content-end collection-pagination-top clearfix">
   <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>
 <div>
-  <h3>In this collection</h3>
+  <h3 class="mb-3">In this collection</h3>
 </div>
 <div>
   <?php foreach ($first_children as $child): ?>
@@ -100,7 +100,7 @@
 
 <!-- Intra-collection pagination -->
 <?php if (isset($collection_pagination)): ?>
-<div class="d-flex justify-content-end collection_pagination clearfix">
+<div class="d-flex justify-content-end collection-pagination-bottom clearfix">
   <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>

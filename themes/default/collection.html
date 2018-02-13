@@ -99,14 +99,14 @@
 <!-- Display child works -->    
 <?php if (!empty($first_children)): ?>
 <?php if (isset($collection_pagination)): ?>
-<div class="float-right collection_pagination clearfix">
+<div class="d-flex justify-content-end collection-pagination-top clearfix">
   <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>
-<div class="mb-3">
-  <h3>In this collection</h3>
-</div>
 <div>
+  <h3 class="mb-3">In this collection</h3>
+</div>
+<div class="mb-3">
   <?php foreach ($first_children as $child): ?>
   <div class="clearfix">
     <h4 class="child-title"><a href="<?php echo $child->getURL($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escape('title'); ?></a></h4>
@@ -133,7 +133,7 @@
 
 <!-- Intra-collection pagination -->
 <?php if (isset($collection_pagination)): ?>
-<div class="float-right collection_pagination clearfix">
+<div class="d-flex justify-content-end collection-pagination-bottom clearfix">
   <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>

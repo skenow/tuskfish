@@ -17,9 +17,9 @@ body {
     margin: 2rem 0;
 }
 
-.collection_pagination {
-    margin-bottom: 1rem;
-}
+.collection-pagination-top {}
+
+.collection-pagination-bottom {}
 
 .main-content {
     margin-bottom: 1rem;
@@ -30,7 +30,9 @@ body {
     margin-bottom: 2rem;
 }
 
-.pagination-bottom {margin-bottom: 1rem;}
+.pagination-bottom {
+    margin-bottom: 1rem;
+}
 
 .pagination-top {
     margin-bottom: 1rem;
