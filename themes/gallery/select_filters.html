@@ -1,10 +1,10 @@
 <!-- Select filters should be assigned to template variable $select_filters -->
 <?php if(isset($select_filters)): ?>
 <form class="form-horizontal" name="select_filters" action="<?php echo $select_action; ?>" method="get">
-    <div class="row">
-        <div class="col">
-            <?php echo $select_filters; ?>
-        </div>
+  <div class="row">
+    <div class="col">
+      <?php echo $select_filters; ?>
     </div>
+  </div>
 </form>
 <?php endif; ?>
