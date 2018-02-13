@@ -1,7 +1,7 @@
 <!-- Display a list of all content types in teaser view -->
 <?php if ($content_objects): ?>
   <?php foreach ($content_objects as $content): ?>
-    <div class="clearfix">
+    <div class="stream-item clearfix">
 	  <div>
 		<h3 class="title"><a href="<?php echo $content->getURL($target_file_name); ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a></h3>
 	  </div>

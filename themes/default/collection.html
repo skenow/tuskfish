@@ -75,7 +75,7 @@
 <?php if (!empty($parent)): ?>
 <div class="clearfix">
   <div>
-    <h3><?php echo TFISH_RELATED; ?></h3>
+    <h3 class="mb-3"><?php echo TFISH_RELATED; ?></h3>
     <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
     <?php if ($parent->image): ?>
     <div class="float-left">
@@ -103,7 +103,7 @@
   <?php echo $collection_pagination; ?>
 </div>
 <?php endif; ?>
-<div>
+<div class="mb-3">
   <h3>In this collection</h3>
 </div>
 <div>

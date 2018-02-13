@@ -4,6 +4,16 @@
 <!-- Title and meta information -->
 <div>
   <h2 class="title"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></h2>
+  <?php if ($contentInfo): ?>
+  <p class="content-info">
+    <span class="small">
+    <?php if (TfishSession::isAdmin()): ?>
+    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+    <?php endif; ?>
+    <?php echo $contentInfo; ?>
+  </span>
+  </p>
+  <?php endif; ?>
 </div>
 
 <!-- Image -->
@@ -23,7 +33,6 @@
 
 <!-- Description -->
 <div class="description">
-  <p><a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a></p>
   <?php if ($content->description) echo $content->escape('description'); ?>
 </div>
 
