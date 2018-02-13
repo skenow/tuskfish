@@ -23,3 +23,130 @@ html {
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
 
 .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+/** Control styles */
+.add-content {
+    margin-bottom: 2rem;
+}
+
+.audio-player {
+    margin: 2rem 0;
+}
+
+.collection-pagination-top {}
+
+.collection-pagination-bottom {}
+
+.main-content {
+    margin-bottom: 1rem;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.pagination-bottom {
+    margin-bottom: 1rem;
+}
+
+.pagination-top {
+    margin-bottom: 1rem;
+}
+
+.select_filters {
+    margin-bottom: 1rem;
+}
+
+.stream-item {
+}
+
+video {
+    max-width: 100%;
+    height: auto;
+    border: solid;
+    border-width: 1px;
+}
+
+.video-player {
+    display: flex;
+    justify-content: center;
+    margin: 2rem;
+}
+
+/** Content styles */
+
+.title {}
+
+.date {}
+
+.teaser {}
+
+.description {}
+
+.author {}
+
+.publisher {}
+
+.parent {}
+
+.image {}
+
+.media {}
+
+.caption {}
+
+.rights {
+    font-style: italic;
+}
+
+.language {}
+
+.online {}
+
+.content-info {}
+
+.copyright {} /* Site footer */
+
+/* Other */
+.block-title {}
+
+.block-description {}
+
+.child-title {}
+
+.child-teaser {}
+
+.error-message {
+    
+}
+
+/* Figure and figcaption styles make captions wrap to figure width */
+figure {
+    display: table;
+}
+
+figure img {
+    border-style: solid;
+    border-width: 1px;
+    display: block;
+    width: 100%;
+}
+
+figcaption {
+    display: table-caption;
+    caption-side: bottom;
+}​
+
+.figure-centre {
+    margin: 1rem 0;
+}
+
+.figure-left {
+    margin: 0 1rem 1rem 0;
+}
+
+.figure-right {
+    margin: 0 0 1rem 1rem;
+}
+

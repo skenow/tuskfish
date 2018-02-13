@@ -1,0 +1,142 @@
+<!-- Display a single collection object -->
+<?php if ($content): ?>
+
+<!-- Title and meta information -->
+<div>
+  <h2 class="title">
+    <?php if ($content->media): ?>
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
+    <?php else: ?>
+    <?php echo $content->icon . ' ' . $content->escape('title'); ?>
+    <?php endif; ?>
+  </h2>
+  <?php if ($contentInfo): ?>
+  <p class="contentInfo">
+    <span class="small">
+    <a href="<?php echo TFISH_RSS_URL . '?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_RSS; ?>" class="fas fa-rss"></i></a> 
+    <?php if (TfishSession::isAdmin()): ?>
+    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+    <?php endif; ?>
+    <?php echo $contentInfo; ?>
+    </span>
+  </p>
+  <?php endif; ?>
+</div>
+
+<!-- Image with link to download media attachment -->
+<?php if ($content->image): ?>
+<div class="float-right figure-right">
+  <figure>
+    <?php if ($content->media): ?>
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
+    <img class="image img-fluid" src="<?php echo $content->getCachedImage(300); ?>" 
+    <?php if ($content->caption): ?>
+        title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+    <?php else: ?>
+        alt="" />
+    <?php endif; ?>
+    </a>
+    <?php if ($content->caption): ?>
+    <figcaption><em><?php echo $content->escape('caption'); ?></em></figcaption>
+    <?php endif; ?>
+    <?php else: ?>
+    <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
+    <?php if ($content->caption): ?>
+        title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
+    <figcaption><em><?php echo $content->escape('caption'); ?></em></figcaption>
+    <?php else: ?>
+        alt="" />
+    <?php endif; ?>
+    <?php endif; ?>                
+  </figure>
+</div>
+<?php endif; ?>
+
+<!-- Description -->
+<div class="description">
+  <?php if ($content->description) echo $content->escape('description'); ?>
+</div>
+
+<!-- Media attachment -->
+<?php if ($content->media): ?>
+<div>
+  <p class="media"><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><i title="<?php echo TFISH_DOWNLOAD; ?>" class="fas fa-download"></i> <?php echo $content->media; ?></a></b></p>
+</div>
+<?php endif; ?>
+
+<!-- Rights -->
+<?php if ($content->rights): ?>
+<div>
+  <p class="rights"><?php echo $content->escape('rights'); ?></p>
+</div>
+<?php endif; ?>
+
+<!-- Display parent work -->
+<?php if (!empty($parent)): ?>
+<div class="clearfix">
+  <div>
+    <h3 class="mb-3"><?php echo TFISH_RELATED; ?></h3>
+    <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
+    <?php if ($parent->image): ?>
+    <div class="float-left">
+      <figure class="figure-left">
+      <a href="<?php echo $parent->getURL($target_file_name); ?>">
+      <img class="image img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
+      <?php if ($parent->caption): ?>
+          title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
+      <?php else: ?>
+          alt=""
+      <?php endif; ?>
+      /></a>
+      </figure>
+    </div>
+    <?php endif; ?>
+    <?php echo $parent->escape('teaser'); ?>
+  </div>
+</div>
+<?php endif; ?>
+
+<!-- Display child works -->    
+<?php if (!empty($first_children)): ?>
+<?php if (isset($collection_pagination)): ?>
+<div class="d-flex justify-content-end collection-pagination-top clearfix">
+  <?php echo $collection_pagination; ?>
+</div>
+<?php endif; ?>
+<div>
+  <h3 class="mb-3">In this collection</h3>
+</div>
+<div class="mb-3">
+  <?php foreach ($first_children as $child): ?>
+  <div class="clearfix">
+    <h4 class="child-title"><a href="<?php echo $child->getURL($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escape('title'); ?></a></h4>
+    <?php if ($child->image): ?>
+      <div class="float-left">
+        <figure class="figure-left">
+        <a href="<?php echo $child->getURL($target_file_name); ?>">
+        <img class="image img-fluid" src="<?php echo $child->getCachedImage(150); ?>" 
+        <?php if ($child->caption): ?>
+            title="<?php echo $child->escape('caption'); ?>" alt="<?php echo $child->escape('caption'); ?>"
+        <?php else: ?>
+            alt=""
+        <?php endif; ?> />
+        </a>
+        </figure>
+      </div>
+    <?php endif; ?>
+    <div class="child-teaser">
+      <?php echo $child->escape('teaser'); ?>
+    </div>
+  </div>
+  <?php endforeach; ?>    
+</div>
+
+<!-- Intra-collection pagination -->
+<?php if (isset($collection_pagination)): ?>
+<div class="d-flex justify-content-end collection-pagination-bottom clearfix">
+  <?php echo $collection_pagination; ?>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+
+<?php endif; ?>
