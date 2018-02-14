@@ -976,6 +976,13 @@ class TfishContentHandler
 
             // Is this object allowed to have an media property?
             if (array_key_exists('media', $property_whitelist)) {
+                
+                // If the updated object has no media attached, or has been instructed to delete
+                // attached image, delete any old media files.
+                if (($existing_media && (!isset($key_values['media']) || empty($key_values['media'])))
+                    || ($existing_media && isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia']))) {
+                    self::_deleteMedia($existing_media);
+                }
 
                 // Check if a new media file has been uploaded by looking in $_FILES.
                 if (!empty($_FILES['media']['name'])) {
@@ -996,17 +1003,10 @@ class TfishContentHandler
                 $key_values['media'] = '';
                 $key_values['format'] = '';
                 $key_values['file_size'] = '';
-            }
-
-            // If the updated object has no media attached, or has been instructed to delete
-            // attached image, delete any old media files.
-            if ($existing_media &&
-                    ((!isset($key_values['media']) || empty($key_values['media']))
-                    || (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])))) {
-                $key_values['media'] = '';
-                $key_values['format'] = '';
-                $key_values['file_size'] = '';
-                self::_deleteMedia($existing_media);
+                
+                if ($existing_media) {
+                    self::_deleteMedia($existing_media);
+                }
             }
         }
 
