@@ -947,6 +947,7 @@ class TfishContentHandler
                 // Check if a new image file has been uploaded by looking in $_FILES.
                 if (!empty($_FILES['image']['name'])) {
                     $filename = TfishFilter::trimString($_FILES['image']['name']);
+                    
                     $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
                     
                     if ($clean_filename) {
@@ -961,10 +962,9 @@ class TfishContentHandler
 
             // If the updated object has no image attached, or has been instructed to delete
             // attached image, delete any old image files.
-            if ((!isset($key_values['image'])
-                    || empty($key_values['image'])) || (isset($_POST['deleteImage'])
-                            && !empty($_POST['deleteImage'])) && $existing_image) {
-                $key_values['image'] = '';
+            if ($existing_image &&
+                    ((!isset($key_values['image']) || empty($key_values['image']))
+                    || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
                 self::_deleteImage($existing_image);
             }
 
@@ -998,10 +998,11 @@ class TfishContentHandler
                 $key_values['file_size'] = '';
             }
 
-            // If the updated object has no media attached, delete any old media files.
-            if ((!isset($key_values['media']) || empty($key_values['media']))
-                    || (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia']))
-                    && $existing_media) {
+            // If the updated object has no media attached, or has been instructed to delete
+            // attached image, delete any old media files.
+            if ($existing_media &&
+                    ((!isset($key_values['media']) || empty($key_values['media']))
+                    || (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])))) {
                 $key_values['media'] = '';
                 $key_values['format'] = '';
                 $key_values['file_size'] = '';
