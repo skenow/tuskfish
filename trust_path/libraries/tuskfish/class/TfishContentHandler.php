@@ -939,32 +939,48 @@ class TfishContentHandler
              * Image property.
              */
             
-            /**
-             * 1. Is there existing media?
-             * 2. Is this object allowed to have media?
-             * 3. Has the existing media been flagged for deletion?
-             */
-            
             // 1. Check if there is an existing image file associated with this content object.
             $existing_image = self::_checkImage($clean_id);
 
-            // Is this object allowed to have an image property?
+            // 2. Is this content type allowed to have an image property?
+            if (!array_key_exists('image', $property_whitelist)) {
+                $key_values['image'] = '';
+                if ($existing_image) {
+                    self::_deleteImage($existing_image);
+                    $existing_image = '';
+                }
+            }
+            
+            // 3. Has an existing image file been flagged for deletion?
+            if ($existing_image) {
+                if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
+                    $key_values['image'] = '';
+                    self::_deleteImage($existing_image);
+                    $existing_image = '';
+                }
+            }
+            
+            // 4. Check if a new image file has been uploaded by looking in $_FILES.
             if (array_key_exists('image', $property_whitelist)) {
 
-                // Check if a new image file has been uploaded by looking in $_FILES.
-                if (!empty($_FILES['image']['name'])) {
+                if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
                     $filename = TfishFilter::trimString($_FILES['image']['name']);
-                    
                     $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
                     
                     if ($clean_filename) {
                         $key_values['image'] = $clean_filename;
+                        
+                        // Delete old image file, if any.
+                        if ($existing_image) {
+                            self::_deleteImage($existing_image);
+                        }
+                    } else {
+                        $key_values['image'] = '';
                     }
+                    
                 } else { // No new image, use the existing file name.
                     $key_values['image'] = $existing_image;
                 }
-            } else {
-                $key_values['image'] = '';
             }
 
             // If the updated object has no image attached, or has been instructed to delete
@@ -1005,24 +1021,31 @@ class TfishContentHandler
             }
             
             // 4. Check if a new media file has been uploaded by looking in $_FILES.
-            if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
-                $filename = TfishFilter::trimString($_FILES['media']['name']);
-                $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+            if (array_key_exists('media', $property_whitelist)) {
+                
+                if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
+                    $filename = TfishFilter::trimString($_FILES['media']['name']);
+                    $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
 
-                if ($clean_filename) {
-                    $key_values['media'] = $clean_filename;
-                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                    $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
-                    $key_values['format'] = $mimetype_whitelist[$extension];
-                    $key_values['file_size'] = $_FILES['media']['size'];
-                    
-                    // Delete old media file, if any.
-                    if ($existing_media) {
-                        self::_deleteMedia($existing_media);
+                    if ($clean_filename) {
+                        $key_values['media'] = $clean_filename;
+                        $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                        $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+                        $key_values['format'] = $mimetype_whitelist[$extension];
+                        $key_values['file_size'] = $_FILES['media']['size'];
+
+                        // Delete old media file, if any.
+                        if ($existing_media) {
+                            self::_deleteMedia($existing_media);
+                        }
+                    } else {
+                        $key_values['media'] = '';
+                        $key_values['format'] = '';
+                        $key_values['file_size'] = '';
                     }
+                } else { // No new media, use the existing file name.
+                    $key_values['media'] = $existing_media;
                 }
-            } else { // No new media, use the existing file name.
-                $key_values['media'] = $existing_media;
             }
         }
 
