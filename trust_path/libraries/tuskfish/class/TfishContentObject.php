@@ -230,7 +230,7 @@ class TfishContentObject extends TfishAncestralObject
      * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
      * 
      * @param string $property Name of property.
-     * @param string $escape_html Whether to escape HTML fields (teaser, description).
+     * @param bool $escape_html Whether to escape HTML fields (teaser, description).
      * @return string Human readable value escaped for display.
      */
     public function escape(string $property, bool $escape_html = false)
@@ -498,8 +498,9 @@ class TfishContentObject extends TfishAncestralObject
      * Note that the supplied data is internally validated by __set().
      * 
      * @param array $dirty_input Usually raw form $_REQUEST data.
+     * @param bool $live_urls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
      */
-    public function loadProperties(array $dirty_input)
+    public function loadProperties(array $dirty_input, $live_urls = true)
     {
 
         $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
@@ -523,14 +524,25 @@ class TfishContentObject extends TfishAncestralObject
         
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
         if (array_key_exists('teaser', $property_whitelist) && !empty($dirty_input['teaser'])) {
-            $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['teaser']);
+            
+            if ($live_urls === true) {
+                $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['teaser']);
+            } else {
+                $teaser = str_replace('TFISH_LINK', TFISH_LINK, $dirty_input['teaser']);
+            }
+            
             $this->__set('teaser', $teaser);
         }
-        
-        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
+
         if (array_key_exists('description', $property_whitelist)
                 && !empty($dirty_input['description'])) {
-            $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['description']);
+            
+            if ($live_urls === true) {
+                $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['description']);
+            } else {
+                $description = str_replace('TFISH_LINK', TFISH_LINK, $dirty_input['description']);
+            }
+            
             $this->__set('description', $description);
         }
 

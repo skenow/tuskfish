@@ -146,7 +146,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                     $tfish_template->page_title = TFISH_EDIT_CONTENT;
                     $tfish_template->op = 'update'; // Critical to launch correct submission action.
                     $tfish_template->action = TFISH_UPDATE;
-                    $tfish_template->content = TfishContentHandler::toObject($row);
+                    $tfish_template->content = TfishContentHandler::toObject($row, false);
                     $tfish_template->content_types = TfishContentHandler::getTypes();
                     $tfish_template->rights = TfishContentHandler::getRights();
                     $tfish_template->languages = TfishContentHandler::getLanguages();
