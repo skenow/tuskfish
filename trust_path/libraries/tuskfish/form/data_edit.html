@@ -165,6 +165,40 @@
                 $('#media').on('fileclear', function(tf_deleteMedia) {
                     document.getElementById("deleteMedia").value = "1";
                 });
+                
+                $('#type').change(function(tf_resetMedia) {
+                    var allowedExtensionTypes = [];
+                    
+                    switch($("#type").val()) {
+                        case 'TfishAudio':
+                            allowedExtensionTypes.push("oga", "ogg", "wav");
+                            break;
+                        case 'TfishImage':
+                            allowedExtensionTypes.push("gif", "jpg", "png");
+                            break;
+                        case 'TfishVideo':
+                            allowedExtensionTypes.push("mp4", "ogg", "webm");
+                            break;
+                        default:
+                            allowedExtensionTypes.push("doc", "docx", "pdf",
+                            "ppt", "pptx", "odt", "ods", "odp", "xls", "xlsx",
+                            "gif", "jpg", "png", "mp3", "oga", "ogg", "wav",
+                            "mp4", "ogv", "webm", "zip", "gz", "tar");
+                            break;
+                    }
+
+                    $('#media').fileinput('destroy').fileinput({
+                        showUpload: false,
+                        previewFileType: ['any'],
+                        initialPreview: '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                        initialPreviewAsData: true,
+                        initialPreviewShowDelete: false,
+                        initialPreviewDownloadUrl: '<?php if ($content->image) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                        initialCaption: '<?php echo $content->escape("media"); ?>',
+                        allowedFileExtensions: allowedExtensionTypes,
+                        theme: 'fa'
+                    });
+                });
             });
             </script>
             
