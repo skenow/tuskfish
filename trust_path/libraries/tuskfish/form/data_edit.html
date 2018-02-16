@@ -105,12 +105,12 @@
         <?php if (isset($content->image) && !empty($content->image)): ?>
         <div class="col-md-6 mb-4 text-left" id="imageContainer">
             <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-            <input id="image" name="image" type="file" data-preview-file-type="image" >
+            <input id="image" name="image" type="file" data-preview-file-type="image">
         </div>
         <?php else: ?>
             <div class="col-md-6 mb-3 text-left" id="imageContainer">
                 <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-                <input id="image" name="image" type="file" data-preview-file-type="image" >
+                <input id="image" name="image" type="file" data-preview-file-type="image">
             </div>
         <?php endif; ?>
         <script>
@@ -139,34 +139,20 @@
         <?php if (isset($content->media) && !empty($content->media)): ?>
             <div class="col-md-6 mb-4 text-left" id="mediaContainer">
                 <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
-                <input id="media" name="media" type="file" data-preview-file-type="text" >
+                <input id="media" name="media" type="file" data-preview-file-type="text">
             </div>
             <?php else: ?>
                 <div class="col-md-6 mb-4 text-left" id="mediaContainer">
                     <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
-                    <input id="media" name="media" type="file">
+                    <input id="media" name="media" type="file" data-preview-file-type="text">
                 </div>
             <?php endif; ?>
             <script>
             $(document).ready(function() {
-                $("#media").fileinput({
-                'showUpload': false,
-                'previewFileType': ["any"],
-                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                'initialPreviewAsData': true,
-                'initialPreviewShowDelete': false,
-                'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                'initialCaption': '<?php echo $content->escape("media"); ?>',
-                'allowedFileExtensions': ["doc","docx","gif","gz","jpg","mp3","mp4","odt", "ods",
-                        "odp", "oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm",
-                        "xls", "xlsx", "zip"],
-                'theme': "fa"});
-    
-                $('#media').on('fileclear', function(tf_deleteMedia) {
-                    document.getElementById("deleteMedia").value = "1";
-                });
                 
-                $('#type').change(function(tf_resetMedia) {
+                createMedia();
+                
+                function createMedia() {
                     var allowedExtensionTypes = [];
                     
                     switch($("#type").val()) {
@@ -186,18 +172,26 @@
                             "mp4", "ogv", "webm", "zip", "gz", "tar");
                             break;
                     }
+                    
+                    $("#media").fileinput({
+                    'showUpload': false,
+                    'previewFileType': ["any"],
+                    'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                    'initialPreviewAsData': true,
+                    'initialPreviewShowDelete': false,
+                    'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                    'initialCaption': '<?php echo $content->escape("media"); ?>',
+                    'allowedFileExtensions': allowedExtensionTypes,
+                    'theme': "fa"});
+                }
 
-                    $('#media').fileinput('destroy').fileinput({
-                        showUpload: false,
-                        previewFileType: ['any'],
-                        initialPreview: '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                        initialPreviewAsData: true,
-                        initialPreviewShowDelete: false,
-                        initialPreviewDownloadUrl: '<?php if ($content->image) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                        initialCaption: '<?php echo $content->escape("media"); ?>',
-                        allowedFileExtensions: allowedExtensionTypes,
-                        theme: 'fa'
-                    });
+                $('#media').on('fileclear', function(tf_deleteMedia) {
+                    document.getElementById("deleteMedia").value = "1";
+                });
+                
+                $('#type').change(function(tf_resetMedia) {
+                    $('#media').fileinput('destroy');
+                    createMedia();
                 });
             });
             </script>
