@@ -191,6 +191,29 @@
                 });
                 
                 $('#type').change(function(tf_resetMedia) {
+                    
+                    // 1. Could test whether the new type is incompatible with old before forcing
+                    // destroy. The only cases where destroy is required are when the transition
+                    // involves audio, image or video. The other types all use same set of media.
+                    
+                    // 2. If a destroy is necessary, and since refresh() doesn't work, it is best
+                    // not to try and preserve native file input information. Just present an empty
+                    // upload control and let them start again.
+                    
+                    // 3. The main issue with the current state of affairs (no refresh) is that
+                    // doing a hard-clear of the upload control will cause the existing file
+                    // reference to be destroyed.
+                    //
+                    // It would be best to WARN the user before this happens, but its going to add
+                    // a whole bunch of stuff. Could perhaps handle it with a hidden alert in the
+                    // form that displays when there's a problem? The alert could advise that
+                    // the media attachment would be removed by the server is proceed. Would
+                    // require an amendment to __set() that would remove the media attachment and
+                    // gracefully log an error (at the moment it's a graceless exit). [EASY].
+                    // 
+                    // Turn the submit button red if there's an incompatible attachment that will
+                    // die. [EASY].
+                    
                     $('#media').fileinput('destroy');
                     createMedia();
                 });
