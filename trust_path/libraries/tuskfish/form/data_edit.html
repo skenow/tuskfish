@@ -211,6 +211,10 @@
                     // require an amendment to __set() that would remove the media attachment and
                     // gracefully log an error (at the moment it's a graceless exit). [EASY].
                     // 
+                    // This is probably the best way out - no need to destroy the form, just shift
+                    // validation of allowed file types to own validation script and use alert
+                    // to inform the admin if its not going to work.
+                    // 
                     // Turn the submit button red if there's an incompatible attachment that will
                     // die. [EASY].
                     
