@@ -174,15 +174,16 @@
                     }
                     
                     $("#media").fileinput({
-                    'showUpload': false,
-                    'previewFileType': ["any"],
-                    'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                    'initialPreviewAsData': true,
-                    'initialPreviewShowDelete': false,
-                    'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                    'initialCaption': '<?php echo $content->escape("media"); ?>',
-                    'allowedFileExtensions': allowedExtensionTypes,
-                    'theme': "fa"});
+                        'showUpload': false,
+                        'previewFileType': ["any"],
+                        'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                        'initialPreviewAsData': true,
+                        'initialPreviewShowDelete': false,
+                        'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                        'initialCaption': '<?php echo $content->escape("media"); ?>',
+                        'allowedFileExtensions': allowedExtensionTypes,
+                        'theme': "fa"
+                    });
                 }
 
                 $('#media').on('fileclear', function(tf_deleteMedia) {
