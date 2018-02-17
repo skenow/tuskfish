@@ -311,3 +311,7 @@ define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
 // RC 4.
 define("TFISH_VIEW", "View");
 define("TFISH_SETTINGS", "Settings");
+
+// RC 5.
+define("TFISH_MEDIA_NOT_COMPATIBLE", "The selected media file is not compatible with the current "
+        . "content type. It will be discarded on save.");
