@@ -177,6 +177,8 @@
                 function checkMedia() {
                     var mediaMimeType = $('#format').val();
                     var allowedExtensionTypes = [];
+                    
+                    alert($('#type').val());
 
                     switch($("#type").val()) {
                         case 'TfishAudio':
@@ -248,16 +250,66 @@
                         $('.alert').addClass('hide');
                     }
                 }
+                
+                function getFileExtension(filename) {
+                    return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+                }
+                
+                function getMimeType($extension) {
+                    var mimeTypes = {};
+                    
+                    // Documents.
+                    mimeTypes.doc = "application/msword";
+                    mimeTypes.docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    mimeTypes.pdf = "application/pdf";
+                    mimeTypes.ppt = "application/vnd.ms-powerpoint";
+                    mimeTypes.pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                    mimeTypes.odt = "application/vnd.oasis.opendocument.text";
+                    mimeTypes.ods = "application/vnd.oasis.opendocument.spreadsheet";
+                    mimeTypes.odp = "application/vnd.oasis.opendocument.presentation";
+                    mimeTypes.xls = "application/vnd.ms-excel";
+                    mimeTypes.xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    
+                    // Images.
+                    mimeTypes.gif = "image/gif";
+                    mimeTypes.jpg = "image/jpeg";
+                    mimeTypes.png = "image/png";
+                    
+                    // Audio.
+                    mimeTypes.mp3 = "audio/mpeg";
+                    mimeTypes.oga = "audio/ogg";
+                    mimeTypes.ogg = "audio/ogg";
+                    mimeTypes.wav = "audio/x-wav";
+                    
+                    // Video.
+                    mimeTypes.mp4 = "video/mp4";
+                    mimeTypes.ogv = "video/ogg";
+                    mimeTypes.webm = "video/webm";
+                    
+                    // Archives.
+                    mimeTypes.zip = "application/zip";
+                    mimeTypes.gz = "application/x-gzip";
+                    mimeTypes.tar = "application/x-tar";
+                    
+                    return mimeTypes.extension;
+                }
 
+                // Set flag that media file should be deleted from server.
                 $('#media').on('fileclear', function(tf_deleteMedia) {
                     document.getElementById("deleteMedia").value = "1";
                 });
                 
-                $('#type').change(function(tf_resetMedia) { 
+                // Update the mime type on selecting a new media file.
+                $('#media').on('change', function(event) {
+                    var fileName = document.getElementById("media").files[0].name;
+                    var extension = getFileExtension(filename);
+                    var mimetype = getMimeType(extension);
+                    document.getElementById("format").value = mimeType;
                     checkMedia();
                 });
                 
-                $('#media').on('change', function(event) {
+                // Validate media file mimetype on changing the content type.
+                $('#type').change(function(tf_resetMedia) {
                     checkMedia();
                 });
             });

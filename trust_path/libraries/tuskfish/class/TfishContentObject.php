@@ -804,7 +804,6 @@ class TfishContentObject extends TfishAncestralObject
 
                 if ($clean_property === "format") {
                     $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                    
                     if (!empty($value) && !in_array($value, $mimetype_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
                     }
