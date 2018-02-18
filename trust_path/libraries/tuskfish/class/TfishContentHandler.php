@@ -1022,8 +1022,8 @@ class TfishContentHandler
             if (array_key_exists('media', $property_whitelist)) {
                 $clean_filename = '';
                 
-                // Get a whitelist of mimetypes allowed for this content type.
-                $mimetype_whitelist = TfishFileHandler::getTypeMimetypes($obj->type);
+                // Get a whitelist of permitted mimetypes.
+                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {

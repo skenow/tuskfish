@@ -160,84 +160,105 @@
             <script>
             $(document).ready(function() {
                 
-                createMedia();
+                $("#media").fileinput({
+                    'showUpload': false,
+                    'previewFileType': ["any"],
+                    'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                    'initialPreviewAsData': true,
+                    'initialPreviewShowDelete': false,
+                    'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
+                    'initialCaption': '<?php echo $content->escape("media"); ?>',
+                    'allowedFileExtensions': ["doc","docx","gif","gz","jpg","mp3","mp4","odt",
+                        "ods","odp","oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm",
+                        "xls","xlsx","zip"],
+                    'theme': "fa"
+                });
                 
-                function createMedia() {
+                function checkMedia() {
+                    var mediaMimeType = $('#format').val();
                     var allowedExtensionTypes = [];
-                    
+
                     switch($("#type").val()) {
                         case 'TfishAudio':
-                            allowedExtensionTypes.push("oga", "ogg", "mp3", "wav");
-                            $('.alert').removeClass('d-block');
-                            $('.alert').removeClass('show');
-                            $('.alert').addClass('d-none');
-                            $('.alert').addClass('hide');
+                            allowedExtensionTypes.push(
+                                "audio/ogg",
+                                "audio/ogg",
+                                "audio/mpeg",
+                                "audio/x-wav"
+                            );
                             break;
+                            
                         case 'TfishImage':
-                            allowedExtensionTypes.push("gif", "jpg", "png");
-                            $('.alert').removeClass('d-none');
-                            $('.alert').removeClass('hide');
-                            $('.alert').addClass('d-block');
-                            $('.alert').addClass('show');
+                            allowedExtensionTypes.push(
+                                "image/gif",
+                                "image/jpeg",
+                                "image/png"
+                            );
                             break;
+                            
                         case 'TfishVideo':
-                            allowedExtensionTypes.push("mp4", "ogg", "webm");
+                            allowedExtensionTypes.push(
+                                "video/mp4",
+                                "video/ogg",
+                                "video/webm"
+                            );
                             break;
+                            
                         default:
-                            allowedExtensionTypes.push("doc", "docx", "pdf",
-                            "ppt", "pptx", "odt", "ods", "odp", "xls", "xlsx",
-                            "gif", "jpg", "png", "mp3", "oga", "ogg", "wav",
-                            "mp4", "ogv", "webm", "zip", "gz", "tar");
+                            allowedExtensionTypes.push(
+                                "application/msword", // Documents.
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                "application/pdf",
+                                "application/vnd.ms-powerpoint",
+                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                "application/vnd.oasis.opendocument.text",
+                                "application/vnd.oasis.opendocument.spreadsheet",
+                                "application/vnd.oasis.opendocument.presentation",
+                                "application/vnd.ms-excel",
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "image/gif", // Images.
+                                "image/jpeg",
+                                "image/png",
+                                "audio/mpeg", // Audio.
+                                "audio/ogg",
+                                "audio/ogg",
+                                "audio/x-wav",
+                                "video/mp4", // Video.
+                                "video/ogg",
+                                "video/webm",
+                                "application/zip", // Archives.
+                                "application/x-gzip",
+                                "application/x-tar"
+                            );
                             break;
                     }
                     
-                    $("#media").fileinput({
-                        'showUpload': false,
-                        'previewFileType': ["any"],
-                        'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                        'initialPreviewAsData': true,
-                        'initialPreviewShowDelete': false,
-                        'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->escape("media"); ?>',
-                        'initialCaption': '<?php echo $content->escape("media"); ?>',
-                        'allowedFileExtensions': allowedExtensionTypes,
-                        'theme': "fa"
-                    });
+                    // Mimetype is bad, show the alert.
+                    if ($.inArray(mediaMimeType, allowedExtensionTypes) === -1) {
+                        $('.alert').removeClass('d-none');
+                        $('.alert').removeClass('hide');
+                        $('.alert').addClass('d-block');
+                        $('.alert').addClass('show');
+
+                    // Mimetype is good, hide the alert.    
+                    } else {
+                        $('.alert').removeClass('d-block');
+                        $('.alert').removeClass('show');
+                        $('.alert').addClass('d-none');
+                        $('.alert').addClass('hide');
+                    }
                 }
 
                 $('#media').on('fileclear', function(tf_deleteMedia) {
                     document.getElementById("deleteMedia").value = "1";
                 });
                 
-                $('#type').change(function(tf_resetMedia) {
-                    
-                    // 1. Could test whether the new type is incompatible with old before forcing
-                    // destroy. The only cases where destroy is required are when the transition
-                    // involves audio, image or video. The other types all use same set of media.
-                    
-                    // 2. If a destroy is necessary, and since refresh() doesn't work, it is best
-                    // not to try and preserve native file input information. Just present an empty
-                    // upload control and let them start again.
-                    
-                    // 3. The main issue with the current state of affairs (no refresh) is that
-                    // doing a hard-clear of the upload control will cause the existing file
-                    // reference to be destroyed.
-                    //
-                    // It would be best to WARN the user before this happens, but its going to add
-                    // a whole bunch of stuff. Could perhaps handle it with a hidden alert in the
-                    // form that displays when there's a problem? The alert could advise that
-                    // the media attachment would be removed by the server is proceed. Would
-                    // require an amendment to __set() that would remove the media attachment and
-                    // gracefully log an error (at the moment it's a graceless exit). [EASY].
-                    // 
-                    // This is probably the best way out - no need to destroy the form, just shift
-                    // validation of allowed file types to own validation script and use alert
-                    // to inform the admin if its not going to work.
-                    // 
-                    // Turn the submit button red if there's an incompatible attachment that will
-                    // die. [EASY].
-                    
-                    $('#media').fileinput('destroy');
-                    createMedia();
+                $('#type').change(function(tf_resetMedia) { 
+                    checkMedia();
+                });
+                
+                $('#media').on('change', function(event) {
+                    checkMedia();
                 });
             });
             </script>
