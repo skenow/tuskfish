@@ -502,7 +502,6 @@ class TfishContentObject extends TfishAncestralObject
      */
     public function loadProperties(array $dirty_input, $live_urls = true)
     {
-
         $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
                 ? true : false;
         $delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia']))
@@ -551,18 +550,6 @@ class TfishContentObject extends TfishAncestralObject
             
             if ($clean_filename) {
                 $this->__set('image', $clean_filename);
-            }
-        }
-
-        if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
-            $clean_filename = TfishFilter::trimString($_FILES['media']['name']);
-            
-            if ($clean_filename) {
-                $this->__set('media', $clean_filename);
-                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                $extension = mb_strtolower(pathinfo($clean_filename, PATHINFO_EXTENSION), 'UTF-8');
-                $this->__set('format', $mimetype_whitelist[$extension]);
-                $this->__set('file_size', $_FILES['media']['size']);
             }
         }
     }
@@ -791,29 +778,19 @@ class TfishContentObject extends TfishAncestralObject
                 
                 // Check media file is a permitted mimetype.
                 if ($clean_property === "media") {
-                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                    $mimetype_whitelist = TfishFileHandler::getTypeMimetypes($this->__data['type']);
                     $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
+                    
                     if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
-                        trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+                        $this->__data['media'] = '';
+                        $this->__data['format'] = '';
+                        $this->__data['file_size'] = '';
                     }
                 }
 
                 if ($clean_property === "format") {
-                    switch ($this->__data['type']) {
-                        case "TfishAudio":
-                            $mimetype_whitelist = TfishFileHandler::allowedAudioMimetypes();
-                            break;
-                        case "TfishImage":
-                            $mimetype_whitelist = TfishFileHandler::allowedImageMimetypes();
-                            break;
-                        case "TfishVideo":
-                            $mimetype_whitelist = TfishFileHandler::allowedVideoMimetypes();
-                            break;
-                        default:
-                            $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                            break;
-                    }
-
+                    $mimetype_whitelist = TfishFileHandler::getTypeMimetypes($this->__data['type']);
+                    
                     if (!empty($value) && !in_array($value, $mimetype_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
                     }
@@ -863,5 +840,5 @@ class TfishContentObject extends TfishAncestralObject
     {
         return array();
     }
-
+    
 }

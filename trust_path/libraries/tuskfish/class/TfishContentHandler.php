@@ -129,8 +129,7 @@ class TfishContentHandler
      * @return bool True on success, false on failure.
      */
     public static function insert(TfishContentObject $obj)
-    {
-        
+    {   
         $key_values = $obj->toArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
@@ -915,7 +914,6 @@ class TfishContentHandler
      */
     public static function update(TfishContentObject $obj)
     {
-        
         $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
@@ -1020,31 +1018,54 @@ class TfishContentHandler
                 }
             }
             
-            // 4. Check if a new media file has been uploaded by looking in $_FILES.
+            // 4. Process media file.
             if (array_key_exists('media', $property_whitelist)) {
+                $clean_filename = '';
                 
+                // Get a whitelist of mimetypes allowed for this content type.
+                $mimetype_whitelist = TfishFileHandler::getTypeMimetypes($obj->type);
+                
+                // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
                     $filename = TfishFilter::trimString($_FILES['media']['name']);
-                    $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+                    $clean_filename = TfishFileHandler::uploadFile($filename, 'media'); 
+                } else {
+                    $clean_filename = $existing_media;
+                }
 
-                    if ($clean_filename) {
+                if ($clean_filename) {
+                    if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
+                        $extension = mb_strtolower(pathinfo($clean_filename, PATHINFO_EXTENSION), 'UTF-8');
+
+                        // Set values of new media file.
                         $key_values['media'] = $clean_filename;
-                        $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
-                        $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
                         $key_values['format'] = $mimetype_whitelist[$extension];
                         $key_values['file_size'] = $_FILES['media']['size'];
 
-                        // Delete old media file, if any.
+                        // Delete any old media file.
                         if ($existing_media) {
                             self::_deleteMedia($existing_media);
+                            $existing_media = '';
                         }
+                    // No new media, use the existing file name. Still need to validate it as the
+                    // content type may have changed.
                     } else {
-                        $key_values['media'] = '';
-                        $key_values['format'] = '';
-                        $key_values['file_size'] = '';
+                        if ($existing_media) {
+                            $key_values['media'] = $existing_media;
+                            $key_values['format'] = $obj->format;
+                            $key_values['file_size'] = $obj->file_size;
+                        }
+                    }           
+                } else {
+                    $key_values['media'] = '';
+                    $key_values['format'] = '';
+                    $key_values['file_size'] = '';
+
+                    // Delete any old media file.
+                    if ($existing_media) {
+                        self::_deleteMedia($existing_media);
+                        $existing_media = '';
                     }
-                } else { // No new media, use the existing file name.
-                    $key_values['media'] = $existing_media;
                 }
             }
         }

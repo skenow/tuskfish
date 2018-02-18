@@ -115,7 +115,7 @@
         <?php if (isset($content->image) && !empty($content->image)): ?>
         <div class="col-md-6 mb-4 text-left" id="imageContainer">
             <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-            <input id="image" name="image" type="file" data-preview-file-type="image">
+            <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo $content->escape('image'); ?>">
         </div>
         <?php else: ?>
             <div class="col-md-6 mb-3 text-left" id="imageContainer">
@@ -149,7 +149,7 @@
         <?php if (isset($content->media) && !empty($content->media)): ?>
             <div class="col-md-6 mb-4 text-left" id="mediaContainer">
                 <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
-                <input id="media" name="media" type="file" data-preview-file-type="text">
+                <input id="media" name="media" type="file" data-preview-file-type="text" value="<?php echo $content->escape('media'); ?>">
             </div>
             <?php else: ?>
                 <div class="col-md-6 mb-4 text-left" id="mediaContainer">
@@ -167,7 +167,7 @@
                     
                     switch($("#type").val()) {
                         case 'TfishAudio':
-                            allowedExtensionTypes.push("oga", "ogg", "wav");
+                            allowedExtensionTypes.push("oga", "ogg", "mp3", "wav");
                             $('.alert').removeClass('d-block');
                             $('.alert').removeClass('show');
                             $('.alert').addClass('d-none');

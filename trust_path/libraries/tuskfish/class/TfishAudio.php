@@ -65,7 +65,7 @@ class TfishAudio extends TfishContentObject
         parent::__construct();
 
         // Declare the type, template and module for this this class
-        $this->__data['type'] = "audio";
+        $this->__data['type'] = "TfishAudio";
         $this->__data['template'] = "audio";
         $this->__data['module'] = "soundtracks";
         $this->__data['icon'] = '<i class="fas fa-headphones"></i>';

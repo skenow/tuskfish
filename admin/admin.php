@@ -189,7 +189,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
-
+            
             $clean_type = TfishFilter::trimString($_REQUEST['type']);
             $type_whitelist = TfishContentHandler::getTypes();
             

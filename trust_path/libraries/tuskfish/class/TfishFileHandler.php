@@ -377,6 +377,32 @@ class TfishFileHandler
             "tar" => "application/x-tar"
         );
     }
+    
+    /**
+     * Returns an array of permitted extensions/mimetypes for a given content type.
+     * 
+     * @param string $type The type (class) of content object.
+     * @return array Array of mimetypes as extension => mimetype pairs.
+     */
+    public static function getTypeMimetypes(string $type)
+    {
+        $clean_type = TfishFilter::trimString($type);
+
+        switch ($clean_type) {
+            case "TfishAudio":
+                return self::allowedAudioMimetypes();
+                break;
+            case "TfishImage":
+                return self::allowedImageMimetypes();
+                break;
+            case "TfishVideo":
+                return self::allowedVideoMimetypes();
+                break;
+            default:
+                return self::getPermittedUploadMimetypes();
+                break;
+        }
+    }
 
     /**
      * Initiate streaming of a downloadable media file associated with a content object.
