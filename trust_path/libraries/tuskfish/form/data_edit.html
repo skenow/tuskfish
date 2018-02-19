@@ -175,12 +175,13 @@
                 });
                 
                 function checkMedia() {
-                    var mediaMimeType = $('#format').val();
-                    var allowedExtensionTypes = [];
-                    
-                    alert($('#type').val());
+                    var allowedExtensionTypes = [""];
+                    var mediaMimeType = $('#format').val() ? $('#format').val() : '';
 
                     switch($("#type").val()) {
+                        case '': // No media file.
+                            break;
+                        
                         case 'TfishAudio':
                             allowedExtensionTypes.push(
                                 "audio/ogg",
@@ -235,15 +236,15 @@
                             break;
                     }
                     
-                    // Mimetype is bad, show the alert.
+                    // Show or hide the mimetype warning.
                     if ($.inArray(mediaMimeType, allowedExtensionTypes) === -1) {
+                        // Mimetype is bad, show the alert.
                         $('.alert').removeClass('d-none');
                         $('.alert').removeClass('hide');
                         $('.alert').addClass('d-block');
-                        $('.alert').addClass('show');
-
-                    // Mimetype is good, hide the alert.    
+                        $('.alert').addClass('show');                        
                     } else {
+                        // Mimetype is good, or there is no media file, hide the alert.
                         $('.alert').removeClass('d-block');
                         $('.alert').removeClass('show');
                         $('.alert').addClass('d-none');
@@ -251,6 +252,9 @@
                     }
                 }
                 
+                // This might not work with 2 or 4 character extensions. It would be better
+                // to get the length of the filename and just slice the whole thing forward
+                // of the last dot.
                 function getFileExtension(filename) {
                     return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
                 }
@@ -296,10 +300,11 @@
 
                 // Set flag that media file should be deleted from server.
                 $('#media').on('fileclear', function(tf_deleteMedia) {
+                    document.getElementById("format").value="";
                     document.getElementById("deleteMedia").value = "1";
+                    alert('clear');
                 });
                 
-                // Update the mime type on selecting a new media file.
                 $('#media').on('change', function(event) {
                     var fileName = document.getElementById("media").files[0].name;
                     var extension = getFileExtension(filename);
