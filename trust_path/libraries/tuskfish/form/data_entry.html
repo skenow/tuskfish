@@ -1,6 +1,16 @@
 <form class="form-horizontal" action="admin.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
     
     <div class="row">
+        
+      <!-- Media file type compatibility alert -->
+      <div class="col-12">
+        <div class="mb-3 alert alert-danger alert-dismissible fade d-none" role="alert">
+          <?php echo '<i class="fas fa-exclamation-triangle"></i> ' . TFISH_MEDIA_NOT_COMPATIBLE; ?>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
     
       <!-- Type -->
       <div class="col-md-6 col-lg-4 mb-3 text-left" id="typeContainer">
@@ -102,7 +112,7 @@
 
         <!-- Media -->
         <div class="col-md-6 mb-3 text-left" id="mediaContainer">
-            <label for="media"><strong><?php echo TFISH_MEDIA; ?></strong></label>
+            <label for="media"><span class="alert2 text-danger d-none  hide"><i class="fas fa-exclamation-triangle"></i> </span><strong><?php echo TFISH_MEDIA; ?></strong></label>
             <input id="media" name="media" type="file" data-preview-file-type="text" >
         </div>
         <script>
@@ -114,7 +124,158 @@
                 "oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm","xls", "xlsx",
                 "zip"],
             'theme': "fa"});
+        
+        function checkMedia() {
+            var allowedExtensionTypes = [""];
+            var mediaMimeType = $('#format').val() ? $('#format').val() : '';
+
+            switch($("#type").val()) {
+                case '': // No media file.
+                    break;
+
+                case 'TfishAudio':
+                    allowedExtensionTypes.push(
+                        "audio/ogg",
+                        "audio/ogg",
+                        "audio/mpeg",
+                        "audio/x-wav"
+                    );
+                    break;
+
+                case 'TfishImage':
+                    allowedExtensionTypes.push(
+                        "image/gif",
+                        "image/jpeg",
+                        "image/png"
+                    );
+                    break;
+
+                case 'TfishVideo':
+                    allowedExtensionTypes.push(
+                        "video/mp4",
+                        "video/ogg",
+                        "video/webm"
+                    );
+                    break;
+
+                default:
+                    allowedExtensionTypes.push(
+                        "application/msword", // Documents.
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        "application/pdf",
+                        "application/vnd.ms-powerpoint",
+                        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                        "application/vnd.oasis.opendocument.text",
+                        "application/vnd.oasis.opendocument.spreadsheet",
+                        "application/vnd.oasis.opendocument.presentation",
+                        "application/vnd.ms-excel",
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "image/gif", // Images.
+                        "image/jpeg",
+                        "image/png",
+                        "audio/mpeg", // Audio.
+                        "audio/ogg",
+                        "audio/ogg",
+                        "audio/x-wav",
+                        "video/mp4", // Video.
+                        "video/ogg",
+                        "video/webm",
+                        "application/zip", // Archives.
+                        "application/x-gzip",
+                        "application/x-tar"
+                    );
+                    break;
+            }
+
+            // Show or hide the mimetype warning.
+            if ($.inArray(mediaMimeType, allowedExtensionTypes) === -1) {
+                // Mimetype is bad, show the alerts.
+                $('.alert').removeClass('d-none');
+                $('.alert').removeClass('hide');
+                $('.alert').addClass('d-block');
+                $('.alert').addClass('show');
+                $('.alert2').removeClass('d-none');
+                $('.alert2').removeClass('hide');
+                $('.alert2').addClass('d-inline');
+                $('.alert2').addClass('show');   
+            } else {
+                // Mimetype is good, or there is no media file, hide the alerts.
+                $('.alert').removeClass('d-block');
+                $('.alert').removeClass('show');
+                $('.alert').addClass('d-none');
+                $('.alert').addClass('hide');
+                $('.alert2').removeClass('d-inline');
+                $('.alert2').removeClass('show');
+                $('.alert2').addClass('d-none');
+                $('.alert2').addClass('hide');
+            }
+        }
+
+        function getFileExtension(filename) {
+            return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+        }
+
+        function getMimeType(extension) {
+            var mimeTypes = {};
+
+            // Documents.
+            mimeTypes.doc = "application/msword";
+            mimeTypes.docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            mimeTypes.pdf = "application/pdf";
+            mimeTypes.ppt = "application/vnd.ms-powerpoint";
+            mimeTypes.pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            mimeTypes.odt = "application/vnd.oasis.opendocument.text";
+            mimeTypes.ods = "application/vnd.oasis.opendocument.spreadsheet";
+            mimeTypes.odp = "application/vnd.oasis.opendocument.presentation";
+            mimeTypes.xls = "application/vnd.ms-excel";
+            mimeTypes.xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+            // Images.
+            mimeTypes.gif = "image/gif";
+            mimeTypes.jpg = "image/jpeg";
+            mimeTypes.png = "image/png";
+
+            // Audio.
+            mimeTypes.mp3 = "audio/mpeg";
+            mimeTypes.oga = "audio/ogg";
+            mimeTypes.ogg = "audio/ogg";
+            mimeTypes.wav = "audio/x-wav";
+
+            // Video.
+            mimeTypes.mp4 = "video/mp4";
+            mimeTypes.ogv = "video/ogg";
+            mimeTypes.webm = "video/webm";
+
+            // Archives.
+            mimeTypes.zip = "application/zip";
+            mimeTypes.gz = "application/x-gzip";
+            mimeTypes.tar = "application/x-tar";
+
+            return mimeTypes[extension];
+        }
+
+        // Set flag that media file should be deleted from server.
+        $('#media').on('fileclear', function(tf_deleteMedia) {
+            document.getElementById("format").value="";
+            // Not required on data entry form as no media has been uploaded.
+            //document.getElementById("deleteMedia").value = "1";
+            checkMedia();
         });
+
+        $('#media').on('change', function(event) {
+            var filename = document.getElementById("media").files[0].name;
+            var extension = getFileExtension(filename);
+            var mimetype = getMimeType(extension);
+            var format = document.getElementById("format");                    
+            document.getElementById("format").value = mimetype;
+            checkMedia();
+        });
+
+        // Validate media file mimetype on changing the content type.
+        $('#type').change(function(tf_resetMedia) {
+            checkMedia();
+        });
+    });
         </script>
 
         <!-- Caption -->
@@ -160,6 +321,13 @@
                 <label class="custom-control-label" for="offline"><?php echo TFISH_OFFLINE; ?></label>
             </div>
         </div>
+        
+        <!-- Format -->
+        <?php if ($content->format): ?>
+        <input type="hidden" id="format" name="format" value="<?php echo $content->format; ?>" />
+        <?php else: ?>
+        <input type="hidden" id="format" name="format" value="" />
+        <?php endif; ?>
 
         <div class="col-md-12" id="metaHeader">
             <h2><?php echo TFISH_META_TAGS; ?><h2>
