@@ -258,6 +258,7 @@
         $('#media').on('fileclear', function(tf_deleteMedia) {
             document.getElementById("format").value="";
             // Not required on data entry form as no media has been uploaded.
+            // Should move the JS into a separate file and include it, as there is duplication.
             //document.getElementById("deleteMedia").value = "1";
             checkMedia();
         });
