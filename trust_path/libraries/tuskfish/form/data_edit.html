@@ -148,12 +148,12 @@
         <!-- Media -->
         <?php if (isset($content->media) && !empty($content->media)): ?>
             <div class="col-md-6 mb-4 text-left" id="mediaContainer">
-                <label for="media"><strong><span class="alert2 text-danger d-none hide"> <i class="fas fa-exclamation-triangle"></i> </span><?php echo TFISH_MEDIA; ?></strong></label>
+                <label for="media"><strong><span class="alert2 text-danger d-none hide"><i class="fas fa-exclamation-triangle"></i> </span><?php echo TFISH_MEDIA; ?></strong></label>
                 <input id="media" name="media" type="file" data-preview-file-type="text" value="<?php echo $content->escape('media'); ?>">
             </div>
             <?php else: ?>
                 <div class="col-md-6 mb-4 text-left" id="mediaContainer">
-                    <label for="media"><span class="alert2 text-danger d-none  hide"> <i class="fas fa-exclamation-triangle"></i></span> <strong><?php echo TFISH_MEDIA; ?></strong></label>
+                    <label for="media"><span class="alert2 text-danger d-none  hide"><i class="fas fa-exclamation-triangle"></i> </span><strong><?php echo TFISH_MEDIA; ?></strong></label>
                     <input id="media" name="media" type="file" data-preview-file-type="text">
                 </div>
             <?php endif; ?>
