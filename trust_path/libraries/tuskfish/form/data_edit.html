@@ -455,10 +455,9 @@
                 }
                 if ($("#type").val() === 'TfishBlock') {
                     var disabledProperties = [
-                        'teaserContainer', 'mediaContainer', 'creatorContainer', 'imageContainer',
-                        'captionContainer', 'dateContainer', 'parentContainer', 'languageContainer',
-                        'rightsContainer', 'publisherContainer', 'metaHeader', 'metaTitleContainer',
-                        'seoContainer', 'metaDescriptionContainer'];
+                        'teaserContainer', 'creatorContainer', 'parentContainer', 'rightsContainer',
+                        'publisherContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
+                        'metaDescriptionContainer']
                     $.each(disabledProperties, function (i, value) {
                         $('#' + value).hide();
                     });

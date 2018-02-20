@@ -324,11 +324,7 @@
         </div>
         
         <!-- Format -->
-        <?php if ($content->format): ?>
-        <input type="hidden" id="format" name="format" value="<?php echo $content->format; ?>" />
-        <?php else: ?>
         <input type="hidden" id="format" name="format" value="" />
-        <?php endif; ?>
 
         <div class="col-md-12" id="metaHeader">
             <h2><?php echo TFISH_META_TAGS; ?><h2>
@@ -383,10 +379,9 @@
             }
             if ($("#type").val() === 'TfishBlock') {
                 var disabledProperties = [
-                    'teaserContainer', 'mediaContainer', 'creatorContainer', 'imageContainer',
-                    'captionContainer', 'dateContainer', 'parentContainer', 'languageContainer',
-                    'rightsContainer', 'publisherContainer', 'metaHeader', 'metaTitleContainer',
-                    'seoContainer', 'metaDescriptionContainer'];
+                    'teaserContainer', 'creatorContainer', 'parentContainer', 'rightsContainer',
+                    'publisherContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
+                    'metaDescriptionContainer'];
                 $.each(disabledProperties, function (i, value) {
                     $('#' + value).hide();
                 });

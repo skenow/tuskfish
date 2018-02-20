@@ -109,15 +109,8 @@ class TfishBlock extends TfishContentObject
     {
         return array(
             'teaser',
-            'media',
-            'format',
-            'file_size',
             'creator',
-            'image',
-            'caption',
-            'date',
             'parent',
-            'language',
             'rights',
             'publisher',
             'counter',
