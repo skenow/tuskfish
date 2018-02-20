@@ -3,7 +3,7 @@
 <!-- Title and meta information -->
 <div>
   <h2 class="title">
-    <?php if ($content->media): ?>
+    <?php if ($content->validMedia()): ?>
     <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
     <?php else: ?>
     <?php echo $content->icon . ' ' . $content->escape('title'); ?>
@@ -21,7 +21,7 @@
   <?php endif; ?>
 </div>
 
-<?php if ($content->media): ?>
+<?php if ($content->validMedia()): ?>
 <div class="audio-player text-left">
   <audio controls>
     <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo $content->format; ?>">

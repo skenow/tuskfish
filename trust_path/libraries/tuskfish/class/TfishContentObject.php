@@ -840,6 +840,44 @@ class TfishContentObject extends TfishAncestralObject
                 break;
         }
     }
+    
+    /**
+     * Determine if the media file (mime) type is valid for this content type.
+     * 
+     * Used in templates to determine whether a media file should be displayed or not.
+     * For example, if you attach a video file to an audio content object, the
+     * inline player will not be displayed (because it will not work).
+     * 
+     * @return boolean True if media mimetype is valid for this content type, otherwise false.
+     */
+    public function validMedia()
+    {
+        if (!$this->__data['media']) {
+            return false;
+        }
+        
+        $allowed_mimetypes = array();
+
+        switch($this->__data['type']) {
+            case "TfishAudio":
+                $allowed_mimetypes = TfishFileHandler::allowedAudioMimetypes();
+                break;
+            case "TfishImage":
+                $allowed_mimetypes = TfishFileHandler::allowedImageMimetypes();
+                break;
+            case "TfishVideo":
+                $allowed_mimetypes = TfishFileHandler::allowedVideoMimetypes();
+                break;
+            default:
+                $allowed_mimetypes = TfishFileHandler::getPermittedUploadMimetypes();
+        }
+
+        if (in_array($this->__data['format'], $allowed_mimetypes)) {
+            return true;
+        }
+        
+        return false;
+    }
 
     /**
      * Returns an array of base object properties that are not used by this subclass.

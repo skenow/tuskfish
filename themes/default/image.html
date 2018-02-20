@@ -37,7 +37,7 @@
 </div>
 
 <!-- Media attachment -->
-<?php if ($content->media): ?>
+<?php if ($content->validMedia()): ?>
 <div>
   <p class="media"><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><i title="<?php echo TFISH_DOWNLOAD; ?>" class="fas fa-download"></i> <?php echo $content->media; ?></a></b></p>
 </div>
