@@ -1,10 +1,13 @@
 // Shows/hides form fields that are relevant/irrelevant to the content type.
 $(document).ready(function() {
+    checkMedia();
+        
     var allowedProperties = ['teaserContainer', 'descriptionContainer', 'captionContainer',
         'creatorContainer', 'dateContainer', 'imageContainer', 'languageContainer',
         'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer',
         'tagsContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
         'metaDescriptionContainer'];
+    
     $("#type").change(function () {
         $.each(allowedProperties, function (i, value) {
             $('#' + value).show();
@@ -26,6 +29,8 @@ $(document).ready(function() {
                 $('#' + value).hide();
             });
         }
+        
+        checkMedia();
     });
 
     // Set flag that media file should be deleted from server.
@@ -44,14 +49,15 @@ $(document).ready(function() {
     $('#media').on('change', function(event) {
         var filename = document.getElementById("media").files[0].name;
         var extension = getFileExtension(filename);
-        var mimetype = getMimeType(extension);
-        var format = document.getElementById("format");                    
-        document.getElementById("format").value = mimetype;
-        checkMedia();
-    });
+        var mimeType = '';
+        var allMimeTypes = getAllMimeType();
+        
+        if (allMimeTypes[extension]) {
+            mimeType = allMimeTypes[extension];
+        }
 
-    // Validate media file mimetype on changing the content type.
-    $('#type').change(function(tf_resetMedia) {
+        var format = document.getElementById("format");                    
+        document.getElementById("format").value = mimeType;
         checkMedia();
     });
 });
@@ -60,89 +66,69 @@ $(document).ready(function() {
 // Shows / hides a warning if the media file is inappropriate for the content
 // type.
 function checkMedia() {
-    var allowedExtensionTypes = [""];
+    var mimeTypes = {};
     var mediaMimeType = $('#format').val() ? $('#format').val() : '';
-
+    
+    // If there is no media attachment then no need to show file type warnings.
+    if (mediaMimeType === '') {
+        hideAlerts();
+        return;
+    }
+    
+    // Get a list of mime types appropriate for this content type.
     switch($("#type").val()) {
-        case '': // No media file.
-            break;
-
         case 'TfishAudio':
-            allowedExtensionTypes.push(
-                "audio/ogg",
-                "audio/ogg",
-                "audio/mpeg",
-                "audio/x-wav"
-            );
+            mimeTypes = getAudioMimeType();
             break;
 
         case 'TfishImage':
-            allowedExtensionTypes.push(
-                "image/gif",
-                "image/jpeg",
-                "image/png"
-            );
+            mimeTypes = getImageMimeType();
             break;
 
         case 'TfishVideo':
-            allowedExtensionTypes.push(
-                "video/mp4",
-                "video/ogg",
-                "video/webm"
-            );
+            mimeTypes = getVideoMimeType();
             break;
 
         default:
-            allowedExtensionTypes.push(
-                "application/msword", // Documents.
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                "application/pdf",
-                "application/vnd.ms-powerpoint",
-                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                "application/vnd.oasis.opendocument.text",
-                "application/vnd.oasis.opendocument.spreadsheet",
-                "application/vnd.oasis.opendocument.presentation",
-                "application/vnd.ms-excel",
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "image/gif", // Images.
-                "image/jpeg",
-                "image/png",
-                "audio/mpeg", // Audio.
-                "audio/ogg",
-                "audio/ogg",
-                "audio/x-wav",
-                "video/mp4", // Video.
-                "video/ogg",
-                "video/webm",
-                "application/zip", // Archives.
-                "application/x-gzip",
-                "application/x-tar"
-            );
+            mimeTypes = getAllMimeType();
             break;
     }
-
+    
+    // You'd think Javascript would have a standard way to find values in objects, but you'd be wrong.
+    var typeList = $.map(mimeTypes, function(value, index) {
+        return [value];
+    });
+    
     // Show or hide the mimetype warning.
-    if ($.inArray(mediaMimeType, allowedExtensionTypes) === -1) {
-        // Mimetype is bad, show the alerts.
-        $('.alert').removeClass('d-none');
-        $('.alert').removeClass('hide');
-        $('.alert').addClass('d-block');
-        $('.alert').addClass('show');
-        $('.alert2').removeClass('d-none');
-        $('.alert2').removeClass('hide');
-        $('.alert2').addClass('d-inline');
-        $('.alert2').addClass('show');   
+    if ($.inArray(mediaMimeType, typeList) === -1) {
+        showAlerts(); // Mimetype is bad.
     } else {
-        // Mimetype is good, or there is no media file, hide the alerts.
-        $('.alert').removeClass('d-block');
-        $('.alert').removeClass('show');
-        $('.alert').addClass('d-none');
-        $('.alert').addClass('hide');
-        $('.alert2').removeClass('d-inline');
-        $('.alert2').removeClass('show');
-        $('.alert2').addClass('d-none');
-        $('.alert2').addClass('hide');
+        hideAlerts(); // Mimetype is good.
     }
+}
+
+// Show warning if media file type is inappropriate for this content type.
+function showAlerts() {
+    $('.alert').removeClass('d-none');
+    $('.alert').removeClass('hide');
+    $('.alert').addClass('d-block');
+    $('.alert').addClass('show');
+    $('.alert2').removeClass('d-none');
+    $('.alert2').removeClass('hide');
+    $('.alert2').addClass('d-inline');
+    $('.alert2').addClass('show');
+}
+
+// Hide warning if media file type is inappropriate for this content type.
+function hideAlerts() {
+    $('.alert').removeClass('d-block');
+    $('.alert').removeClass('show');
+    $('.alert').addClass('d-none');
+    $('.alert').addClass('hide');
+    $('.alert2').removeClass('d-inline');
+    $('.alert2').removeClass('show');
+    $('.alert2').addClass('d-none');
+    $('.alert2').addClass('hide');
 }
 
 // Gets the file extension of the media file (used to set mimetype).
@@ -150,42 +136,64 @@ function getFileExtension(filename) {
     return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
 }
 
+// Get an audio mimetype.
+function getAudioMimeType() {
+    var audioMimeType = {}; 
+    
+    audioMimeType.mp3 = "audio/mpeg";
+    audioMimeType.oga = "audio/ogg";
+    audioMimeType.ogg = "audio/ogg";
+    audioMimeType.wav = "audio/x-wav";
+    
+    return audioMimeType;
+}
+
+// Get an image mimetype.
+function getImageMimeType() {
+    var imageMimeType = {};
+    
+    imageMimeType.gif = "image/gif";
+    imageMimeType.jpg = "image/jpeg";
+    imageMimeType.png = "image/png";
+    
+    return imageMimeType;
+}
+
+// Get a video mimetype.
+function getVideoMimeType() {
+    var videoMimeType = {};
+    
+    videoMimeType.mp4 = "video/mp4";
+    videoMimeType.ogv = "video/ogg";
+    videoMimeType.webm = "video/webm";
+    
+    return videoMimeType;
+}
+
 // Get the appropriate mimetype, given a file extension.
-function getMimeType(extension) {
-    var mimeTypes = {};
+function getAllMimeType() {
+    var audioMimeTypes = getAudioMimeType();
+    var imageMimeTypes = getImageMimeType();
+    var videoMimeTypes = getVideoMimeType();
+    
+    var allMimeTypes = Object.assign({}, audioMimeTypes, imageMimeTypes, videoMimeTypes);
 
-    // Documents.
-    mimeTypes.doc = "application/msword";
-    mimeTypes.docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    mimeTypes.pdf = "application/pdf";
-    mimeTypes.ppt = "application/vnd.ms-powerpoint";
-    mimeTypes.pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-    mimeTypes.odt = "application/vnd.oasis.opendocument.text";
-    mimeTypes.ods = "application/vnd.oasis.opendocument.spreadsheet";
-    mimeTypes.odp = "application/vnd.oasis.opendocument.presentation";
-    mimeTypes.xls = "application/vnd.ms-excel";
-    mimeTypes.xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    // Add documents.
+    allMimeTypes.doc = "application/msword";
+    allMimeTypes.docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    allMimeTypes.pdf = "application/pdf";
+    allMimeTypes.ppt = "application/vnd.ms-powerpoint";
+    allMimeTypes.pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    allMimeTypes.odt = "application/vnd.oasis.opendocument.text";
+    allMimeTypes.ods = "application/vnd.oasis.opendocument.spreadsheet";
+    allMimeTypes.odp = "application/vnd.oasis.opendocument.presentation";
+    allMimeTypes.xls = "application/vnd.ms-excel";
+    allMimeTypes.xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-    // Images.
-    mimeTypes.gif = "image/gif";
-    mimeTypes.jpg = "image/jpeg";
-    mimeTypes.png = "image/png";
+    // Add archives.
+    allMimeTypes.zip = "application/zip";
+    allMimeTypes.gz = "application/x-gzip";
+    allMimeTypes.tar = "application/x-tar";
 
-    // Audio.
-    mimeTypes.mp3 = "audio/mpeg";
-    mimeTypes.oga = "audio/ogg";
-    mimeTypes.ogg = "audio/ogg";
-    mimeTypes.wav = "audio/x-wav";
-
-    // Video.
-    mimeTypes.mp4 = "video/mp4";
-    mimeTypes.ogv = "video/ogg";
-    mimeTypes.webm = "video/webm";
-
-    // Archives.
-    mimeTypes.zip = "application/zip";
-    mimeTypes.gz = "application/x-gzip";
-    mimeTypes.tar = "application/x-tar";
-
-    return mimeTypes[extension];
+    return allMimeTypes;
 }
