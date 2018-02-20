@@ -1,6 +1,5 @@
 // Shows/hides form fields that are relevant/irrelevant to the content type.
 $(document).ready(function() {
-    checkMedia();
         
     var allowedProperties = ['teaserContainer', 'descriptionContainer', 'captionContainer',
         'creatorContainer', 'dateContainer', 'imageContainer', 'languageContainer',
@@ -32,6 +31,9 @@ $(document).ready(function() {
         
         checkMedia();
     });
+    
+    // Check the media when form loads. The warning displays faster if initiated from this position.
+    checkMedia();
 
     // Set flag that media file should be deleted from server.
     $('#media').on('fileclear', function(tf_deleteMedia) {
