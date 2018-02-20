@@ -117,10 +117,7 @@ class TfishTag extends TfishContentObject
     public function zeroedProperties()
     {
         return array(
-            'format',
-            'file_size',
             'creator',
-            'media',
             'date',
             'language',
             'rights',
