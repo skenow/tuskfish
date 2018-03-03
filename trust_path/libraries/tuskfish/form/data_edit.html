@@ -284,5 +284,8 @@
     
     <!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
     <input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
+    
+    <!-- CSRF validation token -->
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
 
     </form>

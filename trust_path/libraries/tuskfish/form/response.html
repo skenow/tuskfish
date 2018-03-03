@@ -3,6 +3,7 @@
     <strong><?php echo TfishFilter::escape($message); ?></strong>
   </div>
   <form class="form-horizontal" method="post" role="form" action="<?php echo $back_url; ?>">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
     <button type="submit" class="btn btn-primary m-0"><?php echo TFISH_BACK; ?></button>
   </form>
 </div>

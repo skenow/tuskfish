@@ -22,6 +22,7 @@
 
   <!-- Submit -->
   <div class="col-md-4 offset-md-4 form-group input-group">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
     <input type="hidden" name="op" value="login" />
     <button type="submit" class="btn btn-primary float-left"><?php echo TFISH_SUBMIT ?></button>
   </div>

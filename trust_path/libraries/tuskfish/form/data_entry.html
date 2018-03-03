@@ -201,6 +201,7 @@
     
     <!-- Action buttons -->
     <div class="float-left clearfix">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
         <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
         <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
     </div>

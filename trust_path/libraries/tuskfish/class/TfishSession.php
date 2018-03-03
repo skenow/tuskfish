@@ -49,6 +49,7 @@ class TfishSession
         $_SESSION = [];
         session_destroy();
         session_start();
+        self::setToken();
     }
 
     /**
@@ -401,9 +402,25 @@ class TfishSession
         // Now working with the new session. Note that old one still exists and both carry a
         // 'destroyed' flag.
         session_start();
+        // Set a cross-site request forgery token.
+        self::setToken();
         // Remove the destroyed flag from the new session. Old one will be destroyed next time
         // isExpired() is called on it.
         unset($_SESSION['destroyed']);
+    }
+    
+    /**
+     * Sets a token for use in cross-site request forgery checks on form submissions.
+     * 
+     * A random token is generated and stored in the current session (if not already set). The value
+     * of this token is included as a hidden field in forms when they are loaded by the user. This
+     * allows forms to be validated via validateFormToken().
+     */
+    public static function setToken()
+    {
+        if (empty($_SESSION['token'])) {
+            $_SESSION['token'] = bin2hex(random_bytes(32)) ;
+        }
     }
     
     /**
@@ -442,6 +459,7 @@ class TfishSession
         session_name($session_name);
         session_set_cookie_params($lifetime, $path, $domain, $secure, $http_only);
         session_start();
+        self::setToken();
 
         // Check if the session has expired.
         if (self::isExpired($tfish_preference))
@@ -455,6 +473,28 @@ class TfishSession
         } elseif (rand(1, 100) <= 10) {
             self::regenerate();
         }
+    }
+    
+    /**
+     * Validate a cross-site request forgery token from a form submission.
+     * 
+     * Forms contain a hidden field with a random token taken from the user's session. This token
+     * is used to validate that a form submission did indeed originate from the user, by comparing
+     * the value against that stored in the user's session. If they do not match then the request
+     * could be a forgery and the form submission should be rejected.
+     * 
+     * @param string $token A form token to validate against the user's session.
+     * @return boolean True if token is valid, otherwise false.
+     */
+    public static function validateToken(string $token)
+    {
+        $clean_token = TfishFilter::trimString($token);
+        
+        if (empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {
+            return true;
+        }
+        
+        return false;
     }
 
 }
