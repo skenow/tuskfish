@@ -374,7 +374,9 @@ class TfishSession
      * Regenerates the session ID.
      * 
      * Called whenever there is a privilege escalation (login) or at random intervals to reduce
-     * risk of session hijacking.
+     * risk of session hijacking. Note that the cross-site request forgery validation token remains
+     * the same, unless the session is destroyed. This is to prevent the random session ID
+     * regeneration events creating false positive CSRF checks.
      * 
      * Note that it allows the new and  old sessions to co-exist for a short period, this is to 
      * avoid headaches with flaky network connections and asynchronous (AJAX) requests, as explained
@@ -390,8 +392,7 @@ class TfishSession
         // Flag old session for destruction in (arbitrary) 10 seconds.
         $_SESSION['destroyed'] = time() + 10;
 
-        // Create new session.
-        // Update ID and keep current session info. Old one is not destroyed.
+        // Create new session. Update ID and keep current session info. Old one is not destroyed.
         session_regenerate_id(false);
         // Get the (new) session ID.
         $new_session_id = session_id();
@@ -459,6 +460,8 @@ class TfishSession
         session_name($session_name);
         session_set_cookie_params($lifetime, $path, $domain, $secure, $http_only);
         session_start();
+        
+        // Set a CSRF token.
         self::setToken();
 
         // Check if the session has expired.
