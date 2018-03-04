@@ -495,8 +495,6 @@ class TfishSession
             return true;
         }
         
-        echo 'session token: ' . $_SESSION['token'] . '<br />';
-        echo 'form token: ' . $clean_token;exit;
         // Invalid token - redirect to warning message and cease processing the request.
         header('location: ' . TFISH_URL . 'token.php');
         exit;
