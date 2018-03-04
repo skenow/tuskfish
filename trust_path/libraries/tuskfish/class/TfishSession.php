@@ -489,14 +489,16 @@ class TfishSession
     public static function validateToken(string $token)
     {
         $clean_token = TfishFilter::trimString($token);
-        
+
         // Valid token.
         if (!empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {
             return true;
         }
         
+        echo 'session token: ' . $_SESSION['token'] . '<br />';
+        echo 'form token: ' . $clean_token;exit;
         // Invalid token - redirect to warning message and cease processing the request.
-        header('location: token.php');
+        header('location: ' . TFISH_URL . 'token.php');
         exit;
     }
 

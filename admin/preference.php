@@ -21,6 +21,9 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('admin');
 
+// Collect CSRF token if available.
+$clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
+
 // Set view option
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 if (in_array($op, array('edit', 'update', false))) {
@@ -28,6 +31,7 @@ if (in_array($op, array('edit', 'update', false))) {
 
         // Edit: Display a data entry form containing the preference settings.
         case "edit":
+            TfishSession::validateToken($clean_token); // CSRF check.
             $tfish_template->page_title = TFISH_PREFERENCE_EDIT_PREFERENCES;
             $tfish_template->preferences = TfishPreference::readPreferences();
             $tfish_template->languages = TfishContentHandler::getLanguages();
@@ -38,6 +42,7 @@ if (in_array($op, array('edit', 'update', false))) {
 
         // Update: Submit the modified object and update the corresponding database row.
         case "update":
+            TfishSession::validateToken($clean_token); // CSRF check.
             $tfish_preference->updatePreferences($_REQUEST);
 
             // Update the database row and display a response.

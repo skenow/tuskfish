@@ -26,11 +26,13 @@ $tfish_template->setTheme('admin');
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 $dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword'] : false;
+$clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.
 if (in_array($op, array('submit', false))) {
     switch ($op) {
         case "submit":
+            TfishSession::validateToken($clean_token); // CSRF check.
             $error = [];
             $password_quality = [];
 

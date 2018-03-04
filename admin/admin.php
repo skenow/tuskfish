@@ -25,6 +25,7 @@ $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type'])
         ? TfishFilter::trimString($_GET['type']) : '';
+$clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
 // Specify the admin theme and the template to be used to preview content (user side template).
@@ -61,8 +62,8 @@ if (in_array($op, $options_whitelist)) {
     // ii) the admin will be alerted to the change by the unexpected display of a confirmation
     // message, iii) the action is trivial to undo and iv) it would reduce the functionality of
     // one-click status toggling.
-    if ($op !== 'view' && $op !== 'toggle') {
-        
+    if (!in_array($op, array('confirm_delete', 'confirm_flush', 'edit', 'toggle', 'view', false))) {
+        TfishSession::validateToken($clean_token);
     }
     
     switch ($op) {
