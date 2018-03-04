@@ -33,7 +33,7 @@
       <td class="text-center"><a class="text-danger" href="admin.php?op=toggle&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-times"></i></a></td>
       <?php endif; ?>
       <td class="text-center"><a href="admin.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-edit"></i></a></td>
-      <td class="text-center"><a href="admin.php?op=confirm&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-trash-alt"></i></a></td>
+      <td class="text-center"><a href="admin.php?op=confirm_delete&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-trash-alt"></i></a></td>
       <?php unset($row); ?>
     </tr>
   <?php endforeach; ?>

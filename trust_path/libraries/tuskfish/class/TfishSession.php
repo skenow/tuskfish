@@ -490,11 +490,14 @@ class TfishSession
     {
         $clean_token = TfishFilter::trimString($token);
         
-        if (empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {
+        // Valid token.
+        if (!empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {
             return true;
         }
         
-        return false;
+        // Invalid token - redirect to warning message and cease processing the request.
+        header('location: token.php');
+        exit;
     }
 
 }

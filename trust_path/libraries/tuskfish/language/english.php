@@ -315,3 +315,12 @@ define("TFISH_SETTINGS", "Settings");
 // RC 5.
 define("TFISH_MEDIA_NOT_COMPATIBLE", "The selected media file is not compatible with the current "
         . "content type. Inline media players will not display.");
+
+// RC6.
+define("TFISH_CONFIRM_FLUSH", "Are you sure?");
+define("TFISH_DO_YOU_WANT_TO_FLUSH_CACHE", "Do you want to flush the cache?");
+define("TFISH_INVALID_TOKEN", "Invalid token error");
+define("TFISH_SORRY_INVALID_TOKEN", "Sorry, the token accompanying your request was invalid. This 
+    is usually caused by your session timing out, but it can be an indication of a cross-site 
+    request forgery. As a precaution, your request has not been processed. Please try again.");
+

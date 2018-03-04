@@ -1,0 +1,10 @@
+<div>
+  <div class="alert alert-danger">
+    <strong><?php echo TFISH_DO_YOU_WANT_TO_FLUSH_CACHE; ?></strong>
+  </div>
+  <form class="form-horizontal" action="admin.php" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <button name="op" value="flush" type="submit" class="btn btn-primary"><?php echo TFISH_YES; ?></button>
+    <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_NO; ?></button>
+  </form>
+</div>

@@ -39,8 +39,32 @@ if ($op === 'view') {
 $target_file_name = '';
 $tfish_template->target_file_name = $target_file_name;
 
-if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', 'toggle', 'update',
-    'view', false))) {
+// Permitted options.
+$options_whitelist = array(
+    'add',
+    'confirm_delete',
+    'confirm_flush',
+    'delete',
+    'edit',
+    'flush',
+    'submit',
+    'toggle',
+    'update',
+    'view',
+    false
+    );
+
+if (in_array($op, $options_whitelist)) {
+    
+    // Cross-site request forgery check for all options except for view and toggle online/offline.
+    // The rationale for not including a check on the toggle option is that i) no data is lost,
+    // ii) the admin will be alerted to the change by the unexpected display of a confirmation
+    // message, iii) the action is trivial to undo and iv) it would reduce the functionality of
+    // one-click status toggling.
+    if ($op !== 'view' && $op !== 'toggle') {
+        
+    }
+    
     switch ($op) {
         // Add: Display an empty content object submission form.
         case "add":
@@ -79,7 +103,7 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             break;
 
         // Confirm: Confirm deletion of a content object.
-        case "confirm":
+        case "confirm_delete":
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
                 
@@ -94,6 +118,12 @@ if (in_array($op, array('add', 'confirm', 'delete', 'edit', 'flush', 'submit', '
             } else {
                 trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
+            break;
+            
+        case "confirm_flush":
+            $tfish_template->page_title = TFISH_CONFIRM_FLUSH;
+            $tfish_template->form = TFISH_FORM_PATH . "confirm_flush.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
         // Delete: Delete a content object. ID must be an integer and > 1.
