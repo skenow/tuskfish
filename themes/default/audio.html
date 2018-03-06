@@ -4,7 +4,7 @@
 <div>
   <h2 class="title">
     <?php if ($content->validMedia()): ?>
-    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escape('id'); ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
     <?php else: ?>
     <?php echo $content->icon . ' ' . $content->escape('title'); ?>
     <?php endif; ?>
@@ -24,7 +24,7 @@
 <?php if ($content->validMedia()): ?>
 <div class="audio-player text-left">
   <audio controls>
-    <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo $content->format; ?>">
+    <source src="<?php echo TFISH_MEDIA_URL . $content->escape('media'); ?>" type="<?php echo $content->escape('format'); ?>">
     <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO; ?>
   </audio>
 </div>
@@ -35,7 +35,7 @@
 <div class="float-right figure-right">
   <figure>
     <?php if ($content->media): ?>
-    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escape('id'); ?>">
       <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
       <?php if ($content->caption): ?>
         title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>

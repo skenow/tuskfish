@@ -239,7 +239,7 @@
 
         <!-- Format -->
         <?php if ($content->format): ?>
-        <input type="hidden" id="format" name="format" value="<?php echo $content->format; ?>" />
+        <input type="hidden" id="format" name="format" value="<?php echo $content->escape('format'); ?>" />
         <?php else: ?>
         <input type="hidden" id="format" name="format" value="" />
         <?php endif; ?>

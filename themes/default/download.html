@@ -5,7 +5,7 @@
 <div>
   <h2 class="title">
   <?php if ($content->media): ?>
-  <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
+  <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escape('id'); ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a>
   <?php else: ?>
   <?php echo $content->icon . ' ' . $content->escape('title'); ?>
   <?php endif; ?>
@@ -27,7 +27,7 @@
 <div class="float-right figure-right">
   <figure>
   <?php if ($content->media): ?>
-    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>">
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escape('id'); ?>">
     <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
     <?php if ($content->caption): ?>
         title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
@@ -59,7 +59,7 @@
 <!-- Media attachment -->
 <?php if ($content->media): ?>
 <div>
-  <p class="media"><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->id; ?>"><i title="<?php echo TFISH_DOWNLOAD; ?>" class="fas fa-download"></i> <?php echo $content->media; ?></a></b></p>
+  <p class="media"><b><a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_DOWNLOAD; ?>" class="fas fa-download"></i> <?php echo $content->escape('media'); ?></a></b></p>
 </div>
 <?php endif; ?>
 

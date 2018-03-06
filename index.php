@@ -77,7 +77,7 @@ if ($clean_id) {
             }
         }
         
-        if ($content->format)$contentInfo[] = '.' . $content->escape('format');
+        if ($content->format) $contentInfo[] = '.' . $content->escape('format');
         
         if ($content->file_size) $contentInfo[] = $content->escape('file_size');
         
@@ -90,9 +90,9 @@ if ($clean_id) {
         
         $tfish_template->contentInfo = implode(' | ', $contentInfo);
         
-        if ($content->meta_title) $tfish_metadata->title = $content->meta_title;
+        if ($content->meta_title) $tfish_metadata->title = $content->escape('meta_title');
         
-        if ($content->meta_description) $tfish_metadata->description = $content->meta_description;
+        if ($content->meta_description) $tfish_metadata->description = $content->escape('meta_description');
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
