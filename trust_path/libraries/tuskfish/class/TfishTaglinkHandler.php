@@ -32,7 +32,7 @@ class TfishTaglinkHandler extends TfishContentHandler
     /**
      * Delete taglinks associated with a particular content object.
      * 
-     * @param int $content_id ID of the target content object.
+     * @param object $obj A TfishContentObject subclass object.
      * @return bool True for success, false on failure.
      */
     public static function deleteTaglinks(TfishContentObject $obj)
@@ -118,7 +118,9 @@ class TfishTaglinkHandler extends TfishContentHandler
     /**
      * Updates taglinks for a particular content object.
      * 
-     * Old taglinks are deleted, newly designated set of taglinks are inserted.
+     * Old taglinks are deleted, newly designated set of taglinks are inserted. Objects that have
+     * had their type converted to TfishTag lose all taglinks (tags are not allowed to reference
+     * tags).
      * 
      * @param int $id ID of target content object.
      * @param string $type Type of content object as whitelisted in TfishTaglinkHandler::getType().
@@ -169,6 +171,12 @@ class TfishTaglinkHandler extends TfishContentHandler
         
         unset($result);
 
+        // If the content object is a tag, it is not allowed to have taglinks, so there is no need
+        // to proceed to insert new ones.
+        if ($type === 'TfishTag') {
+            return true;
+        }
+        
         // Insert new taglinks, if any.
         $clean_tags = array();
         
