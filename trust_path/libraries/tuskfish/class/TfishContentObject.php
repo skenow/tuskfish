@@ -509,7 +509,7 @@ class TfishContentObject extends TfishAncestralObject
 
         // Note that handler, template and module are not accessible through this method.
         $property_whitelist = $this->getPropertyWhitelist();
-        
+
         foreach ($property_whitelist as $key => $type) {
             if (array_key_exists($key, $dirty_input)) {
                 $this->__set($key, $dirty_input[$key]);
@@ -520,7 +520,7 @@ class TfishContentObject extends TfishAncestralObject
         if (array_key_exists('date', $property_whitelist) && empty($dirty_input['date'])) {
             $this->__set('date', date(DATE_RSS, time()));
         }
-        
+
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
         if (array_key_exists('teaser', $property_whitelist) && !empty($dirty_input['teaser'])) {
             

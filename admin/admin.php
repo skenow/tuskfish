@@ -279,7 +279,7 @@ if (in_array($op, $options_whitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
-            
+
             $type = TfishFilter::trimString($_REQUEST['type']);
             $type_whitelist = TfishContentHandler::getTypes();
             
@@ -287,21 +287,21 @@ if (in_array($op, $options_whitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
-            
+
             $content_object = new $type;
             $content_object->loadProperties($_REQUEST);
 
             // As this object is being sent to storage, need to decode some entities that got
             // encoded for display.
             $fields_to_decode = array('title', 'creator', 'publisher', 'caption');
-            
+
             foreach ($fields_to_decode as $field) {
                 if (isset($content_object->field)) {
                     $content_object->$field = htmlspecialchars_decode($content_object->field,
                             ENT_NOQUOTES);
                 }
             }
-            
+
             // Properties that are used within attributes must have quotes encoded.
             $fields_to_decode = array('meta_title', 'seo', 'meta_description');
             
@@ -314,7 +314,7 @@ if (in_array($op, $options_whitelist)) {
 
             // Update the database row and display a response.
             $result = TfishContentHandler::update($content_object);
-            
+
             if ($result) {
                 TfishCache::flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
@@ -326,7 +326,7 @@ if (in_array($op, $options_whitelist)) {
                 $tfish_template->alert_class = 'alert-danger';
                 $tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
             }
-            
+
             $tfish_template->back_url = 'admin.php';
             $tfish_template->form = TFISH_FORM_PATH . "response_edit.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
