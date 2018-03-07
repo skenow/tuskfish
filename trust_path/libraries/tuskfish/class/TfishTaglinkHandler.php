@@ -35,16 +35,22 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param int $content_id ID of the target content object.
      * @return bool True for success, false on failure.
      */
-    public static function deleteTaglinks(int $content_id)
+    public static function deleteTaglinks(TfishContentObject $obj)
     {
-        if (TfishFilter::isInt($content_id, 1)) {
-            $clean_content_id = (int) $content_id;
+        if (TfishFilter::isInt($obj->id, 1)) {
+            $clean_content_id = (int) $obj->id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
         $criteria = new TfishCriteria();
-        $criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
+        
+        if ($obj->type === 'TfishTag') {
+            $criteria->add(new TfishCriteriaItem('tag_id', $clean_content_id));
+        } else {
+            $criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
+        }
+        
         $result = TfishDatabase::deleteAll('taglink', $criteria);
         
         if (!$result) {

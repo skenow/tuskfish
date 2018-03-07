@@ -53,18 +53,21 @@ class TfishContentHandler
         // Delete associated files.
         $obj = self::getObject($clean_id);
         
-        if (TfishFilter::isObject($obj)) {
-            if ($obj->image) {
-                self::_deleteImage($obj->image);
-            }
-            
-            if ($obj->media) {
-                self::_deleteMedia($obj->media);
-            }
+        if (!TfishFilter::isObject($obj)) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            return false;
+        }
+        
+        if (!empty($obj->image)) {
+            self::_deleteImage($obj->image);
         }
 
-        // Delete associated taglinks.
-        $result = TfishTaglinkHandler::deleteTaglinks($clean_id);
+        if (!empty($obj->media)) {
+            self::_deleteMedia($obj->media);
+        }
+
+        // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
+        $result = TfishTaglinkHandler::deleteTaglinks($obj);
         
         if (!$result) {
             return false;
