@@ -93,6 +93,31 @@ class TfishContentHandler
 
         return true;
     }
+    
+    /**
+     * Removes references to a collection when it is deleted or changed to another type.
+     * 
+     * @param int $id ID of the parent collection.
+     * @return boolean True on success, false on failure.
+     */
+    public static function deleteParentalReferences(int $id)
+    {
+        $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
+        
+        if (!$clean_id) {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+        
+        $criteria = new TfishCriteria();
+        $criteria->add(new TfishCriteriaItem('parent', $clean_id));
+        $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
+
+        if (!$result) {
+            return false;
+        }
+        
+        return true;
+    }
 
     /**
      * Deletes an uploaded image file associated with a content object.
@@ -1080,6 +1105,21 @@ class TfishContentHandler
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
             return false;
         }
+        
+        // Check if this object used to be a collection. If it has been changed to something else
+        // clean up any parental references to it.
+        if ($key_values['type'] !== 'TfishCollection') {
+            $ex_collection = self::_checkExCollection($clean_id);
+            
+            if ($ex_collection === true) {
+                $result = self::deleteParentalReferences($clean_id);
+            }
+            
+            if (!$result) {
+                trigger_error(TFISH_ERROR_PARENT_UPDATE_FAILED, E_USER_NOTICE);
+                return false;
+            }
+        }
 
         // Update the content object.
         $result = TfishDatabase::update('content', $clean_id, $key_values);
@@ -1091,6 +1131,38 @@ class TfishContentHandler
         unset($result);
 
         return true;
+    }
+    
+    /**
+     * Check if a content object is currently registered as a TfishCollection in the database.
+     * 
+     * When updating an object, this method is used to check if it used to be a collection. If so,
+     * other content objects referring to it as parent will need to be updated.
+     * 
+     * @param int $id ID of the content object.
+     * @return boolean True if content object is registered as a TfishCollection in database,
+     * otherwise false.
+     */
+    private static function _checkExCollection(int $id)
+    {
+        $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
+        
+        $criteria = new TfishCriteria;
+        $criteria->add(new TfishCriteriaItem('id', $clean_id));
+        
+        $statement = TfishDatabase::select('content', $criteria, array('type'));
+        
+        if ($statement) {
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+        
+        if ($row['type'] === 'TfishCollection') {
+           return true; 
+        }
+        
+        return false;
     }
 
     /**

@@ -323,4 +323,6 @@ define("TFISH_INVALID_TOKEN", "Invalid token error");
 define("TFISH_SORRY_INVALID_TOKEN", "Sorry, the token accompanying your request was invalid. This 
     is usually caused by your session timing out, but it can be an indication of a cross-site 
     request forgery. As a precaution, your request has not been processed. Please try again.");
+define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
+        . "failed.");
 
