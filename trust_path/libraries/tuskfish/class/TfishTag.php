@@ -118,7 +118,6 @@ class TfishTag extends TfishContentObject
     {
         return array(
             'creator',
-            'date',
             'language',
             'rights',
             'publisher',

@@ -1,39 +1,16 @@
 // Shows/hides form fields that are relevant/irrelevant to the content type.
 $(document).ready(function() {
-        
-    var allowedProperties = ['teaserContainer', 'descriptionContainer', 'captionContainer',
-        'creatorContainer', 'dateContainer', 'imageContainer', 'languageContainer',
-        'mediaContainer', 'parentContainer', 'publisherContainer', 'rightsContainer',
-        'tagsContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
-        'metaDescriptionContainer'];
     
-    $("#type").change(function () {
-        $.each(allowedProperties, function (i, value) {
-            $('#' + value).show();
-        });
-        if ($("#type").val() === 'TfishTag') {
-            var disabledProperties = [
-                'creatorContainer', 'dateContainer', 'languageContainer',
-                'rightsContainer', 'publisherContainer', 'tagsContainer'];
-            $.each(disabledProperties, function (i, value) {
-                $('#' + value).hide();
-            });
-        }
-        if ($("#type").val() === 'TfishBlock') {
-            var disabledProperties = [
-                'teaserContainer', 'creatorContainer', 'parentContainer', 'rightsContainer',
-                'publisherContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
-                'metaDescriptionContainer'];
-            $.each(disabledProperties, function (i, value) {
-                $('#' + value).hide();
-            });
-        }
-        
-        checkMedia();
-    });
+    // Show or hide content properties as appropriate for this content type.
+    showHide();
     
     // Check the media when form loads. The warning displays faster if initiated from this position.
     checkMedia();
+    
+    $("#type").change(function () {
+        showHide();
+        checkMedia();
+    });
 
     // Set flag that media file should be deleted from server.
     $('#media').on('fileclear', function(tf_deleteMedia) {
@@ -198,4 +175,35 @@ function getAllMimeType() {
     allMimeTypes.tar = "application/x-tar";
 
     return allMimeTypes;
+}
+
+// Shows or hides form fields as appropriate for this content type.
+function showHide() {
+    var allowedProperties = ['teaserContainer', 'descriptionContainer',
+        'captionContainer','creatorContainer', 'dateContainer',
+        'imageContainer', 'languageContainer','mediaContainer',
+        'parentContainer', 'publisherContainer', 'rightsContainer',
+        'tagsContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
+        'metaDescriptionContainer'];
+
+    $.each(allowedProperties, function (i, value) {
+        $('#' + value).show();
+    });
+    if ($("#type").val() === 'TfishTag') {
+        var disabledProperties = [
+            'creatorContainer', 'languageContainer', 'rightsContainer',
+            'publisherContainer', 'tagsContainer'];
+        $.each(disabledProperties, function (i, value) {
+            $('#' + value).hide();
+        });
+    }
+    if ($("#type").val() === 'TfishBlock') {
+        var disabledProperties = [
+            'teaserContainer', 'creatorContainer', 'parentContainer', 'rightsContainer',
+            'publisherContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',
+            'metaDescriptionContainer'];
+        $.each(disabledProperties, function (i, value) {
+            $('#' + value).hide();
+        });
+    }
 }
