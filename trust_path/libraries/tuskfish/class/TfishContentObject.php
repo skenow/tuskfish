@@ -245,7 +245,7 @@ class TfishContentObject extends TfishAncestralObject
         // Format all data for display and convert TFISH_LINK to URL.
         $human_readable_data = (string) $this->makeHumanReadable($clean_property);
         
-        // Output for editor: HTML should be double escaped.
+        // Output for editor: HTML should be DOUBLE escaped (specification requirement).
         if ($this->__properties[$clean_property] === 'html' && $escape_html === true) {
             
             return htmlspecialchars($human_readable_data, ENT_NOQUOTES, 'UTF-8',
