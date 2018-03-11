@@ -956,17 +956,22 @@ class TfishContentHandler
         // Tags are stored in a separate table and must be handled in a separate query.
         unset($key_values['tags']);
 
+        // Load the saved object from the database. This will be used to make comparisons with the
+        // current object state and facilitate clean up of redundant tags, parent references, and
+        // image/media files.
+        $saved_object = self::getObject($clean_id);
+        
         /**
          * Handle image / media files for existing objects.
          */
-        if (!empty($clean_id)) {
+        if (!empty($saved_object)) {
 
             /**
              * Image property.
              */
             
             // 1. Check if there is an existing image file associated with this content object.
-            $existing_image = self::_checkImage($clean_id);
+            $existing_image = self::_checkImage($saved_object);
 
             // 2. Is this content type allowed to have an image property?
             if (!array_key_exists('image', $property_whitelist)) {
@@ -1022,7 +1027,7 @@ class TfishContentHandler
              */
             
             // 1. Check if there is an existing media file associated with this content object.
-            $existing_media = self::_checkMedia($clean_id);
+            $existing_media = self::_checkMedia($saved_object);
             
             // 2. Is this content type allowed to have a media property?
             if (!array_key_exists('media', $property_whitelist)) {
@@ -1108,16 +1113,16 @@ class TfishContentHandler
         
         // Check if this object used to be a collection. If it has been changed to something else
         // clean up any parental references to it.
-        if ($key_values['type'] !== 'TfishCollection') {
-            $ex_collection = self::_checkExCollection($clean_id);
+        if ($key_values['type'] !== 'TfishCollection' && !empty($saved_object)) {
+            $ex_collection = self::_checkExCollection($saved_object);
             
             if ($ex_collection === true) {
                 $result = self::deleteParentalReferences($clean_id);
-            }
-            
-            if (!$result) {
-                trigger_error(TFISH_ERROR_PARENT_UPDATE_FAILED, E_USER_NOTICE);
-                return false;
+                
+                if (!$result) {
+                    trigger_error(TFISH_ERROR_PARENT_UPDATE_FAILED, E_USER_NOTICE);
+                    return false;
+                }
             }
         }
 
@@ -1137,28 +1142,17 @@ class TfishContentHandler
      * Check if a content object is currently registered as a TfishCollection in the database.
      * 
      * When updating an object, this method is used to check if it used to be a collection. If so,
-     * other content objects referring to it as parent will need to be updated.
+     * other content objects referring to it as parent will need to be updated. Note that you must
+     * pass in the SAVED copy of the object from the database, rather than the 'current' version, 
+     * as the purpose of the method is to determine if the object *used to be* a collection.
      * 
-     * @param int $id ID of the content object.
+     * @param object $obj The TfishContentObject to be tested.
      * @return boolean True if content object is registered as a TfishCollection in database,
      * otherwise false.
      */
-    private static function _checkExCollection(int $id)
-    {
-        $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
-        
-        $criteria = new TfishCriteria;
-        $criteria->add(new TfishCriteriaItem('id', $clean_id));
-        
-        $statement = TfishDatabase::select('content', $criteria, array('type'));
-        
-        if ($statement) {
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
-        } else {
-            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-        }
-        
-        if ($row['type'] === 'TfishCollection') {
+    private static function _checkExCollection(TfishContentObject $obj)
+    {      
+        if (!empty($obj->type) && $obj->type === 'TfishCollection') {
            return true; 
         }
         
@@ -1168,63 +1162,31 @@ class TfishContentHandler
     /**
      * Check if an existing object has an associated image file upload.
      * 
-     * @param int $id ID of content object.
+     * @param object $obj The TfishContentObject to be tested.
      * @return string Filename of associated image property.
      */
-    private static function _checkImage(int $id)
-    {
-        $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
-        $filename = '';
-
-        // Objects without an ID have not yet been inserted into the database.
-        if (empty($clean_id)) {
-            return '';
+    private static function _checkImage(TfishContentObject $obj)
+    {        
+        if (!empty($obj->image)) {
+            return $obj->image;
         }
 
-        $criteria = new TfishCriteria;
-        $criteria->add(new TfishCriteriaItem('id', $clean_id));
-
-        $statement = TfishDatabase::select('content', $criteria, array('image'));
-        
-        if ($statement) {
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
-            $filename = (isset($row['image']) && !empty($row['image'])) ? $row['image'] : '';
-        } else {
-            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-        }
-
-        return $filename;
+        return '';
     }
 
     /**
      * Check if an existing object has an associated media file upload.
      * 
-     * @param int $id ID of content object.
+     * @param object $obj TfishContentObject to be tested.
      * @return string Filename of associated media property.
      */
-    private static function _checkMedia(int $id)
+    private static function _checkMedia(TfishContentObject $obj)
     {
-        $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
-        $filename = '';
-
-        // Objects without an ID have not yet been inserted into the database.
-        if (empty($clean_id)) {
-            return '';
+        if (!empty($obj->media)) {
+            return $obj->media;
         }
-
-        $criteria = new TfishCriteria;
-        $criteria->add(new TfishCriteriaItem('id', $clean_id));
-
-        $statement = TfishDatabase::select('content', $criteria, array('media'));
         
-        if ($statement) {
-            $row = $statement->fetch(PDO::FETCH_ASSOC);
-            $filename = (isset($row['media']) && !empty($row['media'])) ? $row['media'] : '';
-        } else {
-            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-        }
-
-        return $filename;
+        return '';
     }
 
     /**
