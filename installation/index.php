@@ -267,6 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "title" => "General",
             "teaser" => "Default content tag.",
             "description" => "Default content tag, please edit it to something useful.",
+            "date" => date('Y-m-d'),
             "language" => "en",
             "online" => "1",
             "submission_time" => time(),
