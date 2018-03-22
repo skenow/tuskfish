@@ -67,6 +67,7 @@ define("TFISH_ERROR_BAD_PATH", "Bad file path.");
 define("TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY.", "Failed to delete directory");
 define("TFISH_INSTALLATION_DB_ALNUMUNDERSCORE", "Database name is restricted to <strong>alphanumeric and underscore</strong> characters.");
 define("TFISH_INSTALLATION_BAD_EMAIL", "Bad email address.");
+define("TFISH_ERROR_FAILED_TO_APPEND_FILE", "Failed to append to file.");
 
 // Constants used in theme, to prevent errors.
 define("TFISH_SEARCH", "Search");
