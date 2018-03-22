@@ -322,39 +322,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check PHP version 7.2+
     if (PHP_VERSION_ID < 70200) {
-        $missing_list = '<li><i class="fas fa-times"></i> ' . TFISH_PHP_VERSION_TOO_LOW . '</li>';
+        $missing_list = '<li><i class="fas fa-times text-danger"></i> ' . TFISH_PHP_VERSION_TOO_LOW . '</li>';
     } else {
-        $present_list = '<li><i class="fas fa-check"></i> ' . TFISH_PHP_VERSION_OK . '</li>';
+        $present_list = '<li><i class="fas fa-check text-success"></i> ' . TFISH_PHP_VERSION_OK . '</li>';
     }
 
     // Check extensions.
     foreach ($required_extensions as $extension) {
         if (in_array($extension, $loaded_extensions)) {
-            $present_list .= '<li><i class="fas fa-check"></i> ' . $extension . ' '
+            $present_list .= '<li><i class="fas fa-check text-success"></i> ' . $extension . ' '
                     . TFISH_EXTENSION . '</li>';
         } else {
-            $missing_list .= '<li><i class="fas fa-times"></i> ' . $extension . ' '
+            $missing_list .= '<li><i class="fas fa-times text-danger"></i> ' . $extension . ' '
                     . TFISH_EXTENSION . '</li>';
         }
     }
 
     // Check path to mainfile.
     if (is_readable("../mainfile.php")) {
-        $present_list .= '<li><i class="fas fa-check"></i> ' . TFISH_PATH_TO_MAINFILE_OK . '</li>';
+        $present_list .= '<li><i class="fas fa-check text-success"></i> ' . TFISH_PATH_TO_MAINFILE_OK . '</li>';
     }
 
     // Check root_path.
     if (defined("TFISH_ROOT_PATH") && is_readable(TFISH_ROOT_PATH)) {
-        $present_list .= '<li><i class="fas fa-check"></i> ' . TFISH_ROOT_PATH_OK . '</li>';
+        $present_list .= '<li><i class="fas fa-check text-success"></i> ' . TFISH_ROOT_PATH_OK . '</li>';
     } else {
-        $missing_list .= '<li><i class="fas fa-times"></i> ' . TFISH_ROOT_PATH_INVALID . '</li>';
+        $missing_list .= '<li><i class="fas fa-times text-danger"></i> ' . TFISH_ROOT_PATH_INVALID . '</li>';
     }
 
     // Check trust_path.
     if (defined("TFISH_TRUST_PATH") && is_readable(TFISH_TRUST_PATH)) {
-        $present_list .= '<li><i class="fas fa-check"></i> ' . TFISH_TRUST_PATH_OK . '</li>';
+        $present_list .= '<li><i class="fas fa-check text-success"></i> ' . TFISH_TRUST_PATH_OK . '</li>';
     } else {
-        $missing_list .= '<li><i class="fas fa-times"></i> ' . TFISH_TRUST_PATH_INVALID . '</li>';
+        $missing_list .= '<li><i class="fas fa-times text-danger"></i> ' . TFISH_TRUST_PATH_INVALID . '</li>';
     }
 
     if ($present_list) {
