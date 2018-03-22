@@ -72,3 +72,18 @@ define("TFISH_INSTALLATION_BAD_EMAIL", "Bad email address.");
 define("TFISH_SEARCH", "Search");
 define("TFISH_RSS", "RSS");
 define("TFISH_KEYWORDS", "Keywords");
+
+// Pre-flight file path checks.
+define("TFISH_PREFLIGHT_CHECKS", "Pre-flight system checks");
+define("TFISH_PHP_VERSION_TOO_LOW", "PHP version too low, please upgrade to minimum system requirements");
+define("TFISH_PHP_VERSION_OK", "PHP version ok (minimum 7.2)");
+define("TFISH_PATH_TO_MAINFILE_OK", "Path to mainfile");
+define("TFISH_PATH_TO_MAINFILE_INVALID", "mainfile.php is missing, please check that all files were "
+        . "uploaded as installation cannot proceed");
+define("TFISH_ROOT_PATH_OK", "TFISH_ROOT_PATH set");
+define("TFISH_ROOT_PATH_INVALID", "TFISH_ROOT_PATH is invalid, please set the path in mainfile.php");
+define("TFISH_TRUST_PATH_OK", "TFISH_TRUST_PATH set");
+define("TFISH_TRUST_PATH_INVALID", "TFISH_TRUST_PATH is invalid, please set the path in mainfile.php");
+define("TFISH_SYSTEM_REQUIREMENTS_MET", "System requirements met");
+define("TFISH_SYSTEM_REQUIREMENTS_NOT_MET", "System requirements failed");
+define("TFISH_EXTENSION", "extension present");

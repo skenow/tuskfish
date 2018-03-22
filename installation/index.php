@@ -14,20 +14,28 @@
  */
 
 // Enable strict type declaration.
-declare(strict_types=1);
+// declare(strict_types=1);
 
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
-// Boot!
-require_once "../mainfile.php";
+// Include installation language files
+include_once "./english.php";
+
+// Check path to mainfile.
+if (is_readable("../mainfile.php")) {
+    require_once "../mainfile.php";
+} else {
+    echo TFISH_PATH_TO_MAINFILE_INVALID;
+    exit;
+}
+
+// Initialise default content variable.
+$tfish_content = array('output' => '');
 
 // Set error reporting levels and custom error handler.
 error_reporting(E_ALL & ~E_NOTICE);
 set_error_handler("TfishLogger::logErrors");
-
-// Include installation language files
-include_once "./english.php";
 
 // Set theme.
 $tfish_template = new TfishTemplate();
@@ -65,9 +73,6 @@ $tfish_preference->seo = '';
 $tfish_preference->pagination_elements = '5';
 $tfish_preference->enable_cache = 0;
 $tfish_template->tfish_url = getUrl();
-
-// Initialise default content variable.
-$tfish_content = array('output' => '');
 
 /**
  * Helper function to grab the site URL and protocol during installation.
@@ -305,11 +310,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 } else {
+    /**
+     * Preflight checks
+     */
+    $tfish_content['output'] .= '<div class="row"><div class="col-xs-6 offset-xs-3 col-lg-4 offset-md-4 text-left">';
+
+    $required_extensions = array('sqlite3', 'PDO', 'pdo_sqlite', 'gd');
+    $loaded_extensions = get_loaded_extensions();
+    $present_list = '';
+    $missing_list = '';
+
+    // Check PHP version 7.2+
+    if (PHP_VERSION_ID < 70200) {
+        $missing_list = '<li><i class="fas fa-times"></i> ' . TFISH_PHP_VERSION_TOO_LOW . '</li>';
+    } else {
+        $present_list = '<li><i class="fas fa-check"></i> ' . TFISH_PHP_VERSION_OK . '</li>';
+    }
+
+    // Check extensions.
+    foreach ($required_extensions as $extension) {
+        if (in_array($extension, $loaded_extensions)) {
+            $present_list .= '<li><i class="fas fa-check"></i> ' . $extension . ' '
+                    . TFISH_EXTENSION . '</li>';
+        } else {
+            $missing_list .= '<li><i class="fas fa-times"></i> ' . $extension . ' '
+                    . TFISH_EXTENSION . '</li>';
+        }
+    }
+
+    // Check path to mainfile.
+    if (is_readable("../mainfile.php")) {
+        $present_list .= '<li><i class="fas fa-check"></i> ' . TFISH_PATH_TO_MAINFILE_OK . '</li>';
+    }
+
+    // Check root_path.
+    if (defined("TFISH_ROOT_PATH") && is_readable(TFISH_ROOT_PATH)) {
+        $present_list .= '<li><i class="fas fa-check"></i> ' . TFISH_ROOT_PATH_OK . '</li>';
+    } else {
+        $missing_list .= '<li><i class="fas fa-times"></i> ' . TFISH_ROOT_PATH_INVALID . '</li>';
+    }
+
+    // Check trust_path.
+    if (defined("TFISH_TRUST_PATH") && is_readable(TFISH_TRUST_PATH)) {
+        $present_list .= '<li><i class="fas fa-check"></i> ' . TFISH_TRUST_PATH_OK . '</li>';
+    } else {
+        $missing_list .= '<li><i class="fas fa-times"></i> ' . TFISH_TRUST_PATH_INVALID . '</li>';
+    }
+
+    if ($present_list) {
+        $present_list = '<ul class="fa-ul">' . $present_list . '</ul>';
+        $tfish_content['output'] .= '<p><b>' . TFISH_SYSTEM_REQUIREMENTS_MET . '</b></p>'
+                . $present_list;
+    }
+
+    if ($missing_list) {
+        $missing_list = '<ul class="fa-ul">' . $missing_list . '</ul>';
+        $tfish_content['output'] .= '<p><b>' . TFISH_SYSTEM_REQUIREMENTS_NOT_MET . '</b></p>'
+                . $missing_list;
+    }
+    
+    $tfish_content['output'] .= '</div></div>';
+    
     // Display data entry form.
     $tfish_template->page_title = TFISH_INSTALLATION_TUSKFISH;
     $tfish_template->tfish_root_path = realpath('../') . '/';
     $tfish_template->form = "db_credentials_form.html";
-    $tfish_template->tfish_main_content = $tfish_template->render('form');
+    $tfish_template->tfish_main_content = $tfish_content['output'] . $tfish_template->render('form');
 }
 
 /**
