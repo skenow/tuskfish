@@ -93,29 +93,25 @@ class TfishFilter
      */
     public static function filterHtml(string $dirty_html, array $config_options = array())
     {
-        if (self::isUtf8($dirty_html)) {
-            if (class_exists('HTMLPurifier')) {
+        if (self::isUtf8($dirty_html) && class_exists('HTMLPurifier')) {
                 
-                // Set default configuration options.
-                $config = HTMLPurifier_Config::createDefault();
-                $config->set('Core.Encoding', 'UTF-8');
-                $config->set('Attr.EnableID', true);
-                $config->set('Attr.ID.HTML5', true);
-                
-                // Set optional configuration options.
-                if ($config_options) {
-                    foreach ($config_options as $key => $value) {
-                        $config->set($key, $value);
-                    }
+            // Set default configuration options.
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('Core.Encoding', 'UTF-8');
+            $config->set('Attr.EnableID', true);
+            $config->set('Attr.ID.HTML5', true);
+
+            // Set optional configuration options.
+            if ($config_options) {
+                foreach ($config_options as $key => $value) {
+                    $config->set($key, $value);
                 }
-                
-                $html_purifier = new HTMLPurifier($config);
-                $clean_html = (string) $html_purifier->purify($dirty_html);
-                
-                return $clean_html;
-            } else {
-                return false;
             }
+
+            $html_purifier = new HTMLPurifier($config);
+            $clean_html = (string) $html_purifier->purify($dirty_html);
+
+            return $clean_html;
         } else {
             return false;
         }

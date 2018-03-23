@@ -183,6 +183,7 @@ class TfishCache
             $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
             
             foreach ($directory_iterator as $file) {
+                
                 if ($file->isFile()) {
                     $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
                     

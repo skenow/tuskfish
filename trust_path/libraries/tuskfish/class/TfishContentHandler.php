@@ -670,7 +670,6 @@ class TfishContentHandler
      */
     public static function makeTagLinks(array $tags, string $target_filename = '')
     {
-
         if (empty($target_filename)) {
             $clean_filename = TFISH_URL . '?tag_id=';
         } else {

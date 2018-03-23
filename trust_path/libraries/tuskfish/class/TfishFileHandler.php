@@ -141,6 +141,7 @@ class TfishFileHandler
         }
         
         $clean_path = TfishFilter::trimString($path);
+        
         if (!empty($clean_path)) {
             $result = self::_clearDirectory($clean_path);
             
