@@ -36,7 +36,7 @@ $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
 ////////// END CONFIGURATION //////////
 
 // Validate input parameters.
-$clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$clean_id = (int) $id;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 
