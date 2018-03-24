@@ -35,13 +35,15 @@ $tfish_template->target_file_name = $target_file_name;
 $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
 ////////// END CONFIGURATION //////////
 
-// Set cache parameters.
+// Validate input parameters.
+$clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
+
+// Set cache parameters.
 $basename = basename(__FILE__);
 $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
 
-// View single object description.
-$clean_id = (int) $id;
 if ($clean_id) {
     $content = TfishStaticHandler::getObject($clean_id);
     
