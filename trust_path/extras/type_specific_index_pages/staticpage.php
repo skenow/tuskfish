@@ -49,6 +49,10 @@ if ($clean_id) {
         // Update view counter and assign object to template.
         $content->counter += 1;
         TfishStaticHandler::updateCounter($clean_id);
+        
+        // Check if cached page is available.
+        TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+        
         $tfish_template->content = $content;
 
         // Prepare meta information for display.
