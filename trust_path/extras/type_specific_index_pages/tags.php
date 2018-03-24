@@ -37,6 +37,7 @@ $tfish_template->page_title = TFISH_TYPE_TAGS;
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);

@@ -36,7 +36,7 @@ class TfishImageHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishImage objects matching conditions.
      */
-    public static function getCount(TfishCriteria $criteria = false)
+    public static function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
@@ -69,7 +69,7 @@ class TfishImageHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects Array of TfishImage objects.
      */
-    public static function getObjects(TfishCriteria $criteria = false)
+    public static function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
