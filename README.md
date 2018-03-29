@@ -30,3 +30,15 @@ System requirements
 * pdo_sqlite extension.
 * curl extension + a Yubikey hardware token are required for optional two-factor Yubikey authentication.
 * Apache webserver.
+
+INSTALLATION
+* Please see the installation guide at: https://tuskfish.biz/installation.php
+
+USER MANUAL
+* Available at: https://tuskfish.biz/article.php?id=15
+
+DEVELOPER GUIDE
+* Available at: https://tuskfish.biz/article.php?id=47
+
+API
+* Available at https://tuskfish.biz/api/
