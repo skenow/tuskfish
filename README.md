@@ -7,10 +7,9 @@ organisations. It provides the publishing tools that you need and nothing that y
 The project emphasis is on creating the simplest and most lightweight code base possible:
 * A small, simple code base is easy to understand and maintain as PHP evolves.
 * Security is a lot easier to manage in a small project.
-* Avoiding use of external libraries as far as possible greatly reduces attack surface and code
-  bloat (most libraries are far bigger than Tuskfish in their own right and every library you add
-  comes with its own security vulnerabilities). The only external libraries currently in use are
-  jQuery, Boostrap and HTMLPurifier.
+* Avoiding use of external libraries as far as possible to reduce attack surface, maintenance overhead
+  and code bloat. External libraries in use are: Boostrap 4, jQuery, popper.js, Bootstrap-datepicker,
+  Bootstrap-fileinput and HTMLPurifier.
 
 Features include:
 * Publish a mixed stream of articles, file downloads, images, audio, video, static pages and collections with one simple form.
@@ -22,8 +21,12 @@ Features include:
 * SQLite database: There is no database server to worry about.
 * Exclusive use of prepared statements with bound values and parameters as protection against SQL injection.
 * Minimal public-facing code base: Most of the code lives outside the web root.
-* Lightweight core library < 500 KB in size.
+* Lightweight core library ~ 500 KB in size.
 
 System requirements
-* PHP 7.2 or higher with pdo_sqlite.so extension enabled (PDO_SQLITE driver).
+* PHP 7.2+
+* SQLite3 extension.
+* PDO extension.
+* pdo_sqlite extension.
+* curl extension + a Yubikey hardware token are required for optional two-factor Yubikey authentication.
 * Apache webserver.
