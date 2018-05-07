@@ -18,7 +18,7 @@
       <description><![CDATA[<?php echo $item->escape('teaser'); ?>]]></description>
       <?php endif; ?>
       <?php if (($item->media) && is_readable(TFISH_MEDIA_PATH . $item->media)):
-      $length = filesize(TFISH_MEDIA_PATH . $item->escape('media');
+      $length = filesize(TFISH_MEDIA_PATH . $item->escape('media'));
       $mimetype = $mimetype_list[pathinfo($item->media, PATHINFO_EXTENSION)]; ?>
       <enclosure url="<?php echo TFISH_ENCLOSURE_URL . TfishFilter::escape($item->id); ?>" length="<?php echo TfishFilter::escape($length); ?>" type="<?php echo TfishFilter::escape($mimetype); ?>" />
       <?php unset($length, $mimetype); endif; ?>
