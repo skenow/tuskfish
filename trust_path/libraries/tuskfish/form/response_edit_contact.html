@@ -1,0 +1,12 @@
+<div>
+  <div class="alert <?php echo TfishFilter::escape($alert_class); ?>">
+      <strong><?php echo TfishFilter::escape($message); ?></strong>
+  </div>
+  <form class="form-horizontal" action="contacts.php" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <input name="id" value="<?php echo TfishFilter::escape($id); ?>" type="hidden">
+    <button name="op" value="view" type="submit" class="btn btn-primary"><?php echo TFISH_VIEW; ?></button>
+    <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_ADMIN; ?></button>
+  </form>
+  </div>
+</div>

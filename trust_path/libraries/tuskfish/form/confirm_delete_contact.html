@@ -1,0 +1,11 @@
+<div>
+  <div class="alert alert-danger">
+    <strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE_THIS_CONTACT; ?></strong>
+  </div>
+  <form class="form-horizontal" action="contacts.php" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <input name="id" value="<?php echo TfishFilter::escape($contact->id); ?>" type="hidden">
+    <button name="op" value="delete" type="submit" class="btn btn-primary"><?php echo TFISH_YES; ?></button>
+    <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_NO; ?></button>
+  </form>
+</div>

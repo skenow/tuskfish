@@ -1,0 +1,121 @@
+<!-- Custom form manager script to show or hide fields used by specific content subclasses and manage media file uploads -->
+<script type="text/javascript" src="<?php echo TFISH_THEMES_URL . 'admin/tf_form.js'; ?>"></script>
+    
+<form class="form-horizontal" action="contacts.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
+    
+    <div class="row">
+    
+      <!-- Title -->
+      <div class="col-md-2 mb-3 text-left" id="titleContainer">
+        <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
+        <select class="form-control custom-select" name="title" id="title" required>
+            <?php
+                foreach ($titles as $key => $value) {
+                    echo '<option value="' . TfishFilter::escape($key) . '">'
+                    . TfishFilter::escape($value) . '</option>';
+                }
+            ?>
+        </select>
+      </div>
+      
+      <!-- Firstname -->
+      <div class="col-md-3 mb-3 text-left" id="firstnameContainer">
+        <label for="firstname"><strong><?php echo TFISH_FIRSTNAME; ?></strong></label>
+        <input type="text" class="form-control" name="firstname" id="firstname">
+      </div>
+
+      <!-- Midname -->
+      <div class="col-md-3 mb-3 text-left" id="midnameContainer">
+        <label for="midname"><strong><?php echo TFISH_MIDNAME; ?></strong></label>
+        <input type="text" class="form-control" name="midname" id="midname">
+      </div>
+
+      <!-- Lastname -->
+      <div class="col-md-4 mb-3 text-left" id="lastnameContainer">
+        <label for="lastname"><strong><?php echo TFISH_LASTNAME; ?></strong></label>
+        <input type="text" class="form-control" name="lastname" id="lastname">
+      </div>
+      
+      <!-- Job -->
+      <div class="col-md-4 mb-3 text-left" id="jobContainer">
+        <label for="job"><strong><?php echo TFISH_JOB; ?></strong></label>
+        <input type="text" class="form-control" name="job" id="job">
+      </div>
+      
+      <!-- Business unit -->
+      <div class="col-md-4 mb-3 text-left" id="businessContainer">
+        <label for="business_unit"><strong><?php echo TFISH_BUSINESS_UNIT; ?></strong></label>
+        <input type="text" class="form-control" name="business_unit" id="business_unit">
+      </div>
+      
+      <!-- Organisation -->
+      <div class="col-md-4 mb-3 text-left" id="organisationContainer">
+        <label for="organisation"><strong><?php echo TFISH_ORGANISATION; ?></strong></label>
+        <input type="text" class="form-control" name="organisation" id="organisation">
+      </div>
+      
+      <!-- Email -->
+      <div class="col-md-4 mb-3 text-left" id="emailContainer">
+        <label for="email"><strong><?php echo TFISH_EMAIL; ?></strong></label>
+        <input type="text" class="form-control" name="email" id="email">
+      </div>
+      
+      <!-- State -->
+      <div class="col-md-4 mb-3 text-left" id="stateContainer">
+        <label for="state"><strong><?php echo TFISH_STATE; ?></strong></label>
+        <input type="text" class="form-control" name="state" id="state">
+      </div>
+      
+      <!-- Country -->
+      <div class="col-md-4 mb-3 text-left" id="countryContainer">
+        <label for="country"><strong><?php echo TFISH_COUNTRY; ?></strong></label>
+        <select class="form-control custom-select" name="country" id="country">
+            <?php
+                foreach ($country_list as $country_id => $country_title) {
+                    echo '<option value="' . TfishFilter::escape($country_id) . '">' . TfishFilter::escape($country_title) . '</option>';
+                }
+            ?>
+          </select>
+      </div>
+    
+      <!-- Activities -->
+      <div class="col-md-6 col-lg-4 mb-3 text-left" id="activityContainer">
+        <label for="tag"><strong><?php echo TFISH_ACTIVITIES; ?></strong></label>
+          <select multiple class="form-control custom-select" size="8"  name="tag[]" id="tag">
+            <?php
+                foreach ($tags as $tag_id => $tag_title) {
+                    echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
+                }
+            ?>
+          </select>
+      </div>
+      
+      <!-- Mobile -->
+      <div class="col-md-4 mb-3 text-left" id="mobileContainer">
+        <label for="mobile"><strong><?php echo TFISH_MOBILE; ?></strong></label>
+        <input type="text" class="form-control" name="mobile" id="mobile">
+      </div>
+      
+      <!-- Gender -->
+      <div class="col-md-2 mb-3 text-left" id="genderContainer">
+        <p><strong><?php echo TFISH_GENDER; ?></strong></p>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="male" name="gender" value="1" checked class="custom-control-input" required>
+            <label class="custom-control-label" for="male"><?php echo TFISH_MALE; ?></label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="female" name="gender" value="2" class="custom-control-input" required>
+            <label class="custom-control-label" for="female"><?php echo TFISH_FEMALE; ?></label>
+        </div>
+      </div>
+    
+    </div> <!-- /row -->
+    
+    <!-- Action buttons -->
+    <div class="float-left clearfix">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+        <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
+        <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+    </div>
+
+</form>

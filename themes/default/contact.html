@@ -1,0 +1,66 @@
+<!-- Display a single contact -->
+<?php if ($contact): ?>
+<div>
+    <h3 class="title">
+        <?php if (TfishSession::isAdmin()): ?>
+            <a href="<?php echo TFISH_ADMIN_URL . 'contacts.php?op=edit&amp;id=' . (int)$contact->id; ?>"><i class="fas fa-edit"></i></a>
+        <?php endif; ?>
+        <?php
+            if ($contact->gender === 1) {
+                echo '<i class="fas fa-male"></i> ';
+            } else {
+                echo '<i class="fas fa-female"></i> ';
+            }
+            echo $titles[$contact->title];
+            if ($contact->firstname) {
+                echo ' ' . $contact->escape('firstname');
+            }
+            if ($contact->midname) {
+                echo ' ' . $contact->escape('midname');
+            }
+            if ($contact->lastname) {
+                echo ' ' . $contact->escape('lastname');
+            }
+        ?>
+    </h3>
+    <?php
+        echo '<p>';
+        if ($contact->job) {
+            echo '<b>' . $contact->escape('job') . '</b><br />';
+        }
+        if ($contact->business_unit) {
+            echo $contact->escape('business_unit') . '<br />';
+        }
+        if ($contact->organisation) {
+            echo $contact->escape('organisation') . '<br />';
+        }
+        if ($contact->address) {
+            echo $contact->escape('address') . '<br />';
+        }
+        if ($contact->city && $contact->state) {
+            echo $contact->escape('city') . ', ' . $contact->escape('state') . '<br />';
+        } else {
+            if ($contact->city) {
+                echo $contact->escape('city') . '<br />';
+            }
+            if ($contact->state) {
+                echo $contact->escape('state') . '<br />';
+            }
+        }
+        if ($contact->country) {
+            echo strtoupper($country_list[$contact->country]) . '<br />';
+        }
+        if ($contact->mobile) {
+            echo $contact->escape('mobile') . '<br />';
+        }
+        if ($contact->email) {
+            echo $contact->escape('email');
+        }
+        echo '</p>';
+    ?>
+</div>
+
+<?php else: ?>
+<h3><?php echo TFISH_ERROR; ?></h3>
+<p><?php echo TFISH_ERROR_NO_SUCH_CONTENT; ?></p>
+<?php endif; ?>

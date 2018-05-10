@@ -21,7 +21,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * 
  * Implements PDO and makes exclusive use of prepared statements with bound values to mitigate SQL
  * injection attacks. Table and column identifiers are also escaped.
- * 
+ *
  * It is expected that by the time data trickles down to this class it will have ALREADY BEEN
  * THOROUGHLY VALIDATED AND RANGE CHECKED by user-facing control scripts and internal object checks.
  * As the validation conducted by this class is the last line of defense any failures will trigger
@@ -524,7 +524,7 @@ class TfishDatabase
         $clean_table = self::validateTableName($table);
         $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
         $clean_columns = isset($columns) ? self::validateColumns($columns) : array();
-        
+
         return self::_select($clean_table, $clean_criteria, $clean_columns);
     }
 

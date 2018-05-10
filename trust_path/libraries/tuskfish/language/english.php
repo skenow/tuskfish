@@ -327,3 +327,30 @@ define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a n
         . " failed");
 define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
         . " failed.");
+
+// Contacts mod.
+define("TFISH_FIRSTNAME", "Firstname");
+define("TFISH_MIDNAME", "Middle name(s)");
+define("TFISH_LASTNAME", "Last name");
+define("TFISH_GENDER", "Gender");
+define("TFISH_JOB", "Job title");
+define("TFISH_BUSINESS_UNIT", "Business unit");
+define("TFISH_ORGANISATION", "Organisation");
+define("TFISH_ADDRESS", "Address");
+define("TFISH_CITY", "City");
+define("TFISH_STATE", "State / Province");
+define("TFISH_COUNTRY", "Country");
+define("TFISH_MOBILE", "Mobile");
+define("TFISH_CONTACTS", "Contacts");
+define("TFISH_ADD_CONTACT", "Add contact");
+define("TFISH_MALE", "M");
+define("TFISH_FEMALE", "F");
+define("TFISH_DR", "Dr");
+define("TFISH_PROF", "Prof.");
+define("TFISH_MR", "Mr");
+define("TFISH_MS", "Ms");
+define("TFISH_MRS", "Mrs");
+define("TFISH_ACTIVITIES", "Activities");
+define("TFISH_EDIT_CONTACT", "Edit contact");
+define("TFISH_DO_YOU_WANT_TO_DELETE_THIS_CONTACT", "Do you want to delete this contact?");
+define("TFISH_SEX", "Sex");

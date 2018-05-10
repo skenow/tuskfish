@@ -1,0 +1,44 @@
+<div class="form-buttons clearfix">
+  <form method="post">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <input type="hidden" name="op" value="add">
+    <button class="btn btn-primary float-left add-content" type="submit" formaction="contacts.php"><?php echo TFISH_ADD_CONTACT; ?></button>
+  </form>
+</div>
+
+<div class="clearfix">
+<table class="table table-bordered table-striped table-hover text-left">
+  <thead>
+    <tr>
+      <th class="text-center"><?php echo TFISH_SEX; ?></th>
+      <th><?php echo TFISH_TITLE; ?></th>
+      <th><?php echo TFISH_FIRSTNAME; ?></th>
+      <th><?php echo TFISH_LASTNAME; ?></th>
+      <th><?php echo TFISH_JOB; ?></th>
+      <th><?php echo TFISH_ORGANISATION; ?></th>
+      <th><?php echo TFISH_EMAIL; ?></th>
+      <th colspan="2" class="text-center"><?php echo TFISH_ACTION; ?></th>
+    </tr>
+    </thead>
+  <tbody>
+  <?php foreach($rows as &$row): ?>
+    <tr>
+      <?php if ($row['gender'] === 1): ?>
+        <td class="text-center"><i class="fas fa-male"></i></td>
+      <?php else: ?>
+        <td class="text-center"><i class="fas fa-female"></i></td>
+      <?php endif; ?>
+      <td><?php echo $titles[$row['title']]; ?></td>
+      <td><?php echo TfishFilter::escape($row['firstname']); ?></td>
+      <td><a href="contacts.php?op=view&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['lastname']); ?></a></td>
+      <td><?php echo TfishFilter::escape($row['job']); ?></td>
+      <td><?php echo TfishFilter::escape($row['organisation']); ?></td>
+      <td><?php echo TfishFilter::escape($row['email']); ?></td>
+      <td class="text-center"><a href="contacts.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-edit"></i></a></td>
+      <td class="text-center"><a href="contacts.php?op=confirm_delete&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-trash-alt"></i></a></td>
+      <?php unset($row); ?>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>
+</div>

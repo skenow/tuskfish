@@ -39,49 +39,44 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $address Address of organisation (usually postal).
  * @property    string $city City name.
  * @property    string $state State or territory.
- * @property    string $country Country or special administrative region.
+ * @property    int $country Country or special administrative region.
  * @property    string $email Email address.
  * @property    string $mobile Mobile phone number.
  */
-class TfishContact
+class TfishContact extends TfishAncestralObject
 {
-    /** @var array $__data Array holding values of this objects properties. */
-    protected $__data = array(
-        'id',
-        'title',
-        'firstname',
-        'midname',
-        'lastname',
-        'gender',
-        'job',
-        'business_unit',
-        'organisation',
-        'address',
-        'city',
-        'state',
-        'country',
-        'email',
-        'mobile'
-    );
-
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be overridden to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value of property if it is set; otherwise null.
-     */
-    public function __get(string $property)
+    /** Initialise default content object properties and values. */
+    function __construct()
     {
-        $clean_property = TfishFilter::trimString($property);
+        /**
+         * Whitelist of official properties and datatypes.
+         */
+        $this->__properties['id'] = 'int';
+        $this->__properties['title'] = 'int';
+        $this->__properties['firstname'] = 'string';
+        $this->__properties['midname'] = 'string';
+        $this->__properties['lastname'] = 'string';
+        $this->__properties['gender'] = 'int';
+        $this->__properties['job'] = 'string';
+        $this->__properties['business_unit'] = 'string';
+        $this->__properties['organisation'] = 'string';
+        $this->__properties['address'] = 'string';
+        $this->__properties['city'] = 'string';
+        $this->__properties['state'] = 'string';
+        $this->__properties['country'] = 'int';
+        $this->__properties['email'] = 'string';
+        $this->__properties['mobile'] = 'string';
+        $this->__properties['tags'] = 'array';
+        $this->__properties['submission_time'] = 'int';
+        $this->__properties['template'] = 'alnumunder';
         
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
+        /**
+         * Set the permitted properties of this object.
+         */
+        foreach ($this->__properties as $key => $value) {
+            $this->__data[$key] = '';
         }
+        $this->__data['template'] = "contact";
     }
 
     /**
@@ -101,9 +96,20 @@ class TfishContact
         
         if (isset($this->__data[$clean_property])) {
             switch ($clean_property) {
+                
+                // Must be integer >= 0.
+                case "country":
+                    $clean_value = (int) $value;
+                    if (TfishFilter::isInt($clean_value, 0)) {
+                        $this->__data[$clean_property] = $clean_value;
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                    }
+                    break;
+                
                 // Must be positive integer > 0.
                 case "id":
-                case "country":
+                case "submission_time":
                     $clean_value = (int) $value;
                     if (TfishFilter::isInt($clean_value, 1)) {
                         $this->__data[$clean_property] = $clean_value;
@@ -135,16 +141,38 @@ class TfishContact
                 // Must be valid email address.
                 case "email":
                     $clean_value = TfishFilter::trimString($value);
-                    if (TfishFilter::isEmail($clean_email)) {
+                    if (empty($clean_value) || TfishFilter::isEmail($clean_value)) {
                         $this->__data[$clean_property] = $clean_value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
                     }
                     break;
+                    
+                // Only array field is tags, contents must all be integers.
+                case "tags":
+                    if (TfishFilter::isArray($value)) {
+                        $clean_tags = array();
+
+                        foreach ($value as $val) {
+                            $clean_val = (int) $val;
+
+                            if (TfishFilter::isInt($clean_val, 1)) {
+                                $clean_tags[] = $clean_val;
+                            } else {
+                                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                            }
+                            unset($clean_val);
+                        }
+
+                        $this->__data[$clean_property] = $clean_tags;
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+                    }
+                break;
                 
                 // Fields that are strings without specific validation rules.
                 default:
-                    $clean_value = trimString($value);
+                    $clean_value = TfishFilter::trimString($value);
                     $this->__data[$clean_property] = $clean_value;
                     break;
             }
@@ -152,46 +180,17 @@ class TfishContact
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
     }
-
-    /**
-     * Check if a property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set otherwise false.
-     */
-    public function __isset(string $property)
+    
+    public function escape(string $property, bool $escape_html = false)
     {
         $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
+        // If property is not set return null.
+        if (!isset($this->__data[$clean_property])) {
+            return null;
         }
-    }
-
-    /**
-     * Unsets a property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success, false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishFilter::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
+        // Escape data for display.
+        return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8', false);
     }
-
 }

@@ -33,7 +33,8 @@ $contact_columns = array(
     "state" => "TEXT",
     "country" => "INTEGER",
     "email" => "TEXT",
-    "mobile" => "TEXT"
+    "mobile" => "TEXT",
+    "submission_time", "INTEGER"
     );
 
 TfishDatabase::createTable('contact', $contact_columns, 'id');

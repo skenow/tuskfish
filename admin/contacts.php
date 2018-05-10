@@ -18,6 +18,16 @@ declare(strict_types=1);
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
+/**
+ * Configuration
+ * 
+ * Set the ID of the collections that holds your activity / country tags. These are used to build
+ * the activity / country select boxes.
+ */
+
+$activity_collection = 11;
+$country_collection = 14;
+
 // Validate input parameters.
 $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
@@ -64,9 +74,19 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->page_title = TFISH_ADD_CONTACT;
             $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
             $tfish_template->titles = TfishContactHandler::getTitles();
-            $tfish_template->genders = TfishContactHandler::getGenders();
-            $tfish_template->countries = TfishContactHandler::getCountries();
-            $tfish_template->tags = TfishContactHandler::getTagList(false);
+            
+            // Build activities (tag) select box.
+            $criteria = new TfishCriteria();
+            $criteria->add(new TfishCriteriaItem('parent', $activity_collection));
+            $tfish_template->tags = array(0 => '---') + TfishTagHandler::getList($criteria);
+            
+            // Build countries (tag) select box.
+            $criteria = new TfishCriteria();
+            $criteria->add(new TfishCriteriaItem('parent', $country_collection));
+            $tfish_template->country_list = array(0 => '---') + TfishTagHandler::getList($criteria);
+            
+            //$tfish_template->countries = TfishContactHandler::getCountries();
+            //$tfish_template->tags = TfishContactHandler::getTagList(false);
             
             $contact = new TfishContact();            
             $tfish_template->form = TFISH_FORM_PATH . "contact_entry.html";
@@ -74,26 +94,246 @@ if (in_array($op, $options_whitelist)) {
             break;
         
         case "confirm_delete":
+            if (isset($_REQUEST['id'])) {
+                $clean_id = (int) $_REQUEST['id'];
+                
+                if (TfishFilter::isInt($clean_id, 1)) {
+                    $tfish_template->page_title = TFISH_CONFIRM_DELETE;
+                    $tfish_template->contact = TfishContactHandler::getObject($clean_id);
+                    $tfish_template->form = TFISH_FORM_PATH . "confirm_delete_contact.html";
+                    $tfish_template->tfish_main_content = $tfish_template->render('form');
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
             break;
         
         case "delete":
+            if (isset($_REQUEST['id'])) {
+                $clean_id = (int) $_REQUEST['id'];
+                $result = TfishContactHandler::delete($clean_id);
+                
+                if ($result) {
+                    TfishCache::flushCache();
+                    $tfish_template->page_title = TFISH_SUCCESS;
+                    $tfish_template->alert_class = 'alert-success';
+                    $tfish_template->message = TFISH_OBJECT_WAS_DELETED;
+                } else {
+                    $tfish_template->page_title = TFISH_FAILED;
+                    $tfish_template->alert_class = 'alert-danger';
+                    $tfish_template->message = TFISH_OBJECT_DELETION_FAILED;
+                }
+                
+                $tfish_template->back_url = 'contacts.php';
+                $tfish_template->form = TFISH_FORM_PATH . "response.html";
+                $tfish_template->tfish_main_content = $tfish_template->render('form');
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
             break;
         
         case "edit":
+            if (isset($_REQUEST['id'])) {
+                $clean_id = (int) $_REQUEST['id'];
+                
+                if (TfishFilter::isInt($clean_id, 1)) {
+                    $criteria = new TfishCriteria();
+                    $criteria->add(new TfishCriteriaItem('id', $clean_id));
+                    $statement = TfishDatabase::select('contact', $criteria);
+                    
+                    if (!$statement) {
+                        trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
+                        header("Location: contact.php");
+                    }
+                    
+                    $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+                    // Populate a contact object
+                    $contact = new TfishContact();
+                    foreach ($row as $key => $value) {
+                        if (isset($contact->$key)) {
+                            $contact->$key = $value;
+                        }
+                    }
+                    
+                    // Build titles select box.
+                    $tfish_template->titles = TfishContactHandler::getTitles();
+
+                    // Build activities (tag) select box.
+                    $criteria = new TfishCriteria();
+                    $criteria->add(new TfishCriteriaItem('parent', $activity_collection));
+                    $tfish_template->tags = array(0 => '---') + TfishTagHandler::getList($criteria);
+
+                    // Build countries (tag) select box.
+                    $criteria = new TfishCriteria();
+                    $criteria->add(new TfishCriteriaItem('parent', $country_collection));
+                    $tfish_template->country_list = array(0 => '---') + TfishTagHandler::getList($criteria);
+
+                    // Assign to template.
+                    $tfish_template->page_title = TFISH_EDIT_CONTACT;
+                    $tfish_template->op = 'update'; // Critical to launch correct submission action.
+                    $tfish_template->action = TFISH_UPDATE;
+                    $tfish_template->contact = $contact;
+                    $tfish_template->form = TFISH_FORM_PATH . "contact_edit.html";
+                    $tfish_template->tfish_main_content = $tfish_template->render('form');
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
             break;
         
         case "submit":
+            // Populate a contact object.
+            $contact = new TfishContact();
+            foreach ($_REQUEST as $key => $value) {
+                if (isset($contact->$key)) {
+                    $contact->$key = $_REQUEST[$key]; // Note that object does internal validation.
+                }
+            }
+            
+            // Insert the object
+            $result = TfishContactHandler::insert($contact);
+            
+            if ($result) {
+                TfishCache::flushCache();
+                $tfish_template->page_title = TFISH_SUCCESS;
+                $tfish_template->alert_class = 'alert-success';
+                $tfish_template->message = TFISH_OBJECT_WAS_INSERTED;
+            } else {
+                $tfish_template->title = TFISH_FAILED;
+                $tfish_template->alert_class = 'alert-danger';
+                $tfish_template->message = TFISH_OBJECT_INSERTION_FAILED;
+            }
+            
+            $tfish_template->back_url = 'contacts.php';
+            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
         
         case "update":
+            // Populate a contact object.
+            $contact = new TfishContact();
+            foreach ($_REQUEST as $key => $value) {
+                if (isset($contact->$key)) {
+                    $contact->$key = $_REQUEST[$key]; // Note that object does internal validation.
+                }
+            }
+
+            // As this object is being sent to storage, need to decode some entities that got
+            // encoded for display.
+            $fields_to_decode = array('firstname', 'midname', 'lastname', 'job', 'business_unit',
+                'organisation', 'email', 'state', 'mobile');
+
+            foreach ($fields_to_decode as $field) {
+                if (isset($contact->field)) {
+                    $contact->$field = htmlspecialchars_decode($contact->field,
+                            ENT_NOQUOTES);
+                }
+            }
+
+            // Update the database row and display a response.
+            $result = TfishContactHandler::update($contact);
+
+            if ($result) {
+                TfishCache::flushCache();
+                $tfish_template->page_title = TFISH_SUCCESS;
+                $tfish_template->alert_class = 'alert-success';
+                $tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
+                $tfish_template->id = $contact->id;
+            } else {
+                $tfish_template->page_title = TFISH_FAILED;
+                $tfish_template->alert_class = 'alert-danger';
+                $tfish_template->message = TFISH_OBJECT_UPDATE_FAILED;
+            }
+
+            $tfish_template->back_url = 'contacts.php';
+            $tfish_template->form = TFISH_FORM_PATH . "response_edit_contact.html";
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
         
         case "view":
+            if ($clean_id) {
+                $contact = TfishContactHandler::getObject($clean_id);
+                
+                if (is_object($contact)) {
+                    $tfish_template->contact = $contact;
+                    $tfish_template->titles = TfishContactHandler::getTitles();
+                    $criteria = new TfishCriteria();
+                    $criteria->add(new TfishCriteriaItem('parent', $country_collection));
+                    $tfish_template->country_list = array(0 => '---') + TfishTagHandler::getList($criteria);
+                    
+                    // For a content type-specific page use $content->tags, $content->template.
+                    /*if ($content->tags) {
+                        $tags = TfishContentHandler::makeTagLinks($content->tags);
+                        $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+                        $contentInfo[] = $tags;
+                    }
+                    
+                    $tfish_template->contentInfo = implode(' | ', $contentInfo);*/
+
+                    // Render template.
+                    $tfish_template->tfish_main_content
+                            = $tfish_template->render($contact->template);
+                } else {
+                    $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+                }
+            }
             break;
 
         // Default: Display a table of existing content objects and pagination controls.
         default:
+            $criteria = new TfishCriteria;
+
+            // Select box filter input.
+            // if ($clean_tag) $criteria->tag = array($clean_tag);
+
+            // Other criteria.
+            $criteria->offset = $clean_start;
+            $criteria->limit = $tfish_preference->admin_pagination;
+            $criteria->order = 'lastname';
+            $criteria->ordertype = 'ASC';
+            $columns = array('id', 'title', 'firstname', 'lastname', 'gender', 'job',
+                'organisation', 'email');
+            $result = TfishDatabase::select('contact', $criteria, $columns);
+            
+            if ($result) {
+                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+            }
+
+            // Pagination control.
+            $count = TfishDatabase::selectCount('contact', $criteria);
+            $extra_params = array();
+            
+            $tfish_template->pagination = $tfish_metadata->getPaginationControl(
+                    $count,
+                    $tfish_preference->admin_pagination,
+                    'admin',
+                    $clean_start,
+                    $clean_tag,
+                    $extra_params);
+
+            // Prepare select filters.
+            /**$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
+            $type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
+            $online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
+            $tfish_template->select_action = 'admin.php';
+            $tfish_template->tag_select = $tag_select_box;
+            $tfish_template->type_select = $type_select_box;
+            $tfish_template->online_select = $online_select_box;
+            $tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');**/
+
+            // Assign to template.
             $tfish_template->page_title = TFISH_CONTACTS;
+            $tfish_template->rows = $rows;
+            $tfish_template->titles = TfishContactHandler::getTitles();
+            $tfish_template->form = TFISH_FORM_PATH . "contact_table.html";            
+            $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
     }
     
