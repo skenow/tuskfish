@@ -31,6 +31,7 @@ $contact_columns = array(
     "address" => "TEXT",
     "city" => "TEXT",
     "state" => "TEXT",
+    "tags" => "INTEGER",
     "country" => "INTEGER",
     "email" => "TEXT",
     "mobile" => "TEXT",

@@ -32,6 +32,8 @@ $country_collection = 14;
 $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
+$clean_country = isset($_GET['country_id']) ? (int) $_GET['country_id'] : 0;
+$clean_year = isset($_GET['year']) ? (int) $_GET['year'] : 0;
 $clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
@@ -78,12 +80,16 @@ if (in_array($op, $options_whitelist)) {
             // Build activities (tag) select box.
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('parent', $activity_collection));
-            $tfish_template->tags = array(0 => '---') + TfishTagHandler::getList($criteria);
+            $taglist = TfishTagHandler::getList($criteria);
+            $tfish_template->tags = array(0 => '---') + $taglist;
+            unset($criteria);
             
             // Build countries (tag) select box.
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('parent', $country_collection));
-            $tfish_template->country_list = array(0 => '---') + TfishTagHandler::getList($criteria);
+            $country_list = TfishTagHandler::getList($criteria);
+            asort($country_list);
+            $tfish_template->country_list = array(0 => '---') + $country_list;
             
             //$tfish_template->countries = TfishContactHandler::getCountries();
             //$tfish_template->tags = TfishContactHandler::getTagList(false);
@@ -169,7 +175,9 @@ if (in_array($op, $options_whitelist)) {
                     // Build countries (tag) select box.
                     $criteria = new TfishCriteria();
                     $criteria->add(new TfishCriteriaItem('parent', $country_collection));
-                    $tfish_template->country_list = array(0 => '---') + TfishTagHandler::getList($criteria);
+                    $country_list = TfishTagHandler::getList($criteria);
+                    asort($country_list);
+                    $tfish_template->country_list = array(0 => '---') + $country_list;
 
                     // Assign to template.
                     $tfish_template->page_title = TFISH_EDIT_CONTACT;
@@ -194,10 +202,10 @@ if (in_array($op, $options_whitelist)) {
                     $contact->$key = $_REQUEST[$key]; // Note that object does internal validation.
                 }
             }
-            
+
             // Insert the object
             $result = TfishContactHandler::insert($contact);
-            
+ 
             if ($result) {
                 TfishCache::flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
@@ -222,7 +230,7 @@ if (in_array($op, $options_whitelist)) {
                     $contact->$key = $_REQUEST[$key]; // Note that object does internal validation.
                 }
             }
-
+            
             // As this object is being sent to storage, need to decode some entities that got
             // encoded for display.
             $fields_to_decode = array('firstname', 'midname', 'lastname', 'job', 'business_unit',
@@ -264,16 +272,9 @@ if (in_array($op, $options_whitelist)) {
                     $tfish_template->titles = TfishContactHandler::getTitles();
                     $criteria = new TfishCriteria();
                     $criteria->add(new TfishCriteriaItem('parent', $country_collection));
-                    $tfish_template->country_list = array(0 => '---') + TfishTagHandler::getList($criteria);
-                    
-                    // For a content type-specific page use $content->tags, $content->template.
-                    /*if ($content->tags) {
-                        $tags = TfishContentHandler::makeTagLinks($content->tags);
-                        $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
-                        $contentInfo[] = $tags;
-                    }
-                    
-                    $tfish_template->contentInfo = implode(' | ', $contentInfo);*/
+                    $country_list = TfishTagHandler::getList($criteria);
+                    asort($country_list);
+                    $tfish_template->country_list = array(0 => '---') + $country_list;
 
                     // Render template.
                     $tfish_template->tfish_main_content
@@ -289,7 +290,13 @@ if (in_array($op, $options_whitelist)) {
             $criteria = new TfishCriteria;
 
             // Select box filter input.
-            // if ($clean_tag) $criteria->tag = array($clean_tag);
+            if ($clean_tag) {
+                $criteria->add(new TfishCriteriaItem('tags', $clean_tag));
+            }
+            
+            if ($clean_country) {
+                $criteria->add(new TfishCriteriaItem('country', $clean_country));
+            }
 
             // Other criteria.
             $criteria->offset = $clean_start;
@@ -313,20 +320,56 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->pagination = $tfish_metadata->getPaginationControl(
                     $count,
                     $tfish_preference->admin_pagination,
-                    'admin',
+                    'contacts',
                     $clean_start,
                     $clean_tag,
                     $extra_params);
 
-            // Prepare select filters.
-            /**$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
-            $type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
-            $online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
-            $tfish_template->select_action = 'admin.php';
-            $tfish_template->tag_select = $tag_select_box;
-            $tfish_template->type_select = $type_select_box;
-            $tfish_template->online_select = $online_select_box;
-            $tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');**/
+            unset($criteria);
+            
+            // Country select filter.
+            $criteria = new TfishCriteria();
+            $criteria->add(new TfishCriteriaItem('parent', $country_collection));
+            $country_list = TfishTagHandler::getList($criteria);
+            asort($country_list);
+            $country_select = TfishTagHandler::getArbitraryTagSelectBox($clean_country, $country_list,
+                    'country_id', '-- All countries --');
+            unset($criteria);
+            
+            // Activity select filter.
+            $criteria = new TfishCriteria();
+            $criteria->add(new TfishCriteriaItem('parent', $activity_collection));
+            $activity_list = TfishTagHandler::getList($criteria);
+            $activity_select = TfishTagHandler::getArbitraryTagSelectBox($clean_tag, $activity_list,
+                    'tag_id', '-- All activities --');
+            unset($criteria);
+            
+            // Year select filter. Retrieve dates for activities (using existing $criteria),
+            // compute years. Remove duplicates and sort chronologically.
+            $activity_objects = TfishTagHandler::getObjects($criteria);
+            $dates = array();
+            foreach ($activity_objects as $activity) {
+                $years[] = date("Y", strtotime($activity->date));
+            }
+            $years = array_unique($years);
+            $year_select = '<select class="form-control custom-select" name="year" id="year" '
+                    . 'onchange="this.form.submit()">';
+            if (!$clean_year) {
+                $year_select .= '<option value="0" selected>-- All years --</option>';
+            } else {
+                $year_select .= '<option value="0">-- All years --</option>';
+            }
+            foreach ($years as $year) {
+                $year_select .= ($clean_year == $year) ? '<option value="' . $year . '" selected>'
+                        . $year . '</option>' : '<option value="' . $year . '">' . $year . '</option>';
+            }
+            $year_select .= '</select>';
+            
+            $tfish_template->select_action = 'contacts.php';
+            $tfish_template->country_select = $country_select;
+            $tfish_template->activity_select = $activity_select;
+            $tfish_template->year_select = $year_select;
+            $tfish_template->select_filters_form = $tfish_template->render('contact_filters');
 
             // Assign to template.
             $tfish_template->page_title = TFISH_CONTACTS;

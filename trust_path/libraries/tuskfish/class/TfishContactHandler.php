@@ -29,11 +29,11 @@ class TfishContactHandler extends TfishContentHandler
         }
 
         // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
-        /*$result = TfishTaglinkHandler::deleteTaglinks($obj);
+        /**$result = TfishTaglinkHandler::deleteTaglinks($obj);
         
         if (!$result) {
             return false;
-        }*/
+        }**/
 
         // Delete the object.
         $result = TfishDatabase::delete('contact', $clean_id);
@@ -129,11 +129,11 @@ class TfishContactHandler extends TfishContentHandler
         $key_values = $obj->toArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
-        unset($key_values['tags']);
+        //unset($key_values['tags']);
+        unset($key_values['type']); // Contact table does not have a type field.
 
         // Insert the object into the database.
         $result = TfishDatabase::insert('contact', $key_values);
-        
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
             return false;
@@ -142,19 +142,28 @@ class TfishContactHandler extends TfishContentHandler
         }
         
         unset($key_values, $result);
-
+        
+        // Consolidate country into tags array. It is necessary to do it this way because __set()
+        // will not allow an integer to be appended (because it is not an array).
+        /*if ($obj->country) {
+            $tags = $obj->tags;
+            $tags[] = $obj->country;
+            $obj->tags = $tags;
+        }*/
+        
         // Tags are stored separately in the taglinks table. Tags are assembled in one batch before
         // proceeding to insertion; so if one fails a range check all should fail.
         /*if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
             // If the lastInsertId could not be retrieved, then halt execution becuase this data
             // is necessary in order to correctly assign taglinks to content objects.
+
             if (!$content_id) {
                 trigger_error(TFISH_ERROR_NO_LAST_INSERT_ID, E_USER_ERROR);
                 exit;
             }
 
             $result = TfishTaglinkHandler::insertTaglinks($content_id, $obj->type, $obj->tags);
-            
+
             if (!$result) {
                 return false;
             }
@@ -180,23 +189,10 @@ class TfishContactHandler extends TfishContentHandler
         $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
-
-        // Tags are stored in a separate table and must be handled in a separate query.
-        unset($key_values['tags']);
-
-        //$saved_object = self::getObject($clean_id);
-
-        // Update tags.
-        /*$result = TfishTaglinkHandler::updateTaglinks($clean_id, $obj->type, $obj->tags);
+        unset($key_values['type']);
         
-        if (!$result) {
-            trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
-            return false;
-        }*/
-
         // Update the content object.
         $result = TfishDatabase::update('contact', $clean_id, $key_values);
-        
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
         }

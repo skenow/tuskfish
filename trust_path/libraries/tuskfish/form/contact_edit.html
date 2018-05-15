@@ -89,12 +89,12 @@
       </div>
     
       <!-- Activities -->
-      <div class="col-md-6 col-lg-4 mb-3 text-left" id="tagContainer">
-        <label for="tag"><strong><?php echo TFISH_ACTIVITIES; ?></strong></label>
-          <select multiple class="form-control custom-select" size="8"  name="tag[]" id="tag">
+      <div class="col-md-6 col-lg-4 mb-3 text-left" id="tagsContainer">
+        <label for="tags"><strong><?php echo TFISH_ACTIVITIES; ?></strong></label>
+          <select class="form-control custom-select" name="tags" id="tags">
             <?php
                 foreach ($tags as $tag_id => $tag_title) {
-                    if (isset($content->tags) && in_array($tag_id, $content->tags)) {
+                    if (isset($contact->tags) && $contact->tags === $tag_id) {
                         echo '<option value="' . TfishFilter::escape($tag_id) . '" selected>' . TfishFilter::escape($tag_title) . '</option>';
                     } else {
                         echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';

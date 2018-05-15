@@ -440,7 +440,6 @@ class TfishDatabase
     {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
-        
         return self::_insert($clean_table, $clean_keys);
     }
 

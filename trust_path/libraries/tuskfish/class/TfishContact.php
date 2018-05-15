@@ -52,6 +52,7 @@ class TfishContact extends TfishAncestralObject
          * Whitelist of official properties and datatypes.
          */
         $this->__properties['id'] = 'int';
+        $this->__properties['type'] = 'alpha';
         $this->__properties['title'] = 'int';
         $this->__properties['firstname'] = 'string';
         $this->__properties['midname'] = 'string';
@@ -66,7 +67,7 @@ class TfishContact extends TfishAncestralObject
         $this->__properties['country'] = 'int';
         $this->__properties['email'] = 'string';
         $this->__properties['mobile'] = 'string';
-        $this->__properties['tags'] = 'array';
+        $this->__properties['tags'] = 'int'; // activity
         $this->__properties['submission_time'] = 'int';
         $this->__properties['template'] = 'alnumunder';
         
@@ -76,6 +77,7 @@ class TfishContact extends TfishAncestralObject
         foreach ($this->__properties as $key => $value) {
             $this->__data[$key] = '';
         }
+        $this->__data['type'] = "contact";
         $this->__data['template'] = "contact";
     }
 
@@ -99,6 +101,7 @@ class TfishContact extends TfishAncestralObject
                 
                 // Must be integer >= 0.
                 case "country":
+                case "tags":
                     $clean_value = (int) $value;
                     if (TfishFilter::isInt($clean_value, 0)) {
                         $this->__data[$clean_property] = $clean_value;
@@ -147,28 +150,6 @@ class TfishContact extends TfishAncestralObject
                         trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
                     }
                     break;
-                    
-                // Only array field is tags, contents must all be integers.
-                case "tags":
-                    if (TfishFilter::isArray($value)) {
-                        $clean_tags = array();
-
-                        foreach ($value as $val) {
-                            $clean_val = (int) $val;
-
-                            if (TfishFilter::isInt($clean_val, 1)) {
-                                $clean_tags[] = $clean_val;
-                            } else {
-                                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                            }
-                            unset($clean_val);
-                        }
-
-                        $this->__data[$clean_property] = $clean_tags;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-                    }
-                break;
                 
                 // Fields that are strings without specific validation rules.
                 default:
