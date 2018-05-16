@@ -16,11 +16,13 @@
       <th><?php echo TFISH_LASTNAME; ?></th>
       <th><?php echo TFISH_JOB; ?></th>
       <th><?php echo TFISH_ORGANISATION; ?></th>
+      <th><?php echo TFISH_COUNTRY; ?></th>
       <th><?php echo TFISH_EMAIL; ?></th>
       <th colspan="2" class="text-center"><?php echo TFISH_ACTION; ?></th>
     </tr>
     </thead>
   <tbody>
+
   <?php foreach($rows as &$row): ?>
     <tr>
       <?php if ($row['gender'] == 1): ?>
@@ -33,6 +35,7 @@
       <td><a href="contacts.php?op=view&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><?php echo TfishFilter::escape($row['lastname']); ?></a></td>
       <td><?php echo TfishFilter::escape($row['job']); ?></td>
       <td><?php echo TfishFilter::escape($row['organisation']); ?></td>
+      <td><?php echo $country_list[TfishFilter::escape($row['country'])]; ?></td>
       <td><?php echo TfishFilter::escape($row['email']); ?></td>
       <td class="text-center"><a href="contacts.php?op=edit&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-edit"></i></a></td>
       <td class="text-center"><a href="contacts.php?op=confirm_delete&amp;id=<?php echo TfishFilter::escape($row['id']); ?>"><i class="fas fa-trash-alt"></i></a></td>

@@ -37,6 +37,11 @@ $clean_year = isset($_GET['year']) ? (int) $_GET['year'] : 0;
 $clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
+// If both a specific course and year filters are set, disregard year.
+if ($clean_tag && $clean_year) {
+    $clean_year = 0;
+}
+
 // Specify the admin theme and the template to be used to preview content (user side template).
 if ($op === 'view') {
     $tfish_template->setTheme('default');
@@ -287,9 +292,46 @@ if (in_array($op, $options_whitelist)) {
 
         // Default: Display a table of existing content objects and pagination controls.
         default:
-            $criteria = new TfishCriteria;
+            $criteria = new TfishCriteria();
+            $activities = array();
+            $rows = array();
+                        
+            // Calculate timestamp bounds for selected year.
+            if ($clean_year) {
+                $timezones = TfishUtils::getTimezones();
+                $timezone = $timezones[$tfish_preference->site_timezone];
+                $start_year = $clean_year . '-01-01';
+                $end_year = $clean_year . '-12-31';
+                
+                // Get a list of activities that lie within this time period.
+                $activity_criteria = new TfishCriteria();            
+                $activity_criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+                $activity_criteria->add(new TfishCriteriaItem('parent', 11));
+                $activity_criteria->add(new TfishCriteriaItem('date', $start_year, '>'));
+                $activity_criteria->add(new TfishCriteriaItem('date', $end_year, '<'));
+                $activities = array_keys(TfishTagHandler::getList($activity_criteria));
+                unset($activity_criteria);
+            }
+            
+            /**
+             * Problem - somehow when filter by year + country, contacts from unfiltered countries
+             * still get listed. Suspect it's to do with calculating multiple activities for a year
+             * and the "OR". They all get lumped into the same bracket.
+             */
+            
+            // Add the tags (which include courses and years) as criteria.
+            $i = 1;
+            $count = count($activities);
 
-            // Select box filter input.
+            foreach ($activities as $key => $value) {
+                if ($i < $count) {
+                    $criteria->add(new TfishCriteriaItem('tags', $value), "OR");
+                } else {
+                    $criteria->add(new TfishCriteriaItem('tags', $value));
+                }
+                $i++;
+            }
+            
             if ($clean_tag) {
                 $criteria->add(new TfishCriteriaItem('tags', $clean_tag));
             }
@@ -297,20 +339,30 @@ if (in_array($op, $options_whitelist)) {
             if ($clean_country) {
                 $criteria->add(new TfishCriteriaItem('country', $clean_country));
             }
-
+            
             // Other criteria.
             $criteria->offset = $clean_start;
             $criteria->limit = $tfish_preference->admin_pagination;
             $criteria->order = 'lastname';
             $criteria->ordertype = 'ASC';
             $columns = array('id', 'title', 'firstname', 'lastname', 'gender', 'job',
-                'organisation', 'email');
+                'organisation', 'country', 'email');
+
             $result = TfishDatabase::select('contact', $criteria, $columns);
-            
+
             if ($result) {
                 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+            }
+            
+            // Manual adjustment of result.
+            if ($clean_country && $activities && $rows) {
+                for ($i=0; $i < count($rows); $i++) {
+                    if ($rows[$i]['country'] != $clean_country) {
+                        unset($rows[$i]);
+                    }
+                }
             }
 
             // Pagination control.
@@ -364,12 +416,12 @@ if (in_array($op, $options_whitelist)) {
                         . $year . '</option>' : '<option value="' . $year . '">' . $year . '</option>';
             }
             $year_select .= '</select>';
-            
             $tfish_template->select_action = 'contacts.php';
             $tfish_template->country_select = $country_select;
             $tfish_template->activity_select = $activity_select;
             $tfish_template->year_select = $year_select;
             $tfish_template->select_filters_form = $tfish_template->render('contact_filters');
+            $tfish_template->country_list = $country_list;
 
             // Assign to template.
             $tfish_template->page_title = TFISH_CONTACTS;
@@ -384,8 +436,6 @@ if (in_array($op, $options_whitelist)) {
     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
     exit;
 }
-
-
 
 /**
  * Override page template here (otherwise default site metadata will display).
