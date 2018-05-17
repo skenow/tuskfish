@@ -57,6 +57,13 @@
             echo $contact->escape('email');
         }
         echo '</p>';
+        
+        if (isset($activity) && !empty($activity)) {
+            echo '<h4>' . TFISH_ACTIVITY . '</h4>';
+            echo '<p><a href="' . TFISH_ADMIN_URL . 'contacts.php?tag_id=' 
+            . $activity->id . '">' . $activity->escape('title') . '</a> ('
+            . $activity->escape('date') . ').</p>';
+        }
     ?>
 </div>
 

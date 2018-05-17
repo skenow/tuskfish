@@ -37,11 +37,6 @@ $clean_year = isset($_GET['year']) ? (int) $_GET['year'] : 0;
 $clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
 $op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
 
-// If both a specific course and year filters are set, disregard year.
-if ($clean_tag && $clean_year) {
-    $clean_year = 0;
-}
-
 // Specify the admin theme and the template to be used to preview content (user side template).
 if ($op === 'view') {
     $tfish_template->setTheme('default');
@@ -95,9 +90,6 @@ if (in_array($op, $options_whitelist)) {
             $country_list = TfishTagHandler::getList($criteria);
             asort($country_list);
             $tfish_template->country_list = array(0 => '---') + $country_list;
-            
-            //$tfish_template->countries = TfishContactHandler::getCountries();
-            //$tfish_template->tags = TfishContactHandler::getTagList(false);
             
             $contact = new TfishContact();            
             $tfish_template->form = TFISH_FORM_PATH . "contact_entry.html";
@@ -280,6 +272,12 @@ if (in_array($op, $options_whitelist)) {
                     $country_list = TfishTagHandler::getList($criteria);
                     asort($country_list);
                     $tfish_template->country_list = array(0 => '---') + $country_list;
+                    
+                    // Get the related training course details.
+                    if ($contact->tags) {
+                        $activity = TfishTagHandler::getObject($contact->tags);
+                        $tfish_template->activity = $activity;
+                    }
 
                     // Render template.
                     $tfish_template->tfish_main_content
@@ -292,12 +290,25 @@ if (in_array($op, $options_whitelist)) {
 
         // Default: Display a table of existing content objects and pagination controls.
         default:
+            /** Initialise. **/
             $criteria = new TfishCriteria();
             $activities = array();
             $rows = array();
-                        
-            // Calculate timestamp bounds for selected year.
-            if ($clean_year) {
+            
+            /** Set legal parameter combos. **/
+            // $clean_tag takes precedence over $clean_year, as it is more specific.
+            if ($clean_tag) {
+                $clean_year = 0;
+                $criteria->add(new TfishCriteriaItem('tags', $clean_tag));
+            }
+            
+            // $clean_country can be used as complementary, independent filter to the others.
+            if ($clean_country && !$clean_year) {
+                $criteria->add(new TfishCriteriaItem('country', $clean_country));
+            }
+            
+            // $clean_year can be used as a complementary filter to $clean_country.
+            if ($clean_year && !$clean_country) {
                 $timezones = TfishUtils::getTimezones();
                 $timezone = $timezones[$tfish_preference->site_timezone];
                 $start_year = $clean_year . '-01-01';
@@ -311,33 +322,39 @@ if (in_array($op, $options_whitelist)) {
                 $activity_criteria->add(new TfishCriteriaItem('date', $end_year, '<'));
                 $activities = array_keys(TfishTagHandler::getList($activity_criteria));
                 unset($activity_criteria);
-            }
-            
-            /**
-             * Problem - somehow when filter by year + country, contacts from unfiltered countries
-             * still get listed. Suspect it's to do with calculating multiple activities for a year
-             * and the "OR". They all get lumped into the same bracket.
-             */
-            
-            // Add the tags (which include courses and years) as criteria.
-            $i = 1;
-            $count = count($activities);
+                
+                $i = 1;
+                $count = count($activities);
 
-            foreach ($activities as $key => $value) {
-                if ($i < $count) {
-                    $criteria->add(new TfishCriteriaItem('tags', $value), "OR");
-                } else {
-                    $criteria->add(new TfishCriteriaItem('tags', $value));
-                }
+                foreach ($activities as $key => $value) {
+                    if ($i < $count) {
+                        $criteria->add(new TfishCriteriaItem('tags', $value), "OR");
+                    } else {
+                        $criteria->add(new TfishCriteriaItem('tags', $value));
+                    }
                 $i++;
+                }
             }
             
-            if ($clean_tag) {
-                $criteria->add(new TfishCriteriaItem('tags', $clean_tag));
-            }
-            
-            if ($clean_country) {
-                $criteria->add(new TfishCriteriaItem('country', $clean_country));
+            // Custom query for this case.
+            if ($clean_country && $clean_year) {
+                $sql = "SELECT * FROM `contacts` WHERE `country` = :country AND `tags` IN (";
+                for ($i = 0; $i < count($activities); $i++) {
+                    $sql .= ":tags" . $i;
+                }
+                $sql .= ")";
+                
+                // Prepare the statement and bind the ID value.
+                $statement = TfishDatabase::preparedStatement($sql);
+
+                if ($statement) {
+                    $statement->bindValue(":country", $clean_country, PDO::PARAM_INT);
+                    for ($i = 0; $i < count($activities); $i++) {
+                        $statement->bindValue(":tags" . $i, $activities[$i], PDO::PARAM_INT);
+                    }
+                    
+                    $rows = $statement->execute();
+                }
             }
             
             // Other criteria.
@@ -360,6 +377,15 @@ if (in_array($op, $options_whitelist)) {
             if ($clean_country && $activities && $rows) {
                 for ($i=0; $i < count($rows); $i++) {
                     if ($rows[$i]['country'] != $clean_country) {
+                        unset($rows[$i]);
+                    }
+                }
+            }
+            
+            if ($clean_country && $clean_year && $activities && $rows) {
+                for ($i=0; $i < count($rows); $i++) {
+                    if ($rows[$i]['country'] != $clean_country) {
+                        print_r($rows[$i]);
                         unset($rows[$i]);
                     }
                 }
@@ -394,12 +420,13 @@ if (in_array($op, $options_whitelist)) {
             $activity_list = TfishTagHandler::getList($criteria);
             $activity_select = TfishTagHandler::getArbitraryTagSelectBox($clean_tag, $activity_list,
                     'tag_id', '-- All activities --');
-            unset($criteria);
             
             // Year select filter. Retrieve dates for activities (using existing $criteria),
             // compute years. Remove duplicates and sort chronologically.
             $activity_objects = TfishTagHandler::getObjects($criteria);
+            unset($criteria);
             $dates = array();
+            
             foreach ($activity_objects as $activity) {
                 $years[] = date("Y", strtotime($activity->date));
             }

@@ -354,3 +354,4 @@ define("TFISH_ACTIVITIES", "Activities");
 define("TFISH_EDIT_CONTACT", "Edit contact");
 define("TFISH_DO_YOU_WANT_TO_DELETE_THIS_CONTACT", "Do you want to delete this contact?");
 define("TFISH_SEX", "Sex");
+define("TFISH_ACTIVITY", "Activity");
