@@ -308,7 +308,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             // $clean_year can be used as a complementary filter to $clean_country.
-            if ($clean_year && !$clean_country) {
+            if ($clean_year) {
                 $timezones = TfishUtils::getTimezones();
                 $timezone = $timezones[$tfish_preference->site_timezone];
                 $start_year = $clean_year . '-01-01';
@@ -322,9 +322,13 @@ if (in_array($op, $options_whitelist)) {
                 $activity_criteria->add(new TfishCriteriaItem('date', $end_year, '<'));
                 $activities = array_keys(TfishTagHandler::getList($activity_criteria));
                 unset($activity_criteria);
-                
+
                 $i = 1;
                 $count = count($activities);
+            }
+            
+            // $clean_year but no $clean_country.
+            if ($clean_year && !$clean_country) {
 
                 foreach ($activities as $key => $value) {
                     if ($i < $count) {
@@ -336,15 +340,27 @@ if (in_array($op, $options_whitelist)) {
                 }
             }
             
-            // Custom query for this case.
+            // $clean_country + $clean_year requires custom query for this case.
             if ($clean_country && $clean_year) {
-                $sql = "SELECT * FROM `contacts` WHERE `country` = :country AND `tags` IN (";
-                for ($i = 0; $i < count($activities); $i++) {
-                    $sql .= ":tags" . $i;
+                $sql = "SELECT `id`, `title`, `firstname`, `lastname`, `gender`, `job`,
+                    `organisation`, `country`, `email` ";
+                $sql .= "FROM `contact` WHERE `country` = :country ";
+                if (count($activities) > 0) {
+                    $sql .= "AND `tags` IN (";                    
+                    for ($i = 0; $i < count($activities); $i++) {
+                        $sql .= ":tags" . $i . ",";
+                    }
+                    $sql = rtrim($sql, ',');
                 }
-                $sql .= ")";
+                $sql .= ") ";
                 
-                // Prepare the statement and bind the ID value.
+                // Order and order type.
+                $sql .= "ORDER BY `lastname` ASC, `submission_time` DESC ";
+                
+                // Offset and limit.
+                $sql .= " LIMIT :limit OFFSET :offset";
+                
+                // Prepare the statement and bind the placeholders to values.
                 $statement = TfishDatabase::preparedStatement($sql);
 
                 if ($statement) {
@@ -352,48 +368,71 @@ if (in_array($op, $options_whitelist)) {
                     for ($i = 0; $i < count($activities); $i++) {
                         $statement->bindValue(":tags" . $i, $activities[$i], PDO::PARAM_INT);
                     }
+                    $statement->bindValue(":limit", $tfish_preference->admin_pagination, PDO::PARAM_INT);
+                    $statement->bindValue(":offset", $clean_start, PDO::PARAM_INT);
                     
-                    $rows = $statement->execute();
-                }
-            }
-            
-            // Other criteria.
-            $criteria->offset = $clean_start;
-            $criteria->limit = $tfish_preference->admin_pagination;
-            $criteria->order = 'lastname';
-            $criteria->ordertype = 'ASC';
-            $columns = array('id', 'title', 'firstname', 'lastname', 'gender', 'job',
-                'organisation', 'country', 'email');
-
-            $result = TfishDatabase::select('contact', $criteria, $columns);
-
-            if ($result) {
-                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-            }
-            
-            // Manual adjustment of result.
-            if ($clean_country && $activities && $rows) {
-                for ($i=0; $i < count($rows); $i++) {
-                    if ($rows[$i]['country'] != $clean_country) {
-                        unset($rows[$i]);
+                    $statement->execute();
+                    
+                    // Extract rows from PDOStatement object.
+                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                        $rows[] = $row;
                     }
+                    unset($statement);
+
                 }
-            }
-            
-            if ($clean_country && $clean_year && $activities && $rows) {
-                for ($i=0; $i < count($rows); $i++) {
-                    if ($rows[$i]['country'] != $clean_country) {
-                        print_r($rows[$i]);
-                        unset($rows[$i]);
-                    }
+            } else { // Base case.
+                $criteria->offset = $clean_start;
+                $criteria->limit = $tfish_preference->admin_pagination;
+                $criteria->order = 'lastname';
+                $criteria->ordertype = 'ASC';
+                $columns = array('id', 'title', 'firstname', 'lastname', 'gender', 'job',
+                    'organisation', 'country', 'email');
+
+                $result = TfishDatabase::select('contact', $criteria, $columns);
+
+                if ($result) {
+                    $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
                 }
             }
 
             // Pagination control.
-            $count = TfishDatabase::selectCount('contact', $criteria);
+            // 1. Need to run a count seperately for the country + year case.
+            // 2. Need to pass in extra parameters, which are country + year.
+            if ($clean_country && $clean_year) {
+                $sql = "SELECT COUNT(*) FROM `contact` WHERE `country` = :country ";
+                if (count($activities) > 0) {
+                    $sql .= "AND `tags` IN (";                    
+                    for ($i = 0; $i < count($activities); $i++) {
+                        $sql .= ":tags" . $i . ",";
+                    }
+                    $sql = rtrim($sql, ',');
+                }
+                $sql .= ") ";
+                
+                // Prepare the statement and bind the placeholders to values.
+                $statement = TfishDatabase::preparedStatement($sql);
+                $statement->bindValue(":country", $clean_country, PDO::PARAM_INT);
+                for ($i = 0; $i < count($activities); $i++) {
+                    $statement->bindValue(":tags" . $i, $activities[$i], PDO::PARAM_INT);
+                }
+                
+                // Execute the statement and return the row count (integer) by retrieving the row.
+                $statement->execute();
+                $count = $statement->fetch(PDO::FETCH_NUM);
+                $count = (int) reset($count);
+            } else {
+                $count = TfishDatabase::selectCount('contact', $criteria);
+            }
+            
             $extra_params = array();
+            if ($clean_country) {
+                $extra_params['country_id'] = $clean_country;
+            }
+            if ($clean_year) {
+                $extra_params['year'] = $clean_year;
+            }
             
             $tfish_template->pagination = $tfish_metadata->getPaginationControl(
                     $count,
