@@ -121,6 +121,10 @@
             <input type="radio" id="female" name="gender" value="2" class="custom-control-input" required <?php if ($contact->gender === 2) { echo 'checked="checked"'; } ?>>
             <label class="custom-control-label" for="female"><?php echo TFISH_FEMALE; ?></label>
         </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="unknown" name="gender" value="3" class="custom-control-input" required <?php if ($contact->gender === 3) { echo 'checked="checked"'; } ?>>
+            <label class="custom-control-label" for="unknown"><?php echo TFISH_UNKNOWN_GENDER; ?></label>
+        </div>
       </div>
     
     </div> <!-- /row -->

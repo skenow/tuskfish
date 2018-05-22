@@ -8,8 +8,10 @@
         <?php
             if ($contact->gender === 1) {
                 echo '<i class="fas fa-male"></i> ';
-            } else {
+            } elseif ($contact->gender === 2) {
                 echo '<i class="fas fa-female"></i> ';
+            } else {
+                echo '<i class="fas fa-question"></i> ';
             }
             echo $titles[$contact->title];
             if ($contact->firstname) {

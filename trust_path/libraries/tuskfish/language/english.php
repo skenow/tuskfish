@@ -345,6 +345,7 @@ define("TFISH_CONTACTS", "Contacts");
 define("TFISH_ADD_CONTACT", "Add contact");
 define("TFISH_MALE", "M");
 define("TFISH_FEMALE", "F");
+define("TFISH_UNKNOWN_GENDER", "U");
 define("TFISH_DR", "Dr");
 define("TFISH_PROF", "Prof.");
 define("TFISH_MR", "Mr");

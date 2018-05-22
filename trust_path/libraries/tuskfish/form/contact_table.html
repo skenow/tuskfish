@@ -27,8 +27,10 @@
     <tr>
       <?php if ($row['gender'] == 1): ?>
         <td class="text-center"><i class="fas fa-male"></i></td>
-      <?php else: ?>
+      <?php elseif ($row['gender'] == 2): ?>
         <td class="text-center"><i class="fas fa-female"></i></td>
+      <?php else: ?>
+        <td class="text-center"><i class="fas fa-question"></i></td>
       <?php endif; ?>
       <td><?php echo $titles[$row['title']]; ?></td>
       <td><?php echo TfishFilter::escape($row['firstname']); ?></td>

@@ -134,7 +134,7 @@ class TfishContact extends TfishAncestralObject
                 // 1. Male, 2. Female.
                 case "gender":
                     $clean_value = (int) $value;
-                    if (TfishFilter::isInt($clean_value, 1, 2)) {
+                    if (TfishFilter::isInt($clean_value, 1, 3)) {
                         $this->__data[$clean_property] = $clean_value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
