@@ -1,0 +1,9 @@
+Version 1.0 stable
+------------------
+* Released 29 March 2018.
+
+Version 1.01 stable
+-------------------
+* Released 17 June 2018.
+* Fixed syntax error breaking RSS feeds.
+
