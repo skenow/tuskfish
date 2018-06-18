@@ -7,3 +7,10 @@ Version 1.01 stable
 * Released 17 June 2018.
 * Fixed syntax error breaking RSS feeds.
 
+Version 1.02 (unreleased)
+-------------------------
+* Upgrade to jQuery V3.3.1.
+* Upgrade to HTMLPurifier V4.10.0 (PHP 7.2 compatible).
+* Upgrade to Fontawesome V5.0.13.
+* Upgrade to TinyMCE V4.7.13.
+
