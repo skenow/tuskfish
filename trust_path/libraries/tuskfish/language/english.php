@@ -329,4 +329,20 @@ define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a no
         . " failed.");
 
 // Biography addon.
-
+define("TFISH_SALUTATION", "Salutation");
+define("TFISH_FIRST_NAME", "First name");
+define("TFISH_MIDDLE_NAME", "Middle name(s)");
+define("TFISH_LAST_NAME", "Last name");
+define("TFISH_GENDER", "Gender");
+define("TFISH_JOB_TITLE", "Job title");
+define("TFISH_EXPERIENCE", "ExperienCOUNce");
+define("TFISH_PROJECTS", "Projects");
+define("TFISH_PUBLICATIONS", "Publications");
+define("TFISH_BUSINESS_UNIT", "Business unit");
+define("TFISH_ORGANISATION", "Organisation");
+define("TFISH_ADDRESS", "Address");
+define("TFISH_STATE", "State");
+define("TFISH_COUNTRY", "Country");
+define("TFISH_MOBILE", "Mobile");
+define("TFISH_FAX", "Fax");
+define("TFISH_PROFILE", "Profile");

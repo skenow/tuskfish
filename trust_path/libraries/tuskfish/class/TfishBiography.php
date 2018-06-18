@@ -52,7 +52,6 @@ class TfishBiography extends TfishAncestralObject
         $this->__properties['business_unit'] = 'string';
         $this->__properties['organisation'] = 'string';
         $this->__properties['address'] = 'string';
-        $this->__properties['city'] = 'string';
         $this->__properties['state'] = 'string';
         $this->__properties['country'] = 'int';
         $this->__properties['email'] = 'string';
@@ -101,17 +100,251 @@ class TfishBiography extends TfishAncestralObject
      * child classes to impose data type restrictions and range checks on custom subclass
      * properties.
      * 
-     * If you have added some custom properties to this content subclass that need to be type
-     * and/or range checked before permitting assignment, add a switch above the call to the parent
-     * method. Structure it so that any case not explicitly handled will fall through to the parent
-     * method, while explicit cases will be handled here.
-     * 
      * @param string $property Name of property.
      * @param mixed $value Value of property.
      */
     public function __set(string $property, $value)
     {
-        parent::__set($property, $value);
+        $clean_property = TfishFilter::trimString($property);
+    
+        if (!isset($this->__data[$clean_property])) {
+            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
+        }
+        
+        if (isset($this->__properties[$clean_property])) {
+           $type = $this->__properties[$clean_property]; 
+        } else {
+            $type = false; // Do not set property.
+        }
+        
+        switch ($type) {
+
+            case "alpha":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isAlpha($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+                }
+                break;
+
+            case "alnum":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isAlnum($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
+                }
+                break;
+
+            case "alnumunder":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isAlnumUnderscore($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+                }
+                break;
+
+            // Only array field is tags, contents must all be integers.
+            case "array":
+                if (TfishFilter::isArray($value)) {
+                    $clean_tags = array();
+
+                    foreach ($value as $val) {
+                        $clean_val = (int) $val;
+
+                        if (TfishFilter::isInt($clean_val, 1)) {
+                            $clean_tags[] = $clean_val;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+                        unset($clean_val);
+                    }
+
+                    $this->__data[$clean_property] = $clean_tags;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+                }
+                break;
+
+            case "bool":
+                if (TfishFilter::isBool($value)) {
+                    $this->__data[$clean_property] = (bool) $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_BOOL, E_USER_ERROR);
+                }
+                break;
+
+            case "email":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isEmail($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+                }
+                break;
+
+            case "digit":
+                $value = TfishFilter::trimString($value);
+
+                if (TfishFilter::isDigit($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_DIGIT, E_USER_ERROR);
+                }
+                break;
+
+            case "float":
+                $value = (float) $value;
+                
+                if (TfishFilter::isFloat($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_FLOAT, E_USER_ERROR);
+                }
+                break;
+
+            case "html":
+                $value = TfishFilter::trimString($value);
+                $this->__data[$clean_property] = (string) TfishFilter::filterHtml($value);
+                break;
+
+            case "int":
+                $value = (int) $value;
+
+                switch ($clean_property) {
+                    // 0 or 1.
+                    case "online":
+                        if (TfishFilter::isInt($value, 0, 1)) {
+                            $this->__data[$clean_property] = $value;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+                        break;
+                        
+                    case "gender":
+                        if (TfishFilter::isInt($value, 0, 2)) {
+                            $this->__data[$clean_property] = $value;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+                        break;
+
+                    // Minimum value 0.
+                    case "counter":
+                    case "file_size":
+                    case "id":
+                        if (TfishFilter::isInt($value, 0)) {
+                            $this->__data[$clean_property] = $value;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+                        break;
+
+                    // Parent ID must be different to content ID (cannot declare self as parent).
+                    case "parent":
+                        if (!TfishFilter::isInt($value, 0)) {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+
+                        if ($value === $this->__data['id'] && $value > 0) {
+                            trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
+                        } else {
+                            $this->__data[$clean_property] = $value;
+                        }
+                        break;
+
+                    // Minimum value 1.
+                    case "submission_time":
+                    case "country":
+                    case "salutation":
+                        if (TfishFilter::isInt($value, 1)) {
+                            $this->__data[$clean_property] = $value;
+                        } else {
+                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                        }
+                        break;
+                }
+                break;
+
+            case "ip":
+                $value = TfishFilter::trimString($value);
+                if ($value === "" || TfishFilter::isIp($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_IP, E_USER_ERROR);
+                }
+                break;
+
+            case "string":
+                $value = TfishFilter::trimString($value);
+
+                // Check image/media paths for directory traversals and null byte injection.
+                if ($clean_property === "image" || $clean_property === "media") {
+                    if (TfishFilter::hasTraversalorNullByte($value)) {
+                        trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+                    }
+                }
+                
+                // Check image file is a permitted mimetype.
+                if ($clean_property === "image") {
+                    $mimetype_whitelist = TfishFileHandler::allowedImageMimetypes();
+                    $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
+                    if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
+                        trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+                    }
+                }
+                
+                // Check media file is a permitted mimetype.
+                if ($clean_property === "media") {
+                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                    $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
+                    
+                    if (empty($extension) 
+                            || (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist))) {
+                        $this->__data['media'] = '';
+                        $this->__data['format'] = '';
+                        $this->__data['file_size'] = '';
+                    }
+                }
+
+                if ($clean_property === "format") {
+                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                    if (!empty($value) && !in_array($value, $mimetype_whitelist)) {
+                        trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+                    }
+                }
+
+                if ($clean_property === "seo") {
+                    if (TfishFilter::isUtf8($value)) {
+                        $value = str_replace(' ', '-', $value);
+                    } else {
+                        trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
+                    }
+                }
+
+                $this->__data[$clean_property] = $value;
+                break;
+
+            case "url":
+                $value = TfishFilter::trimString($value);
+
+                if ($value === "" || TfishFilter::isUrl($value)) {
+                    $this->__data[$clean_property] = $value;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+                }
+                break;
+            
+            // Illegal data type, do nothing.
+            default:
+                break;
+        }
     }
 
 }
