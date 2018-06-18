@@ -13,5 +13,5 @@ Version 1.02 (unreleased)
 * Upgrade to HTMLPurifier V4.10.0 (PHP 7.2 compatible).
 * Upgrade to Fontawesome V5.0.13.
 * Upgrade to TinyMCE V4.7.13.
-* Upgrade to Boostrap-fileinput V4.4.8.
-
+* Upgrade to Bootstrap-fileinput V4.4.8.
+* Upgrade to Bootstrap-datepicker V1.8.
