@@ -98,6 +98,7 @@ define("TFISH_PREFERENCE_SITE_COPYRIGHT", "Site copyright");
 define("TFISH_PREFERENCE_ENABLE_CACHE", "Enable cache");
 define("TFISH_PREFERENCE_CACHE_LIFE", "Cache life (seconds)");
 define("TFISH_PREFERENCE_SESSION_LIFE", "Session life (minutes)");
+define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
 
 // Search
 define("TFISH_SEARCH", "Search");
@@ -224,6 +225,8 @@ define("TFISH_OBJECT_WAS_UPDATED", "The object was successfully updated.");
 define("TFISH_OBJECT_UPDATE_FAILED", "Object update failed.");
 define("TFISH_PREFERENCES_WERE_UPDATED", "Preferences were successfully updated.");
 define("TFISH_PREFERENCES_UPDATE_FAILED", "Preference update failed.");
+define("TFISH_MEDIA_NOT_COMPATIBLE", "The selected media file is not compatible with the current "
+        . "content type. Inline media players will not display.");
 
 // ERROR MESSAGES.
 define("TFISH_ERROR", "Oops...");
@@ -279,6 +282,10 @@ define("TFISH_ERROR_CIRCULAR_PARENT_REFERENCE", "Circular reference: Content obj
 define("TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE", "File path contains a traversal or null byte (illegal "
         . "value).");
 define("TFISH_ERROR_NOT_UTF8", "Not UTF-8, illegal character set.");
+define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a non-extant tag"
+        . " failed");
+define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
+        . " failed.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini "
@@ -294,36 +301,25 @@ define("TFISH_ERROR_UPLOAD_ERR_CANT_WRITE", "Upload failed: Can't write to disk.
 define("TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO", "Your browser does not support the video tag.");
 define("TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO", "Your browser does not support the audio tag.");
 
-/*
- * Record any new, changed or deleted language constants below by version, to aid translation.
- */
-
-// Beta 1.
-define("TFISH_DOWNLOAD", "Download");
-define("TFISH_DOWNLOADS", "Downloads");
+// Cache.
 define("TFISH_FLUSH_CACHE", "Flush cache");
+define("TFISH_CONFIRM_FLUSH", "Are you sure?");
+define("TFISH_DO_YOU_WANT_TO_FLUSH_CACHE", "Do you want to flush the cache?");
 define("TFISH_CACHE_WAS_FLUSHED", "Cache was flushed.");
 define("TFISH_CACHE_FLUSH_FAILED", "Cache flush failed.");
 
-// RC 1.
-define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
-
-// RC 4.
-define("TFISH_VIEW", "View");
-define("TFISH_SETTINGS", "Settings");
-
-// RC 5.
-define("TFISH_MEDIA_NOT_COMPATIBLE", "The selected media file is not compatible with the current "
-        . "content type. Inline media players will not display.");
-
-// RC6.
-define("TFISH_CONFIRM_FLUSH", "Are you sure?");
-define("TFISH_DO_YOU_WANT_TO_FLUSH_CACHE", "Do you want to flush the cache?");
+// Tokens.
 define("TFISH_INVALID_TOKEN", "Invalid token error");
 define("TFISH_SORRY_INVALID_TOKEN", "Sorry, the token accompanying your request was invalid. This 
     is usually caused by your session timing out, but it can be an indication of a cross-site 
     request forgery. As a precaution, your request has not been processed. Please try again.");
-define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a non-extant tag"
-        . " failed");
-define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
-        . " failed.");
+
+// Miscellaneous.
+define("TFISH_DOWNLOAD", "Download");
+define("TFISH_DOWNLOADS", "Downloads");
+define("TFISH_VIEW", "View");
+define("TFISH_SETTINGS", "Settings");
+
+/*
+ * Record any new, changed or deleted language constants below by version, to aid translation.
+ */
