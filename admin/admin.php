@@ -17,6 +17,7 @@ declare(strict_types=1);
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
+require_once TFISH_MODULE_PATH . "content/tfish_content_module_header.php";
 
 // Validate input parameters.
 $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -99,7 +100,7 @@ if (in_array($op, $options_whitelist)) {
                     'publisher',
                     'tags')
             );
-            $tfish_template->form = TFISH_FORM_PATH . "data_entry.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "data_entry.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
@@ -111,7 +112,7 @@ if (in_array($op, $options_whitelist)) {
                 if (TfishFilter::isInt($clean_id, 1)) {
                     $tfish_template->page_title = TFISH_CONFIRM_DELETE;
                     $tfish_template->content = TfishContentHandler::getObject($clean_id);
-                    $tfish_template->form = TFISH_FORM_PATH . "confirm_delete.html";
+                    $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "confirm_delete.html";
                     $tfish_template->tfish_main_content = $tfish_template->render('form');
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -123,7 +124,7 @@ if (in_array($op, $options_whitelist)) {
             
         case "confirm_flush":
             $tfish_template->page_title = TFISH_CONFIRM_FLUSH;
-            $tfish_template->form = TFISH_FORM_PATH . "confirm_flush.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "confirm_flush.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
@@ -145,7 +146,7 @@ if (in_array($op, $options_whitelist)) {
                 }
                 
                 $tfish_template->back_url = 'admin.php';
-                $tfish_template->form = TFISH_FORM_PATH . "response.html";
+                $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "response.html";
                 $tfish_template->tfish_main_content = $tfish_template->render('form');
             } else {
                 trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
@@ -184,7 +185,7 @@ if (in_array($op, $options_whitelist)) {
                     $tfish_template->tags = TfishContentHandler::getTagList(false);
                     $tfish_template->parent_select_options = 
                             $parent_tree->makeParentSelectBox((int) $row['parent']);
-                    $tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
+                    $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "data_edit.html";
                     $tfish_template->tfish_main_content = $tfish_template->render('form');
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -209,7 +210,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             $tfish_template->back_url = 'admin.php';
-            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
@@ -247,7 +248,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             $tfish_template->back_url = 'admin.php';
-            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
@@ -269,7 +270,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             $tfish_template->back_url = 'admin.php';
-            $tfish_template->form = TFISH_FORM_PATH . "response.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
@@ -328,7 +329,7 @@ if (in_array($op, $options_whitelist)) {
             }
 
             $tfish_template->back_url = 'admin.php';
-            $tfish_template->form = TFISH_FORM_PATH . "response_edit.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "response_edit.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
 
@@ -527,7 +528,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->page_title = TFISH_CURRENT_CONTENT;
             $tfish_template->rows = $rows;
             $tfish_template->typelist = TfishContentHandler::getTypes();
-            $tfish_template->form = TFISH_FORM_PATH . "content_table.html";
+            $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . "content_table.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
     }

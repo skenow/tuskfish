@@ -17,6 +17,7 @@ declare(strict_types=1);
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
+require_once TFISH_MODULE_PATH . "content/tfish_content_module_header.php";
 
 // Get the relevant handler.
 $content_handler = 'TfishContentHandler';
