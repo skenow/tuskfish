@@ -75,9 +75,7 @@ if (in_array($op, array('submit', false))) {
                 $tfish_template->tfish_main_content = $tfish_template->render('form');
             }
 
-            /**
-             * All good: Calculate the password hash and update the user table.
-             */
+            // All good: Calculate the password hash and update the user table.
             if (empty($error)) {
                 $password_hash = '';
                 $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 

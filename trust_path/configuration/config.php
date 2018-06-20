@@ -45,9 +45,7 @@ define("TFISH_PERMALINK_URL", TFISH_URL);
 define("TFISH_MEDIA_URL", TFISH_URL . "uploads/media/");
 define("TFISH_IMAGE_URL", TFISH_URL . "uploads/image/");
 
-// Alias of TFISH_URL (without trailing slash) for use in teaser/description fields. Use this to
-// make your content portable (if you change domain, all your links will still be valid). The
-// trailing slash is omitted for ease of reading in the editor.
+// Alias of TFISH_URL (without trailing slash) for use in teaser/description fields.
 define("TFISH_LINK", rtrim(TFISH_URL, '/'));
 
 // RSS enclosure URL - spec requires that the URL use http protocol, as https will invalidate feed.

@@ -125,32 +125,6 @@ function checkPasswordStrength(string $password) {
         $evaluation[] = 'Too short. Password must be 15 characters or more.';
     }
 
-    /**
-    // Must contain at least one upper case letter.
-    if (!preg_match('/[A-Z]/', $password)) {
-        $evaluation['strong'] = false;
-        $evaluation[] = 'Must include at least one upper case letter.';
-    }
-
-    // Must contain at least one lower case letter.
-    if (!preg_match('/[a-z]/', $password)) {
-        $evaluation['strong'] = false;
-        $evaluation[] = 'Must include at least one lower case letter.';
-    }
-
-    // Must contain at least one number.
-    if (!preg_match('/[0-9]/', $password)) {
-        $evaluation['strong'] = false;
-        $evaluation[] = 'Must include at least one number.';
-    }
-
-    // Must contain at least one symbol.
-    if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-        $evaluation['strong'] = false;
-        $evaluation[] = 'Must include at least one non-alphanumeric symbol (!@#$%^&?,;:[] etc).';
-    }
-     */
-
     return $evaluation;
 }
 

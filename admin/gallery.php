@@ -22,17 +22,12 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('gallery');
 
-// CONVENTIONS:
-// 1. Specify the class name of the handler for the object type this page will handle,
-// eg. 'TfishImageHandler'.
-// 2. Specify the name of the template for the index page, eg. 'gallery'.
+// Configure page.
+$tfish_template->page_title = TFISH_IMAGE_GALLERY;
 $content_handler = 'TfishContentHandler';
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
 $tfish_template->target_file_name = 'index';
-
-// Page title.
-$tfish_template->page_title = TFISH_IMAGE_GALLERY;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
