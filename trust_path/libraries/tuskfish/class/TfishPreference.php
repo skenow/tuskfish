@@ -48,8 +48,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    int enable_cache Enable site cache.
  * @property    int cache_life Expiry timer for site cache (seconds).
  */
-class TfishPreference extends TfishAncestralObject
+class TfishPreference
 {
+    /** @var array $__properties Whitelist that defines permitted content object properties. */
+    protected $__properties = array();
+    
+    /** @var array Holds values of permitted content object properties, accessed via magic methods. */
+    protected $__data = array();
 
     /** Initialise default properties. */
     function __construct()
@@ -98,6 +103,24 @@ class TfishPreference extends TfishAncestralObject
             unset($key, $value);
         }
     }
+    
+    /**
+     * Returns a whitelist of object properties whose values are allowed be set.
+     * 
+     * This function is used to build a list of $allowed_vars for a content object. Child classes
+     * use this list to unset properties they do not use. Properties that are not resident in the
+     * database are also unset here (handler, template, module and icon).
+     * 
+     * @return array Array of object properties.
+     */
+    public function getPropertyWhitelist()
+    {
+        $properties = $this->__properties;
+        unset($properties['handler'], $properties['template'], $properties['module'],
+                $properties['icon']);
+
+        return $properties;
+    }
 
     /**
      * Escape a property for on-screen display to prevent XSS.
@@ -140,6 +163,62 @@ class TfishPreference extends TfishAncestralObject
         }
         
         return $preferences;
+    }
+    
+    /**
+     * Update the preference object.
+     * 
+     * The preference object will conduct its own internal data type validation and range checks.
+     * 
+     * @param array $dirty_input Usually $_REQUEST data.
+     */
+    public function updatePreferences(array $dirty_input)
+    {
+        if (!TfishFilter::isArray($dirty_input)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+
+        // Obtain a whitelist of permitted fields.
+        $whitelist = $this->getPropertyWhitelist();
+
+        // Iterate through the whitelist validating supplied parameters.
+        foreach ($whitelist as $key => $type) {
+            if (array_key_exists($key, $dirty_input)) {
+                $this->__set($key, $dirty_input[$key]);
+            }
+            
+            unset($key, $type);
+        }
+    }
+
+    /**
+     * Save updated preferences to the database.
+     * 
+     * @return bool True on success false on failure.
+     */
+    private static function writePreferences()
+    {
+        return TfishDatabase::update('preference', $this->__data);
+    }
+    
+    /**
+     * Get the value of a property.
+     * 
+     * Intercepts direct calls to access an object property. This method can be overridden to impose
+     * processing logic to the value before returning it.
+     * 
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
+     */
+    public function __get(string $property)
+    {
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return $this->__data[$clean_property];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -323,41 +402,46 @@ class TfishPreference extends TfishAncestralObject
         
         return true;
     }
-
+    
     /**
-     * Update the preference object.
+     * Check if an object property is set.
      * 
-     * The preference object will conduct its own internal data type validation and range checks.
+     * Intercepts isset() calls to correctly read object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
      * 
-     * @param array $dirty_input Usually $_REQUEST data.
+     * @param string $property Name of property to check.
+     * @return bool True if set otherwise false.
      */
-    public function updatePreferences(array $dirty_input)
+    public function __isset(string $property)
     {
-        if (!TfishFilter::isArray($dirty_input)) {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
-
-        // Obtain a whitelist of permitted fields.
-        $whitelist = $this->getPropertyWhitelist();
-
-        // Iterate through the whitelist validating supplied parameters.
-        foreach ($whitelist as $key => $type) {
-            if (array_key_exists($key, $dirty_input)) {
-                $this->__set($key, $dirty_input[$key]);
-            }
-            
-            unset($key, $type);
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return true;
+        } else {
+            return false;
         }
     }
 
     /**
-     * Save updated preferences to the database.
+     * Unsets a property.
      * 
+     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
+     * 
+     * @param string $property Name of property.
      * @return bool True on success false on failure.
      */
-    private static function writePreferences()
+    public function __unset(string $property)
     {
-        return TfishDatabase::update('preference', $this->__data);
+        $clean_property = TfishFilter::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            unset($this->__data[$clean_property]);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
