@@ -52,31 +52,6 @@ class TfishSecurityUtility
             $evaluation['strong'] = false;
             $evaluation[] = TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS;
         }
-        /**
-        // Must contain at least one upper case letter.
-        if (!preg_match('/[A-Z]/', $password)) {
-            $evaluation['strong'] = false;
-            $evaluation[] = TFISH_PASSWORD_UPPER_CASE_WEAKNESS;
-        }
-
-        // Must contain at least one lower case letter.
-        if (!preg_match('/[a-z]/', $password)) {
-            $evaluation['strong'] = false;
-            $evaluation[] = TFISH_PASSWORD_LOWER_CASE_WEAKNESS;
-        }
-
-        // Must contain at least one number.
-        if (!preg_match('/[0-9]/', $password)) {
-            $evaluation['strong'] = false;
-            $evaluation[] = TFISH_PASSWORD_NUMBERIC_WEAKNESS;
-        }
-
-        // Must contain at least one symbol.
-        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
-            $evaluation['strong'] = false;
-            $evaluation[] = TFISH_PASSWORD_SYMBOLIC_WEAKNESS;
-        }
-         */
 
         return $evaluation;
     }
