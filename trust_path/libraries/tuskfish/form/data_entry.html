@@ -22,8 +22,8 @@
         <select class="form-control custom-select" name="type" id="type" required>
             <?php
                 foreach ($content_types as $key => $type) {
-                    echo '<option value="' . TfishFilter::escape($key) . '">'
-                    . TfishFilter::escape($type) . '</option>';
+                    echo '<option value="' . TfishDataValidator::escape($key) . '">'
+                    . TfishDataValidator::escape($type) . '</option>';
                 }
             ?>
         </select>
@@ -53,7 +53,7 @@
             <select multiple class="form-control custom-select" size="5"  name="tags[]" id="tags">
                 <?php
                     foreach ($tags as $tag_id => $tag_title) {
-                        echo '<option value="' . TfishFilter::escape($tag_id) . '">' . TfishFilter::escape($tag_title) . '</option>';
+                        echo '<option value="' . TfishDataValidator::escape($tag_id) . '">' . TfishDataValidator::escape($tag_title) . '</option>';
                     }
                 ?>
             </select>
@@ -86,7 +86,7 @@
         <!-- Publisher -->
         <div class="col-md-6 mb-3 text-left" id="publisherContainer">
             <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
-            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfish_preference; echo TfishFilter::escape($tfish_preference->site_author); ?>">
+            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfish_preference; echo TfishDataValidator::escape($tfish_preference->site_author); ?>">
         </div>
 
         <!-- Parent -->
@@ -141,7 +141,7 @@
         <div class="col-md-6 mb-3 text-left" id="rightsContainer">
             <label for="rights"><strong><?php echo TFISH_RIGHTS; ?></strong></label>
             <select class="form-control custom-select" name="rights" id="rights" required>
-                <?php foreach ($rights as $key => $right) { echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($right) . '</option>';} ?>
+                <?php foreach ($rights as $key => $right) { echo '<option value="' . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($right) . '</option>';} ?>
             </select>
         </div>
 
@@ -153,9 +153,9 @@
                         global $tfish_preference;
                         foreach ($languages as $key => $value) {
                             if ($tfish_preference->default_language === $key) {
-                                echo '<option value="' . TfishFilter::escape($key) . '" selected>' . TfishFilter::escape($value) . '</option>';
+                                echo '<option value="' . TfishDataValidator::escape($key) . '" selected>' . TfishDataValidator::escape($value) . '</option>';
                             } else {
-                                echo '<option value="' . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
+                                echo '<option value="' . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($value) . '</option>';
                             }
                         }
                     ?>

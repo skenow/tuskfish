@@ -189,7 +189,7 @@ class TfishYubikeyAuthenticator
      */
     public function verify(string $otp)
     {
-        $otp = TfishFilter::trimString($otp);
+        $otp = TfishDataValidator::trimString($otp);
         
         unset($this->_response);
         unset($this->_curlResult);
@@ -264,7 +264,7 @@ class TfishYubikeyAuthenticator
      */
     protected function createSignedRequest(string $urlParams)
     {
-        $urlParams = TfishFilter::trimString($urlParams);
+        $urlParams = TfishDataValidator::trimString($urlParams);
         
         if ($this->_signatureKey) {
             $hash = urlencode(base64_encode(hash_hmac("sha1", $urlParams, $this->_signatureKey,
@@ -283,9 +283,9 @@ class TfishYubikeyAuthenticator
      */
     protected function curlRequest(string $url)
     {
-        $url = TfishFilter::trimString($url);
+        $url = TfishDataValidator::trimString($url);
         
-        if (!TfishFilter::isUrl($url)) {
+        if (!TfishDataValidator::isUrl($url)) {
             trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
         }
         
@@ -316,7 +316,7 @@ class TfishYubikeyAuthenticator
      */
     protected function otpIsProperLength(string $otp)
     {
-        $otp = TfishFilter::trimString($otp);
+        $otp = TfishDataValidator::trimString($otp);
         
         if (mb_strlen($otp, "UTF-8") === 44) {
             return true;
@@ -333,7 +333,7 @@ class TfishYubikeyAuthenticator
      */
     protected function otpIsModhex(string $otp)
     {
-        $otp = TfishFilter::trimString($otp);
+        $otp = TfishDataValidator::trimString($otp);
         $modhexChars = array("c", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n", "r", "t",
             "u", "v");
 
@@ -353,7 +353,7 @@ class TfishYubikeyAuthenticator
      */
     protected function resultTimestampIsGood(string $timestamp)
     {
-    	$timestamp = TfishFilter::trimString($timestamp);
+    	$timestamp = TfishDataValidator::trimString($timestamp);
     
         // Turn times into 'seconds since Unix Epoch' for easy comparison
         $now = date("U");
@@ -380,8 +380,8 @@ class TfishYubikeyAuthenticator
      */
     protected function resultSignatureIsGood(string $signedMessage, string $signature)
     {
-        $signedMessage = TfishFilter::trimString($signedMessage);
-        $signature = TfishFilter::trimString($signature);
+        $signedMessage = TfishDataValidator::trimString($signedMessage);
+        $signature = TfishDataValidator::trimString($signature);
         
         if (!$this->_signatureKey)
             return true;

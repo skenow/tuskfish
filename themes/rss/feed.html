@@ -1,11 +1,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title><?php echo TfishFilter::escape($rss_feed->title); ?></title>
-    <link><?php echo TfishFilter::escape($rss_feed->link); ?></link>
-    <description><?php echo TfishFilter::escape(strip_tags($rss_feed->description)); ?></description>
-    <generator><?php echo TfishFilter::escape($rss_feed->generator); ?></generator>
-    <managingEditor><?php echo TfishFilter::escape($rss_feed->managingEditor); ?></managingEditor>
-    <webMaster><?php echo TfishFilter::escape($rss_feed->webMaster); ?></webMaster>
+    <title><?php echo TfishDataValidator::escape($rss_feed->title); ?></title>
+    <link><?php echo TfishDataValidator::escape($rss_feed->link); ?></link>
+    <description><?php echo TfishDataValidator::escape(strip_tags($rss_feed->description)); ?></description>
+    <generator><?php echo TfishDataValidator::escape($rss_feed->generator); ?></generator>
+    <managingEditor><?php echo TfishDataValidator::escape($rss_feed->managingEditor); ?></managingEditor>
+    <webMaster><?php echo TfishDataValidator::escape($rss_feed->webMaster); ?></webMaster>
     <atom:link href="<?php echo $rss_feed->link; ?>" rel="self" type="application/rss+xml" />
     <?php if (isset($items) && !empty($items)): ?>
     <?php foreach ($items as $item): ?>
@@ -20,12 +20,12 @@
       <?php if (($item->media) && is_readable(TFISH_MEDIA_PATH . $item->media)):
       $length = filesize(TFISH_MEDIA_PATH . $item->escape('media'));
       $mimetype = $mimetype_list[pathinfo($item->media, PATHINFO_EXTENSION)]; ?>
-      <enclosure url="<?php echo TFISH_ENCLOSURE_URL . TfishFilter::escape($item->id); ?>" length="<?php echo TfishFilter::escape($length); ?>" type="<?php echo TfishFilter::escape($mimetype); ?>" />
+      <enclosure url="<?php echo TFISH_ENCLOSURE_URL . TfishDataValidator::escape($item->id); ?>" length="<?php echo TfishDataValidator::escape($length); ?>" type="<?php echo TfishDataValidator::escape($mimetype); ?>" />
       <?php unset($length, $mimetype); endif; ?>
       <?php if ($item->submission_time): ?>
-      <pubDate><?php echo TfishFilter::escape(gmdate(DATE_RSS, ($item->escape('submission_time')))); ?></pubDate>
+      <pubDate><?php echo TfishDataValidator::escape(gmdate(DATE_RSS, ($item->escape('submission_time')))); ?></pubDate>
       <?php endif; ?>
-      <guid isPermaLink="true"><?php echo TfishFilter::escape(TFISH_PERMALINK_URL . '?id=' . $item->escape('id')); ?></guid>
+      <guid isPermaLink="true"><?php echo TfishDataValidator::escape(TFISH_PERMALINK_URL . '?id=' . $item->escape('id')); ?></guid>
     </item>
     <?php endforeach; ?>
     <?php endif; ?>

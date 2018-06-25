@@ -1,15 +1,15 @@
 <!-- Page title -->
 <?php if (isset($page_title)): ?>
-  <h1 class="cover-heading"><?php echo TfishFilter::escape($page_title); ?></h1>
+  <h1 class="cover-heading"><?php echo TfishDataValidator::escape($page_title); ?></h1>
 <?php endif; ?>
 
 <!-- Lead -->
 <?php if (isset($lead)): ?>
-  <p class="lead"><?php echo TfishFilter::escape($lead); ?></p>
+  <p class="lead"><?php echo TfishDataValidator::escape($lead); ?></p>
 <?php endif; ?>
 
 <!-- Button -->
 <?php if (isset($button_text)): ?>
-  <p class="lead"><a href="#" class="btn btn-lg btn-secondary"><?php echo TfishFilter::escape($button_text); ?></a></p>
+  <p class="lead"><a href="#" class="btn btn-lg btn-secondary"><?php echo TfishDataValidator::escape($button_text); ?></a></p>
 <?php endif; ?>
 

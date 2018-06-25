@@ -23,10 +23,10 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 $tfish_template->setTheme('admin');
 
 // Validate input parameters. Note that passwords are not sanitised in any way.
-$op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? TfishDataValidator::trimString($_REQUEST['op']) : false;
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 $dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword'] : false;
-$clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
+$clean_token = isset($_POST['token']) ? TfishDataValidator::trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.
 if (in_array($op, array('submit', false))) {

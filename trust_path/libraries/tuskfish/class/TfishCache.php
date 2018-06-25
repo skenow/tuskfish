@@ -60,7 +60,7 @@ class TfishCache
         }
         
         // Check for directory traversals and null byte injection.
-        if (TfishFilter::hasTraversalorNullByte($basename)) {
+        if (TfishDataValidator::hasTraversalorNullByte($basename)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
@@ -101,23 +101,23 @@ class TfishCache
         $basename = rtrim($basename, '.php');
         
         // Validate the parameters. All should be treated as alNumUnderscore strings.
-        $basename = TfishFilter::trimString($basename);
+        $basename = TfishDataValidator::trimString($basename);
         
-        if ($basename && TfishFilter::isAlnumUnderscore($basename)) {
+        if ($basename && TfishDataValidator::isAlnumUnderscore($basename)) {
             $clean_filename = $basename;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }
 
-        if (TfishFilter::isArray($params) && !empty($params)) {
+        if (TfishDataValidator::isArray($params) && !empty($params)) {
             
             foreach ($params as $key => $value) {  
                 if ($value) {
-                    $clean_key = TfishFilter::trimString($key);
-                    $clean_value = TfishFilter::trimString($value);
-                    if (TfishFilter::isAlnumUnderscore($clean_key)
-                            && TfishFilter::isAlnumUnderscore($clean_value)) {
+                    $clean_key = TfishDataValidator::trimString($key);
+                    $clean_value = TfishDataValidator::trimString($value);
+                    if (TfishDataValidator::isAlnumUnderscore($clean_key)
+                            && TfishDataValidator::isAlnumUnderscore($clean_value)) {
                         $clean_filename .= '&' . $clean_key . '=' . $clean_value;
                     }
                 }
@@ -150,7 +150,7 @@ class TfishCache
         }
         
         // Check for directory traversals and null byte injection.
-        if (TfishFilter::hasTraversalorNullByte($basename)) {
+        if (TfishDataValidator::hasTraversalorNullByte($basename)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }

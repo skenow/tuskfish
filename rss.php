@@ -54,7 +54,7 @@ if ($clean_tag_id) {
 if ($clean_id) {
     $collection = TfishContentHandler::getObject($clean_id);
     
-    if ($collection && TfishFilter::isObject($collection)) {
+    if ($collection && TfishDataValidator::isObject($collection)) {
         $rss->makeFeedForCollection($collection);
         $criteria->add(new TfishCriteriaItem('parent', $clean_id));
     }

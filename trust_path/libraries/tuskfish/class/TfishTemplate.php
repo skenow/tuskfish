@@ -49,7 +49,7 @@ class TfishTemplate
      */
     public function __get(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return $this->__data[$clean_property];
@@ -69,7 +69,7 @@ class TfishTemplate
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return true;
@@ -91,10 +91,10 @@ class TfishTemplate
      */
     public function render(string $template)
     {
-        $template = TfishFilter::trimString($template);
+        $template = TfishDataValidator::trimString($template);
         
         // Check for directory traversals and null byte injection.
-        if (TfishFilter::hasTraversalorNullByte($template)) {
+        if (TfishDataValidator::hasTraversalorNullByte($template)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
@@ -121,7 +121,7 @@ class TfishTemplate
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if ($clean_property === 'theme') {
             $this->setTheme($value);
@@ -143,12 +143,12 @@ class TfishTemplate
     public function setTheme(string $theme)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishFilter::hasTraversalorNullByte($theme)) {
+        if (TfishDataValidator::hasTraversalorNullByte($theme)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
-        if (TfishFilter::isAlnumUnderscore($theme)) {
-            $clean_theme = TfishFilter::trimString($theme);
+        if (TfishDataValidator::isAlnumUnderscore($theme)) {
+            $clean_theme = TfishDataValidator::trimString($theme);
             $this->__data['theme'] = $clean_theme;
         }
     }
@@ -164,7 +164,7 @@ class TfishTemplate
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             unset($this->__data[$clean_property]);

@@ -37,7 +37,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      */
     public static function deleteTaglinks(TfishContentObject $obj)
     {
-        if (TfishFilter::isInt($obj->id, 1)) {
+        if (TfishDataValidator::isInt($obj->id, 1)) {
             $clean_content_id = (int) $obj->id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -72,7 +72,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      */
     public static function insertTaglinks(int $content_id, string $type, array $tags)
     {
-        if (TfishFilter::isInt($content_id, 1)) {
+        if (TfishDataValidator::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -81,8 +81,8 @@ class TfishTaglinkHandler extends TfishContentHandler
 
         $typeList = self::getTypes();
         
-        if (TfishFilter::isAlpha($type) && array_key_exists($type, $typeList)) {
-            $clean_type = TfishFilter::trimString($type);
+        if (TfishDataValidator::isAlpha($type) && array_key_exists($type, $typeList)) {
+            $clean_type = TfishDataValidator::trimString($type);
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
@@ -93,7 +93,7 @@ class TfishTaglinkHandler extends TfishContentHandler
         foreach ($tags as $tag_id) {
             $tag = array();
             
-            if (TfishFilter::isInt($tag_id, 1)) {
+            if (TfishDataValidator::isInt($tag_id, 1)) {
                 $tag['tag_id'] = (int) $tag_id;
             } else {
                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -130,7 +130,7 @@ class TfishTaglinkHandler extends TfishContentHandler
     public static function updateTaglinks(int $id, string $type, array $tags = null)
     {
         // Validate ID.
-        if (TfishFilter::isInt($id, 1)) {
+        if (TfishDataValidator::isInt($id, 1)) {
             $clean_id = (int) $id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -139,8 +139,8 @@ class TfishTaglinkHandler extends TfishContentHandler
         // Validate type.
         $typeList = self::getTypes();
         
-        if (TfishFilter::isAlpha($type) && array_key_exists($type, $typeList)) {
-            $clean_type = TfishFilter::trimString($type);
+        if (TfishDataValidator::isAlpha($type) && array_key_exists($type, $typeList)) {
+            $clean_type = TfishDataValidator::trimString($type);
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
@@ -149,9 +149,9 @@ class TfishTaglinkHandler extends TfishContentHandler
         // Validate tags.
         $clean_tag_id = array();
         
-        if (TfishFilter::isArray($tags)) {
+        if (TfishDataValidator::isArray($tags)) {
             foreach ($tags as $tag) {
-                if (TfishFilter::isInt($tag, 1)) {
+                if (TfishDataValidator::isInt($tag, 1)) {
                     $clean_tag_id[] = (int) $tag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -183,7 +183,7 @@ class TfishTaglinkHandler extends TfishContentHandler
         foreach ($clean_tag_id as $tag_id) {
             $tag = array();
             
-            if (TfishFilter::isInt($tag_id, 1)) {
+            if (TfishDataValidator::isInt($tag_id, 1)) {
                 $tag['tag_id'] = (int) $tag_id;
             } else {
                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);

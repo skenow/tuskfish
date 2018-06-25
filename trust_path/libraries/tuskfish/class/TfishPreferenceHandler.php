@@ -52,9 +52,9 @@ class TfishPreferenceHandler
      */
     public static function get(string $pref)
     {
-        $pref = TfishFilter::trimString($pref);
+        $pref = TfishDataValidator::trimString($pref);
         
-        if (TfishFilter::isAlnumUnderscore($pref)) {
+        if (TfishDataValidator::isAlnumUnderscore($pref)) {
             return $this->tfish_preferences->$pref;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);

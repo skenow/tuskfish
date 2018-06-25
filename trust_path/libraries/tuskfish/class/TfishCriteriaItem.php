@@ -69,7 +69,7 @@ class TfishCriteriaItem
      */
     public function __get(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return $this->__data[$clean_property];
@@ -111,14 +111,14 @@ class TfishCriteriaItem
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             switch ($clean_property) {
                 case "column": // Alphanumeric and underscore characters only
-                    $value = TfishFilter::trimString($value);
+                    $value = TfishDataValidator::trimString($value);
                     
-                    if (TfishFilter::isAlnumUnderscore($value)) {
+                    if (TfishDataValidator::isAlnumUnderscore($value)) {
                         $this->__data['column'] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -133,7 +133,7 @@ class TfishCriteriaItem
                     switch ($type) {
                         // Strings are valid but should be trimmed of control characters.
                         case "string":
-                            $clean_value = TfishFilter::trimString($value);
+                            $clean_value = TfishDataValidator::trimString($value);
                             break;
 
 
@@ -158,7 +158,7 @@ class TfishCriteriaItem
 
                 // The default operator is "=" and this will be used unless something else is set.
                 case "operator":
-                    $value = TfishFilter::trimString($value);
+                    $value = TfishDataValidator::trimString($value);
                     
                     if (in_array($value, self::permittedOperators())) {
                         $this->__data['operator'] = $value;
@@ -188,7 +188,7 @@ class TfishCriteriaItem
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return true;
@@ -208,7 +208,7 @@ class TfishCriteriaItem
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             unset($this->__data[$clean_property]);

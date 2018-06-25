@@ -61,7 +61,7 @@ class TfishTaglink
      */
     public function __get(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return $this->__data[$clean_property];
@@ -83,7 +83,7 @@ class TfishTaglink
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (!isset($this->__data[$clean_property])) {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
@@ -92,7 +92,7 @@ class TfishTaglink
         switch ($clean_property) {
             // Minimum value 0.
             case "id":
-                if (TfishFilter::isInt($value, 0)) {
+                if (TfishDataValidator::isInt($value, 0)) {
                     $this->__data[$clean_property] = (int) $value;
                 }
                 break;
@@ -100,13 +100,13 @@ class TfishTaglink
             // Minimum value 1.
             case "tag_id":
             case "content_id":
-                if (TfishFilter::isInt($value, 1)) {
+                if (TfishDataValidator::isInt($value, 1)) {
                     $this->__data[$clean_property] = (int) $value;
                 }                    
                 break;
 
             case "content_type":
-                $clean_value = TfishFilter::trimString($value);
+                $clean_value = TfishDataValidator::trimString($value);
                 
                 if (TfishContentHandler::isSanctionedType($clean_value)) {
                     $this->__data[$clean_property] = $clean_value;
@@ -131,7 +131,7 @@ class TfishTaglink
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return true;
@@ -151,7 +151,7 @@ class TfishTaglink
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             unset($this->__data[$clean_property]);

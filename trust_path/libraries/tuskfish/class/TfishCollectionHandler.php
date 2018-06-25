@@ -98,7 +98,7 @@ class TfishCollectionHandler extends TfishContentHandler
      */
     public static function getParentSelectBox(int $selected = 0)
     {
-        $clean_selected = TfishFilter::isInt($selected, 1) ? $selected : 0;
+        $clean_selected = TfishDataValidator::isInt($selected, 1) ? $selected : 0;
         $options = array(0 => TFISH_SELECT_PARENT);
         $select_box = '';
 

@@ -59,7 +59,7 @@ class TfishUser
      */
     public function __get(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return $this->__data[$clean_property];
@@ -81,12 +81,12 @@ class TfishUser
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             switch ($clean_property) {
                 case "id":
-                    if (TfishFilter::isInt($value, 1)) {
+                    if (TfishDataValidator::isInt($value, 1)) {
                         $clean_value = (int) $value;
                         $this->__data[$clean_property] = $clean_value;
                     } else {
@@ -95,9 +95,9 @@ class TfishUser
                     break;
                 
                 case "admin_email":
-                    $clean_value = TfishFilter::trimString($value);
+                    $clean_value = TfishDataValidator::trimString($value);
                     
-                    if (TfishFilter::isEmail($clean_value)) {
+                    if (TfishDataValidator::isEmail($clean_value)) {
                         $this->__data[$clean_property] = $clean_value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -105,17 +105,17 @@ class TfishUser
                     break;
                 
                 case "password_hash":
-                    $clean_value = TfishFilter::trimString($value);
+                    $clean_value = TfishDataValidator::trimString($value);
                     $this->__data[$clean_property] = $clean_value;
                     break;
                 
                 case "user_salt":
-                    $clean_value = TfishFilter::trimString($value);
+                    $clean_value = TfishDataValidator::trimString($value);
                     $this->__data[$clean_property] = $clean_value;
                     break;
                 
                 case "user_group":                    
-                    if (TfishFilter::isInt($value, 1)) {
+                    if (TfishDataValidator::isInt($value, 1)) {
                         $this->__data[$clean_property] = (int) $value;
                     } else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -124,12 +124,12 @@ class TfishUser
                 
                 case "yubikey_id":
                 case "yubikey_id2":
-                    $clean_value = TfishFilter::trimString($value);
+                    $clean_value = TfishDataValidator::trimString($value);
                     $this->__data[$clean_property] = $clean_value;
                     break;
                 
                 case "login_errors":
-                    if (TfishFilter::isInt($value, 0)) {
+                    if (TfishDataValidator::isInt($value, 0)) {
                         $this->__data[$clean_property] = (int) $value;
                     }  else {
                         trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -152,7 +152,7 @@ class TfishUser
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return true;
@@ -172,7 +172,7 @@ class TfishUser
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             unset($this->__data[$clean_property]);

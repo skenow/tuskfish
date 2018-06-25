@@ -24,9 +24,9 @@ $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type'])
-        ? TfishFilter::trimString($_GET['type']) : '';
-$clean_token = isset($_POST['token']) ? TfishFilter::trimString($_POST['token']) : '';
-$op = isset($_REQUEST['op']) ? TfishFilter::trimString($_REQUEST['op']) : false;
+        ? TfishDataValidator::trimString($_GET['type']) : '';
+$clean_token = isset($_POST['token']) ? TfishDataValidator::trimString($_POST['token']) : '';
+$op = isset($_REQUEST['op']) ? TfishDataValidator::trimString($_REQUEST['op']) : false;
 
 // Specify the admin theme and the template to be used to preview content (user side template).
 if ($op === 'view') {
@@ -108,7 +108,7 @@ if (in_array($op, $options_whitelist)) {
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
                 
-                if (TfishFilter::isInt($clean_id, 1)) {
+                if (TfishDataValidator::isInt($clean_id, 1)) {
                     $tfish_template->page_title = TFISH_CONFIRM_DELETE;
                     $tfish_template->content = TfishContentHandler::getObject($clean_id);
                     $tfish_template->form = TFISH_FORM_PATH . "confirm_delete.html";
@@ -157,7 +157,7 @@ if (in_array($op, $options_whitelist)) {
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
                 
-                if (TfishFilter::isInt($clean_id, 1)) {
+                if (TfishDataValidator::isInt($clean_id, 1)) {
                     $criteria = new TfishCriteria();
                     $criteria->add(new TfishCriteriaItem('id', $clean_id));
                     $statement = TfishDatabase::select('content', $criteria);
@@ -221,7 +221,7 @@ if (in_array($op, $options_whitelist)) {
                 exit;
             }
             
-            $clean_type = TfishFilter::trimString($_REQUEST['type']);
+            $clean_type = TfishDataValidator::trimString($_REQUEST['type']);
             $type_whitelist = TfishContentHandler::getTypes();
             
             if (!array_key_exists($clean_type, $type_whitelist)) {
@@ -254,7 +254,7 @@ if (in_array($op, $options_whitelist)) {
         // Toggle the online status of a particular object.
         case "toggle":
             $id = (int) $_REQUEST['id'];
-            $clean_id = TfishFilter::isInt($id, 1) ? $id : 0;
+            $clean_id = TfishDataValidator::isInt($id, 1) ? $id : 0;
             $result = TfishContentHandler::toggleOnlineStatus($clean_id);
             
             if ($result) {
@@ -280,7 +280,7 @@ if (in_array($op, $options_whitelist)) {
                 exit;
             }
 
-            $type = TfishFilter::trimString($_REQUEST['type']);
+            $type = TfishDataValidator::trimString($_REQUEST['type']);
             $type_whitelist = TfishContentHandler::getTypes();
             
             if (!array_key_exists($type, $type_whitelist)) {
@@ -460,7 +460,7 @@ if (in_array($op, $options_whitelist)) {
             // Select box filter input.
             if ($clean_tag) $criteria->tag = array($clean_tag);
             
-            if (TfishFilter::isInt($clean_online, 0, 1)) {
+            if (TfishDataValidator::isInt($clean_online, 0, 1)) {
                 $criteria->add(new TfishCriteriaItem('online', $clean_online));
             }
             
@@ -497,7 +497,7 @@ if (in_array($op, $options_whitelist)) {
             $count = TfishDatabase::selectCount('content', $criteria);
             $extra_params = array();
             
-            if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+            if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {
                 $extra_params['online'] = $clean_online;
             }
             

@@ -149,9 +149,9 @@ class TfishSession
             self::logout(TFISH_ADMIN_URL . "login.php");
         } else {
             // Validate the admin email (which functions as the username in Tuskfish CMS)
-            $clean_email = TfishFilter::trimString($email);
+            $clean_email = TfishDataValidator::trimString($email);
             
-            if (TfishFilter::isEmail($clean_email)) {
+            if (TfishDataValidator::isEmail($clean_email)) {
                 self::_login($clean_email, $password);
             } else {
                 // Issue warning - email should follow email format
@@ -224,7 +224,7 @@ class TfishSession
             exit;
         }
         
-        $dirty_otp = TfishFilter::trimString($dirty_otp);
+        $dirty_otp = TfishDataValidator::trimString($dirty_otp);
         
         // Yubikey OTP should be 44 characters long.
         if (mb_strlen($dirty_otp, "UTF-8") != 44) {
@@ -233,7 +233,7 @@ class TfishSession
         }
         
         // Yubikey OTP should be alphabetic characters only.
-        if (!TfishFilter::isAlpha($dirty_otp)) {
+        if (!TfishDataValidator::isAlpha($dirty_otp)) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
@@ -321,7 +321,7 @@ class TfishSession
         $clean_url = '';
         
         if (!empty($url_redirect)) {
-            $clean_url = TfishFilter::isUrl($url_redirect) ? $url_redirect : '';
+            $clean_url = TfishDataValidator::isUrl($url_redirect) ? $url_redirect : '';
         }
         
         self::_logout($clean_url);
@@ -491,7 +491,7 @@ class TfishSession
      */
     public static function validateToken(string $token)
     {
-        $clean_token = TfishFilter::trimString($token);
+        $clean_token = TfishDataValidator::trimString($token);
 
         // Valid token.
         if (!empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {

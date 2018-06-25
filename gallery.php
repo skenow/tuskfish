@@ -39,7 +39,7 @@ $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) 
-        ? TfishFilter::trimString($_GET['type']) : '';
+        ? TfishDataValidator::trimString($_GET['type']) : '';
 
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria();

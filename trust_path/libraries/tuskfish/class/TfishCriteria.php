@@ -78,7 +78,7 @@ class TfishCriteria
      */
     public function __get(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return $this->__data[$clean_property];
@@ -98,7 +98,7 @@ class TfishCriteria
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return true;
@@ -139,7 +139,7 @@ class TfishCriteria
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         // Check that property is whitelisted.
         if (!isset($this->__data[$clean_property])) {
@@ -157,7 +157,7 @@ class TfishCriteria
 
             case "limit": // int
             case "offset": // int
-                if (TfishFilter::isInt($value, 0)) {
+                if (TfishDataValidator::isInt($value, 0)) {
                     $this->__data[$clean_property] = (int) $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -166,7 +166,7 @@ class TfishCriteria
 
             case "condition":
                 if ($value === "AND" || $value === "OR") {
-                    $this->__data['condition'][] = TfishFilter::trimString($value);
+                    $this->__data['condition'][] = TfishDataValidator::trimString($value);
                 } else {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 }
@@ -174,9 +174,9 @@ class TfishCriteria
 
             case "order": // string; any property of target object
             case "groupby": // string; any property of target object
-                $value = TfishFilter::trimString($value);
+                $value = TfishDataValidator::trimString($value);
 
-                if (TfishFilter::isAlnumUnderscore($value)) {
+                if (TfishDataValidator::isAlnumUnderscore($value)) {
                     $this->__data[$clean_property] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -192,11 +192,11 @@ class TfishCriteria
                 break;
 
             case "tag":
-                if (TfishFilter::isArray($value)) {
+                if (TfishDataValidator::isArray($value)) {
                     $clean_tags = array();
 
                     foreach ($value as $val) {
-                        if (TfishFilter::isInt($val, 1)) {
+                        if (TfishDataValidator::isInt($val, 1)) {
                             $clean_tags[] = (int) $val;
                         } else {
                             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -331,7 +331,7 @@ class TfishCriteria
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             unset($this->__data[$clean_property]);

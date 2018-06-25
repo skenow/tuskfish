@@ -45,7 +45,7 @@ class TfishContentHandler
     {
         $clean_id = (int) $id;
         
-        if (!TfishFilter::isInt($clean_id, 1)) {
+        if (!TfishDataValidator::isInt($clean_id, 1)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             return false;
         }
@@ -53,7 +53,7 @@ class TfishContentHandler
         // Delete associated files.
         $obj = self::getObject($clean_id);
         
-        if (!TfishFilter::isObject($obj)) {
+        if (!TfishDataValidator::isObject($obj)) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             return false;
         }
@@ -102,7 +102,7 @@ class TfishContentHandler
      */
     public static function deleteParentalReferences(int $id)
     {
-        $clean_id = TfishFilter::isInt($id, 1) ? (int) $id : null;
+        $clean_id = TfishDataValidator::isInt($id, 1) ? (int) $id : null;
         
         if (!$clean_id) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -167,7 +167,7 @@ class TfishContentHandler
         $property_whitelist = $obj->getPropertyWhitelist();
         
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
-            $filename = TfishFilter::trimString($_FILES['image']['name']);
+            $filename = TfishDataValidator::trimString($_FILES['image']['name']);
             $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
             
             if ($clean_filename) {
@@ -176,7 +176,7 @@ class TfishContentHandler
         }
 
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
-            $filename = TfishFilter::trimString($_FILES['media']['name']);
+            $filename = TfishDataValidator::trimString($_FILES['media']['name']);
             $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
             
             if ($clean_filename) {
@@ -202,7 +202,7 @@ class TfishContentHandler
 
         // Tags are stored separately in the taglinks table. Tags are assembled in one batch before
         // proceeding to insertion; so if one fails a range check all should fail.
-        if (isset($obj->tags) and TfishFilter::isArray($obj->tags)) {
+        if (isset($obj->tags) and TfishDataValidator::isArray($obj->tags)) {
             // If the lastInsertId could not be retrieved, then halt execution becuase this data
             // is necessary in order to correctly assign taglinks to content objects.
             if (!$content_id) {
@@ -230,7 +230,7 @@ class TfishContentHandler
      */
     public static function isSanctionedType(string $type)
     {
-        $type = TfishFilter::trimString($type);
+        $type = TfishDataValidator::trimString($type);
         $sanctioned_types = self::getTypes();
         
         if (array_key_exists($type, $sanctioned_types)) {
@@ -254,7 +254,7 @@ class TfishContentHandler
     {
         $tags = $distinct_tags = array();
 
-        $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
+        $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
         $tags = self::getTagList($clean_online_only);
         
         if (empty($tags)) {
@@ -263,7 +263,7 @@ class TfishContentHandler
 
         // Restrict tag list to those actually in use.
         $clean_type = (isset($type) && self::isSanctionedType($type))
-                ? TfishFilter::trimString($type) : null;
+                ? TfishDataValidator::trimString($type) : null;
 
         $criteria = new TfishCriteria();
 
@@ -378,7 +378,7 @@ class TfishContentHandler
         $clean_id = (int) $id;
         $row = $object = '';
         
-        if (TfishFilter::isInt($id, 1)) {
+        if (TfishDataValidator::isInt($id, 1)) {
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('id', $clean_id));
             $statement = TfishDatabase::select('content', $criteria);
@@ -472,9 +472,9 @@ class TfishContentHandler
     public static function getOnlineSelectBox(int $selected = null,
             string $zero_option = TFISH_ONLINE_STATUS)
     {
-        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 0, 1)) 
+        $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 0, 1)) 
                 ? (int) $selected : null; // Offline (0) or online (1)
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
         $select_box = '<select class="form-control custom-select" name="online" id="online" '
                 . 'onchange="this.form.submit()">';
@@ -531,7 +531,7 @@ class TfishContentHandler
     {
         $tags = array();
         $statement = false;
-        $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
+        $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
@@ -628,7 +628,7 @@ class TfishContentHandler
     {
         // The text to display in the zero option of the select box.
         if (isset($zero_option)) {
-            $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+            $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
         } else {
             $clean_zero_option = TFISH_TYPE;
         }
@@ -636,9 +636,9 @@ class TfishContentHandler
         $clean_selected = '';
         $type_list = self::getTypes();
 
-        if ($selected && TfishFilter::isAlnumUnderscore($selected)) {
+        if ($selected && TfishDataValidator::isAlnumUnderscore($selected)) {
             if (array_key_exists($selected, $type_list)) {
-                $clean_selected = TfishFilter::trimString($selected);
+                $clean_selected = TfishDataValidator::trimString($selected);
             }
         }
 
@@ -647,9 +647,9 @@ class TfishContentHandler
                 . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {
-            $select_box .= ($key === $clean_selected) ? '<option value="' . TfishFilter::escape($key)
-                    . '" selected>' . TfishFilter::escape($value) . '</option>' : '<option value="'
-                . TfishFilter::escape($key) . '">' . TfishFilter::escape($value) . '</option>';
+            $select_box .= ($key === $clean_selected) ? '<option value="' . TfishDataValidator::escape($key)
+                    . '" selected>' . TfishDataValidator::escape($value) . '</option>' : '<option value="'
+                . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($value) . '</option>';
         }
         
         $select_box .= '</select>';
@@ -673,11 +673,11 @@ class TfishContentHandler
         if (empty($target_filename)) {
             $clean_filename = TFISH_URL . '?tag_id=';
         } else {
-            if (!TfishFilter::isAlnumUnderscore($target_filename)) {
+            if (!TfishDataValidator::isAlnumUnderscore($target_filename)) {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             } else {
-                $target_filename = TfishFilter::trimString($target_filename);
-                $clean_filename = TFISH_URL . TfishFilter::escape($target_filename)
+                $target_filename = TfishDataValidator::trimString($target_filename);
+                $clean_filename = TFISH_URL . TfishDataValidator::escape($target_filename)
                         . '.php?tag_id=';
             }
         }
@@ -686,9 +686,9 @@ class TfishContentHandler
         $tag_links = array();
         
         foreach ($tags as $tag) {
-            if (TfishFilter::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
-                $tag_links[$tag] = '<a href="' . TfishFilter::escape($clean_filename . $tag) . '">'
-                        . TfishFilter::escape($tag_list[$tag]) . '</a>';
+            if (TfishDataValidator::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
+                $tag_links[$tag] = '<a href="' . TfishDataValidator::escape($clean_filename . $tag) . '">'
+                        . TfishDataValidator::escape($tag_list[$tag]) . '</a>';
             }
             
             unset($tag);
@@ -722,7 +722,7 @@ class TfishContentHandler
         
         $clean_search_terms = $escaped_search_terms = $clean_escaped_search_terms = array();
         $clean_andor = in_array($andor, array('AND', 'OR', 'exact'))
-                ? TfishFilter::trimString($andor) : 'AND';
+                ? TfishDataValidator::trimString($andor) : 'AND';
         $clean_limit = (int) $limit;
         $clean_offset = (int) $offset;
         
@@ -740,7 +740,7 @@ class TfishContentHandler
         
         // Trim search terms and discard any that are less than the minimum search length characters.
         foreach ($search_terms as $term) {
-            $term = TfishFilter::TrimString($term);
+            $term = TfishDataValidator::TrimString($term);
             
             if (!empty($term) && mb_strlen($term, 'UTF-8') >= $tfish_preference->min_search_length) {
                 $clean_search_terms[] = (string) $term;
@@ -748,7 +748,7 @@ class TfishContentHandler
         }
         
         foreach ($escaped_search_terms as $escaped_term) {
-            $escaped_term = TfishFilter::TrimString($escaped_term);
+            $escaped_term = TfishDataValidator::TrimString($escaped_term);
             
             if (!empty($escaped_term) && mb_strlen($escaped_term, 'UTF-8')
                     >= $tfish_preference->min_search_length) {
@@ -893,7 +893,7 @@ class TfishContentHandler
      */
     public static function toObject(array $row)
     {
-        if (empty($row) || !TfishFilter::isArray($row)) {
+        if (empty($row) || !TfishDataValidator::isArray($row)) {
             return false;
         }
 
@@ -941,7 +941,7 @@ class TfishContentHandler
      */
     public static function update(TfishContentObject $obj)
     {
-        $clean_id = TfishFilter::isInt($obj->id, 1) ? (int) $obj->id : 0;
+        $clean_id = TfishDataValidator::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
         $zeroed_properties = $obj->zeroedProperties();
@@ -994,7 +994,7 @@ class TfishContentHandler
             if (array_key_exists('image', $property_whitelist)) {
 
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
-                    $filename = TfishFilter::trimString($_FILES['image']['name']);
+                    $filename = TfishDataValidator::trimString($_FILES['image']['name']);
                     $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
                     
                     if ($clean_filename) {
@@ -1059,7 +1059,7 @@ class TfishContentHandler
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
-                    $filename = TfishFilter::trimString($_FILES['media']['name']);
+                    $filename = TfishDataValidator::trimString($_FILES['media']['name']);
                     $clean_filename = TfishFileHandler::uploadFile($filename, 'media'); 
                 } else {
                     $clean_filename = $existing_media;

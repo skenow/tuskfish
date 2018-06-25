@@ -40,7 +40,7 @@ $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) 
-        ? TfishFilter::trimString($_GET['type']) : '';
+        ? TfishDataValidator::trimString($_GET['type']) : '';
 
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria();
@@ -50,7 +50,7 @@ $criteria->add(new TfishCriteriaItem('image', '', '<>'));
 if ($clean_tag)
     $criteria->tag = array($clean_tag);
 
-if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {
     $criteria->add(new TfishCriteriaItem('online', 1));
 }
 
@@ -66,7 +66,7 @@ if ($clean_type) {
 $count = $content_handler::getCount($criteria);
 $extra_params = array();
 
-if (isset($clean_online) && TfishFilter::isInt($clean_online, 0, 1)) {
+if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {
     $extra_params['online'] = $clean_online;
 }
 

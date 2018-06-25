@@ -128,9 +128,9 @@ class TfishDatabase
     public static function create(string $db_name)
     {
         // Validate input parameters
-        $db_name = TfishFilter::trimString($db_name);
+        $db_name = TfishDataValidator::trimString($db_name);
         
-        if (TfishFilter::isAlnumUnderscore($db_name)) {
+        if (TfishDataValidator::isAlnumUnderscore($db_name)) {
             return self::_create($db_name . '.db');
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -184,13 +184,13 @@ class TfishDatabase
         // Validate input parameters
         $clean_table = self::validateTableName($table);
         
-        if (TfishFilter::isArray($columns) && !empty($columns)) {
+        if (TfishDataValidator::isArray($columns) && !empty($columns)) {
             $type_whitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
             
             foreach ($columns as $key => $value) {
                 $key = self::escapeIdentifier($key);
                 
-                if (!TfishFilter::isAlnumUnderscore($key)) {
+                if (!TfishDataValidator::isAlnumUnderscore($key)) {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
                 }
@@ -212,7 +212,7 @@ class TfishDatabase
             $primary_key = self::escapeIdentifier($primary_key);
             
             if (array_key_exists($primary_key, $clean_columns)) {
-                $clean_primary_key = TfishFilter::isAlnumUnderscore($primary_key)
+                $clean_primary_key = TfishDataValidator::isAlnumUnderscore($primary_key)
                         ? $primary_key : null;
             }
             
@@ -321,7 +321,7 @@ class TfishDatabase
                 $sql .= "WHERE ";
             }
 
-            if (TfishFilter::isArray($criteria->item)) {
+            if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSQL();
                 $pdo_placeholders = $criteria->renderPDO();
@@ -395,7 +395,7 @@ class TfishDatabase
     public static function escapeIdentifier(string $identifier)
     {
         $clean_identifier = '';
-        $identifier = TfishFilter::trimString($identifier);
+        $identifier = TfishDataValidator::trimString($identifier);
         $identifier = str_replace('"', '""', $identifier);
         $identifier = str_replace('`', '``', $identifier);
         $identifier = str_replace('[', '[[', $identifier);
@@ -559,7 +559,7 @@ class TfishDatabase
                 $sql .= "WHERE ";
             }
 
-            if (TfishFilter::isArray($criteria->item)) {
+            if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSQL();
                 $pdo_placeholders = $criteria->renderPDO();
@@ -652,7 +652,7 @@ class TfishDatabase
         if ($column) {
             $column = self::escapeIdentifier($column);
             
-            if (TfishFilter::isAlnumUnderscore($column)) {
+            if (TfishDataValidator::isAlnumUnderscore($column)) {
                 $clean_column = $column;
             } else {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -688,7 +688,7 @@ class TfishDatabase
                 $sql .= "WHERE ";
             }
 
-            if (TfishFilter::isArray($criteria->item)) {
+            if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSQL();
                 $pdo_placeholders = $criteria->renderPDO();
@@ -778,7 +778,7 @@ class TfishDatabase
                 $sql .= "WHERE ";
             }
 
-            if (TfishFilter::isArray($criteria->item)) {
+            if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSQL();
                 $pdo_placeholders = $criteria->renderPDO();
@@ -1020,7 +1020,7 @@ class TfishDatabase
                 $sql .= "WHERE ";
             }
 
-            if (TfishFilter::isArray($criteria->item)) {
+            if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSQL();
                 $pdo_placeholders = $criteria->renderPDO();
@@ -1115,7 +1115,7 @@ class TfishDatabase
     {
         
         if ($criteria->item) {
-            if (!TfishFilter::isArray($criteria->item)) {
+            if (!TfishDataValidator::isArray($criteria->item)) {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
             }
@@ -1125,7 +1125,7 @@ class TfishDatabase
                 exit;
             }
             
-            if (!TfishFilter::isArray($criteria->condition)) {
+            if (!TfishDataValidator::isArray($criteria->condition)) {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
             }
@@ -1141,7 +1141,7 @@ class TfishDatabase
                     exit;
                 }
                 
-                if (!TfishFilter::isAlnumUnderscore($item->column)) {
+                if (!TfishDataValidator::isAlnumUnderscore($item->column)) {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
                 }
@@ -1160,22 +1160,22 @@ class TfishDatabase
             }
         }
         
-        if ($criteria->groupby && !TfishFilter::isAlnumUnderscore($criteria->groupby)) {
+        if ($criteria->groupby && !TfishDataValidator::isAlnumUnderscore($criteria->groupby)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }
         
-        if ($criteria->limit && !TfishFilter::isInt($criteria->limit, 1)) {
+        if ($criteria->limit && !TfishDataValidator::isInt($criteria->limit, 1)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;
         }
         
-        if ($criteria->offset && !TfishFilter::isInt($criteria->offset, 0)) {
+        if ($criteria->offset && !TfishDataValidator::isInt($criteria->offset, 0)) {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;
         }
         
-        if ($criteria->order && !TfishFilter::isAlnumUnderscore($criteria->order)) {
+        if ($criteria->order && !TfishDataValidator::isAlnumUnderscore($criteria->order)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }
@@ -1199,11 +1199,11 @@ class TfishDatabase
     {
         $clean_columns = array();
         
-        if (TfishFilter::isArray($columns) && !empty($columns)) {
+        if (TfishDataValidator::isArray($columns) && !empty($columns)) {
             foreach ($columns as $column) {
                 $column = self::escapeIdentifier($column);
                 
-                if (TfishFilter::isAlnumUnderscore($column)) {
+                if (TfishDataValidator::isAlnumUnderscore($column)) {
                     $clean_columns[] = $column;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -1229,7 +1229,7 @@ class TfishDatabase
     public static function validateId(int $id)
     {
         $clean_id = (int) $id;
-        if (TfishFilter::isInt($clean_id, 1)) {
+        if (TfishDataValidator::isInt($clean_id, 1)) {
             return $clean_id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -1250,11 +1250,11 @@ class TfishDatabase
     {
         $clean_keys = array();
         
-        if (TfishFilter::isArray($key_values) && !empty($key_values)) {
+        if (TfishDataValidator::isArray($key_values) && !empty($key_values)) {
             foreach ($key_values as $key => $value) {
                 $key = self::escapeIdentifier($key);
                 
-                if (TfishFilter::isAlnumUnderscore($key)) {
+                if (TfishDataValidator::isAlnumUnderscore($key)) {
                     $clean_keys[$key] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -1281,7 +1281,7 @@ class TfishDatabase
     {
         $table_name = self::escapeIdentifier($table_name);
         
-        if (TfishFilter::isAlnum($table_name)) {
+        if (TfishDataValidator::isAlnum($table_name)) {
             return $table_name;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);

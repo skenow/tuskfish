@@ -52,10 +52,10 @@ class TfishLogger
     public static function logErrors(int $errno = null, string $error = '',
             string $file = '', int $line = null, array $context = array())
     {
-        $errno = isset($errno) ? TfishFilter::trimString($errno) : TFISH_ERROR_UNSPECIFIED;
-        $error = !empty($error) ? TfishFilter::trimString($error) : TFISH_ERROR_UNSPECIFIED;
-        $file = !empty($file) ? Tfishfilter::trimString($file) : TFISH_ERROR_UNSPECIFIED;
-        $line = isset($line) ? TfishFilter::trimString($line) : TFISH_ERROR_UNSPECIFIED;
+        $errno = isset($errno) ? TfishDataValidator::trimString($errno) : TFISH_ERROR_UNSPECIFIED;
+        $error = !empty($error) ? TfishDataValidator::trimString($error) : TFISH_ERROR_UNSPECIFIED;
+        $file = !empty($file) ? TfishDataValidator::trimString($file) : TFISH_ERROR_UNSPECIFIED;
+        $line = isset($line) ? TfishDataValidator::trimString($line) : TFISH_ERROR_UNSPECIFIED;
         // $context not in use.
         
         $message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";

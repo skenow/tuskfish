@@ -109,12 +109,12 @@ class TfishTagHandler extends TfishContentHandler
         $select_box = '';
         $tag_list = array();
 
-        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1))
+        $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 1))
                 ? (int) $selected : null;
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
         $clean_type = TfishContentHandler::isSanctionedType($type)
-                ? TfishFilter::trimString($type) : null;
-        $clean_online_only = TfishFilter::isBool($online_only) ? (bool) $online_only : true;
+                ? TfishDataValidator::trimString($type) : null;
+        $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
 
         $tag_list = TfishContentHandler::getActiveTagList($clean_type, $clean_online_only);
         
@@ -154,24 +154,24 @@ class TfishTagHandler extends TfishContentHandler
 
         // Validate input.
         // ID of a previously selected tag, if any.
-        $clean_selected = (isset($selected) && TfishFilter::isInt($selected, 1))
+        $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 1))
                 ? (int) $selected : null;
         
-        if (TfishFilter::isArray($tag_list) && !empty($tag_list)) {
+        if (TfishDataValidator::isArray($tag_list) && !empty($tag_list)) {
             asort($tag_list);
             
             foreach ($tag_list as $key => $value) {
                 $clean_key = (int) $key;
-                $clean_value = TfishFilter::escape(TfishFilter::trimString($value));
+                $clean_value = TfishDataValidator::escape(TfishDataValidator::trimString($value));
                 $clean_tag_list[$clean_key] = $clean_value;
                 unset($key, $clean_key, $value, $clean_value);
             }
         }
         
         // The text to display in the zero option of the select box.
-        $clean_zero_option = TfishFilter::escape(TfishFilter::trimString($zero_option));
+        $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
         $clean_key_name = isset($key_name)
-                ? TfishFilter::escape(TfishFilter::trimString($key_name)) : 'tag_id';
+                ? TfishDataValidator::escape(TfishDataValidator::trimString($key_name)) : 'tag_id';
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;

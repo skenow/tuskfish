@@ -55,7 +55,7 @@ class TfishPreference
     
     public function escape(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             switch ($clean_property) {
@@ -107,20 +107,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Database name is restricted to alphanumeric and underscore characters only.
-    $db_name = TfishFilter::trimString($_POST['db_name']);
-    if (!TfishFilter::isAlnumUnderscore($db_name)) {
+    $db_name = TfishDataValidator::trimString($_POST['db_name']);
+    if (!TfishDataValidator::isAlnumUnderscore($db_name)) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DB_ALNUMUNDERSCORE . '</p>';
     }
 
     // Admin email must conform to email specification.
-    $admin_email = TfishFilter::trimString($_POST['admin_email']);
-    if (!TfishFilter::isEmail($admin_email)) {
+    $admin_email = TfishDataValidator::trimString($_POST['admin_email']);
+    if (!TfishDataValidator::isEmail($admin_email)) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_BAD_EMAIL . '</p>';
     }
 
     // There are no restrictions on what characters you use for a password. Only only on what you
     // don't use!
-    $admin_password = TfishFilter::trimString($_POST['admin_password']);
+    $admin_password = TfishDataValidator::trimString($_POST['admin_password']);
 
     // Check password length and quality.
     $password_quality = TfishSecurityUtility::checkPasswordStrength($admin_password);

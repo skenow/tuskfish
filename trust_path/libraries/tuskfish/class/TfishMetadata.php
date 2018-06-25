@@ -96,12 +96,12 @@ class TfishMetadata
             int $tag = 0, array $extra_params = array())
     {
         // Filter parameters.
-        $clean_count = TfishFilter::isInt($count, 1) ? (int) $count : 0;
-        $clean_limit = TfishFilter::isInt($limit, 1) ? (int) $limit : 0;
-        $clean_start = TfishFilter::isInt($start, 0) ? (int) $start : 0;
-        $clean_url = TfishFilter::isAlnumUnderscore($url) ? TfishFilter::trimString($url)
+        $clean_count = TfishDataValidator::isInt($count, 1) ? (int) $count : 0;
+        $clean_limit = TfishDataValidator::isInt($limit, 1) ? (int) $limit : 0;
+        $clean_start = TfishDataValidator::isInt($start, 0) ? (int) $start : 0;
+        $clean_url = TfishDataValidator::isAlnumUnderscore($url) ? TfishDataValidator::trimString($url)
                 . '.php' : TFISH_URL;
-        $clean_tag = TfishFilter::isInt($tag) ? (int) $tag : 0;
+        $clean_tag = TfishDataValidator::isInt($tag) ? (int) $tag : 0;
 
         // $extra_params is a potential XSS attack vector.
         // The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
@@ -115,19 +115,19 @@ class TfishMetadata
         foreach ($extra_params as $key => $value) {
             
             // Check for directory traversals and null byte injection.
-            if (TfishFilter::hasTraversalorNullByte($key)
-                    || TfishFilter::hasTraversalorNullByte((string) $value)) {
+            if (TfishDataValidator::hasTraversalorNullByte($key)
+                    || TfishDataValidator::hasTraversalorNullByte((string) $value)) {
                 trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                 return false;
             }
         
-            $clean_extra_params[] = TfishFilter::encodeEscapeUrl($key) . '='
-                    . TfishFilter::encodeEscapeUrl((string) $value);
+            $clean_extra_params[] = TfishDataValidator::encodeEscapeUrl($key) . '='
+                    . TfishDataValidator::encodeEscapeUrl((string) $value);
             unset($key, $value);
         }
         
         $clean_extra_params = !empty($clean_extra_params)
-                ? TfishFilter::escape(implode("&", $clean_extra_params)) : '';
+                ? TfishDataValidator::escape(implode("&", $clean_extra_params)) : '';
 
         // If the count is zero there is no need for a pagination control.
         if ($clean_count === 0) {
@@ -260,7 +260,7 @@ class TfishMetadata
      */
     public function __get(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return htmlspecialchars((string) $this->__data[$clean_property], ENT_QUOTES, "UTF-8",
@@ -281,7 +281,7 @@ class TfishMetadata
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         // Check that property is whitelisted.
         if (!isset($this->__data[$clean_property])) {
@@ -297,13 +297,13 @@ class TfishMetadata
             case "generator":
             case "seo":
             case "robots":
-                $clean_value = TfishFilter::trimString($value);
+                $clean_value = TfishDataValidator::trimString($value);
                 $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_QUOTES,
                         "UTF-8", false);
                 break;
             
             case "pagination_elements":
-                if (TfishFilter::isInt($value, 3)) {
+                if (TfishDataValidator::isInt($value, 3)) {
                     $clean_value = (int) $value;
                     $this->__data[$clean_property] = $clean_value;
                 }
@@ -319,7 +319,7 @@ class TfishMetadata
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             return true;
@@ -336,7 +336,7 @@ class TfishMetadata
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             unset($this->__data[$clean_property]);

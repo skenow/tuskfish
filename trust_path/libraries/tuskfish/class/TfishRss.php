@@ -103,7 +103,7 @@ class TfishRss extends TfishAncestralObject
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishFilter::trimString($property);
+        $clean_property = TfishDataValidator::trimString($property);
         
         // Check that property is whitelisted.
         if (isset($this->__data[$clean_property])) {
@@ -115,7 +115,7 @@ class TfishRss extends TfishAncestralObject
         // Validate $value against expected data type and business rules.
         switch ($type) {
             case "array": // Items
-                if (TfishFilter::isArray($value)) {
+                if (TfishDataValidator::isArray($value)) {
                     $clean_items = array();
 
                     foreach ($value as $val) {
@@ -135,9 +135,9 @@ class TfishRss extends TfishAncestralObject
                 break;
 
             case "email":
-                $value = TfishFilter::trimString($value);
+                $value = TfishDataValidator::trimString($value);
 
-                if (TfishFilter::isEmail($value)) {
+                if (TfishDataValidator::isEmail($value)) {
                     $this->__data[$clean_property] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -145,7 +145,7 @@ class TfishRss extends TfishAncestralObject
                 break;
 
             case "int": // Tags, minimum value 1.
-                if (TfishFilter::isInt($value, 1)) {
+                if (TfishDataValidator::isInt($value, 1)) {
                     $this->__data[$clean_property] = (int) $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -153,13 +153,13 @@ class TfishRss extends TfishAncestralObject
                 break;
 
             case "string":
-                $this->__data[$clean_property] = TfishFilter::trimString($value);
+                $this->__data[$clean_property] = TfishDataValidator::trimString($value);
                 break;
 
             case "url":
-                $value = TfishFilter::trimString($value);
+                $value = TfishDataValidator::trimString($value);
 
-                if (TfishFilter::isUrl($value)) {
+                if (TfishDataValidator::isUrl($value)) {
                     $this->__data[$clean_property] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);

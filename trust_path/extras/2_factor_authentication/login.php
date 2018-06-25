@@ -67,11 +67,11 @@ $allowed_options = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NOT sanitised and therefore it is dangerous.
 if (!empty($_POST['op'])) {
-    $op = TfishFilter::trimString($_POST['op']);
-    $clean_op = TfishFilter::isAlpha($op) ? $op : false;
+    $op = TfishDataValidator::trimString($_POST['op']);
+    $clean_op = TfishDataValidator::isAlpha($op) ? $op : false;
 } elseif (!empty($_GET['op'])) {
-    $op = TfishFilter::trimString($_GET['op']);
-    $clean_op = TfishFilter::isAlpha($op) ? $op : false;
+    $op = TfishDataValidator::trimString($_GET['op']);
+    $clean_op = TfishDataValidator::isAlpha($op) ? $op : false;
 }
 
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
