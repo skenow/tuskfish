@@ -601,20 +601,6 @@ class TfishContentObject extends TfishAncestralObject
             }
         }
 
-        /**
-         * Validate $value against expected data type and business rules.
-         * 
-         * Seems to be a PDO bug here. Using PDO::FETCH_PROPS_LATE it is supposed to run the
-         * constructor (which unsets disallowed properties) before assigning values to properties.
-         * However, it is still trying to set them. A similar bug has been reported for reading
-         * directly into objects (rather than classes).
-         * 
-         * Theory:
-         * 1. Constructor does run first.
-         * 2. Disallowed properties are unset() as expected.
-         * 3. PDO:FETCH_PROPS_LATE proceeds to try and assign properties to object using column
-         * names, including the unset() ones. This is what causes the undefined index errors.
-         */
         if (isset($this->__properties[$clean_property])) {
            $type = $this->__properties[$clean_property]; 
         } else {

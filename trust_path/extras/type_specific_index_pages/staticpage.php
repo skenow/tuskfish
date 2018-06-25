@@ -20,9 +20,6 @@ declare(strict_types=1);
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify theme set, otherwise 'default' will be used.
-// $tfish_template->setTheme('jumbotron');
-
 ////////// CONFIGURATION //////////
 // 1. Enter the ID of the content object you want to display on this page.
 $id = 10;
@@ -33,6 +30,9 @@ $tfish_template->target_file_name = $target_file_name;
 
 // 3. Set the page title.
 $tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
+
+// 4. Specify theme set, otherwise 'default' will be used.
+// $tfish_template->setTheme('jumbotron');
 ////////// END CONFIGURATION //////////
 
 // Validate input parameters.

@@ -20,22 +20,14 @@ declare(strict_types=1);
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('default');
-
-
-// CONVENTIONS:
-// 1. Specify the class name of the handler for the object type this page will handle,]
-// eg. 'TfishDownloadHandler'.
-// 2. Specify the name of the template for the index page, eg. 'downloads'.
-
+// Configure page.
+$tfish_template->page_title = TFISH_TYPE_DOWNLOADS;
 $content_handler = 'TfishDownloadHandler';
 $index_template = 'downloads';
 $target_file_name = 'downloads';
 $tfish_template->target_file_name = $target_file_name;
-
-// Page title.
-$tfish_template->page_title = TFISH_TYPE_DOWNLOADS;
+// Specify theme, otherwise 'default' will be used.
+$tfish_template->setTheme('default');
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;

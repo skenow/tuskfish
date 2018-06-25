@@ -18,21 +18,13 @@ declare(strict_types=1);
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
-// Specify theme, otherwise 'default' will be used.
-// $tfish_template->setTheme('jumbotron');
-
-// CONVENTIONS:
-// 1. Specify the class name of the handler for the object type this page will handle,
-// eg. 'TfishTagHandler'.
-// 2. Specify the name of the template for the index page, eg. 'tags'.
-
+// Configure page.
+$tfish_template->page_title = TFISH_TYPE_TAGS;
 $content_handler = 'TfishTagHandler';
 $index_template = 'tags';
 $target_file_name = 'tags';
 $tfish_template->target_file_name = $target_file_name;
-
-// Page title.
-$tfish_template->page_title = TFISH_TYPE_TAGS;
+// $tfish_template->setTheme('jumbotron');
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;

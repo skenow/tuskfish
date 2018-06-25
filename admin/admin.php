@@ -194,7 +194,7 @@ if (in_array($op, $options_whitelist)) {
             }
             break;
 
-        // Flush: Flush the cache.
+        // Flush the cache.
         case "flush":
             $result = TfishCache::flushCache();
             

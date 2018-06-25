@@ -21,18 +21,10 @@ require_once TFISH_PATH . "tfish_header.php";
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
 
-// CONVENTIONS:
-// 1. Specify the class name of the handler for the object type this page will handle, eg. 'TfishArticleHandler'.
-// 2. Specify the name of the template for the index page, eg. 'articles'.
-// 3. (In type-specific pages) the name of this file (without extension) should be the same as the 
-//    value of the object's 'module' field. If you want to change the file name, change the module
-//    value in the object class as well.
-
+// Configure page.
+$tfish_template->page_title = TFISH_TYPE_PERMALINKS;
 $content_handler = 'TfishContentHandler';
 $target_file_name = 'permalink';
-
-// Page title.
-$tfish_template->page_title = TFISH_TYPE_PERMALINKS;
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
