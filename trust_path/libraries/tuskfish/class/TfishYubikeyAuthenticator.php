@@ -133,9 +133,11 @@ class TfishYubikeyAuthenticator
      */
     public function setTimestampTolerance(int $int)
     {
+        define("SECONDS_IN_ONE_DAY", 86400);
+        
         $int = (int) $int;
         
-        if ($int > 0 && $int < 86400) {
+        if ($int > 0 && $int < SECONDS_IN_ONE_DAY) {
             $this->_timestampTolerance = $int;
             return true;
         } else {

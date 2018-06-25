@@ -137,6 +137,10 @@ class TfishContentObject extends TfishAncestralObject
      */
     protected function makeHumanReadable(string $clean_property)
     {
+        define("ONE_KILOBYTE", 1024);
+        define("ONE_MEGABYTE", 1048576);
+        define("ONE_GIGABYTE", 1073741824);
+        
         switch ($clean_property) {
             case "date": // Stored in format yyyy-mm-dd
                 $date = new DateTime($this->__data[$clean_property]);
@@ -148,18 +152,18 @@ class TfishContentObject extends TfishAncestralObject
                 $bytes = (int) $this->__data[$clean_property];
                 $unit = $val = '';
 
-                if ($bytes === 0 || $bytes < 1024) {
+                if ($bytes === 0 || $bytes < ONE_KILOBYTE) {
                     $unit = ' bytes';
                     $val = $bytes;
-                } elseif ($bytes > 1023 && $bytes < 1048576) {
+                } elseif ($bytes >= ONE_KILOBYTE && $bytes < ONE_MEGABYTE) {
                     $unit = ' KB';
-                    $val = ($bytes / 1024);
-                } elseif ($bytes > 1048575 && $bytes < 1073741824) {
+                    $val = ($bytes / ONE_KILOBYTE);
+                } elseif ($bytes >= ONE_MEGABYTE && $bytes < ONE_GIGABYTE) {
                     $unit = ' MB';
-                    $val = ($bytes / 1048576);
+                    $val = ($bytes / ONE_MEGABYTE);
                 } else {
                     $unit = ' GB';
-                    $val = ($bytes / 1073741824);
+                    $val = ($bytes / ONE_GIGABYTE);
                 }
 
                 $val = round($val, 2);
