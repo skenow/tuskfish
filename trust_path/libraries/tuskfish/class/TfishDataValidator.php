@@ -94,20 +94,7 @@ class TfishDataValidator
     public static function filterHtml(string $dirty_html, array $config_options = array())
     {
         if (self::isUtf8($dirty_html) && class_exists('HTMLPurifier')) {
-                
-            // Set default configuration options.
-            $config = HTMLPurifier_Config::createDefault();
-            $config->set('Core.Encoding', 'UTF-8');
-            $config->set('Attr.EnableID', true);
-            $config->set('Attr.ID.HTML5', true);
-
-            // Set optional configuration options.
-            if ($config_options) {
-                foreach ($config_options as $key => $value) {
-                    $config->set($key, $value);
-                }
-            }
-
+            $config = self::_configureHTMLPurifier($config_options);
             $html_purifier = new HTMLPurifier($config);
             $clean_html = (string) $html_purifier->purify($dirty_html);
 
@@ -115,6 +102,38 @@ class TfishDataValidator
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Configure HTMLPurifier for use with Tuskfish.
+     * 
+     * Tuskfish requires HTMLPurifier to use UTF-8 encoding; to allow the ID attribute in HTML,
+     * which is required to provide CSS selector targets; and support for HTML5 tags.
+     * 
+     * By default HTMLPurifier removes ID attributes from HTML markup, as duplicate IDs render
+     * markup technically invalid. However, it is widely known that IDs are supposed to be unique
+     * and not an issue if you are doing things properly. Removing IDs breaks CSS that uses IDs as 
+     * selectors, which *is* an issue. 
+     * 
+     * @param array $config_options HTMLPurifier configuration options (see HTMLPurifier documentation).
+     * @return object HTMLPurifier configuration object.
+     */
+    private static function _configureHTMLPurifier(array $config_options)
+    {
+        // Set default configuration options.
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('Core.Encoding', 'UTF-8');
+        $config->set('Attr.EnableID', true);
+        $config->set('Attr.ID.HTML5', true);
+
+        // Set optional configuration options.
+        if ($config_options) {
+            foreach ($config_options as $key => $value) {
+                $config->set($key, $value);
+            }
+        }
+        
+        return $config;
     }
     
     /**
