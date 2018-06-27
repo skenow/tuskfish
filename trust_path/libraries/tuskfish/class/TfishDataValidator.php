@@ -97,7 +97,6 @@ class TfishDataValidator
             $config = self::_configureHTMLPurifier($config_options);
             $html_purifier = new HTMLPurifier($config);
             $clean_html = (string) $html_purifier->purify($dirty_html);
-
             return $clean_html;
         } else {
             return false;
