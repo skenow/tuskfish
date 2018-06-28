@@ -53,7 +53,7 @@ if ($clean_id) {
         TfishStaticHandler::updateCounter($clean_id);
         
         // Check if cached page is available.
-        TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+        $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
         
         $tfish_template->content = $content;
 

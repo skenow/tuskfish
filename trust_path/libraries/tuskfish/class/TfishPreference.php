@@ -325,13 +325,13 @@ class TfishPreference extends TfishAncestralObject
     }
 
     /**
-     * Update the preference object.
+     * Update the preference object from an external data source (eg. form submission).
      * 
      * The preference object will conduct its own internal data type validation and range checks.
      * 
      * @param array $dirty_input Usually $_REQUEST data.
      */
-    public function updatePreferences(array $dirty_input)
+    public function loadProperties(array $dirty_input)
     {
         if (!TfishDataValidator::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -348,16 +348,6 @@ class TfishPreference extends TfishAncestralObject
             
             unset($key, $type);
         }
-    }
-
-    /**
-     * Save updated preferences to the database.
-     * 
-     * @return bool True on success false on failure.
-     */
-    private static function writePreferences()
-    {
-        return TfishDatabase::update('preference', $this->__data);
     }
 
 }

@@ -55,7 +55,7 @@ if ($clean_id) {
         }
 
         // Check if cached page is available.
-        TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+        $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
 
         // Assign content object to template.
         $tfish_template->content = $content;
@@ -152,7 +152,7 @@ if ($clean_id) {
 } else {
 
     // Check if cached page is available.
-    TfishCache::checkCache($tfish_preference, $basename, $cache_parameters);
+    $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
 
     // Page title, customise it as you see fit.
     $tfish_template->page_title = TFISH_LATEST_POSTS;

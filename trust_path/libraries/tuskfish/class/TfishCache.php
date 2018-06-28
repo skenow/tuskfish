@@ -50,7 +50,7 @@ class TfishCache
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public static function checkCache(TfishPreference $tfish_preference, string $basename,
+    public function checkCache(TfishPreference $tfish_preference, string $basename,
             array $params = array())
     {
         
@@ -66,7 +66,7 @@ class TfishCache
         }
 
         // Resolve the file name.
-        $file_name = self::_getCachedFileName($basename, $params);
+        $file_name = $this->_getCachedFileName($basename, $params);
         
         // Verify that the constructed path matches the canonical path. Exit cache if path is bad.
         $resolved_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
@@ -93,7 +93,7 @@ class TfishCache
      * underscore characters only.
      * @param array $params URL query string parameters for this page as $key => $value pairs.
      */
-    private static function _getCachedFileName(string $basename, array $params)
+    private function _getCachedFileName(string $basename, array $params)
     {
         $clean_filename = false;
         
@@ -141,7 +141,7 @@ class TfishCache
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
-    public static function cachePage(TfishPreference $tfish_preference, string $basename,
+    public function cachePage(TfishPreference $tfish_preference, string $basename,
             array $params, string $buffer)
     {        
         // Abort if cache is disabled.
@@ -156,7 +156,7 @@ class TfishCache
         }
 
         // Resolve the file name and verify that the constructed path matches the canonical path.
-        $file_name = self::_getCachedFileName($basename, $params);
+        $file_name = $this->_getCachedFileName($basename, $params);
         $file_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
         if ($file_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
             return;
@@ -177,7 +177,7 @@ class TfishCache
      * 
      * @return bool True on success, false on failure.
      */
-    public static function flushCache()
+    public function flushCache()
     {
         try {
             $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);

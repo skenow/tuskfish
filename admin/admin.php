@@ -134,7 +134,7 @@ if (in_array($op, $options_whitelist)) {
                 $result = TfishContentHandler::delete($clean_id);
                 
                 if ($result) {
-                    TfishCache::flushCache();
+                    $tfish_cache->flushCache();
                     $tfish_template->page_title = TFISH_SUCCESS;
                     $tfish_template->alert_class = 'alert-success';
                     $tfish_template->message = TFISH_OBJECT_WAS_DELETED;
@@ -196,7 +196,7 @@ if (in_array($op, $options_whitelist)) {
 
         // Flush the cache.
         case "flush":
-            $result = TfishCache::flushCache();
+            $result = $tfish_cache->flushCache();
             
             if ($result) {
                 $tfish_template->page_title = TFISH_SUCCESS;
@@ -236,7 +236,7 @@ if (in_array($op, $options_whitelist)) {
             $result = TfishContentHandler::insert($content_object);
             
             if ($result) {
-                TfishCache::flushCache();
+                $tfish_cache->flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
                 $tfish_template->message = TFISH_OBJECT_WAS_INSERTED;
@@ -258,7 +258,7 @@ if (in_array($op, $options_whitelist)) {
             $result = TfishContentHandler::toggleOnlineStatus($clean_id);
             
             if ($result) {
-                TfishCache::flushCache();
+                $tfish_cache->flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
                 $tfish_template->message = TFISH_OBJECT_WAS_UPDATED;
@@ -316,7 +316,7 @@ if (in_array($op, $options_whitelist)) {
             $result = TfishContentHandler::update($content_object);
 
             if ($result) {
-                TfishCache::flushCache();
+                $tfish_cache->flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
                 $tfish_template->message = TFISH_OBJECT_WAS_UPDATED;

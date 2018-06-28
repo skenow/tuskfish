@@ -43,11 +43,11 @@ if (in_array($op, array('edit', 'update', false))) {
         // Update: Submit the modified object and update the corresponding database row.
         case "update":
             TfishSession::validateToken($clean_token); // CSRF check.
-            $tfish_preference->updatePreferences($_REQUEST);
+            $tfish_preference->loadProperties($_REQUEST);
 
             // Update the database row and display a response.
-            $result = TfishPreferenceHandler::updatePreferences($tfish_preference);
-            
+            $tfish_preference_handler = new TfishPreferenceHandler;
+            $result = $tfish_preference_handler->writePreferences($tfish_preference);
             if ($result) {
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';
@@ -61,6 +61,9 @@ if (in_array($op, array('edit', 'update', false))) {
             $tfish_template->back_url = 'preference.php';
             $tfish_template->form = TFISH_FORM_PATH . "response.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
+            
+            // Flush the cache.
+            $tfish_cache->flushCache();
             break;
 
         // Default: Display a table of existing preferences.

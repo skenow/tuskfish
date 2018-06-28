@@ -34,16 +34,16 @@ ini_set('log_errors', '1');
 error_reporting(E_ALL);
 set_error_handler("TfishLogger::logErrors");
 
-// Ensure that a database connection is available
+// Ensure that a database connection is available.
 TfishDatabase::connect();
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;
 
-// Ensure that global site preferences are available via $tfish_preference
+// Ensure that global site preferences are available via $tfish_preference.
 $tfish_preference = new TfishPreference();
 
-// Begin secure session. Note that cookies are only relevant in the /admin section of the site
+// Begin secure session. Note that cookies are only relevant in the /admin section of the site.
 TfishSession::start($tfish_preference);
 
 // Set default page-level metadata values for essential template variables (overwrite as required).
@@ -51,6 +51,9 @@ $tfish_metadata = new TfishMetadata($tfish_preference);
 
 // Instantiate the template object so that it will be available globally.
 $tfish_template = new TfishTemplate();
+
+// Instantiate the cache.
+$tfish_cache = new TfishCache();
 
 // Check if site is closed, if so redirect to the login page and exit.
 if ($tfish_preference->close_site && !TfishSession::isAdmin()) {

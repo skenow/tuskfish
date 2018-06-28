@@ -30,32 +30,18 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishPreferenceHandler
 {
-
-    /** @var object $tfish_preferences Permitted website properties held in instance of TfishPreference */
-    private $tfish_preferences;
-
-    /** 
-     * Initialise default property values.
-     * 
-     * @param object $tfish_preferences Instance of TfishPreference class, holds site preference info.
-     */
-    function __construct(TfishPreference $tfish_preferences)
-    {
-        $this->preferences = $tfish_preferences;
-    }
-
     /**
      * Get the value of a particular site preference.
      * 
      * @param string $pref Name of preference.
      * @return mixed|null Value of preference if it exists, otherwise null.
      */
-    public static function get(string $pref)
+    public function get(string $pref)
     {
         $pref = TfishDataValidator::trimString($pref);
         
         if (TfishDataValidator::isAlnumUnderscore($pref)) {
-            return $this->tfish_preferences->$pref;
+            return $this->tfish_preference->$pref;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             return null;
@@ -65,14 +51,13 @@ class TfishPreferenceHandler
     /**
      * Updates the site preferences in the database.
      * 
-     * @param object $obj TfishPreference object.
      * @return bool True on success false on failure.
      */
-    public static function updatePreferences(TfishPreference $obj)
+    public function writePreferences(TfishPreference $tfish_preference)
     {
-        // Convert object to array of key => values.
-        if (is_a($obj, 'TfishPreference')) {
-            $key_values = $obj->toArray();
+        // Convert preference object to array of key => values.
+        if (is_a($tfish_preference, 'TfishPreference')) {
+            $key_values = $tfish_preference->toArray();
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
@@ -90,9 +75,6 @@ class TfishPreferenceHandler
                 return false;
             }
         }
-        
-        // Flush the cache.
-        TfishCache::flushCache();
         
         return true;
     }
