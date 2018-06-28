@@ -21,7 +21,7 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_IMAGES;
-$content_handler = 'TfishImageHandler';
+$content_handler = new TfishImageHandler();
 $index_template = 'images';
 $target_file_name = 'images';
 $tfish_template->target_file_name = $target_file_name;
@@ -39,12 +39,12 @@ $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' =
 
 // View single object description.
 if ($clean_id) {
-    $content = $content_handler::getObject($clean_id);
+    $content = $content_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online) {
         // Update view counter and assign object to template.
         $content->counter += 1;
-        $content_handler::updateCounter($clean_id);
+        $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
         $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
@@ -65,7 +65,7 @@ if ($clean_id) {
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
-            $tags = $content_handler::makeTagLinks($content->tags, $target_file_name);
+            $tags = $content_handler->makeTagLinks($content->tags, $target_file_name);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
@@ -80,7 +80,7 @@ if ($clean_id) {
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
-            $parent = $content_handler::getObject($content->parent);
+            $parent = $content_handler->getObject($content->parent);
             
             if (is_object($parent) && $parent->online) {
                 $tfish_template->parent = $parent;
@@ -112,12 +112,12 @@ if ($clean_id) {
     $criteria->add(new TfishCriteriaItem('online', 1));
 
     // Prepare pagination control.
-    $count = $content_handler::getCount($criteria);
+    $count = $content_handler->getCount($criteria);
     $tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
             $tfish_preference->user_pagination, $target_file_name, $clean_start, $clean_tag);
 
     // Retrieve content objects and assign to template.
-    $content_objects = $content_handler::getObjects($criteria);
+    $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 }

@@ -52,7 +52,8 @@ if ($clean_tag_id) {
 
 // Optionally make a feed specific to a collection object.
 if ($clean_id) {
-    $collection = TfishContentHandler::getObject($clean_id);
+    $content_handler = new TfishContentHandler();
+    $collection = $content_handler->getObject($clean_id);
     
     if ($collection && TfishDataValidator::isObject($collection)) {
         $rss->makeFeedForCollection($collection);
@@ -65,7 +66,7 @@ $criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
 $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
 $criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
 $criteria->add(new TfishCriteriaItem('online', 1));
-$content_objects = TfishContentHandler::getObjects($criteria);
+$content_objects = $content_handler->getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.
 $tfish_template->rss_feed = $rss;

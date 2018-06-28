@@ -107,8 +107,9 @@ class TfishTaglink
 
             case "content_type":
                 $clean_value = TfishDataValidator::trimString($value);
+                $content_handler = new TfishContentHandler();
                 
-                if (TfishContentHandler::isSanctionedType($clean_value)) {
+                if ($content_handler->isSanctionedType($clean_value)) {
                     $this->__data[$clean_property] = $clean_value;
                 } else {
                     trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);

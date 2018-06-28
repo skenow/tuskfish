@@ -66,22 +66,24 @@ if (in_array($op, $options_whitelist)) {
         TfishSession::validateToken($clean_token);
     }
     
+    $content_handler = new TfishContentHandler();
+    
     switch ($op) {
         // Add: Display an empty content object submission form.
         case "add":
             $tfish_template->page_title = TFISH_ADD_CONTENT;
             $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
-            $tfish_template->content_types = TfishContentHandler::getTypes();
-            $tfish_template->rights = TfishContentHandler::getRights();
-            $tfish_template->languages = TfishContentHandler::getLanguages();
-            $tfish_template->tags = TfishContentHandler::getTagList(false);
+            $tfish_template->content_types = $content_handler->getTypes();
+            $tfish_template->rights = $content_handler->getRights();
+            $tfish_template->languages = $content_handler->getLanguages();
+            $tfish_template->tags = $content_handler->getTagList(false);
 
             // Make a parent tree select box options.
-            $collections = TfishCollectionHandler::getObjects();
+            $collection_handler = new TfishCollectionHandler();
+            $collections = $collection_handler->getObjects();
             $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
             $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox();
 
-            //$tfish_template->parent_select_box = TfishCollectionHandler::getParentSelectBox();
             $content = new TfishContentObject();
             $tfish_template->allowed_properties = $content->getPropertyWhitelist();
             $tfish_template->zeroed_properties = array(
@@ -110,7 +112,7 @@ if (in_array($op, $options_whitelist)) {
                 
                 if (TfishDataValidator::isInt($clean_id, 1)) {
                     $tfish_template->page_title = TFISH_CONFIRM_DELETE;
-                    $tfish_template->content = TfishContentHandler::getObject($clean_id);
+                    $tfish_template->content = $content_handler->getObject($clean_id);
                     $tfish_template->form = TFISH_FORM_PATH . "confirm_delete.html";
                     $tfish_template->tfish_main_content = $tfish_template->render('form');
                 } else {
@@ -131,7 +133,7 @@ if (in_array($op, $options_whitelist)) {
         case "delete":
             if (isset($_REQUEST['id'])) {
                 $clean_id = (int) $_REQUEST['id'];
-                $result = TfishContentHandler::delete($clean_id);
+                $result = $content_handler->delete($clean_id);
                 
                 if ($result) {
                     $tfish_cache->flushCache();
@@ -170,18 +172,19 @@ if (in_array($op, $options_whitelist)) {
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
 
                     // Make a parent tree select box options.
-                    $collections = TfishCollectionHandler::getObjects();
+                    $collection_handler = new TfishCollectionHandler();
+                    $collections = $collection_handler->getObjects();
                     $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
 
                     // Assign to template.
                     $tfish_template->page_title = TFISH_EDIT_CONTENT;
                     $tfish_template->op = 'update'; // Critical to launch correct submission action.
                     $tfish_template->action = TFISH_UPDATE;
-                    $tfish_template->content = TfishContentHandler::toObject($row, false);
-                    $tfish_template->content_types = TfishContentHandler::getTypes();
-                    $tfish_template->rights = TfishContentHandler::getRights();
-                    $tfish_template->languages = TfishContentHandler::getLanguages();
-                    $tfish_template->tags = TfishContentHandler::getTagList(false);
+                    $tfish_template->content = $content_handler->toObject($row, false);
+                    $tfish_template->content_types = $content_handler->getTypes();
+                    $tfish_template->rights = $content_handler->getRights();
+                    $tfish_template->languages = $content_handler->getLanguages();
+                    $tfish_template->tags = $content_handler->getTagList(false);
                     $tfish_template->parent_select_options = 
                             $parent_tree->makeParentSelectBox((int) $row['parent']);
                     $tfish_template->form = TFISH_FORM_PATH . "data_edit.html";
@@ -222,7 +225,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             $clean_type = TfishDataValidator::trimString($_REQUEST['type']);
-            $type_whitelist = TfishContentHandler::getTypes();
+            $type_whitelist = $content_handler->getTypes();
             
             if (!array_key_exists($clean_type, $type_whitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -233,7 +236,7 @@ if (in_array($op, $options_whitelist)) {
             $content_object->loadProperties($_REQUEST);
 
             // Insert the object
-            $result = TfishContentHandler::insert($content_object);
+            $result = $content_handler->insert($content_object);
             
             if ($result) {
                 $tfish_cache->flushCache();
@@ -255,7 +258,7 @@ if (in_array($op, $options_whitelist)) {
         case "toggle":
             $id = (int) $_REQUEST['id'];
             $clean_id = TfishDataValidator::isInt($id, 1) ? $id : 0;
-            $result = TfishContentHandler::toggleOnlineStatus($clean_id);
+            $result = $content_handler->toggleOnlineStatus($clean_id);
             
             if ($result) {
                 $tfish_cache->flushCache();
@@ -281,7 +284,7 @@ if (in_array($op, $options_whitelist)) {
             }
 
             $type = TfishDataValidator::trimString($_REQUEST['type']);
-            $type_whitelist = TfishContentHandler::getTypes();
+            $type_whitelist = $content_handler->getTypes();
             
             if (!array_key_exists($type, $type_whitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -313,7 +316,7 @@ if (in_array($op, $options_whitelist)) {
             }
 
             // Update the database row and display a response.
-            $result = TfishContentHandler::update($content_object);
+            $result = $content_handler->update($content_object);
 
             if ($result) {
                 $tfish_cache->flushCache();
@@ -335,7 +338,7 @@ if (in_array($op, $options_whitelist)) {
         // View: See the user-side display of a single object, including offline objects.
         case "view":
             if ($clean_id) {
-                $content = TfishContentHandler::getObject($clean_id);
+                $content = $content_handler->getObject($clean_id);
                 
                 if (is_object($content)) {
                     $tfish_template->content = $content;
@@ -377,7 +380,7 @@ if (in_array($op, $options_whitelist)) {
                     
                     // For a content type-specific page use $content->tags, $content->template.
                     if ($content->tags) {
-                        $tags = TfishContentHandler::makeTagLinks($content->tags);
+                        $tags = $content_handler->makeTagLinks($content->tags);
                         $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
                         $contentInfo[] = $tags;
                     }
@@ -391,7 +394,7 @@ if (in_array($op, $options_whitelist)) {
 
                     // Check if has a parental object; if so display a thumbnail and teaser / link.
                     if (!empty($content->parent)) {
-                        $parent = TfishContentHandler::getObject($content->parent);
+                        $parent = $content_handler->getObject($content->parent);
                         
                         if (is_object($parent) && $parent->online) {
                             $tfish_template->parent = $parent;
@@ -426,7 +429,7 @@ if (in_array($op, $options_whitelist)) {
 
                     // Prepare pagination control.
                     if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-                        $first_child_count = TfishContentHandler::getCount($criteria);
+                        $first_child_count = $content_handler->getCount($criteria);
                         $tfish_template->collection_pagination = 
                                 $tfish_metadata->getPaginationControl(
                                         $first_child_count, 
@@ -437,7 +440,7 @@ if (in_array($op, $options_whitelist)) {
                                         array('id' => $clean_id));
 
                         // Retrieve content objects and assign to template.
-                        $first_children = TfishContentHandler::getObjects($criteria);
+                        $first_children = $content_handler->getObjects($criteria);
                         
                         if (!empty($first_children)) {
                             $tfish_template->first_children = $first_children;
@@ -465,7 +468,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             if ($clean_type) {
-                if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+                if (array_key_exists($clean_type, $content_handler->getTypes())) {
                     $criteria->add(new TfishCriteriaItem('type', $clean_type));
                 } else {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -491,7 +494,7 @@ if (in_array($op, $options_whitelist)) {
                         = date($tfish_preference->date_format, (int) $row['submission_time']);
             }
             
-            $typelist = TfishContentHandler::getTypes();
+            $typelist = $content_handler->getTypes();
 
             // Pagination control.
             $count = TfishDatabase::selectCount('content', $criteria);
@@ -514,9 +517,10 @@ if (in_array($op, $options_whitelist)) {
                     $extra_params);
 
             // Prepare select filters.
-            $tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
-            $type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
-            $online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
+            $tag_handler = new TfishTagHandler();
+            $tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
+            $type_select_box = $content_handler->getTypeSelectBox($clean_type);
+            $online_select_box = $content_handler->getOnlineSelectBox($clean_online);
             $tfish_template->select_action = 'admin.php';
             $tfish_template->tag_select = $tag_select_box;
             $tfish_template->type_select = $type_select_box;
@@ -526,7 +530,7 @@ if (in_array($op, $options_whitelist)) {
             // Assign to template.
             $tfish_template->page_title = TFISH_CURRENT_CONTENT;
             $tfish_template->rows = $rows;
-            $tfish_template->typelist = TfishContentHandler::getTypes();
+            $tfish_template->typelist = $content_handler->getTypes();
             $tfish_template->form = TFISH_FORM_PATH . "content_table.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;

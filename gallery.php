@@ -24,7 +24,7 @@ $tfish_template->setTheme('default');
 
 // Configure page.
 $tfish_template->page_title = TFISH_IMAGE_GALLERY;
-$content_handler = 'TfishContentHandler';
+$content_handler = new TfishContentHandler();
 $index_template = 'gallery';
 $target_file_name = '';
 $tfish_template->target_file_name = $target_file_name;
@@ -46,7 +46,7 @@ if ($clean_tag)
     $criteria->tag = array($clean_tag);
 
 if ($clean_type) {
-    if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+    if (array_key_exists($clean_type, $content_handler->getTypes())) {
         $criteria->add(new TfishCriteriaItem('type', $clean_type));
     } else {
         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -54,7 +54,7 @@ if ($clean_type) {
 }
 
 // Prepare pagination control.
-$count = $content_handler::getCount($criteria);
+$count = $content_handler->getCount($criteria);
 $extra_params = array();
 
 if (isset($clean_type)) {
@@ -70,13 +70,14 @@ if ($clean_start) $criteria->offset = $clean_start;
 $criteria->limit = $tfish_preference->gallery_pagination;
 
 // Prepare select filters.
-$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
+$tag_handler = new TfishTagHandler();
+$tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
 $tfish_template->select_action = 'gallery.php';
 $tfish_template->tag_select = $tag_select_box;
 $tfish_template->select_filters_form = $tfish_template->render('gallery_filters');
 
 // Retrieve content objects and assign to template.
-$content_objects = $content_handler::getObjects($criteria);
+$content_objects = $content_handler->getObjects($criteria);
 $tfish_template->content_objects = $content_objects;
 $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 

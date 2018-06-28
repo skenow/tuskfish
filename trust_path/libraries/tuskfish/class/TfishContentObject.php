@@ -191,7 +191,8 @@ class TfishContentObject extends TfishAncestralObject
                 break;
 
             case "rights":
-                $rights = TfishContentHandler::getRights();
+                $content_handler = new TfishContentHandler();
+                $rights = $content_handler->getRights();
 
                 return $rights[$this->__data[$clean_property]];
                 break;
@@ -817,7 +818,8 @@ class TfishContentObject extends TfishAncestralObject
                 }
 
                 if ($clean_property === "language") {
-                    $language_whitelist = TfishContentHandler::getLanguages();
+                    $content_hander = new TfishContentHandler();
+                    $language_whitelist = $content_handler->getLanguages();
 
                     if (!array_key_exists($value, $language_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);

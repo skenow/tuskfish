@@ -22,7 +22,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Get a generic handler.
-$content_handler = 'TfishContentHandler';
+$content_handler = new TfishContentHandler;
 
 // Sitemap generation code.
 
@@ -46,7 +46,7 @@ $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
 $criteria->add(new TfishCriteriaItem('online', 0));
 $criteria->order = 'id';
 $criteria->ordertype = 'ASC';
-$offline_tag_ids = $content_handler::getList($criteria);
+$offline_tag_ids = $content_handler->getList($criteria);
 
 // Combine the list
 $content_ids = $content_ids + $offline_tag_ids;

@@ -24,7 +24,7 @@ $tfish_template->setTheme('gallery');
 
 // Configure page.
 $tfish_template->page_title = TFISH_IMAGE_GALLERY;
-$content_handler = 'TfishContentHandler';
+$content_handler = new TfishContentHandler();
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
 $tfish_template->target_file_name = 'index';
@@ -50,7 +50,7 @@ if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {
 }
 
 if ($clean_type) {
-    if (array_key_exists($clean_type, TfishContentHandler::getTypes())) {
+    if (array_key_exists($clean_type, $content_handler->getTypes())) {
         $criteria->add(new TfishCriteriaItem('type', $clean_type));
     } else {
         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -58,7 +58,7 @@ if ($clean_type) {
 }
 
 // Prepare pagination control.
-$count = $content_handler::getCount($criteria);
+$count = $content_handler->getCount($criteria);
 $extra_params = array();
 
 if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {
@@ -78,9 +78,10 @@ if ($clean_start) $criteria->offset = $clean_start;
 $criteria->limit = $tfish_preference->gallery_pagination;
 
 // Prepare select filters.
-$tag_select_box = TfishTagHandler::getTagSelectBox($clean_tag);
-$type_select_box = TfishContentHandler::getTypeSelectBox($clean_type);
-$online_select_box = TfishContentHandler::getOnlineSelectBox($clean_online);
+$tag_handler = new TfishTagHandler();
+$tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
+$type_select_box = $content_handler->getTypeSelectBox($clean_type);
+$online_select_box = $content_handler->getOnlineSelectBox($clean_online);
 $tfish_template->select_action = 'gallery.php';
 $tfish_template->tag_select = $tag_select_box;
 $tfish_template->type_select = $type_select_box;
@@ -88,7 +89,7 @@ $tfish_template->online_select = $online_select_box;
 $tfish_template->select_filters_form = $tfish_template->render('admin_select_filters');
 
 // Retrieve content objects and assign to template.
-$content_objects = $content_handler::getObjects($criteria);
+$content_objects = $content_handler->getObjects($criteria);
 $tfish_template->content_objects = $content_objects;
 $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 

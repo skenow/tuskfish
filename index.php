@@ -19,7 +19,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Get the relevant handler.
-$content_handler = 'TfishContentHandler';
+$content_handler = new TfishContentHandler();
 
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
@@ -42,7 +42,7 @@ $rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tag_id=' . $clean_tag : TFISH_
 if ($clean_id) {
 
     // Retrieve target object.
-    $content = $content_handler::getObject($clean_id);
+    $content = $content_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online && $content->type !== 'TfishBlock') {
 
@@ -51,7 +51,7 @@ if ($clean_id) {
         if ($content->type != 'TfishDownload' && !($content->type === 'TfishCollection' 
                 && $content->media)) {
             $content->counter += 1;
-            $content_handler::updateCounter($clean_id);
+            $content_handler->updateCounter($clean_id);
         }
 
         // Check if cached page is available.
@@ -83,7 +83,7 @@ if ($clean_id) {
         
         // For a content type-specific page use $content->tags, $content->template
         if ($content->tags) {
-            $tags = $content_handler::makeTagLinks($content->tags);
+            $tags = $content_handler->makeTagLinks($content->tags);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
@@ -96,7 +96,7 @@ if ($clean_id) {
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
-            $parent = $content_handler::getObject($content->parent);
+            $parent = $content_handler->getObject($content->parent);
             
             if (is_object($parent) && $parent->online) {
                 $tfish_template->parent = $parent;
@@ -130,13 +130,13 @@ if ($clean_id) {
 
         // Prepare pagination control.
         if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-            $first_child_count = TfishContentHandler::getCount($criteria);
+            $first_child_count = $content_handler->getCount($criteria);
             $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl(
                     $first_child_count, $tfish_preference->user_pagination, $target_file_name,
                     $clean_start, 0, array('id' => $clean_id));
 
             // Retrieve content objects and assign to template.
-            $first_children = TfishContentHandler::getObjects($criteria);
+            $first_children = $content_handler->getObjects($criteria);
             
             if (!empty($first_children)) {
                 $tfish_template->first_children = $first_children;
@@ -172,20 +172,21 @@ if ($clean_id) {
     $criteria->add(new TfishCriteriaItem('online', 1));
 
     // Prepare pagination control.
-    $count = $content_handler::getCount($criteria);
+    $count = $content_handler->getCount($criteria);
     $tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
             $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 
     // Retrieve content objects and assign to template.
     $criteria->order = 'date';
     $criteria->ordertype = 'DESC';
-    $content_objects = $content_handler::getObjects($criteria);
+    $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 
     // Prepare tag select box.
     $tfish_template->select_action = 'index.php';
-    $tfish_template->select_filters = TfishTagHandler::getTagSelectBox($clean_tag);
+    $tag_handler = new TfishTagHandler();
+    $tfish_template->select_filters = $tag_handler->getTagSelectBox($clean_tag);
     $tfish_template->select_filters_form = $tfish_template->render('select_filters');
 }
 

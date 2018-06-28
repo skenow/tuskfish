@@ -36,14 +36,14 @@ class TfishCollectionHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of collection objects matching the criteria.
      */
-    public static function getCount(TfishCriteria $criteria = null)
+    public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
@@ -70,14 +70,14 @@ class TfishCollectionHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishCollection objects.
      */
-    public static function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
@@ -96,7 +96,7 @@ class TfishCollectionHandler extends TfishContentHandler
      * @param int $selected Currently selected option.
      * @return string HTML select box.
      */
-    public static function getParentSelectBox(int $selected = 0)
+    public function getParentSelectBox(int $selected = 0)
     {
         $clean_selected = TfishDataValidator::isInt($selected, 1) ? $selected : 0;
         $options = array(0 => TFISH_SELECT_PARENT);
@@ -106,7 +106,7 @@ class TfishCollectionHandler extends TfishContentHandler
         $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
         $criteria->order = 'title';
         $criteria->ordertype = 'ASC';
-        $options = $options + self::getList($criteria);
+        $options = $options + $this->getList($criteria);
 
         $select_box = '<select id="parent" name="parent" class="form-control">';
         

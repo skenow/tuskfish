@@ -35,14 +35,14 @@ class TfishTagHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishTagObjects that match the criteria.
      */
-    public static function getCount(TfishCriteria $criteria = null)
+    public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
@@ -68,14 +68,14 @@ class TfishTagHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects Array of TfishTag objects.
      */
-    public static function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
@@ -103,7 +103,7 @@ class TfishTagHandler extends TfishContentHandler
      * @param bool $online_only Get all tags or just those marked online.
      * @return bool|string False if no tags or a HTML select box if there are.
      */
-    public static function getTagSelectBox(int $selected = null, string $type = '',
+    public function getTagSelectBox(int $selected = null, string $type = '',
             string $zero_option = TFISH_SELECT_TAGS, bool $online_only = true)
     {
         $select_box = '';
@@ -112,14 +112,15 @@ class TfishTagHandler extends TfishContentHandler
         $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 1))
                 ? (int) $selected : null;
         $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
-        $clean_type = TfishContentHandler::isSanctionedType($type)
+        
+        $content_handler = new TfishContentHandler();
+        $clean_type = $content_handler->isSanctionedType($type)
                 ? TfishDataValidator::trimString($type) : null;
         $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
-
-        $tag_list = TfishContentHandler::getActiveTagList($clean_type, $clean_online_only);
+        $tag_list = $content_handler->getActiveTagList($clean_type, $clean_online_only);
         
         if ($tag_list) {
-            $select_box = self::getArbitraryTagSelectBox($clean_selected, $tag_list, 'tag_id', $clean_zero_option);
+            $select_box = $this->getArbitraryTagSelectBox($clean_selected, $tag_list, 'tag_id', $clean_zero_option);
         } else {
             $select_box = false;
         }
@@ -144,7 +145,7 @@ class TfishTagHandler extends TfishContentHandler
      * option.
      * @return string HTML select box.
      */
-    public static function getArbitraryTagSelectBox($selected = null, $tag_list = array(),
+    public function getArbitraryTagSelectBox($selected = null, $tag_list = array(),
             $key_name = null, $zero_option = TFISH_SELECT_TAGS)
     {
         // Initialise variables.

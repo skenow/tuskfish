@@ -41,7 +41,7 @@ class TfishContentHandler
      * @param int $id ID of content object to delete.
      * @return bool True on success, false on failure.
      */
-    public static function delete(int $id)
+    public function delete(int $id)
     {
         $clean_id = (int) $id;
         
@@ -51,7 +51,7 @@ class TfishContentHandler
         }
 
         // Delete associated files.
-        $obj = self::getObject($clean_id);
+        $obj = $this->getObject($clean_id);
         
         if (!TfishDataValidator::isObject($obj)) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
@@ -59,15 +59,16 @@ class TfishContentHandler
         }
         
         if (!empty($obj->image)) {
-            self::_deleteImage($obj->image);
+            $this->_deleteImage($obj->image);
         }
 
         if (!empty($obj->media)) {
-            self::_deleteMedia($obj->media);
+            $this->_deleteMedia($obj->media);
         }
 
         // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
-        $result = TfishTaglinkHandler::deleteTaglinks($obj);
+        $taglink_handler = new TfishTaglinkHandler();
+        $result = $taglink_handler->deleteTaglinks($obj);
         
         if (!$result) {
             return false;
@@ -100,7 +101,7 @@ class TfishContentHandler
      * @param int $id ID of the parent collection.
      * @return boolean True on success, false on failure.
      */
-    public static function deleteParentalReferences(int $id)
+    public function deleteParentalReferences(int $id)
     {
         $clean_id = TfishDataValidator::isInt($id, 1) ? (int) $id : null;
         
@@ -125,7 +126,7 @@ class TfishContentHandler
      * @param string $filename Name of file.
      * @return bool True on success, false on failure.
      */
-    private static function _deleteImage(string $filename)
+    private function _deleteImage(string $filename)
     {
         if ($filename) {
             return TfishFileHandler::deleteFile('image/' . $filename);
@@ -138,7 +139,7 @@ class TfishContentHandler
      * @param string $filename Name of file.
      * @return bool True on success, false on failure.
      */
-    private static function _deleteMedia(string $filename)
+    private function _deleteMedia(string $filename)
     {
         if ($filename) {
             return TfishFileHandler::deleteFile('media/' . $filename);
@@ -156,7 +157,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public static function insert(TfishContentObject $obj)
+    public function insert(TfishContentObject $obj)
     {   
         $key_values = $obj->toArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
@@ -210,7 +211,8 @@ class TfishContentHandler
                 exit;
             }
 
-            $result = TfishTaglinkHandler::insertTaglinks($content_id, $obj->type, $obj->tags);
+            $taglink_handler = new TfishTaglinkHandler();
+            $result = $taglink_handler->insertTaglinks($content_id, $obj->type, $obj->tags);
             
             if (!$result) {
                 return false;
@@ -228,10 +230,10 @@ class TfishContentHandler
      * @param string $type Type of content object.
      * @return bool True if sanctioned type otherwise false.
      */
-    public static function isSanctionedType(string $type)
+    public function isSanctionedType(string $type)
     {
         $type = TfishDataValidator::trimString($type);
-        $sanctioned_types = self::getTypes();
+        $sanctioned_types = $this->getTypes();
         
         if (array_key_exists($type, $sanctioned_types)) {
             return true;
@@ -250,19 +252,19 @@ class TfishContentHandler
      * @param bool $online_only True if marked as online, false if marked as offline.
      * @return array|bool List of tags if available, false if empty.
      */
-    public static function getActiveTagList(string $type = null, bool $online_only = true)
+    public function getActiveTagList(string $type = null, bool $online_only = true)
     {
         $tags = $distinct_tags = array();
 
         $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
-        $tags = self::getTagList($clean_online_only);
+        $tags = $this->getTagList($clean_online_only);
         
         if (empty($tags)) {
             return false;
         }
 
         // Restrict tag list to those actually in use.
-        $clean_type = (isset($type) && self::isSanctionedType($type))
+        $clean_type = (isset($type) && $this->isSanctionedType($type))
                 ? TfishDataValidator::trimString($type) : null;
 
         $criteria = new TfishCriteria();
@@ -295,7 +297,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of objects matching conditions.
      */
-    public static function getCount(TfishCriteria $criteria = null)
+    public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
@@ -325,7 +327,7 @@ class TfishContentHandler
      * 
      * @return array Array of languages in ISO 639-1 code => name format.
      */
-    public static function getLanguages()
+    public function getLanguages()
     {
         return array(
             "en" => "English",
@@ -339,7 +341,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
-    public static function getList(TfishCriteria $criteria = null)
+    public function getList(TfishCriteria $criteria = null)
     {
         $content_list = array();
         $columns = array('id', 'title');
@@ -373,7 +375,7 @@ class TfishContentHandler
      * @param int $id ID of content object.
      * @return object|bool $object Object on success, false on failure.
      */
-    public static function getObject(int $id)
+    public function getObject(int $id)
     {
         $clean_id = (int) $id;
         $row = $object = '';
@@ -388,7 +390,7 @@ class TfishContentHandler
             }
             
             if ($row) {
-                $object = self::toObject($row);
+                $object = $this->toObject($row);
                 return $object;
             }
         }
@@ -402,7 +404,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array of content objects.
      */
-    public static function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(TfishCriteria $criteria = null)
     {
         $objects = array();
         
@@ -469,7 +471,7 @@ class TfishContentHandler
      * @param string $zero_option The text to display in the zero option of the select box.
      * @return string HTML select box.
      */
-    public static function getOnlineSelectBox(int $selected = null,
+    public function getOnlineSelectBox(int $selected = null,
             string $zero_option = TFISH_ONLINE_STATUS)
     {
         $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 0, 1)) 
@@ -505,7 +507,7 @@ class TfishContentHandler
      * 
      * @return array Array of copyright licenses.
      */
-    public static function getRights()
+    public function getRights()
     {
         return array(
             '1' => TFISH_RIGHTS_COPYRIGHT,
@@ -527,7 +529,7 @@ class TfishContentHandler
      * @param bool Get tags marked online only.
      * @return array Array of tag IDs and titles.
      */
-    public static function getTagList(bool $online_only = true)
+    public function getTagList(bool $online_only = true)
     {
         $tags = array();
         $statement = false;
@@ -564,12 +566,12 @@ class TfishContentHandler
      * 
      * @return array Array of TfishTag objects.
      */
-    public static function getTags()
+    public function getTags()
     {
         $tags = array();
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
-        $tags = self::getObjects($criteria);
+        $tags = $this->getObjects($criteria);
         
         return $tags;
     }
@@ -581,7 +583,7 @@ class TfishContentHandler
      * @param array $criteria_items Array of TfishCriteriaItem objects.
      * @return int|null Key of relevant TfishCriteriaItem or null.
      */
-    protected static function getTypeIndex(array $criteria_items)
+    protected function getTypeIndex(array $criteria_items)
     {
         foreach ($criteria_items as $key => $item) {
             if ($item->column === 'type') {
@@ -602,7 +604,7 @@ class TfishContentHandler
      * 
      * @return array Array of whitelisted (permitted) content object types.
      */
-    public static function getTypes()
+    public function getTypes()
     {
         return array(
             'TfishArticle' => TFISH_TYPE_ARTICLE,
@@ -624,7 +626,7 @@ class TfishContentHandler
      * @param string $zero_option The default text to show at top of select box.
      * @return string HTML select box.
      */
-    public static function getTypeSelectBox(string $selected = '', string $zero_option = null)
+    public function getTypeSelectBox(string $selected = '', string $zero_option = null)
     {
         // The text to display in the zero option of the select box.
         if (isset($zero_option)) {
@@ -634,7 +636,7 @@ class TfishContentHandler
         }
         
         $clean_selected = '';
-        $type_list = self::getTypes();
+        $type_list = $this->getTypes();
 
         if ($selected && TfishDataValidator::isAlnumUnderscore($selected)) {
             if (array_key_exists($selected, $type_list)) {
@@ -668,7 +670,7 @@ class TfishContentHandler
      * @param string $target_filename Name of file for tag links to point at.
      * @return array Array of HTML tag links.
      */
-    public static function makeTagLinks(array $tags, string $target_filename = '')
+    public function makeTagLinks(array $tags, string $target_filename = '')
     {
         if (empty($target_filename)) {
             $clean_filename = TFISH_URL . '?tag_id=';
@@ -682,7 +684,7 @@ class TfishContentHandler
             }
         }
 
-        $tag_list = self::getTagList(false);
+        $tag_list = $this->getTagList(false);
         $tag_links = array();
         
         foreach ($tags as $tag) {
@@ -716,7 +718,7 @@ class TfishContentHandler
      * @param int $offset Starting point for retrieving results (pagination constraint).
      * @return array|bool Array of content objects on success, false failure.
      */
-    public static function searchContent(TfishPreference $tfish_preference, string $search_terms,
+    public function searchContent(TfishPreference $tfish_preference, string $search_terms,
             string $andor, int $limit = 0, int $offset = 0)
     {
         
@@ -757,7 +759,7 @@ class TfishContentHandler
         }
         
         if (!empty($clean_search_terms)) {
-            $results = self::_searchContent($tfish_preference, $clean_search_terms,
+            $results = $this->_searchContent($tfish_preference, $clean_search_terms,
                     $clean_escaped_search_terms, $clean_andor, $clean_limit, $clean_offset);
         } else {
             $results = false;
@@ -767,7 +769,7 @@ class TfishContentHandler
     }
 
     /** @internal */
-    private static function _searchContent(TfishPreference $tfish_preference, array $search_terms,
+    private function _searchContent(TfishPreference $tfish_preference, array $search_terms,
             array $escaped_terms, string $andor, int $limit, int $offset)
     {
         $sql = $count = '';
@@ -873,7 +875,7 @@ class TfishContentHandler
      * @param int $id ID of content object.
      * @return boolean True on success, false on failure.
      */
-    public static function toggleOnlineStatus(int $id)
+    public function toggleOnlineStatus(int $id)
     {
         $clean_id = (int) $id;
         return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
@@ -891,14 +893,14 @@ class TfishContentHandler
      * @param array $row Array of result set from database.
      * @return object|bool Content object on success, false on failure.
      */
-    public static function toObject(array $row)
+    public function toObject(array $row)
     {
         if (empty($row) || !TfishDataValidator::isArray($row)) {
             return false;
         }
 
         // Check the content type is whitelisted.
-        $type_whitelist = self::getTypes();
+        $type_whitelist = $this->getTypes();
         
         if (!empty($row['type']) && array_key_exists($row['type'], $type_whitelist)) {
             $content_object = new $row['type'];
@@ -939,7 +941,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public static function update(TfishContentObject $obj)
+    public function update(TfishContentObject $obj)
     {
         $clean_id = TfishDataValidator::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
@@ -958,7 +960,7 @@ class TfishContentHandler
         // Load the saved object from the database. This will be used to make comparisons with the
         // current object state and facilitate clean up of redundant tags, parent references, and
         // image/media files.
-        $saved_object = self::getObject($clean_id);
+        $saved_object = $this->getObject($clean_id);
         
         /**
          * Handle image / media files for existing objects.
@@ -970,13 +972,13 @@ class TfishContentHandler
              */
             
             // 1. Check if there is an existing image file associated with this content object.
-            $existing_image = self::_checkImage($saved_object);
+            $existing_image = $this->_checkImage($saved_object);
 
             // 2. Is this content type allowed to have an image property?
             if (!array_key_exists('image', $property_whitelist)) {
                 $key_values['image'] = '';
                 if ($existing_image) {
-                    self::_deleteImage($existing_image);
+                    $this->_deleteImage($existing_image);
                     $existing_image = '';
                 }
             }
@@ -985,7 +987,7 @@ class TfishContentHandler
             if ($existing_image) {
                 if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
                     $key_values['image'] = '';
-                    self::_deleteImage($existing_image);
+                    $this->_deleteImage($existing_image);
                     $existing_image = '';
                 }
             }
@@ -1002,7 +1004,7 @@ class TfishContentHandler
                         
                         // Delete old image file, if any.
                         if ($existing_image) {
-                            self::_deleteImage($existing_image);
+                            $this->_deleteImage($existing_image);
                         }
                     } else {
                         $key_values['image'] = '';
@@ -1018,7 +1020,7 @@ class TfishContentHandler
             if ($existing_image &&
                     ((!isset($key_values['image']) || empty($key_values['image']))
                     || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
-                self::_deleteImage($existing_image);
+                $this->_deleteImage($existing_image);
             }
 
             /**
@@ -1026,7 +1028,7 @@ class TfishContentHandler
              */
             
             // 1. Check if there is an existing media file associated with this content object.
-            $existing_media = self::_checkMedia($saved_object);
+            $existing_media = $this->_checkMedia($saved_object);
             
             // 2. Is this content type allowed to have a media property?
             if (!array_key_exists('media', $property_whitelist)) {
@@ -1034,7 +1036,7 @@ class TfishContentHandler
                 $key_values['format'] = '';
                 $key_values['file_size'] = '';
                 if ($existing_media) {
-                    self::_deleteMedia($existing_media);
+                    $this->_deleteMedia($existing_media);
                     $existing_media = '';
                 }
             }
@@ -1045,7 +1047,7 @@ class TfishContentHandler
                     $key_values['media'] = '';
                     $key_values['format'] = '';
                     $key_values['file_size'] = '';
-                    self::_deleteMedia($existing_media);
+                    $this->_deleteMedia($existing_media);
                     $existing_media = '';
                 }
             }
@@ -1076,7 +1078,7 @@ class TfishContentHandler
 
                         // Delete any old media file.
                         if ($existing_media) {
-                            self::_deleteMedia($existing_media);
+                            $this->_deleteMedia($existing_media);
                             $existing_media = '';
                         }
                     // No new media, use the existing file name. Still need to validate it as the
@@ -1095,15 +1097,16 @@ class TfishContentHandler
 
                     // Delete any old media file.
                     if ($existing_media) {
-                        self::_deleteMedia($existing_media);
+                        $this->_deleteMedia($existing_media);
                         $existing_media = '';
                     }
                 }
             }
         }
 
-        // Update tags.
-        $result = TfishTaglinkHandler::updateTaglinks($clean_id, $obj->type, $obj->tags);
+        // Update tags
+        $taglink_handler = new TfishTaglinkHandler();
+        $result = $taglink_handler->updateTaglinks($clean_id, $obj->type, $obj->tags);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
@@ -1113,10 +1116,10 @@ class TfishContentHandler
         // Check if this object used to be a collection. If it has been changed to something else
         // clean up any parental references to it.
         if ($key_values['type'] !== 'TfishCollection' && !empty($saved_object)) {
-            $ex_collection = self::_checkExCollection($saved_object);
+            $ex_collection = $this->_checkExCollection($saved_object);
             
             if ($ex_collection === true) {
-                $result = self::deleteParentalReferences($clean_id);
+                $result = $this->deleteParentalReferences($clean_id);
                 
                 if (!$result) {
                     trigger_error(TFISH_ERROR_PARENT_UPDATE_FAILED, E_USER_NOTICE);
@@ -1149,7 +1152,7 @@ class TfishContentHandler
      * @return boolean True if content object is registered as a TfishCollection in database,
      * otherwise false.
      */
-    private static function _checkExCollection(TfishContentObject $obj)
+    private function _checkExCollection(TfishContentObject $obj)
     {      
         if (!empty($obj->type) && $obj->type === 'TfishCollection') {
            return true; 
@@ -1164,7 +1167,7 @@ class TfishContentHandler
      * @param object $obj The TfishContentObject to be tested.
      * @return string Filename of associated image property.
      */
-    private static function _checkImage(TfishContentObject $obj)
+    private function _checkImage(TfishContentObject $obj)
     {        
         if (!empty($obj->image)) {
             return $obj->image;
@@ -1179,7 +1182,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject to be tested.
      * @return string Filename of associated media property.
      */
-    private static function _checkMedia(TfishContentObject $obj)
+    private function _checkMedia(TfishContentObject $obj)
     {
         if (!empty($obj->media)) {
             return $obj->media;
@@ -1193,7 +1196,7 @@ class TfishContentHandler
      * 
      * @param int $id ID of content object.
      */
-    public static function updateCounter(int $id)
+    public function updateCounter(int $id)
     {
         $clean_id = (int) $id;
         return TfishDatabase::updateCounter($clean_id, 'content', 'counter');

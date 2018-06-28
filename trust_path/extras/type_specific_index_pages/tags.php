@@ -20,7 +20,7 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_TAGS;
-$content_handler = 'TfishTagHandler';
+$content_handler = new TfishTagHandler();
 $index_template = 'tags';
 $target_file_name = 'tags';
 $tfish_template->target_file_name = $target_file_name;
@@ -37,12 +37,12 @@ $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' =
 
 // View single object description.
 if ($clean_id) {
-    $content = $content_handler::getObject($clean_id);
+    $content = $content_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online) {
         // Update view counter and assign object to template.
         $content->counter += 1;
-        $content_handler::updateCounter($clean_id);
+        $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
         $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
@@ -78,12 +78,12 @@ if ($clean_id) {
     $criteria->add(new TfishCriteriaItem('online', 1));
 
     // Prepare pagination control.
-    $count = $content_handler::getCount($criteria);
+    $count = $content_handler->getCount($criteria);
     $tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
             $tfish_preference->user_pagination, $target_file_name, $clean_start);
 
     // Retrieve content objects and assign to template.
-    $content_objects = $content_handler::getObjects($criteria);
+    $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 }

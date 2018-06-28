@@ -168,7 +168,8 @@ class TfishPreference extends TfishAncestralObject
                 $clean_value = TfishDataValidator::trimString($value);
 
                 if ($clean_property === "language") {
-                    $language_whitelist = TfishContentHandler::getLanguages();
+                    $content_handler = new TfishContentHandler();
+                    $language_whitelist = $content_handler->getLanguages();
 
                     if (!array_key_exists($clean_value, $language_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);

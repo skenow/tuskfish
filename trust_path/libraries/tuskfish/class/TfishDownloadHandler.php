@@ -36,14 +36,14 @@ class TfishDownloadHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishDownload objects that match the criteria.
      */
-    public static function getCount(TfishCriteria $criteria = null)
+    public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
@@ -70,14 +70,14 @@ class TfishDownloadHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects Array of TfishDownload objects.
      */
-    public static function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);

@@ -35,7 +35,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param object $obj A TfishContentObject subclass object.
      * @return bool True for success, false on failure.
      */
-    public static function deleteTaglinks(TfishContentObject $obj)
+    public function deleteTaglinks(TfishContentObject $obj)
     {
         if (TfishDataValidator::isInt($obj->id, 1)) {
             $clean_content_id = (int) $obj->id;
@@ -70,7 +70,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public static function insertTaglinks(int $content_id, string $type, array $tags)
+    public function insertTaglinks(int $content_id, string $type, array $tags)
     {
         if (TfishDataValidator::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
@@ -79,7 +79,7 @@ class TfishTaglinkHandler extends TfishContentHandler
             exit;
         }
 
-        $typeList = self::getTypes();
+        $typeList = $this->getTypes();
         
         if (TfishDataValidator::isAlpha($type) && array_key_exists($type, $typeList)) {
             $clean_type = TfishDataValidator::trimString($type);
@@ -127,7 +127,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public static function updateTaglinks(int $id, string $type, array $tags = null)
+    public function updateTaglinks(int $id, string $type, array $tags = null)
     {
         // Validate ID.
         if (TfishDataValidator::isInt($id, 1)) {
@@ -137,7 +137,7 @@ class TfishTaglinkHandler extends TfishContentHandler
         }
 
         // Validate type.
-        $typeList = self::getTypes();
+        $typeList = $this->getTypes();
         
         if (TfishDataValidator::isAlpha($type) && array_key_exists($type, $typeList)) {
             $clean_type = TfishDataValidator::trimString($type);

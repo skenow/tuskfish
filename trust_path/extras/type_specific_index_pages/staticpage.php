@@ -45,12 +45,14 @@ $basename = basename(__FILE__);
 $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
 
 if ($clean_id) {
-    $content = TfishStaticHandler::getObject($clean_id);
+    $static_handler = new TfishStaticHandler();
+    
+    $content = $static_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online) {
         // Update view counter and assign object to template.
         $content->counter += 1;
-        TfishStaticHandler::updateCounter($clean_id);
+        $static_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
         $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
@@ -71,7 +73,7 @@ if ($clean_id) {
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
-            $tags = TfishStaticHandler::makeTagLinks($content->tags, $target_file_name);
+            $tags = $static_handler->makeTagLinks($content->tags, $target_file_name);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
@@ -85,7 +87,7 @@ if ($clean_id) {
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
-            $parent = TfishStaticHandler::getObject($content->parent);
+            $parent = $static_handler->getObject($content->parent);
             
             if (is_object($parent) && $parent->online) {
                 $tfish_template->parent = $parent;
@@ -119,13 +121,14 @@ if ($clean_id) {
         
         // Prepare pagination control.
         if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-            $first_child_count = TfishContentHandler::getCount($criteria);
+            $content_handler = new TfishContentHandler();
+            $first_child_count = $content_handler->getCount($criteria);
             $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl(
                     $first_child_count, $tfish_preference->user_pagination, $target_file_name,
                     $clean_start, 0, array('id' => $clean_id));
 
             // Retrieve content objects and assign to template.
-            $first_children = TfishContentHandler::getObjects($criteria);
+            $first_children = $content_handler->getObjects($criteria);
             
             if (!empty($first_children)) {
                 $tfish_template->first_children = $first_children;

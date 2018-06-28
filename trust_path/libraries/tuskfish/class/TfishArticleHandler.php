@@ -32,24 +32,24 @@ class TfishArticleHandler extends TfishContentHandler
     /**
      * Get TfishArticle objects, optionally matching conditions specified in a TfishCriteria object.
      * 
-     * Note that the article type is automatically set, so when calling
-     * TfishArticleHandler::getObjects($criteria) it is unnecessary to set the object type.
-     * However, if you want to use TfishContentHandler::getObjects($criteria) then you do need to
-     * specify the object type, otherwise you will get all types of content returned. it is
-     * acceptable to use either handler, although probably good practice to use the object-
-     * specific one when you know you want a specific kind of object.
+     * Note that the article type is automatically set, so when calling 
+     * $this->getObjects($criteria) it is unnecessary to set the object type.
+     * However, if you want to use the generic TfishContentHandler version of getObjects($criteria)
+     * then you do need to specify the object type, otherwise you will get all types of content 
+     * returned. it is acceptable to use either handler, although probably good practice to use the
+     * object-specific one when you know you want a specific kind of object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
-    public static function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
@@ -65,24 +65,22 @@ class TfishArticleHandler extends TfishContentHandler
     /**
      * Get TfishArticle objects, optionally matching conditions specified in a TfishCriteria object.
      * 
-     * Note that the object type is automatically set, so it is unnecessary to set it when calling
-     * TfishArticleHandler::getObjects($criteria). However, if you want to use the generic handler
-     * TfishContentHandler::getObjects($criteria) then you do need to specify the object type,
-     * otherwise you will get all types of content returned. It is acceptable to use either handler,
+     * Note that the object type is automatically set, so it is unnecessary to set it, unless you
+     * are using the generic (TfishContentHandler) handler. It is acceptable to use either handler,
      * although good practice to use the type-specific one when you know you want a specific kind of
      * object.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects TfishArticle objects.
      */
-    public static function getCount(TfishCriteria $criteria = null)
+    public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = self::getTypeIndex($criteria->item);
+        $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
             $criteria->killType($type_key);
