@@ -3,7 +3,7 @@
 /**
  * TfishContentObject class file.
  * 
- * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
@@ -35,7 +35,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * particular properties; and so subclassed content types simply unset() any properties that they 
  * don't need in their constructor.
  * 
- * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0

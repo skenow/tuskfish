@@ -6,7 +6,7 @@
  * Form requests that fail a cross-site request forgery check redirect here. In most cases the
  * failure will be caused by session expiry.
  *
- * @copyright	Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @copyright	Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0

@@ -6,7 +6,7 @@
  * Free text search of all content objects with ALL OR EXACT options for search terms. The fields
  * searched are title, teaser, description, caption, creator, publisher.
  *
- * @copyright	Simon Wilkinson 2013-2017 Tuskfish CMS Project (https://tuskfish.biz)
+ * @copyright	Simon Wilkinson 2013+ Tuskfish CMS Project (https://tuskfish.biz)
  * @license		https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since		1.0

@@ -24,7 +24,7 @@
  * has SSL then practically speaking, you'll probably get away with running it on your live
  * webserver. Just don't forget to delete this file when you're finished, right?
  * 
- * @copyright   Simon Wilkinson 2013-2017 (https://tuskfish.biz)
+ * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since       1.0
