@@ -14,7 +14,7 @@
  */
 
 // Enable strict type declaration.
-// declare(strict_types=1);
+declare(strict_types=1);
 
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
