@@ -136,11 +136,7 @@ class TfishContentObject extends TfishAncestralObject
      * @return string Property formatted to human readable form for output.
      */
     protected function makeHumanReadable(string $clean_property)
-    {
-        define("ONE_KILOBYTE", 1024);
-        define("ONE_MEGABYTE", 1048576);
-        define("ONE_GIGABYTE", 1073741824);
-        
+    {        
         switch ($clean_property) {
             case "date": // Stored in format yyyy-mm-dd
                 $date = new DateTime($this->__data[$clean_property]);
@@ -818,7 +814,7 @@ class TfishContentObject extends TfishAncestralObject
                 }
 
                 if ($clean_property === "language") {
-                    $content_hander = new TfishContentHandler();
+                    $content_handler = new TfishContentHandler();
                     $language_whitelist = $content_handler->getLanguages();
 
                     if (!array_key_exists($value, $language_whitelist)) {

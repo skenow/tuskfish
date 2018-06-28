@@ -65,6 +65,11 @@ if (parse_url(TFISH_URL, PHP_URL_SCHEME) === 'https') {
 define("TFISH_LANGUAGE_PATH", TFISH_PATH . "language/");
 define("TFISH_DEFAULT_LANGUAGE", TFISH_LANGUAGE_PATH . "english.php");
 
+// Numerical constants.
+define("ONE_KILOBYTE", 1024);
+define("ONE_MEGABYTE", 1048576);
+define("ONE_GIGABYTE", 1073741824);
+
 /**
  * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
  * @param string $classname Name of class to autoload. 
