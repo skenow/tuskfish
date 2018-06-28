@@ -45,12 +45,12 @@ class TfishDatabase
     {
     }
 
-    /** No cloning permitted */
+    /** No cloning permitted. */
     final private function __clone()
     {
     }
     
-    /** No serialisation */
+    /** No serialisation. */
     final private function __wakeup()
     {
     }
