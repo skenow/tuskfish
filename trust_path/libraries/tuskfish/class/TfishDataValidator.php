@@ -53,7 +53,7 @@ class TfishDataValidator
         $output = (string) $output;
         
         if (isset($output)) {
-            return htmlspecialchars($output, ENT_NOQUOTES, 'UTF-8', false);
+            return htmlspecialchars($output, ENT_QUOTES, 'UTF-8', false);
         } else {
             return '';
         }
