@@ -34,7 +34,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 set_error_handler("TfishLogger::logErrors");
 
 // Ensure that a database connection is available
-TfishDatabase::connect();
+$tfish_database = new TfishDatabase();
+$tfish_database->connect();
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;

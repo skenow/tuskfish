@@ -23,7 +23,7 @@ if ($tfish_template && !empty($tfish_template->theme)) {
 }
 
 // Close the database connection.
-TfishDatabase::close();
+$tfish_database->close();
 
 // Write the contents of the buffer to the cache.
 if ($tfish_preference->enable_cache && isset($basename)) {
