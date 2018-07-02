@@ -42,7 +42,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishCriteria
 {
-
     /** @var array $__data Holds the values of the object's properties for access by magic methods. **/
     protected $__data = array(
         'item' => array(),
@@ -235,7 +234,7 @@ class TfishCriteria
             $sql = "(";
             
             for ($i = 0; $i < $count; $i++) {
-                $sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
+                $sql .= "`" . $this->escapeIdentifier($this->item[$i]->column) . "` " 
                         . $this->item[$i]->operator . " :placeholder" . (string) $i;
                 
                 if ($i < ($count - 1)) {
@@ -339,6 +338,39 @@ class TfishCriteria
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Escape delimiters for identifiers (table and column names).
+     * 
+     * SQLite supports three styles of identifier delimitation:
+     * 
+     * 1. Standard SQL double quotes: "
+     * 2. MySQL style grave accents: `
+     * 3. MS SQL style square brackets: []
+     * 
+     * Escaping of delimiters where they are used as part of a table or column name is done by
+     * doubling them, eg ` becomes ``. In order to safely escape table and column names ALL
+     * three delimiter types must be escaped.
+     * 
+     * Tuskfish policy is that table names can only contain alphanumeric characters (and column
+     * names can only contain alphanumeric plus underscore characters) so delimiters should never
+     * get into a query as part of an identifier. But just because we are paranoid they are
+     * escaped here anyway.
+     * 
+     * @param string $identifier Name of table or column.
+     * @return string Escaped table or column name.
+     */
+    public function escapeIdentifier(string $identifier)
+    {
+        $clean_identifier = '';
+        $identifier = TfishDataValidator::trimString($identifier);
+        $identifier = str_replace('"', '""', $identifier);
+        $identifier = str_replace('`', '``', $identifier);
+        $identifier = str_replace('[', '[[', $identifier);
+        $clean_identifier = str_replace(']', ']]', $identifier);
+        
+        return $clean_identifier;
     }
 
 }

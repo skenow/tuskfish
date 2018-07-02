@@ -141,7 +141,7 @@ class TfishSession
      * @param string $email Input email.
      * @param string $password Input password.
      */
-    public static function login(string $email, string $password)
+    public static function login(string $email, string $password, TfishDatabase $tfish_database)
     {
         // Check email and password have been supplied
         if (empty($email) || empty($password)) {
@@ -152,7 +152,7 @@ class TfishSession
             $clean_email = TfishDataValidator::trimString($email);
             
             if (TfishDataValidator::isEmail($clean_email)) {
-                self::_login($clean_email, $password);
+                self::_login($clean_email, $password, $tfish_database);
             } else {
                 // Issue warning - email should follow email format
                 self::logout(TFISH_ADMIN_URL . "login.php");
@@ -161,10 +161,10 @@ class TfishSession
     }
 
     /** @internal */
-    private static function _login(string $clean_email, string $dirty_password)
+    private static function _login(string $clean_email, string $dirty_password, $tfish_database)
     {
         // Query the database for a matching user.
-        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
+        $statement = $tfish_database->preparedStatement("SELECT * FROM user WHERE "
                 . "`admin_email` = :clean_email");
         $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
         $statement->execute();
@@ -187,14 +187,14 @@ class TfishSession
                 $_SESSION['user_id'] = (int) $user['id'];
                 
                 // Reset failed login counter to zero.
-                TfishDatabase::update('user', (int) $user['id'], array('login_errors' => 0));
+                $tfish_database->update('user', (int) $user['id'], array('login_errors' => 0));
                 
                 // Redirect to admin page.
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
                 // Increment failed login counter, destroy session and redirect to the login page.
-                TfishDatabase::updateCounter((int) $user['id'], 'user', 'login_errors');
+                $tfish_database->updateCounter((int) $user['id'], 'user', 'login_errors');
                 self::logout(TFISH_ADMIN_URL . "login.php");
                 exit;
             }
@@ -216,7 +216,8 @@ class TfishSession
      * @param string $dirty_otp Input Yubikey one-time password.
      * @param object $yubikey Instance of the TfishYubikeyAuthenticator class.
      */
-    public static function twoFactorLogin(string $dirty_password, string $dirty_otp, $yubikey)
+    public static function twoFactorLogin(string $dirty_password, string $dirty_otp, $yubikey,
+            TfishDatabase $tfish_database)
     {
         // Check password, OTP and Yubikey have been supplied
         if (empty($dirty_password) || empty($dirty_otp) || empty($yubikey)) {
@@ -252,14 +253,14 @@ class TfishSession
     
     /** @internal */
     private static function _twoFactorLogin(string $dirty_id, string $dirty_password, string $dirty_otp,
-            TfishYubikeyAuthenticator $yubikey)
+            TfishYubikeyAuthenticator $yubikey, TfishDatabase $tfish_database)
     {
         $user = false;
         $first_factor = false;
         $second_factor = false;
         
         // Query the database for a matching user.
-        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
+        $statement = $tfish_database->preparedStatement("SELECT * FROM user WHERE "
                 . "`yubikey_id` = :yubikey_id OR "
                 . "`yubikey_id2` = :yubikey_id");
         $statement->bindParam(':yubikey_id', $dirty_id, PDO::PARAM_STR);

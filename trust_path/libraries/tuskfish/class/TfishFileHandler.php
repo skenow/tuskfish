@@ -419,13 +419,13 @@ class TfishFileHandler
      * excluding extension.
      * @return bool True on success, false on failure. 
      */
-    public static function sendDownload(int $id, string $filename = '')
+    public static function sendDownload(int $id, TfishDatabase $tfish_database, string $filename = '')
     {
         $clean_id = TfishDataValidator::isInt($id, 1) ? (int) $id : false;
         $clean_filename = !empty($filename) ? TfishDataValidator::trimString($filename) : '';
         
         if ($clean_id) {
-            $result = self::_sendDownload($clean_id, $clean_filename);
+            $result = self::_sendDownload($clean_id, $tfish_database, $clean_filename);
             if ($result === false) {
                 return false;
             }
@@ -436,11 +436,11 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _sendDownload(int $id, string $filename)
+    private static function _sendDownload(int $id, TfishDatabase $tfish_database, string $filename)
     {
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         $criteria->add(new TfishCriteriaItem('id', $id));
-        $statement = TfishDatabase::select('content', $criteria);
+        $statement = $tfish_database->select('content', $criteria);
         
         if (!$statement) {
             trigger_error(TFISH_ERROR_NO_STATEMENT, E_USER_NOTICE);

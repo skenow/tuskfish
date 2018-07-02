@@ -28,6 +28,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishTaglinkHandler extends TfishContentHandler
 {
+    function __construct(TfishDatabase $tfish_database)
+    {
+        parent::__construct($tfish_database);
+    }
 
     /**
      * Delete taglinks associated with a particular content object.
@@ -35,7 +39,7 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param object $obj A TfishContentObject subclass object.
      * @return bool True for success, false on failure.
      */
-    public function deleteTaglinks(TfishContentObject $obj)
+    public function deleteTaglinks(TfishContentObject $obj, TfishDatabase $tfish_database)
     {
         if (TfishDataValidator::isInt($obj->id, 1)) {
             $clean_content_id = (int) $obj->id;
@@ -43,7 +47,7 @@ class TfishTaglinkHandler extends TfishContentHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         
         if ($obj->type === 'TfishTag') {
             $criteria->add(new TfishCriteriaItem('tag_id', $clean_content_id));
@@ -51,7 +55,7 @@ class TfishTaglinkHandler extends TfishContentHandler
             $criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
         }
         
-        $result = TfishDatabase::deleteAll('taglink', $criteria);
+        $result = $tfish_database->deleteAll('taglink', $criteria);
         
         if (!$result) {
             return false;
@@ -70,7 +74,8 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function insertTaglinks(int $content_id, string $type, array $tags)
+    public function insertTaglinks(int $content_id, string $type, array $tags,
+            TfishDatabase $tfish_database)
     {
         if (TfishDataValidator::isInt($content_id, 1)) {
             $clean_content_id = (int) $content_id;
@@ -105,7 +110,7 @@ class TfishTaglinkHandler extends TfishContentHandler
             unset($tag);
         }
         foreach ($clean_tags as $clean_tag) {
-            $result = TfishDatabase::insert('taglink', $clean_tag);
+            $result = $tfish_database->insert('taglink', $clean_tag);
             
             if (!$result) {
                 return false;
@@ -127,7 +132,8 @@ class TfishTaglinkHandler extends TfishContentHandler
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function updateTaglinks(int $id, string $type, array $tags = null)
+    public function updateTaglinks(int $id, string $type, TfishDatabase $tfish_database,
+            array $tags = null)
     {
         // Validate ID.
         if (TfishDataValidator::isInt($id, 1)) {
@@ -161,9 +167,9 @@ class TfishTaglinkHandler extends TfishContentHandler
         }
 
         // Delete any existing tags.
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         $criteria->add(new TfishCriteriaItem('content_id', $clean_id));
-        $result = TfishDatabase::deleteAll('taglink', $criteria);
+        $result = $tfish_database->deleteAll('taglink', $criteria);
         
         if (!$result) {
             return false;
@@ -197,7 +203,7 @@ class TfishTaglinkHandler extends TfishContentHandler
 
         // Insert the new taglinks.
         foreach ($clean_tags as $clean_tag) {
-            $result = TfishDatabase::insert('taglink', $clean_tag);
+            $result = $tfish_database->insert('taglink', $clean_tag);
             
             if (!$result) {
                 return false;
