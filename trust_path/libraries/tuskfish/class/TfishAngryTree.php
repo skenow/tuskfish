@@ -80,7 +80,7 @@ class TfishAngryTree
     private $_rootId = null;
     
     /** @var object $_tree Associative array that comprises the category tree. */
-    public $_tree = array();
+    privat $_tree = array();
 
     /**
      * Constructor
