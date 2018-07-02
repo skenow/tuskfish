@@ -68,10 +68,10 @@ class TfishAngryTree
 {
 
     /** @var array $_objects Array of objects to be assembled into a category tree. */
-    public $_objects;
+    private $_objects;
     
     /** @var string $_myId Name of object ID field. */
-    public $_myId;
+    private $_myId;
     
     /** @var string $_parentId Name of parent object ID field. */
     private $_parentId;
