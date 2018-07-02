@@ -38,7 +38,7 @@ $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
 $criteria->add(new TfishCriteriaItem('online', 1));
 $criteria->order = 'id';
 $criteria->ordertype = 'ASC';
-$content_ids = TfishDatabase::select('content', $criteria, $columns);
+$content_ids = $tfish_database->select('content', $criteria, $columns);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
 $criteria = new TfishCriteria();

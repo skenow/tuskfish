@@ -48,7 +48,7 @@ if (in_array($op, array('edit', 'update', false))) {
 
             // Update the database row and display a response.
             $tfish_preference_handler = new TfishPreferenceHandler;
-            $result = $tfish_preference_handler->writePreferences($tfish_preference);
+            $result = $tfish_preference_handler->writePreferences($tfish_preference, $tfish_database);
             if ($result) {
                 $tfish_template->page_title = TFISH_SUCCESS;
                 $tfish_template->alert_class = 'alert-success';

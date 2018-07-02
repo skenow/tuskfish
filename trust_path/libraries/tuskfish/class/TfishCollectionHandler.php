@@ -28,6 +28,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishCollectionHandler extends TfishContentHandler
 {
+    function __construct(TfishDatabase $tfish_database)
+    {
+        parent::__construct($tfish_database);
+    }
 
     /**
      * Count TfishCollection objects, optionally matching conditions specified with a TfishCriteria\
@@ -39,7 +43,7 @@ class TfishCollectionHandler extends TfishContentHandler
     public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
 
         // Unset any pre-existing object type criteria.
@@ -73,7 +77,7 @@ class TfishCollectionHandler extends TfishContentHandler
     public function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
 
         // Unset any pre-existing object type criteria.
@@ -102,7 +106,7 @@ class TfishCollectionHandler extends TfishContentHandler
         $options = array(0 => TFISH_SELECT_PARENT);
         $select_box = '';
 
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
         $criteria->order = 'title';
         $criteria->ordertype = 'ASC';

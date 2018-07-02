@@ -28,6 +28,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishStaticHandler extends TfishContentHandler
 {
+    function __construct(TfishDatabase $tfish_database)
+    {
+        parent::__construct($tfish_database);
+    }
 
     /**
      * Count TfishStatic objects, optionally matching conditions specified with a TfishCriteria
@@ -39,7 +43,7 @@ class TfishStaticHandler extends TfishContentHandler
     public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
 
         // Unset any pre-existing object type criteria.
@@ -73,7 +77,7 @@ class TfishStaticHandler extends TfishContentHandler
     public function getObjects(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
 
         // Unset any pre-existing object type criteria.

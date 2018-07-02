@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // INITIALISE THE SQLITE DATABASE //
         ////////////////////////////////////
         // Create the database
-        $db_path = TfishDatabase::create($db_name);
+        $db_path = $tfish_database->create($db_name);
 
         if ($db_path) {
             if (!defined("TFISH_DATABASE"))
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "login_errors" => "INTEGER"
         );
 
-        TfishDatabase::createTable('user', $user_columns, 'id');
+        $tfish_database->createTable('user', $user_columns, 'id');
         // Insert admin user's details to database.
         $user_data = array(
             'admin_email' => $admin_email,
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'yubikey_id2' => '',
             'login_errors' => '0'
             );
-        $query = TfishDatabase::insert('user', $user_data);
+        $query = $tfish_database->insert('user', $user_data);
 
         // Create preference table.
         $preference_columns = array(
@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "title" => "TEXT",
             "value" => "TEXT"
         );
-        TfishDatabase::createTable('preference', $preference_columns, 'id');
+        $tfish_database->createTable('preference', $preference_columns, 'id');
 
         // Insert default preferences to database.
         $preference_data = array(
@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         foreach ($preference_data as $preference) {
-            TfishDatabase::insert('preference', $preference, 'id');
+            $tfish_database->insert('preference', $preference, 'id');
         }
 
         // Create session table.
@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "last_active" => "INTEGER",
             "data" => "TEXT"
         );
-        TfishDatabase::createTable('session', $session_columns, 'id');
+        $tfish_database->createTable('session', $session_columns, 'id');
 
         // Create content object table. Note that the type must be first column to enable
         // the PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE functionality, which automatically
@@ -270,7 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "meta_title" => "TEXT", // Set a custom page title for this content.
             "meta_description" => "TEXT", // Set a custom page meta description for this content.
             "seo" => "TEXT"); // SEO-friendly string; it will be appended to the URL for this content.
-        TfishDatabase::createTable('content', $content_columns, 'id');
+        $tfish_database->createTable('content', $content_columns, 'id');
 
         // Insert a "General" tag content object.
         $content_data = array(
@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "meta_title" => "General",
             "meta_description" => "General information.",
             "seo" => "general");
-        $query = TfishDatabase::insert('content', $content_data);
+        $query = $tfish_database->insert('content', $content_data);
 
         // Create taglink table.
         $taglink_columns = array(
@@ -294,10 +294,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "tag_id" => "INTEGER",
             "content_type" => "TEXT",
             "content_id" => "INTEGER");
-        TfishDatabase::createTable('taglink', $taglink_columns, 'id');
+        $tfish_database->createTable('taglink', $taglink_columns, 'id');
 
         // Close database.
-        TfishDatabase::close();
+        $tfish_database->close();
 
         // Report on status of database creation.
         if ($db_path && $query) {

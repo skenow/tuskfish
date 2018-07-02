@@ -38,7 +38,7 @@ if (in_array($op, array('submit', false))) {
 
             // Get the admin user details.
             $user_id = (int) $_SESSION['user_id'];
-            $statement = TfishDatabase::preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
+            $statement = $tfish_database->preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
             $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -86,7 +86,7 @@ if (in_array($op, array('submit', false))) {
                     $tfish_template->form = TFISH_FORM_PATH . "response.html";
 
                 if ($password_hash) {
-                    $result = TfishDatabase::update('user', $user_id, 
+                    $result = $tfish_database->update('user', $user_id, 
                             array('password_hash' => $password_hash));
                     
                     // Display response.

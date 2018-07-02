@@ -53,7 +53,7 @@ class TfishPreferenceHandler
      * 
      * @return bool True on success false on failure.
      */
-    public function writePreferences(TfishPreference $tfish_preference)
+    public function writePreferences(TfishPreference $tfish_preference, TfishDatabase $tfish_database)
     {
         // Convert preference object to array of key => values.
         if (is_a($tfish_preference, 'TfishPreference')) {
@@ -64,11 +64,11 @@ class TfishPreferenceHandler
 
         foreach ($key_values as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
-            $statement = TfishDatabase::preparedStatement($sql);
-            $statement->bindValue(':title', $key, TfishDatabase::setType($key));
-            $statement->bindValue(':value', $value, TfishDatabase::setType($value));
+            $statement = $tfish_database->preparedStatement($sql);
+            $statement->bindValue(':title', $key, $tfish_database->setType($key));
+            $statement->bindValue(':value', $value, $tfish_database->setType($value));
             unset($sql, $key, $value);
-            $result = TfishDatabase::executeTransaction($statement);
+            $result = $tfish_database->executeTransaction($statement);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);

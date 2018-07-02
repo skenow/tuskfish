@@ -34,6 +34,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishContentHandler
 {
+    protected $tfish_database;
+    
+    function __construct(TfishDatabase $tfish_database)
+    {
+        $this->tfish_database = $tfish_database;
+    }
     /**
      * Delete a single object from the content table.
      * 
@@ -75,9 +81,9 @@ class TfishContentHandler
 
         // If object is a collection delete related parent references in child objects.
         if ($obj->type === 'TfishCollection') {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
             $criteria->add(new TfishCriteriaItem('parent', $clean_id));
-            $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
+            $result = $this->tfish_database->updateAll('content', array('parent' => 0), $criteria);
             
             if (!$result) {
                 return false;
@@ -85,7 +91,7 @@ class TfishContentHandler
         }
 
         // Delete the object.
-        $result = TfishDatabase::delete('content', $clean_id);
+        $result = $this->tfish_database->delete('content', $clean_id);
         
         if (!$result) {
             return false;
@@ -108,9 +114,9 @@ class TfishContentHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         $criteria->add(new TfishCriteriaItem('parent', $clean_id));
-        $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
+        $result = $this->tfish_database->updateAll('content', array('parent' => 0), $criteria);
 
         if (!$result) {
             return false;
@@ -189,13 +195,13 @@ class TfishContentHandler
         }
 
         // Insert the object into the database.
-        $result = TfishDatabase::insert('content', $key_values);
+        $result = $this->tfish_database->insert('content', $key_values);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
             return false;
         } else {
-            $content_id = TfishDatabase::lastInsertId();
+            $content_id = $this->tfish_database->lastInsertId();
         }
         
         unset($key_values, $result);
@@ -266,7 +272,7 @@ class TfishContentHandler
         $clean_type = (isset($type) && $this->isSanctionedType($type))
                 ? TfishDataValidator::trimString($type) : null;
 
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
 
         // Filter tags by type.
         if (isset($clean_type)) {
@@ -274,7 +280,7 @@ class TfishContentHandler
         }
 
         // Put a check for online status in here.
-        $statement = TfishDatabase::selectDistinct('taglink', $criteria, array('tag_id'));
+        $statement = $this->tfish_database->selectDistinct('taglink', $criteria, array('tag_id'));
         
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -299,7 +305,7 @@ class TfishContentHandler
     public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
         
         if ($criteria && !empty($criteria->limit)) {
@@ -307,7 +313,7 @@ class TfishContentHandler
             $criteria->limit = 0;
         }
         
-        $count = TfishDatabase::selectCount('content', $criteria);
+        $count = $this->tfish_database->selectCount('content', $criteria);
         
         if (isset($limit)) {
             $criteria->limit = (int) $limit;
@@ -346,7 +352,7 @@ class TfishContentHandler
         $columns = array('id', 'title');
 
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
         
         // Set default sorting order by submission time descending.
@@ -354,7 +360,7 @@ class TfishContentHandler
             $criteria->order = 'date';
         }
 
-        $statement = TfishDatabase::select('content', $criteria, $columns);
+        $statement = $this->tfish_database->select('content', $criteria, $columns);
         
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -380,9 +386,9 @@ class TfishContentHandler
         $row = $object = '';
         
         if (TfishDataValidator::isInt($id, 1)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
             $criteria->add(new TfishCriteriaItem('id', $clean_id));
-            $statement = TfishDatabase::select('content', $criteria);
+            $statement = $this->tfish_database->select('content', $criteria);
             
             if ($statement) {
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
@@ -408,7 +414,7 @@ class TfishContentHandler
         $objects = array();
         
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
         }
 
         // Set default sorting order by submission time descending.        
@@ -416,7 +422,8 @@ class TfishContentHandler
             $criteria->order = 'date';
         }
 
-        $statement = TfishDatabase::select('content', $criteria);
+        $statement = $this->tfish_database->select('content', $criteria);
+        
         if ($statement) {
             // Fetch rows into the appropriate class type, as determined by the first column.
             $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
@@ -435,14 +442,14 @@ class TfishContentHandler
             $taglinks = array();
             $object_ids = array_keys($objects);
 
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->tfish_database);
             
             foreach ($object_ids as $id) {
                 $criteria->add(new TfishCriteriaItem('content_id', (int) $id), "OR");
                 unset($id);
             }
 
-            $statement = TfishDatabase::select('taglink', $criteria);
+            $statement = $this->tfish_database->select('taglink', $criteria);
             
             if ($statement) {
                 // Sort tag into multi-dimensional array indexed by content_id.
@@ -534,14 +541,14 @@ class TfishContentHandler
         $statement = false;
         $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
         
         if ($clean_online_only) {
             $criteria->add(new TfishCriteriaItem('online', true));
         }
 
-        $statement = TfishDatabase::select('content', $criteria, $columns);
+        $statement = $this->tfish_database->select('content', $criteria, $columns);
         
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -568,7 +575,7 @@ class TfishContentHandler
     public function getTags()
     {
         $tags = array();
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->tfish_database);
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
         $tags = $this->getObjects($criteria);
         
@@ -806,7 +813,7 @@ class TfishContentHandler
         $sql_count .= $sql;
         
         // Bind the search term values and execute the statement.
-        $statement = TfishDatabase::preparedStatement($sql_count);
+        $statement = $this->tfish_database->preparedStatement($sql_count);
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
@@ -838,7 +845,7 @@ class TfishContentHandler
         }
 
         $sql_search .= $sql;
-        $statement = TfishDatabase::preparedStatement($sql_search);
+        $statement = $this->tfish_database->preparedStatement($sql_search);
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
@@ -877,7 +884,7 @@ class TfishContentHandler
     public function toggleOnlineStatus(int $id)
     {
         $clean_id = (int) $id;
-        return TfishDatabase::toggleBoolean($clean_id, 'content', 'online');
+        return $this->tfish_database->toggleBoolean($clean_id, 'content', 'online');
     }
 
     /**
@@ -914,9 +921,9 @@ class TfishContentHandler
             // Populate the tag property.
             if (isset($content_object->tags) && !empty($content_object->id)) {
                 $tags = array();
-                $criteria = new TfishCriteria();
+                $criteria = new TfishCriteria($this->tfish_database);
                 $criteria->add(new TfishCriteriaItem('content_id', (int) $content_object->id));
-                $statement = TfishDatabase::select('taglink', $criteria, array('tag_id'));
+                $statement = $this->tfish_database->select('taglink', $criteria, array('tag_id'));
                 
                 if ($statement) {
                     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -1128,7 +1135,7 @@ class TfishContentHandler
         }
 
         // Update the content object.
-        $result = TfishDatabase::update('content', $clean_id, $key_values);
+        $result = $this->tfish_database->update('content', $clean_id, $key_values);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
@@ -1198,7 +1205,7 @@ class TfishContentHandler
     public function updateCounter(int $id)
     {
         $clean_id = (int) $id;
-        return TfishDatabase::updateCounter($clean_id, 'content', 'counter');
+        return $this->tfish_database->updateCounter($clean_id, 'content', 'counter');
     }
 
 }

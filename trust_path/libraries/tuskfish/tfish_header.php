@@ -42,7 +42,7 @@ $tfish_database->connect();
 include TFISH_DEFAULT_LANGUAGE;
 
 // Ensure that global site preferences are available via $tfish_preference.
-$tfish_preference = new TfishPreference();
+$tfish_preference = new TfishPreference($tfish_database);
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site.
 TfishSession::start($tfish_preference);

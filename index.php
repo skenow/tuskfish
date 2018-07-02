@@ -19,7 +19,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Get the relevant handler.
-$content_handler = new TfishContentHandler();
+$content_handler = new TfishContentHandler($tfish_database);
 
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
@@ -179,6 +179,7 @@ if ($clean_id) {
     // Retrieve content objects and assign to template.
     $criteria->order = 'date';
     $criteria->ordertype = 'DESC';
+    
     $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);

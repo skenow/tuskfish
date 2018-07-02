@@ -77,7 +77,7 @@ class TfishDatabase
     /** @internal */
     private function _close()
     {
-        $this->$_db = null;
+        $this->_db = null;
         return true;
     }
 
@@ -98,13 +98,13 @@ class TfishDatabase
     private function _connect()
     {
         // SQLite just expects a file name, which was defined as a constant during create()
-        $this->$_db = new PDO('sqlite:' . TFISH_DATABASE);
+        $this->_db = new PDO('sqlite:' . TFISH_DATABASE);
         
-        if ($this->$_db) {
+        if ($this->_db) {
             // Set PDO to throw exceptions every time it encounters an error.
             // On production sites it may be best to change the second argument to 
             // PDO::ERRMODE_SILENT OR PDO::ERRMODE_WARNING
-            $this->$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return true;
         } else {
             return false;
@@ -142,7 +142,7 @@ class TfishDatabase
         // Create database file and append a constant with the database path to config.php
         try {
             $db_path = TFISH_DATABASE_PATH . $prefix . '_' . $db_name;
-            $this->$_db = new PDO('sqlite:' . $db_path);
+            $this->_db = new PDO('sqlite:' . $db_path);
             $db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "'
                     . $db_path . '");';
             $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $db_constant);
@@ -318,7 +318,7 @@ class TfishDatabase
 
             if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
-                $sql .= $criteria->renderSQL();
+                $sql .= $criteria->renderSQL($this->_db);
                 $pdo_placeholders = $criteria->renderPDO();
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -412,11 +412,11 @@ class TfishDatabase
     public function executeTransaction(PDOStatement $statement)
     {
         try {
-            $this->$_db->beginTransaction();
+            $this->_db->beginTransaction();
             $statement->execute();
-            $this->$_db->commit();
+            $this->_db->commit();
         } catch (PDOException $e) {
-            $this->$_db->rollBack();
+            $this->_db->rollBack();
             TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
@@ -457,7 +457,7 @@ class TfishDatabase
         $sql .= ") VALUES (" . $pdo_placeholders . ")";
 
         // Prepare the statement and bind the values.
-        $statement = $this->$_db->prepare($sql);
+        $statement = $this->_db->prepare($sql);
         
         foreach ($key_values as $key => $value) {
             $statement->bindValue(":" . $key, $value, $this->setType($value));
@@ -477,8 +477,8 @@ class TfishDatabase
      */
     public function lastInsertId()
     {
-        if ($this->$_db->lastInsertId()) {
-            return (int) $this->$_db->lastInsertId();
+        if ($this->_db->lastInsertId()) {
+            return (int) $this->_db->lastInsertId();
         } else {
             return false;
         }
@@ -501,7 +501,7 @@ class TfishDatabase
     /** @internal */
     private function _preparedStatement(string $sql)
     {
-        return $this->$_db->prepare($sql);
+        return $this->_db->prepare($sql);
     }
 
     /**
@@ -875,7 +875,7 @@ class TfishDatabase
                 . " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
 
         // Prepare the statement and bind the ID value.
-        $statement = TfishDatabase::preparedStatement($sql);
+        $statement = $this->tfish_database->preparedStatement($sql);
         
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
@@ -912,7 +912,7 @@ class TfishDatabase
                 . " = " . $this->addBackticks($column) . " + 1 WHERE `id` = :id";
 
         // Prepare the statement and bind the ID value.
-        $statement = TfishDatabase::preparedStatement($sql);
+        $statement = $this->tfish_database->preparedStatement($sql);
         
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);

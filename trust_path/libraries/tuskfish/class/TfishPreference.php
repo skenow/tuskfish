@@ -50,10 +50,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishPreference extends TfishAncestralObject
 {
-
+    private $tfish_database;
+    
     /** Initialise default properties. */
-    function __construct()
+    function __construct(TfishDatabase $tfish_database)
     {
+        $this->tfish_database = $tfish_database;
         /**
          * Set the permitted properties of this object.
          */
@@ -84,7 +86,7 @@ class TfishPreference extends TfishAncestralObject
             $this->__data[$key] = '';
         }
 
-        $preferences = self::readPreferences();
+        $preferences = $this->readPreferences();
         
         foreach ($preferences as $key => $value) {
             if (isset($this->__data[$key])) {
@@ -130,10 +132,10 @@ class TfishPreference extends TfishAncestralObject
      * 
      * @return array Array of site preferences.
      */
-    public static function readPreferences()
+    public function readPreferences()
     {
         $preferences = array();
-        $result = TfishDatabase::select('preference');
+        $result = $this->tfish_database->select('preference');
         
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $preferences[$row['title']] = $row['value'];
