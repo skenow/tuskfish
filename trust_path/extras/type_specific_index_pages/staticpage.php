@@ -120,10 +120,12 @@ if ($clean_id) {
         }
         
         // Prepare pagination control.
+        $tfish_pagination = new TfishPaginationControl($tfish_preference);
+        
         if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
             $content_handler = new TfishContentHandler();
             $first_child_count = $content_handler->getCount($criteria);
-            $tfish_template->collection_pagination = $tfish_metadata->getPaginationControl(
+            $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl(
                     $first_child_count, $tfish_preference->user_pagination, $target_file_name,
                     $clean_start, 0, array('id' => $clean_id));
 

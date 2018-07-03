@@ -428,10 +428,12 @@ if (in_array($op, $options_whitelist)) {
                     }
 
                     // Prepare pagination control.
+                    $tfish_pagination = new TfishPaginationControl($tfish_preference);
+                    
                     if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
                         $first_child_count = $content_handler->getCount($criteria);
                         $tfish_template->collection_pagination = 
-                                $tfish_metadata->getPaginationControl(
+                                $tfish_pagination->getPaginationControl(
                                         $first_child_count, 
                                         $tfish_preference->user_pagination,
                                         $target_file_name,
@@ -497,6 +499,7 @@ if (in_array($op, $options_whitelist)) {
             $typelist = $content_handler->getTypes();
 
             // Pagination control.
+            $tfish_pagination = new TfishPaginationControl($tfish_preference);
             $count = TfishDatabase::selectCount('content', $criteria);
             $extra_params = array();
             
@@ -508,7 +511,7 @@ if (in_array($op, $options_whitelist)) {
                 $extra_params['type'] = $clean_type;
             }
             
-            $tfish_template->pagination = $tfish_metadata->getPaginationControl(
+            $tfish_template->pagination = $tfish_pagination->getPaginationControl(
                     $count,
                     $tfish_preference->admin_pagination,
                     'admin',

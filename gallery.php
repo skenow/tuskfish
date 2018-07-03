@@ -61,7 +61,8 @@ if (isset($clean_type)) {
     $extra_params['type'] = $clean_type;
 }
 
-$tfish_template->pagination = $tfish_metadata->getPaginationControl($count, 
+$tfish_pagination = new TfishPaginationControl($tfish_preference);
+$tfish_template->pagination = $tfish_pagination->getPaginationControl($count, 
         $tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, 
         $extra_params);
 

@@ -113,8 +113,9 @@ if ($clean_id) {
         $criteria->tag = array($clean_tag);
 
     // Prepare pagination control.
+    $tfish_pagination = new TfishPaginationControl($tfish_preference);
     $count = $content_handler->getCount($criteria);
-    $tfish_template->pagination = $tfish_metadata->getPaginationControl($count,
+    $tfish_template->pagination = $tfish_pagination->getPaginationControl($count,
             $tfish_preference->user_pagination, $target_file_name, $clean_start, $clean_tag);
 
     // Retrieve content objects and assign to template.
