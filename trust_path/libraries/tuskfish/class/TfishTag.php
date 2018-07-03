@@ -101,9 +101,9 @@ class TfishTag extends TfishContentObject
      * 
      * @param string $clean_property Name of content object property to be formatted.
      */
-    protected function makeHumanReadable(string $clean_property)
+    protected function makeDataHumanReadable(string $clean_property)
     {
-        return parent::makeHumanReadable($clean_property);
+        return parent::makeDataHumanReadable($clean_property);
     }
     
     /**

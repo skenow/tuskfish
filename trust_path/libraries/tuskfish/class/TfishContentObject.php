@@ -135,7 +135,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param string $property Name of property.
      * @return string Property formatted to human readable form for output.
      */
-    protected function makeHumanReadable(string $clean_property)
+    protected function makeDataHumanReadable(string $clean_property)
     {        
         switch ($clean_property) {
             case "date": // Stored in format yyyy-mm-dd
@@ -244,7 +244,7 @@ class TfishContentObject extends TfishAncestralObject
         }
         
         // Format all data for display and convert TFISH_LINK to URL.
-        $human_readable_data = (string) $this->makeHumanReadable($clean_property);
+        $human_readable_data = (string) $this->makeDataHumanReadable($clean_property);
         
         // Output for editor: HTML should be DOUBLE escaped (specification requirement).
         if ($this->__properties[$clean_property] === 'html' && $escape_html === true) {
