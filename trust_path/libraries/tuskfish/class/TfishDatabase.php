@@ -573,7 +573,7 @@ class TfishDatabase
 
             // Set tag(s).
             if (!empty($criteria->tag)) {
-                $sql .= $criteria->renderTagSQL();
+                $sql .= $criteria->renderTagSql();
                 $tag_placeholders = $criteria->renderTagPdo();
             }
 
@@ -703,7 +703,7 @@ class TfishDatabase
 
             // Set tag(s).
             if (!empty($criteria->tag)) {
-                $sql .= $criteria->renderTagSQL();
+                $sql .= $criteria->renderTagSql();
                 $tag_placeholders = $criteria->renderTagPdo();
             }
         }
@@ -793,7 +793,7 @@ class TfishDatabase
 
             // Set tag(s).
             if (!empty($criteria->tag)) {
-                $sql .= $criteria->renderTagSQL();
+                $sql .= $criteria->renderTagSql();
                 $tag_placeholders = $criteria->renderTagPdo();
             }
 
