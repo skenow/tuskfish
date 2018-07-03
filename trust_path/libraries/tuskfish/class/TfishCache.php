@@ -191,7 +191,7 @@ class TfishCache
                         try {
                             unlink($path);
                         } catch (Exeption $e) {
-                            TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(),
+                            TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
                                     $e->getLine());
                         }
                     } else {
@@ -201,7 +201,7 @@ class TfishCache
                 }
             }
         } catch (Exception $e) {
-            TfishLogger::logErrors($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+            TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
         return true;
