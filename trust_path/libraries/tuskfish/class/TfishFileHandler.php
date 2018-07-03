@@ -419,13 +419,13 @@ class TfishFileHandler
      * excluding extension.
      * @return bool True on success, false on failure. 
      */
-    public static function sendDownloadToBrowser(int $id, string $filename = '')
+    public static function streamDownloadToBrowser(int $id, string $filename = '')
     {
         $clean_id = TfishDataValidator::isInt($id, 1) ? (int) $id : false;
         $clean_filename = !empty($filename) ? TfishDataValidator::trimString($filename) : '';
         
         if ($clean_id) {
-            $result = self::_sendDownloadToBrowser($clean_id, $clean_filename);
+            $result = self::_streamDownloadToBrowser($clean_id, $clean_filename);
             if ($result === false) {
                 return false;
             }
@@ -436,7 +436,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _sendDownloadToBrowser(int $id, string $filename)
+    private static function _streamDownloadToBrowser(int $id, string $filename)
     {
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('id', $id));
