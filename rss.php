@@ -35,7 +35,7 @@ header('Content-Type: application/rss+xml');
 $rss = new TfishRss($tfish_preference);
 
 // Prepare a mimetype lookup buffer.
-$mimetype_list = TfishUtils::getMimetypes();
+$mimetype_list = TfishUtils::getListOfMimetypes();
 
 // Get a generic content object handler.
 $content_handler = new TfishContentHandler();

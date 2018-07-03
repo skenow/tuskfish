@@ -36,7 +36,7 @@ if (in_array($op, array('edit', 'update', false))) {
             $tfish_template->preferences = TfishPreference::readPreferences();
             $content_handler = new TfishContentHandler();
             $tfish_template->languages = $content_handler->getListOfLanguages();
-            $tfish_template->timezones = TfishUtils::getTimezones();
+            $tfish_template->timezones = TfishUtils::getListOfTimezones();
             $tfish_template->form = TFISH_FORM_PATH . "preference_edit.html";
             $tfish_template->tfish_main_content = $tfish_template->render('form');
             break;
@@ -74,7 +74,7 @@ if (in_array($op, array('edit', 'update', false))) {
             $content_handler = new TfishContentHandler();
             $languages = $content_handler->getListOfLanguages();
             $preferences['default_language'] = $languages[$preferences['default_language']];
-            $timezones = TfishUtils::getTimezones();
+            $timezones = TfishUtils::getListOfTimezones();
             $preferences['server_timezone'] = $timezones[$preferences['server_timezone']];
             $preferences['site_timezone'] = $timezones[$preferences['site_timezone']];
             $preferences['close_site'] = empty($preferences['close_site']) ? TFISH_NO : TFISH_YES;

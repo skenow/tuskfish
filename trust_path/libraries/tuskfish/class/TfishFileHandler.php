@@ -460,7 +460,7 @@ class TfishFileHandler
                 $filename = empty($filename) ? pathinfo($file_path, PATHINFO_FILENAME) : $filename;
                 $file_extension = pathinfo($file_path, PATHINFO_EXTENSION);
                 $file_size = filesize(TFISH_MEDIA_PATH . $content->media);
-                $mimetype_list = TfishUtils::getMimetypes();
+                $mimetype_list = TfishUtils::getListOfMimetypes();
                 $mimetype = $mimetype_list[$file_extension];
 
                 // Must call session_write_close() first otherwise the script gets locked.

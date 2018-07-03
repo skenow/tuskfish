@@ -45,7 +45,7 @@ class TfishUtils
      * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
      * @author		marcan <marcan@impresscms.org>
      */
-    public static function getMimetypes()
+    public static function getListOfMimetypes()
     {
         return array(
             "hqx" => "application/mac-binhex40",
@@ -158,7 +158,7 @@ class TfishUtils
      * 
      * @return array Array of timezone offsets.
      */
-    public static function getTimezones()
+    public static function getListOfTimezones()
     {
         return array(
             '-12' => 'UTC-12:00',
