@@ -49,7 +49,7 @@ class TfishCriteriaItem
      * @param string $column Name of column in database table. Alphanumeric and underscore
      * characters only.
      * @param mixed $value Value of the column.
-     * @param string $operator See listOfPermittedOperators() for a list of acceptable operators.
+     * @param string $operator See getListOfPermittedOperators() for a list of acceptable operators.
      */
     function __construct(string $column, $value, string $operator = '=')
     {
@@ -93,7 +93,7 @@ class TfishCriteriaItem
      * 
      * @return array Array of permitted operators for use in database queries.
      */
-    public function listOfPermittedOperators()
+    public function getListOfPermittedOperators()
     {
         return array(
             '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
@@ -160,7 +160,7 @@ class TfishCriteriaItem
                 case "operator":
                     $value = TfishDataValidator::trimString($value);
                     
-                    if (in_array($value, self::listOfPermittedOperators())) {
+                    if (in_array($value, self::getListOfPermittedOperators())) {
                         $this->__data['operator'] = $value;
                     } else {
                         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
