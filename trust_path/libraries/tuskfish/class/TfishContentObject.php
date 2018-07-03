@@ -859,7 +859,7 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * @return boolean True if media mimetype is valid for this content type, otherwise false.
      */
-    public function validMedia()
+    public function isValidMedia()
     {
         if (!$this->__data['media']) {
             return false;
