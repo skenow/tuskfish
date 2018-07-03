@@ -340,7 +340,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
-    public function getList(TfishCriteria $criteria = null)
+    public function getListOfObjects(TfishCriteria $criteria = null)
     {
         $content_list = array();
         $columns = array('id', 'title');

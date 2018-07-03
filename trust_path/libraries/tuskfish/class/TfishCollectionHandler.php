@@ -106,7 +106,7 @@ class TfishCollectionHandler extends TfishContentHandler
         $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
         $criteria->order = 'title';
         $criteria->ordertype = 'ASC';
-        $options = $options + $this->getList($criteria);
+        $options = $options + $this->getListOfObjects($criteria);
 
         $select_box = '<select id="parent" name="parent" class="form-control">';
         

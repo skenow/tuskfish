@@ -46,7 +46,7 @@ $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
 $criteria->add(new TfishCriteriaItem('online', 0));
 $criteria->order = 'id';
 $criteria->ordertype = 'ASC';
-$offline_tag_ids = $content_handler->getList($criteria);
+$offline_tag_ids = $content_handler->getListOfObjects($criteria);
 
 // Combine the list
 $content_ids = $content_ids + $offline_tag_ids;
