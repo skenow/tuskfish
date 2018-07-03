@@ -302,7 +302,7 @@ class TfishSession
      * 
      * @return string HTML login or logout link.
      */
-    public static function loginLink()
+    public static function getLoginLink()
     {
         if (self::isAdmin()) {
             return '<a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">' . TFISH_LOGOUT . '</a>';
