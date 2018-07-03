@@ -501,7 +501,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param array $dirty_input Usually raw form $_REQUEST data.
      * @param bool $live_urls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
      */
-    public function loadProperties(array $dirty_input, $live_urls = true)
+    public function loadPropertiesFromArray(array $dirty_input, $live_urls = true)
     {
         $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
                 ? true : false;

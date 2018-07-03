@@ -233,7 +233,7 @@ if (in_array($op, $options_whitelist)) {
             }
             
             $content_object = new $clean_type;
-            $content_object->loadProperties($_REQUEST);
+            $content_object->loadPropertiesFromArray($_REQUEST);
 
             // Insert the object
             $result = $content_handler->insert($content_object);
@@ -292,7 +292,7 @@ if (in_array($op, $options_whitelist)) {
             }
 
             $content_object = new $type;
-            $content_object->loadProperties($_REQUEST);
+            $content_object->loadPropertiesFromArray($_REQUEST);
 
             // As this object is being sent to storage, need to decode some entities that got
             // encoded for display.

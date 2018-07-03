@@ -909,7 +909,7 @@ class TfishContentHandler
 
         // Populate the object from the $row using whitelisted properties.
         if ($content_object) {
-            $content_object->loadProperties($row, true);
+            $content_object->loadPropertiesFromArray($row, true);
 
             // Populate the tag property.
             if (isset($content_object->tags) && !empty($content_object->id)) {

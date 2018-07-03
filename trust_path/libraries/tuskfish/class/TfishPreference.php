@@ -332,7 +332,7 @@ class TfishPreference extends TfishAncestralObject
      * 
      * @param array $dirty_input Usually $_REQUEST data.
      */
-    public function loadProperties(array $dirty_input)
+    public function loadPropertiesFromArray(array $dirty_input)
     {
         if (!TfishDataValidator::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);

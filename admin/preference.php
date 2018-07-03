@@ -44,7 +44,7 @@ if (in_array($op, array('edit', 'update', false))) {
         // Update: Submit the modified object and update the corresponding database row.
         case "update":
             TfishSession::validateToken($clean_token); // CSRF check.
-            $tfish_preference->loadProperties($_REQUEST);
+            $tfish_preference->loadPropertiesFromArray($_REQUEST);
 
             // Update the database row and display a response.
             $tfish_preference_handler = new TfishPreferenceHandler;
