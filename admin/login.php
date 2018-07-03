@@ -31,7 +31,7 @@ require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php'
 
 // Set error reporting levels and custom error handler.
 error_reporting(E_ALL & ~E_NOTICE);
-set_error_handler("TfishLogger::logErrors");
+set_error_handler("TfishLogger::logError");
 
 // Ensure that a database connection is available
 TfishDatabase::connect();
