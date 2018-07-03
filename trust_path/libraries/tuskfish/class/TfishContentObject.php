@@ -786,7 +786,7 @@ class TfishContentObject extends TfishAncestralObject
                 
                 // Check image file is a permitted mimetype.
                 if ($clean_property === "image") {
-                    $mimetype_whitelist = TfishFileHandler::allowedImageMimetypes();
+                    $mimetype_whitelist = TfishFileHandler::getListOfAllowedImageMimetypes();
                     $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
                     if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
@@ -869,13 +869,13 @@ class TfishContentObject extends TfishAncestralObject
 
         switch($this->__data['type']) {
             case "TfishAudio":
-                $allowed_mimetypes = TfishFileHandler::allowedAudioMimetypes();
+                $allowed_mimetypes = TfishFileHandler::getListOfAllowedAudioMimetypes();
                 break;
             case "TfishImage":
-                $allowed_mimetypes = TfishFileHandler::allowedImageMimetypes();
+                $allowed_mimetypes = TfishFileHandler::getListOfAllowedImageMimetypes();
                 break;
             case "TfishVideo":
-                $allowed_mimetypes = TfishFileHandler::allowedVideoMimetypes();
+                $allowed_mimetypes = TfishFileHandler::getListOfAllowedVideoMimetypes();
                 break;
             default:
                 $allowed_mimetypes = TfishFileHandler::getPermittedUploadMimetypes();

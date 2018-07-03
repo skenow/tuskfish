@@ -40,7 +40,7 @@ class TfishFileHandler
      * 
      * @return array Array of permitted audio mimetypes in file extension => mimetype format.
      */
-    public static function allowedAudioMimetypes()
+    public static function getListOfAllowedAudioMimetypes()
     {
         return array(
             "mp3" => "audio/mpeg",
@@ -55,7 +55,7 @@ class TfishFileHandler
      * 
      * @return array Array of permitted image mimetypes in file extension => mimetype format.
      */
-    public static function allowedImageMimetypes()
+    public static function getListOfAllowedImageMimetypes()
     {
         return array(
             "gif" => "image/gif",
@@ -73,7 +73,7 @@ class TfishFileHandler
      * 
      * @return array Array of permitted video mimetypes in file extension => mimetype format.
      */
-    public static function allowedVideoMimetypes()
+    public static function getListOfAllowedVideoMimetypes()
     {
         return array(
             "mp4" => "video/mp4",
@@ -391,13 +391,13 @@ class TfishFileHandler
 
         switch ($clean_type) {
             case "TfishAudio":
-                return self::allowedAudioMimetypes();
+                return self::getListOfAllowedAudioMimetypes();
                 break;
             case "TfishImage":
-                return self::allowedImageMimetypes();
+                return self::getListOfAllowedImageMimetypes();
                 break;
             case "TfishVideo":
-                return self::allowedVideoMimetypes();
+                return self::getListOfAllowedVideoMimetypes();
                 break;
             default:
                 return self::getPermittedUploadMimetypes();
