@@ -91,7 +91,7 @@ class TfishFileHandler
      * @param string $contents Content to append to the target file.
      * @return bool True on success false on failure.
      */
-    public static function appendFile(string $path, string $contents)
+    public static function appendToFile(string $path, string $contents)
     {
         // Check for directory traversals and null byte injection.
         if (TfishDataValidator::hasTraversalorNullByte($path)) {
@@ -104,7 +104,7 @@ class TfishFileHandler
         $clean_content = PHP_EOL . TfishDataValidator::trimString($contents);
         
         if ($clean_path && $clean_content) {
-            $result = self::_appendFile($clean_path, $clean_content);
+            $result = self::_appendToFile($clean_path, $clean_content);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
@@ -118,7 +118,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _appendFile(string $path, string $contents)
+    private static function _appendToFile(string $path, string $contents)
     {
         return file_put_contents($path, $contents, FILE_APPEND);
     }

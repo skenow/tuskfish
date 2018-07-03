@@ -150,7 +150,7 @@ class TfishDatabase
             self::$_db = new PDO('sqlite:' . $db_path);
             $db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "'
                     . $db_path . '");';
-            $result = TfishFileHandler::appendFile(TFISH_CONFIGURATION_PATH, $db_constant);
+            $result = TfishFileHandler::appendToFile(TFISH_CONFIGURATION_PATH, $db_constant);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
