@@ -350,7 +350,7 @@ class TfishFileHandler
      * @todo Move this into a static TfishPreference method.
      *
      */
-    public static function getPermittedUploadMimetypes()
+    public static function getListOfPermittedUploadMimetypes()
     {
         return array(
             "doc" => "application/msword", // Documents.
@@ -400,7 +400,7 @@ class TfishFileHandler
                 return self::getListOfAllowedVideoMimetypes();
                 break;
             default:
-                return self::getPermittedUploadMimetypes();
+                return self::getListOfPermittedUploadMimetypes();
                 break;
         }
     }
@@ -515,7 +515,7 @@ class TfishFileHandler
             exit;
         }
 
-        $mimetype_list = self::getPermittedUploadMimetypes(); // extension => mimetype
+        $mimetype_list = self::getListOfPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
         $clean_extension = array_key_exists($extension, $mimetype_list)
                 ? TfishDataValidator::trimString($extension) : false;

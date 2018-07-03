@@ -181,7 +181,7 @@ class TfishContentHandler
             
             if ($clean_filename) {
                 $key_values['media'] = $clean_filename;
-                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
                 $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
                 $key_values['format'] = $mimetype_whitelist[$extension];
                 $key_values['file_size'] = $_FILES['media']['size'];
@@ -1056,7 +1056,7 @@ class TfishContentHandler
                 $clean_filename = '';
                 
                 // Get a whitelist of permitted mimetypes.
-                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {

@@ -168,7 +168,7 @@ class TfishContentObject extends TfishAncestralObject
                 break;
 
             case "format": // Output the file extension as user-friendly "mimetype".
-                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
                 $mimetype = array_search($this->__data[$clean_property], $mimetype_whitelist);
 
                 if (!empty($mimetype)) {
@@ -558,7 +558,7 @@ class TfishContentObject extends TfishAncestralObject
             $clean_media_filename = TfishDataValidator::trimString($_FILES['media']['name']);
             
             if ($clean_media_filename) {
-                $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
                 $extension = mb_strtolower(pathinfo($clean_media_filename, PATHINFO_EXTENSION), 'UTF-8');
                 
                 $this->__set('media', $clean_media_filename);
@@ -795,7 +795,7 @@ class TfishContentObject extends TfishAncestralObject
                 
                 // Check media file is a permitted mimetype.
                 if ($clean_property === "media") {
-                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                    $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
                     $extension = mb_strtolower(pathinfo($value, PATHINFO_EXTENSION), 'UTF-8');
                     
                     if (empty($extension) 
@@ -807,7 +807,7 @@ class TfishContentObject extends TfishAncestralObject
                 }
 
                 if ($clean_property === "format") {
-                    $mimetype_whitelist = TfishFileHandler::getPermittedUploadMimetypes();
+                    $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
                     if (!empty($value) && !in_array($value, $mimetype_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
                     }
@@ -878,7 +878,7 @@ class TfishContentObject extends TfishAncestralObject
                 $allowed_mimetypes = TfishFileHandler::getListOfAllowedVideoMimetypes();
                 break;
             default:
-                $allowed_mimetypes = TfishFileHandler::getPermittedUploadMimetypes();
+                $allowed_mimetypes = TfishFileHandler::getListOfPermittedUploadMimetypes();
         }
 
         if (in_array($this->__data['format'], $allowed_mimetypes)) {
