@@ -49,10 +49,10 @@ class TfishContentHandler
             return false;
         }
 
-        // Delete associated files.
+        // Delete files associated with the image and media properties.
         $obj = $this->getObject($clean_id);
         
-        if (!TfishDataValidator::isObject($obj)) {
+        if (!is_a($obj, 'TfishContentObject')) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             return false;
         }
@@ -84,7 +84,7 @@ class TfishContentHandler
             }
         }
 
-        // Delete the object.
+        // Finally, delete the object.
         $result = TfishDatabase::delete('content', $clean_id);
         
         if (!$result) {
