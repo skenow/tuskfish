@@ -48,7 +48,7 @@ class TfishDataValidator
      * @param mixed $output Unescaped string intended for display.
      * @return string Escaped output string safe for display.
      */
-    public static function escape($output)
+    public static function escapeForXss($output)
     {
         $output = (string) $output;
         
@@ -75,7 +75,7 @@ class TfishDataValidator
     {
         $url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
         $url = rawurlencode($url); // Encode characters to make them URL safe.
-        $clean_url = self::escape($url); // Encode entities with htmlspecialchars()
+        $clean_url = self::escapeForXss($url); // Encode entities with htmlspecialchars()
 
         return $clean_url;
     }

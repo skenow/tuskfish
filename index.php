@@ -63,23 +63,23 @@ if ($clean_id) {
         // Prepare meta information for display.
         $contentInfo = array();
         
-        if ($content->creator) $contentInfo[] = $content->escape('creator');
+        if ($content->creator) $contentInfo[] = $content->escapeForXss('creator');
         
-        if ($content->date) $contentInfo[] = $content->escape('date');
+        if ($content->date) $contentInfo[] = $content->escapeForXss('date');
         
         if ($content->counter) {
             switch ($content->type) {
                 case "TfishDownload":
-                    $contentInfo[] = $content->escape('counter') . ' ' . TFISH_DOWNLOADS;
+                    $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_DOWNLOADS;
                     break;
                 default:
-                    $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+                    $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
             }
         }
         
-        if ($content->format) $contentInfo[] = '.' . $content->escape('format');
+        if ($content->format) $contentInfo[] = '.' . $content->escapeForXss('format');
         
-        if ($content->file_size) $contentInfo[] = $content->escape('file_size');
+        if ($content->file_size) $contentInfo[] = $content->escapeForXss('file_size');
         
         // For a content type-specific page use $content->tags, $content->template
         if ($content->tags) {
@@ -90,9 +90,9 @@ if ($clean_id) {
         
         $tfish_template->contentInfo = implode(' | ', $contentInfo);
         
-        if ($content->meta_title) $tfish_metadata->title = $content->escape('meta_title');
+        if ($content->meta_title) $tfish_metadata->title = $content->escapeForXss('meta_title');
         
-        if ($content->meta_description) $tfish_metadata->description = $content->escape('meta_description');
+        if ($content->meta_description) $tfish_metadata->description = $content->escapeForXss('meta_description');
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {

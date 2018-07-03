@@ -5,12 +5,12 @@
 
 <!-- Title and meta information -->
 <div>
-  <h2 class="title"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></h2>
+  <h2 class="title"><?php echo $content->icon; ?> <?php echo $content->escapeForXss('title'); ?></h2>
   <?php if ($contentInfo): ?>
   <p class="content-info">
     <span class="small">
     <?php if (TfishSession::isAdmin()): ?>
-    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escape('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escapeForXss('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
     <?php endif; ?>
     <?php echo $contentInfo; ?>
   </span>
@@ -24,8 +24,8 @@
   <figure class="figure-centre">
   <img class="image img-fluid" src="<?php echo $content->getCachedImage(1170); ?>" 
   <?php if ($content->caption): ?>
-      title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"/>
-  <figcaption class="text-left"><em><?php echo $content->escape('caption'); ?></em></figcaption>
+      title="<?php echo $content->escapeForXss('caption'); ?>" alt="<?php echo $content->escapeForXss('caption'); ?>"/>
+  <figcaption class="text-left"><em><?php echo $content->escapeForXss('caption'); ?></em></figcaption>
   <?php else: ?>
       alt="" />
   <?php endif; ?>
@@ -35,7 +35,7 @@
 
 <!-- Description -->
 <div class="description">
-  <?php if ($content->description) echo $content->escape('description'); ?>
+  <?php if ($content->description) echo $content->escapeForXss('description'); ?>
 </div>
 
 <!-- Display parent work -->
@@ -43,14 +43,14 @@
 <div class="clearfix">
   <div>
     <h3 class="mb-3"><?php echo TFISH_RELATED; ?></h3>
-    <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escape('title'); ?></a></h4>
+    <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escapeForXss('title'); ?></a></h4>
     <?php if ($parent->image): ?>
     <div class="float-left">
       <figure class="figure-left">
       <a href="<?php echo $parent->getURL($target_file_name); ?>">
       <img class="image img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
       <?php if ($parent->caption): ?>
-          title="<?php echo $parent->escape('caption'); ?>" alt="<?php echo $parent->escape('caption'); ?>"
+          title="<?php echo $parent->escapeForXss('caption'); ?>" alt="<?php echo $parent->escapeForXss('caption'); ?>"
       <?php else: ?>
           alt=""
       <?php endif; ?>
@@ -59,7 +59,7 @@
     </div>
     <?php endif; ?>
     <div class="teaser">
-      <?php echo $parent->escape('teaser'); ?>
+      <?php echo $parent->escapeForXss('teaser'); ?>
     </div>
   </div>
 </div>
@@ -78,14 +78,14 @@
 <div>
   <?php foreach ($first_children as $child): ?>
   <div class="clearfix">
-    <h4 class="child-title"><a href="<?php echo $child->getURL($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escape('title'); ?></a></h4>
+    <h4 class="child-title"><a href="<?php echo $child->getURL($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escapeForXss('title'); ?></a></h4>
     <?php if ($child->image): ?>
     <div class="float-left">
       <figure class="figure-left">
       <a href="<?php echo $child->getURL($target_file_name); ?>">
       <img class="image img-fluid" src="<?php echo $child->getCachedImage(150); ?>" 
       <?php if ($child->caption): ?>
-          title="<?php echo $child->escape('caption'); ?>" alt="<?php echo $child->escape('caption'); ?>"
+          title="<?php echo $child->escapeForXss('caption'); ?>" alt="<?php echo $child->escapeForXss('caption'); ?>"
       <?php else: ?>
           alt=""
       <?php endif; ?>
@@ -94,7 +94,7 @@
     </div>
     <?php endif; ?>
     <div class="child-teaser">
-      <?php echo $child->escape('teaser'); ?>
+      <?php echo $child->escapeForXss('teaser'); ?>
     </div>
   </div>
     <?php endforeach; ?>    

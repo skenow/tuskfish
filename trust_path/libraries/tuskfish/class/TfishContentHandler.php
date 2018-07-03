@@ -475,7 +475,7 @@ class TfishContentHandler
     {
         $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 0, 1)) 
                 ? (int) $selected : null; // Offline (0) or online (1)
-        $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
+        $clean_zero_option = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($zero_option));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
         $select_box = '<select class="form-control custom-select" name="online" id="online" '
                 . 'onchange="this.form.submit()">';
@@ -629,7 +629,7 @@ class TfishContentHandler
     {
         // The text to display in the zero option of the select box.
         if (isset($zero_option)) {
-            $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
+            $clean_zero_option = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($zero_option));
         } else {
             $clean_zero_option = TFISH_TYPE;
         }
@@ -648,9 +648,9 @@ class TfishContentHandler
                 . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {
-            $select_box .= ($key === $clean_selected) ? '<option value="' . TfishDataValidator::escape($key)
-                    . '" selected>' . TfishDataValidator::escape($value) . '</option>' : '<option value="'
-                . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($value) . '</option>';
+            $select_box .= ($key === $clean_selected) ? '<option value="' . TfishDataValidator::escapeForXss($key)
+                    . '" selected>' . TfishDataValidator::escapeForXss($value) . '</option>' : '<option value="'
+                . TfishDataValidator::escapeForXss($key) . '">' . TfishDataValidator::escapeForXss($value) . '</option>';
         }
         
         $select_box .= '</select>';
@@ -678,7 +678,7 @@ class TfishContentHandler
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             } else {
                 $target_filename = TfishDataValidator::trimString($target_filename);
-                $clean_filename = TFISH_URL . TfishDataValidator::escape($target_filename)
+                $clean_filename = TFISH_URL . TfishDataValidator::escapeForXss($target_filename)
                         . '.php?tag_id=';
             }
         }
@@ -688,8 +688,8 @@ class TfishContentHandler
         
         foreach ($tags as $tag) {
             if (TfishDataValidator::isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
-                $tag_links[$tag] = '<a href="' . TfishDataValidator::escape($clean_filename . $tag) . '">'
-                        . TfishDataValidator::escape($tag_list[$tag]) . '</a>';
+                $tag_links[$tag] = '<a href="' . TfishDataValidator::escapeForXss($clean_filename . $tag) . '">'
+                        . TfishDataValidator::escapeForXss($tag_list[$tag]) . '</a>';
             }
             
             unset($tag);

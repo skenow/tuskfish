@@ -127,7 +127,7 @@ class TfishMetadata
         }
         
         $clean_extra_params = !empty($clean_extra_params)
-                ? TfishDataValidator::escape(implode("&", $clean_extra_params)) : '';
+                ? TfishDataValidator::escapeForXss(implode("&", $clean_extra_params)) : '';
 
         // If the count is zero there is no need for a pagination control.
         if ($clean_count === 0) {

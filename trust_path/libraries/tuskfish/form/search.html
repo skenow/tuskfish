@@ -36,22 +36,22 @@
 <hr>
 <div class="text-left">
     <?php if (!empty($search_results)): ?>
-    <h2><?php echo TfishDataValidator::escape($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
+    <h2><?php echo TfishDataValidator::escapeForXss($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
     <?php foreach ($search_results as $key => $object): ?>
     <div class="clearfix">
-        <h3><a href="<?php echo $object->getURL($target_file_name); ?>"><?php echo $object->icon; ?> <?php echo $object->escape('title'); ?></a></h3>
+        <h3><a href="<?php echo $object->getURL($target_file_name); ?>"><?php echo $object->icon; ?> <?php echo $object->escapeForXss('title'); ?></a></h3>
         <?php if ($object->image): ?>
         <div class="float-left">
             <figure class="figure-left">
                 <a href="<?php echo $object->getURL($target_file_name); ?>">
                     <img class="img-responsive" src="<?php echo $object->getCachedImage(100); ?>" 
-                         <?php if ($object->caption): ?>title="<?php echo $object->escape('caption'); ?>" 
-                         alt="<?php echo $object->escape('caption'); ?>"<?php endif; ?> />
+                         <?php if ($object->caption): ?>title="<?php echo $object->escapeForXss('caption'); ?>" 
+                         alt="<?php echo $object->escapeForXss('caption'); ?>"<?php endif; ?> />
                 </a>
             </figure>
         </div>
         <?php endif; ?>
-        <?php echo $object->escape('teaser'); ?>
+        <?php echo $object->escapeForXss('teaser'); ?>
     </div>
     <?php endforeach; ?>
     <?php else: ?>

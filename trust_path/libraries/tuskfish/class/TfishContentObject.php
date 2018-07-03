@@ -234,7 +234,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param bool $escape_html Whether to escape HTML fields (teaser, description).
      * @return string Human readable value escaped for display.
      */
-    public function escape(string $property, bool $escape_html = false)
+    public function escapeForXss(string $property, bool $escape_html = false)
     {
         $clean_property = TfishDataValidator::trimString($property);
         
@@ -701,7 +701,7 @@ class TfishContentObject extends TfishAncestralObject
                 // Enable input filtering with HTMLPurifier.
                 $this->__data[$clean_property] = (string) TfishDataValidator::filterHtml($value);
                 // Disable input filtering with HTMLPurifier (only do this if output filtering
-                // is enabled in escape()).
+                // is enabled in escapeForXss()).
                 //$this->__data[$clean_property] = (string)TfishDataValidator::trimString($value);
                 break;
 

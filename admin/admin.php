@@ -346,14 +346,14 @@ if (in_array($op, $options_whitelist)) {
                     // Prepare meta information for display.
                     $contentInfo = array();
                     
-                    if ($content->creator) $contentInfo[] = $content->escape('creator');
+                    if ($content->creator) $contentInfo[] = $content->escapeForXss('creator');
                     
-                    if ($content->date) $contentInfo[] = $content->escape('date');
+                    if ($content->date) $contentInfo[] = $content->escapeForXss('date');
                     
                     if ($content->counter) {
                         switch ($content->type) {
                             case "TfishDownload": // Display 'downloads' after the counter.
-                                $contentInfo[] = $content->escape('counter') . ' '
+                                $contentInfo[] = $content->escapeForXss('counter') . ' '
                                     . TFISH_DOWNLOADS;
                                 break;
                             
@@ -361,22 +361,22 @@ if (in_array($op, $options_whitelist)) {
                             // file; otherwise 'views'.
                             case "TfishCollection":
                                 if ($content->media) {
-                                    $contentInfo[] = $content->escape('counter') . ' '
+                                    $contentInfo[] = $content->escapeForXss('counter') . ' '
                                             . TFISH_DOWNLOADS;
                                     break;
                                 }
                                 break;
                                 
                             default: // Display 'views' after the counter.
-                                $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+                                $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
                         }
                     }
                     
                     if ($content->format)
-                        $contentInfo[] = '.' . $content->escape('format');
+                        $contentInfo[] = '.' . $content->escapeForXss('format');
                     
                     if ($content->file_size)
-                        $contentInfo[] = $content->escape('file_size');
+                        $contentInfo[] = $content->escapeForXss('file_size');
                     
                     // For a content type-specific page use $content->tags, $content->template.
                     if ($content->tags) {

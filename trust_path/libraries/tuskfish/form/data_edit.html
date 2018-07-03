@@ -8,7 +8,7 @@
     <div class="row">
         
         <!-- ID -->
-        <input type="hidden" name="id" value="<?php echo TfishDataValidator::escape($content->id); ?>">
+        <input type="hidden" name="id" value="<?php echo TfishDataValidator::escapeForXss($content->id); ?>">
         
         <!-- Media file type compatibility alert -->
         <div class="col-12">
@@ -27,9 +27,9 @@
                 <?php
                   foreach ($content_types as $key => $type) {
                       if ($content->type === $key) {
-                          echo '<option value="' . TfishDataValidator::escape($key) . '" selected>' . TfishDataValidator::escape($type) . '</option>';
+                          echo '<option value="' . TfishDataValidator::escapeForXss($key) . '" selected>' . TfishDataValidator::escapeForXss($type) . '</option>';
                       } else {
-                          echo '<option value="' . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($type) . '</option>';
+                          echo '<option value="' . TfishDataValidator::escapeForXss($key) . '">' . TfishDataValidator::escapeForXss($type) . '</option>';
                       }
                   }
                 ?>
@@ -39,7 +39,7 @@
         <!-- Date (bootstrap-datepicker) -->
         <div class="col-md-6 col-lg-4 mb-3 text-left" id="dateContainer">
             <label for="date"><strong><?php echo TFISH_DATE; ?></strong></label>
-            <input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . TfishDataValidator::escape($content->date) . '"'; } ?>>
+            <input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . TfishDataValidator::escapeForXss($content->date) . '"'; } ?>>
         </div>
         <script>
         $(document).ready(function() {
@@ -49,7 +49,7 @@
               todayBtn: 'linked',
               startView: 'years'
           });
-          $('#date').datepicker('setDate', new Date('<?php echo TfishDataValidator::escape($content->date); ?>'));
+          $('#date').datepicker('setDate', new Date('<?php echo TfishDataValidator::escapeForXss($content->date); ?>'));
           $('#date').datepicker('update');
         });
         </script>
@@ -61,9 +61,9 @@
                 <?php
                     foreach ($tags as $tag_id => $tag_title) {
                         if (isset($content->tags) && in_array($tag_id, $content->tags)) {
-                            echo '<option value="' . TfishDataValidator::escape($tag_id) . '" selected>' . TfishDataValidator::escape($tag_title) . '</option>';
+                            echo '<option value="' . TfishDataValidator::escapeForXss($tag_id) . '" selected>' . TfishDataValidator::escapeForXss($tag_title) . '</option>';
                         } else {
-                            echo '<option value="' . TfishDataValidator::escape($tag_id) . '">' . TfishDataValidator::escape($tag_title) . '</option>';
+                            echo '<option value="' . TfishDataValidator::escapeForXss($tag_id) . '">' . TfishDataValidator::escapeForXss($tag_title) . '</option>';
                         }
                     }
                 ?>
@@ -73,31 +73,31 @@
         <!-- Title -->
         <div class="col-12 mb-3 text-left" id="titleContainer">
             <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="title" id="title" <?php if (isset($content->title)) echo 'value="' . TfishDataValidator::escape($content->title) . '"'; ?>>
+            <input type="text" class="form-control" name="title" id="title" <?php if (isset($content->title)) echo 'value="' . TfishDataValidator::escapeForXss($content->title) . '"'; ?>>
         </div>
 
         <!-- Teaser -->
         <div class="col-12 mb-3 text-left" id="teaserContainer">
             <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
-            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($content->teaser)) { echo $content->escape('teaser', true); } ?></textarea>
+            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($content->teaser)) { echo $content->escapeForXss('teaser', true); } ?></textarea>
         </div>
 
         <!-- Description -->
         <div class="col-12 mb-3 text-left" id="descriptionContainer">
             <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
-            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($content->description)) { echo $content->escape('description', true); } ?></textarea>
+            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($content->description)) { echo $content->escapeForXss('description', true); } ?></textarea>
         </div>
 
         <!-- Creator (author) -->
         <div class="col-md-6 mb-3 text-left" id="creatorContainer">
             <label for="creator"><strong><?php echo TFISH_CREATOR; ?></strong></label>
-            <input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . TfishDataValidator::escape($content->creator) . '"'; ?>>
+            <input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . TfishDataValidator::escapeForXss($content->creator) . '"'; ?>>
         </div>
 
         <!-- Publisher -->
         <div class="col-md-6 mb-3 text-left" id="publisherContainer">
             <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
-            <input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . TfishDataValidator::escape($content->publisher) . '"'; ?>>
+            <input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . TfishDataValidator::escapeForXss($content->publisher) . '"'; ?>>
         </div>
         
         <!-- Parent -->
@@ -106,11 +106,11 @@
             <select class="form-control custom-select" name="parent" id="parent" required>
             <?php foreach ($parent_select_options as $key => $option): ?>
                 <?php if ($key === $content->id): ?>
-                    <option value="<?php echo $key; ?>" disabled><?php echo TfishDataValidator::escape($option); ?></option>
+                    <option value="<?php echo $key; ?>" disabled><?php echo TfishDataValidator::escapeForXss($option); ?></option>
                 <?php elseif ($key === $content->parent): ?>
-                    <option value="<?php echo $key; ?>" selected><?php echo TfishDataValidator::escape($option); ?></option>
+                    <option value="<?php echo $key; ?>" selected><?php echo TfishDataValidator::escapeForXss($option); ?></option>
                 <?php else: ?>
-                    <option value="<?php echo $key; ?>"><?php echo TfishDataValidator::escape($option); ?></option>
+                    <option value="<?php echo $key; ?>"><?php echo TfishDataValidator::escapeForXss($option); ?></option>
                 <?php endif; ?> 
             <?php endforeach; ?>
             </select>
@@ -120,7 +120,7 @@
         <?php if (isset($content->image) && !empty($content->image)): ?>
         <div class="col-md-6 mb-4 text-left" id="imageContainer">
             <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-            <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo TfishDataValidator::escape($content->image); ?>">
+            <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo TfishDataValidator::escapeForXss($content->image); ?>">
         </div>
         <?php else: ?>
             <div class="col-md-6 mb-3 text-left" id="imageContainer">
@@ -134,11 +134,11 @@
             'showUpload': false,
             'allowedFileExtensions': ["gif", "jpg", "png"],
             'previewFileType': ["image"],
-            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . TfishDataValidator::escape($content->image); ?>',
+            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . TfishDataValidator::escapeForXss($content->image); ?>',
             'initialPreviewAsData': true,
             'initialPreviewShowDelete': false,
-            'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_IMAGE_URL . TfishDataValidator::escape($content->image); ?>',
-            'initialCaption': '<?php if (isset($content->image)) echo TfishDataValidator::escape($content->image); ?>',
+            'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_IMAGE_URL . TfishDataValidator::escapeForXss($content->image); ?>',
+            'initialCaption': '<?php if (isset($content->image)) echo TfishDataValidator::escapeForXss($content->image); ?>',
             'theme': "fa"});
 
             $('#image').on('fileclear', function(tf_deleteImage) {
@@ -154,7 +154,7 @@
         <?php if (isset($content->media) && !empty($content->media)): ?>
         <div class="col-md-6 mb-4 text-left" id="mediaContainer">
             <label for="media"><strong><span class="alert2 text-danger d-none hide"><i class="fas fa-exclamation-triangle" title="<?php echo TFISH_MEDIA_NOT_COMPATIBLE; ?>"></i> </span><?php echo TFISH_MEDIA; ?></strong></label>
-            <input id="media" name="media" type="file" data-preview-file-type="text" value="<?php echo TfishDataValidator::escape($content->media); ?>">
+            <input id="media" name="media" type="file" data-preview-file-type="text" value="<?php echo TfishDataValidator::escapeForXss($content->media); ?>">
         </div>
         <?php else: ?>
             <div class="col-md-6 mb-4 text-left" id="mediaContainer">
@@ -167,11 +167,11 @@
             $("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': ["any"],
-                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . TfishDataValidator::escape($content->media); ?>',
+                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . TfishDataValidator::escapeForXss($content->media); ?>',
                 'initialPreviewAsData': true,
                 'initialPreviewShowDelete': false,
-                'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . TfishDataValidator::escape($content->media); ?>',
-                'initialCaption': '<?php echo TfishDataValidator::escape($content->media); ?>',
+                'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . TfishDataValidator::escapeForXss($content->media); ?>',
+                'initialCaption': '<?php echo TfishDataValidator::escapeForXss($content->media); ?>',
                 'allowedFileExtensions': ["doc","docx","gif","gz","jpg","mp3","mp4","odt",
                     "ods","odp","oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm",
                     "xls","xlsx","zip"],
@@ -186,7 +186,7 @@
         <!-- Caption -->
         <div class="col-md-6 mb-3 text-left" id="captionContainer">
             <label for="caption"><strong><?php echo TFISH_CAPTION; ?></strong></label>
-            <input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) echo 'value="' . TfishDataValidator::escape($content->caption) . '"'; ?>>
+            <input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) echo 'value="' . TfishDataValidator::escapeForXss($content->caption) . '"'; ?>>
         </div>
 
         <!-- Rights -->
@@ -196,9 +196,9 @@
                 <?php
                     foreach ($rights as $key => $right) {
                         if ($content->rights === $key) {
-                            echo '<option value="' . TfishDataValidator::escape($key) . '" selected>' . TfishDataValidator::escape($right) . '</option>';
+                            echo '<option value="' . TfishDataValidator::escapeForXss($key) . '" selected>' . TfishDataValidator::escapeForXss($right) . '</option>';
                         } else {
-                            echo '<option value="' . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($right) . '</option>';
+                            echo '<option value="' . TfishDataValidator::escapeForXss($key) . '">' . TfishDataValidator::escapeForXss($right) . '</option>';
                         }
                     }
                 ?>
@@ -212,9 +212,9 @@
                     <?php
                         foreach ($languages as $key => $value) {
                             if (isset($content->language) && $content->language === $key) {
-                                echo '<option value="' . TfishDataValidator::escape($key) . '" selected>' . TfishDataValidator::escape($value) . '</option>';
+                                echo '<option value="' . TfishDataValidator::escapeForXss($key) . '" selected>' . TfishDataValidator::escapeForXss($value) . '</option>';
                             } else {
-                                echo '<option value="' . TfishDataValidator::escape($key) . '">' . TfishDataValidator::escape($value) . '</option>';
+                                echo '<option value="' . TfishDataValidator::escapeForXss($key) . '">' . TfishDataValidator::escapeForXss($value) . '</option>';
                             }
                         }
                     ?>
@@ -236,19 +236,19 @@
         
         <!-- Counter -->
         <?php if ($content->counter): ?>
-        <input type="hidden" id="counter" name="counter" value="<?php echo TfishDataValidator::escape($content->counter); ?>" />
+        <input type="hidden" id="counter" name="counter" value="<?php echo TfishDataValidator::escapeForXss($content->counter); ?>" />
         <?php endif; ?>
 
         <!-- Format -->
         <?php if ($content->format): ?>
-        <input type="hidden" id="format" name="format" value="<?php echo TfishDataValidator::escape($content->format); ?>" />
+        <input type="hidden" id="format" name="format" value="<?php echo TfishDataValidator::escapeForXss($content->format); ?>" />
         <?php else: ?>
         <input type="hidden" id="format" name="format" value="" />
         <?php endif; ?>
 
         <!-- File size -->
         <?php if ($content->file_size): ?>
-        <input type="hidden" id="file_size" name="file_size" value="<?php echo TfishDataValidator::escape($content->file_size); ?>" />
+        <input type="hidden" id="file_size" name="file_size" value="<?php echo TfishDataValidator::escapeForXss($content->file_size); ?>" />
         <?php endif; ?>
         
         <div class="col-md-12" id="metaHeader">
@@ -259,27 +259,27 @@
         <!-- Meta title -->
         <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
             <label for="meta_title"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . TfishDataValidator::escape($content->meta_title) . '"'; } ?>>
+            <input type="text" class="form-control" name="meta_title" id="meta_title" <?php if (isset($content->meta_title)) { echo 'value="' . TfishDataValidator::escapeForXss($content->meta_title) . '"'; } ?>>
         </div>
 
         <!-- SEO -->
         <div class="col-md-6 mb-3 text-left" id="seoContainer">
             <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
-            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . TfishDataValidator::escape($content->seo) . '"'; } ?>>
+            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . TfishDataValidator::escapeForXss($content->seo) . '"'; } ?>>
         </div>
 
         <!-- Meta description -->
         <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
             <label for="meta_description"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
-            <input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . TfishDataValidator::escape($content->meta_description) . '"'; } ?>>
+            <input type="text" class="form-control" name="meta_description" id="meta_description" <?php if (isset($content->meta_description)) { echo 'value="' . TfishDataValidator::escapeForXss($content->meta_description) . '"'; } ?>>
         </div>
     
     </div> <!-- /row -->
 
     <!-- Action buttons -->
     <div class="float-left clearfix">
-        <button class="btn btn-primary" onclick="this.form.elements.op.value = '<?php echo TfishDataValidator::escape($op); ?>';
-                submit()"><?php echo TfishDataValidator::escape($action); ?></button>
+        <button class="btn btn-primary" onclick="this.form.elements.op.value = '<?php echo TfishDataValidator::escapeForXss($op); ?>';
+                submit()"><?php echo TfishDataValidator::escapeForXss($action); ?></button>
         <button class="btn btn-primary" onclick="this.form.elements.op.value = '';
                 submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
     </div>

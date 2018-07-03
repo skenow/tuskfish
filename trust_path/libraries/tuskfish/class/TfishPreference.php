@@ -109,7 +109,7 @@ class TfishPreference extends TfishAncestralObject
      * @param string $property Name of property.
      * @return string Value of property escaped for display.
      */
-    public function escape(string $property)
+    public function escapeForXss(string $property)
     {
         $clean_property = TfishDataValidator::trimString($property);
         

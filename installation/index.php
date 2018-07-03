@@ -53,7 +53,7 @@ class TfishPreference
 {
     function __construct() {}
     
-    public function escape(string $property)
+    public function escapeForXss(string $property)
     {
         $clean_property = TfishDataValidator::trimString($property);
         

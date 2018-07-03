@@ -45,15 +45,15 @@ if ($clean_id) {
         // Prepare meta information for display.
         $contentInfo = array();
         if ($content->creator)
-            $contentInfo[] = $content->escape('creator');
+            $contentInfo[] = $content->escapeForXss('creator');
         if ($content->date)
-            $contentInfo[] = $content->escape('date');
+            $contentInfo[] = $content->escapeForXss('date');
         if ($content->counter)
-            $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+            $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
         if ($content->format)
-            $contentInfo[] = '.' . $content->escape('format');
+            $contentInfo[] = '.' . $content->escapeForXss('format');
         if ($content->file_size)
-            $contentInfo[] = $content->escape('file_size');
+            $contentInfo[] = $content->escapeForXss('file_size');
         if ($content->tags) {
             $tags = $content_handler->makeTagLinks($content->tags); // For a content type-specific page use $content->tags, $content->template
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);

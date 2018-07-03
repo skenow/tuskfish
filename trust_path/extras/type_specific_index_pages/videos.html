@@ -5,7 +5,7 @@
 <?php foreach ($content_objects as $content): ?>
 <div class="clearfix">
     <div class="text-left">
-        <h3><a href="<?php echo $content->getURL($target_file_name); ?>"><?php echo $content->icon; ?> <?php echo $content->escape('title'); ?></a></h3>
+        <h3><a href="<?php echo $content->getURL($target_file_name); ?>"><?php echo $content->icon; ?> <?php echo $content->escapeForXss('title'); ?></a></h3>
     </div>
     <?php if ($content->image): ?>
     <div class="float-left">
@@ -13,7 +13,7 @@
             <a href="<?php echo $content->getURL($target_file_name); ?>">
                 <img class="img-fluid" src="<?php echo $content->getCachedImage(100); ?>" 
                      <?php if ($content->caption): ?>
-                     title="<?php echo $content->escape('caption'); ?>" alt="<?php echo $content->escape('caption'); ?>"
+                     title="<?php echo $content->escapeForXss('caption'); ?>" alt="<?php echo $content->escapeForXss('caption'); ?>"
                      <?php else: ?>
                      alt=""
                      <?php endif; ?>
@@ -22,7 +22,7 @@
     </div>
     <?php endif; ?>
     <?php if ($content->teaser): ?>
-    <div class="text-left"><?php echo $content->escape('teaser'); ?></div>
+    <div class="text-left"><?php echo $content->escapeForXss('teaser'); ?></div>
     <?php endif; ?>
 </div>
 <?php endforeach; ?>

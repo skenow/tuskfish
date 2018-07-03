@@ -3,11 +3,11 @@
 <?php if ($content): ?>
 
 <?php if ($content->title): ?>
-    <div class="block-title"><h3><?php echo $content->escape('title'); ?></h3></div>
+    <div class="block-title"><h3><?php echo $content->escapeForXss('title'); ?></h3></div>
 <?php endif; ?>
 
 <?php if ($content->description): ?>
-    <div class="block-description"><?php echo $content->escape('description'); ?></div>
+    <div class="block-description"><?php echo $content->escapeForXss('description'); ?></div>
 <?php endif; ?>
 
 <?php endif; ?>

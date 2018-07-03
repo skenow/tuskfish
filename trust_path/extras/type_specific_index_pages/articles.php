@@ -55,13 +55,13 @@ if ($clean_id) {
         $contentInfo = array();
         
         if ($content->creator)
-            $contentInfo[] = $content->escape('creator');
+            $contentInfo[] = $content->escapeForXss('creator');
         
         if ($content->date)
-            $contentInfo[] = $content->escape('date');
+            $contentInfo[] = $content->escapeForXss('date');
         
         if ($content->counter)
-            $contentInfo[] = $content->escape('counter') . ' ' . TFISH_VIEWS;
+            $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {

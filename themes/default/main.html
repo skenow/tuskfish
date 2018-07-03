@@ -4,7 +4,7 @@
 <?php if (isset($page_title)): ?>
 <div class="row">
   <div class="col">
-    <h1 class="page-title"><?php echo TfishDataValidator::escape($page_title); ?></h1>
+    <h1 class="page-title"><?php echo TfishDataValidator::escapeForXss($page_title); ?></h1>
   </div>
 </div>
 <?php endif; ?>

@@ -14,7 +14,7 @@
             ?>
             <tr>
                 <td><?php echo constant($lang); ?></td>
-                <td><?php echo TfishDataValidator::escape($value); ?></td>
+                <td><?php echo TfishDataValidator::escapeForXss($value); ?></td>
                 <?php unset($key, $value, $lang); ?>
             </tr>
             <?php } ?>

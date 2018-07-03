@@ -111,7 +111,7 @@ class TfishTagHandler extends TfishContentHandler
 
         $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 1))
                 ? (int) $selected : null;
-        $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
+        $clean_zero_option = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($zero_option));
         
         $content_handler = new TfishContentHandler();
         $clean_type = $content_handler->isSanctionedType($type)
@@ -163,16 +163,16 @@ class TfishTagHandler extends TfishContentHandler
             
             foreach ($tag_list as $key => $value) {
                 $clean_key = (int) $key;
-                $clean_value = TfishDataValidator::escape(TfishDataValidator::trimString($value));
+                $clean_value = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($value));
                 $clean_tag_list[$clean_key] = $clean_value;
                 unset($key, $clean_key, $value, $clean_value);
             }
         }
         
         // The text to display in the zero option of the select box.
-        $clean_zero_option = TfishDataValidator::escape(TfishDataValidator::trimString($zero_option));
+        $clean_zero_option = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($zero_option));
         $clean_key_name = isset($key_name)
-                ? TfishDataValidator::escape(TfishDataValidator::trimString($key_name)) : 'tag_id';
+                ? TfishDataValidator::escapeForXss(TfishDataValidator::trimString($key_name)) : 'tag_id';
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
