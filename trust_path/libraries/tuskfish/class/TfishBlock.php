@@ -55,9 +55,9 @@ class TfishBlock extends TfishContentObject
         $this->__data['icon'] = '<i class="fas fa-cube"></i>';
 
         // Object definition - unset any properties unused in this subclass.
-        $zeroedProperties = $this->getListOfZeroedProperties();
+        $listOfZeroedProperties = $this->getListOfZeroedProperties();
         
-        foreach ($zeroedProperties as $property) {
+        foreach ($listOfZeroedProperties as $property) {
             unset($this->__properties[$property], $this->__data[$property]);
         }
     }
