@@ -57,7 +57,7 @@ class TfishPreferenceHandler
     {
         // Convert preference object to array of key => values.
         if (is_a($tfish_preference, 'TfishPreference')) {
-            $key_values = $tfish_preference->toArray();
+            $key_values = $tfish_preference->convertObjectToArray();
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }

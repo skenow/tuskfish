@@ -152,7 +152,7 @@ class TfishAncestralObject
      * 
      * @return array Array of object property/values.
      */
-    public function toArray()
+    public function convertObjectToArray()
     {
         $key_values = array();
         $properties = $this->getPropertyWhitelist();

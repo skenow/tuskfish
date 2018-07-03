@@ -158,7 +158,7 @@ class TfishContentHandler
      */
     public function insert(TfishContentObject $obj)
     {   
-        $key_values = $obj->toArray();
+        $key_values = $obj->convertObjectToArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
         unset($key_values['tags']);
@@ -943,7 +943,7 @@ class TfishContentHandler
     public function update(TfishContentObject $obj)
     {
         $clean_id = TfishDataValidator::isInt($obj->id, 1) ? (int) $obj->id : 0;
-        $key_values = $obj->toArray();
+        $key_values = $obj->convertObjectToArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
         $zeroed_properties = $obj->getListOfZeroedProperties();
         
