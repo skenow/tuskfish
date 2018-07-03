@@ -24,7 +24,7 @@ $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($clean_id) {
     $content_handler = new TfishContentHandler();
     $content_handler->updateCounter($clean_id);
-    TfishFileHandler::sendDownload($clean_id);
+    TfishFileHandler::sendDownloadToBrowser($clean_id);
 }
 
 exit;
