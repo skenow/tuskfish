@@ -449,7 +449,7 @@ class TfishFileHandler
         
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $content_handler = new TfishContentHandler();
-        $content = $content_handler->toObject($row);
+        $content = $content_handler->convertRowToObject($row);
         
         if ($content && $content->online) {
             $media = isset($content->media) ? $content->media : false;

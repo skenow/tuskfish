@@ -389,7 +389,7 @@ class TfishContentHandler
             }
             
             if ($row) {
-                $object = $this->toObject($row);
+                $object = $this->convertRowToObject($row);
                 return $object;
             }
         }
@@ -892,7 +892,7 @@ class TfishContentHandler
      * @param array $row Array of result set from database.
      * @return object|bool Content object on success, false on failure.
      */
-    public function toObject(array $row)
+    public function convertRowToObject(array $row)
     {
         if (empty($row) || !TfishDataValidator::isArray($row)) {
             return false;

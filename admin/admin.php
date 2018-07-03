@@ -180,7 +180,7 @@ if (in_array($op, $options_whitelist)) {
                     $tfish_template->page_title = TFISH_EDIT_CONTENT;
                     $tfish_template->op = 'update'; // Critical to launch correct submission action.
                     $tfish_template->action = TFISH_UPDATE;
-                    $tfish_template->content = $content_handler->toObject($row, false);
+                    $tfish_template->content = $content_handler->convertRowToObject($row, false);
                     $tfish_template->content_types = $content_handler->getTypes();
                     $tfish_template->rights = $content_handler->getListOfRights();
                     $tfish_template->languages = $content_handler->getListOfLanguages();
