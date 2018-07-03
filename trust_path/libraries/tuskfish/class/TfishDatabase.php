@@ -324,7 +324,7 @@ class TfishDatabase
             if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSql();
-                $pdo_placeholders = $criteria->renderPDO();
+                $pdo_placeholders = $criteria->renderPdo();
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
             }
@@ -562,7 +562,7 @@ class TfishDatabase
             if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSql();
-                $pdo_placeholders = $criteria->renderPDO();
+                $pdo_placeholders = $criteria->renderPdo();
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
             }
@@ -691,7 +691,7 @@ class TfishDatabase
             if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSql();
-                $pdo_placeholders = $criteria->renderPDO();
+                $pdo_placeholders = $criteria->renderPdo();
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
@@ -781,7 +781,7 @@ class TfishDatabase
             if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSql();
-                $pdo_placeholders = $criteria->renderPDO();
+                $pdo_placeholders = $criteria->renderPdo();
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
@@ -1023,7 +1023,7 @@ class TfishDatabase
             if (TfishDataValidator::isArray($criteria->item)) {
                 $pdo_placeholders = array();
                 $sql .= $criteria->renderSql();
-                $pdo_placeholders = $criteria->renderPDO();
+                $pdo_placeholders = $criteria->renderPdo();
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
