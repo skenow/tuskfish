@@ -64,7 +64,7 @@ class TfishTag extends TfishContentObject
         $this->__data['icon'] = '<i class="fas fa-tag"></i>';
 
         // Object definition - unset any properties unused in this subclass.
-        $zeroedProperties = $this->zeroedProperties();
+        $zeroedProperties = $this->getListOfZeroedProperties();
         
         foreach ($zeroedProperties as $property) {
             unset($this->__properties[$property], $this->__data[$property]);
@@ -114,7 +114,7 @@ class TfishTag extends TfishContentObject
      * 
      * @return array Array of properties that should be zeroed (unset).
      */
-    public function zeroedProperties()
+    public function getListOfZeroedProperties()
     {
         return array(
             'creator',

@@ -593,7 +593,7 @@ class TfishContentObject extends TfishAncestralObject
              * If try to set some other random property (which probably means a typo has been made)
              * throw an error to help catch bugs.
              */
-            if (!in_array($clean_property, $this->zeroedProperties())) {
+            if (!in_array($clean_property, $this->getListOfZeroedProperties())) {
                 trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_WARNING);
             }
         }
@@ -896,7 +896,7 @@ class TfishContentObject extends TfishAncestralObject
      * 
      * @return array
      */
-    public function zeroedProperties()
+    public function getListOfZeroedProperties()
     {
         return array();
     }

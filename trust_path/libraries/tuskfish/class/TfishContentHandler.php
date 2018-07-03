@@ -945,7 +945,7 @@ class TfishContentHandler
         $clean_id = TfishDataValidator::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->toArray();
         unset($key_values['submission_time']); // Submission time should not be overwritten.
-        $zeroed_properties = $obj->zeroedProperties();
+        $zeroed_properties = $obj->getListOfZeroedProperties();
         
         foreach ($zeroed_properties as $property) {
             $key_values[$property] = null;
