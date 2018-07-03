@@ -506,7 +506,7 @@ class TfishContentHandler
      * 
      * @return array Array of copyright licenses.
      */
-    public function getRights()
+    public function getListOfRights()
     {
         return array(
             '1' => TFISH_RIGHTS_COPYRIGHT,

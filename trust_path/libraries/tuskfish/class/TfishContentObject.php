@@ -188,7 +188,7 @@ class TfishContentObject extends TfishAncestralObject
 
             case "rights":
                 $content_handler = new TfishContentHandler();
-                $rights = $content_handler->getRights();
+                $rights = $content_handler->getListOfRights();
 
                 return $rights[$this->__data[$clean_property]];
                 break;

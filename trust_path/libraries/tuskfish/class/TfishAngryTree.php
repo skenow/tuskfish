@@ -66,7 +66,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishAngryTree
 {
-
+    
     /** @var array $_objects Array of objects to be assembled into a category tree. */
     private $_objects;
     

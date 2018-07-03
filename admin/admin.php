@@ -74,7 +74,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->page_title = TFISH_ADD_CONTENT;
             $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
             $tfish_template->content_types = $content_handler->getTypes();
-            $tfish_template->rights = $content_handler->getRights();
+            $tfish_template->rights = $content_handler->getListOfRights();
             $tfish_template->languages = $content_handler->getLanguages();
             $tfish_template->tags = $content_handler->getTagList(false);
 
@@ -182,7 +182,7 @@ if (in_array($op, $options_whitelist)) {
                     $tfish_template->action = TFISH_UPDATE;
                     $tfish_template->content = $content_handler->toObject($row, false);
                     $tfish_template->content_types = $content_handler->getTypes();
-                    $tfish_template->rights = $content_handler->getRights();
+                    $tfish_template->rights = $content_handler->getListOfRights();
                     $tfish_template->languages = $content_handler->getLanguages();
                     $tfish_template->tags = $content_handler->getTagList(false);
                     $tfish_template->parent_select_options = 

@@ -28,7 +28,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishArticleHandler extends TfishContentHandler
 {
-
+    
     /**
      * Get TfishArticle objects, optionally matching conditions specified in a TfishCriteria object.
      * 

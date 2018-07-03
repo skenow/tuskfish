@@ -27,7 +27,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishBlockHandler extends TfishContentHandler
 {
-
+    
     /**
      * Get TfishBlock objects, optionally matching conditions specified with a TfishCriteria object.
      * 

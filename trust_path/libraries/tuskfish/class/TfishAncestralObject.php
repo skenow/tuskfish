@@ -31,7 +31,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishAncestralObject
 {
-
+    
     /** @var array $__properties Whitelist that defines permitted content object properties. */
     protected $__properties = array();
     
