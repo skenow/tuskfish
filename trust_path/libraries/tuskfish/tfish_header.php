@@ -32,7 +32,7 @@ require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php'
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
-set_error_handler("TfishLogger::logErrors");
+set_error_handler("TfishLogger::logError");
 
 // Ensure that a database connection is available.
 TfishDatabase::connect();
