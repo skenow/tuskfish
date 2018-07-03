@@ -815,7 +815,7 @@ class TfishContentObject extends TfishAncestralObject
 
                 if ($clean_property === "language") {
                     $content_handler = new TfishContentHandler();
-                    $language_whitelist = $content_handler->getLanguages();
+                    $language_whitelist = $content_handler->getListOfLanguages();
 
                     if (!array_key_exists($value, $language_whitelist)) {
                         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);

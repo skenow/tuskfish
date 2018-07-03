@@ -75,7 +75,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
             $tfish_template->content_types = $content_handler->getTypes();
             $tfish_template->rights = $content_handler->getListOfRights();
-            $tfish_template->languages = $content_handler->getLanguages();
+            $tfish_template->languages = $content_handler->getListOfLanguages();
             $tfish_template->tags = $content_handler->getTagList(false);
 
             // Make a parent tree select box options.
@@ -183,7 +183,7 @@ if (in_array($op, $options_whitelist)) {
                     $tfish_template->content = $content_handler->toObject($row, false);
                     $tfish_template->content_types = $content_handler->getTypes();
                     $tfish_template->rights = $content_handler->getListOfRights();
-                    $tfish_template->languages = $content_handler->getLanguages();
+                    $tfish_template->languages = $content_handler->getListOfLanguages();
                     $tfish_template->tags = $content_handler->getTagList(false);
                     $tfish_template->parent_select_options = 
                             $parent_tree->makeParentSelectBox((int) $row['parent']);

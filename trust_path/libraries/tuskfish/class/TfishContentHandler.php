@@ -326,7 +326,7 @@ class TfishContentHandler
      * 
      * @return array Array of languages in ISO 639-1 code => name format.
      */
-    public function getLanguages()
+    public function getListOfLanguages()
     {
         return array(
             "en" => "English",
