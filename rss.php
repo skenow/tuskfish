@@ -37,6 +37,9 @@ $rss = new TfishRss($tfish_preference);
 // Prepare a mimetype lookup buffer.
 $mimetype_list = TfishUtils::getMimetypes();
 
+// Get a generic content object handler.
+$content_handler = new TfishContentHandler();
+
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.
 $criteria = new TfishCriteria();
@@ -52,7 +55,6 @@ if ($clean_tag_id) {
 
 // Optionally make a feed specific to a collection object.
 if ($clean_id) {
-    $content_handler = new TfishContentHandler();
     $collection = $content_handler->getObject($clean_id);
     
     if ($collection && TfishDataValidator::isObject($collection)) {

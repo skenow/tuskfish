@@ -48,12 +48,12 @@ class TfishDataValidator
      * @param mixed $output Unescaped string intended for display.
      * @return string Escaped output string safe for display.
      */
-    public static function escapeForXss($output)
+    public static function escapeForXss($dirty_text)
     {
-        $output = (string) $output;
+        $dirty_text = (string) $dirty_text;
         
-        if (isset($output)) {
-            return htmlspecialchars($output, ENT_QUOTES, 'UTF-8', false);
+        if (isset($dirty_text)) {
+            return htmlspecialchars($dirty_text, ENT_QUOTES, 'UTF-8', false);
         } else {
             return '';
         }
