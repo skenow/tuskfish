@@ -574,7 +574,7 @@ class TfishDatabase
             // Set tag(s).
             if (!empty($criteria->tag)) {
                 $sql .= $criteria->renderTagSQL();
-                $tag_placeholders = $criteria->renderTagPDO();
+                $tag_placeholders = $criteria->renderTagPdo();
             }
 
             // Set GROUP BY.
@@ -704,7 +704,7 @@ class TfishDatabase
             // Set tag(s).
             if (!empty($criteria->tag)) {
                 $sql .= $criteria->renderTagSQL();
-                $tag_placeholders = $criteria->renderTagPDO();
+                $tag_placeholders = $criteria->renderTagPdo();
             }
         }
 
@@ -794,7 +794,7 @@ class TfishDatabase
             // Set tag(s).
             if (!empty($criteria->tag)) {
                 $sql .= $criteria->renderTagSQL();
-                $tag_placeholders = $criteria->renderTagPDO();
+                $tag_placeholders = $criteria->renderTagPdo();
             }
 
             // Set GROUP BY.
