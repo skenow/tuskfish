@@ -475,7 +475,7 @@ class TfishContentObject extends TfishAncestralObject
      * @param string $custom_page Use an arbitrary target page or the home page (index.php).
      * @return string URL to view this object.
      */
-    public function getURL(string $custom_page = '')
+    public function getUrl(string $custom_page = '')
     {
         $url = empty($custom_page) ? TFISH_PERMALINK_URL : TFISH_URL;
         

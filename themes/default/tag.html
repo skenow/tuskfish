@@ -50,11 +50,11 @@
 <div class="clearfix">
   <div>
     <h3 class="mb-3"><?php echo TFISH_RELATED; ?></h3>
-    <h4 class="parent"><a href="<?php echo $parent->getURL($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escapeForXss('title'); ?></a></h4>
+    <h4 class="parent"><a href="<?php echo $parent->getUrl($target_file_name); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escapeForXss('title'); ?></a></h4>
     <?php if ($parent->image): ?>
     <div class="float-left">
       <figure class="figure-left">
-      <a href="<?php echo $parent->getURL($target_file_name); ?>">
+      <a href="<?php echo $parent->getUrl($target_file_name); ?>">
       <img class="image img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
       <?php if ($parent->caption): ?>
           title="<?php echo $parent->escapeForXss('caption'); ?>" alt="<?php echo $parent->escapeForXss('caption'); ?>"
@@ -85,11 +85,11 @@
 <div>
   <?php foreach ($first_children as $child): ?>
   <div class="clearfix">
-    <h4 class="child-title"><a href="<?php echo $child->getURL($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escapeForXss('title'); ?></a></h4>
+    <h4 class="child-title"><a href="<?php echo $child->getUrl($target_file_name); ?>"><?php echo $child->icon; ?> <?php echo $child->escapeForXss('title'); ?></a></h4>
     <?php if ($child->image): ?>
     <div class="float-left">
       <figure class="figure-left">
-      <a href="<?php echo $child->getURL($target_file_name); ?>">
+      <a href="<?php echo $child->getUrl($target_file_name); ?>">
       <img class="image img-fluid" src="<?php echo $child->getCachedImage(150); ?>" 
       <?php if ($child->caption): ?>
           title="<?php echo $child->escapeForXss('caption'); ?>" alt="<?php echo $child->escapeForXss('caption'); ?>"

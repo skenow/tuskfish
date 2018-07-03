@@ -15,7 +15,7 @@
       <?php if ($item->title): ?>
       <title><?php echo $item->escapeForXss('title'); ?></title>
       <?php endif; ?>
-      <link><?php echo $item->getURL($target_file_name); ?></link>
+      <link><?php echo $item->getUrl($target_file_name); ?></link>
       <?php if ($item->teaser): ?>
       <description><![CDATA[<?php echo $item->escapeForXss('teaser'); ?>]]></description>
       <?php endif; ?>
