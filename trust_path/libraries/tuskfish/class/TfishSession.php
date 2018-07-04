@@ -77,7 +77,6 @@ class TfishSession
      */
     public static function isExpired(TfishPreference $tfish_preference)
     {
-        
         // Check if session carries a destroyed flag and kill it if the grace timer has expired.
         if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
             return true;
