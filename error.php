@@ -32,6 +32,6 @@ $tfish_metadata->title = TFISH_ERROR;
 // $tfish_metadata->copyright = '';
 // $tfish_metadata->generator = '';
 // $tfish_metadata->seo = '';
-// $tfish_metadata->robots = '';
+$tfish_metadata->robots = 'noindex,nofollow';
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";
