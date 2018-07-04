@@ -116,7 +116,7 @@ class TfishPreference extends TfishAncestralObject
         if (isset($this->__data[$clean_property])) {
             switch ($clean_property) {
                 default:
-                    return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8',
+                    return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8',
                             false);
                     break;
             }
