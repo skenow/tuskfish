@@ -50,7 +50,7 @@ class TfishCache
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public function checkCache(TfishPreference $tfish_preference, string $basename,
+    public function getFromCache(TfishPreference $tfish_preference, string $basename,
             array $params = array())
     {
         

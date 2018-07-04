@@ -46,7 +46,7 @@ if ($clean_id) {
         $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
-        $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
+        $tfish_cache->getFromCache($tfish_preference, $basename, $cache_parameters);
         
         // Assign content to template.
         $tfish_template->content = $content;
@@ -95,7 +95,7 @@ if ($clean_id) {
 // View index page of multiple objects (teasers).
 } else {
     // Check if cached page is available.
-    $tfish_cache->checkCache($tfish_preference, $basename, $cache_parameters);
+    $tfish_cache->getFromCache($tfish_preference, $basename, $cache_parameters);
     
     // Set criteria for selecting content objects.
     $criteria = new TfishCriteria();
