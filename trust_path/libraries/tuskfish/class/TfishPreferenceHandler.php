@@ -33,15 +33,15 @@ class TfishPreferenceHandler
     /**
      * Get the value of a particular site preference.
      * 
-     * @param string $pref Name of preference.
+     * @param string $preference Name of preference.
      * @return mixed|null Value of preference if it exists, otherwise null.
      */
-    public function get(string $pref)
+    public function get(string $preference)
     {
-        $pref = TfishDataValidator::trimString($pref);
+        $clean_preference = TfishDataValidator::trimString($preference);
         
-        if (TfishDataValidator::isAlnumUnderscore($pref)) {
-            return $this->tfish_preference->$pref;
+        if (TfishDataValidator::isAlnumUnderscore($clean_preference)) {
+            return $this->tfish_preference->$clean_preference;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             return null;
