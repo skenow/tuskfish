@@ -382,14 +382,14 @@ class TfishFileHandler
     /**
      * Returns an array of permitted extensions/mimetypes for a given content type.
      * 
-     * @param string $type The type (class) of content object.
+     * @param string $content_type The type (class) of content object.
      * @return array Array of mimetypes as extension => mimetype pairs.
      */
-    public static function getTypeMimetypes(string $type)
+    public static function getTypeMimetypes(string $content_type)
     {
-        $clean_type = TfishDataValidator::trimString($type);
+        $clean_content_type = TfishDataValidator::trimString($content_type);
 
-        switch ($clean_type) {
+        switch ($clean_content_type) {
             case "TfishAudio":
                 return self::getListOfAllowedAudioMimetypes();
                 break;
