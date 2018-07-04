@@ -52,7 +52,7 @@ class TfishArticleHandler extends TfishContentHandler
         $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
-            $criteria->killType($type_key);
+            $criteria->unsetType($type_key);
         }
 
         // Set new type criteria specific to this object.
@@ -83,7 +83,7 @@ class TfishArticleHandler extends TfishContentHandler
         $type_key = $this->getTypeIndex($criteria->item);
         
         if (isset($type_key)) {
-            $criteria->killType($type_key);
+            $criteria->unsetType($type_key);
         }
 
         // Set new type criteria specific to this object.

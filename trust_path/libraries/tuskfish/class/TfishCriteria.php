@@ -115,7 +115,7 @@ class TfishCriteria
      * 
      * @param int $key Key of the item array containing the type filter.
      */
-    public function killType(int $key)
+    public function unsetType(int $key)
     {
 
         if (isset($this->__data['item'][$key])) {
