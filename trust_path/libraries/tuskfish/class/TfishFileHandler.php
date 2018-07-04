@@ -85,21 +85,21 @@ class TfishFileHandler
     /**
      * Append a string to a file.
      * 
-     * Do not set the $path using untrusted data sources, such as user input.
+     * Do not set the $file_path using untrusted data sources, such as user input.
      * 
-     * @param string $path Path to the target file.
+     * @param string $file_path Path to the target file.
      * @param string $contents Content to append to the target file.
      * @return bool True on success false on failure.
      */
-    public static function appendToFile(string $path, string $contents)
+    public static function appendToFile(string $file_path, string $contents)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($path)) {
+        if (TfishDataValidator::hasTraversalorNullByte($file_path)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($path);
+        $clean_path = TfishDataValidator::trimString($file_path);
         // NOTE: Calling trim() removes linefeed from the contents.
         $clean_content = PHP_EOL . TfishDataValidator::trimString($contents);
         
@@ -118,29 +118,29 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _appendToFile(string $path, string $contents)
+    private static function _appendToFile(string $file_path, string $contents)
     {
-        return file_put_contents($path, $contents, FILE_APPEND);
+        return file_put_contents($file_path, $contents, FILE_APPEND);
     }
 
     /**
      * Deletes the contents of a specific directory, subdirectories are unaffected.
      * 
-     * Do not set the $path using untrusted data sources, such as user input.
+     * Do not set the $file_path using untrusted data sources, such as user input.
      * 
-     * @param string $path Path to the target directory.
+     * @param string $file_path Path to the target directory.
      * @return bool True on success false on failure.
      */
     
-    public static function clearDirectory(string $path)
+    public static function clearDirectory(string $file_path)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($path)) {
+        if (TfishDataValidator::hasTraversalorNullByte($file_path)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($path);
+        $clean_path = TfishDataValidator::trimString($file_path);
         
         if (!empty($clean_path)) {
             $result = self::_clearDirectory($clean_path);
@@ -159,15 +159,15 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _clearDirectory(string $path)
+    private static function _clearDirectory(string $file_path)
     {
-        $resolved_path = self::_dataFilePath($path);
+        $resolved_path = self::_dataFilePath($file_path);
         
         if ($resolved_path) {
             try {
                 foreach (new DirectoryIterator($resolved_path) as $file) {
                     if ($file->isFile() && !$file->isDot()) {
-                        self::_deleteFile($path . '/' . $file->getFileName());
+                        self::_deleteFile($file_path . '/' . $file->getFileName());
                     }
                 }
             } catch (Exception $e) {
@@ -188,21 +188,21 @@ class TfishFileHandler
      * Note that the running script must have executable permissions on all directories in the
      * hierarchy, otherwise realpath() will return FALSE (this is a realpath() limitation).
      *
-     * @param string $path Path relative to the data_file directory.
+     * @param string $file_path Path relative to the data_file directory.
      * @return string|bool Path on success, false on failure.
      */
-    private static function _dataFilePath(string $path)
+    private static function _dataFilePath(string $file_path)
     {
-        if (mb_strlen($path, 'UTF-8') > 0) {
-            $path = rtrim($path, '/');
-            $path = TFISH_UPLOADS_PATH . $path;
-            $resolved_path = realpath($path);
+        if (mb_strlen($file_path, 'UTF-8') > 0) {
+            $file_path = rtrim($file_path, '/');
+            $file_path = TFISH_UPLOADS_PATH . $file_path;
+            $resolved_path = realpath($file_path);
             
             // Basically this checks for directory traversals. This is a limited use function and
             // directory traversals are unnecessary. If any are found the input is suspect and
             // rejected.
-            if ($path === $resolved_path) {
-                return $path; // Path is good.
+            if ($file_path === $resolved_path) {
+                return $file_path; // Path is good.
             } else {
                 trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
                 return false; // Path is bad.
@@ -217,26 +217,26 @@ class TfishFileHandler
     /**
      * Destroys a directory and all contents recursively relative to the data_file directory.
      * 
-     * Do not set the $path using untrusted data sources, such as user input.
+     * Do not set the $file_path using untrusted data sources, such as user input.
      * 
-     * @param string $path Path relative to data_file directory.
+     * @param string $file_path Path relative to data_file directory.
      * @return bool True on success, false on failure.
      */
-    public static function deleteDirectory(string $path)
+    public static function deleteDirectory(string $file_path)
     {
         // Do not allow the upload, image or media directories to be deleted!
-        if (empty($path)) {
+        if (empty($file_path)) {
             trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
             return false;
         }
         
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($path)) {
+        if (TfishDataValidator::hasTraversalorNullByte($file_path)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($path);
+        $clean_path = TfishDataValidator::trimString($file_path);
         
         if ($clean_path) {
             $result = self::_deleteDirectory($clean_path);
@@ -254,14 +254,14 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _deleteDirectory(string $path)
+    private static function _deleteDirectory(string $file_path)
     {
-        $path = self::_dataFilePath($path);
+        $file_path = self::_dataFilePath($file_path);
         
-        if ($path) {
+        if ($file_path) {
             try {
                 $iterator = new RecursiveDirectoryIterator(
-                        $path,RecursiveDirectoryIterator::SKIP_DOTS);
+                        $file_path,RecursiveDirectoryIterator::SKIP_DOTS);
                 
                 foreach (new RecursiveIteratorIterator(
                         $iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
@@ -271,7 +271,7 @@ class TfishFileHandler
                         unlink($file->getPathname());
                     }
                 }
-                rmdir($path);
+                rmdir($file_path);
                 return true;
             } catch (Exception $e) {
                 TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
@@ -288,20 +288,20 @@ class TfishFileHandler
     /**
      * Destroys an individual file in the data_file directory.
      * 
-     * Do not set the $path using untrusted data sources, such as user input.
+     * Do not set the $file_path using untrusted data sources, such as user input.
      * 
-     * @param string $path Path relative to the data_file directory.
+     * @param string $file_path Path relative to the data_file directory.
      * @return bool True on success, false on failure.
      */
-    public static function deleteFile(string $path)
+    public static function deleteFile(string $file_path)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($path)) {
+        if (TfishDataValidator::hasTraversalorNullByte($file_path)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($path);
+        $clean_path = TfishDataValidator::trimString($file_path);
         
         if (!empty($clean_path)) {
             $result = self::_deleteFile($clean_path);
@@ -320,13 +320,13 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _deleteFile(string $path)
+    private static function _deleteFile(string $file_path)
     {
-        $path = self::_dataFilePath($path);
+        $file_path = self::_dataFilePath($file_path);
         
-        if ($path && file_exists($path)) {
+        if ($file_path && file_exists($file_path)) {
             try {
-                unlink($path);
+                unlink($file_path);
             } catch (Exeption $e) {
                 TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
