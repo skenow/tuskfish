@@ -48,57 +48,58 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    int enable_cache Enable site cache.
  * @property    int cache_life Expiry timer for site cache (seconds).
  */
-class TfishPreference extends TfishAncestralObject
+class TfishPreference
 {
-
-    /** Initialise default properties. */
+    
+    protected $site_name;
+    protected $site_description;
+    protected $site_author;
+    protected $site_email;
+    protected $site_copyright;
+    protected $close_site;
+    protected $server_timezone;
+    protected $site_timezone;
+    protected $min_search_length;
+    protected $search_pagination;
+    protected $user_pagination;
+    protected $admin_pagination;
+    protected $gallery_pagination;
+    protected $rss_posts;
+    protected $pagination_elements;
+    protected $session_name;
+    protected $session_life;
+    protected $default_language;
+    protected $date_format;
+    protected $enable_cache;
+    protected $cache_life;
+    
     function __construct()
     {
-        /**
-         * Set the permitted properties of this object.
-         */
-        $this->__properties['site_name'] = 'string';
-        $this->__properties['site_description'] = 'string';
-        $this->__properties['site_author'] = 'string';
-        $this->__properties['site_email'] = 'email';
-        $this->__properties['site_copyright'] = 'string';
-        $this->__properties['close_site'] = 'int';
-        $this->__properties['server_timezone'] = 'string';
-        $this->__properties['site_timezone'] = 'string';
-        $this->__properties['min_search_length'] = 'int';
-        $this->__properties['search_pagination'] = 'int';
-        $this->__properties['user_pagination'] = 'int';
-        $this->__properties['admin_pagination'] = 'int';
-        $this->__properties['gallery_pagination'] = 'int';
-        $this->__properties['rss_posts'] = 'int';
-        $this->__properties['pagination_elements'] = 'int';
-        $this->__properties['session_name'] = 'alnum';
-        $this->__properties['session_life'] = 'int';
-        $this->__properties['default_language'] = 'alpha';
-        $this->__properties['date_format'] = 'string';
-        $this->__properties['enable_cache'] = 'int';
-        $this->__properties['cache_life'] = 'int';
-
-        // Instantiate whitelisted fields in the protected $__data property.
-        foreach ($this->__properties as $key => $value) {
-            $this->__data[$key] = '';
-        }
-
-        $preferences = self::readPreferences();
+        $preferences = self::readPreferencesFromDatabase();
         
-        foreach ($preferences as $key => $value) {
-            if (isset($this->__data[$key])) {
-                if ($this->__properties[$key] === 'int') {
-                    $this->__set($key, (int) $value);
-                } else {
-                    $this->__set($key, $value);
-                }
-            }
-            
-            unset($key, $value);
-        }
+        $this->setSiteName($preferences['site_name']);
+        $this->setSiteDescription($preferences['site_description']);
+        $this->setSiteAuthor($preferences['site_author']);
+        $this->setSiteEmail($preferences['site_email']);
+        $this->setSiteCopyright($preferences['site_copyright']);
+        $this->setCloseSite($preferences['close_site']);
+        $this->setServerTimezone($preferences['server_timezone']);
+        $this->setSiteTimezone($preferences['site_timezone']);
+        $this->setMinSearchLength($preferences['min_search_length']);
+        $this->setSearchPagination($preferences['search_pagination']);
+        $this->setUserPagination($preferences['user_pagination']);
+        $this->setAdminPagination($preferences['admin_pagination']);
+        $this->setGalleryPagination($preferences['gallery_pagination']);
+        $this->setRssPosts($preferences['rss_posts']);
+        $this->setPaginationElements($preferences['pagination_elements']);
+        $this->setSessionName($preferences['session_name']);
+        $this->setSessionLife($preferences['session_life']);
+        $this->setDefaultLanguage($preferences['default_language']);
+        $this->setDateFormat($preferences['date_format']);
+        $this->setEnableCache($preferences['enable_cache']);
+        $this->setCacheLife($preferences['cache_life']);
     }
-
+    
     /**
      * Escape a property for on-screen display to prevent XSS.
      * 
@@ -113,24 +114,19 @@ class TfishPreference extends TfishAncestralObject
     {
         $clean_property = TfishDataValidator::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            switch ($clean_property) {
-                default:
-                    return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8',
-                            false);
-                    break;
-            }
+        if (isset($this->$clean_property)) {
+            return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8', false);
         } else {
             return null;
         }
     }
-
+    
     /**
      * Read out the site preferences into an array.
      * 
      * @return array Array of site preferences.
      */
-    public static function readPreferences()
+    public static function readPreferencesFromDatabase()
     {
         $preferences = array();
         $result = TfishDatabase::select('preference');
@@ -142,187 +138,200 @@ class TfishPreference extends TfishAncestralObject
         return $preferences;
     }
 
-    /**
-     * Set the value of a whitelisted property.
-     * 
-     * Intercepts direct calls to set the value of object properties. Imposes data type
-     * restrictions and range checks before allowing the properties to be set. 
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
+    public function setAdminPagination($value)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_value = (int) $value;
         
-        // Check that property is whitelisted.
-        if (!isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+        if (TfishDataValidator::isInt($clean_value, 1)) {
+            $this->admin_pagination = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setSiteAuthor($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setCacheLife($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 1)) {
+            $this->cache_life = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setCloseSite($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 0, 1)) {
+            $this->close_site = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setDateFormat($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setDefaultLanguage($value)
+    {
+        $clean_value = TfishDataValidator::trimString($value);
+        
+        if (!TfishDataValidator::isAlpha($clean_value)) {
+            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
 
-        // Validate $value against expected data type and business rules.
-        $type = $this->__properties[$clean_property];
+        $content_handler = new TfishContentHandler();
+        $language_whitelist = $content_handler->getListOfLanguages();
 
-        switch ($type) {
-            case "alpha":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if ($clean_property === "language") {
-                    $content_handler = new TfishContentHandler();
-                    $language_whitelist = $content_handler->getListOfLanguages();
-
-                    if (!array_key_exists($clean_value, $language_whitelist)) {
-                        trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                    }
-                }
-
-                if (TfishDataValidator::isAlpha($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-                }
-                break;
-
-            case "alnum":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if (TfishDataValidator::isAlnum($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
-                }
-                break;
-
-            case "alnumunder":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if (TfishDataValidator::isAlnumUnderscore($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-                }
-                break;
-
-            case "bool":
-                $clean_value = (bool) $value;
-                
-                if (TfishDataValidator::isBool($clean_value)) {
-                    $this->__data[$clean_property] = (bool) $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_BOOL, E_USER_ERROR);
-                }
-                break;
-
-            case "email":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if (TfishDataValidator::isEmail($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-                }
-                break;
-
-            case "digit":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if (TfishDataValidator::isDigit($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_DIGIT, E_USER_ERROR);
-                }
-                break;
-
-            case "float":
-                $clean_value = (float) $value;
-                
-                if (TfishDataValidator::isFloat($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_FLOAT, E_USER_ERROR);
-                }
-                break;
-
-            case "html":
-                $clean_value = TfishDataValidator::trimString($value);
-                $this->__data[$clean_property] = (string) TfishDataValidator::filterHtml($clean_value);
-                break;
-
-            case "int":
-                $clean_value = (int) $value;
-                
-                switch ($clean_property) {
-                    // 0 or 1.
-                    case "close_site":
-                    case "enable_cache":
-                        if (TfishDataValidator::isInt($clean_value, 0, 1)) {
-                            $this->__data[$clean_property] = $clean_value;
-                        } else {
-                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                        }
-                        break;
-
-                    // Minimum value 0.
-                    case "search_pagination":
-                    case "session_life":
-                        if (TfishDataValidator::isInt($clean_value, 0)) {
-                            $this->__data[$clean_property] = $clean_value;
-                        } else {
-                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                        }
-                        break;
-
-                    // Minimum value 1.
-                    case "admin_pagination":
-                    case "gallery_pagination":
-                    case "user_pagination":
-                    case "cache_life":
-                    case "rss_posts":
-                        if (TfishDataValidator::isInt($clean_value, 1)) {
-                            $this->__data[$clean_property] = $clean_value;
-                        } else {
-                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                        }
-                        break;
-
-                    // Minimum value 3.
-                    case "min_search_length":
-                    case "pagination_elements":
-                        if (TfishDataValidator::isInt($clean_value, 3)) {
-                            $this->__data[$clean_property] = $clean_value;
-                        } else {
-                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                        }
-                        break;
-                }
-                break;
-
-            case "ip":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if ($clean_value === "" || TfishDataValidator::isIp($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_IP, E_USER_ERROR);
-                }
-                break;
-
-            case "string":
-                $this->__data[$clean_property] = TfishDataValidator::trimString($value);
-                break;
-
-            case "url":
-                $clean_value = TfishDataValidator::trimString($value);
-
-                if ($clean_value === "" || TfishDataValidator::isUrl($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
-                }
-                break;
+        if (array_key_exists($clean_value, $language_whitelist)) {
+            $this->default_language = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
+    }
+    
+    public function setSiteDescription($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setSiteEmail($value)
+    {
+        $clean_value = TfishDataValidator::trimString($value);
+
+        if (TfishDataValidator::isEmail($clean_value)) {
+            $this->site_email = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    public function setEnableCache($value)
+    {
+        $clean_value = (int) $value;
         
-        return true;
+        if (TfishDataValidator::isInt($clean_value, 0, 1)) {
+            $this->enable_cache = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setGalleryPagination($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 1)) {
+            $this->gallery_pagination = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setMinSearchLength($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 3)) {
+            $this->min_search_length = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setPaginationElements($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 3)) {
+            $this->pagination_elements = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setRssPosts($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 1)) {
+            $this->rss_posts = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setSearchPagination($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 0)) {
+            $this->search_pagination = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setServerTimezone($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setSessionLife($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 0)) {
+            $this->session_life = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setSessionName($value)
+    {
+        $clean_value = TfishDataValidator::trimString($value);
+
+        if (TfishDataValidator::isAlnum($clean_value)) {
+            $this->session_name = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
+        }
+    }
+    
+    public function setSiteCopyright($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setSiteName($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setSiteTimezone($value)
+    {
+        $this->site_name = TfishDataValidator::trimString($value);
+    }
+    
+    public function setUserPagination($value)
+    {
+        $clean_value = (int) $value;
+        
+        if (TfishDataValidator::isInt($clean_value, 1)) {
+            $this->user_pagination = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
     }
 
     /**
