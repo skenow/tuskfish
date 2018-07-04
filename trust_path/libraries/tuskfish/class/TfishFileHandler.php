@@ -99,12 +99,12 @@ class TfishFileHandler
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($file_path);
+        $clean_file_path = TfishDataValidator::trimString($file_path);
         // NOTE: Calling trim() removes linefeed from the contents.
         $clean_content = PHP_EOL . TfishDataValidator::trimString($contents);
         
-        if ($clean_path && $clean_content) {
-            $result = self::_appendToFile($clean_path, $clean_content);
+        if ($clean_file_path && $clean_content) {
+            $result = self::_appendToFile($clean_file_path, $clean_content);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
@@ -140,10 +140,10 @@ class TfishFileHandler
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($file_path);
+        $clean_file_path = TfishDataValidator::trimString($file_path);
         
-        if (!empty($clean_path)) {
-            $result = self::_clearDirectory($clean_path);
+        if (!empty($clean_file_path)) {
+            $result = self::_clearDirectory($clean_file_path);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
@@ -236,10 +236,10 @@ class TfishFileHandler
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($file_path);
+        $clean_file_path = TfishDataValidator::trimString($file_path);
         
-        if ($clean_path) {
-            $result = self::_deleteDirectory($clean_path);
+        if ($clean_file_path) {
+            $result = self::_deleteDirectory($clean_file_path);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
                 return false;
@@ -301,10 +301,10 @@ class TfishFileHandler
             return false;
         }
         
-        $clean_path = TfishDataValidator::trimString($file_path);
+        $clean_file_path = TfishDataValidator::trimString($file_path);
         
-        if (!empty($clean_path)) {
-            $result = self::_deleteFile($clean_path);
+        if (!empty($clean_file_path)) {
+            $result = self::_deleteFile($clean_file_path);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
