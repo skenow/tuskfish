@@ -61,7 +61,7 @@ class TfishPreferenceHandler
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
-
+        
         foreach ($key_values as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
             $statement = TfishDatabase::preparedStatement($sql);

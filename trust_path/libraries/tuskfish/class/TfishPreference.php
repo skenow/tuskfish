@@ -51,9 +51,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishPreference
 {
     
-    /** @var array $__properties Whitelist that defines permitted preference object properties. */
-    protected $__properties = array();
-    
     /** @var array Holds values of permitted preference object properties. */
     protected $__data = array();
     
@@ -61,6 +58,22 @@ class TfishPreference
     {
         $preferences = $this->readPreferencesFromDatabase();
         $this->loadPropertiesFromArray($preferences);
+    }
+    
+    /**
+     * Converts a content object to an array suitable for insert/update calls to the database.
+     * 
+     * @return array Array of object property/values.
+     */
+    public function convertObjectToArray()
+    {
+        $key_values = array();
+        
+        foreach ($this->__data as $key => $value) {
+            $key_values[$key] = $value;
+        }
+        
+        return $key_values;
     }
     
     /**
@@ -82,16 +95,6 @@ class TfishPreference
         } else {
             return null;
         }
-    }
-    
-    /**
-     * Returns a whitelist of object properties whose values are allowed be set.
-     * 
-     * @return array Array of TfishPreference object properties.
-     */
-    public function getPropertyWhitelist()
-    {
-        return $this->__properties;
     }
     
     /**
@@ -319,29 +322,28 @@ class TfishPreference
         if (!TfishDataValidator::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
-
         // Validate object properties as they are assigned.
         if (isset($dirty_input['site_name'])) $this->setSiteName($dirty_input['site_name']);
         if (isset($dirty_input['site_description'])) $this->setSiteDescription($dirty_input['site_description']);
-        if (isset($dirty_input['site_authors'])) $this->setSiteAuthor($dirty_input['site_author']);
+        if (isset($dirty_input['site_author'])) $this->setSiteAuthor($dirty_input['site_author']);
         if (isset($dirty_input['site_email'])) $this->setSiteEmail($dirty_input['site_email']);
         if (isset($dirty_input['site_copyright'])) $this->setSiteCopyright($dirty_input['site_copyright']);
-        if (isset($dirty_input['close_site'])) $this->setCloseSite($dirty_input['close_site']);
+        if (isset($dirty_input['close_site'])) $this->setCloseSite((int) $dirty_input['close_site']);
         if (isset($dirty_input['server_timezone'])) $this->setServerTimezone($dirty_input['server_timezone']);
         if (isset($dirty_input['site_timezone'])) $this->setSiteTimezone($dirty_input['site_timezone']);
-        if (isset($dirty_input['min_search_length'])) $this->setMinSearchLength($dirty_input['min_search_length']);
-        if (isset($dirty_input['search_pagination'])) $this->setSearchPagination($dirty_input['search_pagination']);
-        if (isset($dirty_input['user_pagination'])) $this->setUserPagination($dirty_input['user_pagination']);
-        if (isset($dirty_input['admin_pagination'])) $this->setAdminPagination($dirty_input['admin_pagination']);
-        if (isset($dirty_input['gallery_pagination'])) $this->setGalleryPagination($dirty_input['gallery_pagination']);
-        if (isset($dirty_input['rss_posts'])) $this->setRssPosts($dirty_input['rss_posts']);
-        if (isset($dirty_input['pagination_elements'])) $this->setPaginationElements($dirty_input['pagination_elements']);
+        if (isset($dirty_input['min_search_length'])) $this->setMinSearchLength((int) $dirty_input['min_search_length']);
+        if (isset($dirty_input['search_pagination'])) $this->setSearchPagination((int) $dirty_input['search_pagination']);
+        if (isset($dirty_input['user_pagination'])) $this->setUserPagination((int) $dirty_input['user_pagination']);
+        if (isset($dirty_input['admin_pagination'])) $this->setAdminPagination((int) $dirty_input['admin_pagination']);
+        if (isset($dirty_input['gallery_pagination'])) $this->setGalleryPagination((int) $dirty_input['gallery_pagination']);
+        if (isset($dirty_input['rss_posts'])) $this->setRssPosts((int) $dirty_input['rss_posts']);
+        if (isset($dirty_input['pagination_elements'])) $this->setPaginationElements((int) $dirty_input['pagination_elements']);
         if (isset($dirty_input['session_name'])) $this->setSessionName($dirty_input['session_name']);
-        if (isset($dirty_input['session_life'])) $this->setSessionLife($dirty_input['session_life']);
+        if (isset($dirty_input['session_life'])) $this->setSessionLife((int) $dirty_input['session_life']);
         if (isset($dirty_input['default_language'])) $this->setDefaultLanguage($dirty_input['default_language']);
         if (isset($dirty_input['date_format'])) $this->setDateFormat($dirty_input['date_format']);
-        if (isset($dirty_input['enable_cache'])) $this->setEnableCache($dirty_input['enable_cache']);
-        if (isset($dirty_input['cache_life'])) $this->setCacheLife($dirty_input['cache_life']);
+        if (isset($dirty_input['enable_cache'])) $this->setEnableCache((int) $dirty_input['enable_cache']);
+        if (isset($dirty_input['cache_life'])) $this->setCacheLife((int) $dirty_input['cache_life']);
     }
     
     /** Magic methods **/
