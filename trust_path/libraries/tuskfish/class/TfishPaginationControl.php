@@ -34,12 +34,16 @@ class TfishPaginationControl
 {
     
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
-    private $preference;
+    protected $preference;
     
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
     function __construct(TfishPreference $preference)
     {
-        $this->preference = $preference;
+        if (is_a($preference, 'TfishPreference')) {
+            $this->preference = $preference;
+        } else {
+            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+        }        
     }
     
     /**
@@ -248,22 +252,11 @@ class TfishPaginationControl
      * Note that htmlspecialchars() should use the ENT_QUOTES flag, as most of these values are
      * used within attributes of meta tags, and a double quote would break them.
      */
+    
     public function __set(string $property, $value)
     {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        // Validate properties against expectations and business rules.
-        switch ($clean_property) {
-            case "preference":
-                if (is_a($value, 'TfishPreference')) {
-                    $this->preference = $value;
-                }
-                break;
-                
-            default:
-                trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-                break;
-        }        
+        trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);        
+        exit;    
     }
 
     /**
