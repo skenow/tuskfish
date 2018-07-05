@@ -327,3 +327,7 @@ define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a n
         . " failed");
 define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
         . " failed.");
+
+// 1.03
+define("TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED", "Object properties are not permitted to be"
+        . "set directly. Use the relevant setter method.");
