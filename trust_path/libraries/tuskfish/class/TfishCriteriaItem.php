@@ -53,9 +53,9 @@ class TfishCriteriaItem
      */
     function __construct(string $column, $value, string $operator = '=')
     {
-        self::__set('column', $column);
-        self::__set('value', $value);
-        self::__set('operator', $operator);
+        $this->setColumn($column);
+        $this->setValue($value);
+        $this->setOperator($operator);
     }
 
     /**
@@ -109,72 +109,69 @@ class TfishCriteriaItem
      * @param string $property Name of property.
      * @param mixed $value Value of property.
      */
+    
+    public function setColumn($value)
+    {
+        $clean_value = TfishDataValidator::trimString($value);
+                    
+        if (TfishDataValidator::isAlnumUnderscore($clean_value)) {
+            $this->__data['column'] = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+        }
+    }
+    
+    public function setValue($value)
+    {
+        $type = gettype($value);
+
+        switch ($type) {
+            case "string":
+                $clean_value = TfishDataValidator::trimString($value);
+                break;
+
+            // Types that can't be validated further in the current context.
+            case "array":
+            case "boolean":
+            case "integer":
+            case "double":
+                $clean_value = $value;
+                break;
+
+            // Illegal types.
+            case "object":
+            case "resource":
+            case "NULL":
+            case "unknown type":
+                trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+                break;
+        }
+
+        $this->__data['value'] = $clean_value;
+    }
+    
+    public function setOperator($value)
+    {
+        $clean_value = TfishDataValidator::trimString($value);
+                    
+        if (in_array($clean_value, self::getListOfPermittedOperators())) {
+            $this->__data['operator'] = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+    }
+        
     public function __set(string $property, $value)
     {
         $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
-            switch ($clean_property) {
-                case "column": // Alphanumeric and underscore characters only
-                    $value = TfishDataValidator::trimString($value);
-                    
-                    if (TfishDataValidator::isAlnumUnderscore($value)) {
-                        $this->__data['column'] = $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-                    }
-                    break;
-
-                // Could be any type of value, so it is difficult to validate.
-                case "value":
-                    $clean_value;
-                    $type = gettype($value);
-                    
-                    switch ($type) {
-                        // Strings are valid but should be trimmed of control characters.
-                        case "string":
-                            $clean_value = TfishDataValidator::trimString($value);
-                            break;
-
-
-                        // Types that can't be validated further in the current context.
-                        case "array":
-                        case "boolean":
-                        case "integer":
-                        case "double":
-                            $clean_value = $value;
-                            break;
-
-                        case "object":
-                        case "resource":
-                        case "NULL":
-                        case "uknown type":
-                            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
-                            break;
-                    }
-                    
-                    $this->__data['value'] = $clean_value;
-                    break;
-
-                // The default operator is "=" and this will be used unless something else is set.
-                case "operator":
-                    $value = TfishDataValidator::trimString($value);
-                    
-                    if (in_array($value, self::getListOfPermittedOperators())) {
-                        $this->__data['operator'] = $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                    }
-                    break;
-
-                default:
-                    trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
-                    break;
-            }
-            return true;
+            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
+        
+        exit;
     }
 
     /**
