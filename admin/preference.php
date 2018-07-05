@@ -33,7 +33,7 @@ if (in_array($op, array('edit', 'update', false))) {
         case "edit":
             TfishSession::validateToken($clean_token); // CSRF check.
             $tfish_template->page_title = TFISH_PREFERENCE_EDIT_PREFERENCES;
-            $tfish_template->preferences = $tfish_preference->readPreferencesFromDatabase();
+            $tfish_template->preferences = $tfish_preference->getPreferencesAsArray();
             $content_handler = new TfishContentHandler();
             $tfish_template->languages = $content_handler->getListOfLanguages();
             $tfish_template->timezones = TfishUtils::getListOfTimezones();
@@ -71,7 +71,7 @@ if (in_array($op, array('edit', 'update', false))) {
         // Default: Display a table of existing preferences.
         default:
             $tfish_template->page_title = TFISH_PREFERENCES;
-            $preferences = $tfish_preference->readPreferencesFromDatabase();
+            $preferences = $tfish_preference->getPreferencesAsArray();
             $content_handler = new TfishContentHandler();
             $languages = $content_handler->getListOfLanguages();
             $preferences['default_language'] = $languages[$preferences['default_language']];

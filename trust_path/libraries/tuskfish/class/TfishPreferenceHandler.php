@@ -30,22 +30,22 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishPreferenceHandler
 {
+    
     /**
-     * Get the value of a particular site preference.
+     * Read out the site preferences into an array.
      * 
-     * @param string $preference Name of preference.
-     * @return mixed|null Value of preference if it exists, otherwise null.
+     * @return array Array of site preferences.
      */
-    public function get(string $preference)
+    public function readPreferencesFromDatabase()
     {
-        $clean_preference = TfishDataValidator::trimString($preference);
+        $preferences = array();
+        $result = TfishDatabase::select('preference');
         
-        if (TfishDataValidator::isAlnumUnderscore($clean_preference)) {
-            return $this->tfish_preference->$clean_preference;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-            return null;
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $preferences[$row['title']] = $row['value'];
         }
+        
+        return $preferences;
     }
 
     /**
@@ -57,7 +57,7 @@ class TfishPreferenceHandler
     {
         // Convert preference object to array of key => values.
         if (is_a($tfish_preference, 'TfishPreference')) {
-            $key_values = $tfish_preference->convertObjectToArray();
+            $key_values = $tfish_preference->getPreferencesAsArray();
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }

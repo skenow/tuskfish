@@ -54,18 +54,17 @@ class TfishPreference
     /** @var array Holds values of permitted preference object properties. */
     protected $__data = array();
     
-    function __construct()
+    function __construct(array $preferences)
     {
-        $preferences = $this->readPreferencesFromDatabase();
         $this->loadPropertiesFromArray($preferences);
     }
     
     /**
-     * Converts a content object to an array suitable for insert/update calls to the database.
+     * Converts the preference object to an array suitable for insert/update calls to the database.
      * 
      * @return array Array of object property/values.
      */
-    public function convertObjectToArray()
+    public function getPreferencesAsArray()
     {
         $key_values = array();
         
@@ -95,23 +94,6 @@ class TfishPreference
         } else {
             return null;
         }
-    }
-    
-    /**
-     * Read out the site preferences into an array.
-     * 
-     * @return array Array of site preferences.
-     */
-    public function readPreferencesFromDatabase()
-    {
-        $preferences = array();
-        $result = TfishDatabase::select('preference');
-        
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $preferences[$row['title']] = $row['value'];
-        }
-        
-        return $preferences;
     }
 
     public function setAdminPagination(int $value)
