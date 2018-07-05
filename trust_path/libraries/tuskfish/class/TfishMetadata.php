@@ -62,13 +62,13 @@ class TfishMetadata
      */
     function __construct(TfishPreference $preference)
     {
-        $this->title = $preference->site_name;
-        $this->description = $preference->site_description;
-        $this->author = $preference->site_author;
-        $this->copyright = $preference->site_copyright;
-        $this->generator = 'Tuskfish CMS';
-        $this->seo = '';
-        $this->robots = 'index,follow';
+        $this->setTitle($preference->site_name);
+        $this->setDescription($preference->site_description);
+        $this->setAuthor($preference->site_author);
+        $this->setCopyright($preference->site_copyright);
+        $this->setGenerator('Tuskfish CMS');
+        $this->setSeo('');
+        $this->setRobots('index,follow');
     }
 
     /**
@@ -101,29 +101,59 @@ class TfishMetadata
      * Note that htmlspecialchars() should use the ENT_QUOTES flag, as most of these values are
      * used within attributes of meta tags, and a double quote would break them.
      */
+    
+    public function setTitle($value)
+    {
+        $this->setProperty('title', $value);
+    }
+    
+    public function setDescription($value)
+    {
+        $this->setProperty('description', $value);
+    }
+    
+    public function setAuthor($value)
+    {
+        $this->setProperty('author', $value);
+    }
+    
+    public function setCopyright($value)
+    {
+        $this->setProperty('copyright', $value);
+    }
+    
+    public function setGenerator(string $value)
+    {
+        $this->setProperty('generator', $value);
+    }
+    
+    public function setSeo(string $value)
+    {
+        $this->setProperty('seo', $value);
+    }
+    
+    public function setRobots(string $value)
+    {
+        $this->setProperty('robots', $value);
+    }
+    
+    private function setProperty(string $property, string $value)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        $clean_value = TfishDataValidator::trimString($value);
+        $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
+    }
+    
+    
     public function __set(string $property, $value)
     {
         $clean_property = TfishDataValidator::trimString($property);
         
-        // Check that property is whitelisted.
         if (!isset($this->__data[$clean_property])) {
+            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
+        } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
-        
-        // Validate properties against expectations and business rules.
-        switch ($clean_property) {
-            case "title":
-            case "description":
-            case "author":
-            case "copyright":
-            case "generator":
-            case "seo":
-            case "robots":
-                $clean_value = TfishDataValidator::trimString($value);
-                $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_QUOTES,
-                        "UTF-8", false);
-                break;
-        }        
     }
 
     /**

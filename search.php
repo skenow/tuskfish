@@ -78,13 +78,13 @@ $tfish_template->tfish_main_content = $tfish_template->render('form');
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tfish_metadata->title = TFISH_SEARCH;
-$tfish_metadata->description = TFISH_SEARCH_DESCRIPTION;
-// $tfish_metadata->author = '';
-// $tfish_metadata->copyright = '';
-// $tfish_metadata->generator = '';
-// $tfish_metadata->seo = '';
-// $tfish_metadata->robots = '';
-// Include page template and flush buffer
+$tfish_metadata->setTitle(TFISH_SEARCH);
+$tfish_metadata->setDescription(TFISH_SEARCH_DESCRIPTION);
+// $tfish_metadata->setAuthor('');
+// $tfish_metadata->setCopyright('');
+// $tfish_metadata->setGenerator('');
+// $tfish_metadata->setSeo('');
+// $tfish_metadata->setRobots('');
 
+// Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

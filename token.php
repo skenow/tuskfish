@@ -29,12 +29,13 @@ $tfish_template->tfish_main_content = $tfish_template->render('error');
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tfish_metadata->title = TFISH_INVALID_TOKEN;
-// $tfish_metadata->description = '';
-// $tfish_metadata->author = '';
-// $tfish_metadata->copyright = '';
-// $tfish_metadata->generator = '';
-// $tfish_metadata->seo = '';
-// $tfish_metadata->robots = '';
+$tfish_metadata->setTitle(TFISH_INVALID_TOKEN);
+// $tfish_metadata->setDescription('');
+// $tfish_metadata->setAuthor('');
+// $tfish_metadata->setCopyright('');
+// $tfish_metadata->setGenerator('');
+// $tfish_metadata->setSeo('');
+// $tfish_metadata->setRobots('');
+        
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

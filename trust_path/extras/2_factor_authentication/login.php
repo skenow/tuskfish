@@ -101,13 +101,13 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tfish_metadata->title = TFISH_LOGIN;
-$tfish_metadata->description = TFISH_LOGIN_DESCRIPTION;
-// $tfish_metadata->author = '';
-// $tfish_metadata->copyright = '';
-// $tfish_metadata->generator = '';
-// $tfish_metadata->seo = '';
-$tfish_metadata->robots = 'noindex,nofollow';
+$tfish_metadata->setTitle(TFISH_LOGIN);
+$tfish_metadata->setDescription(TFISH_LOGIN_DESCRIPTION);
+// $tfish_metadata->setAuthor('');
+// $tfish_metadata->setCopyright('');
+// $tfish_metadata->setGenerator('');
+// $tfish_metadata->setSeo('');
+$tfish_metadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";
