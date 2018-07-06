@@ -118,7 +118,7 @@ if (in_array($op, array('submit', false))) {
 
 // Assign to template.
 $tfish_template->page_title = TFISH_CHANGE_PASSWORD;
-$tfish_metadata->robots = 'noindex,nofollow';
+$tfish_metadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
 require_once TFISH_PATH . "tfish_footer.php";

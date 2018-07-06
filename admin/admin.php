@@ -389,8 +389,7 @@ if (in_array($op, $options_whitelist)) {
                     
                     if ($content->meta_title) $tfish_metadata->setTitle($content->meta_title);
                     
-                    if ($content->meta_description) $tfish_metadata->description 
-                        = $content->meta_description;
+                    if ($content->meta_description) $tfish_metadata->setDescription($content->meta_description);
 
                     // Check if has a parental object; if so display a thumbnail and teaser / link.
                     if (!empty($content->parent)) {
