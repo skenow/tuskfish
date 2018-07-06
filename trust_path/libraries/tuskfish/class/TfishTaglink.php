@@ -39,17 +39,64 @@ class TfishTaglink
     /** @var array Array holding the values of taglink object properties, accessed via magic methods. */
     protected $__data = array(
         'id',
-        'tag_id', 
+        'tag_id',
         'content_type', 
-        'content_id',
-        'handler');
-
-    /** Initialise default property values and unset unneeded ones. */
-    function __construct()
+        'content_id');
+    
+    public function setContentId($id)
     {
-        $this->__data['type'] = "TfishTaglink";
+        if (TfishDataValidator::isInt($id, 1)) {
+            $this->__data['content_id'] = (int) $id;
+        }
+    }
+    
+    public function setContentType($content_type)
+    {
+        $clean_content_type = TfishDataValidator::trimString($content_type);
+        $content_handler = new TfishContentHandler();
+
+        if ($content_handler->isSanctionedType($clean_content_type)) {
+            $this->__data['content_type'] = $clean_content_type;
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
+        }
+    }   
+    
+    public function setId($id)
+    {
+        if (TfishDataValidator::isInt($id, 0)) {
+            $this->__data['id'] = (int) $id;
+        }
     }
 
+    public function setTagId($id)
+    {
+        if (TfishDataValidator::isInt($id, 1)) {
+            $this->__data['tag_id'] = (int) $id;
+        }
+    }
+    
+    /**
+     * Intercept and prevent direct setting of properties.
+     * 
+     * Properties must be set using the relevant setter method.
+     * 
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
+     */
+    public function __set(string $property, $value)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
+        } else {
+            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+        }
+        
+        exit;
+    }
+    
     /**
      * Get the value of a property.
      * 
@@ -68,57 +115,6 @@ class TfishTaglink
         } else {
             return null;
         }
-    }
-
-    /**
-     * Set the value of a whitelisted property.
-     * 
-     * Intercepts direct calls to set the value of an object property. This method is overridden by
-     * child classes to impose data type restrictions and range checks before allowing the property
-     * to be set. Tuskfish objects are designed not to trust other components; each conducts its
-     * own internal validation checks. 
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (!isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-            
-        switch ($clean_property) {
-            // Minimum value 0.
-            case "id":
-                if (TfishDataValidator::isInt($value, 0)) {
-                    $this->__data[$clean_property] = (int) $value;
-                }
-                break;
-
-            // Minimum value 1.
-            case "tag_id":
-            case "content_id":
-                if (TfishDataValidator::isInt($value, 1)) {
-                    $this->__data[$clean_property] = (int) $value;
-                }                    
-                break;
-
-            case "content_type":
-                $clean_value = TfishDataValidator::trimString($value);
-                $content_handler = new TfishContentHandler();
-                
-                if ($content_handler->isSanctionedType($clean_value)) {
-                    $this->__data[$clean_property] = $clean_value;
-                } else {
-                    trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
-                }
-                
-                break;
-
-            // Handler is not permitted to be changed.
-        }            
     }
 
     /**
