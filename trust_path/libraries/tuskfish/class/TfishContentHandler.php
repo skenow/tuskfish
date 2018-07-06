@@ -304,13 +304,13 @@ class TfishContentHandler
         
         if ($criteria && !empty($criteria->limit)) {
             $limit = $criteria->limit;
-            $criteria->limit = 0;
+            $criteria->setLimit(0);
         }
         
         $count = TfishDatabase::selectCount('content', $criteria);
         
         if (isset($limit)) {
-            $criteria->limit = (int) $limit;
+            $criteria->setLimit((int) $limit);
         }
 
         return $count;
@@ -351,7 +351,7 @@ class TfishContentHandler
         
         // Set default sorting order by submission time descending.
         if (!$criteria->order) {
-            $criteria->order = 'date';
+            $criteria->setOrder('date');
         }
 
         $statement = TfishDatabase::select('content', $criteria, $columns);
@@ -413,7 +413,7 @@ class TfishContentHandler
 
         // Set default sorting order by submission time descending.        
         if (!$criteria->order) {
-            $criteria->order = 'date';
+            $criteria->setOrder('date');
         }
 
         $statement = TfishDatabase::select('content', $criteria);

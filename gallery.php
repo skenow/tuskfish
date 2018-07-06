@@ -43,7 +43,7 @@ $criteria->add(new TfishCriteriaItem('online', 1));
 
 // Optional selection criteria.
 if ($clean_tag)
-    $criteria->tag = array($clean_tag);
+    $criteria->setTag(array($clean_tag));
 
 if ($clean_type) {
     if (array_key_exists($clean_type, $content_handler->getTypes())) {
@@ -67,8 +67,8 @@ $tfish_template->pagination = $tfish_pagination->getPaginationControl($count,
         $extra_params);
 
 // Set offset and limit.
-if ($clean_start) $criteria->offset = $clean_start;
-$criteria->limit = $tfish_preference->gallery_pagination;
+if ($clean_start) $criteria->setOffset($clean_start);
+$criteria->setLimit($tfish_preference->gallery_pagination);
 
 // Prepare select filters.
 $tag_handler = new TfishTagHandler();

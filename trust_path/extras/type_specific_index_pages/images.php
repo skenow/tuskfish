@@ -102,12 +102,12 @@ if ($clean_id) {
     $criteria = new TfishCriteria();
     
     if ($clean_start)
-        $criteria->offset = $clean_start;
+        $criteria->setOffset($clean_start);
     
-    $criteria->limit = $tfish_preference->user_pagination;
+    $criteria->setLimit($tfish_preference->user_pagination);
     
     if ($clean_tag)
-        $criteria->tag = array($clean_tag);
+        $criteria->setTag(array($clean_tag));
     
     $criteria->add(new TfishCriteriaItem('online', 1));
 

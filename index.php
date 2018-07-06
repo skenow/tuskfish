@@ -105,25 +105,25 @@ if ($clean_id) {
 
         // Initialise criteria object.
         $criteria = new TfishCriteria();
-        $criteria->order = 'date';
-        $criteria->ordertype = 'DESC';
+        $criteria->setOrder('date');
+        $criteria->setOrderType('DESC');;
 
         // If object is a collection check if has child objects; if so display teasers / links.
         if ($content->type === 'TfishCollection') {
             $criteria->add(new TfishCriteriaItem('parent', $content->id));
             $criteria->add(new TfishCriteriaItem('online', 1));
             
-            if ($clean_start) $criteria->offset = $clean_start;
+            if ($clean_start) $criteria->setOffset($clean_start);
             
-            $criteria->limit = $tfish_preference->user_pagination;
+            $criteria->setLimit($tfish_preference->user_pagination);
         }
 
         // If object is a tag, then a different method is required to call the related content.
         if ($content->type === 'TfishTag') {
-            if ($clean_start) $criteria->offset = $clean_start;
+            if ($clean_start) $criteria->setOffset($clean_start);
             
-            $criteria->limit = $tfish_preference->user_pagination;
-            $criteria->tag = array($content->id);
+            $criteria->setLimit($tfish_preference->user_pagination);
+            $criteria->setTag(array($content->id));
             $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
             $criteria->add(new TfishCriteriaItem('online', 1));
         }
@@ -162,11 +162,11 @@ if ($clean_id) {
     // Exclude static pages, tags and blocks from the index page.
     $criteria = new TfishCriteria();
     
-    if ($clean_start) $criteria->offset = $clean_start;
+    if ($clean_start) $criteria->setOffset($clean_start);
     
-    $criteria->limit = $tfish_preference->user_pagination;
+    $criteria->setLimit($tfish_preference->user_pagination);
     
-    if ($clean_tag) $criteria->tag = array($clean_tag);
+    if ($clean_tag) $criteria->setTag(array($clean_tag));
     
     $criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
     $criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
@@ -180,8 +180,8 @@ if ($clean_id) {
             $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
 
     // Retrieve content objects and assign to template.
-    $criteria->order = 'date';
-    $criteria->ordertype = 'DESC';
+    $criteria->setOrder('date');
+    $criteria->setOrderType('DESC');;
     $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);

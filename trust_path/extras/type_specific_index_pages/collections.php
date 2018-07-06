@@ -106,12 +106,12 @@ if ($clean_id) {
         $criteria->add(new TfishCriteriaItem('online', 1));
         
         if ($clean_start) {
-            $criteria->offset = $clean_start;
+            $criteria->setOffset($clean_start);
         }
         
-        $criteria->limit = $tfish_preference->user_pagination;
-        $criteria->order = 'date';
-        $criteria->ordertype = 'DESC';
+        $criteria->setLimit($tfish_preference->user_pagination);
+        $criteria->setOrder('date');
+        $criteria->setOrderType('DESC');;
 
         // Prepare pagination control.
         $tfish_pagination = new TfishPaginationControl($tfish_preference);
@@ -142,12 +142,12 @@ if ($clean_id) {
     $criteria = new TfishCriteria();
     
     if ($clean_start)
-        $criteria->offset = $clean_start;
+        $criteria->setOffset($clean_start);
     
-    $criteria->limit = $tfish_preference->user_pagination;
+    $criteria->setLimit($tfish_preference->user_pagination);
     
     if ($clean_tag)
-        $criteria->tag = array($clean_tag);
+        $criteria->setTag(array($clean_tag));
     
     $criteria->add(new TfishCriteriaItem('online', 1));
 
@@ -158,8 +158,8 @@ if ($clean_id) {
             $tfish_preference->user_pagination, $target_file_name, $clean_start, $clean_tag);
 
     // Retrieve content objects and assign to template.
-    $criteria->order = 'date';
-    $criteria->ordertype = 'DESC';
+    $criteria->setOrder('date');
+    $criteria->setOrderType('DESC');;
     $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);

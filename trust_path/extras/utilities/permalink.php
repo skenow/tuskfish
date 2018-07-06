@@ -78,11 +78,11 @@ if ($clean_id) {
         $criteria->add(new TfishCriteriaItem('parent', $content->id));
         $criteria->add(new TfishCriteriaItem('online', 1));
         if ($clean_start) {
-            $criteria->offset = $clean_start;
+            $criteria->setOffset($clean_start);
         }
-        $criteria->limit = $tfish_preference->user_pagination;
-        $criteria->order = 'date';
-        $criteria->ordertype = 'DESC';
+        $criteria->setLimit($tfish_preference->user_pagination);
+        $criteria->setOrder('date');
+        $criteria->setOrderType('DESC');;
 
         // Prepare pagination control.
         $tfish_pagination = new TfishPaginationControl($tfish_preference);

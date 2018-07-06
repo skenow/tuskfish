@@ -72,9 +72,9 @@ if ($clean_id) {
     $criteria = new TfishCriteria();
     
     if ($clean_start)
-        $criteria->offset = $clean_start;
+        $criteria->setOffset($clean_start);
     
-    $criteria->limit = $tfish_preference->user_pagination;
+    $criteria->setLimit($tfish_preference->user_pagination);
     $criteria->add(new TfishCriteriaItem('online', 1));
 
     // Prepare pagination control.

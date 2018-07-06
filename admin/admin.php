@@ -402,8 +402,8 @@ if (in_array($op, $options_whitelist)) {
 
                     // Initialise criteria object.
                     $criteria = new TfishCriteria();
-                    $criteria->order = 'date';
-                    $criteria->ordertype = 'DESC';
+                    $criteria->setOrder('date');
+                    $criteria->setOrderType('DESC');;
 
                     // If object is a collection check if has child objects; if so display
                     // thumbnails and teasers / links.
@@ -411,18 +411,18 @@ if (in_array($op, $options_whitelist)) {
                         $criteria->add(new TfishCriteriaItem('parent', $content->id));
                         $criteria->add(new TfishCriteriaItem('online', 1));
                         
-                        if ($clean_start) $criteria->offset = $clean_start;
+                        if ($clean_start) $criteria->setOffset($clean_start);
                         
-                        $criteria->limit = $tfish_preference->user_pagination;
+                        $criteria->setLimit($tfish_preference->user_pagination);
                     }
 
                     // If object is a tag, then a different method is required to call the related
                     // content.
                     if ($content->type === 'TfishTag') {
-                        if ($clean_start) $criteria->offset = $clean_start;
+                        if ($clean_start) $criteria->setOffset($clean_start);
                         
-                        $criteria->limit = $tfish_preference->user_pagination;
-                        $criteria->tag = array($content->id);
+                        $criteria->setLimit($tfish_preference->user_pagination);
+                        $criteria->setTag(array($content->id));
                         $criteria->add(new TfishCriteriaItem('online', 1));
                     }
 
@@ -462,7 +462,7 @@ if (in_array($op, $options_whitelist)) {
             $criteria = new TfishCriteria;
 
             // Select box filter input.
-            if ($clean_tag) $criteria->tag = array($clean_tag);
+            if ($clean_tag) $criteria->setTag(array($clean_tag));
             
             if (TfishDataValidator::isInt($clean_online, 0, 1)) {
                 $criteria->add(new TfishCriteriaItem('online', $clean_online));
@@ -477,10 +477,10 @@ if (in_array($op, $options_whitelist)) {
             }
 
             // Other criteria.
-            $criteria->offset = $clean_start;
-            $criteria->limit = $tfish_preference->admin_pagination;
-            $criteria->order = 'submission_time';
-            $criteria->ordertype = 'DESC';
+            $criteria->setOffset($clean_start);
+            $criteria->setLimit($tfish_preference->admin_pagination);
+            $criteria->setOrder('submission_time');
+            $criteria->setOrderType('DESC');;
             $columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
             $result = TfishDatabase::select('content', $criteria, $columns);
             

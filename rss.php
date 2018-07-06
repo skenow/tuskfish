@@ -43,13 +43,13 @@ $content_handler = new TfishContentHandler();
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.
 $criteria = new TfishCriteria();
-$criteria->order = 'submission_time';
-$criteria->ordertype = 'DESC';
-$criteria->offset = 0;
-$criteria->limit = $tfish_preference->rss_posts;
+$criteria->setOrder('submission_time');
+$criteria->setOrderType('DESC');
+$criteria->setOffset(0);
+$criteria->setLimit($tfish_preference->rss_posts);
 
 if ($clean_tag_id) {
-    $criteria->tag = array($clean_tag_id);
+    $criteria->setTag(array($clean_tag_id));
     $rss->setLink(TFISH_RSS_URL . '?tag_id=' . $clean_tag_id);
 }
 

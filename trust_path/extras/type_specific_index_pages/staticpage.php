@@ -96,25 +96,25 @@ if ($clean_id) {
         
         // Initialise criteria object.
         $criteria = new TfishCriteria();
-        $criteria->order = 'date';
-        $criteria->ordertype = 'DESC';
+        $criteria->setOrder('date');
+        $criteria->setOrderType('DESC');;
 
         // If object is a collection check if has child objects; if so display teasers / links.
         if ($content->type === 'TfishCollection') {
             $criteria->add(new TfishCriteriaItem('parent', $content->id));
             $criteria->add(new TfishCriteriaItem('online', 1));
             
-            if ($clean_start) $criteria->offset = $clean_start;
+            if ($clean_start) $criteria->setOffset($clean_start);
             
-            $criteria->limit = $tfish_preference->user_pagination;
+            $criteria->setLimit($tfish_preference->user_pagination);
         }
 
         // If object is a tag, then a different method is required to call the related content.
         if ($content->type === 'TfishTag') {
-            if ($clean_start) $criteria->offset = $clean_start;
+            if ($clean_start) $criteria->setOffset($clean_start);
             
-            $criteria->limit = $tfish_preference->user_pagination;
-            $criteria->tag = array($content->id);
+            $criteria->setLimit($tfish_preference->user_pagination);
+            $criteria->setTag(array($content->id));
             $criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
             $criteria->add(new TfishCriteriaItem('online', 1));
         }
