@@ -578,9 +578,9 @@ class TfishDatabase
             }
 
             // Set GROUP BY.
-            if ($criteria->groupBy) {
+            if ($criteria->groupby) {
                 $sql .= " GROUP BY `t1`."
-                        . self::addBackticks(self::escapeIdentifier($criteria->groupBy));
+                        . self::addBackticks(self::escapeIdentifier($criteria->groupby));
             }
 
             // Set the order (sort) column and order (default is ascending).
@@ -798,9 +798,9 @@ class TfishDatabase
             }
 
             // Set GROUP BY.
-            if ($criteria->groupBy) {
+            if ($criteria->groupby) {
                 $sql .= " GROUP BY `t1`."
-                        . self::addBackticks(self::escapeIdentifier($criteria->groupBy));
+                        . self::addBackticks(self::escapeIdentifier($criteria->groupby));
             }
 
             // Set the order (sort) column and type (default is ascending)
@@ -1160,7 +1160,7 @@ class TfishDatabase
             }
         }
         
-        if ($criteria->groupBy && !TfishDataValidator::isAlnumUnderscore($criteria->groupBy)) {
+        if ($criteria->groupby && !TfishDataValidator::isAlnumUnderscore($criteria->groupby)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }

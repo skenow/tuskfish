@@ -33,7 +33,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @package     database
  * @property    array $item Array of TfishCriteriaItem
  * @property    array $condition Array of conditions used to join TfishCriteriaItem (AND, OR)
- * @property    string $group_by Column to group results by
+ * @property    string $groupby Column to group results by
  * @property    int $limit Number of records to retrieve
  * @property    int $offset Starting point for retrieving records
  * @property    string $order Sort order
@@ -47,7 +47,7 @@ class TfishCriteria
     protected $__data = array(
         'item' => array(),
         'condition' => array(), 
-        'groupBy' => '',
+        'groupby' => '',
         'limit' => 0,
         'offset' => 0,
         'order' => '',
@@ -78,12 +78,12 @@ class TfishCriteria
         }
     }
     
-    public function setGroupBy(string $group_by)
+    public function setGroupBy(string $groupby)
     {
-        $clean_group_by = TfishDataValidator::trimString($group_by);
+        $clean_groupby = TfishDataValidator::trimString($groupby);
 
-        if (TfishDataValidator::isAlnumUnderscore($clean_group_by)) {
-            $this->__data['groupBy'] = $clean_group_by;
+        if (TfishDataValidator::isAlnumUnderscore($clean_groupby)) {
+            $this->__data['groupby'] = $clean_groupby;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
