@@ -7,7 +7,7 @@
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @since       1.0
- * @package     core
+ * @package     content
  */
 // Enable strict type declaration.
 declare(strict_types=1);
