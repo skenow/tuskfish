@@ -37,7 +37,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    int $limit Number of records to retrieve
  * @property    int $offset Starting point for retrieving records
  * @property    string $order Sort order
- * @property    string $ordertype Sort ascending (ASC) or descending(DESC)
+ * @property    string $order_type Sort ascending (ASC) or descending(DESC)
  * @property    array $tag Array of tag IDs
  */
 class TfishCriteria
@@ -51,7 +51,7 @@ class TfishCriteria
         'limit' => 0,
         'offset' => 0,
         'order' => '',
-        'ordertype' => "DESC",
+        'order_type' => "DESC",
         'tag' => array()
     );
     
@@ -132,9 +132,9 @@ class TfishCriteria
         $clean_order_type = TfishDataValidator::trimString($order_type);
         
         if ($clean_order_type === "ASC") {
-            $this->__data['ordertype'] = "ASC";
+            $this->__data['order_type'] = "ASC";
         } else {
-            $this->__data['ordertype'] = "DESC";
+            $this->__data['order_type'] = "DESC";
         }
     }
     

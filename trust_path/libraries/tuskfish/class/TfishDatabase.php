@@ -333,10 +333,10 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= "ORDER BY `t1`." 
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
+                    $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -587,11 +587,11 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
+                    $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -807,11 +807,11 @@ class TfishDatabase
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->order != 'submission_time') {
                     $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->ordertype === "DESC" ? "DESC" : "ASC";
+                    $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -1180,8 +1180,8 @@ class TfishDatabase
             exit;
         }
         
-        if ($criteria->ordertype &&
-                ($criteria->ordertype != "ASC" && $criteria->ordertype != "DESC")) {
+        if ($criteria->order_type &&
+                ($criteria->order_type != "ASC" && $criteria->order_type != "DESC")) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
