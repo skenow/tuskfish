@@ -39,42 +39,114 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    array $items Array of content objects.
  * @property    string $template Template for presenting feed, default 'rss'.
  */
-class TfishRss extends TfishAncestralObject
+class TfishRss
 {
+    
+    /** @var array Holds values of permitted preference object properties. */
+    protected $__data = array();
 
     /** Initialise default property values and unset unneeded ones. */
     public function __construct(TfishPreference $tfish_preference)
     {
-
-        // Whitelist of official channel properties and datatypes.
-        $this->__properties['title'] = 'string';
-        $this->__properties['link'] = 'url';
-        $this->__properties['description'] = 'string';
-        $this->__properties['copyright'] = 'string';
-        $this->__properties['managingEditor'] = 'email';
-        $this->__properties['webMaster'] = 'email';
-        // $this->__properties['category'] = 'int'; // Todo: Implement tag-specific sub-channels.
-        $this->__properties['generator'] = 'string';
-        $this->__properties['image'] = 'string';
-        $this->__properties['items'] = 'array';
-
-        // Set the permitted properties of this object.
-        foreach ($this->__properties as $key => $value) {
-            $this->__data[$key] = '';
-        }
-
         // Set default values of permitted properties.
-        $this->__data['title'] = $tfish_preference->site_name;
-        $this->__data['link'] = TFISH_RSS_URL;
-        $this->__data['description'] = $tfish_preference->site_description;
-        $this->__data['copyright'] = $tfish_preference->site_copyright;
-        $this->__data['managingEditor'] = $tfish_preference->site_email;
-        $this->__data['webMaster'] = $tfish_preference->site_email;
-        // $this->__data['category'] = 'int'; // Todo: Implement tag-specific sub-channels.
-        $this->__data['generator'] = 'Tuskfish';
-        //$this->__data['image'] = ''; // Todo: Add a preference or something for RSS feed.
-        $this->__data['items'] = array();
-        $this->__data['template'] = 'rss';
+        $this->setTitle($tfish_preference->site_name);
+        $this->setLink(TFISH_RSS_URL);
+        $this->setDescription($tfish_preference->site_description);
+        $this->setCopyright($tfish_preference->site_copyright);
+        $this->setManagingEditor($tfish_preference->site_email);
+        $this->setWebMaster($tfish_preference->site_email);
+        $this->setGenerator('Tuskfish');
+        $this->setItems(array());
+        $this->setTemplate('rss');
+    }
+    
+    public function setTitle(string $title)
+    {
+        $clean_title = TfishDataValidator::trimString($title);
+        $this->__data['title'] = $clean_title;
+    }
+    
+    public function setLink(string $url)
+    {
+        $clean_url = TfishDataValidator::trimString($url);
+
+        if (TfishDataValidator::isUrl($clean_url)) {
+            $this->__data['link'] = $clean_url;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+        }
+    }
+    
+    public function setDescription(string $description)
+    {
+        $clean_description = TfishDataValidator::trimString($description);
+        $this->__data['description'] = $clean_description;
+    }
+    
+    public function setCopyright(string $copyright)
+    {
+        $clean_copyright = TfishDataValidator::trimString($copyright);
+        $this->__data['copyright'] = $clean_copyright;
+    }
+    
+    public function setManagingEditor(string $email)
+    {
+        $clean_email = TfishDataValidator::trimString($email);
+
+        if (TfishDataValidator::isEmail($clean_email)) {
+            $this->__data[$clean_property] = $clean_email;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    public function setWebmaster(string $email)
+    {
+        $clean_email = TfishDataValidator::trimString($email);
+
+        if (TfishDataValidator::isEmail($clean_email)) {
+            $this->__data[$clean_property] = $clean_email;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    public function setGenerator(string $generator)
+    {
+        $clean_generator = TfishDataValidator::trimString($generator);
+        $this->__data['generator'] = $clean_generator;
+    }
+    
+    public function setImage(string $image)
+    {
+        // Not implemented.
+    }
+    
+    public function setItems(array $items)
+    {
+        if (TfishDataValidator::isArray($items)) {
+            $clean_items = array();
+
+            foreach ($items as $item) {
+                if (is_a('TfishContentObject')) {
+                    $clean_items[] = $item;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+
+                unset($item);
+            }
+
+            $this->__data['items'] = $clean_items;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+    }
+    
+    private function setTemplate(string $template)
+    {
+        $clean_template = TfishDataValidator::trimString($template);
+        $this->__data['template'] = $clean_template;
     }
 
     /**
@@ -88,11 +160,13 @@ class TfishRss extends TfishAncestralObject
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
-        $this->__set('title', $obj->title);
-        $this->__set('link', TFISH_RSS_URL . '?id=' . (int) $obj->id);
-        $this->__set('description', $obj->teaser);
+        $this->setTitle($obj->title);
+        $this->setLink(TFISH_RSS_URL . '?id=' . $obj->id);
+        $this->setDescription($obj->teaser);
     }
-
+    
+    /** Magic methods **/
+    
     /**
      * Validate and set an existing object property according to type specified in constructor.
      * 
@@ -105,66 +179,70 @@ class TfishRss extends TfishAncestralObject
     {
         $clean_property = TfishDataValidator::trimString($property);
         
-        // Check that property is whitelisted.
         if (isset($this->__data[$clean_property])) {
-            $type = $this->__properties[$clean_property];
+            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
-            
-        // Validate $value against expected data type and business rules.
-        switch ($type) {
-            case "array": // Items
-                if (TfishDataValidator::isArray($value)) {
-                    $clean_items = array();
+    }
+    
+    /**
+     * Get the value of a property.
+     * 
+     * Intercepts direct calls to access an object property. This method can be overridden to impose
+     * processing logic to the value before returning it.
+     * 
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
+     */
+    public function __get(string $property)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return $this->__data[$clean_property];
+        } else {
+            return null;
+        }
+    }
 
-                    foreach ($value as $val) {
-                        if (is_a('TfishContentObject')) {
-                            $clean_items[] = $val;
-                        } else {
-                            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                        }
+    /**
+     * Check if an object property is set.
+     * 
+     * Intercepts isset() calls to correctly read object properties.
+     * 
+     * @param string $property Name of property to check.
+     * @return bool True if set otherwise false.
+     */
+    public function __isset(string $property)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-                        unset($clean_val);
-                    }
-
-                    $this->__data[$clean_property] = $clean_items;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-                }
-                break;
-
-            case "email":
-                $value = TfishDataValidator::trimString($value);
-
-                if (TfishDataValidator::isEmail($value)) {
-                    $this->__data[$clean_property] = $value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-                }
-                break;
-
-            case "int": // Tags, minimum value 1.
-                if (TfishDataValidator::isInt($value, 1)) {
-                    $this->__data[$clean_property] = (int) $value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                }
-                break;
-
-            case "string":
-                $this->__data[$clean_property] = TfishDataValidator::trimString($value);
-                break;
-
-            case "url":
-                $value = TfishDataValidator::trimString($value);
-
-                if (TfishDataValidator::isUrl($value)) {
-                    $this->__data[$clean_property] = $value;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
-                }
-                break;
+    /**
+     * Unsets a property.
+     * 
+     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
+     * objects to add processing logic for specific properties.
+     * 
+     * @param string $property Name of property.
+     * @return bool True on success false on failure.
+     */
+    public function __unset(string $property)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        
+        if (isset($this->__data[$clean_property])) {
+            unset($this->__data[$clean_property]);
+            return true;
+        } else {
+            return false;
         }
     }
 

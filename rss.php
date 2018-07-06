@@ -50,7 +50,7 @@ $criteria->limit = $tfish_preference->rss_posts;
 
 if ($clean_tag_id) {
     $criteria->tag = array($clean_tag_id);
-    $rss->link .= '?tag_id=' . $clean_tag_id;
+    $rss->setLink(TFISH_RSS_URL . '?tag_id=' . $clean_tag_id);
 }
 
 // Optionally make a feed specific to a collection object.
