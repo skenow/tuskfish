@@ -418,13 +418,14 @@ class TfishContentHandler
 
         $statement = TfishDatabase::select('content', $criteria);
         if ($statement) {
+
             // Fetch rows into the appropriate class type, as determined by the first column.
             $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
-            
+
             while ($object = $statement->fetch()) {
                 $objects[$object->id] = $object;
             }
-            
+
             unset($statement);
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
@@ -944,13 +945,14 @@ class TfishContentHandler
     {
         $clean_id = TfishDataValidator::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->convertObjectToArray();
+        
         unset($key_values['submission_time']); // Submission time should not be overwritten.
         $zeroed_properties = $obj->getListOfZeroedProperties();
-        
+
         foreach ($zeroed_properties as $property) {
             $key_values[$property] = null;
         }
-        
+
         $property_whitelist = $obj->getPropertyWhitelist();
 
         // Tags are stored in a separate table and must be handled in a separate query.
@@ -959,6 +961,7 @@ class TfishContentHandler
         // Load the saved object from the database. This will be used to make comparisons with the
         // current object state and facilitate clean up of redundant tags, parent references, and
         // image/media files.
+        
         $saved_object = $this->getObject($clean_id);
         
         /**

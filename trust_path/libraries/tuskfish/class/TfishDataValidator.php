@@ -466,7 +466,7 @@ class TfishDataValidator
             // Trims all control characters plus space (ASCII / UTF-8 points 0-32 inclusive).
             return trim($dirty_string, "\x00..\x20");
         } else {
-            return false;
+            return '';
         }
     }
 

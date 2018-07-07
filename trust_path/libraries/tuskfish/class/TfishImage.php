@@ -71,7 +71,7 @@ class TfishImage extends TfishContentObject
         // Object definition - unset any properties unused in this subclass.
         $listOfZeroedProperties = $this->getListOfZeroedProperties();
         foreach ($listOfZeroedProperties as $property) {
-            unset($this->__properties[$property], $this->__data[$property]);
+            unset($this->__data[$property]);
         }
     }
     

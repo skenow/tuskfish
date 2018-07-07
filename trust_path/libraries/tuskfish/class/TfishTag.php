@@ -67,7 +67,7 @@ class TfishTag extends TfishContentObject
         $listOfZeroedProperties = $this->getListOfZeroedProperties();
         
         foreach ($listOfZeroedProperties as $property) {
-            unset($this->__properties[$property], $this->__data[$property]);
+            unset($this->__data[$property]);
         }
     }
     

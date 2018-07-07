@@ -181,7 +181,7 @@ if ($clean_id) {
 
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');
-    $criteria->setOrderType('DESC');;
+    $criteria->setOrderType('DESC');
     $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);
