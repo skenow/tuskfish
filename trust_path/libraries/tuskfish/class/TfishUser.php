@@ -47,6 +47,73 @@ class TfishUser
         'yubikey_id2',
         'login_errors'
     );
+    
+    public function setId(int $id)
+    {
+        $clean_id = (int) $id;
+        
+        if (TfishDataValidator::isInt($clean_id, 1)) {    
+            $this->__data['id'] = $clean_id;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setAdminEmail(string $email)
+    {
+        $clean_email = TfishDataValidator::trimString($email);
+
+        if (TfishDataValidator::isEmail($clean_email)) {
+            $this->__data['admin_email'] = $clean_email;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    public function setPasswordHash(string $hash)
+    {
+        $clean_hash = TfishDataValidator::trimString($hash);
+        $this->__data['password_hash'] = $clean_hash;
+    }
+    
+    public function setUserSalt(string $salt)
+    {
+        $clean_salt = TfishDataValidator::trimString($salt);
+        $this->__data['user_salt'] = $clean_salt;
+    }
+    
+    public function setUserGroup(int $group)
+    {
+        $clean_group = (int) $group;
+        if (TfishDataValidator::isInt($clean_group, 1)) {
+            $this->__data['user_group'] = $clean_group;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setYubikeyId(string $id)
+    {
+        $clean_id = TfishDataValidator::trimString($id);
+        $this->__data['yubikey_id'] = $clean_id;
+    }
+    
+    public function setYubikeyId2(string $id)
+    {
+        $clean_id = TfishDataValidator::trimString($id);
+        $this->__data['yubikey_id2'] = $clean_id;
+    }
+    
+    public function setLoginErrors(int $number_of_errors)
+    {
+        $clean_number_of_errors = (int) $number_of_errors;
+        
+        if (TfishDataValidator::isInt($clean_number_of_errors, 0)) {
+            $this->__data['login_errors'] = $clean_number_of_errors;
+        }  else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
 
     /**
      * Get the value of a property.
@@ -69,12 +136,9 @@ class TfishUser
     }
 
     /**
-     * Set the value of a whitelisted property.
+     * Intercept and prevent direct setting of properties.
      * 
-     * Intercepts direct calls to set the value of an object property. This method is overridden by
-     * child classes to impose data type restrictions and range checks before allowing the property
-     * to be set. Tuskfish objects are designed not to trust other components; each conducts its
-     * own internal validation checks. 
+     * Properties must be set using the relevant setter method.
      * 
      * @param string $property Name of property.
      * @param mixed $value Value of property.
@@ -84,61 +148,12 @@ class TfishUser
         $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->__data[$clean_property])) {
-            switch ($clean_property) {
-                case "id":
-                    if (TfishDataValidator::isInt($value, 1)) {
-                        $clean_value = (int) $value;
-                        $this->__data[$clean_property] = $clean_value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                    }
-                    break;
-                
-                case "admin_email":
-                    $clean_value = TfishDataValidator::trimString($value);
-                    
-                    if (TfishDataValidator::isEmail($clean_value)) {
-                        $this->__data[$clean_property] = $clean_value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-                    }
-                    break;
-                
-                case "password_hash":
-                    $clean_value = TfishDataValidator::trimString($value);
-                    $this->__data[$clean_property] = $clean_value;
-                    break;
-                
-                case "user_salt":
-                    $clean_value = TfishDataValidator::trimString($value);
-                    $this->__data[$clean_property] = $clean_value;
-                    break;
-                
-                case "user_group":                    
-                    if (TfishDataValidator::isInt($value, 1)) {
-                        $this->__data[$clean_property] = (int) $value;
-                    } else {
-                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                    }
-                    break;
-                
-                case "yubikey_id":
-                case "yubikey_id2":
-                    $clean_value = TfishDataValidator::trimString($value);
-                    $this->__data[$clean_property] = $clean_value;
-                    break;
-                
-                case "login_errors":
-                    if (TfishDataValidator::isInt($value, 0)) {
-                        $this->__data[$clean_property] = (int) $value;
-                    }  else {
-                        trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                    }
-                    break;
-            }
+            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
+        
+        exit;
     }
 
     /**
