@@ -52,7 +52,28 @@ class TfishPreference
 {
     
     /** @var array Holds values of permitted preference object properties. */
-    protected $__data = array();
+    protected $__data = array(
+        'site_name' => '',
+        'site_description' => '',
+        'site_author' => '',
+        'site_email' => '',
+        'site_copyright' => '',
+        'close_site' => '',
+        'server_timezone' => '',
+        'site_timezone' => '',
+        'min_search_length' => '',
+        'search_pagination' => '',
+        'user_pagination' => '',
+        'admin_pagination' => '',
+        'gallery_pagination' => '',
+        'pagination_elements' => '',
+        'session_name' => '',
+        'session_life' => '',
+        'default_language' => '',
+        'date_format' => '',
+        'enable_cache' => '',
+        'cache_life' => ''
+    );
     
     function __construct(array $preferences)
     {

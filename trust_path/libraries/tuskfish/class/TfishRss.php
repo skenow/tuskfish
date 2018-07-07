@@ -43,7 +43,17 @@ class TfishRss
 {
     
     /** @var array Holds values of permitted preference object properties. */
-    protected $__data = array();
+    protected $__data = array(
+        'title' => '',
+        'link' => '',
+        'description' => '',
+        'copyright' => '',
+        'managing_editor' => '',
+        'webmaster' => '',
+        'generator' => '',
+        'items' => '',
+        'template' => ''
+    );
 
     /** Initialise default property values and unset unneeded ones. */
     public function __construct(TfishPreference $tfish_preference)
