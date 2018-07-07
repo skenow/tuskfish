@@ -85,6 +85,7 @@ class TfishUser
     public function setUserGroup(int $group)
     {
         $clean_group = (int) $group;
+        
         if (TfishDataValidator::isInt($clean_group, 1)) {
             $this->__data['user_group'] = $clean_group;
         } else {

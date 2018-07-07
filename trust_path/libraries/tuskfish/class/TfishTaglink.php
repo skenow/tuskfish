@@ -43,14 +43,15 @@ class TfishTaglink
         'content_type', 
         'content_id');
     
-    public function setContentId($id)
+    public function setContentId(int $id)
     {
-        if (TfishDataValidator::isInt($id, 1)) {
-            $this->__data['content_id'] = (int) $id;
+        $clean_id = (int) $id;
+        if (TfishDataValidator::isInt($clean_id, 1)) {
+            $this->__data['content_id'] = $clean_id;
         }
     }
     
-    public function setContentType($content_type)
+    public function setContentType(string $content_type)
     {
         $clean_content_type = TfishDataValidator::trimString($content_type);
         $content_handler = new TfishContentHandler();
@@ -62,17 +63,20 @@ class TfishTaglink
         }
     }   
     
-    public function setId($id)
+    public function setId(int $id)
     {
-        if (TfishDataValidator::isInt($id, 0)) {
-            $this->__data['id'] = (int) $id;
+        $clean_id = (int) $id;
+        if (TfishDataValidator::isInt($clean_id, 0)) {
+            $this->__data['id'] = $clean_id;
         }
     }
 
-    public function setTagId($id)
+    public function setTagId(int $id)
     {
-        if (TfishDataValidator::isInt($id, 1)) {
-            $this->__data['tag_id'] = (int) $id;
+        $clean_id = (int) $id;
+        
+        if (TfishDataValidator::isInt($clean_id, 1)) {
+            $this->__data['tag_id'] = $clean_id;
         }
     }
     

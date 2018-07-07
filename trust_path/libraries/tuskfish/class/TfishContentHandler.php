@@ -379,7 +379,7 @@ class TfishContentHandler
         $clean_id = (int) $id;
         $row = $object = '';
         
-        if (TfishDataValidator::isInt($id, 1)) {
+        if (TfishDataValidator::isInt($clean_id, 1)) {
             $criteria = new TfishCriteria();
             $criteria->add(new TfishCriteriaItem('id', $clean_id));
             $statement = TfishDatabase::select('content', $criteria);
