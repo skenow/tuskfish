@@ -33,15 +33,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    mixed $value Value to compare
  * @property    string $operator The operator to use for evaluation (=, +, >, < etc)
  */
-class TfishCriteriaItem
+class TfishCriteriaItem extends TfishBaseObject
 {
 
-    /** @var array $__data Array holding values of this object properties, accessed via magic methods. */
-    protected $__data = array(
-        'column' => false,
-        'value' => false,
-        'operator' => "=" // Default value.
-    );
+    protected $column = false;
+    protected $value = false;
+    protected $operator = "="; // Default value.
 
     /**
      * Constructor.
@@ -56,26 +53,6 @@ class TfishCriteriaItem
         $this->setColumn($column);
         $this->setValue($value);
         $this->setOperator($operator);
-    }
-
-    /**
-     * Get the value of an object property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be modified to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value if it is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -115,7 +92,7 @@ class TfishCriteriaItem
         $clean_value = TfishDataValidator::trimString($value);
                     
         if (TfishDataValidator::isAlnumUnderscore($clean_value)) {
-            $this->__data['column'] = $clean_value;
+            $this->column = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -147,7 +124,7 @@ class TfishCriteriaItem
                 break;
         }
 
-        $this->__data['value'] = $clean_value;
+        $this->value = $clean_value;
     }
     
     public function setOperator($value)
@@ -155,64 +132,10 @@ class TfishCriteriaItem
         $clean_value = TfishDataValidator::trimString($value);
                     
         if (in_array($clean_value, self::getListOfPermittedOperators())) {
-            $this->__data['operator'] = $clean_value;
+            $this->operator = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
     }
         
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
-        } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-        
-        exit;
-    }
-
-    /**
-     * Check if an object property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties. Can be modified to add
-     * processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set otherwise false.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Unsets an object property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be modified to add
-     * processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }
