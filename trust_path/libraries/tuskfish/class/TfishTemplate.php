@@ -33,7 +33,16 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishTemplate
 {
     
-    protected $theme = 'default';
+    protected $theme = 'default';    
+    
+    public function getTheme()
+    {
+        if (isset($this->theme)) {
+            return $this->theme;
+        } else {
+            return 'default';
+        }
+    }
 
     /**
      * Renders a HTML template file for display.
@@ -88,26 +97,6 @@ class TfishTemplate
         if (TfishDataValidator::isAlnumUnderscore($theme)) {
             $clean_theme = TfishDataValidator::trimString($theme);
             $this->theme = $clean_theme;
-        }
-    }
-    
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be overridden to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value of property if it is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($clean_property)) {
-            return $this->$clean_property;
-        } else {
-            return null;
         }
     }
 

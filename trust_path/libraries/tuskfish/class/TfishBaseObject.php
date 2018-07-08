@@ -33,7 +33,7 @@ class TfishBaseObject
     {
         $clean_property = TfishDataValidator::trimString($property);
         
-        if (isset($clean_property)) {
+        if (isset($this->$clean_property)) {
             return $this->$clean_property;
         } else {
             return null;
