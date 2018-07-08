@@ -113,5 +113,25 @@ class TfishUser extends TfishBaseObject
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
     }
+    
+    /**
+     * Get the value of a property.
+     * 
+     * Intercepts direct calls to access an object property. Disallow public access to sensitive
+     * properties (password_hash, user_salt).
+     * 
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
+     */
+    public function __get(string $property)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        
+        if (isset($clean_property) && $clean_property !== 'password_hash' && $clean_property !== 'user_salt') {
+            return $this->$clean_property;
+        } else {
+            return null;
+        }
+    }
 
 }
