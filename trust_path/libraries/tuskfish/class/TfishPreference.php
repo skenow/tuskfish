@@ -48,32 +48,30 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    int enable_cache Enable site cache.
  * @property    int cache_life Expiry timer for site cache (seconds).
  */
-class TfishPreference
+class TfishPreference extends TfishBaseObject
 {
-    
-    /** @var array Holds values of permitted preference object properties. */
-    protected $__data = array(
-        'site_name' => '',
-        'site_description' => '',
-        'site_author' => '',
-        'site_email' => '',
-        'site_copyright' => '',
-        'close_site' => '',
-        'server_timezone' => '',
-        'site_timezone' => '',
-        'min_search_length' => '',
-        'search_pagination' => '',
-        'user_pagination' => '',
-        'admin_pagination' => '',
-        'gallery_pagination' => '',
-        'pagination_elements' => '',
-        'session_name' => '',
-        'session_life' => '',
-        'default_language' => '',
-        'date_format' => '',
-        'enable_cache' => '',
-        'cache_life' => ''
-    );
+
+    protected $site_name;
+    protected $site_description;
+    protected $site_author;
+    protected $site_email;
+    protected $site_copyright;
+    protected $close_site;
+    protected $server_timezone;
+    protected $site_timezone;
+    protected $min_search_length;
+    protected $search_pagination;
+    protected $user_pagination;
+    protected $admin_pagination;
+    protected $gallery_pagination;
+    protected $rss_posts;
+    protected $pagination_elements;
+    protected $session_name;
+    protected $session_life;
+    protected $default_language;
+    protected $date_format;
+    protected $enable_cache;
+    protected $cache_life;
     
     function __construct(array $preferences)
     {
@@ -89,7 +87,7 @@ class TfishPreference
     {
         $key_values = array();
         
-        foreach ($this->__data as $key => $value) {
+        foreach ($this as $key => $value) {
             $key_values[$key] = $value;
         }
         
@@ -111,7 +109,7 @@ class TfishPreference
         $clean_property = TfishDataValidator::trimString($property);
         
         if (isset($this->$clean_property)) {
-            return htmlspecialchars($this->__data[$clean_property], ENT_QUOTES, 'UTF-8', false);
+            return htmlspecialchars($this->$clean_property, ENT_QUOTES, 'UTF-8', false);
         } else {
             return null;
         }
@@ -122,7 +120,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 1)) {
-            $this->__data['admin_pagination'] = $clean_value;
+            $this->admin_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -130,7 +128,7 @@ class TfishPreference
     
     public function setSiteAuthor(string $value)
     {
-        $this->__data['site_author'] = TfishDataValidator::trimString($value);
+        $this->site_author = TfishDataValidator::trimString($value);
     }
     
     public function setCacheLife(int $value)
@@ -138,7 +136,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 1)) {
-            $this->__data['cache_life'] = $clean_value;
+            $this->cache_life = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -149,7 +147,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 0, 1)) {
-            $this->__data['close_site'] = $clean_value;
+            $this->close_site = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -157,7 +155,7 @@ class TfishPreference
     
     public function setDateFormat(string $value)
     {
-        $this->__data['date_format'] = TfishDataValidator::trimString($value);
+        $this->date_format = TfishDataValidator::trimString($value);
     }
     
     public function setDefaultLanguage(string $value)
@@ -172,7 +170,7 @@ class TfishPreference
         $language_whitelist = $content_handler->getListOfLanguages();
 
         if (array_key_exists($clean_value, $language_whitelist)) {
-            $this->__data['default_language'] = $clean_value;
+            $this->default_language = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
@@ -180,7 +178,7 @@ class TfishPreference
     
     public function setSiteDescription(string $value)
     {
-        $this->__data['site_description'] = TfishDataValidator::trimString($value);
+        $this->site_description = TfishDataValidator::trimString($value);
     }
     
     public function setSiteEmail(string $value)
@@ -188,7 +186,7 @@ class TfishPreference
         $clean_value = TfishDataValidator::trimString($value);
 
         if (TfishDataValidator::isEmail($clean_value)) {
-            $this->__data['site_email'] = $clean_value;
+            $this->site_email = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }
@@ -199,7 +197,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 0, 1)) {
-            $this->__data['enable_cache'] = $clean_value;
+            $this->enable_cache = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -210,7 +208,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 1)) {
-            $this->__data['gallery_pagination'] = $clean_value;
+            $this->gallery_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -221,7 +219,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 3)) {
-            $this->__data['min_search_length'] = $clean_value;
+            $this->min_search_length = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -232,7 +230,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 3)) {
-            $this->__data['pagination_elements'] = $clean_value;
+            $this->pagination_elements = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -243,7 +241,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 1)) {
-            $this->__data['rss_posts'] = $clean_value;
+            $this->rss_posts = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -254,7 +252,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 0)) {
-            $this->__data['search_pagination'] = $clean_value;
+            $this->search_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -262,7 +260,7 @@ class TfishPreference
     
     public function setServerTimezone(string $value)
     {
-        $this->__data['server_timezone'] = TfishDataValidator::trimString($value);
+        $this->server_timezone = TfishDataValidator::trimString($value);
     }
     
     public function setSessionLife(int $value)
@@ -270,7 +268,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 0)) {
-            $this->__data['session_life'] = $clean_value;
+            $this->session_life = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -281,7 +279,7 @@ class TfishPreference
         $clean_value = TfishDataValidator::trimString($value);
 
         if (TfishDataValidator::isAlnum($clean_value)) {
-            $this->__data['session_name'] = $clean_value;
+            $this->session_name = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
         }
@@ -289,17 +287,17 @@ class TfishPreference
     
     public function setSiteCopyright(string $value)
     {
-        $this->__data['site_copyright'] = TfishDataValidator::trimString($value);
+        $this->site_copyright = TfishDataValidator::trimString($value);
     }
     
     public function setSiteName(string $value)
     {
-        $this->__data['site_name'] = TfishDataValidator::trimString($value);
+        $this->site_name = TfishDataValidator::trimString($value);
     }
     
     public function setSiteTimezone(string $value)
     {
-        $this->__data['site_timezone'] = TfishDataValidator::trimString($value);
+        $this->site_timezone = TfishDataValidator::trimString($value);
     }
     
     public function setUserPagination(int $value)
@@ -307,7 +305,7 @@ class TfishPreference
         $clean_value = (int) $value;
         
         if (TfishDataValidator::isInt($clean_value, 1)) {
-            $this->__data['user_pagination'] = $clean_value;
+            $this->user_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -325,6 +323,7 @@ class TfishPreference
         if (!TfishDataValidator::isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
+        
         // Validate object properties as they are assigned.
         if (isset($dirty_input['site_name'])) $this->setSiteName($dirty_input['site_name']);
         if (isset($dirty_input['site_description'])) $this->setSiteDescription($dirty_input['site_description']);
@@ -349,87 +348,4 @@ class TfishPreference
         if (isset($dirty_input['cache_life'])) $this->setCacheLife((int) $dirty_input['cache_life']);
     }
     
-    /** Magic methods **/
-    
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be overridden to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value of property if it is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Intercept and prevent direct setting of properties.
-     * 
-     * Properties must be set using the relevant setter method.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
-        } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-        
-        exit;
-    }
-
-    /**
-     * Check if an object property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties.
-     * 
-     * @param string $property Name of property to check.
-     * @return bool True if set otherwise false.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Unsets a property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }

@@ -44,7 +44,6 @@ class TfishPreferenceHandler
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $preferences[$row['title']] = $row['value'];
         }
-        
         return $preferences;
     }
 
