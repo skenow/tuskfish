@@ -221,74 +221,18 @@ class TfishPaginationControl
 
         return $control;
     }
-    
-    /**
-     * Access an existing property and escape it for output to browser.
-     * 
-     * @param string $property Name of property.
-     * @return string|bool Value of preference escaped for display if set, otherwise false.
-     * 
-     * Note that the ENT_QUOTES flag must be set on htmlspecialchars() as these properties are
-     * used within attributes of meta tags, so a double quote would cause breakage.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if ($clean_property === 'preference' && isset($this->preference)) {
-            return htmlspecialchars((string) $this->__data[$clean_property], ENT_QUOTES, "UTF-8",
-                    false);
-        } else {
-            return null;
-        }
-    }
 
     /**
-     * Set an existing property.
+     * Disallow direct setting of properties.
      * 
      * @param string $property Name of property.
      * @param mixed $value Value to assign to property.
-     * 
-     * Note that htmlspecialchars() should use the ENT_QUOTES flag, as most of these values are
-     * used within attributes of meta tags, and a double quote would break them.
      */
     
     public function __set(string $property, $value)
     {
         trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);        
         exit;    
-    }
-
-    /**
-     * Intercept isset() calls to correctly read object properties
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set, false if not.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if ($clean_property === 'preference' && isset($this->preference)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Intercept unset() calls to correctly unset object properties
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success, false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if ($clean_property === 'preference') {
-            unset($this->preference);
-        }
     }
     
 }
