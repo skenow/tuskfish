@@ -37,17 +37,16 @@ class TfishTaglink
 {
 
     /** @var array Array holding the values of taglink object properties, accessed via magic methods. */
-    protected $__data = array(
-        'id',
-        'tag_id',
-        'content_type', 
-        'content_id');
+    protected $id;
+    protected $tag_id;
+    protected $content_type;
+    protected $content_id;
     
     public function setContentId(int $id)
     {
         $clean_id = (int) $id;
         if (TfishDataValidator::isInt($clean_id, 1)) {
-            $this->__data['content_id'] = $clean_id;
+            $this->content_id = $clean_id;
         }
     }
     
@@ -57,7 +56,7 @@ class TfishTaglink
         $content_handler = new TfishContentHandler();
 
         if ($content_handler->isSanctionedType($clean_content_type)) {
-            $this->__data['content_type'] = $clean_content_type;
+            $this->content_type = $clean_content_type;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_TYPE, E_USER_ERROR);
         }
@@ -67,7 +66,7 @@ class TfishTaglink
     {
         $clean_id = (int) $id;
         if (TfishDataValidator::isInt($clean_id, 0)) {
-            $this->__data['id'] = $clean_id;
+            $this->id = $clean_id;
         }
     }
 
@@ -76,7 +75,7 @@ class TfishTaglink
         $clean_id = (int) $id;
         
         if (TfishDataValidator::isInt($clean_id, 1)) {
-            $this->__data['tag_id'] = $clean_id;
+            $this->tag_id = $clean_id;
         }
     }
     
@@ -92,74 +91,13 @@ class TfishTaglink
     {
         $clean_property = TfishDataValidator::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
+        if (isset($this->$clean_property)) {
             trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
         }
         
         exit;
-    }
-    
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be overridden to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value if property is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Check if a property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set, otherwise false.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Unsets a property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success, false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }
