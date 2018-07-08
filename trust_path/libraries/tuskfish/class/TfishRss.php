@@ -101,7 +101,7 @@ class TfishRss extends TfishBaseObject
         $clean_email = TfishDataValidator::trimString($email);
 
         if (TfishDataValidator::isEmail($clean_email)) {
-            $this->__data[$clean_property] = $clean_email;
+            $this->managing_editor = $clean_email;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }
@@ -112,7 +112,7 @@ class TfishRss extends TfishBaseObject
         $clean_email = TfishDataValidator::trimString($email);
 
         if (TfishDataValidator::isEmail($clean_email)) {
-            $this->__data[$clean_property] = $clean_email;
+            $this->webmaster = $clean_email;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }

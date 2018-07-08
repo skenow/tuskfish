@@ -5,8 +5,8 @@
     <link><?php echo TfishDataValidator::escapeForXss($rss_feed->link); ?></link>
     <description><?php echo TfishDataValidator::escapeForXss(strip_tags($rss_feed->description)); ?></description>
     <generator><?php echo TfishDataValidator::escapeForXss($rss_feed->generator); ?></generator>
-    <managingEditor><?php echo TfishDataValidator::escapeForXss($rss_feed->managingEditor); ?></managingEditor>
-    <webMaster><?php echo TfishDataValidator::escapeForXss($rss_feed->webMaster); ?></webMaster>
+    <managingEditor><?php echo TfishDataValidator::escapeForXss($rss_feed->managing_editor); ?></managingEditor>
+    <webMaster><?php echo TfishDataValidator::escapeForXss($rss_feed->webmaster); ?></webMaster>
     <atom:link href="<?php echo $rss_feed->link; ?>" rel="self" type="application/rss+xml" />
     <?php if (isset($items) && !empty($items)): ?>
     <?php foreach ($items as $item): ?>
