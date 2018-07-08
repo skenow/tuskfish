@@ -33,7 +33,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $content_type type of content object
  * @property    string $handler The handler for taglink objects
  */
-class TfishTaglink
+class TfishTaglink extends TfishBaseObject
 {
 
     /** @var array Array holding the values of taglink object properties, accessed via magic methods. */
@@ -77,27 +77,6 @@ class TfishTaglink
         if (TfishDataValidator::isInt($clean_id, 1)) {
             $this->tag_id = $clean_id;
         }
-    }
-    
-    /**
-     * Intercept and prevent direct setting of properties.
-     * 
-     * Properties must be set using the relevant setter method.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->$clean_property)) {
-            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
-        } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-        
-        exit;
     }
 
 }
