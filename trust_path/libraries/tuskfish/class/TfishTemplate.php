@@ -34,49 +34,7 @@ class TfishTemplate
 {
     
     /** @var array $__data Array holding values of this object's properties. */
-    protected $__data = array(
-        'theme' => 'default'
-    );
-
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be modified to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of Property.
-     * @return mixed|null $property Value of property if it is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Check if a property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties. Can be modified to add
-     * processing logic to specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set, otherwise false.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    protected $theme = 'default';
 
     /**
      * Renders a HTML template file for display.
@@ -98,37 +56,18 @@ class TfishTemplate
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
-        extract($this->__data);
-        if (file_exists(TFISH_THEMES_PATH . $this->__data['theme'] . '/' . $template
+        extract((array) $this);
+        
+        if (file_exists(TFISH_THEMES_PATH . $this->theme . '/' . $template
                 . '.html')) {
             ob_start();
-            include TFISH_THEMES_PATH . $this->__data['theme'] . '/' . $template
+            include TFISH_THEMES_PATH . $this->theme . '/' . $template
                     . '.html';
             return ob_get_clean();
         } else {
-            echo $this->__data['theme'] . '/' . $template . '.html'; // Helps debug.
+            echo $this->theme . '/' . $template . '.html'; // Helps debug.
             trigger_error(TFISH_ERROR_TEMPLATE_DOES_NOT_EXIST, E_USER_ERROR);
         }
-    }
-
-    /**
-     * Set the value of an object property.
-     * 
-     * Do not declare variables named $theme or it will disrupt this method.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value to assign to property.
-     */
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if ($clean_property === 'theme') {
-            $this->setTheme($value);
-            return;
-        }
-        
-        $this->__data[$clean_property] = $value;
     }
 
     /**
@@ -149,28 +88,7 @@ class TfishTemplate
         
         if (TfishDataValidator::isAlnumUnderscore($theme)) {
             $clean_theme = TfishDataValidator::trimString($theme);
-            $this->__data['theme'] = $clean_theme;
-        }
-    }
-
-    /**
-     * Unsets an object property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be modified to add 
-     * processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success, false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
+            $this->theme = $clean_theme;
         }
     }
 
