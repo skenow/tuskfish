@@ -39,21 +39,18 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    array $items Array of content objects.
  * @property    string $template Template for presenting feed, default 'rss'.
  */
-class TfishRss
+class TfishRss extends TfishBaseObject
 {
     
-    /** @var array Holds values of permitted preference object properties. */
-    protected $__data = array(
-        'title' => '',
-        'link' => '',
-        'description' => '',
-        'copyright' => '',
-        'managing_editor' => '',
-        'webmaster' => '',
-        'generator' => '',
-        'items' => '',
-        'template' => ''
-    );
+    protected $title;
+    protected $link;
+    protected $description;
+    protected $copyright;
+    protected $managing_editor;
+    protected $webmaster;
+    protected $generator;
+    protected $items;
+    protected $template;
 
     /** Initialise default property values and unset unneeded ones. */
     public function __construct(TfishPreference $tfish_preference)
@@ -73,7 +70,7 @@ class TfishRss
     public function setTitle(string $title)
     {
         $clean_title = TfishDataValidator::trimString($title);
-        $this->__data['title'] = $clean_title;
+        $this->title = $clean_title;
     }
     
     public function setLink(string $url)
@@ -81,7 +78,7 @@ class TfishRss
         $clean_url = TfishDataValidator::trimString($url);
 
         if (TfishDataValidator::isUrl($clean_url)) {
-            $this->__data['link'] = $clean_url;
+            $this->link = $clean_url;
         } else {
             trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
         }
@@ -90,13 +87,13 @@ class TfishRss
     public function setDescription(string $description)
     {
         $clean_description = TfishDataValidator::trimString($description);
-        $this->__data['description'] = $clean_description;
+        $this->description = $clean_description;
     }
     
     public function setCopyright(string $copyright)
     {
         $clean_copyright = TfishDataValidator::trimString($copyright);
-        $this->__data['copyright'] = $clean_copyright;
+        $this->copyright = $clean_copyright;
     }
     
     public function setManagingEditor(string $email)
@@ -124,7 +121,7 @@ class TfishRss
     public function setGenerator(string $generator)
     {
         $clean_generator = TfishDataValidator::trimString($generator);
-        $this->__data['generator'] = $clean_generator;
+        $this->generator = $clean_generator;
     }
     
     public function setImage(string $image)
@@ -147,7 +144,7 @@ class TfishRss
                 unset($item);
             }
 
-            $this->__data['items'] = $clean_items;
+            $this->items = $clean_items;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
@@ -156,7 +153,7 @@ class TfishRss
     private function setTemplate(string $template)
     {
         $clean_template = TfishDataValidator::trimString($template);
-        $this->__data['template'] = $clean_template;
+        $this->template = $clean_template;
     }
 
     /**
@@ -175,85 +172,4 @@ class TfishRss
         $this->setDescription($obj->teaser);
     }
     
-    /** Magic methods **/
-    
-    /**
-     * Validate and set an existing object property according to type specified in constructor.
-     * 
-     * For more fine-grained control each property could be dealt with individually.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
-        } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be overridden to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value of property if it is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Check if an object property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties.
-     * 
-     * @param string $property Name of property to check.
-     * @return bool True if set otherwise false.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Unsets a property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }
