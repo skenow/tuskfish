@@ -91,5 +91,25 @@ class TfishTemplate
             $this->theme = $clean_theme;
         }
     }
+    
+    /**
+     * Get the value of a property.
+     * 
+     * Intercepts direct calls to access an object property. This method can be overridden to impose
+     * processing logic to the value before returning it.
+     * 
+     * @param string $property Name of property.
+     * @return mixed|null $property Value of property if it is set; otherwise null.
+     */
+    public function __get(string $property)
+    {
+        $clean_property = TfishDataValidator::trimString($property);
+        
+        if (isset($clean_property)) {
+            return $this->$clean_property;
+        } else {
+            return null;
+        }
+    }
 
 }
