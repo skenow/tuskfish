@@ -40,20 +40,17 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $order_type Sort ascending (ASC) or descending(DESC)
  * @property    array $tag Array of tag IDs
  */
-class TfishCriteria
+class TfishCriteria extends TfishBaseObject
 {
 
-    /** @var array $__data Holds the values of the object's properties for access by magic methods. **/
-    protected $__data = array(
-        'item' => array(),
-        'condition' => array(), 
-        'group_by' => '',
-        'limit' => 0,
-        'offset' => 0,
-        'order' => '',
-        'order_type' => "DESC",
-        'tag' => array()
-    );
+    protected $item = array();
+    protected $condition = array();
+    protected $group_by = '';
+    protected $limit = 0;
+    protected $offset = 0;
+    protected $order = '';
+    protected $order_type = "DESC";
+    protected $tag = array();
     
     /**
      * Add conditions (TfishCriteriaItem) to a query.
@@ -72,7 +69,7 @@ class TfishCriteria
         $clean_condition = TfishDataValidator::trimString($condition);
         
         if ($clean_condition === "AND" || $clean_condition === "OR") {
-            $this->__data['condition'][] = $clean_condition;
+            $this->condition[] = $clean_condition;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
@@ -83,7 +80,7 @@ class TfishCriteria
         $clean_group_by = TfishDataValidator::trimString($group_by);
 
         if (TfishDataValidator::isAlnumUnderscore($clean_group_by)) {
-            $this->__data['group_by'] = $clean_group_by;
+            $this->group_by = $clean_group_by;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -92,7 +89,7 @@ class TfishCriteria
     private function setItem(TfishCriteriaItem $item)
     {
         if (is_a($item, 'TfishCriteriaItem')) {
-            $this->__data['item'][] = $item;
+            $this->item[] = $item;
         } else {
             trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);
         }
@@ -101,7 +98,7 @@ class TfishCriteria
     public function setLimit(int $limit)
     {
         if (TfishDataValidator::isInt($limit, 0)) {
-            $this->__data['limit'] = (int) $limit;
+            $this->limit = (int) $limit;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -110,7 +107,7 @@ class TfishCriteria
     public function setOffset(int $offset)
     {
         if (TfishDataValidator::isInt($offset, 0)) {
-            $this->__data['offset'] = (int) $offset;
+            $this->offset = (int) $offset;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -121,7 +118,7 @@ class TfishCriteria
         $clean_order = TfishDataValidator::trimString($order);
 
         if (TfishDataValidator::isAlnumUnderscore($clean_order)) {
-            $this->__data['order'] = $clean_order;
+            $this->order = $clean_order;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -132,9 +129,9 @@ class TfishCriteria
         $clean_order_type = TfishDataValidator::trimString($order_type);
         
         if ($clean_order_type === "ASC") {
-            $this->__data['order_type'] = "ASC";
+            $this->order_type = "ASC";
         } else {
-            $this->__data['order_type'] = "DESC";
+            $this->order_type = "DESC";
         }
     }
     
@@ -152,7 +149,7 @@ class TfishCriteria
                 unset($tag);
             }
 
-            $this->__data['tag'] = $clean_tags;
+            $this->tag = $clean_tags;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
@@ -274,98 +271,14 @@ class TfishCriteria
      */
     public function unsetType(int $key)
     {
-        if (isset($this->__data['item'][$key])) {
-            unset($this->__data['item'][$key]);
-            unset($this->__data['condition'][$key]);
+        if (isset($this->item[$key])) {
+            unset($this->item[$key]);
+            unset($this->condition[$key]);
         }
 
         // Reindex the arrays.
-        $this->setItem(array_values($this->__data['item']));
-        $this->setCondition(array_values($this->__data['condition']));
-    }
-    
-    /** Magic methods. **/
-    
-    /**
-     * Intercept and prevent direct setting of properties.
-     * 
-     * Properties must be set using the relevant setter method.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
-        } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-        
-        exit;
-    }
-    
-    /**
-     * Get the value of a property.
-     * 
-     * Intercepts direct calls to access an object property. This method can be modified to impose
-     * processing logic to the value before returning it.
-     * 
-     * @param string $property Name of property.
-     * @return mixed|null $property Value of property if it is set; otherwise null.
-     */
-    public function __get(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return $this->__data[$clean_property];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Check if a property is set.
-     * 
-     * Intercepts isset() calls to correctly read object properties. Can be modified to add
-     * processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set, otherwise false.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Unsets a property.
-     * 
-     * Intercepts unset() calls to correctly unset object properties. Can be modified to add
-     * processing logic for specific properties.
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
+        $this->setItem(array_values($this->item));
+        $this->setCondition(array_values($this->condition));
     }
 
 }
