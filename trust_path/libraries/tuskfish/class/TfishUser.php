@@ -36,7 +36,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishUser extends TfishBaseObject
 {
 
-    /** @var array $__data Array holding values of this object's properties. */
     protected $id;
     protected $admin_email;
     protected $password_hash;

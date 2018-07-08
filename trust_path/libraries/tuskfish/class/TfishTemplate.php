@@ -33,7 +33,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishTemplate
 {
     
-    /** @var array $__data Array holding values of this object's properties. */
     protected $theme = 'default';
 
     /**
