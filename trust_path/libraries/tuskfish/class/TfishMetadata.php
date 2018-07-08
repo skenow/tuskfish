@@ -40,21 +40,19 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $robots Meta instructions to robots.
  * @property    int $pagination_elements Number of slots in the pagination control.
  */
-class TfishMetadata
+class TfishMetadata extends TfishBaseObject
 {
     
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;
     
-    /** @var array $__data Array holding values of this object properties, accessed via magic methods. */
-    protected $__data = array(
-        'title' => '',
-        'description' => '',
-        'author' => '',
-        'copyright' => '',
-        'generator' => '',
-        'seo' => '',
-        'robots' => '');
+    protected $title = '';
+    protected $description = '';
+    protected $author = '';
+    protected $copyright = '';
+    protected $generator = '';
+    protected $seo = '';
+    protected $robots = '';
 
     /** Initialise object properties and default values.
      * 
@@ -84,8 +82,8 @@ class TfishMetadata
     {
         $clean_property = TfishDataValidator::trimString($property);
         
-        if (isset($this->__data[$clean_property])) {
-            return htmlspecialchars((string) $this->__data[$clean_property], ENT_QUOTES, "UTF-8",
+        if (isset($this->$clean_property)) {
+            return htmlspecialchars((string) $this->$clean_property, ENT_QUOTES, "UTF-8",
                     false);
         } else {
             return null;
@@ -141,54 +139,7 @@ class TfishMetadata
     {
         $clean_property = TfishDataValidator::trimString($property);
         $clean_value = TfishDataValidator::trimString($value);
-        $this->__data[$clean_property] = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
+        $this->$clean_property = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
     }
-    
-    
-    public function __set(string $property, $value)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (!isset($this->__data[$clean_property])) {
-            trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
-        } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
-        }
-    }
-
-    /**
-     * Intercept isset() calls to correctly read object properties
-     * 
-     * @param string $property Name of property.
-     * @return bool True if set, false if not.
-     */
-    public function __isset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Intercept unset() calls to correctly unset object properties
-     * 
-     * @param string $property Name of property.
-     * @return bool True on success, false on failure.
-     */
-    public function __unset(string $property)
-    {
-        $clean_property = TfishDataValidator::trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            unset($this->__data[$clean_property]);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+       
 }
