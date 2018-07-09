@@ -161,7 +161,7 @@ if ($clean_id) {
 
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');
-    $criteria->setOrderType('DESC');;
+    $criteria->setOrderType('DESC');
     $criteria->setSecondaryOrder('submission_time');
     $criteria->setSecondaryOrderType('DESC');
     $content_objects = $content_handler->getObjects($criteria);
