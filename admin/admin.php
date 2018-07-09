@@ -168,7 +168,6 @@ if (in_array($op, $options_whitelist)) {
                         trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
                         header("Location: admin.php");
                     }
-                    
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
 
                     // Make a parent tree select box options.

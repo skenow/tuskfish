@@ -65,16 +65,16 @@ class TfishAudio extends TfishContentObject
         parent::__construct();
 
         // Declare the type, template and module for this this class
-        $this->__data['type'] = "TfishAudio";
-        $this->__data['template'] = "audio";
-        $this->__data['module'] = "soundtracks";
-        $this->__data['icon'] = '<i class="fas fa-headphones"></i>';
+        $this->type = "TfishAudio";
+        $this->template = "audio";
+        $this->module = "soundtracks";
+        $this->icon = '<i class="fas fa-headphones"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $listOfZeroedProperties = $this->getListOfZeroedProperties();
         
         foreach ($listOfZeroedProperties as $property) {
-            unset($this->__data[$property]);
+            unset($this->$property);
         }
     }
     

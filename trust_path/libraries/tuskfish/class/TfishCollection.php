@@ -75,16 +75,16 @@ class TfishCollection extends TfishContentObject
         parent::__construct();
 
         // Declare the type, template and module for this this class
-        $this->__data['type'] = "TfishCollection";
-        $this->__data['template'] = "collection";
-        $this->__data['module'] = "collections";
-        $this->__data['icon'] = '<i class="fas fa-folder-open"></i>';
+        $this->type = "TfishCollection";
+        $this->template = "collection";
+        $this->module = "collections";
+        $this->icon = '<i class="fas fa-folder-open"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $listOfZeroedProperties = $this->getListOfZeroedProperties();
         
         foreach ($listOfZeroedProperties as $property) {
-            unset($this->__data[$property]);
+            unset($this->$property);
         }   
     }
     

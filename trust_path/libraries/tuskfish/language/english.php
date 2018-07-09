@@ -330,4 +330,4 @@ define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a no
 
 // 1.03
 define("TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED", "Object properties are not permitted to be"
-        . "set directly. Use the relevant setter method.");
+        . " set directly. Use the relevant setter method.");

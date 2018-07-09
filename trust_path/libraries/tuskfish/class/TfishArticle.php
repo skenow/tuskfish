@@ -63,16 +63,16 @@ class TfishArticle extends TfishContentObject
         parent::__construct();
 
         // Declare the type, template, module and icon for this this class.
-        $this->__data['type'] = "TfishArticle";
-        $this->__data['template'] = "article";
-        $this->__data['module'] = "articles";
-        $this->__data['icon'] = '<i class="fas fa-file-alt"></i>';
+        $this->type = "TfishArticle";
+        $this->template = "article";
+        $this->module = "articles";
+        $this->icon = '<i class="fas fa-file-alt"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $listOfZeroedProperties = $this->getListOfZeroedProperties();
         
         foreach ($listOfZeroedProperties as $property) {
-            unset($this->__data[$property]);
+            unset($this->$property);
         }
     }
     

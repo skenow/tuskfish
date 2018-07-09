@@ -226,8 +226,8 @@ class TfishAngryTree
      * @param string $prefix_orig String to indent items at deeper levels.
      * @param string $prefix_curr String to indent the current item.
      */
-    private function _makeSelBoxOptions(string $fieldName, int $selected, int $key, &$ret,
-                string $prefix_orig, string $prefix_curr = '')
+    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret,
+                $prefix_orig, $prefix_curr = '')
     {
         if ($key > 0) {
             $id_field = $this->_myId;

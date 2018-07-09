@@ -156,8 +156,9 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
+    
     public function insert(TfishContentObject $obj)
-    {   
+    {
         $key_values = $obj->convertObjectToArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
         unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
@@ -444,7 +445,7 @@ class TfishContentHandler
             }
 
             $statement = TfishDatabase::select('taglink', $criteria);
-            
+
             if ($statement) {
                 // Sort tag into multi-dimensional array indexed by content_id.
                 while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -453,7 +454,7 @@ class TfishContentHandler
 
                 // Assign the sorted tags to correct content objects.
                 foreach ($taglinks as $content_id => $tags) {
-                    $objects[$content_id]->tags = $tags;
+                    $objects[$content_id]->setTags($tags);
                     unset($tags);
                 }
             } else {
@@ -865,7 +866,6 @@ class TfishContentHandler
         while ($object = $statement->fetch()) {
             $result[$object->id] = $object;
         }
-        
         return $result;
     }
 
@@ -923,7 +923,7 @@ class TfishContentHandler
                     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                         $tags[] = $row['tag_id'];
                     }
-                    $content_object->tags = $tags;
+                    $content_object->setTags($tags);
                 } else {
                     trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
                 }

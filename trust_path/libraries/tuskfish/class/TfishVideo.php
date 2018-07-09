@@ -63,16 +63,16 @@ class TfishVideo extends TfishContentObject
         parent::__construct();
 
         // Declare the type, template and module for this this class
-        $this->__data['type'] = "TfishVideo";
-        $this->__data['template'] = "video";
-        $this->__data['module'] = "videos";
-        $this->__data['icon'] = '<i class="fas fa-video"></i>';
+        $this->type = "TfishVideo";
+        $this->template = "video";
+        $this->module = "videos";
+        $this->icon = '<i class="fas fa-video"></i>';
 
         // Object definition - unset any properties unused in this subclass.
         $listOfZeroedProperties = $this->getListOfZeroedProperties();
         
         foreach ($listOfZeroedProperties as $property) {
-            unset($this->__data[$property]);
+            unset($this->$property);
         }
     }
     
