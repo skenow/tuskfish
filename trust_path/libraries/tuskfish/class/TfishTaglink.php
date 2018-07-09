@@ -33,9 +33,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $content_type type of content object
  * @property    string $handler The handler for taglink objects
  */
-class TfishTaglink extends TfishBaseObject
+class TfishTaglink
 {
 
+    use TfishMagicMethods;
+    
     /** @var array Array holding the values of taglink object properties, accessed via magic methods. */
     protected $id;
     protected $tag_id;

@@ -33,9 +33,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    mixed $value Value to compare
  * @property    string $operator The operator to use for evaluation (=, +, >, < etc)
  */
-class TfishCriteriaItem extends TfishBaseObject
+class TfishCriteriaItem
 {
-
+    
+    use TfishMagicMethods;
+    
     protected $column = false;
     protected $value = false;
     protected $operator = "="; // Default value.

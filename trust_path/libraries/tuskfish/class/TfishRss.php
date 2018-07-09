@@ -39,8 +39,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    array $items Array of content objects.
  * @property    string $template Template for presenting feed, default 'rss'.
  */
-class TfishRss extends TfishBaseObject
+class TfishRss
 {
+    
+    use TfishMagicMethods;
     
     protected $title;
     protected $link;

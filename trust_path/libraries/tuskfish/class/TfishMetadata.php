@@ -40,8 +40,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $robots Meta instructions to robots.
  * @property    int $pagination_elements Number of slots in the pagination control.
  */
-class TfishMetadata extends TfishBaseObject
+class TfishMetadata
 {
+    use TfishMagicMethods;
     
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;

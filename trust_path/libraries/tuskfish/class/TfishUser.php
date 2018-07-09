@@ -33,8 +33,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $password_hash
  * @property    int $user_group
  */
-class TfishUser extends TfishBaseObject
+class TfishUser
 {
+    
+    use TfishMagicMethods;
 
     protected $id;
     protected $admin_email;

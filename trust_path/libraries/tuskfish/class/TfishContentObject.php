@@ -69,8 +69,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $module The module that handles this content type (not persistent).
  * @properties  string $icon The vector icon that represents this object type (not persistent).
  */
-class TfishContentObject extends TfishBaseObject
+class TfishContentObject
 {
+    use TfishMagicMethods;
 
     /** @var array Holds values of permitted preference object properties. */
     protected $id = '';

@@ -40,8 +40,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $order_type Sort ascending (ASC) or descending(DESC)
  * @property    array $tag Array of tag IDs
  */
-class TfishCriteria extends TfishBaseObject
+class TfishCriteria
 {
+    
+    use TfishMagicMethods;
 
     protected $item = array();
     protected $condition = array();
