@@ -69,6 +69,22 @@ class TfishRss
         $this->setTemplate('rss');
     }
     
+    /**
+     * Make a RSS feed for a collection object.
+     * 
+     * @param object $obj TfishCollection object.
+     */
+    public function makeFeedForCollection(TfishCollection $obj)
+    {
+        if (!is_a($obj, 'TfishCollection')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        $this->setTitle($obj->title);
+        $this->setLink(TFISH_RSS_URL . '?id=' . $obj->id);
+        $this->setDescription($obj->teaser);
+    }
+    
     public function setTitle(string $title)
     {
         $clean_title = TfishDataValidator::trimString($title);
@@ -156,22 +172,6 @@ class TfishRss
     {
         $clean_template = TfishDataValidator::trimString($template);
         $this->template = $clean_template;
-    }
-
-    /**
-     * Make a RSS feed for a collection object.
-     * 
-     * @param object $obj TfishCollection object.
-     */
-    public function makeFeedForCollection(TfishCollection $obj)
-    {
-        if (!is_a($obj, 'TfishCollection')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        $this->setTitle($obj->title);
-        $this->setLink(TFISH_RSS_URL . '?id=' . $obj->id);
-        $this->setDescription($obj->teaser);
     }
     
 }

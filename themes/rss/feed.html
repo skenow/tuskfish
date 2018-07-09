@@ -24,7 +24,7 @@
       <enclosure url="<?php echo TFISH_ENCLOSURE_URL . TfishDataValidator::escapeForXss($item->id); ?>" length="<?php echo TfishDataValidator::escapeForXss($length); ?>" type="<?php echo TfishDataValidator::escapeForXss($mimetype); ?>" />
       <?php unset($length, $mimetype); endif; ?>
       <?php if ($item->submission_time): ?>
-      <pubDate><?php echo TfishDataValidator::escapeForXss(gmdate(DATE_RSS, $item->submission_time)); ?></pubDate>
+      <pubDate><?php echo TfishDataValidator::escapeForXss(gmdate(DATE_RSS, (int) $item->submission_time)); ?></pubDate>
       <?php endif; ?>
       <guid isPermaLink="true"><?php echo TfishDataValidator::escapeForXss(TFISH_PERMALINK_URL . '?id=' . $item->escapeForXss('id')); ?></guid>
     </item>
