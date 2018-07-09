@@ -334,9 +334,11 @@ class TfishDatabase
                 $sql .= "ORDER BY `t1`." 
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
-                if ($criteria->order != 'submission_time') {
-                    $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
+                
+                if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
+                    $sql .= ", `t1`."
+                         . self::addBackticks(self::escapeIdentifier($criteria->secondary_order)) . " ";
+                    $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -589,9 +591,10 @@ class TfishDatabase
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
-                if ($criteria->order != 'submission_time') {
-                    $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
+                if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
+                    $sql .= ", `t1`."
+                         . self::addBackticks(self::escapeIdentifier($criteria->secondary_order)) . " ";
+                    $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -809,9 +812,10 @@ class TfishDatabase
                         . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
-                if ($criteria->order != 'submission_time') {
-                    $sql .= ", `t1`.`submission_time` ";
-                    $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
+                if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
+                    $sql .= ", `t1`."
+                         . self::addBackticks(self::escapeIdentifier($criteria->secondary_order)) . " ";
+                    $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
 

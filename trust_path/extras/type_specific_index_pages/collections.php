@@ -111,7 +111,9 @@ if ($clean_id) {
         
         $criteria->setLimit($tfish_preference->user_pagination);
         $criteria->setOrder('date');
-        $criteria->setOrderType('DESC');;
+        $criteria->setOrderType('DESC');
+        $criteria->setSecondaryOrder('submission_time');
+        $criteria->setSecondaryOrderType('DESC');
 
         // Prepare pagination control.
         $tfish_pagination = new TfishPaginationControl($tfish_preference);
@@ -160,6 +162,8 @@ if ($clean_id) {
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');
     $criteria->setOrderType('DESC');;
+    $criteria->setSecondaryOrder('submission_time');
+    $criteria->setSecondaryOrderType('DESC');
     $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);

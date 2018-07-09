@@ -52,6 +52,8 @@ class TfishCriteria
     protected $offset = 0;
     protected $order = '';
     protected $order_type = "DESC";
+    protected $secondary_order = '';
+    protected $secondary_order_type = "DESC";
     protected $tag = array();
     
     /**
@@ -134,6 +136,28 @@ class TfishCriteria
             $this->order_type = "ASC";
         } else {
             $this->order_type = "DESC";
+        }
+    }
+    
+    public function setSecondaryOrder(string $secondary_order)
+    {
+        $clean_secondary_order = TfishDataValidator::trimString($secondary_order);
+
+        if (TfishDataValidator::isAlnumUnderscore($clean_secondary_order)) {
+            $this->secondary_order = $clean_secondary_order;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+        }
+    }
+    
+    public function setSecondaryOrderType(string $secondary_order_type)
+    {
+        $clean_secondary_order_type = TfishDataValidator::trimString($secondary_order_type);
+        
+        if ($clean_secondary_order_type === "ASC") {
+            $this->secondary_order_type = "ASC";
+        } else {
+            $this->secondary_order_type = "DESC";
         }
     }
     

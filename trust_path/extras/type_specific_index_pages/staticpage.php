@@ -97,7 +97,9 @@ if ($clean_id) {
         // Initialise criteria object.
         $criteria = new TfishCriteria();
         $criteria->setOrder('date');
-        $criteria->setOrderType('DESC');;
+        $criteria->setOrderType('DESC');
+        $criteria->setSecondaryOrder('submission_time');
+        $criteria->setSecondaryOrderType('DESC');
 
         // If object is a collection check if has child objects; if so display teasers / links.
         if ($content->type === 'TfishCollection') {

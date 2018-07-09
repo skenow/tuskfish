@@ -353,6 +353,8 @@ class TfishContentHandler
         // Set default sorting order by submission time descending.
         if (!$criteria->order) {
             $criteria->setOrder('date');
+            $criteria->setSecondaryOrder('submission_time');
+            $criteria->setSecondaryOrderType('DESC');
         }
 
         $statement = TfishDatabase::select('content', $criteria, $columns);
@@ -415,6 +417,8 @@ class TfishContentHandler
         // Set default sorting order by submission time descending.        
         if (!$criteria->order) {
             $criteria->setOrder('date');
+            $criteria->setSecondaryOrder('submission_time');
+            $criteria->setSecondaryOrderType('DESC');
         }
 
         $statement = TfishDatabase::select('content', $criteria);

@@ -402,7 +402,9 @@ if (in_array($op, $options_whitelist)) {
                     // Initialise criteria object.
                     $criteria = new TfishCriteria();
                     $criteria->setOrder('date');
-                    $criteria->setOrderType('DESC');;
+                    $criteria->setOrderType('DESC');
+                    $criteria->setSecondaryOrder('submission_time');
+                    $criteria->setSecondaryOrderType('DESC');
 
                     // If object is a collection check if has child objects; if so display
                     // thumbnails and teasers / links.
@@ -479,7 +481,7 @@ if (in_array($op, $options_whitelist)) {
             $criteria->setOffset($clean_start);
             $criteria->setLimit($tfish_preference->admin_pagination);
             $criteria->setOrder('submission_time');
-            $criteria->setOrderType('DESC');;
+            $criteria->setOrderType('DESC');
             $columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
             $result = TfishDatabase::select('content', $criteria, $columns);
             
