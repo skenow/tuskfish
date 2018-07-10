@@ -46,7 +46,7 @@ class TfishDataValidator
      * limit XSS attacks. Encoding of quotes and use of UTF-8 character set is hardcoded in.
      *
      * @param mixed $output Unescaped string intended for display.
-     * @return string Escaped output string safe for display.
+     * @return string XSS-escaped output string safe for display.
      */
     public static function escapeForXss($dirty_text)
     {
