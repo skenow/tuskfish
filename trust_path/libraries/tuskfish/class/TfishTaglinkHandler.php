@@ -26,8 +26,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @since       1.0
  * @package     content
  */
-class TfishTaglinkHandler extends TfishContentHandler
+class TfishTaglinkHandler
 {
+    
+    use TfishContentTypes;
 
     /**
      * Delete taglinks associated with a particular content object.

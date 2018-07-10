@@ -236,7 +236,7 @@ if (in_array($op, $options_whitelist)) {
 
             // Insert the object
             $result = $content_handler->insert($content_object);
-            
+
             if ($result) {
                 $tfish_cache->flushCache();
                 $tfish_template->page_title = TFISH_SUCCESS;
