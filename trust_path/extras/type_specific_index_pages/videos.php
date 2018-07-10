@@ -18,9 +18,13 @@ declare(strict_types=1);
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Lock handler to videos.
+$content_handler = new TfishContentHandler();
+$criteria = new TfishCriteria();
+$criteria->add(new TfishCriteriaItem('type', 'TfishVideo'));
+
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_VIDEOS;
-$content_handler = new TfishVideoHandler();
 $index_template = 'videos';
 $target_file_name = 'videos';
 $tfish_template->target_file_name = $target_file_name;
@@ -100,9 +104,6 @@ if ($clean_id) {
 } else {
     // Check if cached page is available.
     $tfish_cache->getCachedPage($tfish_preference, $basename, $cache_parameters);
-    
-    // Set criteria for selecting content objects.
-    $criteria = new TfishCriteria();
     
     if ($clean_start)
         $criteria->setOffset($clean_start);

@@ -20,6 +20,11 @@ declare(strict_types=1);
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Lock handler to static pages.
+$content_handler = new TfishContentHandler();
+$criteria = new TfishCriteria();
+$criteria->add(new TfishCriteriaItem('type', 'TfishStatic'));
+
 ////////// CONFIGURATION //////////
 // 1. Enter the ID of the content object you want to display on this page.
 $id = 10;
@@ -45,7 +50,6 @@ $basename = basename(__FILE__);
 $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
 
 if ($clean_id) {
-    $static_handler = new TfishStaticHandler();
     
     $content = $static_handler->getObject($clean_id);
     
