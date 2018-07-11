@@ -18,6 +18,9 @@ declare(strict_types=1);
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
+// Access content module resources.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+
 // Get the relevant handler.
 $content_handler = new TfishContentHandler();
 

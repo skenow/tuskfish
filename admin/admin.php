@@ -18,6 +18,9 @@ declare(strict_types=1);
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 
+// Access content module resources.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+
 // Validate input parameters.
 $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;

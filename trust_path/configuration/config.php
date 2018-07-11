@@ -34,7 +34,7 @@ define("TFISH_ERROR_LOG_PATH", TFISH_TRUST_PATH . "log/tuskfish_log.txt");
 define("TFISH_FORM_PATH", TFISH_PATH . "form/");
 define("TFISH_LIBRARIES_PATH", TFISH_TRUST_PATH . "libraries/");
 define("TFISH_PRIVATE_CACHE_PATH", TFISH_TRUST_PATH . "cache/");
-
+define("TFISH_MODULE_PATH", TFISH_TRUST_PATH . "modules/");
 // Constants that make use of the virtual (URL) path, these refer to assets accessed by URL.
 define("TFISH_ADMIN_URL", TFISH_URL . "admin/");
 define("TFISH_CACHE_URL", TFISH_URL . "cache/");
