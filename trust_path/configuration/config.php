@@ -72,10 +72,16 @@ define("ONE_GIGABYTE", 1073741824);
 
 /**
  * Autoload core Tuskfish classes. spl_autoload_register() avoids namespace clashes.
+ * 
+ * Note that you must check if the file exists before attempting to include it; otherwise calls
+ * to additional autoloaders down the chain (eg. module-specific autoloaders) will fail.
+ * 
  * @param string $classname Name of class to autoload. 
  */
 function tfish_autoload(string $classname) {
-    include TFISH_CLASS_PATH . $classname . '.php';
+    if (is_file(TFISH_CLASS_PATH . $classname . '.php')) {
+        include TFISH_CLASS_PATH . $classname . '.php';
+    }
 }
 spl_autoload_register('tfish_autoload');
 

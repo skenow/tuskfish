@@ -25,6 +25,8 @@ include TFISH_CONTENT_MODULE_LANGUAGE_PATH . 'english.php';
  * @param string $classname Name of class to autoload. 
  */
 function tfish_content_module_autoload(string $classname) {
-    include TFISH_CONTENT_MODULE_PATH . 'class/' . $classname . '.php';
+    if (is_file(TFISH_CONTENT_MODULE_PATH . 'class/' . $classname . '.php')) {
+        include TFISH_CONTENT_MODULE_PATH . 'class/' . $classname . '.php';
+    }
 }
 spl_autoload_register('tfish_content_module_autoload');

@@ -72,6 +72,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishContentObject
 {
     use TfishMagicMethods;
+    use TfishLanguage;
 
     /** @var array Holds values of permitted preference object properties. */
     protected $id = '';
@@ -266,11 +267,9 @@ class TfishContentObject
     }
     
     public function setLanguage(string $language)
-    {
+    {        
         $language = (string) TfishDataValidator::trimString($language);
-
-        $content_handler = new TfishContentHandler();
-        $language_whitelist = $content_handler->getListOfLanguages();
+        $language_whitelist = $this->getListOfLanguages();
 
         if (!array_key_exists($language, $language_whitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);

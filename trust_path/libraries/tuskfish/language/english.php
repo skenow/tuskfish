@@ -32,8 +32,6 @@ define("TFISH_YUBIKEY_NO_SIGNATURE_KEY", "No Yubikey signature key in config.php
 // admin/admin.php
 define("TFISH_ADMIN", "Admin");
 define("TFISH_DASHBOARD", "Dashboard");
-define("TFISH_ADD_CONTENT", "Add content");
-define("TFISH_EDIT_CONTENT", "Edit content");
 define("TFISH_SELECT_STATUS", "- Select status -");
 define("TFISH_SELECT_TAGS", "- Select tag -");
 define("TFISH_SELECT_TYPE", "- Select type -");
@@ -47,6 +45,9 @@ define("TFISH_CHANGE_PASSWORD_EXPLANATION", "Please enter and confirm your new a
         . "password in the form below to change it. Passwords must be at least 15 characters long "
         . "and contain at least least one upper and lower case letter, number and symbol.");
 define("TFISH_STATIC_PAGES", "Static pages");
+
+// admin/gallery.php
+define("TFISH_IMAGE_GALLERY", "Gallery");
 
 // admin/password.php
 define("TFISH_NEW_PASSWORD", "Enter new password");

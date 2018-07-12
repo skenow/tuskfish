@@ -15,8 +15,13 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-// Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
+// 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
+
+// 2. Module header must precede Tuskfish header. This file sets module-specific paths.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+
+// 3. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfish_header.php";
 
 // Specify theme set, otherwise 'default' will be used.
@@ -72,7 +77,7 @@ if ($clean_op && $clean_terms && $type) {
 $tfish_template->page_title = TFISH_SEARCH;
 $tfish_template->terms = $clean_terms;
 $tfish_template->type = $type;
-$tfish_template->form = TFISH_FORM_PATH . 'search.html';
+$tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . 'search.html';
 $tfish_template->tfish_main_content = $tfish_template->render('form');
 
 /**

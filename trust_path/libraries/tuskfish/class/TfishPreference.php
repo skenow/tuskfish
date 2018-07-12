@@ -52,6 +52,7 @@ class TfishPreference
 {
     
     use TfishMagicMethods;
+    use TfishLanguage;
 
     protected $site_name;
     protected $site_description;
@@ -168,8 +169,7 @@ class TfishPreference
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
 
-        $content_handler = new TfishContentHandler();
-        $language_whitelist = $content_handler->getListOfLanguages();
+        $language_whitelist = $this->getListOfLanguages();
 
         if (array_key_exists($clean_value, $language_whitelist)) {
             $this->default_language = $clean_value;

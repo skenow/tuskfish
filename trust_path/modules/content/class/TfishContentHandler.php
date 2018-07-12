@@ -319,24 +319,6 @@ class TfishContentHandler
     }
 
     /**
-     * Returns a list of languages for the content object submission form.
-     * 
-     * In the interests of brevity and sanity a full list is not provided. Add entries that you
-     * want to use to the array using ISO 639-1 two-letter language codes, which you can find at:
-     * https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes. Be aware that deleting entries that
-     * are in use by your content objects will cause errors.
-     * 
-     * @return array Array of languages in ISO 639-1 code => name format.
-     */
-    public function getListOfLanguages()
-    {
-        return array(
-            "en" => "English",
-            "th" => "Thai",
-        );
-    }
-
-    /**
      * Returns a list of content object titles with ID as key.
      * 
      * @param object $criteria TfishCriteria object used to build conditional database query.

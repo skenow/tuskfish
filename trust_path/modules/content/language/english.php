@@ -79,9 +79,6 @@ define("TFISH_CURRENT_CONTENT", "Current content");
 define("TFISH_ADD_CONTENT", "Add content");
 define("TFISH_EDIT_CONTENT", "Edit content");
 
-// Page titles.
-define("TFISH_IMAGE_GALLERY", "Gallery");
-
 // Related and parent works.
 define("TFISH_PARENT_WORK", "Parent work");
 define("TFISH_RELATED", "Related");

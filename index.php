@@ -14,12 +14,14 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-// Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
+// 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
-require_once TFISH_PATH . "tfish_header.php";
 
-// Access content module resources.
+// 2. Module header must precede Tuskfish header. This file sets module-specific paths.
 require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+
+// 3. Main Tuskfish header. This file bootstraps Tuskfish.
+require_once TFISH_PATH . "tfish_header.php";
 
 // Get the relevant handler.
 $content_handler = new TfishContentHandler();
