@@ -146,18 +146,6 @@ class TfishContentHandler
             return TfishFileHandler::deleteFile('media/' . $filename);
         }
     }
-
-    /**
-     * Inserts a content object into the database.
-     * 
-     * Note that content child content classes that have unset unused properties from the parent
-     * should reset them to null before insertion or update. This is to guard against the case
-     * where the admin reassigns the type of a content object - it makes sure that unused properties
-     * are zeroed in the database. 
-     * 
-     * @param object $obj TfishContentObject subclass.
-     * @return bool True on success, false on failure.
-     */
     
     public function insert(TfishContentObject $obj)
     {
@@ -829,6 +817,90 @@ class TfishContentHandler
             $result[$object->id] = $object;
         }
         return $result;
+    }
+    
+    /**
+     * Initiate streaming of a downloadable media file associated with a content object.
+     * 
+     * DOES NOT WORK WITH COMPRESSION ENABLED IN OUTPUT BUFFER. This method acts as an intermediary
+     * to provide access to uploaded file resources that reside outside of the web root, while
+     * concealing the real file path and name. Use this method to provide safe user access to
+     * uploaded files. If anything nasty gets uploaded nobody will be able to execute it directly
+     * through the browser.
+     * 
+     * @param int $id ID of the associated content object.
+     * @param string $filename An alternative name (rename) for the file you wish to transfer,
+     * excluding extension.
+     * @return bool True on success, false on failure. 
+     */
+    public static function streamDownloadToBrowser(int $id, string $filename = '')
+    {
+        $clean_id = TfishDataValidator::isInt($id, 1) ? (int) $id : false;
+        $clean_filename = !empty($filename) ? TfishDataValidator::trimString($filename) : '';
+        
+        if ($clean_id) {
+            $result = self::_streamDownloadToBrowser($clean_id, $clean_filename);
+            if ($result === false) {
+                return false;
+            }
+            return true;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_NOTICE);
+        }
+    }
+
+    /** @internal */
+    private static function _streamDownloadToBrowser(int $id, string $filename)
+    {
+        $criteria = new TfishCriteria();
+        $criteria->add(new TfishCriteriaItem('id', $id));
+        $statement = TfishDatabase::select('content', $criteria);
+        
+        if (!$statement) {
+            trigger_error(TFISH_ERROR_NO_STATEMENT, E_USER_NOTICE);
+            return false;
+        }
+        
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        $content_handler = new TfishContentHandler();
+        $content = $content_handler->convertRowToObject($row);
+        
+        if ($content && $content->online) {
+            $media = isset($content->media) ? $content->media : false;
+            
+            if ($media && is_readable(TFISH_MEDIA_PATH . $content->media)) {
+                ob_start();
+                $filepath = TFISH_MEDIA_PATH . $content->media;
+                $filename = empty($filename) ? pathinfo($filepath, PATHINFO_FILENAME) : $filename;
+                $file_extension = pathinfo($filepath, PATHINFO_EXTENSION);
+                $file_size = filesize(TFISH_MEDIA_PATH . $content->media);
+                $mimetype_list = TfishUtils::getListOfMimetypes();
+                $mimetype = $mimetype_list[$file_extension];
+
+                // Must call session_write_close() first otherwise the script gets locked.
+                session_write_close();
+
+                // Prevent caching
+                header("Pragma: public");
+                header("Expires: -1");
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+                // Set file-specific headers.
+                header('Content-Disposition: attachment; filename="' . $filename . '.'
+                        . $file_extension . '"');
+                //header('Content-Type: application/octet-stream');
+                header("Content-Type: " . $mimetype);
+                header("Content-Length: " . $file_size);
+                ob_clean();
+                flush();
+                readfile($filepath);
+            } else {
+                return false;
+            }
+        } else {
+            trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_WARNING);
+            return false;
+        }
     }
 
     /**

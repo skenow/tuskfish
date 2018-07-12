@@ -218,7 +218,7 @@ class TfishContentObject
         }
 
         // Check image file is a permitted mimetype.
-        $mimetype_whitelist = TfishFileHandler::getListOfAllowedImageMimetypes();
+        $mimetype_whitelist = $this->getListOfAllowedImageMimetypes();
         $extension = mb_strtolower(pathinfo($image, PATHINFO_EXTENSION), 'UTF-8');
         
         if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
@@ -832,7 +832,7 @@ class TfishContentObject
                 $this->setImage($clean_image_filename);
             }
         }
-        
+      
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
             $clean_media_filename = TfishDataValidator::trimString($_FILES['media']['name']);
             
@@ -842,7 +842,7 @@ class TfishContentObject
                 
                 $this->setMedia($clean_media_filename);
                 $this->setFormat($mimetype_whitelist[$extension]);
-                $this->setFile_size($_FILES['media']['size']);
+                $this->setFileSize($_FILES['media']['size']);
             }
         }
     }
@@ -898,13 +898,13 @@ class TfishContentObject
 
         switch($this->type) {
             case "TfishAudio":
-                $allowed_mimetypes = TfishFileHandler::getListOfAllowedAudioMimetypes();
+                $allowed_mimetypes = $this->getListOfAllowedAudioMimetypes();
                 break;
             case "TfishImage":
-                $allowed_mimetypes = TfishFileHandler::getListOfAllowedImageMimetypes();
+                $allowed_mimetypes = $this->getListOfAllowedImageMimetypes();
                 break;
             case "TfishVideo":
-                $allowed_mimetypes = TfishFileHandler::getListOfAllowedVideoMimetypes();
+                $allowed_mimetypes = $this->getListOfAllowedVideoMimetypes();
                 break;
             default:
                 $allowed_mimetypes = TfishFileHandler::getListOfPermittedUploadMimetypes();
@@ -915,6 +915,68 @@ class TfishContentObject
         }
         
         return false;
+    }
+    
+    /**
+     * Inserts a content object into the database.
+     * 
+     * Note that content child content classes that have unset unused properties from the parent
+     * should reset them to null before insertion or update. This is to guard against the case
+     * where the admin reassigns the type of a content object - it makes sure that unused properties
+     * are zeroed in the database. 
+     * 
+     * @param object $obj TfishContentObject subclass.
+     * @return bool True on success, false on failure.
+     */
+    
+    /**
+     * Returns an array of audio mimetypes that are permitted for content objects.
+     * 
+     * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
+     * is still acceptable, although it must no longer be used for video files.
+     * 
+     * @return array Array of permitted audio mimetypes in file extension => mimetype format.
+     */
+    public static function getListOfAllowedAudioMimetypes()
+    {
+        return array(
+            "mp3" => "audio/mpeg",
+            "oga" => "audio/ogg",
+            "ogg" => "audio/ogg",
+            "wav" => "audio/x-wav"
+        );
+    }
+    
+    /**
+     * Returns an array of image mimetypes that are permitted for content objects.
+     * 
+     * @return array Array of permitted image mimetypes in file extension => mimetype format.
+     */
+    public static function getListOfAllowedImageMimetypes()
+    {
+        return array(
+            "gif" => "image/gif",
+            "jpg" => "image/jpeg",
+            "png" => "image/png"
+        );
+    }            
+
+    /**
+     * Returns an array of video mimetypes that are permitted for upload.
+     * 
+     * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
+     * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
+     * wide use it is now presumed to refer to audio files only.
+     * 
+     * @return array Array of permitted video mimetypes in file extension => mimetype format.
+     */
+    public static function getListOfAllowedVideoMimetypes()
+    {
+        return array(
+            "mp4" => "video/mp4",
+            "ogv" => "video/ogg",
+            "webm" => "video/webm"
+        );
     }
     
     /**
