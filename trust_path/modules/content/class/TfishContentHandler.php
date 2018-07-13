@@ -754,7 +754,8 @@ class TfishContentHandler
             }
         }
         
-        $sql .= " AND `online` = 1 AND `type` != 'TfishBlock' ORDER BY `date` DESC ";
+        $sql .= "AND `online` = 1 AND `type` != 'TfishBlock' ";
+        $sql .= "ORDER BY `date` DESC, `submission_time` DESC ";
         $sql_count .= $sql;
         
         // Bind the search term values and execute the statement.
