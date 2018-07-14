@@ -179,7 +179,10 @@
                     "xls","xlsx","zip"],
                 'fileActionSettings': {
                     'showDrag': false},
-                'theme': "explorer-fa"
+                'theme': "explorer-fa"});
+            
+            $('#media').on('fileclear', function(tf_deleteMedia) {
+                document.getElementById("deleteMedia").value = "1";
             });
         });
         </script>
