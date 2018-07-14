@@ -140,8 +140,13 @@
             'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_IMAGE_URL . TfishDataValidator::escapeForXss($content->image); ?>',
             'initialCaption': '<?php if (isset($content->image)) echo TfishDataValidator::escapeForXss($content->image); ?>',
             'fileActionSettings': {
-                'showDrag': false},
+                'showDrag': false,
+                'showRemove': false},
             'theme': "explorer-fa"});
+
+            $('#image').on('fileclear', function(tf_deleteImage) {
+                document.getElementById("deleteImage").value = "1";
+            });
         });
         </script>
         
@@ -174,8 +179,13 @@
                     "ods","odp","oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm",
                     "xls","xlsx","zip"],
                 'fileActionSettings': {
-                    'showDrag': false},
+                    'showDrag': false,
+                    'showRemove': false},
                 'theme': "explorer-fa"});
+            
+            $('#media').on('fileclear', function(tf_deleteMedia) {
+                document.getElementById("deleteMedia").value = "1";
+            });
         });
         </script>
 
