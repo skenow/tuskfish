@@ -39,11 +39,11 @@ if ($clean_id && $clean_tag_id) {
 header('Content-Type: application/rss+xml');
 $rss = new TfishRss($tfish_preference);
 
-// Prepare a mimetype lookup buffer.
-$mimetype_list = TfishUtils::getListOfMimetypes();
-
 // Get a generic content object handler.
 $content_handler = new TfishContentHandler();
+
+// Prepare a mimetype lookup buffer.
+$mimetype_list = $content_handler->getListOfMimetypes();
 
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.

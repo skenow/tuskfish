@@ -41,7 +41,7 @@ class TfishFileHandler
      * @param string $contents Content to append to the target file.
      * @return bool True on success false on failure.
      */
-    public static function appendToFile(string $filepath, string $contents)
+    public function appendToFile(string $filepath, string $contents)
     {
         // Check for directory traversals and null byte injection.
         if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
@@ -54,7 +54,7 @@ class TfishFileHandler
         $clean_content = PHP_EOL . TfishDataValidator::trimString($contents);
         
         if ($clean_filepath && $clean_content) {
-            $result = self::_appendToFile($clean_filepath, $clean_content);
+            $result = $this->_appendToFile($clean_filepath, $clean_content);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
@@ -68,7 +68,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _appendToFile(string $filepath, string $contents)
+    private function _appendToFile(string $filepath, string $contents)
     {
         return file_put_contents($filepath, $contents, FILE_APPEND);
     }
@@ -82,7 +82,7 @@ class TfishFileHandler
      * @return bool True on success false on failure.
      */
     
-    public static function clearDirectory(string $filepath)
+    public function clearDirectory(string $filepath)
     {
         // Check for directory traversals and null byte injection.
         if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
@@ -93,7 +93,7 @@ class TfishFileHandler
         $clean_filepath = TfishDataValidator::trimString($filepath);
         
         if (!empty($clean_filepath)) {
-            $result = self::_clearDirectory($clean_filepath);
+            $result = $this->_clearDirectory($clean_filepath);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
@@ -109,15 +109,15 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _clearDirectory(string $filepath)
+    private function _clearDirectory(string $filepath)
     {
-        $resolved_path = self::_dataFilePath($filepath);
+        $resolved_path = $this->_dataFilePath($filepath);
         
         if ($resolved_path) {
             try {
                 foreach (new DirectoryIterator($resolved_path) as $file) {
                     if ($file->isFile() && !$file->isDot()) {
-                        self::_deleteFile($filepath . '/' . $file->getFileName());
+                        $this->_deleteFile($filepath . '/' . $file->getFileName());
                     }
                 }
             } catch (Exception $e) {
@@ -142,7 +142,7 @@ class TfishFileHandler
      * @param string $filepath Path relative to the data_file directory.
      * @return string|bool Path on success, false on failure.
      */
-    private static function _dataFilePath(string $filepath)
+    private function _dataFilePath(string $filepath)
     {
         if (mb_strlen($filepath, 'UTF-8') > 0) {
             $filepath = rtrim($filepath, '/');
@@ -173,7 +173,7 @@ class TfishFileHandler
      * @param string $filepath Path relative to data_file directory.
      * @return bool True on success, false on failure.
      */
-    public static function deleteDirectory(string $filepath)
+    public function deleteDirectory(string $filepath)
     {
         // Do not allow the upload, image or media directories to be deleted!
         if (empty($filepath)) {
@@ -190,7 +190,7 @@ class TfishFileHandler
         $clean_filepath = TfishDataValidator::trimString($filepath);
         
         if ($clean_filepath) {
-            $result = self::_deleteDirectory($clean_filepath);
+            $result = $this->_deleteDirectory($clean_filepath);
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
                 return false;
@@ -205,9 +205,9 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _deleteDirectory(string $filepath)
+    private function _deleteDirectory(string $filepath)
     {
-        $filepath = self::_dataFilePath($filepath);
+        $filepath = $this->_dataFilePath($filepath);
         
         if ($filepath) {
             try {
@@ -245,7 +245,7 @@ class TfishFileHandler
      * @param string $filepath Path relative to the data_file directory.
      * @return bool True on success, false on failure.
      */
-    public static function deleteFile(string $filepath)
+    public function deleteFile(string $filepath)
     {
         // Check for directory traversals and null byte injection.
         if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
@@ -256,7 +256,7 @@ class TfishFileHandler
         $clean_filepath = TfishDataValidator::trimString($filepath);
         
         if (!empty($clean_filepath)) {
-            $result = self::_deleteFile($clean_filepath);
+            $result = $this->_deleteFile($clean_filepath);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
@@ -272,9 +272,9 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _deleteFile(string $filepath)
+    private function _deleteFile(string $filepath)
     {
-        $filepath = self::_dataFilePath($filepath);
+        $filepath = $this->_dataFilePath($filepath);
         
         if ($filepath && file_exists($filepath)) {
             try {
@@ -300,10 +300,10 @@ class TfishFileHandler
      * web root in order to prevent direct access by browser. 
      * 
      * @return array Array of permitted mimetypes as file extensions.
-     * @todo Move this into a static TfishPreference method.
+     * @todo Move this into a TfishPreference method.
      *
      */
-    public static function getListOfPermittedUploadMimetypes()
+    public function getListOfPermittedUploadMimetypes()
     {
         return array(
             "doc" => "application/msword", // Documents.
@@ -339,7 +339,7 @@ class TfishFileHandler
      * @param string $fieldname Name of form field associated with this upload ('image' or 'media').
      * @return string|bool Filename on success, false on failure.
      */
-    public static function uploadFile(string $filename, string $fieldname)
+    public function uploadFile(string $filename, string $fieldname)
     {
         // Check for directory traversals and null byte injection.
         if (TfishDataValidator::hasTraversalorNullByte($filename)) {
@@ -358,13 +358,13 @@ class TfishFileHandler
             exit;
         }
 
-        $mimetype_list = self::getListOfPermittedUploadMimetypes(); // extension => mimetype
+        $mimetype_list = $this->getListOfPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
         $clean_extension = array_key_exists($extension, $mimetype_list)
                 ? TfishDataValidator::trimString($extension) : false;
         
         if ($clean_filename && $clean_fieldname && $clean_extension) {
-            return self::_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
+            return $this->_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
         }
         
         if (!$clean_extension) {
@@ -377,7 +377,7 @@ class TfishFileHandler
     }
 
     /** @internal */
-    private static function _uploadFile(string $filename, string $fieldname, string $extension)
+    private function _uploadFile(string $filename, string $fieldname, string $extension)
     {
         $filename = time() . '_' . $filename;
         $upload_path = TFISH_UPLOADS_PATH . $fieldname . '/' . $filename . '.' . $extension;

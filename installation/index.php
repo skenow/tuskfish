@@ -157,7 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Append site salt to config.php.
         $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
                 . $site_salt . '");';
-        $result = TfishFileHandler::appendToFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
+        $tfish_file_handler = new TfishFileHandler();
+        $result = $tfish_file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
 
         if (!$result) {
             trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);

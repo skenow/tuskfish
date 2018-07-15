@@ -130,7 +130,8 @@ class TfishContentHandler
     private function _deleteImage(string $filename)
     {
         if ($filename) {
-            return TfishFileHandler::deleteFile('image/' . $filename);
+            global $tfish_file_handler;
+            return $tfish_file_handler->deleteFile('image/' . $filename);
         }
     }
 
@@ -143,7 +144,8 @@ class TfishContentHandler
     private function _deleteMedia(string $filename)
     {
         if ($filename) {
-            return TfishFileHandler::deleteFile('media/' . $filename);
+            global $tfish_file_handler;
+            return $tfish_file_handler->deleteFile('media/' . $filename);
         }
     }
     
@@ -159,7 +161,8 @@ class TfishContentHandler
         
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
             $filename = TfishDataValidator::trimString($_FILES['image']['name']);
-            $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+            global $tfish_file_handler;
+            $clean_filename = $tfish_file_handler->uploadFile($filename, 'image');
             
             if ($clean_filename) {
                 $key_values['image'] = $clean_filename;
@@ -168,11 +171,13 @@ class TfishContentHandler
 
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
             $filename = TfishDataValidator::trimString($_FILES['media']['name']);
-            $clean_filename = TfishFileHandler::uploadFile($filename, 'media');
+            global $tfish_file_handler;
+            $clean_filename = $tfish_file_handler->uploadFile($filename, 'media');
             
             if ($clean_filename) {
                 $key_values['media'] = $clean_filename;
-                $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
+                global $tfish_file_handler;
+                $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
                 $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
                 $key_values['format'] = $mimetype_whitelist[$extension];
                 $key_values['file_size'] = $_FILES['media']['size'];
@@ -304,6 +309,126 @@ class TfishContentHandler
         }
 
         return $count;
+    }
+    
+    /**
+     * Return a list of mimetypes.
+     * 
+     * This list is not exhaustive, but it does cover most things that a sane person would want.
+     * Feel free to add more if you wish, but do NOT use this as a whitelist of permitted mimetypes,
+     * it is just a reference.
+     * 
+     * @return array Array of mimetypes with extension as key.
+     * @copyright	The ImpressCMS Project http://www.impresscms.org/
+     * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
+     * @author		marcan <marcan@impresscms.org>
+     */
+    public function getListOfMimetypes()
+    {
+        return array(
+            "hqx" => "application/mac-binhex40",
+            "doc" => "application/msword",
+            "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "dot" => "application/msword",
+            "bin" => "application/octet-stream",
+            "lha" => "application/octet-stream",
+            "lzh" => "application/octet-stream",
+            "exe" => "application/octet-stream",
+            "class" => "application/octet-stream",
+            "so" => "application/octet-stream",
+            "dll" => "application/octet-stream",
+            "pdf" => "application/pdf",
+            "ai" => "application/postscript",
+            "eps" => "application/postscript",
+            "ps" => "application/postscript",
+            "smi" => "application/smil",
+            "smil" => "application/smil",
+            "wbxml" => "application/vnd.wap.wbxml",
+            "wmlc" => "application/vnd.wap.wmlc",
+            "wmlsc" => "application/vnd.wap.wmlscriptc",
+            "odt" => "application/vnd.oasis.opendocument.text",
+            "xla" => "application/vnd.ms-excel",
+            "xls" => "application/vnd.ms-excel",
+            "xlt" => "application/vnd.ms-excel",
+            "ppt" => "application/vnd.ms-powerpoint",
+            "csh" => "application/x-csh",
+            "dcr" => "application/x-director",
+            "dir" => "application/x-director",
+            "dxr" => "application/x-director",
+            "spl" => "application/x-futuresplash",
+            "gtar" => "application/x-gtar",
+            "php" => "application/x-httpd-php",
+            "php3" => "application/x-httpd-php",
+            "php4" => "application/x-httpd-php",
+            "php5" => "application/x-httpd-php",
+            "phtml" => "application/x-httpd-php",
+            "js" => "application/x-javascript",
+            "sh" => "application/x-sh",
+            "swf" => "application/x-shockwave-flash",
+            "sit" => "application/x-stuffit",
+            "tar" => "application/x-tar",
+            "tcl" => "application/x-tcl",
+            "xhtml" => "application/xhtml+xml",
+            "xht" => "application/xhtml+xml",
+            "xhtml" => "application/xml",
+            "ent" => "application/xml-external-parsed-entity",
+            "dtd" => "application/xml-dtd",
+            "mod" => "application/xml-dtd",
+            "gz" => "application/x-gzip",
+            "zip" => "application/zip",
+            "au" => "audio/basic",
+            "snd" => "audio/basic",
+            "mid" => "audio/midi",
+            "midi" => "audio/midi",
+            "kar" => "audio/midi",
+            "mp1" => "audio/mpeg",
+            "mp2" => "audio/mpeg",
+            "mp3" => "audio/mpeg",
+            "aif" => "audio/x-aiff",
+            "aiff" => "audio/x-aiff",
+            "m3u" => "audio/x-mpegurl",
+            "ram" => "audio/x-pn-realaudio",
+            "rm" => "audio/x-pn-realaudio",
+            "rpm" => "audio/x-pn-realaudio-plugin",
+            "ra" => "audio/x-realaudio",
+            "wav" => "audio/x-wav",
+            "bmp" => "image/bmp",
+            "gif" => "image/gif",
+            "jpeg" => "image/jpeg",
+            "jpg" => "image/jpeg",
+            "jpe" => "image/jpeg",
+            "png" => "image/png",
+            "tiff" => "image/tiff",
+            "tif" => "image/tif",
+            "wbmp" => "image/vnd.wap.wbmp",
+            "pnm" => "image/x-portable-anymap",
+            "pbm" => "image/x-portable-bitmap",
+            "pgm" => "image/x-portable-graymap",
+            "ppm" => "image/x-portable-pixmap",
+            "xbm" => "image/x-xbitmap",
+            "xpm" => "image/x-xpixmap",
+            "ics" => "text/calendar",
+            "ifb" => "text/calendar",
+            "css" => "text/css",
+            "html" => "text/html",
+            "htm" => "text/html",
+            "asc" => "text/plain",
+            "txt" => "text/plain",
+            "rtf" => "text/rtf",
+            "sgml" => "text/x-sgml",
+            "sgm" => "text/x-sgml",
+            "tsv" => "text/tab-seperated-values",
+            "wml" => "text/vnd.wap.wml",
+            "wmls" => "text/vnd.wap.wmlscript",
+            "xsl" => "text/xml",
+            "mpeg" => "video/mpeg",
+            "mpg" => "video/mpeg",
+            "mpe" => "video/mpeg",
+            "mp4" => "video/mp4",
+            "qt" => "video/quicktime",
+            "mov" => "video/quicktime",
+            "avi" => "video/x-msvideo",
+        );
     }
 
     /**
@@ -875,7 +1000,7 @@ class TfishContentHandler
                 $filename = empty($filename) ? pathinfo($filepath, PATHINFO_FILENAME) : $filename;
                 $file_extension = pathinfo($filepath, PATHINFO_EXTENSION);
                 $file_size = filesize(TFISH_MEDIA_PATH . $content->media);
-                $mimetype_list = TfishUtils::getListOfMimetypes();
+                $mimetype_list = $this->getListOfMimetypes();
                 $mimetype = $mimetype_list[$file_extension];
 
                 // Must call session_write_close() first otherwise the script gets locked.
@@ -1034,7 +1159,8 @@ class TfishContentHandler
 
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
                     $filename = TfishDataValidator::trimString($_FILES['image']['name']);
-                    $clean_filename = TfishFileHandler::uploadFile($filename, 'image');
+                    global $tfish_file_handler;
+                    $clean_filename = $tfish_file_handler->uploadFile($filename, 'image');
                     
                     if ($clean_filename) {
                         $key_values['image'] = $clean_filename;
@@ -1094,12 +1220,14 @@ class TfishContentHandler
                 $clean_filename = '';
                 
                 // Get a whitelist of permitted mimetypes.
-                $mimetype_whitelist = TfishFileHandler::getListOfPermittedUploadMimetypes();
+                global $tfish_file_handler;
+                $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
                     $filename = TfishDataValidator::trimString($_FILES['media']['name']);
-                    $clean_filename = TfishFileHandler::uploadFile($filename, 'media'); 
+                    global $tfish_file_handler;
+                    $clean_filename = $tfish_file_handler->uploadFile($filename, 'media'); 
                 } else {
                     $clean_filename = $existing_media;
                 }
