@@ -39,7 +39,7 @@ class TfishPaginationControl
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
     function __construct(TfishPreference $preference)
     {
-        if (is_a($preference, 'TfishPreference')) {
+        if (is_object($preference)) {
             $this->preference = $preference;
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);

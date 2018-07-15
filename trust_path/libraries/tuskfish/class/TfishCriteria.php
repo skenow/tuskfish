@@ -92,7 +92,7 @@ class TfishCriteria
     
     private function setItem(TfishCriteriaItem $item)
     {
-        if (is_a($item, 'TfishCriteriaItem')) {
+        if (is_object($item)) {
             $this->item[] = $item;
         } else {
             trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);

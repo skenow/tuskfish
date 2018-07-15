@@ -55,7 +55,7 @@ class TfishPreferenceHandler
     public function writePreferences(TfishPreference $tfish_preference)
     {
         // Convert preference object to array of key => values.
-        if (is_a($tfish_preference, 'TfishPreference')) {
+        if (is_object($tfish_preference)) {
             $key_values = $tfish_preference->getPreferencesAsArray();
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);

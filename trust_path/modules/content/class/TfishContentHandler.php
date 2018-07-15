@@ -54,7 +54,7 @@ class TfishContentHandler
         // Delete files associated with the image and media properties.
         $obj = $this->getObject($clean_id);
         
-        if (!is_a($obj, 'TfishContentObject')) {
+        if (!is_object($obj)) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             return false;
         }

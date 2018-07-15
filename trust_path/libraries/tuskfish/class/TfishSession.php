@@ -237,8 +237,8 @@ class TfishSession
             exit;
         }
         
-        // Yubikey should be TfishYubikeyAuthenticator class.
-        if (!is_object($yubikey) || get_class($yubikey) != 'TfishYubikeyAuthenticator') {
+        // Yubikey should be TfishYubikeyAuthenticator class or equivalent.
+        if (!is_object($yubikey)) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }

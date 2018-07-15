@@ -1140,7 +1140,7 @@ class TfishDatabase
             }
             
             foreach ($criteria->item as $item) {
-                if (!is_a($item, 'TfishCriteriaItem')) {
+                if (!is_object($item)) {
                     trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);
                     exit;
                 }

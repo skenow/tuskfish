@@ -76,7 +76,7 @@ class TfishRss
      */
     public function makeFeedForCollection(TfishCollection $obj)
     {
-        if (!is_a($obj, 'TfishCollection')) {
+        if (!is_object($obj)) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
@@ -153,7 +153,7 @@ class TfishRss
             $clean_items = array();
 
             foreach ($items as $item) {
-                if (is_a('TfishContentObject')) {
+                if (is_object($item)) {
                     $clean_items[] = $item;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
