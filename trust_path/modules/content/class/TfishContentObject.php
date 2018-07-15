@@ -942,7 +942,7 @@ class TfishContentObject
      * 
      * @return array Array of permitted audio mimetypes in file extension => mimetype format.
      */
-    public static function getListOfAllowedAudioMimetypes()
+    public function getListOfAllowedAudioMimetypes()
     {
         return array(
             "mp3" => "audio/mpeg",
@@ -957,7 +957,7 @@ class TfishContentObject
      * 
      * @return array Array of permitted image mimetypes in file extension => mimetype format.
      */
-    public static function getListOfAllowedImageMimetypes()
+    public function getListOfAllowedImageMimetypes()
     {
         return array(
             "gif" => "image/gif",
@@ -975,7 +975,7 @@ class TfishContentObject
      * 
      * @return array Array of permitted video mimetypes in file extension => mimetype format.
      */
-    public static function getListOfAllowedVideoMimetypes()
+    public function getListOfAllowedVideoMimetypes()
     {
         return array(
             "mp4" => "video/mp4",
