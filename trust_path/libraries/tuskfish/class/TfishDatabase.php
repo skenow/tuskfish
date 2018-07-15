@@ -159,7 +159,8 @@ class TfishDatabase
             
             return $db_path;
         } catch (PDOException $e) {
-            TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+            global $tfish_logger;
+            $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
     }
@@ -424,7 +425,8 @@ class TfishDatabase
             self::$_db->commit();
         } catch (PDOException $e) {
             self::$_db->rollBack();
-            TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+            global $tfish_logger;
+            $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
         

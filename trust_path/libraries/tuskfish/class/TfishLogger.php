@@ -49,7 +49,7 @@ class TfishLogger
      * @param array $context Active symbol table, ie. an array of every variable in scope when the
      * error was triggered.
      */
-    public static function logError(int $errno = null, string $error = '',
+    public function logError(int $errno = null, string $error = '',
             string $file = '', int $line = null)
     {
         $errno = isset($errno) ? TfishDataValidator::trimString($errno) : TFISH_ERROR_UNSPECIFIED;

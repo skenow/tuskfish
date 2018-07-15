@@ -32,7 +32,9 @@ require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php'
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
-set_error_handler("TfishLogger::logError");
+
+$tfish_logger = new TfishLogger();
+set_error_handler($tfish_logger, "logError");
 
 // Ensure that a database connection is available.
 TfishDatabase::connect();
@@ -54,7 +56,7 @@ $tfish_metadata = new TfishMetadata($tfish_preference);
 $tfish_template = new TfishTemplate();
 
 // Instantiate the cache.
-$tfish_cache = new TfishCache();
+$tfish_cache = new TfishCache($tfish_logger);
 
 // Check if site is closed, if so redirect to the login page and exit.
 if ($tfish_preference->close_site && !TfishSession::isAdmin()) {

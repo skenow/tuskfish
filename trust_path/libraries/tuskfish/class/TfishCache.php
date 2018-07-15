@@ -30,6 +30,18 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishCache
 {
+    /** @var object $loger Instance of TfishLogger class, used for logging errors. */
+    protected $logger;
+    
+    /** @param object $preference Instance of TfishLogger class, used for logging errors. */
+    function __construct(object $tfish_logger)
+    {
+        if (is_object($tfish_logger)) {
+            $this->logger = $tfish_logger;
+        } else {
+            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+        }        
+    }
 
     /**
      * Check if a cached page exists and has not expired, and displays it.
@@ -191,7 +203,7 @@ class TfishCache
                         try {
                             unlink($path);
                         } catch (Exeption $e) {
-                            TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                            $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                                     $e->getLine());
                         }
                     } else {
@@ -201,7 +213,7 @@ class TfishCache
                 }
             }
         } catch (Exception $e) {
-            TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+            $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
         return true;

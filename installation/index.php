@@ -41,7 +41,8 @@ $tfish_content = array('output' => '');
 
 // Set error reporting levels and custom error handler.
 error_reporting(E_ALL & ~E_NOTICE);
-set_error_handler("TfishLogger::logError");
+$tfish_logger = new TfishLogger();
+set_error_handler($tfish_logger, "logError");
 
 // Set theme.
 $tfish_template = new TfishTemplate();

@@ -121,7 +121,8 @@ class TfishFileHandler
                     }
                 }
             } catch (Exception $e) {
-                TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                global $tfish_logger;
+                $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
                 return false;
             }
@@ -224,7 +225,8 @@ class TfishFileHandler
                 rmdir($filepath);
                 return true;
             } catch (Exception $e) {
-                TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                global $tfish_logger;
+                $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
                 return false;
             }
@@ -278,7 +280,8 @@ class TfishFileHandler
             try {
                 unlink($filepath);
             } catch (Exeption $e) {
-                TfishLogger::logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                global $tfish_logger;
+                $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
             }
         } else {
