@@ -51,7 +51,7 @@ if ($clean_tag)
     $criteria->setTag(array($clean_tag));
 
 if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {
-    $criteria->add(new TfishCriteriaItem('online', 1));
+    $criteria->add(new TfishCriteriaItem('online', $clean_online));
 }
 
 if ($clean_type) {
