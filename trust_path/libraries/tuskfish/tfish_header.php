@@ -40,7 +40,8 @@ set_error_handler($tfish_logger, "logError");
 $tfish_file_handler = new TfishFileHandler();
 
 // Ensure that a database connection is available.
-TfishDatabase::connect();
+$tfish_database = new TfishDatabase();
+$tfish_database->connect();
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;

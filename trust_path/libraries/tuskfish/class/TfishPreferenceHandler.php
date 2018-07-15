@@ -39,7 +39,7 @@ class TfishPreferenceHandler
     public function readPreferencesFromDatabase()
     {
         $preferences = array();
-        $result = TfishDatabase::select('preference');
+        $result = $tfish_database->select('preference');
         
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $preferences[$row['title']] = $row['value'];
@@ -63,11 +63,11 @@ class TfishPreferenceHandler
         
         foreach ($key_values as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
-            $statement = TfishDatabase::preparedStatement($sql);
-            $statement->bindValue(':title', $key, TfishDatabase::setType($key));
-            $statement->bindValue(':value', $value, TfishDatabase::setType($value));
+            $statement = $tfish_database->preparedStatement($sql);
+            $statement->bindValue(':title', $key, $tfish_database->setType($key));
+            $statement->bindValue(':value', $value, $tfish_database->setType($value));
             unset($sql, $key, $value);
-            $result = TfishDatabase::executeTransaction($statement);
+            $result = $tfish_database->executeTransaction($statement);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);

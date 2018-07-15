@@ -53,7 +53,7 @@ class TfishTaglinkHandler
             $criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
         }
         
-        $result = TfishDatabase::deleteAll('taglink', $criteria);
+        $result = $tfish_database->deleteAll('taglink', $criteria);
         
         if (!$result) {
             return false;
@@ -107,7 +107,7 @@ class TfishTaglinkHandler
             unset($tag);
         }
         foreach ($clean_tags as $clean_tag) {
-            $result = TfishDatabase::insert('taglink', $clean_tag);
+            $result = $tfish_database->insert('taglink', $clean_tag);
             
             if (!$result) {
                 return false;
@@ -165,7 +165,7 @@ class TfishTaglinkHandler
         // Delete any existing tags.
         $criteria = new TfishCriteria();
         $criteria->add(new TfishCriteriaItem('content_id', $clean_id));
-        $result = TfishDatabase::deleteAll('taglink', $criteria);
+        $result = $tfish_database->deleteAll('taglink', $criteria);
         
         if (!$result) {
             return false;
@@ -199,7 +199,7 @@ class TfishTaglinkHandler
 
         // Insert the new taglinks.
         foreach ($clean_tags as $clean_tag) {
-            $result = TfishDatabase::insert('taglink', $clean_tag);
+            $result = $tfish_database->insert('taglink', $clean_tag);
             
             if (!$result) {
                 return false;

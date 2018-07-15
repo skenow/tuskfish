@@ -167,7 +167,7 @@ if (in_array($op, $options_whitelist)) {
                 if (TfishDataValidator::isInt($clean_id, 1)) {
                     $criteria = new TfishCriteria();
                     $criteria->add(new TfishCriteriaItem('id', $clean_id));
-                    $statement = TfishDatabase::select('content', $criteria);
+                    $statement = $tfish_database->select('content', $criteria);
                     
                     if (!$statement) {
                         trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
@@ -489,7 +489,7 @@ if (in_array($op, $options_whitelist)) {
             $criteria->setOrder('submission_time');
             $criteria->setOrderType('DESC');
             $columns = array('id', 'type', 'title', 'submission_time', 'counter', 'online');
-            $result = TfishDatabase::select('content', $criteria, $columns);
+            $result = $tfish_database->select('content', $criteria, $columns);
             
             if ($result) {
                 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -506,7 +506,7 @@ if (in_array($op, $options_whitelist)) {
 
             // Pagination control.
             $tfish_pagination = new TfishPaginationControl($tfish_preference);
-            $count = TfishDatabase::selectCount('content', $criteria);
+            $count = $tfish_database->selectCount('content', $criteria);
             $extra_params = array();
             
             if (isset($clean_online) && TfishDataValidator::isInt($clean_online, 0, 1)) {

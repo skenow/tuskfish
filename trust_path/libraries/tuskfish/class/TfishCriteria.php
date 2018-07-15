@@ -223,7 +223,7 @@ class TfishCriteria
             $sql = "(";
             
             for ($i = 0; $i < $count; $i++) {
-                $sql .= "`" . TfishDatabase::escapeIdentifier($this->item[$i]->column) . "` " 
+                $sql .= "`" . $tfish_database->escapeIdentifier($this->item[$i]->column) . "` " 
                         . $this->item[$i]->operator . " :placeholder" . (string) $i;
                 
                 if ($i < ($count - 1)) {
