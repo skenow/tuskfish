@@ -50,7 +50,7 @@ class TfishCache
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public function getCachedPage(TfishPreference $tfish_preference, string $basename,
+    public function getCachedPage(object $tfish_preference, string $basename,
             array $params = array())
     {
         
@@ -141,7 +141,7 @@ class TfishCache
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
-    public function cachePage(TfishPreference $tfish_preference, string $basename,
+    public function cachePage(object $tfish_preference, string $basename,
             array $params, string $buffer)
     {        
         // Abort if cache is disabled.

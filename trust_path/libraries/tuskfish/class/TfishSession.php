@@ -75,7 +75,7 @@ class TfishSession
      * @param object $tfish_preference TfishPreference object.
      * @return bool True if session has expired, false if not.
      */
-    public static function isExpired(TfishPreference $tfish_preference)
+    public static function isExpired(object $tfish_preference)
     {
         // Check if session carries a destroyed flag and kill it if the grace timer has expired.
         if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
@@ -428,7 +428,7 @@ class TfishSession
      * 
      * @param object $tfish_preference TfishPreference object.
      */
-    public static function start(TfishPreference $tfish_preference)
+    public static function start(object $tfish_preference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', '1');

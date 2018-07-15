@@ -37,7 +37,7 @@ class TfishPaginationControl
     protected $preference;
     
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
-    function __construct(TfishPreference $preference)
+    function __construct(object $preference)
     {
         if (is_object($preference)) {
             $this->preference = $preference;

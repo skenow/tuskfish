@@ -52,7 +52,7 @@ class TfishPreferenceHandler
      * 
      * @return bool True on success false on failure.
      */
-    public function writePreferences(TfishPreference $tfish_preference)
+    public function writePreferences(object $tfish_preference)
     {
         // Convert preference object to array of key => values.
         if (is_object($tfish_preference)) {

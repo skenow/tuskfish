@@ -300,7 +300,7 @@ class TfishDatabase
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return bool True on success, false on failure.
      */
-    public static function deleteAll(string $table, TfishCriteria $criteria)
+    public static function deleteAll(string $table, object $criteria)
     {
         $clean_table = self::validateTableName($table);
         $clean_criteria = self::validateCriteriaObject($criteria);
@@ -309,7 +309,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _deleteAll(string $table, TfishCriteria $criteria)
+    private static function _deleteAll(string $table, object $criteria)
     {
         // Set table.
         $sql = "DELETE FROM " . self::addBackticks($table) . " ";
@@ -416,7 +416,7 @@ class TfishDatabase
      * @param object $statement Prepared statement.
      * @return bool True on success, false on failure.
      */
-    public static function executeTransaction(PDOStatement $statement)
+    public static function executeTransaction(object $statement)
     {
         try {
             self::$_db->beginTransaction();
@@ -521,7 +521,7 @@ class TfishDatabase
      * @param array $columns Names of database columns to be selected.
      * @return object PDOStatement object on success PDOException on failure.
      */
-    public static function select(string $table, TfishCriteria $criteria = null, array $columns = null)
+    public static function select(string $table, object $criteria = null, array $columns = null)
     {
         $clean_table = self::validateTableName($table);
         $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
@@ -531,7 +531,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _select(string $table, TfishCriteria $criteria = null, array $columns)
+    private static function _select(string $table, object $criteria = null, array $columns)
     {
         // Specify operation.
         $sql = "SELECT ";
@@ -647,7 +647,7 @@ class TfishDatabase
      * @param string $column Name of column.
      * @return int|object Row count on success, PDOException object on failure.
      */
-    public static function selectCount(string $table, TfishCriteria $criteria = null, string $column = '')
+    public static function selectCount(string $table, object $criteria = null, string $column = '')
     {
         $clean_table = self::validateTableName($table);
         $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
@@ -669,7 +669,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _selectCount(string $table, TfishCriteria $criteria, string $column)
+    private static function _selectCount(string $table, object $criteria, string $column)
     {
         // Specify operation and column
         $sql = "SELECT COUNT(";
@@ -748,7 +748,7 @@ class TfishDatabase
      * @param array $columns Name of columns to filter results by.
      * @return object PDOStatement on success, PDOException on failure.
      */
-    public static function selectDistinct(string $table, TfishCriteria $criteria = null, array $columns)
+    public static function selectDistinct(string $table, object $criteria = null, array $columns)
     {
         // Validate the tablename (alphanumeric characters only).
         $clean_table = self::validateTableName($table);
@@ -759,7 +759,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _selectDistinct(string $table, TfishCriteria $criteria, array $columns)
+    private static function _selectDistinct(string $table, object $criteria, array $columns)
     {
         // Specify operation
         $sql = "SELECT DISTINCT ";
@@ -990,7 +990,7 @@ class TfishDatabase
      * @param array $key_values Array of column names and values to update.
      * @param object $criteria TfishCriteria object used to build conditional database query.
      */
-    public static function updateAll(string $table, array $key_values, TfishCriteria $criteria = null)
+    public static function updateAll(string $table, array $key_values, object $criteria = null)
     {
         $clean_table = self::validateTableName($table);
         $clean_keys = self::validateKeys($key_values);
@@ -1005,7 +1005,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private static function _updateAll(string $table, array $key_values, TfishCriteria $criteria)
+    private static function _updateAll(string $table, array $key_values, object $criteria)
     {
         // Set table.
         $sql = "UPDATE " . self::addBackticks($table) . " SET ";
@@ -1115,7 +1115,7 @@ class TfishDatabase
      * @param object $criteria TfishCriteria object.
      * @return object Validated TfishCriteria object.
      */
-    public static function validateCriteriaObject(TfishCriteria $criteria)
+    public static function validateCriteriaObject(object $criteria)
     {
         
         if ($criteria->item) {

@@ -59,7 +59,7 @@ class TfishMetadata
      * 
      * @param TfishPreference $preference Instance of TfishPreference, holding site preferences.
      */
-    function __construct(TfishPreference $preference)
+    function __construct(object $preference)
     {
         $this->setTitle($preference->site_name);
         $this->setDescription($preference->site_description);
@@ -101,22 +101,22 @@ class TfishMetadata
      * used within attributes of meta tags, and a double quote would break them.
      */
     
-    public function setTitle($value)
+    public function setTitle(string $value)
     {
         $this->setProperty('title', $value);
     }
     
-    public function setDescription($value)
+    public function setDescription(string $value)
     {
         $this->setProperty('description', $value);
     }
     
-    public function setAuthor($value)
+    public function setAuthor(string $value)
     {
         $this->setProperty('author', $value);
     }
     
-    public function setCopyright($value)
+    public function setCopyright(string $value)
     {
         $this->setProperty('copyright', $value);
     }
