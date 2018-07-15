@@ -33,20 +33,24 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
+// Initialise error logger.
 $tfish_logger = new TfishLogger();
 set_error_handler($tfish_logger, "logError");
 
-// Make file handler available.
+// Initialise data validator.
+$tfish_validator = new TfishDataValidator();
+
+// Initialise file handler.
 $tfish_file_handler = new TfishFileHandler();
 
-// Ensure that a database connection is available.
+// Initialise database connection.
 $tfish_database = new TfishDatabase();
 $tfish_database->connect();
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;
 
-// Ensure that global site preferences are available via $tfish_preference.
+// Initialise global site preferences.
 $preference_handler = new TfishPreferenceHandler();
 $tfish_preference = new TfishPreference($preference_handler->readPreferencesFromDatabase());
 
