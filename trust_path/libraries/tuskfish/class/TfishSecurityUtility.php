@@ -43,7 +43,7 @@ class TfishSecurityUtility
      * @param string $password Input password.
      * @return array Array of evaluation warnings as strings.
      */
-    public static function checkPasswordStrength(string $password)
+    public function checkPasswordStrength(string $password)
     {
         $evaluation = array('strong' => true);
 
@@ -64,47 +64,11 @@ class TfishSecurityUtility
      * @param int $length Length of required salt.
      * @return string $salt
      */
-    public static function generateSalt(int $length = 64)
+    public function generateSalt(int $length = 64)
     {        
         $salt = base64_encode(random_bytes($length));
         
         return $salt;
     }
-
-    /**
-     * Recursively hashes a salted password to harden it against dictionary attacks.
-     * 
-     * Recursively hashing a password a large number of times directly increases the amount of
-     * effort that must be spent to brute force or even dictionary attack a hash, because each
-     * attempt will consume $iterations more cycles. 
-     * 
-     * @param string $password Input password.
-     * @param int $iterations Number of iterations to run, you want this to be a large number
-     * (100,000 or more).
-     * @param string $site_salt The Tuskfish site salt, found in the configuration file.
-     * @param string $user_salt The user-specific salt for this user, found in the user database
-     * table.
-     * @return string Password hash.
-     */
-    public static function recursivelyHashPassword(string $password, int $iterations,
-            string $site_salt, string $user_salt = '')
-    {
-
-        $iterations = (int) $iterations;
-
-        // Force a minimum number of iterations (1).
-        $iterations = $iterations > 0 ? $iterations : 1;
-
-        $password = $site_salt . $password;
-        
-        if ($user_salt) {
-            $password .= $user_salt;
-        }
-        
-        for ($i = 0; $i < $iterations; $i++) {
-            $password = hash('sha256', $password);
-        }
-        return $password;
-    }
-
+    
 }

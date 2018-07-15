@@ -59,7 +59,8 @@ if (in_array($op, array('submit', false))) {
             }
 
             // Check that password meets minimum strength requirements.
-            $password_quality = TfishSecurityUtility::checkPasswordStrength($dirty_password);
+            $security_utility = new TfishSecurityUtility();
+            $password_quality = $security_utility->checkPasswordStrength($dirty_password);
             
             if ($password_quality['strong'] === false) {
                 unset($password_quality['strong']);
@@ -80,7 +81,7 @@ if (in_array($op, array('submit', false))) {
              */
             if (empty($error)) {
                 $password_hash = '';
-                $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 
+                $password_hash = TfishSession::recursivelyHashPassword($dirty_password, 
                         100000, TFISH_SITE_SALT, $user['user_salt']);
                 $tfish_template->back_url = 'admin.php';
                     $tfish_template->form = TFISH_FORM_PATH . "response.html";

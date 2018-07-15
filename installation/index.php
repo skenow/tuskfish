@@ -124,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin_password = TfishDataValidator::trimString($_POST['admin_password']);
 
     // Check password length and quality.
-    $password_quality = TfishSecurityUtility::checkPasswordStrength($admin_password);
+    $security_utility = new TfishSecurityUtility();
+    $password_quality = $security_utility->checkPasswordStrength($admin_password);
 
     if ($password_quality['strong'] === false) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_WEAK_PASSWORD . '</p>';
@@ -149,9 +150,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // All input validated, proceed to process and set up database.    
     } else {
         // Salt and iteratively hash the password 100,000 times to resist brute force attacks.
-        $site_salt = TfishSecurityUtility::generateSalt(64);
-        $user_salt = TfishSecurityUtility::generateSalt(64);
-        $password_hash = TfishSecurityUtility::recursivelyHashPassword($admin_password, 100000,
+        $security_utility = new TfishSecurityUtility();
+        $site_salt = $security_utility->generateSalt(64);
+        $user_salt = $security_utility->generateSalt(64);
+        $password_hash = TfishSession::recursivelyHashPassword($admin_password, 100000,
                 $site_salt, $user_salt);
 
         // Append site salt to config.php.

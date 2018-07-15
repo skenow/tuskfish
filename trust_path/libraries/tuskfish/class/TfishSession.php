@@ -176,7 +176,7 @@ class TfishSession
                 sleep((int) $user['login_errors']);
             }
             
-            $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
+            $password_hash = self::recursivelyHashPassword($dirty_password, 100000,
                     TFISH_SITE_SALT, $user['user_salt']);
             
             // If login successful regenerate session due to privilege escalation.
@@ -271,7 +271,7 @@ class TfishSession
         }
         
         // First factor authentication: Calculate password hash and compare to the one on file.
-        $password_hash = TfishSecurityUtility::recursivelyHashPassword($dirty_password, 100000,
+        $password_hash = self::recursivelyHashPassword($dirty_password, 100000,
                 TFISH_SITE_SALT, $user['user_salt']);
         
         if ($password_hash === $user['password_hash']) {
@@ -348,6 +348,42 @@ class TfishSession
             header('location: ' . TFISH_URL);
             exit;
         }
+    }
+    
+    /**
+     * Recursively hashes a salted password to harden it against dictionary attacks.
+     * 
+     * Recursively hashing a password a large number of times directly increases the amount of
+     * effort that must be spent to brute force or even dictionary attack a hash, because each
+     * attempt will consume $iterations more cycles. 
+     * 
+     * @param string $password Input password.
+     * @param int $iterations Number of iterations to run, you want this to be a large number
+     * (100,000 or more).
+     * @param string $site_salt The Tuskfish site salt, found in the configuration file.
+     * @param string $user_salt The user-specific salt for this user, found in the user database
+     * table.
+     * @return string Password hash.
+     */
+    public function recursivelyHashPassword(string $password, int $iterations,
+            string $site_salt, string $user_salt = '')
+    {
+
+        $iterations = (int) $iterations;
+
+        // Force a minimum number of iterations (1).
+        $iterations = $iterations > 0 ? $iterations : 1;
+
+        $password = $site_salt . $password;
+        
+        if ($user_salt) {
+            $password .= $user_salt;
+        }
+        
+        for ($i = 0; $i < $iterations; $i++) {
+            $password = hash('sha256', $password);
+        }
+        return $password;
     }
 
     /**
