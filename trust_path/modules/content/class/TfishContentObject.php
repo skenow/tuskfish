@@ -235,7 +235,7 @@ class TfishContentObject
         $this->caption = $clean_caption;
     }
     
-    public function setDate($date)
+    public function setDate(string $date)
     {
         $date = (string) TfishDataValidator::trimString($date);
 

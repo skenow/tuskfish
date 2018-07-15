@@ -147,7 +147,7 @@ class TfishContentHandler
         }
     }
     
-    public function insert(TfishContentObject $obj)
+    public function insert(object $obj)
     {
         $key_values = $obj->convertObjectToArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
@@ -286,7 +286,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of objects matching conditions.
      */
-    public function getCount(TfishCriteria $criteria = null)
+    public function getCount(object $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
@@ -312,7 +312,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
-    public function getListOfObjectTitles(TfishCriteria $criteria = null)
+    public function getListOfObjectTitles(object $criteria = null)
     {
         $content_list = array();
         $columns = array('id', 'title');
@@ -377,7 +377,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array of content objects.
      */
-    public function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(object $criteria = null)
     {
         $objects = array();
         
@@ -669,7 +669,7 @@ class TfishContentHandler
      * @param int $offset Starting point for retrieving results (pagination constraint).
      * @return array|bool Array of content objects on success, false failure.
      */
-    public function searchContent(TfishPreference $tfish_preference, string $search_terms,
+    public function searchContent(object $tfish_preference, string $search_terms,
             string $andor, int $limit = 0, int $offset = 0)
     {
         
@@ -720,7 +720,7 @@ class TfishContentHandler
     }
 
     /** @internal */
-    private function _searchContent(TfishPreference $tfish_preference, array $search_terms,
+    private function _searchContent(object $tfish_preference, array $search_terms,
             array $escaped_terms, string $andor, int $limit, int $offset)
     {
         $sql = $count = '';
@@ -976,7 +976,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public function update(TfishContentObject $obj)
+    public function update(object $obj)
     {
         $clean_id = TfishDataValidator::isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->convertObjectToArray();
@@ -1189,7 +1189,7 @@ class TfishContentHandler
      * @return boolean True if content object is registered as a TfishCollection in database,
      * otherwise false.
      */
-    private function _checkExCollection(TfishContentObject $obj)
+    private function _checkExCollection(object $obj)
     {      
         if (!empty($obj->type) && $obj->type === 'TfishCollection') {
            return true; 
@@ -1204,7 +1204,7 @@ class TfishContentHandler
      * @param object $obj The TfishContentObject to be tested.
      * @return string Filename of associated image property.
      */
-    private function _checkImage(TfishContentObject $obj)
+    private function _checkImage(object $obj)
     {        
         if (!empty($obj->image)) {
             return $obj->image;
@@ -1219,7 +1219,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject to be tested.
      * @return string Filename of associated media property.
      */
-    private function _checkMedia(TfishContentObject $obj)
+    private function _checkMedia(object $obj)
     {
         if (!empty($obj->media)) {
             return $obj->media;

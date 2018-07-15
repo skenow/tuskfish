@@ -35,7 +35,7 @@ class TfishTagHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of TfishTagObjects that match the criteria.
      */
-    public function getCount(TfishCriteria $criteria = null)
+    public function getCount(object $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();
@@ -68,7 +68,7 @@ class TfishTagHandler extends TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array $objects Array of TfishTag objects.
      */
-    public function getObjects(TfishCriteria $criteria = null)
+    public function getObjects(object $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = new TfishCriteria();

@@ -37,7 +37,7 @@ class TfishTaglinkHandler
      * @param object $obj A TfishContentObject subclass object.
      * @return bool True for success, false on failure.
      */
-    public function deleteTaglinks(TfishContentObject $obj)
+    public function deleteTaglinks(object $obj)
     {
         if (TfishDataValidator::isInt($obj->id, 1)) {
             $clean_content_id = (int) $obj->id;
