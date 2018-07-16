@@ -71,10 +71,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishContentObject
 {
-    use TfishMagicMethods;
+    
     use TfishLanguage;
+    use TfishMagicMethods;
 
     /** @var array Holds values of permitted preference object properties. */
+    protected $validator;
+    
     protected $id = '';
     protected $type = '';
     protected $title = '';
@@ -106,6 +109,13 @@ class TfishContentObject
     /** Initialise default content object properties and values. */
     function __construct()
     {
+        /** It would be better to inject TfishDataValidator as a dependency, but can't do this
+         * without modifying the way that objects are auto instantiated into the right class by
+         * PDO, as may not be able to pass in constructor arguments that way. At least, not without
+         * modifying it. See: https://phpdelusions.net/pdo/objects#parameters
+         */
+        $this->validator = new TfishDataValidator1();
+        
         /**
          * Set default values of permitted properties.
          */
@@ -120,7 +130,7 @@ class TfishContentObject
     
     public function setId(int $id)
     {
-        if (TfishDataValidator::isInt($id, 0)) {
+        if ($this->validator->isInt($id, 0)) {
             $this->id = $id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -129,9 +139,9 @@ class TfishContentObject
     
     public function setType(string $type)
     {
-        $clean_type = (string) TfishDataValidator::trimString($type);
+        $clean_type = (string) $this->validator->trimString($type);
 
-        if (TfishDataValidator::isAlpha($clean_type)) {
+        if ($this->validator->isAlpha($clean_type)) {
             $this->type = $clean_type;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
@@ -140,28 +150,28 @@ class TfishContentObject
     
     public function setTitle(string $title)
     {
-        $clean_title = (string) TfishDataValidator::trimString($title);
+        $clean_title = (string) $this->validator->trimString($title);
         $this->title = $clean_title;
     }
     
     public function setTeaser(string $teaser)
     {
-        $teaser = (string) TfishDataValidator::trimString($teaser);
-        $this->teaser = TfishDataValidator::filterHtml($teaser);
+        $teaser = (string) $this->validator->trimString($teaser);
+        $this->teaser = $this->validator->filterHtml($teaser);
     }
     
     public function setDescription(string $description)
     {
-        $description = (string) TfishDataValidator::trimString($description);
-        $this->description = TfishDataValidator::filterHtml($description);
+        $description = (string) $this->validator->trimString($description);
+        $this->description = $this->validator->filterHtml($description);
     }
    
     public function setMedia(string $media)
     {
-        $media = (string) TfishDataValidator::trimString($media);
+        $media = (string) $this->validator->trimString($media);
 
         // Check image/media paths for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($media)) {
+        if ($this->validator->hasTraversalorNullByte($media)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             exit; // Hard stop due to high probability of abuse.
         }
@@ -183,7 +193,7 @@ class TfishContentObject
     
     public function setFormat(string $format)
     {
-        $format = (string) TfishDataValidator::trimString($format);
+        $format = (string) $this->validator->trimString($format);
 
         global $tfish_file_handler;
         $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
@@ -196,7 +206,7 @@ class TfishContentObject
     
     public function setFileSize(int $file_size)
     {
-        if (TfishDataValidator::isInt($file_size, 0)) {
+        if ($this->validator->isInt($file_size, 0)) {
             $this->file_size = $file_size;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -205,16 +215,16 @@ class TfishContentObject
     
     public function setCreator(string $creator)
     {
-        $clean_creator = (string) TfishDataValidator::trimString($creator);
+        $clean_creator = (string) $this->validator->trimString($creator);
         $this->creator = $clean_creator;
     }
     
     public function setImage(string $image)
     {
-        $image = (string) TfishDataValidator::trimString($image);
+        $image = (string) $this->validator->trimString($image);
         
         // Check image/media paths for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($image)) {
+        if ($this->validator->hasTraversalorNullByte($image)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             exit; // Hard stop due to high probability of abuse.
         }
@@ -233,13 +243,13 @@ class TfishContentObject
     
     public function setCaption(string $caption)
     {
-        $clean_caption = (string) TfishDataValidator::trimString($caption);
+        $clean_caption = (string) $this->validator->trimString($caption);
         $this->caption = $clean_caption;
     }
     
     public function setDate(string $date)
     {
-        $date = (string) TfishDataValidator::trimString($date);
+        $date = (string) $this->validator->trimString($date);
 
         // Ensure format complies with DATE_RSS
         $check_date = date_parse_from_format('Y-m-d', $date);
@@ -257,7 +267,7 @@ class TfishContentObject
     // Parent ID must be different to content ID (cannot declare self as parent).
     public function setParent(int $parent)
     {        
-        if (!TfishDataValidator::isInt($parent, 0)) {
+        if (!$this->validator->isInt($parent, 0)) {
                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
 
@@ -270,7 +280,7 @@ class TfishContentObject
     
     public function setLanguage(string $language)
     {        
-        $language = (string) TfishDataValidator::trimString($language);
+        $language = (string) $this->validator->trimString($language);
         $language_whitelist = $this->getListOfLanguages();
 
         if (!array_key_exists($language, $language_whitelist)) {
@@ -282,7 +292,7 @@ class TfishContentObject
     
     public function setRights(int $rights)
     {
-        if (TfishDataValidator::isInt($rights, 1)) {
+        if ($this->validator->isInt($rights, 1)) {
             $this->rights = $rights;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -291,19 +301,19 @@ class TfishContentObject
     
     public function setPublisher(string $publisher)
     {
-        $clean_publisher = (string) TfishDataValidator::trimString($publisher);
+        $clean_publisher = (string) $this->validator->trimString($publisher);
         $this->publisher = $clean_publisher;
     }
     
     public function setTags(array $tags)
     {
-        if (TfishDataValidator::isArray($tags)) {
+        if ($this->validator->isArray($tags)) {
             $clean_tags = array();
 
             foreach ($tags as $tag) {
                 $clean_tag = (int) $tag;
 
-                if (TfishDataValidator::isInt($clean_tag, 1)) {
+                if ($this->validator->isInt($clean_tag, 1)) {
                     $clean_tags[] = $clean_tag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -319,7 +329,7 @@ class TfishContentObject
     
     public function setOnline(int $online)
     {
-        if (TfishDataValidator::isInt($online, 0, 1)) {
+        if ($this->validator->isInt($online, 0, 1)) {
             $this->online = $online;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -328,7 +338,7 @@ class TfishContentObject
     
     public function setSubmissionTime(int $submission_time)
     {
-        if (TfishDataValidator::isInt($submission_time, 1)) {
+        if ($this->validator->isInt($submission_time, 1)) {
             $this->submission_time = $submission_time;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -337,7 +347,7 @@ class TfishContentObject
     
     public function setCounter(int $counter)
     {
-        if (TfishDataValidator::isInt($counter, 0)) {
+        if ($this->validator->isInt($counter, 0)) {
             $this->counter = $counter;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -346,22 +356,22 @@ class TfishContentObject
     
     public function setMetaTitle(string $meta_title)
     {
-        $clean_meta_title = (string) TfishDataValidator::trimString($meta_title);
+        $clean_meta_title = (string) $this->validator->trimString($meta_title);
         $this->meta_title = $clean_meta_title;
     }
     
     public function setMetaDescription(string $meta_description)
     {
-        $clean_meta_description = (string) TfishDataValidator::trimString($meta_description);
+        $clean_meta_description = (string) $this->validator->trimString($meta_description);
         $this->meta_description = $clean_meta_description;
     }
     
     public function setSeo(string $seo)
     {
-        $clean_seo = (string) TfishDataValidator::trimString($seo);
+        $clean_seo = (string) $this->validator->trimString($seo);
 
         // Replace spaces with dashes.
-        if (TfishDataValidator::isUtf8($clean_seo)) {
+        if ($this->validator->isUtf8($clean_seo)) {
             $clean_seo = str_replace(' ', '-', $clean_seo);
         } else {
             trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
@@ -372,9 +382,9 @@ class TfishContentObject
     
     public function setHandler(string $handler)
     {
-        $clean_handler = (string) TfishDataValidator::trimString($handler);
+        $clean_handler = (string) $this->validator->trimString($handler);
 
-        if (TfishDataValidator::isAlpha($clean_handler)) {
+        if ($this->validator->isAlpha($clean_handler)) {
             $this->handler = $clean_handler;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
@@ -383,9 +393,9 @@ class TfishContentObject
     
     public function setTemplate(string $template)
     {
-        $clean_template = (string) TfishDataValidator::trimString($template);
+        $clean_template = (string) $this->validator->trimString($template);
 
-        if (TfishDataValidator::isAlnumUnderscore($clean_template)) {
+        if ($this->validator->isAlnumUnderscore($clean_template)) {
             $this->template = $clean_template;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -394,14 +404,14 @@ class TfishContentObject
     
     public function setModule(string $module)
     {
-        $clean_module = (string) TfishDataValidator::trimString($module);
+        $clean_module = (string) $this->validator->trimString($module);
         $this->module = $clean_module;
     }
     
     public function setIcon(string $icon)
     {
-        $icon = (string) TfishDataValidator::trimString($icon);
-        $this->icon = TfishDataValidator::filterHtml($icon);
+        $icon = (string) $this->validator->trimString($icon);
+        $this->icon = $this->validator->filterHtml($icon);
     }
     
     /**
@@ -516,7 +526,7 @@ class TfishContentObject
      */
     public function escapeForXss(string $property, bool $escape_html = false)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         // If property is not set return null.
         if (!isset($this->$clean_property)) {
@@ -562,8 +572,8 @@ class TfishContentObject
     public function getCachedImage(int $width = 0, int $height = 0)
     {
         // Validate parameters; and at least one must be set.
-        $clean_width = TfishDataValidator::isInt($width, 1) ? (int) $width : 0;
-        $clean_height = TfishDataValidator::isInt($height, 1) ? (int) $height : 0;
+        $clean_width = $this->validator->isInt($width, 1) ? (int) $width : 0;
+        $clean_height = $this->validator->isInt($height, 1) ? (int) $height : 0;
         
         if (!$clean_width && !$clean_height) {
             return false;
@@ -762,14 +772,14 @@ class TfishContentObject
         $url = empty($custom_page) ? TFISH_PERMALINK_URL : TFISH_URL;
         
         if ($custom_page) {
-            $url .= TfishDataValidator::isAlnumUnderscore($custom_page)
-                    ? TfishDataValidator::trimString($custom_page) . '.php' : '';
+            $url .= $this->validator->isAlnumUnderscore($custom_page)
+                    ? $this->validator->trimString($custom_page) . '.php' : '';
         }
         
         $url .= '?id=' . (int) $this->id;
         
         if ($this->seo) {
-            $url .= '&amp;title=' . TfishDataValidator::encodeEscapeUrl($this->seo);
+            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
         }
 
         return $url;
@@ -829,7 +839,7 @@ class TfishContentObject
         }
 
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
-            $clean_image_filename = TfishDataValidator::trimString($_FILES['image']['name']);
+            $clean_image_filename = $this->validator->trimString($_FILES['image']['name']);
             
             if ($clean_image_filename) {
                 $this->setImage($clean_image_filename);
@@ -837,7 +847,7 @@ class TfishContentObject
         }
       
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
-            $clean_media_filename = TfishDataValidator::trimString($_FILES['media']['name']);
+            $clean_media_filename = $this->validator->trimString($_FILES['media']['name']);
             
             if ($clean_media_filename) {
                 global $tfish_file_handler;
@@ -1033,7 +1043,7 @@ class TfishContentObject
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             switch ($clean_property) {

@@ -37,7 +37,7 @@ if ($clean_id && $clean_tag_id) {
 
 // Initialise RSS object.
 header('Content-Type: application/rss+xml');
-$rss = new TfishRss($tfish_preference);
+$rss = new TfishRss($tfish_preference, $tfish_validator);
 
 // Get a generic content object handler.
 $content_handler = new TfishContentHandler();

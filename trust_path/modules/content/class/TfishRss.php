@@ -44,6 +44,7 @@ class TfishRss
     
     use TfishMagicMethods;
     
+    protected $validator;
     protected $title;
     protected $link;
     protected $description;
@@ -55,9 +56,11 @@ class TfishRss
     protected $template;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct(object $tfish_preference)
+    public function __construct(object $tfish_preference, object $tfish_validator)
     {
+        
         // Set default values of permitted properties.
+        $this->validator = $tfish_validator;
         $this->setTitle($tfish_preference->site_name);
         $this->setLink(TFISH_RSS_URL);
         $this->setDescription($tfish_preference->site_description);
@@ -87,15 +90,15 @@ class TfishRss
     
     public function setTitle(string $title)
     {
-        $clean_title = TfishDataValidator::trimString($title);
+        $clean_title = $this->validator->trimString($title);
         $this->title = $clean_title;
     }
     
     public function setLink(string $url)
     {
-        $clean_url = TfishDataValidator::trimString($url);
+        $clean_url = $this->validator->trimString($url);
 
-        if (TfishDataValidator::isUrl($clean_url)) {
+        if ($this->validator->isUrl($clean_url)) {
             $this->link = $clean_url;
         } else {
             trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
@@ -104,21 +107,21 @@ class TfishRss
     
     public function setDescription(string $description)
     {
-        $clean_description = TfishDataValidator::trimString($description);
+        $clean_description = $this->validator->trimString($description);
         $this->description = $clean_description;
     }
     
     public function setCopyright(string $copyright)
     {
-        $clean_copyright = TfishDataValidator::trimString($copyright);
+        $clean_copyright = $this->validator->trimString($copyright);
         $this->copyright = $clean_copyright;
     }
     
     public function setManagingEditor(string $email)
     {
-        $clean_email = TfishDataValidator::trimString($email);
+        $clean_email = $this->validator->trimString($email);
 
-        if (TfishDataValidator::isEmail($clean_email)) {
+        if ($this->validator->isEmail($clean_email)) {
             $this->managing_editor = $clean_email;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -127,9 +130,9 @@ class TfishRss
     
     public function setWebmaster(string $email)
     {
-        $clean_email = TfishDataValidator::trimString($email);
+        $clean_email = $this->validator->trimString($email);
 
-        if (TfishDataValidator::isEmail($clean_email)) {
+        if ($this->validator->isEmail($clean_email)) {
             $this->webmaster = $clean_email;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -138,7 +141,7 @@ class TfishRss
     
     public function setGenerator(string $generator)
     {
-        $clean_generator = TfishDataValidator::trimString($generator);
+        $clean_generator = $this->validator->trimString($generator);
         $this->generator = $clean_generator;
     }
     
@@ -149,7 +152,7 @@ class TfishRss
     
     public function setItems(array $items)
     {
-        if (TfishDataValidator::isArray($items)) {
+        if ($this->validator->isArray($items)) {
             $clean_items = array();
 
             foreach ($items as $item) {
@@ -170,7 +173,7 @@ class TfishRss
     
     private function setTemplate(string $template)
     {
-        $clean_template = TfishDataValidator::trimString($template);
+        $clean_template = $this->validator->trimString($template);
         $this->template = $clean_template;
     }
     
