@@ -48,7 +48,7 @@ class TfishDataValidator
      * @param mixed $output Unescaped string intended for display.
      * @return string XSS-escaped output string safe for display.
      */
-    public function escapeForXss($dirty_text)
+    public static function escapeForXss($dirty_text)
     {
         $dirty_text = (string) $dirty_text;
         
@@ -71,11 +71,11 @@ class TfishDataValidator
      * @param string $url Unescaped input URL.
      * @return string Encoded and escaped URL.
      */
-    public function encodeEscapeUrl(string $url)
+    public static function encodeEscapeUrl(string $url)
     {
-        $url = $this->trimString($url); // Trim control characters, verify UTF-8 character set.
+        $url = self::trimString($url); // Trim control characters, verify UTF-8 character set.
         $url = rawurlencode($url); // Encode characters to make them URL safe.
-        $clean_url = $this->escapeForXss($url); // Encode entities with htmlspecialchars()
+        $clean_url = self::escapeForXss($url); // Encode entities with htmlspecialchars()
 
         return $clean_url;
     }
@@ -91,10 +91,10 @@ class TfishDataValidator
      * @param array $config_options HTMLPurifier configuration options (see HTMLPurifier documentation).
      * @return string Validated HTML content.
      */
-    public function filterHtml(string $dirty_html, array $config_options = array())
+    public static function filterHtml(string $dirty_html, array $config_options = array())
     {
-        if ($this->isUtf8($dirty_html) && class_exists('HTMLPurifier')) {
-            $config = $this->_configureHTMLPurifier($config_options);
+        if (self::isUtf8($dirty_html) && class_exists('HTMLPurifier')) {
+            $config = self::_configureHTMLPurifier($config_options);
             $html_purifier = new HTMLPurifier($config);
             $clean_html = (string) $html_purifier->purify($dirty_html);
             return $clean_html;
@@ -117,7 +117,7 @@ class TfishDataValidator
      * @param array $config_options HTMLPurifier configuration options (see HTMLPurifier documentation).
      * @return object HTMLPurifier configuration object.
      */
-    private function _configureHTMLPurifier(array $config_options)
+    private static function _configureHTMLPurifier(array $config_options)
     {
         // Set default configuration options.
         $config = HTMLPurifier_Config::createDefault();
@@ -150,7 +150,7 @@ class TfishDataValidator
      * @param string $path
      * @return boolean True if a traversal or null byte is found, otherwise false.
      */
-    public function hasTraversalorNullByte(string $path)
+    public static function hasTraversalorNullByte(string $path)
     {
         // List of traversals and null byte encodings.
         $traversals = array(
@@ -191,7 +191,7 @@ class TfishDataValidator
      * @param string $alpha Input to be tested.
      * @return bool True if valid alphabetical string, false otherwise.
      */
-    public function isAlpha(string $alpha)
+    public static function isAlpha(string $alpha)
     {
         if (mb_strlen($alpha, 'UTF-8') > 0) {
             return preg_match('/[^a-z]/i', $alpha) ? false : true;
@@ -209,7 +209,7 @@ class TfishDataValidator
      * @param string $alnum Input to be tested.
      * @return bool True if valid alphanumerical string, false otherwise.
      */
-    public function isAlnum(string $alnum)
+    public static function isAlnum(string $alnum)
     {
         if (mb_strlen($alnum, 'UTF-8') > 0) {
             return preg_match('/[^a-z0-9]/i', $alnum) ? false : true;
@@ -227,7 +227,7 @@ class TfishDataValidator
      * @param string $alnumUnderscore Input to be tested.
      * @return bool True if valid alphanumerical or underscore string, false otherwise.
      */
-    public function isAlnumUnderscore(string $alnumUnderscore)
+    public static function isAlnumUnderscore(string $alnumUnderscore)
     {
         if (mb_strlen($alnumUnderscore, 'UTF-8') > 0) {
             return preg_match('/[^a-z0-9_]/i', $alnumUnderscore) ? false : true;
@@ -245,7 +245,7 @@ class TfishDataValidator
      * @param mixed $bool Input to be tested.
      * @return bool True if a valid boolean value, false otherwise.
      */
-    public function isBool($bool)
+    public static function isBool($bool)
     {
         $result = filter_var($bool, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         
@@ -262,7 +262,7 @@ class TfishDataValidator
      * @param string $digit Input to be tested.
      * @return bool True if valid digit string, false otherwise.
      */
-    public function isDigit(string $digit)
+    public static function isDigit(string $digit)
     {
         if (mb_strlen($digit, 'UTF-8') > 0) {
             return preg_match('/[^0-9]/', $digit) ? false : true;
@@ -280,7 +280,7 @@ class TfishDataValidator
      * @param string $email Input to be tested.
      * @return boolean True if valid email address, otherwise false.
      */
-    public function isEmail(string $email)
+    public static function isEmail(string $email)
     {
         if (mb_strlen($email, 'UTF-8') > 2) {
             return filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -297,7 +297,7 @@ class TfishDataValidator
      * @param mixed $float Input to be tested.
      * @return boolean True if valid float, otherwise false.
      */
-    public function isFloat($float)
+    public static function isFloat($float)
     {
         return is_float($float);
     }
@@ -310,7 +310,7 @@ class TfishDataValidator
      * @param int $max Maximum acceptable value.
      * @return bool True if valid int and within optional range check, false otherwise.
      */
-    public function isInt($int, int $min = null, int $max = null)
+    public static function isInt($int, int $min = null, int $max = null)
     {
         $clean_int = is_int($int) ? (int) $int : null;
         $clean_min = is_int($min) ? (int) $min : null;
@@ -346,7 +346,7 @@ class TfishDataValidator
      * @param int $version IP address version ('4' or '6').
      * @return bool True if valid IP address, false otherwise.
      */
-    public function isIp(string $ip, int $version = null)
+    public static function isIp(string $ip, int $version = null)
     {
         if (isset($version) && $version === 6) {
             if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6
@@ -374,7 +374,7 @@ class TfishDataValidator
      * @param string $dirty_string Input string to check.
      * @return bool True if string is UTF-8 encoded otherwise false.
      */
-    public function isUtf8(string $dirty_string)
+    public static function isUtf8(string $dirty_string)
     {
         return mb_check_encoding($dirty_string, 'UTF-8');
     }
@@ -388,7 +388,7 @@ class TfishDataValidator
      * @param string $url Input to be tested.
      * @return bool True if valid URL otherwise false.
      */
-    public function isUrl(string $url)
+    public static function isUrl(string $url)
     {
         if (filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED
                 | FILTER_FLAG_HOST_REQUIRED)) {
@@ -407,7 +407,7 @@ class TfishDataValidator
      * @param mixed $array Input to be tested.
      * @return bool True if valid array otherwise false.
      */
-    public function isArray($array)
+    public static function isArray($array)
     {
         return is_array($array);
     }
@@ -418,7 +418,7 @@ class TfishDataValidator
      * @param mixed $object Input to be tested.
      * @return bool True if valid object otherwise false.
      */
-    public function isObject($object)
+    public static function isObject($object)
     {
         return is_object($object);
     }
@@ -429,7 +429,7 @@ class TfishDataValidator
      * @param mixed $null Input to be tested.
      * @return bool True if input is null otherwise false.
      */
-    public function isNull($null)
+    public static function isNull($null)
     {
         return is_null($null);
     }
@@ -440,7 +440,7 @@ class TfishDataValidator
      * @param mixed $resource Input to be tested.
      * @return bool True if valid resource otherwise false.
      */
-    public function isResource($resource)
+    public static function isResource($resource)
     {
         return is_resource($resource);
     }
@@ -458,11 +458,11 @@ class TfishDataValidator
      * @param mixed $dirty_string Input to be trimmed.
      * @return string Trimmed and UTF-8 validated string.
      */
-    public function trimString($dirty_string)
+    public static function trimString($dirty_string)
     {
         $dirty_string = (string) $dirty_string;
         
-        if ($this->isUtf8($dirty_string)) {
+        if (self::isUtf8($dirty_string)) {
             // Trims all control characters plus space (ASCII / UTF-8 points 0-32 inclusive).
             return trim($dirty_string, "\x00..\x20");
         } else {

@@ -33,23 +33,19 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// Initialise data validator.
-$tfish_validator = new TfishValidator();
-
-// Initialise error logger.
 $tfish_logger = new TfishLogger();
 set_error_handler(array($tfish_logger, "logError"));
 
-// Initialise file handler.
+// Make file handler available.
 $tfish_file_handler = new TfishFileHandler();
 
-// Initialise database connection.
+// Ensure that a database connection is available.
 TfishDatabase::connect();
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;
 
-// Initialise site preferences.
+// Ensure that global site preferences are available via $tfish_preference.
 $preference_handler = new TfishPreferenceHandler();
 $tfish_preference = new TfishPreference($preference_handler->readPreferencesFromDatabase());
 
@@ -59,10 +55,10 @@ TfishSession::start($tfish_preference);
 // Set default page-level metadata values for essential template variables (overwrite as required).
 $tfish_metadata = new TfishMetadata($tfish_preference);
 
-// Initialise the template object.
+// Instantiate the template object so that it will be available globally.
 $tfish_template = new TfishTemplate();
 
-// Initialise the cache.
+// Instantiate the cache.
 $tfish_cache = new TfishCache($tfish_logger);
 
 // Check if site is closed, if so redirect to the login page and exit.
