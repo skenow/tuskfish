@@ -365,7 +365,7 @@ class TfishSession
      * table.
      * @return string Password hash.
      */
-    public function recursivelyHashPassword(string $password, int $iterations,
+    public static function recursivelyHashPassword(string $password, int $iterations,
             string $site_salt, string $user_salt = '')
     {
 
