@@ -34,7 +34,7 @@ ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
 $tfish_logger = new TfishLogger();
-set_error_handler($tfish_logger, "logError");
+set_error_handler(array($tfish_logger, "logError"));
 
 // Make file handler available.
 $tfish_file_handler = new TfishFileHandler();
