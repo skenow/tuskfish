@@ -45,6 +45,13 @@ define("TFISH_CHANGE_PASSWORD_EXPLANATION", "Please enter and confirm your new a
         . "password in the form below to change it. Passwords must be at least 15 characters long "
         . "and contain at least least one upper and lower case letter, number and symbol.");
 define("TFISH_STATIC_PAGES", "Static pages");
+define("TFISH_FLUSH_CACHE", "Flush cache");
+define("TFISH_DO_YOU_WANT_TO_FLUSH_CACHE", "Do you want to flush the cache?");
+define("TFISH_CONFIRM_FLUSH", "Are you sure?");
+define("TFISH_CACHE_WAS_FLUSHED", "Cache was flushed.");
+define("TFISH_CACHE_FLUSH_FAILED", "Cache flush failed.");
+define("TFISH_VIEW", "View");
+define("TFISH_SETTINGS", "Settings");
 
 // admin/gallery.php
 define("TFISH_IMAGE_GALLERY", "Gallery");
@@ -85,6 +92,7 @@ define("TFISH_PREFERENCE_MIN_SEARCH_LENGTH", "Min. search length");
 define("TFISH_PREFERENCE_SEARCH_PAGINATION", "Search pagination");
 define("TFISH_PREFERENCE_ADMIN_PAGINATION", "Admin-side pagination");
 define("TFISH_PREFERENCE_GALLERY_PAGINATION", "Gallery pagination");
+define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
 define("TFISH_PREFERENCE_SESSION_NAME", "Session name");
 define("TFISH_PREFERENCE_SESSION_TIMEOUT", "Session timeout");
 define("TFISH_PREFERENCE_SESSION_DOMAIN", "Session domain");
@@ -209,6 +217,14 @@ define("TFISH_ERROR_CIRCULAR_PARENT_REFERENCE", "Circular reference: Content obj
 define("TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE", "File path contains a traversal or null byte (illegal "
         . "value).");
 define("TFISH_ERROR_NOT_UTF8", "Not UTF-8, illegal character set.");
+define("TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED", "Object properties are not permitted to be"
+        . " set directly. Use the relevant setter method.");
+
+// Token errors.
+define("TFISH_INVALID_TOKEN", "Invalid token error");
+define("TFISH_SORRY_INVALID_TOKEN", "Sorry, the token accompanying your request was invalid. This 
+    is usually caused by your session timing out, but it can be an indication of a cross-site 
+    request forgery. As a precaution, your request has not been processed. Please try again.");
 
 // File upload error messages.
 define("TFISH_ERROR_UPLOAD_ERR_INI_SIZE", "Upload failed: File exceeds maximimum permitted .ini "
@@ -227,37 +243,3 @@ define("TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO", "Your browser does not support th
 /*
  * Record any new, changed or deleted language constants below by version, to aid translation.
  */
-
-// Beta 1.
-define("TFISH_DOWNLOAD", "Download");
-define("TFISH_DOWNLOADS", "Downloads");
-define("TFISH_FLUSH_CACHE", "Flush cache");
-define("TFISH_CACHE_WAS_FLUSHED", "Cache was flushed.");
-define("TFISH_CACHE_FLUSH_FAILED", "Cache flush failed.");
-
-// RC 1.
-define("TFISH_PREFERENCE_RSS_POSTS", "RSS posts");
-
-// RC 4.
-define("TFISH_VIEW", "View");
-define("TFISH_SETTINGS", "Settings");
-
-// RC 5.
-define("TFISH_MEDIA_NOT_COMPATIBLE", "The selected media file is not compatible with the current "
-        . "content type. Inline media players will not display.");
-
-// RC6.
-define("TFISH_CONFIRM_FLUSH", "Are you sure?");
-define("TFISH_DO_YOU_WANT_TO_FLUSH_CACHE", "Do you want to flush the cache?");
-define("TFISH_INVALID_TOKEN", "Invalid token error");
-define("TFISH_SORRY_INVALID_TOKEN", "Sorry, the token accompanying your request was invalid. This 
-    is usually caused by your session timing out, but it can be an indication of a cross-site 
-    request forgery. As a precaution, your request has not been processed. Please try again.");
-define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a non-extant tag"
-        . " failed");
-define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
-        . " failed.");
-
-// 1.03
-define("TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED", "Object properties are not permitted to be"
-        . " set directly. Use the relevant setter method.");

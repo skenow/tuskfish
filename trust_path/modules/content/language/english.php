@@ -84,3 +84,15 @@ define("TFISH_PARENT_WORK", "Parent work");
 define("TFISH_RELATED", "Related");
 define("TFISH_RELATED_WORKS", "Related works");
 define("TFISH_IN_THIS_COLLECTION", "In this collection");
+
+// Miscellaneous.
+define("TFISH_DOWNLOAD", "Download");
+define("TFISH_DOWNLOADS", "Downloads");
+
+// Errors.
+define("TFISH_MEDIA_NOT_COMPATIBLE", "The selected media file is not compatible with the current "
+        . "content type. Inline media players will not display.");
+define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a non-extant tag"
+        . " failed");
+define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
+        . " failed.");
