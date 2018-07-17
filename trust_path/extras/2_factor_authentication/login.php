@@ -86,7 +86,7 @@ $dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubikey_otp'] : false;
 if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
     switch ($clean_op) {
         case "login":
-            $yubikey = new TfishYubikeyAuthenticator();
+            $yubikey = new TfishYubikeyAuthenticator($tfish_validator);
             TfishSession::twoFactorLogin($dirty_password, $dirty_otp, $yubikey);
             break;
 

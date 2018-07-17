@@ -38,6 +38,8 @@ if (!defined("TFISH_ROOT_PATH"))
  */
 class TfishYubikeyAuthenticator
 {
+    
+    protected $validator;
 
     // Input.
     /** @var int $_id ID of the Yubikey hardware token (first 12 characters of output). */
@@ -65,8 +67,14 @@ class TfishYubikeyAuthenticator
     private $_curlTimeout;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct()
+    public function __construct($tfish_validator)
     {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if (defined("TFISH_YUBIKEY_ID")) {
             $this->_id = (int) TFISH_YUBIKEY_ID;
         }
