@@ -27,7 +27,7 @@ $tfish_template->setTheme('admin');
  **/
 
 // Permitted options.
-$op = isset($_REQUEST['op']) ? TfishDataValidator::trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
 $options_whitelist = array();
 
 if (in_array($op, $options_whitelist)) {

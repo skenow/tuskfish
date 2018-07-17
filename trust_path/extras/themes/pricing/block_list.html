@@ -1,11 +1,11 @@
 <?php declare(strict_types=1); ?>
 
 <?php if (isset($title) && isset($items)): ?>
-<h3><?php echo TfishDataValidator::escapeForXss($title);?></h3>
+<h3><?php echo $tfish_validator->escapeForXss($title);?></h3>
 <?php if ($items): ?>
 <ul>
     <?php foreach ($items as $item): ?>
-    <li><a href="<?php echo $item->getUrl($target_file_name); ?>"><?php echo TfishDataValidator::escapeForXss($item->title); ?></a></li>
+    <li><a href="<?php echo $item->getUrl($target_file_name); ?>"><?php echo $tfish_validator->escapeForXss($item->title); ?></a></li>
     <?php endforeach; ?>
 </ul>
 <?php endif; ?>
