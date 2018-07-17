@@ -21,7 +21,7 @@ require_once TFISH_PATH . "tfish_header.php";
 // Lock handler to soundtracks.
 $content_handler = new TfishContentHandler($tfish_validator);
 $criteria = new TfishCriteria($tfish_validator);
-$criteria->add(new TfishCriteriaItem('type', 'TfishAudio'));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishAudio'));
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_AUDIO_FILES;
@@ -115,7 +115,7 @@ if ($clean_id) {
     if ($clean_tag)
         $criteria->setTag(array($clean_tag));
     
-    $criteria->add(new TfishCriteriaItem('online', 1));
+    $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 
     // Prepare pagination control.
     $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);

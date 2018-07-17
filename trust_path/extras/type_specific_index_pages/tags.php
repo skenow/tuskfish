@@ -75,7 +75,7 @@ if ($clean_id) {
         $criteria->setOffset($clean_start);
     
     $criteria->setLimit($tfish_preference->user_pagination);
-    $criteria->add(new TfishCriteriaItem('online', 1));
+    $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 
     // Prepare pagination control.
     $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);

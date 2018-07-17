@@ -38,6 +38,7 @@ class TfishCriteriaItem
     
     use TfishMagicMethods;
     
+    protected $validator;
     protected $column = false;
     protected $value = false;
     protected $operator = "="; // Default value.
@@ -50,8 +51,14 @@ class TfishCriteriaItem
      * @param mixed $value Value of the column.
      * @param string $operator See getListOfPermittedOperators() for a list of acceptable operators.
      */
-    function __construct(string $column, $value, string $operator = '=')
+    function __construct(object $tfish_validator, string $column, $value, string $operator = '=')
     {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $this->setColumn($column);
         $this->setValue($value);
         $this->setOperator($operator);
@@ -91,9 +98,9 @@ class TfishCriteriaItem
     
     public function setColumn($value)
     {
-        $clean_value = TfishDataValidator::trimString($value);
+        $clean_value = $this->validator->trimString($value);
                     
-        if (TfishDataValidator::isAlnumUnderscore($clean_value)) {
+        if ($this->validator->isAlnumUnderscore($clean_value)) {
             $this->column = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -106,7 +113,7 @@ class TfishCriteriaItem
 
         switch ($type) {
             case "string":
-                $clean_value = TfishDataValidator::trimString($value);
+                $clean_value = $this->validator->trimString($value);
                 break;
 
             // Types that can't be validated further in the current context.
@@ -131,7 +138,7 @@ class TfishCriteriaItem
     
     public function setOperator($value)
     {
-        $clean_value = TfishDataValidator::trimString($value);
+        $clean_value = $this->validator->trimString($value);
                     
         if (in_array($clean_value, self::getListOfPermittedOperators())) {
             $this->operator = $clean_value;

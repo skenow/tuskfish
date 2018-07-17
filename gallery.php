@@ -43,8 +43,8 @@ $clean_type = isset($_GET['type']) && !empty($_GET['type'])
 
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria($tfish_validator);
-$criteria->add(new TfishCriteriaItem('image', '', '<>'));
-$criteria->add(new TfishCriteriaItem('online', 1));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'image', '', '<>'));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 
 // Optional selection criteria.
 if ($clean_tag)
@@ -52,7 +52,7 @@ if ($clean_tag)
 
 if ($clean_type) {
     if (array_key_exists($clean_type, $content_handler->getTypes())) {
-        $criteria->add(new TfishCriteriaItem('type', $clean_type));
+        $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', $clean_type));
     } else {
         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
     }

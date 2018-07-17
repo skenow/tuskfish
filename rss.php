@@ -64,15 +64,15 @@ if ($clean_id) {
     
     if ($collection && $tfish_validator->isObject($collection)) {
         $rss->makeFeedForCollection($collection);
-        $criteria->add(new TfishCriteriaItem('parent', $clean_id));
+        $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $clean_id));
     }
 }
 
 // Do not allow tags, blocks or offline content objects to show in the feed.
-$criteria->add(new TfishCriteriaItem('type', 'TfishTag', '!='));
-$criteria->add(new TfishCriteriaItem('type', 'TfishBlock', '!='));
-$criteria->add(new TfishCriteriaItem('type', 'TfishStatic', '!='));
-$criteria->add(new TfishCriteriaItem('online', 1));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishTag', '!='));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!='));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishStatic', '!='));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 $content_objects = $content_handler->getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.

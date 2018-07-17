@@ -22,7 +22,7 @@ require_once TFISH_PATH . "tfish_header.php";
 // Lock handler to images.
 $content_handler = new TfishContentHandler($tfish_validator);
 $criteria = new TfishCriteria($tfish_validator);
-$criteria->add(new TfishCriteriaItem('type', 'TfishImage'));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishImage'));
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_IMAGES;
@@ -110,7 +110,7 @@ if ($clean_id) {
     if ($clean_tag)
         $criteria->setTag(array($clean_tag));
     
-    $criteria->add(new TfishCriteriaItem('online', 1));
+    $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 
     // Prepare pagination control.
     $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);

@@ -54,7 +54,7 @@ class TfishTagHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishTag'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -87,7 +87,7 @@ class TfishTagHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishTag'));
         $objects = parent::getObjects($criteria);
 
         return $objects;

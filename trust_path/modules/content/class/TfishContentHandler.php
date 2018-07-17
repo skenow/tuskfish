@@ -89,7 +89,7 @@ class TfishContentHandler
         // If object is a collection delete related parent references in child objects.
         if ($obj->type === 'TfishCollection') {
             $criteria = new TfishCriteria($this->validator);
-            $criteria->add(new TfishCriteriaItem('parent', $clean_id));
+            $criteria->add(new TfishCriteriaItem($this->validator, 'parent', $clean_id));
             $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
             
             if (!$result) {
@@ -122,7 +122,7 @@ class TfishContentHandler
         }
         
         $criteria = new TfishCriteria($this->validator);
-        $criteria->add(new TfishCriteriaItem('parent', $clean_id));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'parent', $clean_id));
         $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
 
         if (!$result) {
@@ -277,7 +277,7 @@ class TfishContentHandler
 
         // Filter tags by type.
         if (isset($clean_type)) {
-            $criteria->add(new TfishCriteriaItem('content_type', $clean_type));
+            $criteria->add(new TfishCriteriaItem($this->validator, 'content_type', $clean_type));
         }
 
         // Put a check for online status in here.
@@ -492,7 +492,7 @@ class TfishContentHandler
         
         if ($this->validator->isInt($clean_id, 1)) {
             $criteria = new TfishCriteria($this->validator);
-            $criteria->add(new TfishCriteriaItem('id', $clean_id));
+            $criteria->add(new TfishCriteriaItem($this->validator, 'id', $clean_id));
             $statement = TfishDatabase::select('content', $criteria);
             
             if ($statement) {
@@ -552,7 +552,7 @@ class TfishContentHandler
             $criteria = new TfishCriteria($this->validator);
             
             foreach ($object_ids as $id) {
-                $criteria->add(new TfishCriteriaItem('content_id', (int) $id), "OR");
+                $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', (int) $id), "OR");
                 unset($id);
             }
 
@@ -649,10 +649,10 @@ class TfishContentHandler
         $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
         $criteria = new TfishCriteria($this->validator);
-        $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishTag'));
         
         if ($clean_online_only) {
-            $criteria->add(new TfishCriteriaItem('online', true));
+            $criteria->add(new TfishCriteriaItem($this->validator, 'online', true));
         }
 
         $statement = TfishDatabase::select('content', $criteria, $columns);
@@ -683,7 +683,7 @@ class TfishContentHandler
     {
         $tags = array();
         $criteria = new TfishCriteria($this->validator);
-        $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishTag'));
         $tags = $this->getObjects($criteria);
         
         return $tags;
@@ -991,7 +991,7 @@ class TfishContentHandler
     private function _streamDownloadToBrowser(int $id, string $filename)
     {
         $criteria = new TfishCriteria($this->validator);
-        $criteria->add(new TfishCriteriaItem('id', $id));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'id', $id));
         $statement = TfishDatabase::select('content', $criteria);
         
         if (!$statement) {
@@ -1087,7 +1087,7 @@ class TfishContentHandler
             if (isset($content_object->tags) && !empty($content_object->id)) {
                 $tags = array();
                 $criteria = new TfishCriteria($this->validator);
-                $criteria->add(new TfishCriteriaItem('content_id', (int) $content_object->id));
+                $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', (int) $content_object->id));
                 $statement = TfishDatabase::select('taglink', $criteria, array('tag_id'));
                 
                 if ($statement) {

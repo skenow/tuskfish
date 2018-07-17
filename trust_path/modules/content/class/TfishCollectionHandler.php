@@ -55,7 +55,7 @@ class TfishCollectionHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishCollection'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -89,7 +89,7 @@ class TfishCollectionHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishCollection'));
         $objects = parent::getObjects($criteria);
 
         return $objects;
@@ -108,7 +108,7 @@ class TfishCollectionHandler extends TfishContentHandler
         $select_box = '';
 
         $criteria = new TfishCriteria($this->validator);
-        $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishCollection'));
         $criteria->setOrder('title');
         $criteria->setOrderType('ASC');
         $options = $options + $this->getListOfObjectTitles($criteria);

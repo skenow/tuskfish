@@ -166,7 +166,7 @@ if (in_array($op, $options_whitelist)) {
                 
                 if ($tfish_validator->isInt($clean_id, 1)) {
                     $criteria = new TfishCriteria($tfish_validator);
-                    $criteria->add(new TfishCriteriaItem('id', $clean_id));
+                    $criteria->add(new TfishCriteriaItem($tfish_validator, 'id', $clean_id));
                     $statement = TfishDatabase::select('content', $criteria);
                     
                     if (!$statement) {
@@ -415,8 +415,8 @@ if (in_array($op, $options_whitelist)) {
                     // If object is a collection check if has child objects; if so display
                     // thumbnails and teasers / links.
                     if ($content->type === 'TfishCollection') {
-                        $criteria->add(new TfishCriteriaItem('parent', $content->id));
-                        $criteria->add(new TfishCriteriaItem('online', 1));
+                        $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $content->id));
+                        $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
                         
                         if ($clean_start) $criteria->setOffset($clean_start);
                         
@@ -430,7 +430,7 @@ if (in_array($op, $options_whitelist)) {
                         
                         $criteria->setLimit($tfish_preference->user_pagination);
                         $criteria->setTag(array($content->id));
-                        $criteria->add(new TfishCriteriaItem('online', 1));
+                        $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
                     }
 
                     // Prepare pagination control.
@@ -472,12 +472,12 @@ if (in_array($op, $options_whitelist)) {
             if ($clean_tag) $criteria->setTag(array($clean_tag));
             
             if ($tfish_validator->isInt($clean_online, 0, 1)) {
-                $criteria->add(new TfishCriteriaItem('online', $clean_online));
+                $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', $clean_online));
             }
             
             if ($clean_type) {
                 if (array_key_exists($clean_type, $content_handler->getTypes())) {
-                    $criteria->add(new TfishCriteriaItem('type', $clean_type));
+                    $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', $clean_type));
                 } else {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 }

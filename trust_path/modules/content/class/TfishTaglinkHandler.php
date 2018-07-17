@@ -59,9 +59,9 @@ class TfishTaglinkHandler
         $criteria = new TfishCriteria($this->validator);
         
         if ($obj->type === 'TfishTag') {
-            $criteria->add(new TfishCriteriaItem('tag_id', $clean_content_id));
+            $criteria->add(new TfishCriteriaItem($this->validator, 'tag_id', $clean_content_id));
         } else {
-            $criteria->add(new TfishCriteriaItem('content_id', $clean_content_id));
+            $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_content_id));
         }
         
         $result = TfishDatabase::deleteAll('taglink', $criteria);
@@ -175,7 +175,7 @@ class TfishTaglinkHandler
 
         // Delete any existing tags.
         $criteria = new TfishCriteria($this->validator);
-        $criteria->add(new TfishCriteriaItem('content_id', $clean_id));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_id));
         $result = TfishDatabase::deleteAll('taglink', $criteria);
         
         if (!$result) {

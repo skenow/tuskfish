@@ -60,7 +60,7 @@ class TfishBlockHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem('type', 'TfishBlock'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishBlock'));
         $objects = parent::getObjects($criteria);
 
         return $objects;
@@ -86,7 +86,7 @@ class TfishBlockHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem('type', 'TfishBlock'));
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishBlock'));
         $count = parent::getcount($criteria);
 
         return $count;
