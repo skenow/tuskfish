@@ -31,6 +31,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishSession
 {
     
+    /** Set within the start() method; ideally this should be injected but I want to keep the
+     * session class static for now. */
+    private static $validator;
+    
     /** No instantiation permitted. */
     final private function __construct()
     {
@@ -148,9 +152,9 @@ class TfishSession
             self::logout(TFISH_ADMIN_URL . "login.php");
         } else {
             // Validate the admin email (which functions as the username in Tuskfish CMS)
-            $clean_email = TfishDataValidator::trimString($email);
+            $clean_email = self::$validator->trimString($email);
             
-            if (TfishDataValidator::isEmail($clean_email)) {
+            if (self::$validator->isEmail($clean_email)) {
                 self::_login($clean_email, $password);
             } else {
                 // Issue warning - email should follow email format
@@ -223,7 +227,7 @@ class TfishSession
             exit;
         }
         
-        $dirty_otp = TfishDataValidator::trimString($dirty_otp);
+        $dirty_otp = self::$validator->trimString($dirty_otp);
         
         // Yubikey OTP should be 44 characters long.
         if (mb_strlen($dirty_otp, "UTF-8") != 44) {
@@ -232,7 +236,7 @@ class TfishSession
         }
         
         // Yubikey OTP should be alphabetic characters only.
-        if (!TfishDataValidator::isAlpha($dirty_otp)) {
+        if (!self::$validator->isAlpha($dirty_otp)) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
@@ -320,7 +324,7 @@ class TfishSession
         $clean_url = '';
         
         if (!empty($url_redirect)) {
-            $clean_url = TfishDataValidator::isUrl($url_redirect) ? $url_redirect : '';
+            $clean_url = self::$validator->isUrl($url_redirect) ? $url_redirect : '';
         }
         
         self::_logout($clean_url);
@@ -469,6 +473,8 @@ class TfishSession
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', '1');
         ini_set('session.use_only_cookies', '1');
+        
+        self::$validator = new TfishDataValidator1();
 
         // Session name. If the preference has been messed up it will assign one.
         $session_name = isset($tfish_preference->session_name)
@@ -526,7 +532,7 @@ class TfishSession
      */
     public static function validateToken(string $token)
     {
-        $clean_token = TfishDataValidator::trimString($token);
+        $clean_token = self::$validator->trimString($token);
 
         // Valid token.
         if (!empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {
