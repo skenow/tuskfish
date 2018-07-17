@@ -77,6 +77,8 @@ class TfishContentObject
 
     /** @var array Holds values of permitted preference object properties. */
     protected $validator;
+    protected $logger;
+    protected $file_handler;
     
     protected $id = '';
     protected $type = '';
@@ -115,6 +117,8 @@ class TfishContentObject
          * modifying it. See: https://phpdelusions.net/pdo/objects#parameters
          */
         $this->validator = new TfishDataValidator();
+        $this->logger = new TfishLogger($this->validator);
+        $this->file_handler = new TfishFileHandler($this->validator, $this->logger);
         
         /**
          * Set default values of permitted properties.
@@ -177,8 +181,7 @@ class TfishContentObject
         }
 
         // Check media file is a permitted mimetype.
-        global $tfish_file_handler;
-        $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+        $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
         $extension = mb_strtolower(pathinfo($media, PATHINFO_EXTENSION), 'UTF-8');
 
         if (empty($extension) 
@@ -195,8 +198,7 @@ class TfishContentObject
     {
         $format = (string) $this->validator->trimString($format);
 
-        global $tfish_file_handler;
-        $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+        $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
         if (!empty($format) && !in_array($format, $mimetype_whitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
         }
@@ -457,8 +459,7 @@ class TfishContentObject
                 break;
 
             case "format": // Output the file extension as user-friendly "mimetype".
-                global $tfish_file_handler;
-                $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $his->file_handler->getListOfPermittedUploadMimetypes();
                 $mimetype = array_search($this->$clean_property, $mimetype_whitelist);
 
                 if (!empty($mimetype)) {
@@ -850,8 +851,7 @@ class TfishContentObject
             $clean_media_filename = $this->validator->trimString($_FILES['media']['name']);
             
             if ($clean_media_filename) {
-                global $tfish_file_handler;
-                $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
                 $extension = mb_strtolower(pathinfo($clean_media_filename, PATHINFO_EXTENSION), 'UTF-8');
                 
                 $this->setMedia($clean_media_filename);
@@ -921,8 +921,7 @@ class TfishContentObject
                 $allowed_mimetypes = $this->getListOfAllowedVideoMimetypes();
                 break;
             default:
-                global $tfish_file_handler;
-                $allowed_mimetypes = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+                $allowed_mimetypes = $this->file_handler->getListOfPermittedUploadMimetypes();
         }
 
         if (in_array($this->format, $allowed_mimetypes)) {
