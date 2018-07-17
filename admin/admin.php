@@ -434,7 +434,7 @@ if (in_array($op, $options_whitelist)) {
                     }
 
                     // Prepare pagination control.
-                    $tfish_pagination = new TfishPaginationControl($tfish_preference);
+                    $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
                     
                     if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
                         $first_child_count = $content_handler->getCount($criteria);
@@ -505,7 +505,7 @@ if (in_array($op, $options_whitelist)) {
             $typelist = $content_handler->getTypes();
 
             // Pagination control.
-            $tfish_pagination = new TfishPaginationControl($tfish_preference);
+            $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
             $count = TfishDatabase::selectCount('content', $criteria);
             $extra_params = array();
             

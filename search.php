@@ -61,7 +61,7 @@ if ($clean_op && $clean_terms && $type) {
         $tfish_template->search_results = $search_results;
 
         // Prepare the pagination control, including parameters to be included in the link.
-        $tfish_pagination = new TfishPaginationControl($tfish_preference);
+        $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
         $query_parameters = array(
             'op' => 'search',
             'search_type' => $type,

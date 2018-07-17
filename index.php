@@ -136,7 +136,7 @@ if ($clean_id) {
         }
 
         // Prepare pagination control.
-        $tfish_pagination = new TfishPaginationControl($tfish_preference);
+        $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
         
         if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
             $first_child_count = $content_handler->getCount($criteria);
@@ -181,7 +181,7 @@ if ($clean_id) {
     $criteria->add(new TfishCriteriaItem('online', 1));
 
     // Prepare pagination control.
-    $tfish_pagination = new TfishPaginationControl($tfish_preference);
+    $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
     $count = $content_handler->getCount($criteria);
     $tfish_template->pagination = $tfish_pagination->getPaginationControl($count,
             $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);

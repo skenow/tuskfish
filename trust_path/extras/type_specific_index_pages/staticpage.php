@@ -126,7 +126,7 @@ if ($clean_id) {
         }
         
         // Prepare pagination control.
-        $tfish_pagination = new TfishPaginationControl($tfish_preference);
+        $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
         
         if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
             $content_handler = new TfishContentHandler($tfish_validator);

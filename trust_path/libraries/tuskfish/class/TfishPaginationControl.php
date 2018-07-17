@@ -33,16 +33,24 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishPaginationControl
 {
     
+    protected $validator;
+    
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     protected $preference;
     
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
-    function __construct(object $preference)
+    function __construct(object $tfish_validator, object $tfish_preference)
     {
-        if (is_object($preference)) {
-            $this->preference = $preference;
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
         } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_object($tfish_preference)) {
+            $this->preference = $tfish_preference;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }        
     }
     
@@ -69,12 +77,12 @@ class TfishPaginationControl
             int $tag = 0, array $extra_params = array())
     {
         // Filter parameters.
-        $clean_count = TfishDataValidator::isInt($count, 1) ? (int) $count : 0;
-        $clean_limit = TfishDataValidator::isInt($limit, 1) ? (int) $limit : 0;
-        $clean_start = TfishDataValidator::isInt($start, 0) ? (int) $start : 0;
-        $clean_url = TfishDataValidator::isAlnumUnderscore($url) ? TfishDataValidator::trimString($url)
+        $clean_count = $this->validator->isInt($count, 1) ? (int) $count : 0;
+        $clean_limit = $this->validator->isInt($limit, 1) ? (int) $limit : 0;
+        $clean_start = $this->validator->isInt($start, 0) ? (int) $start : 0;
+        $clean_url = $this->validator->isAlnumUnderscore($url) ? $this->validator->trimString($url)
                 . '.php' : TFISH_URL;
-        $clean_tag = TfishDataValidator::isInt($tag) ? (int) $tag : 0;
+        $clean_tag = $this->validator->isInt($tag) ? (int) $tag : 0;
 
         // $extra_params is a potential XSS attack vector.
         // The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
@@ -88,19 +96,19 @@ class TfishPaginationControl
         foreach ($extra_params as $key => $value) {
             
             // Check for directory traversals and null byte injection.
-            if (TfishDataValidator::hasTraversalorNullByte($key)
-                    || TfishDataValidator::hasTraversalorNullByte((string) $value)) {
+            if ($this->validator->hasTraversalorNullByte($key)
+                    || $this->validator->hasTraversalorNullByte((string) $value)) {
                 trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                 return false;
             }
         
-            $clean_extra_params[] = TfishDataValidator::encodeEscapeUrl($key) . '='
-                    . TfishDataValidator::encodeEscapeUrl((string) $value);
+            $clean_extra_params[] = $this->validator->encodeEscapeUrl($key) . '='
+                    . $this->validator->encodeEscapeUrl((string) $value);
             unset($key, $value);
         }
         
         $clean_extra_params = !empty($clean_extra_params)
-                ? TfishDataValidator::escapeForXss(implode("&", $clean_extra_params)) : '';
+                ? $this->validator->escapeForXss(implode("&", $clean_extra_params)) : '';
 
         // If the count is zero there is no need for a pagination control.
         if ($clean_count === 0) {
