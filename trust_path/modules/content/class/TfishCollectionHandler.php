@@ -29,9 +29,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishCollectionHandler extends TfishContentHandler
 {
     
-    public function __construct(object $tfish_validator)
+    public function __construct(object $tfish_validator, object $tfish_file_handler)
     {
-        parent::__construct($tfish_validator);
+        parent::__construct($tfish_validator, $tfish_file_handler);
     }
 
     /**

@@ -37,11 +37,18 @@ class TfishContentHandler
     use TfishContentTypes;
     
     protected $validator;
+    protected $file_handler;
     
-    public function __construct(object $tfish_validator)
+    public function __construct(object $tfish_validator, object $tfish_file_handler)
     {
         if (is_object($tfish_validator)) {
             $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_object($tfish_file_handler)) {
+            $this->file_handler = $tfish_file_handler;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
@@ -141,8 +148,7 @@ class TfishContentHandler
     private function _deleteImage(string $filename)
     {
         if ($filename) {
-            global $tfish_file_handler;
-            return $tfish_file_handler->deleteFile('image/' . $filename);
+            return $this->file_handler->deleteFile('image/' . $filename);
         }
     }
 
@@ -155,8 +161,7 @@ class TfishContentHandler
     private function _deleteMedia(string $filename)
     {
         if ($filename) {
-            global $tfish_file_handler;
-            return $tfish_file_handler->deleteFile('media/' . $filename);
+            return $this->file_handler->deleteFile('media/' . $filename);
         }
     }
     
@@ -173,8 +178,7 @@ class TfishContentHandler
         
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
             $filename = $this->validator->trimString($_FILES['image']['name']);
-            global $tfish_file_handler;
-            $clean_filename = $tfish_file_handler->uploadFile($filename, 'image');
+            $clean_filename = $this->file_handler->uploadFile($filename, 'image');
             
             if ($clean_filename) {
                 $key_values['image'] = $clean_filename;
@@ -183,13 +187,11 @@ class TfishContentHandler
 
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
             $filename = $this->validator->trimString($_FILES['media']['name']);
-            global $tfish_file_handler;
-            $clean_filename = $tfish_file_handler->uploadFile($filename, 'media');
+            $clean_filename = $this->file_handler->uploadFile($filename, 'media');
             
             if ($clean_filename) {
                 $key_values['media'] = $clean_filename;
-                global $tfish_file_handler;
-                $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
                 $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
                 $key_values['format'] = $mimetype_whitelist[$extension];
                 $key_values['file_size'] = $_FILES['media']['size'];
@@ -1173,8 +1175,7 @@ class TfishContentHandler
 
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
                     $filename = $this->validator->trimString($_FILES['image']['name']);
-                    global $tfish_file_handler;
-                    $clean_filename = $tfish_file_handler->uploadFile($filename, 'image');
+                    $clean_filename = $this->file_handler->uploadFile($filename, 'image');
                     
                     if ($clean_filename) {
                         $key_values['image'] = $clean_filename;
@@ -1234,14 +1235,12 @@ class TfishContentHandler
                 $clean_filename = '';
                 
                 // Get a whitelist of permitted mimetypes.
-                global $tfish_file_handler;
-                $mimetype_whitelist = $tfish_file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
                     $filename = $this->validator->trimString($_FILES['media']['name']);
-                    global $tfish_file_handler;
-                    $clean_filename = $tfish_file_handler->uploadFile($filename, 'media'); 
+                    $clean_filename = $this->file_handler->uploadFile($filename, 'media'); 
                 } else {
                     $clean_filename = $existing_media;
                 }

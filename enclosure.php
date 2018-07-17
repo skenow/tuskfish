@@ -28,7 +28,7 @@ require_once TFISH_PATH . "tfish_header.php";
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($clean_id) {
-    $content_handler = new TfishContentHandler($tfish_validator);
+    $content_handler = new TfishContentHandler($tfish_validator, $tfish_file_handler);
     $content_handler->updateCounter($clean_id);
     $content_handler->streamDownloadToBrowser($clean_id);
 }

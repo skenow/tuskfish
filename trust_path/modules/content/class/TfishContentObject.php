@@ -459,7 +459,7 @@ class TfishContentObject
                 break;
 
             case "format": // Output the file extension as user-friendly "mimetype".
-                $mimetype_whitelist = $his->file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
                 $mimetype = array_search($this->$clean_property, $mimetype_whitelist);
 
                 if (!empty($mimetype)) {
@@ -478,7 +478,7 @@ class TfishContentObject
                 break;
 
             case "rights":
-                $content_handler = new TfishContentHandler($this->validator);
+                $content_handler = new TfishContentHandler($this->validator, $this->file_handler);
                 $rights = $content_handler->getListOfRights();
 
                 return $rights[$this->$clean_property];
