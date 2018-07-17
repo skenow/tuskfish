@@ -37,7 +37,7 @@ error_reporting(E_ALL);
 $tfish_validator = new TfishDataValidator1();
 
 // Initialise data logger.
-$tfish_logger = new TfishLogger();
+$tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
 // Initialise file handler.

@@ -31,6 +31,17 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishLogger
 {
+    
+    protected $validator;
+    
+    public function __construct(object $tfish_validator)
+    {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+    }
 
     /**
      * Tuskfish custom error logger class.
@@ -52,10 +63,10 @@ class TfishLogger
     public function logError(int $errno = null, string $error = '',
             string $file = '', int $line = null)
     {
-        $errno = isset($errno) ? TfishDataValidator::trimString($errno) : TFISH_ERROR_UNSPECIFIED;
-        $error = !empty($error) ? TfishDataValidator::trimString($error) : TFISH_ERROR_UNSPECIFIED;
-        $file = !empty($file) ? TfishDataValidator::trimString($file) : TFISH_ERROR_UNSPECIFIED;
-        $line = isset($line) ? TfishDataValidator::trimString($line) : TFISH_ERROR_UNSPECIFIED;
+        $errno = isset($errno) ? $this->validator->trimString($errno) : TFISH_ERROR_UNSPECIFIED;
+        $error = !empty($error) ? $this->validator->trimString($error) : TFISH_ERROR_UNSPECIFIED;
+        $file = !empty($file) ? $this->validator->trimString($file) : TFISH_ERROR_UNSPECIFIED;
+        $line = isset($line) ? $this->validator->trimString($line) : TFISH_ERROR_UNSPECIFIED;
         
         $message = date("Y-m-d, H:i:s", time()) . ": [ERROR][$errno][$error]";
         $message .= "[$file:$line]\r\n";

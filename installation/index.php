@@ -46,7 +46,7 @@ $tfish_content = array('output' => '');
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL & ~E_NOTICE);
-$tfish_logger = new TfishLogger();
+$tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
 // Initialise data validator.
