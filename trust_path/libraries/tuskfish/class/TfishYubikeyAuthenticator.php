@@ -67,7 +67,7 @@ class TfishYubikeyAuthenticator
     private $_curlTimeout;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct($tfish_validator)
+    public function __construct(object $tfish_validator)
     {
         if (is_object($tfish_validator)) {
             $this->validator = $tfish_validator;
@@ -199,7 +199,7 @@ class TfishYubikeyAuthenticator
      */
     public function verify(string $otp)
     {
-        $otp = TfishDataValidator::trimString($otp);
+        $otp = $this->validator->trimString($otp);
         
         unset($this->_response);
         unset($this->_curlResult);
@@ -274,7 +274,7 @@ class TfishYubikeyAuthenticator
      */
     protected function createSignedRequest(string $urlParams)
     {
-        $urlParams = TfishDataValidator::trimString($urlParams);
+        $urlParams = $this->validator->trimString($urlParams);
         
         if ($this->_signatureKey) {
             $hash = urlencode(base64_encode(hash_hmac("sha1", $urlParams, $this->_signatureKey,
@@ -293,9 +293,9 @@ class TfishYubikeyAuthenticator
      */
     protected function curlRequest(string $url)
     {
-        $url = TfishDataValidator::trimString($url);
+        $url = $this->validator->trimString($url);
         
-        if (!TfishDataValidator::isUrl($url)) {
+        if (!$this->validator->isUrl($url)) {
             trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
         }
         
@@ -326,7 +326,7 @@ class TfishYubikeyAuthenticator
      */
     protected function otpIsProperLength(string $otp)
     {
-        $otp = TfishDataValidator::trimString($otp);
+        $otp = $this->validator->trimString($otp);
         
         if (mb_strlen($otp, "UTF-8") === 44) {
             return true;
@@ -343,7 +343,7 @@ class TfishYubikeyAuthenticator
      */
     protected function otpIsModhex(string $otp)
     {
-        $otp = TfishDataValidator::trimString($otp);
+        $otp = $this->validator->trimString($otp);
         $modhexChars = array("c", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n", "r", "t",
             "u", "v");
 
@@ -363,7 +363,7 @@ class TfishYubikeyAuthenticator
      */
     protected function resultTimestampIsGood(string $timestamp)
     {
-    	$timestamp = TfishDataValidator::trimString($timestamp);
+    	$timestamp = $this->validator->trimString($timestamp);
     
         // Turn times into 'seconds since Unix Epoch' for easy comparison
         $now = date("U");
@@ -390,8 +390,8 @@ class TfishYubikeyAuthenticator
      */
     protected function resultSignatureIsGood(string $signedMessage, string $signature)
     {
-        $signedMessage = TfishDataValidator::trimString($signedMessage);
-        $signature = TfishDataValidator::trimString($signature);
+        $signedMessage = $this->validator->trimString($signedMessage);
+        $signature = $this->validator->trimString($signature);
         
         if (!$this->_signatureKey)
             return true;

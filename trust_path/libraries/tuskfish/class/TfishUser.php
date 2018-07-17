@@ -38,6 +38,7 @@ class TfishUser
     
     use TfishMagicMethods;
 
+    protected $validator;
     protected $id;
     protected $admin_email;
     protected $password_hash;
@@ -47,11 +48,20 @@ class TfishUser
     protected $yubikey_id2;
     protected $login_errors;
     
+    public function __construct(object $tfish_validator)
+    {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+    }
+    
     public function setId(int $id)
     {
         $clean_id = (int) $id;
         
-        if (TfishDataValidator::isInt($clean_id, 1)) {    
+        if ($this->validator->isInt($clean_id, 1)) {    
             $this->id = $clean_id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -60,9 +70,9 @@ class TfishUser
     
     public function setAdminEmail(string $email)
     {
-        $clean_email = TfishDataValidator::trimString($email);
+        $clean_email = $this->validator->trimString($email);
 
-        if (TfishDataValidator::isEmail($clean_email)) {
+        if ($this->validator->isEmail($clean_email)) {
             $this->admin_email = $clean_email;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -71,13 +81,13 @@ class TfishUser
     
     public function setPasswordHash(string $hash)
     {
-        $clean_hash = TfishDataValidator::trimString($hash);
+        $clean_hash = $this->validator->trimString($hash);
         $this->password_hash = $clean_hash;
     }
     
     public function setUserSalt(string $salt)
     {
-        $clean_salt = TfishDataValidator::trimString($salt);
+        $clean_salt = $this->validator->trimString($salt);
         $this->user_salt = $clean_salt;
     }
     
@@ -85,7 +95,7 @@ class TfishUser
     {
         $clean_group = (int) $group;
         
-        if (TfishDataValidator::isInt($clean_group, 1)) {
+        if ($this->validator->isInt($clean_group, 1)) {
             $this->user_group = $clean_group;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -94,13 +104,13 @@ class TfishUser
     
     public function setYubikeyId(string $id)
     {
-        $clean_id = TfishDataValidator::trimString($id);
+        $clean_id = $this->validator->trimString($id);
         $this->yubikey_id = $clean_id;
     }
     
     public function setYubikeyId2(string $id)
     {
-        $clean_id = TfishDataValidator::trimString($id);
+        $clean_id = $this->validator->trimString($id);
         $this->yubikey_id2 = $clean_id;
     }
     
@@ -108,7 +118,7 @@ class TfishUser
     {
         $clean_number_of_errors = (int) $number_of_errors;
         
-        if (TfishDataValidator::isInt($clean_number_of_errors, 0)) {
+        if ($this->validator->isInt($clean_number_of_errors, 0)) {
             $this->login_errors = $clean_number_of_errors;
         }  else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -126,7 +136,7 @@ class TfishUser
      */
     public function __get(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($clean_property) && $clean_property !== 'password_hash' && $clean_property !== 'user_salt') {
             return $this->$clean_property;
