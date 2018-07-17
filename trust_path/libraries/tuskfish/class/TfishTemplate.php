@@ -68,10 +68,10 @@ class TfishTemplate
         // Make the data validator available within scope of the templates.
         $tfish_validator = $this->validator;
         
-        $template = TfishDataValidator::trimString($template);
+        $template = $this->validator->trimString($template);
         
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($template)) {
+        if ($this->validator->hasTraversalorNullByte($template)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
@@ -101,12 +101,12 @@ class TfishTemplate
     public function setTheme(string $theme)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($theme)) {
+        if ($this->validator->hasTraversalorNullByte($theme)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
-        if (TfishDataValidator::isAlnumUnderscore($theme)) {
-            $clean_theme = TfishDataValidator::trimString($theme);
+        if ($this->validator->isAlnumUnderscore($theme)) {
+            $clean_theme = $this->validator->trimString($theme);
             $this->theme = $clean_theme;
         }
     }
