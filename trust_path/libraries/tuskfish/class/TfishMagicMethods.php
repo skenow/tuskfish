@@ -3,7 +3,8 @@
 /**
  * TfishMagicMethods trait file.
  * 
- * Provides common magic methods for non-write access to protected properties.
+ * Provides common magic methods for non-write access to protected properties. Only to be used in
+ * classes that have a TfishDataValidator instance as a property.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -15,7 +16,8 @@
 /**
  * MagicMethods trait.
  * 
- * Provides common magic methods for non-write access to protected properties.
+ * Provides common magic methods for non-write access to protected properties. Only to be used in
+ * classes that have a TfishDataValidator instance as a property.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -39,7 +41,7 @@ trait TfishMagicMethods
      */
     public function __get(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             return $this->$clean_property;
@@ -59,7 +61,7 @@ trait TfishMagicMethods
      */
     public function __isset(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             return true;
@@ -78,7 +80,7 @@ trait TfishMagicMethods
      */
     public function __set(string $property, $value)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
@@ -100,7 +102,7 @@ trait TfishMagicMethods
      */
     public function __unset(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             unset($this->$clean_property);
