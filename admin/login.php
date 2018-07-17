@@ -71,20 +71,20 @@ $allowed_options = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NEVER sanitised and therefore dangerous.
 if (!empty($_POST['op'])) {
-    $op = TfishDataValidator::trimString($_POST['op']);
-    $clean_op = TfishDataValidator::isAlpha($op) ? $op : '';
+    $op = $tfish_validator->trimString($_POST['op']);
+    $clean_op = $tfish_validator->isAlpha($op) ? $op : '';
 } elseif (!empty($_GET['op'])) {
-    $op = TfishDataValidator::trimString($_GET['op']);
-    $clean_op = TfishDataValidator::isAlpha($op) ? $op : '';
+    $op = $tfish_validator->trimString($_GET['op']);
+    $clean_op = $tfish_validator->isAlpha($op) ? $op : '';
 }
 
 if (isset($_POST['email'])) {
-    $email = TfishDataValidator::trimString($_POST['email']);
-    $clean_email = TfishDataValidator::isEmail($email) ? $email : '';
+    $email = $tfish_validator->trimString($_POST['email']);
+    $clean_email = $tfish_validator->isEmail($email) ? $email : '';
 }
 
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : '';
-$clean_token = isset($_POST['token']) ? TfishDataValidator::trimString($_POST['token']) : '';
+$clean_token = isset($_POST['token']) ? $tfish_validator->trimString($_POST['token']) : '';
 
 if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
     switch ($clean_op) {

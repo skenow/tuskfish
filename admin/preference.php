@@ -22,10 +22,10 @@ require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
 $tfish_template->setTheme('admin');
 
 // Collect CSRF token if available.
-$clean_token = isset($_POST['token']) ? TfishDataValidator::trimString($_POST['token']) : '';
+$clean_token = isset($_POST['token']) ? $tfish_validator->trimString($_POST['token']) : '';
 
 // Set view option
-$op = isset($_REQUEST['op']) ? TfishDataValidator::trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
 if (in_array($op, array('edit', 'update', false))) {
     switch ($op) {
 
