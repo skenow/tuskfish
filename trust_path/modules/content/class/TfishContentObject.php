@@ -114,7 +114,7 @@ class TfishContentObject
          * PDO, as may not be able to pass in constructor arguments that way. At least, not without
          * modifying it. See: https://phpdelusions.net/pdo/objects#parameters
          */
-        $this->validator = new TfishDataValidator1();
+        $this->validator = new TfishDataValidator();
         
         /**
          * Set default values of permitted properties.

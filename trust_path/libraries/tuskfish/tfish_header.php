@@ -34,7 +34,7 @@ ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
 // Initialise data validator.
-$tfish_validator = new TfishDataValidator1();
+$tfish_validator = new TfishDataValidator();
 
 // Initialise data logger.
 $tfish_logger = new TfishLogger($tfish_validator);

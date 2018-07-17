@@ -105,7 +105,7 @@ class TfishDatabase
     /** @internal */
     private static function _connect()
     {
-        self::$validator = new TfishDataValidator1();
+        self::$validator = new TfishDataValidator();
                 
         // SQLite just expects a file name, which was defined as a constant during create()
         self::$_db = new PDO('sqlite:' . TFISH_DATABASE);

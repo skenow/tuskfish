@@ -37,7 +37,7 @@ if (is_readable("../mainfile.php")) {
 }
 
 // Initialise data validator.
-$tfish_validator = new TfishDataValidator1();
+$tfish_validator = new TfishDataValidator();
 
 // Initialise default content variable.
 $tfish_content = array('output' => '');
@@ -50,7 +50,7 @@ $tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
 // Initialise data validator.
-$tfish_validator = new TfishDataValidator1();
+$tfish_validator = new TfishDataValidator();
 
 // Set theme.
 $tfish_template = new TfishTemplate($tfish_validator);

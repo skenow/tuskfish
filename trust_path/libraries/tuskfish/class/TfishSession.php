@@ -474,7 +474,7 @@ class TfishSession
         ini_set('session.use_cookies', '1');
         ini_set('session.use_only_cookies', '1');
         
-        self::$validator = new TfishDataValidator1();
+        self::$validator = new TfishDataValidator();
 
         // Session name. If the preference has been messed up it will assign one.
         $session_name = isset($tfish_preference->session_name)
