@@ -57,7 +57,7 @@ $tfish_preference = new TfishPreference($tfish_validator, $preference_handler->r
 TfishSession::start($tfish_preference);
 
 // Initialise the metadata object and set default page-level metadata values (overwrite as required).
-$tfish_metadata = new TfishMetadata($tfish_preference);
+$tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);
 
 // Initialise the template object.
 $tfish_template = new TfishTemplate($tfish_validator);

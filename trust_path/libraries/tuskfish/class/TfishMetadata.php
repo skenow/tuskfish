@@ -43,10 +43,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishMetadata
 {
     use TfishMagicMethods;
-    use TfishString; // No need to inject TfishDataValidator as it only uses trimString().
+    
+    protected $validator;
     
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
-    private $preference;
+    protected $preference;
     
     protected $title = '';
     protected $description = '';
@@ -60,8 +61,14 @@ class TfishMetadata
      * 
      * @param TfishPreference $preference Instance of TfishPreference, holding site preferences.
      */
-    function __construct(object $preference)
+    function __construct(object $tfish_validator, object $preference)
     {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $this->setTitle($preference->site_name);
         $this->setDescription($preference->site_description);
         $this->setAuthor($preference->site_author);
@@ -82,7 +89,7 @@ class TfishMetadata
      */
     public function __get(string $property)
     {
-        $clean_property = $this->trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             return htmlspecialchars((string) $this->$clean_property, ENT_QUOTES, "UTF-8",
@@ -139,8 +146,8 @@ class TfishMetadata
     
     private function setProperty(string $property, string $value)
     {
-        $clean_property = $this->trimString($property);
-        $clean_value = $this->trimString($value);
+        $clean_property = $this->validator->trimString($property);
+        $clean_value = $this->validator->trimString($value);
         $this->$clean_property = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
     }
        

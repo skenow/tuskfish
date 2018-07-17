@@ -399,7 +399,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 /**
  * Manually instantiate the metadata object.
  */
-$tfish_metadata = new TfishMetadata($tfish_preference);
+$tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);
 $tfish_metadata->setTitle(TFISH_INSTALLATION_TUSKFISH);
 $tfish_metadata->setDescription('');
 $tfish_metadata->setRobots('noindex,nofollow');
