@@ -31,15 +31,22 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishCache
 {
     /** @var object $loger Instance of TfishLogger class, used for logging errors. */
+    protected $validator;
     protected $logger;
     
     /** @param object $preference Instance of TfishLogger class, used for logging errors. */
-    function __construct(object $tfish_logger)
+    function __construct(object $tfish_validator, object $tfish_logger)
     {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if (is_object($tfish_logger)) {
             $this->logger = $tfish_logger;
         } else {
-            trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }        
     }
 
