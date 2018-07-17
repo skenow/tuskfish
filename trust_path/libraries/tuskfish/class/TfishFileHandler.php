@@ -31,6 +31,17 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishFileHandler
 {
+    
+    protected $validator;
+    
+    public function __construct(object $tfish_validator)
+    {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+    }
 
     /**
      * Append a string to a file.
@@ -44,14 +55,14 @@ class TfishFileHandler
     public function appendToFile(string $filepath, string $contents)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
+        if ($this->validator->hasTraversalorNullByte($filepath)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_filepath = TfishDataValidator::trimString($filepath);
+        $clean_filepath = $this->validator->trimString($filepath);
         // NOTE: Calling trim() removes linefeed from the contents.
-        $clean_content = PHP_EOL . TfishDataValidator::trimString($contents);
+        $clean_content = PHP_EOL . $this->validator->trimString($contents);
         
         if ($clean_filepath && $clean_content) {
             $result = $this->_appendToFile($clean_filepath, $clean_content);
@@ -85,12 +96,12 @@ class TfishFileHandler
     public function clearDirectory(string $filepath)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
+        if ($this->validator->hasTraversalorNullByte($filepath)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_filepath = TfishDataValidator::trimString($filepath);
+        $clean_filepath = $this->validator->trimString($filepath);
         
         if (!empty($clean_filepath)) {
             $result = $this->_clearDirectory($clean_filepath);
@@ -182,12 +193,12 @@ class TfishFileHandler
         }
         
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
+        if ($this->validator->hasTraversalorNullByte($filepath)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_filepath = TfishDataValidator::trimString($filepath);
+        $clean_filepath = $this->validator->trimString($filepath);
         
         if ($clean_filepath) {
             $result = $this->_deleteDirectory($clean_filepath);
@@ -248,12 +259,12 @@ class TfishFileHandler
     public function deleteFile(string $filepath)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($filepath)) {
+        if ($this->validator->hasTraversalorNullByte($filepath)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             return false;
         }
         
-        $clean_filepath = TfishDataValidator::trimString($filepath);
+        $clean_filepath = $this->validator->trimString($filepath);
         
         if (!empty($clean_filepath)) {
             $result = $this->_deleteFile($clean_filepath);
@@ -342,17 +353,17 @@ class TfishFileHandler
     public function uploadFile(string $filename, string $fieldname)
     {
         // Check for directory traversals and null byte injection.
-        if (TfishDataValidator::hasTraversalorNullByte($filename)) {
+        if ($this->validator->hasTraversalorNullByte($filename)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
             exit;
         }
         
-        $filename = TfishDataValidator::trimString($filename);
+        $filename = $this->validator->trimString($filename);
         $clean_filename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
         
         // Check that target directory is whitelisted (locked to uploads/image or uploads/media).
         if ($fieldname === 'image' || $fieldname === 'media') {
-            $clean_fieldname = TfishDataValidator::trimString($fieldname);
+            $clean_fieldname = $this->validator->trimString($fieldname);
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE);
             exit;
@@ -361,7 +372,7 @@ class TfishFileHandler
         $mimetype_list = $this->getListOfPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
         $clean_extension = array_key_exists($extension, $mimetype_list)
-                ? TfishDataValidator::trimString($extension) : false;
+                ? $this->validator->trimString($extension) : false;
         
         if ($clean_filename && $clean_fieldname && $clean_extension) {
             return $this->_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
