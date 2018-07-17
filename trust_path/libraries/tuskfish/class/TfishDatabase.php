@@ -42,6 +42,8 @@ class TfishDatabase
     
     /** @var object $validator Instance of the TfishDataValidator class or equivalent */
     private static $validator;
+    private static $file_handler;
+    private static $logger;
 
     /** Instantiation not permitted. */
     final private function __construct()
@@ -106,6 +108,8 @@ class TfishDatabase
     private static function _connect()
     {
         self::$validator = new TfishDataValidator();
+        self::$file_handler = new TfishFileHandler();
+        self::$logger = new TfishLogger();
                 
         // SQLite just expects a file name, which was defined as a constant during create()
         self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
@@ -155,8 +159,7 @@ class TfishDatabase
             self::$_db = new PDO('sqlite:' . $db_path);
             $db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "'
                     . $db_path . '");';
-            global $tfish_file_handler;
-            $result = $tfish_file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $db_constant);
+            $result = self::$file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $db_constant);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
@@ -165,8 +168,7 @@ class TfishDatabase
             
             return $db_path;
         } catch (PDOException $e) {
-            global $tfish_logger;
-            $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+            self::$logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
     }
@@ -431,8 +433,7 @@ class TfishDatabase
             self::$_db->commit();
         } catch (PDOException $e) {
             self::$_db->rollBack();
-            global $tfish_logger;
-            $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
+            self::$logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
         }
         
