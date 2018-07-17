@@ -45,6 +45,7 @@ class TfishCriteria
     
     use TfishMagicMethods;
 
+    protected $validator;
     protected $item = array();
     protected $condition = array();
     protected $group_by = '';
@@ -55,6 +56,15 @@ class TfishCriteria
     protected $secondary_order = '';
     protected $secondary_order_type = "DESC";
     protected $tag = array();
+    
+    public function __construct(object $tfish_validator)
+    {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+    }
     
     /**
      * Add conditions (TfishCriteriaItem) to a query.
@@ -70,7 +80,7 @@ class TfishCriteria
     
     private function setCondition(string $condition)
     {
-        $clean_condition = TfishDataValidator::trimString($condition);
+        $clean_condition = $this->validator->trimString($condition);
         
         if ($clean_condition === "AND" || $clean_condition === "OR") {
             $this->condition[] = $clean_condition;
@@ -81,9 +91,9 @@ class TfishCriteria
     
     public function setGroupBy(string $group_by)
     {
-        $clean_group_by = TfishDataValidator::trimString($group_by);
+        $clean_group_by = $this->validator->trimString($group_by);
 
-        if (TfishDataValidator::isAlnumUnderscore($clean_group_by)) {
+        if ($this->validator->isAlnumUnderscore($clean_group_by)) {
             $this->group_by = $clean_group_by;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -101,7 +111,7 @@ class TfishCriteria
     
     public function setLimit(int $limit)
     {
-        if (TfishDataValidator::isInt($limit, 0)) {
+        if ($this->validator->isInt($limit, 0)) {
             $this->limit = (int) $limit;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -110,7 +120,7 @@ class TfishCriteria
     
     public function setOffset(int $offset)
     {
-        if (TfishDataValidator::isInt($offset, 0)) {
+        if ($this->validator->isInt($offset, 0)) {
             $this->offset = (int) $offset;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -119,9 +129,9 @@ class TfishCriteria
     
     public function setOrder(string $order)
     {
-        $clean_order = TfishDataValidator::trimString($order);
+        $clean_order = $this->validator->trimString($order);
 
-        if (TfishDataValidator::isAlnumUnderscore($clean_order)) {
+        if ($this->validator->isAlnumUnderscore($clean_order)) {
             $this->order = $clean_order;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -130,7 +140,7 @@ class TfishCriteria
     
     public function setOrderType(string $order_type)
     {
-        $clean_order_type = TfishDataValidator::trimString($order_type);
+        $clean_order_type = $this->validator->trimString($order_type);
         
         if ($clean_order_type === "ASC") {
             $this->order_type = "ASC";
@@ -141,9 +151,9 @@ class TfishCriteria
     
     public function setSecondaryOrder(string $secondary_order)
     {
-        $clean_secondary_order = TfishDataValidator::trimString($secondary_order);
+        $clean_secondary_order = $this->validator->trimString($secondary_order);
 
-        if (TfishDataValidator::isAlnumUnderscore($clean_secondary_order)) {
+        if ($this->validator->isAlnumUnderscore($clean_secondary_order)) {
             $this->secondary_order = $clean_secondary_order;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -152,7 +162,7 @@ class TfishCriteria
     
     public function setSecondaryOrderType(string $secondary_order_type)
     {
-        $clean_secondary_order_type = TfishDataValidator::trimString($secondary_order_type);
+        $clean_secondary_order_type = $this->validator->trimString($secondary_order_type);
         
         if ($clean_secondary_order_type === "ASC") {
             $this->secondary_order_type = "ASC";
@@ -163,11 +173,11 @@ class TfishCriteria
     
     public function setTag(array $tags)
     {
-        if (TfishDataValidator::isArray($tags)) {
+        if ($this->validator->isArray($tags)) {
             $clean_tags = array();
 
             foreach ($tags as $tag) {
-                if (TfishDataValidator::isInt($tag, 1)) {
+                if ($this->validator->isInt($tag, 1)) {
                     $clean_tags[] = (int) $tag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);

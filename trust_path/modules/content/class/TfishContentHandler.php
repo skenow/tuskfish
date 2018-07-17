@@ -88,7 +88,7 @@ class TfishContentHandler
 
         // If object is a collection delete related parent references in child objects.
         if ($obj->type === 'TfishCollection') {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
             $criteria->add(new TfishCriteriaItem('parent', $clean_id));
             $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
             
@@ -121,7 +121,7 @@ class TfishContentHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->validator);
         $criteria->add(new TfishCriteriaItem('parent', $clean_id));
         $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
 
@@ -273,7 +273,7 @@ class TfishContentHandler
         $clean_type = (isset($type) && $this->isSanctionedType($type))
                 ? $this->validator->trimString($type) : null;
 
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->validator);
 
         // Filter tags by type.
         if (isset($clean_type)) {
@@ -306,7 +306,7 @@ class TfishContentHandler
     public function getCount(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
         
         if ($criteria && !empty($criteria->limit)) {
@@ -455,7 +455,7 @@ class TfishContentHandler
         $columns = array('id', 'title');
 
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
         
         // Set default sorting order by submission time descending.
@@ -491,7 +491,7 @@ class TfishContentHandler
         $row = $object = '';
         
         if ($this->validator->isInt($clean_id, 1)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
             $criteria->add(new TfishCriteriaItem('id', $clean_id));
             $statement = TfishDatabase::select('content', $criteria);
             
@@ -519,7 +519,7 @@ class TfishContentHandler
         $objects = array();
         
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
 
         // Set default sorting order by submission time descending.        
@@ -549,7 +549,7 @@ class TfishContentHandler
             $taglinks = array();
             $object_ids = array_keys($objects);
 
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
             
             foreach ($object_ids as $id) {
                 $criteria->add(new TfishCriteriaItem('content_id', (int) $id), "OR");
@@ -648,7 +648,7 @@ class TfishContentHandler
         $statement = false;
         $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->validator);
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
         
         if ($clean_online_only) {
@@ -682,7 +682,7 @@ class TfishContentHandler
     public function getTags()
     {
         $tags = array();
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->validator);
         $criteria->add(new TfishCriteriaItem('type', 'TfishTag'));
         $tags = $this->getObjects($criteria);
         
@@ -990,7 +990,7 @@ class TfishContentHandler
     /** @internal */
     private function _streamDownloadToBrowser(int $id, string $filename)
     {
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->validator);
         $criteria->add(new TfishCriteriaItem('id', $id));
         $statement = TfishDatabase::select('content', $criteria);
         
@@ -1086,7 +1086,7 @@ class TfishContentHandler
             // Populate the tag property.
             if (isset($content_object->tags) && !empty($content_object->id)) {
                 $tags = array();
-                $criteria = new TfishCriteria();
+                $criteria = new TfishCriteria($this->validator);
                 $criteria->add(new TfishCriteriaItem('content_id', (int) $content_object->id));
                 $statement = TfishDatabase::select('taglink', $criteria, array('tag_id'));
                 

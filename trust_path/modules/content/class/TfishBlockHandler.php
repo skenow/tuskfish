@@ -49,7 +49,7 @@ class TfishBlockHandler extends TfishContentHandler
     public function getObjects(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
 
         // Unset any pre-existing object type criteria.
@@ -75,7 +75,7 @@ class TfishBlockHandler extends TfishContentHandler
     public function getCount(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
 
         // Unset any pre-existing object type criteria.

@@ -44,7 +44,7 @@ class TfishCollectionHandler extends TfishContentHandler
     public function getCount(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
 
         // Unset any pre-existing object type criteria.
@@ -78,7 +78,7 @@ class TfishCollectionHandler extends TfishContentHandler
     public function getObjects(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria();
+            $criteria = new TfishCriteria($this->validator);
         }
 
         // Unset any pre-existing object type criteria.
@@ -107,7 +107,7 @@ class TfishCollectionHandler extends TfishContentHandler
         $options = array(0 => TFISH_SELECT_PARENT);
         $select_box = '';
 
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($this->validator);
         $criteria->add(new TfishCriteriaItem('type', 'TfishCollection'));
         $criteria->setOrder('title');
         $criteria->setOrderType('ASC');

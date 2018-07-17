@@ -109,7 +109,7 @@ if ($clean_id) {
         }
 
         // Initialise criteria object.
-        $criteria = new TfishCriteria();
+        $criteria = new TfishCriteria($tfish_validator);
         $criteria->setOrder('date');
         $criteria->setOrderType('DESC');
         $criteria->setSecondaryOrder('submission_time');
@@ -167,7 +167,7 @@ if ($clean_id) {
     $tfish_template->page_title = TFISH_LATEST_POSTS;
 
     // Exclude static pages, tags and blocks from the index page.
-    $criteria = new TfishCriteria();
+    $criteria = new TfishCriteria($tfish_validator);
     
     if ($clean_start) $criteria->setOffset($clean_start);
     

@@ -69,7 +69,7 @@ if ($clean_id) {
     $tfish_cache->getCachedPage($tfish_preference, $basename, $cache_parameters);
     
     // Set criteria for selecting content objects.
-    $criteria = new TfishCriteria();
+    $criteria = new TfishCriteria($tfish_validator);
     
     if ($clean_start)
         $criteria->setOffset($clean_start);

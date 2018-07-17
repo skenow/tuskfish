@@ -165,7 +165,7 @@ if (in_array($op, $options_whitelist)) {
                 $clean_id = (int) $_REQUEST['id'];
                 
                 if ($tfish_validator->isInt($clean_id, 1)) {
-                    $criteria = new TfishCriteria();
+                    $criteria = new TfishCriteria($tfish_validator);
                     $criteria->add(new TfishCriteriaItem('id', $clean_id));
                     $statement = TfishDatabase::select('content', $criteria);
                     
@@ -406,7 +406,7 @@ if (in_array($op, $options_whitelist)) {
                     }
 
                     // Initialise criteria object.
-                    $criteria = new TfishCriteria();
+                    $criteria = new TfishCriteria($tfish_validator);
                     $criteria->setOrder('date');
                     $criteria->setOrderType('DESC');
                     $criteria->setSecondaryOrder('submission_time');
@@ -466,7 +466,7 @@ if (in_array($op, $options_whitelist)) {
 
         // Default: Display a table of existing content objects and pagination controls.
         default:
-            $criteria = new TfishCriteria;
+            $criteria = new TfishCriteria($tfish_validator);
 
             // Select box filter input.
             if ($clean_tag) $criteria->setTag(array($clean_tag));
