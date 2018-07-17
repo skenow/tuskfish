@@ -49,9 +49,6 @@ error_reporting(E_ALL & ~E_NOTICE);
 $tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
-// Initialise data validator.
-$tfish_validator = new TfishDataValidator();
-
 // Set theme.
 $tfish_template = new TfishTemplate($tfish_validator);
 $tfish_template->setTheme('signin');
@@ -167,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Append site salt to config.php.
         $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
                 . $site_salt . '");';
-        $tfish_file_handler = new TfishFileHandler($tfish_validator);
+        $tfish_file_handler = new TfishFileHandler($tfish_validator, $tfish_logger);
         $result = $tfish_file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
 
         if (!$result) {

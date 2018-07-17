@@ -33,11 +33,18 @@ class TfishFileHandler
 {
     
     protected $validator;
+    protected $logger;
     
-    public function __construct(object $tfish_validator)
+    public function __construct(object $tfish_validator, object $tfish_logger)
     {
         if (is_object($tfish_validator)) {
             $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_object($tfish_logger)) {
+            $this->logger = $tfish_logger;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
@@ -132,8 +139,7 @@ class TfishFileHandler
                     }
                 }
             } catch (Exception $e) {
-                global $tfish_logger;
-                $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
                 return false;
             }
@@ -236,8 +242,7 @@ class TfishFileHandler
                 rmdir($filepath);
                 return true;
             } catch (Exception $e) {
-                global $tfish_logger;
-                $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
                 return false;
             }
@@ -291,8 +296,7 @@ class TfishFileHandler
             try {
                 unlink($filepath);
             } catch (Exeption $e) {
-                global $tfish_logger;
-                $tfish_logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
+                $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
                         $e->getLine());
             }
         } else {
