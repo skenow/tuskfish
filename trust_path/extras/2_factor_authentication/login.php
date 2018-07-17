@@ -30,9 +30,14 @@ ob_start("ob_gzhandler");
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
 
 // Set error reporting levels and custom error handler.
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 error_reporting(E_ALL & ~E_NOTICE);
 $tfish_logger = new TfishLogger();
 set_error_handler(array($tfish_logger, "logError"));
+
+// Initialise data validator.
+$tfish_validator = new TfishDataValidator1();
 
 // Ensure that a database connection is available
 TfishDatabase::connect();
@@ -50,7 +55,7 @@ TfishSession::start($tfish_preference);
 $tfish_metadata = new TfishMetadata($tfish_preference);
 
 // Instantiate the template object so that it will be available globally.
-$tfish_template = new TfishTemplate();
+$tfish_template = new TfishTemplate($tfish_validator);
 
 // End manual duplication of header.
 

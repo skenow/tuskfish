@@ -20,7 +20,7 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_COLLECTIONS;
-$content_handler = new TfishCollectionHandler();
+$content_handler = new TfishCollectionHandler($tfish_validator);
 $index_template = 'collections';
 $target_file_name = 'collections';
 $tfish_template->target_file_name = $target_file_name;

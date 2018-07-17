@@ -32,8 +32,16 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishTemplate
 {
+    // Note that the data validator is *required* to escape data within the scope of templates.
+    protected $validator;
+    protected $theme = 'default';  
     
-    protected $theme = 'default';    
+    public function __construct(object $tfish_validator)
+    {
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        }
+    }
     
     public function getTheme()
     {
@@ -57,6 +65,9 @@ class TfishTemplate
      */
     public function render(string $template)
     {
+        // Make the data validator available within scope of the templates.
+        $tfish_validator = $this->validator;
+        
         $template = TfishDataValidator::trimString($template);
         
         // Check for directory traversals and null byte injection.

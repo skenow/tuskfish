@@ -28,6 +28,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishBlockHandler extends TfishContentHandler
 {
     
+    public function __construct(object $tfish_validator)
+    {
+        parent::__construct($tfish_validator);
+    }
+    
     /**
      * Get TfishBlock objects, optionally matching conditions specified with a TfishCriteria object.
      * 

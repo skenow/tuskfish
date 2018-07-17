@@ -477,7 +477,7 @@ class TfishContentObject
                 break;
 
             case "rights":
-                $content_handler = new TfishContentHandler();
+                $content_handler = new TfishContentHandler($this->validator);
                 $rights = $content_handler->getListOfRights();
 
                 return $rights[$this->$clean_property];

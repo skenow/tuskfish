@@ -31,25 +31,25 @@ $tfish_template->setTheme('default');
 $tfish_template->target_file_name = '';
 
 // Validate data and separate the search terms.
-$clean_op = isset($_REQUEST['op']) ? TfishDataValidator::trimString($_REQUEST['op']) : false;
+$clean_op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
 
 // Search terms passed in from a pagination control link, in which case it has been previously
 // i) encoded and ii) escaped. This process needs to be reversed.
 if (isset($_REQUEST['query'])) {
-    $terms = TfishDataValidator::trimString($_REQUEST['query']);
+    $terms = $tfish_validator->trimString($_REQUEST['query']);
     $terms = rawurldecode($terms);
     $clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
     $clean_terms = isset($_REQUEST['search_terms'])
-            ? TfishDataValidator::trimString($_REQUEST['search_terms']) : false;
+            ? $tfish_validator->trimString($_REQUEST['search_terms']) : false;
 }
 
-$type = isset($_REQUEST['search_type']) ? TfishDataValidator::trimString($_REQUEST['search_type']) : false;
+$type = isset($_REQUEST['search_type']) ? $tfish_validator->trimString($_REQUEST['search_type']) : false;
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $clean_terms && $type) {
-    $content_handler = new TfishContentHandler();
+    $content_handler = new TfishContentHandler($tfish_validator);
     $search_results = $content_handler->searchContent($tfish_preference, $clean_terms, $type,
             $tfish_preference->search_pagination, $start);
     

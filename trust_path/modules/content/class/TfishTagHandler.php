@@ -28,6 +28,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishTagHandler extends TfishContentHandler
 {
+    
+    public function __construct(object $tfish_validator)
+    {
+        parent::__construct($tfish_validator);
+    }
 
     /**
      * Count TfishTag objects, optionally matching conditions specified with a TfishCriteria object.
@@ -109,15 +114,13 @@ class TfishTagHandler extends TfishContentHandler
         $select_box = '';
         $tag_list = array();
 
-        $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 1))
+        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
-        $clean_zero_option = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($zero_option));
-        
-        $content_handler = new TfishContentHandler();
-        $clean_type = $content_handler->isSanctionedType($type)
-                ? TfishDataValidator::trimString($type) : null;
-        $clean_online_only = TfishDataValidator::isBool($online_only) ? (bool) $online_only : true;
-        $tag_list = $content_handler->getActiveTagList($clean_type, $clean_online_only);
+        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
+        $clean_type = $this->isSanctionedType($type)
+                ? $this->validator->trimString($type) : null;
+        $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
+        $tag_list = $this->getActiveTagList($clean_type, $clean_online_only);
         
         if ($tag_list) {
             $select_box = $this->getArbitraryTagSelectBox($clean_selected, $tag_list, 'tag_id', $clean_zero_option);
@@ -155,24 +158,24 @@ class TfishTagHandler extends TfishContentHandler
 
         // Validate input.
         // ID of a previously selected tag, if any.
-        $clean_selected = (isset($selected) && TfishDataValidator::isInt($selected, 1))
+        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
         
-        if (TfishDataValidator::isArray($tag_list) && !empty($tag_list)) {
+        if ($this->validator->isArray($tag_list) && !empty($tag_list)) {
             asort($tag_list);
             
             foreach ($tag_list as $key => $value) {
                 $clean_key = (int) $key;
-                $clean_value = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($value));
+                $clean_value = $this->validator->escapeForXss($this->validator->trimString($value));
                 $clean_tag_list[$clean_key] = $clean_value;
                 unset($key, $clean_key, $value, $clean_value);
             }
         }
         
         // The text to display in the zero option of the select box.
-        $clean_zero_option = TfishDataValidator::escapeForXss(TfishDataValidator::trimString($zero_option));
+        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
         $clean_key_name = isset($key_name)
-                ? TfishDataValidator::escapeForXss(TfishDataValidator::trimString($key_name)) : 'tag_id';
+                ? $this->validator->escapeForXss($this->validator->trimString($key_name)) : 'tag_id';
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;

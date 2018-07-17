@@ -60,7 +60,7 @@ TfishSession::start($tfish_preference);
 $tfish_metadata = new TfishMetadata($tfish_preference);
 
 // Initialise the template object.
-$tfish_template = new TfishTemplate();
+$tfish_template = new TfishTemplate($tfish_validator);
 
 // Initialise the cache.
 $tfish_cache = new TfishCache($tfish_logger);

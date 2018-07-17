@@ -40,12 +40,17 @@ if (is_readable("../mainfile.php")) {
 $tfish_content = array('output' => '');
 
 // Set error reporting levels and custom error handler.
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 error_reporting(E_ALL & ~E_NOTICE);
 $tfish_logger = new TfishLogger();
 set_error_handler(array($tfish_logger, "logError"));
 
+// Initialise data validator.
+$tfish_validator = new TfishDataValidator1();
+
 // Set theme.
-$tfish_template = new TfishTemplate();
+$tfish_template = new TfishTemplate($tfish_validator);
 $tfish_template->setTheme('signin');
 
 // TfishPreference is not available yet, so just set up an analogue for use with installation.

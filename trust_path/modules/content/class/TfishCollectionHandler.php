@@ -28,6 +28,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishCollectionHandler extends TfishContentHandler
 {
+    
+    public function __construct(object $tfish_validator)
+    {
+        parent::__construct($tfish_validator);
+    }
 
     /**
      * Count TfishCollection objects, optionally matching conditions specified with a TfishCriteria\
@@ -98,7 +103,7 @@ class TfishCollectionHandler extends TfishContentHandler
      */
     public function getParentSelectBox(int $selected = 0)
     {
-        $clean_selected = TfishDataValidator::isInt($selected, 1) ? $selected : 0;
+        $clean_selected = $this->validator->isInt($selected, 1) ? $selected : 0;
         $options = array(0 => TFISH_SELECT_PARENT);
         $select_box = '';
 

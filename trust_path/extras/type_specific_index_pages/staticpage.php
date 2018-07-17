@@ -21,7 +21,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Lock handler to static pages.
-$content_handler = new TfishContentHandler();
+$content_handler = new TfishContentHandler($tfish_validator);
 $criteria = new TfishCriteria();
 $criteria->add(new TfishCriteriaItem('type', 'TfishStatic'));
 
@@ -129,7 +129,7 @@ if ($clean_id) {
         $tfish_pagination = new TfishPaginationControl($tfish_preference);
         
         if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-            $content_handler = new TfishContentHandler();
+            $content_handler = new TfishContentHandler($tfish_validator);
             $first_child_count = $content_handler->getCount($criteria);
             $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl(
                     $first_child_count, $tfish_preference->user_pagination, $target_file_name,

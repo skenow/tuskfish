@@ -40,7 +40,7 @@ header('Content-Type: application/rss+xml');
 $rss = new TfishRss($tfish_preference, $tfish_validator);
 
 // Get a generic content object handler.
-$content_handler = new TfishContentHandler();
+$content_handler = new TfishContentHandler($tfish_validator);
 
 // Prepare a mimetype lookup buffer.
 $mimetype_list = $content_handler->getListOfMimetypes();
@@ -62,7 +62,7 @@ if ($clean_tag_id) {
 if ($clean_id) {
     $collection = $content_handler->getObject($clean_id);
     
-    if ($collection && TfishDataValidator::isObject($collection)) {
+    if ($collection && $tfish_validator->isObject($collection)) {
         $rss->makeFeedForCollection($collection);
         $criteria->add(new TfishCriteriaItem('parent', $clean_id));
     }

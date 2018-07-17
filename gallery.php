@@ -29,7 +29,7 @@ $tfish_template->setTheme('default');
 
 // Configure page.
 $tfish_template->page_title = TFISH_IMAGE_GALLERY;
-$content_handler = new TfishContentHandler();
+$content_handler = new TfishContentHandler($tfish_validator);
 $index_template = 'gallery';
 $target_file_name = '';
 $tfish_template->target_file_name = $target_file_name;
@@ -39,7 +39,7 @@ $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $clean_type = isset($_GET['type']) && !empty($_GET['type']) 
-        ? TfishDataValidator::trimString($_GET['type']) : '';
+        ? $tfish_validator->trimString($_GET['type']) : '';
 
 // Select content objects where the image field is not null or empty.
 $criteria = new TfishCriteria();
@@ -76,7 +76,7 @@ if ($clean_start) $criteria->setOffset($clean_start);
 $criteria->setLimit($tfish_preference->gallery_pagination);
 
 // Prepare select filters.
-$tag_handler = new TfishTagHandler();
+$tag_handler = new TfishTagHandler($tfish_validator);
 $tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
 $tfish_template->select_action = 'gallery.php';
 $tfish_template->tag_select = $tag_select_box;
