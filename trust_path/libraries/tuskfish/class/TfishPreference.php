@@ -54,6 +54,7 @@ class TfishPreference
     use TfishMagicMethods;
     use TfishLanguage;
 
+    protected $validator;
     protected $site_name;
     protected $site_description;
     protected $site_author;
@@ -76,9 +77,19 @@ class TfishPreference
     protected $enable_cache;
     protected $cache_life;
     
-    function __construct(array $preferences)
+    function __construct(object $tfish_validator, array $tfish_preferences)
     {
-        $this->loadPropertiesFromArray($preferences);
+        if (is_object($tfish_validator)) {
+            $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_array($tfish_preferences)) {
+            $this->loadPropertiesFromArray($tfish_preferences);
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
     }
     
     /**
@@ -109,7 +120,7 @@ class TfishPreference
      */
     public function escapeForXss(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->validator->trimString($property);
         
         if (isset($this->$clean_property)) {
             return htmlspecialchars($this->$clean_property, ENT_QUOTES, 'UTF-8', false);
@@ -122,7 +133,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 1)) {
+        if ($this->validator->isInt($clean_value, 1)) {
             $this->admin_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -131,14 +142,14 @@ class TfishPreference
     
     public function setSiteAuthor(string $value)
     {
-        $this->site_author = TfishDataValidator::trimString($value);
+        $this->site_author = $this->validator->trimString($value);
     }
     
     public function setCacheLife(int $value)
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 1)) {
+        if ($this->validator->isInt($clean_value, 1)) {
             $this->cache_life = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -149,7 +160,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 0, 1)) {
+        if ($this->validator->isInt($clean_value, 0, 1)) {
             $this->close_site = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -158,14 +169,14 @@ class TfishPreference
     
     public function setDateFormat(string $value)
     {
-        $this->date_format = TfishDataValidator::trimString($value);
+        $this->date_format = $this->validator->trimString($value);
     }
     
     public function setDefaultLanguage(string $value)
     {
-        $clean_value = TfishDataValidator::trimString($value);
+        $clean_value = $this->validator->trimString($value);
         
-        if (!TfishDataValidator::isAlpha($clean_value)) {
+        if (!$this->validator->isAlpha($clean_value)) {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
 
@@ -180,14 +191,14 @@ class TfishPreference
     
     public function setSiteDescription(string $value)
     {
-        $this->site_description = TfishDataValidator::trimString($value);
+        $this->site_description = $this->validator->trimString($value);
     }
     
     public function setSiteEmail(string $value)
     {
-        $clean_value = TfishDataValidator::trimString($value);
+        $clean_value = $this->validator->trimString($value);
 
-        if (TfishDataValidator::isEmail($clean_value)) {
+        if ($this->validator->isEmail($clean_value)) {
             $this->site_email = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -198,7 +209,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 0, 1)) {
+        if ($this->validator->isInt($clean_value, 0, 1)) {
             $this->enable_cache = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -209,7 +220,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 1)) {
+        if ($this->validator->isInt($clean_value, 1)) {
             $this->gallery_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -220,7 +231,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 3)) {
+        if ($this->validator->isInt($clean_value, 3)) {
             $this->min_search_length = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -231,7 +242,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 3)) {
+        if ($this->validator->isInt($clean_value, 3)) {
             $this->pagination_elements = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -242,7 +253,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 1)) {
+        if ($this->validator->isInt($clean_value, 1)) {
             $this->rss_posts = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -253,7 +264,7 @@ class TfishPreference
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 0)) {
+        if ($this->validator->isInt($clean_value, 0)) {
             $this->search_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -262,14 +273,14 @@ class TfishPreference
     
     public function setServerTimezone(string $value)
     {
-        $this->server_timezone = TfishDataValidator::trimString($value);
+        $this->server_timezone = $this->validator->trimString($value);
     }
     
     public function setSessionLife(int $value)
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 0)) {
+        if ($this->validator->isInt($clean_value, 0)) {
             $this->session_life = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -278,9 +289,9 @@ class TfishPreference
     
     public function setSessionName(string $value)
     {
-        $clean_value = TfishDataValidator::trimString($value);
+        $clean_value = $this->validator->trimString($value);
 
-        if (TfishDataValidator::isAlnum($clean_value)) {
+        if ($this->validator->isAlnum($clean_value)) {
             $this->session_name = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
@@ -289,24 +300,24 @@ class TfishPreference
     
     public function setSiteCopyright(string $value)
     {
-        $this->site_copyright = TfishDataValidator::trimString($value);
+        $this->site_copyright = $this->validator->trimString($value);
     }
     
     public function setSiteName(string $value)
     {
-        $this->site_name = TfishDataValidator::trimString($value);
+        $this->site_name = $this->validator->trimString($value);
     }
     
     public function setSiteTimezone(string $value)
     {
-        $this->site_timezone = TfishDataValidator::trimString($value);
+        $this->site_timezone = $this->validator->trimString($value);
     }
     
     public function setUserPagination(int $value)
     {
         $clean_value = (int) $value;
         
-        if (TfishDataValidator::isInt($clean_value, 1)) {
+        if ($this->validator->isInt($clean_value, 1)) {
             $this->user_pagination = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -322,7 +333,7 @@ class TfishPreference
      */
     public function loadPropertiesFromArray(array $dirty_input)
     {
-        if (!TfishDataValidator::isArray($dirty_input)) {
+        if (!$this->validator->isArray($dirty_input)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
         

@@ -61,6 +61,9 @@ class TfishPreferenceHandler
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
+        // Unset the validator object as it is not stored in the database.
+        unset($key_values['validator']);
+        
         foreach ($key_values as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
             $statement = TfishDatabase::preparedStatement($sql);

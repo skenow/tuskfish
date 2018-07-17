@@ -9,7 +9,9 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach($preferences as $key => &$value) {
+            <?php
+            unset($preferences['validator']);
+            foreach($preferences as $key => &$value) {
             $lang = "TFISH_PREFERENCE_" . strtoupper($key);
             ?>
             <tr>
