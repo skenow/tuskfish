@@ -43,6 +43,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishMetadata
 {
     use TfishMagicMethods;
+    use TfishString; // No need to inject TfishDataValidator as it only uses trimString().
     
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     private $preference;
@@ -81,7 +82,7 @@ class TfishMetadata
      */
     public function __get(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $this->trimString($property);
         
         if (isset($this->$clean_property)) {
             return htmlspecialchars((string) $this->$clean_property, ENT_QUOTES, "UTF-8",
@@ -138,8 +139,8 @@ class TfishMetadata
     
     private function setProperty(string $property, string $value)
     {
-        $clean_property = TfishDataValidator::trimString($property);
-        $clean_value = TfishDataValidator::trimString($value);
+        $clean_property = $this->trimString($property);
+        $clean_value = $this->trimString($value);
         $this->$clean_property = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
     }
        
