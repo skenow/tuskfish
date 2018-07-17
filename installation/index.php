@@ -36,6 +36,9 @@ if (is_readable("../mainfile.php")) {
     exit;
 }
 
+// Initialise data validator.
+$tfish_validator = new TfishDataValidator1();
+
 // Initialise default content variable.
 $tfish_content = array('output' => '');
 
@@ -57,11 +60,11 @@ $tfish_template->setTheme('signin');
 /** @internal */
 class TfishPreference
 {
-    function __construct() {}
+    function __construct(object $tfish_validator) {}
     
     public function escapeForXss(string $property)
     {
-        $clean_property = TfishDataValidator::trimString($property);
+        $clean_property = $tfish_validator->trimString($property);
         
         if (isset($this->__data[$clean_property])) {
             switch ($clean_property) {
@@ -76,7 +79,7 @@ class TfishPreference
     }
 }
 
-$tfish_preference = new TfishPreference();
+$tfish_preference = new TfishPreference($tfish_validator);
 $tfish_preference->site_name = 'Tuskfish CMS';
 $tfish_preference->site_description = 'A cutting edge micro-CMS';
 $tfish_preference->site_author = '';
@@ -113,20 +116,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Database name is restricted to alphanumeric and underscore characters only.
-    $db_name = TfishDataValidator::trimString($_POST['db_name']);
-    if (!TfishDataValidator::isAlnumUnderscore($db_name)) {
+    $db_name = $tfish_validator->trimString($_POST['db_name']);
+    if (!$tfish_validator->isAlnumUnderscore($db_name)) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DB_ALNUMUNDERSCORE . '</p>';
     }
 
     // Admin email must conform to email specification.
-    $admin_email = TfishDataValidator::trimString($_POST['admin_email']);
-    if (!TfishDataValidator::isEmail($admin_email)) {
+    $admin_email = $tfish_validator->trimString($_POST['admin_email']);
+    if (!$tfish_validator->isEmail($admin_email)) {
         $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_BAD_EMAIL . '</p>';
     }
 
     // There are no restrictions on what characters you use for a password. Only only on what you
     // don't use!
-    $admin_password = TfishDataValidator::trimString($_POST['admin_password']);
+    $admin_password = $tfish_validator->trimString($_POST['admin_password']);
 
     // Check password length and quality.
     $security_utility = new TfishSecurityUtility();
