@@ -42,6 +42,8 @@ class TfishContentHandler
     {
         if (is_object($tfish_validator)) {
             $this->validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
     }
     
