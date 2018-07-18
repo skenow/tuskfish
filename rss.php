@@ -43,7 +43,7 @@ $rss = new TfishRss($tfish_preference, $tfish_validator);
 $content_handler = new TfishContentHandler($tfish_validator, $tfish_file_handler);
 
 // Prepare a mimetype lookup buffer.
-$mimetype_list = $content_handler->getListOfMimetypes();
+$mimetype_list = TfishUtils::getListOfMimetypes();
 
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.

@@ -191,7 +191,7 @@ class TfishContentHandler
             
             if ($clean_filename) {
                 $key_values['media'] = $clean_filename;
-                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $obj->getListOfPermittedUploadMimetypes();
                 $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
                 $key_values['format'] = $mimetype_whitelist[$extension];
                 $key_values['file_size'] = $_FILES['media']['size'];
@@ -323,126 +323,6 @@ class TfishContentHandler
         }
 
         return $count;
-    }
-    
-    /**
-     * Return a list of mimetypes.
-     * 
-     * This list is not exhaustive, but it does cover most things that a sane person would want.
-     * Feel free to add more if you wish, but do NOT use this as a whitelist of permitted mimetypes,
-     * it is just a reference.
-     * 
-     * @return array Array of mimetypes with extension as key.
-     * @copyright	The ImpressCMS Project http://www.impresscms.org/
-     * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
-     * @author		marcan <marcan@impresscms.org>
-     */
-    public function getListOfMimetypes()
-    {
-        return array(
-            "hqx" => "application/mac-binhex40",
-            "doc" => "application/msword",
-            "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "dot" => "application/msword",
-            "bin" => "application/octet-stream",
-            "lha" => "application/octet-stream",
-            "lzh" => "application/octet-stream",
-            "exe" => "application/octet-stream",
-            "class" => "application/octet-stream",
-            "so" => "application/octet-stream",
-            "dll" => "application/octet-stream",
-            "pdf" => "application/pdf",
-            "ai" => "application/postscript",
-            "eps" => "application/postscript",
-            "ps" => "application/postscript",
-            "smi" => "application/smil",
-            "smil" => "application/smil",
-            "wbxml" => "application/vnd.wap.wbxml",
-            "wmlc" => "application/vnd.wap.wmlc",
-            "wmlsc" => "application/vnd.wap.wmlscriptc",
-            "odt" => "application/vnd.oasis.opendocument.text",
-            "xla" => "application/vnd.ms-excel",
-            "xls" => "application/vnd.ms-excel",
-            "xlt" => "application/vnd.ms-excel",
-            "ppt" => "application/vnd.ms-powerpoint",
-            "csh" => "application/x-csh",
-            "dcr" => "application/x-director",
-            "dir" => "application/x-director",
-            "dxr" => "application/x-director",
-            "spl" => "application/x-futuresplash",
-            "gtar" => "application/x-gtar",
-            "php" => "application/x-httpd-php",
-            "php3" => "application/x-httpd-php",
-            "php4" => "application/x-httpd-php",
-            "php5" => "application/x-httpd-php",
-            "phtml" => "application/x-httpd-php",
-            "js" => "application/x-javascript",
-            "sh" => "application/x-sh",
-            "swf" => "application/x-shockwave-flash",
-            "sit" => "application/x-stuffit",
-            "tar" => "application/x-tar",
-            "tcl" => "application/x-tcl",
-            "xhtml" => "application/xhtml+xml",
-            "xht" => "application/xhtml+xml",
-            "xhtml" => "application/xml",
-            "ent" => "application/xml-external-parsed-entity",
-            "dtd" => "application/xml-dtd",
-            "mod" => "application/xml-dtd",
-            "gz" => "application/x-gzip",
-            "zip" => "application/zip",
-            "au" => "audio/basic",
-            "snd" => "audio/basic",
-            "mid" => "audio/midi",
-            "midi" => "audio/midi",
-            "kar" => "audio/midi",
-            "mp1" => "audio/mpeg",
-            "mp2" => "audio/mpeg",
-            "mp3" => "audio/mpeg",
-            "aif" => "audio/x-aiff",
-            "aiff" => "audio/x-aiff",
-            "m3u" => "audio/x-mpegurl",
-            "ram" => "audio/x-pn-realaudio",
-            "rm" => "audio/x-pn-realaudio",
-            "rpm" => "audio/x-pn-realaudio-plugin",
-            "ra" => "audio/x-realaudio",
-            "wav" => "audio/x-wav",
-            "bmp" => "image/bmp",
-            "gif" => "image/gif",
-            "jpeg" => "image/jpeg",
-            "jpg" => "image/jpeg",
-            "jpe" => "image/jpeg",
-            "png" => "image/png",
-            "tiff" => "image/tiff",
-            "tif" => "image/tif",
-            "wbmp" => "image/vnd.wap.wbmp",
-            "pnm" => "image/x-portable-anymap",
-            "pbm" => "image/x-portable-bitmap",
-            "pgm" => "image/x-portable-graymap",
-            "ppm" => "image/x-portable-pixmap",
-            "xbm" => "image/x-xbitmap",
-            "xpm" => "image/x-xpixmap",
-            "ics" => "text/calendar",
-            "ifb" => "text/calendar",
-            "css" => "text/css",
-            "html" => "text/html",
-            "htm" => "text/html",
-            "asc" => "text/plain",
-            "txt" => "text/plain",
-            "rtf" => "text/rtf",
-            "sgml" => "text/x-sgml",
-            "sgm" => "text/x-sgml",
-            "tsv" => "text/tab-seperated-values",
-            "wml" => "text/vnd.wap.wml",
-            "wmls" => "text/vnd.wap.wmlscript",
-            "xsl" => "text/xml",
-            "mpeg" => "video/mpeg",
-            "mpg" => "video/mpeg",
-            "mpe" => "video/mpeg",
-            "mp4" => "video/mp4",
-            "qt" => "video/quicktime",
-            "mov" => "video/quicktime",
-            "avi" => "video/x-msvideo",
-        );
     }
 
     /**
@@ -628,31 +508,6 @@ class TfishContentHandler
         $select_box .= '</select>';
 
         return $select_box;
-    }
-
-    /**
-     * Returns a list of intellectual property rights licenses for the content submission form.
-     * 
-     * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
-     * that you want to use to the array below. Be aware that deleting entries that are in use by
-     * your content objects will cause errors.
-     * 
-     * @return array Array of copyright licenses.
-     */
-    public function getListOfRights()
-    {
-        return array(
-            '1' => TFISH_RIGHTS_COPYRIGHT,
-            '2' => TFISH_RIGHTS_ATTRIBUTION,
-            '3' => TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE,
-            '4' => TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS,
-            '5' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL,
-            '6' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE,
-            '7' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS,
-            '8' => TFISH_RIGHTS_GPL2,
-            '9' => TFISH_RIGHTS_GPL3,
-            '10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
-        );
     }
 
     /**
@@ -1252,7 +1107,7 @@ class TfishContentHandler
                 $clean_filename = '';
                 
                 // Get a whitelist of permitted mimetypes.
-                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $obj->getListOfPermittedUploadMimetypes();
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {

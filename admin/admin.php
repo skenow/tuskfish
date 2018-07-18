@@ -76,10 +76,12 @@ if (in_array($op, $options_whitelist)) {
     switch ($op) {
         // Add: Display an empty content object submission form.
         case "add":
+            $content = new TfishContentObject();
+            
             $tfish_template->page_title = TFISH_ADD_CONTENT;
             $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
             $tfish_template->content_types = $content_handler->getTypes();
-            $tfish_template->rights = $content_handler->getListOfRights();
+            $tfish_template->rights = $content->getListOfRights();
             $tfish_template->languages = $tfish_preference->getListOfLanguages();
             $tfish_template->tags = $content_handler->getTagList(false);
 
@@ -89,7 +91,6 @@ if (in_array($op, $options_whitelist)) {
             $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
             $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox();
 
-            $content = new TfishContentObject();
             $tfish_template->allowed_properties = $content->getPropertyWhitelist();
             $tfish_template->zeroed_properties = array(
                 'image' => array('image'),
@@ -179,14 +180,17 @@ if (in_array($op, $options_whitelist)) {
                     $collection_handler = new TfishCollectionHandler($tfish_validator, $tfish_file_handler);
                     $collections = $collection_handler->getObjects();
                     $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
-
+                    
+                    // Build the content object.
+                    $content = $content_handler->convertRowToObject($row, false);
+                    
                     // Assign to template.
                     $tfish_template->page_title = TFISH_EDIT_CONTENT;
                     $tfish_template->op = 'update'; // Critical to launch correct submission action.
                     $tfish_template->action = TFISH_UPDATE;
-                    $tfish_template->content = $content_handler->convertRowToObject($row, false);
+                    $tfish_template->content = $content;
                     $tfish_template->content_types = $content_handler->getTypes();
-                    $tfish_template->rights = $content_handler->getListOfRights();
+                    $tfish_template->rights = $content->getListOfRights();
                     $tfish_template->languages = $tfish_preference->getListOfLanguages();
                     $tfish_template->tags = $content_handler->getTagList(false);
                     $tfish_template->parent_select_options = 

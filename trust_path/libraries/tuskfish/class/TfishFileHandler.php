@@ -32,6 +32,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishFileHandler
 {
     
+    use TfishMimetypes;
+    
     protected $validator;
     protected $logger;
     
@@ -305,46 +307,6 @@ class TfishFileHandler
         }
 
         return true;
-    }
-
-    /**
-     * Returns an array of mimetypes that are permitted for upload to the media directory.
-     * 
-     * NOTE: Adding HTML to this list would be a BAD IDEA, as such files can include PHP code,
-     * although uploaded files have execution permissions removed and are stored outside of the
-     * web root in order to prevent direct access by browser. 
-     * 
-     * @return array Array of permitted mimetypes as file extensions.
-     * @todo Move this into a TfishPreference method.
-     *
-     */
-    public function getListOfPermittedUploadMimetypes()
-    {
-        return array(
-            "doc" => "application/msword", // Documents.
-            "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "pdf" => "application/pdf",
-            "ppt" => "application/vnd.ms-powerpoint",
-            "pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "odt" => "application/vnd.oasis.opendocument.text",
-            "ods" => "application/vnd.oasis.opendocument.spreadsheet",
-            "odp" => "application/vnd.oasis.opendocument.presentation",
-            "xls" => "application/vnd.ms-excel",
-            "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "gif" => "image/gif", // Images.
-            "jpg" => "image/jpeg",
-            "png" => "image/png",
-            "mp3" => "audio/mpeg", // Audio.
-            "oga" => "audio/ogg",
-            "ogg" => "audio/ogg",
-            "wav" => "audio/x-wav",
-            "mp4" => "video/mp4", // Video.
-            "ogv" => "video/ogg",
-            "webm" => "video/webm",
-            "zip" => "application/zip", // Archives.
-            "gz" => "application/x-gzip",
-            "tar" => "application/x-tar"
-        );
     }
 
     /**

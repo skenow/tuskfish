@@ -14,7 +14,7 @@
  */
 
 /**
- * MagicMethods trait.
+ * TfishMagicMethods trait.
  * 
  * Provides common magic methods for non-write access to protected properties. Only to be used in
  * classes that have a TfishDataValidator instance as a property.

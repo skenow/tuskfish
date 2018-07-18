@@ -74,11 +74,10 @@ class TfishContentObject
     
     use TfishLanguage;
     use TfishMagicMethods;
+    use TfishMimetypes;
 
     /** @var array Holds values of permitted preference object properties. */
     protected $validator;
-    protected $logger;
-    protected $file_handler;
     
     protected $id = '';
     protected $type = '';
@@ -117,8 +116,6 @@ class TfishContentObject
          * modifying it. See: https://phpdelusions.net/pdo/objects#parameters
          */
         $this->validator = new TfishDataValidator();
-        $this->logger = new TfishLogger($this->validator);
-        $this->file_handler = new TfishFileHandler($this->validator, $this->logger);
         
         /**
          * Set default values of permitted properties.
@@ -181,7 +178,7 @@ class TfishContentObject
         }
 
         // Check media file is a permitted mimetype.
-        $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
+        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
         $extension = mb_strtolower(pathinfo($media, PATHINFO_EXTENSION), 'UTF-8');
 
         if (empty($extension) 
@@ -198,7 +195,7 @@ class TfishContentObject
     {
         $format = (string) $this->validator->trimString($format);
 
-        $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
+        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
         if (!empty($format) && !in_array($format, $mimetype_whitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
         }
@@ -459,7 +456,7 @@ class TfishContentObject
                 break;
 
             case "format": // Output the file extension as user-friendly "mimetype".
-                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
                 $mimetype = array_search($this->$clean_property, $mimetype_whitelist);
 
                 if (!empty($mimetype)) {
@@ -478,8 +475,7 @@ class TfishContentObject
                 break;
 
             case "rights":
-                $content_handler = new TfishContentHandler($this->validator, $this->file_handler);
-                $rights = $content_handler->getListOfRights();
+                $rights = $this->getListOfRights();
 
                 return $rights[$this->$clean_property];
                 break;
@@ -751,6 +747,31 @@ class TfishContentObject
             return $cached_url;
         }
     }
+    
+    /**
+     * Returns a list of intellectual property rights licenses for the content submission form.
+     * 
+     * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
+     * that you want to use to the array below. Be aware that deleting entries that are in use by
+     * your content objects will cause errors.
+     * 
+     * @return array Array of copyright licenses.
+     */
+    public function getListOfRights()
+    {
+        return array(
+            '1' => TFISH_RIGHTS_COPYRIGHT,
+            '2' => TFISH_RIGHTS_ATTRIBUTION,
+            '3' => TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE,
+            '4' => TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS,
+            '5' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL,
+            '6' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE,
+            '7' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS,
+            '8' => TFISH_RIGHTS_GPL2,
+            '9' => TFISH_RIGHTS_GPL3,
+            '10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
+        );
+    }
 
     /**
      * Generates a URL to access this object in single view mode.
@@ -851,7 +872,7 @@ class TfishContentObject
             $clean_media_filename = $this->validator->trimString($_FILES['media']['name']);
             
             if ($clean_media_filename) {
-                $mimetype_whitelist = $this->file_handler->getListOfPermittedUploadMimetypes();
+                $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
                 $extension = mb_strtolower(pathinfo($clean_media_filename, PATHINFO_EXTENSION), 'UTF-8');
                 
                 $this->setMedia($clean_media_filename);
@@ -921,7 +942,7 @@ class TfishContentObject
                 $allowed_mimetypes = $this->getListOfAllowedVideoMimetypes();
                 break;
             default:
-                $allowed_mimetypes = $this->file_handler->getListOfPermittedUploadMimetypes();
+                $allowed_mimetypes = $this->getListOfPermittedUploadMimetypes();
         }
 
         if (in_array($this->format, $allowed_mimetypes)) {
