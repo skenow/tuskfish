@@ -415,23 +415,7 @@ class TfishContentHandler
         if ($statement) {
 
             // Fetch rows into the appropriate class type, as determined by the first column.
-            // The problem with fetch() is that you can't pass in constructor arguments. We could
-            // get around this using fetchObject() and specifying the class type, but we don't
-            // know the class type in advance, and it is not possible to cast one content type to
-            // another directly.
-            //
-            // Maybe it would be better to read out an array and construct an object from that?
-            // Certainly feasible and easy; however the existing method was designed for use with
-            // a single object, and runs a query for each to retrieve the tags. Might need a
-            // dedicated function for building objects from PDO.
-            //
-            // A third option would be to eliminate constructor arguments from TfishContentObject
-            // and subclasses. This would require a global variable call to $tfish_validator, but
-            // it's not that big a deal as it's easy to change.
-            //
-            // To achieve this, need to modify content handler move getrights() and
-            // getpermitteduploadmimetypes() into the content object, this will allow elimination
-            // of two dependency injections.
+            // Note that you can't pass constructor arguments using FETCH_CLASSTYPE.
             $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
 
             while ($object = $statement->fetch()) {

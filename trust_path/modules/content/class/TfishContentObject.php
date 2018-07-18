@@ -19,16 +19,16 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 /**
  * Parent content object class, represents a single content object.
  *
- * There is only one 'archtype' of content object in Tuskfish; it uses standard Dublin Core metadata
- * fields plus a few more that are common to most content objects. Why? If you look at most common
- * content types - articles, photos, downloads etc. - you will see that for the most part they all
- * use the same fields. For example, everything has a title, everything has a description, 
- * everything has an author, everything has a hit counter.
+ * There is only one 'archtype' of content object in Tuskfish; it uses a subset of standard
+ * Dublin Core metadata fields plus a few more that are common to most content objects. Why? If you
+ * look at most common content types - articles, photos, downloads etc. - you will see that for the
+ * most part they all use the same fields. For example, everything has a title, everything has a
+ * description, everything has an author, everything has a hit counter.
  * 
- * Traditionally, most CMS create a separate database table for every type of content with
- * duplicate column names. And it works just fine until you want to publish a single content stream
- * containing different kinds of content objects. Then, suddenly, your queries are full of complex
- * joins and other rubbish and it becomes very painful to work with.
+ * Traditionally, most modular CMS create a separate database table for every type of content so you
+ * get duplication of column names across tables. And it works just fine until you want to publish
+ * a single content stream containing different kinds of content objects. Then, suddenly, your
+ * queries are full of complex joins and other rubbish and it becomes very painful to work with.
  * 
  * By using a single table for content objects with common field names our queries become very
  * simple and much redundancy is avoided. Of course, some types of content might not require a few
@@ -111,9 +111,9 @@ class TfishContentObject
     function __construct()
     {
         /** It would be better to inject TfishDataValidator as a dependency, but can't do this
-         * without modifying the way that objects are auto instantiated into the right class by
-         * PDO, as may not be able to pass in constructor arguments that way. At least, not without
-         * modifying it. See: https://phpdelusions.net/pdo/objects#parameters
+         * due to an issue with the use of the PDO FETCH_CLASSTYPE flag, to auto-instantiate
+         * classes using the first column in the database table, as it does not allow constructor
+         * arguments to be passed.
          */
         $this->validator = new TfishDataValidator();
         
