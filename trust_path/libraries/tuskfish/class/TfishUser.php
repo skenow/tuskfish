@@ -48,13 +48,9 @@ class TfishUser
     protected $yubikey_id2;
     protected $login_errors;
     
-    public function __construct(object $tfish_validator)
+    public function __construct(TfishDataValidator $tfish_validator)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
+        $this->validator = $tfish_validator;
     }
     
     public function setId(int $id)

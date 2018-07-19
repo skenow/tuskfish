@@ -35,19 +35,10 @@ class TfishCache
     protected $logger;
     
     /** @param object $preference Instance of TfishLogger class, used for logging errors. */
-    function __construct(object $tfish_validator, object $tfish_logger)
+    function __construct(TfishDataValidator $tfish_validator, TfishLogger $tfish_logger)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        if (is_object($tfish_logger)) {
-            $this->logger = $tfish_logger;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }        
+        $this->validator = $tfish_validator;
+        $this->logger = $tfish_logger;       
     }
 
     /**

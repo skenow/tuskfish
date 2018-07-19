@@ -67,13 +67,9 @@ class TfishYubikeyAuthenticator
     private $_curlTimeout;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct(object $tfish_validator)
+    public function __construct(TfishDataValidator $tfish_validator)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
+        $this->validator = $tfish_validator;
         
         if (defined("TFISH_YUBIKEY_ID")) {
             $this->_id = (int) TFISH_YUBIKEY_ID;

@@ -52,14 +52,10 @@ class TfishPreferenceHandler
      * 
      * @return bool True on success false on failure.
      */
-    public function writePreferences(object $tfish_preference)
+    public function writePreferences(TfishPreference $tfish_preference)
     {
         // Convert preference object to array of key => values.
-        if (is_object($tfish_preference)) {
-            $key_values = $tfish_preference->getPreferencesAsArray();
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
+        $key_values = $tfish_preference->getPreferencesAsArray();
         
         // Unset the validator object as it is not stored in the database.
         unset($key_values['validator']);

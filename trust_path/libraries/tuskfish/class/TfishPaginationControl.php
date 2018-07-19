@@ -39,19 +39,10 @@ class TfishPaginationControl
     protected $preference;
     
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
-    function __construct(object $tfish_validator, object $tfish_preference)
+    function __construct(TfishDataValidator $tfish_validator, TfishPreference $tfish_preference)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        if (is_object($tfish_preference)) {
-            $this->preference = $tfish_preference;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }        
+        $this->validator = $tfish_validator;
+        $this->preference = $tfish_preference;       
     }
     
     /**

@@ -57,13 +57,9 @@ class TfishCriteria
     protected $secondary_order_type = "DESC";
     protected $tag = array();
     
-    public function __construct(object $tfish_validator)
+    public function __construct(TfishDataValidator $tfish_validator)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
+        $this->validator = $tfish_validator;
     }
     
     /**
@@ -100,7 +96,7 @@ class TfishCriteria
         }
     }
     
-    private function setItem(object $item)
+    private function setItem(TfishCriteriaItem $item)
     {
         if (is_object($item)) {
             $this->item[] = $item;

@@ -77,19 +77,10 @@ class TfishPreference
     protected $enable_cache;
     protected $cache_life;
     
-    function __construct(object $tfish_validator, array $tfish_preferences)
+    function __construct(TfishDataValidator $tfish_validator, array $tfish_preferences)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        if (is_array($tfish_preferences)) {
-            $this->loadPropertiesFromArray($tfish_preferences);
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
+        $this->validator = $tfish_validator;
+        $this->loadPropertiesFromArray($tfish_preferences);
     }
     
     /**

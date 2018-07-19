@@ -219,7 +219,8 @@ class TfishSession
      * @param string $dirty_otp Input Yubikey one-time password.
      * @param object $yubikey Instance of the TfishYubikeyAuthenticator class.
      */
-    public static function twoFactorLogin(string $dirty_password, string $dirty_otp, $yubikey)
+    public static function twoFactorLogin(string $dirty_password, string $dirty_otp,
+            TfishYubikeyAuthenticator $yubikey)
     {
         // Check password, OTP and Yubikey have been supplied
         if (empty($dirty_password) || empty($dirty_otp) || empty($yubikey)) {

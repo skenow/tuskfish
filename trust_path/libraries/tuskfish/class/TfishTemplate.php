@@ -36,11 +36,9 @@ class TfishTemplate
     protected $validator;
     protected $theme = 'default';  
     
-    public function __construct(object $tfish_validator)
+    public function __construct(TfishDataValidator $tfish_validator)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        }
+        $this->validator = $tfish_validator;
     }
     
     public function getTheme()

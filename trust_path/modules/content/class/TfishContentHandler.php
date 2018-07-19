@@ -39,19 +39,10 @@ class TfishContentHandler
     protected $validator;
     protected $file_handler;
     
-    public function __construct(object $tfish_validator, object $tfish_file_handler)
+    public function __construct(TfishDataValidator $tfish_validator, TfishFileHandler $tfish_file_handler)
     {
-        if (is_object($tfish_validator)) {
-            $this->validator = $tfish_validator;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        if (is_object($tfish_file_handler)) {
-            $this->file_handler = $tfish_file_handler;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
+        $this->validator = $tfish_validator;
+        $this->file_handler = $tfish_file_handler;
     }
     
     /**
