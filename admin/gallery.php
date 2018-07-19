@@ -63,21 +63,24 @@ if ($clean_type) {
 }
 
 // Prepare pagination control.
-$count = $content_handler->getCount($criteria);
 $extra_params = array();
 
 if (isset($clean_online) && $tfish_validator->isInt($clean_online, 0, 1)) {
     $extra_params['online'] = $clean_online;
 }
 
-if (isset($clean_type)) {
+if (isset($clean_type) && !empty ($clean_type)) {
     $extra_params['type'] = $clean_type;
 }
 
-$tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-$tfish_template->pagination = $tfish_pagination->getPaginationControl($count, 
-        $tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, 
-        $extra_params);
+$tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);          
+$tfish_pagination->setUrl($target_file_name);
+$tfish_pagination->setCount($content_handler->getCount($criteria));
+$tfish_pagination->setLimit($tfish_preference->gallery_pagination);
+$tfish_pagination->setStart($clean_start);
+$tfish_pagination->setTag($clean_tag);
+$tfish_pagination->setExtraParams($extra_params);
+$tfish_template->pagination = $tfish_pagination->getPaginationControl();
 
 // Set offset and limit.
 if ($clean_start) $criteria->setOffset($clean_start);

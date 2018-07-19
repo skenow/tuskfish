@@ -31,7 +31,7 @@ $tfish_template->setTheme('default');
 $tfish_template->page_title = TFISH_IMAGE_GALLERY;
 $content_handler = new TfishContentHandler($tfish_validator, $tfish_file_handler);
 $index_template = 'gallery';
-$target_file_name = '';
+$target_file_name = 'gallery';
 $tfish_template->target_file_name = $target_file_name;
 
 // Validate input parameters.
@@ -59,17 +59,18 @@ if ($clean_type) {
 }
 
 // Prepare pagination control.
-$count = $content_handler->getCount($criteria);
-$extra_params = array();
+$tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);          
+$tfish_pagination->setUrl($target_file_name);
+$tfish_pagination->setCount($content_handler->getCount($criteria));
+$tfish_pagination->setLimit($tfish_preference->gallery_pagination);
+$tfish_pagination->setStart($clean_start);
+$tfish_pagination->setTag($clean_tag);
 
 if (isset($clean_type)) {
-    $extra_params['type'] = $clean_type;
+    $tfish_pagination->setExtraParams(array(['type'] => $clean_type));
 }
 
-$tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-$tfish_template->pagination = $tfish_pagination->getPaginationControl($count, 
-        $tfish_preference->gallery_pagination, $target_file_name, $clean_start, $clean_tag, 
-        $extra_params);
+$tfish_template->pagination = $tfish_pagination->getPaginationControl();
 
 // Set offset and limit.
 if ($clean_start) $criteria->setOffset($clean_start);

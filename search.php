@@ -62,12 +62,17 @@ if ($clean_op && $clean_terms && $type) {
 
         // Prepare the pagination control, including parameters to be included in the link.
         $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
+        $tfish_pagination->setUrl('search');
+        $tfish_pagination->setCount($results_count);
+        $tfish_pagination->setLimit($tfish_preference->search_pagination);
+        $tfish_pagination->setStart($start);
+        $tfish_pagination->setTag(0);
         $query_parameters = array(
             'op' => 'search',
             'search_type' => $type,
             'query' => $clean_terms);
-        $tfish_template->pagination = $tfish_pagination->getPaginationControl($results_count,
-                $tfish_preference->search_pagination, 'search', $start, 0, $query_parameters);
+        $tfish_pagination->setExtraParams($query_parameters);
+        $tfish_template->pagination = $tfish_pagination->getPaginationControl();
     } else {
         $tfish_template->search_results = false;
     }

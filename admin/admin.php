@@ -438,18 +438,15 @@ if (in_array($op, $options_whitelist)) {
                     }
 
                     // Prepare pagination control.
-                    $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-                    
-                    if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-                        $first_child_count = $content_handler->getCount($criteria);
-                        $tfish_template->collection_pagination = 
-                                $tfish_pagination->getPaginationControl(
-                                        $first_child_count, 
-                                        $tfish_preference->user_pagination,
-                                        $target_file_name,
-                                        $clean_start,
-                                        0,
-                                        array('id' => $clean_id));
+                    if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {                        
+                        $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
+                        $tfish_pagination->setUrl($target_file_name);
+                        $tfish_pagination->setCount($content_handler->getCount($criteria));
+                        $tfish_pagination->setLimit($tfish_preference->user_pagination);
+                        $tfish_pagination->setStart($clean_start);
+                        $tfish_pagination->setTag(0);
+                        $tfish_pagination->setExtraParams(array('id' => $clean_id));
+                        $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl();
 
                         // Retrieve content objects and assign to template.
                         $first_children = $content_handler->getObjects($criteria);
