@@ -38,11 +38,24 @@ class TfishPaginationControl
     /** @var object $preference Instance of TfishPreference class, holds site preference info. */
     protected $preference;
     
+    protected $count;
+    protected $limit;
+    protected $url;
+    protected $start;
+    protected $tag;
+    protected $extra_params;
+    
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
     function __construct(TfishDataValidator $tfish_validator, TfishPreference $tfish_preference)
     {
         $this->validator = $tfish_validator;
-        $this->preference = $tfish_preference;       
+        $this->preference = $tfish_preference;
+        $this->count = 0;
+        $this->limit = 0;
+        $this->url = '';
+        $this->start = 0;
+        $this->tag = 0;
+        $this->extra_params = array();
     }
     
     /**
@@ -64,67 +77,17 @@ class TfishPaginationControl
      * @param array $extra_params Query string to be appended to the URLs (control script params).
      * @return string HTML pagination control.
      */
-    public function getPaginationControl(int $count, int $limit, string $url, int $start = 0,
-            int $tag = 0, array $extra_params = array())
+    public function getPaginationControl()
     {
-        // Filter parameters.
-        $clean_count = $this->validator->isInt($count, 1) ? (int) $count : 0;
-        $clean_limit = $this->validator->isInt($limit, 1) ? (int) $limit : 0;
-        $clean_start = $this->validator->isInt($start, 0) ? (int) $start : 0;
-        $clean_url = $this->validator->isAlnumUnderscore($url) ? $this->validator->trimString($url)
-                . '.php' : TFISH_URL;
-        $clean_tag = $this->validator->isInt($tag) ? (int) $tag : 0;
-
-        // $extra_params is a potential XSS attack vector.
-        // The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
-        // avoid messing up the query and avoid unecessary decoding it is possible to maintain
-        // manual control over the operators. (Basically, input requiring encoding or escaping is
-        // absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
-        // actually *want* to use such input you will need to decode it prior to use on the
-        // landing page.
-        $clean_extra_params = array();
-        
-        foreach ($extra_params as $key => $value) {
-            
-            // Check for directory traversals and null byte injection.
-            if ($this->validator->hasTraversalorNullByte($key)
-                    || $this->validator->hasTraversalorNullByte((string) $value)) {
-                trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
-                return false;
-            }
-        
-            $clean_extra_params[] = $this->validator->encodeEscapeUrl($key) . '='
-                    . $this->validator->encodeEscapeUrl((string) $value);
-            unset($key, $value);
-        }
-        
-        $clean_extra_params = !empty($clean_extra_params)
-                ? $this->validator->escapeForXss(implode("&", $clean_extra_params)) : '';
-
         // If the count is zero there is no need for a pagination control.
-        if ($clean_count === 0) {
+        if ($this->count === 0) {
             return false;
         }
         
-        // If any parameter fails a range check throw an error.
-        if ($clean_limit === false || $clean_url === false) {
-            trigger_error(TFISH_ERROR_PAGINATION_PARAMETER_ERROR, E_USER_ERROR);
-        }
-        
-        $control = $this->_getPavigationControl($clean_count, $clean_limit, $clean_url,
-                $clean_start, $clean_tag, $clean_extra_params);
-
-        return $control;
-    }
-
-    /** @internal */
-    private function _getPavigationControl(int $count, int $limit, string $url, int $start,
-            int $tag, string $extra_params)
-    {
         // 1. Calculate number of pages, page number of start object and adjust for remainders.
         $page_slots = array();
-        $page_count = (int) (($count / $limit));
-        $remainder = $count % $limit;
+        $page_count = (int) (($this->count / $this->limit));
+        $remainder = $this->count % $this->limit;
         
         if ($remainder) {
             $page_count += 1;
@@ -138,7 +101,7 @@ class TfishPaginationControl
         }
 
         // 2. Calculate current page.
-        $current_page = (int) (($start / $limit) + 1);
+        $current_page = (int) (($this->start / $this->limit) + 1);
 
         // 3. Calculate length of pagination control (number of slots).
         $elements = ((int) $this->preference->pagination_elements > $page_count)
@@ -184,33 +147,33 @@ class TfishPaginationControl
         $query = $start_arg = $tag_arg = '';
         
         foreach ($page_slots as $key => $slot) {
-            $start = (int) ($key * $limit);
+            $this->start = (int) ($key * $this->limit);
 
             // Set the arguments.
-            if ($start || $tag || $extra_params) {
+            if ($this->start || $this->tag || $this->extra_params) {
                 $arg_array = array();
                 
-                if (!empty($start)) {
-                    $arg_array[] = 'start=' . $start;
+                if (!empty($this->start)) {
+                    $arg_array[] = 'start=' . $this->start;
                 }
                 
-                if (!empty($tag)) {
-                    $arg_array[] = 'tag_id=' . $tag;
+                if (!empty($this->tag)) {
+                    $arg_array[] = 'tag_id=' . $this->tag;
                 }
                 
-                if (!empty($extra_params)) {
-                    $arg_array[] = $extra_params;
+                if (!empty($this->extra_params)) {
+                    $arg_array[] = $this->extra_params;
                 }
                 
                 $query = '?' . implode('&amp;', $arg_array);
             }
 
             if (($key + 1) === $current_page) {
-                $control .= '<li class="page-item active"><a class="page-link" href="' . $url 
+                $control .= '<li class="page-item active"><a class="page-link" href="' . $this->url 
                         . $query . '">' . $slot . '</a></li>';
             } else {
-                $control .= '<li class="page-item"><a class="page-link" href="' . $url . $query 
-                        . '">' . $slot . '</a></li>';
+                $control .= '<li class="page-item"><a class="page-link" href="' . $this->url
+                        . $query . '">' . $slot . '</a></li>';
             }
             
             unset($query, $key, $slot);
@@ -219,6 +182,63 @@ class TfishPaginationControl
         $control .= '</ul></nav>';
 
         return $control;
+    }
+    
+    public function setCount(int $count)
+    {
+        $this->count = $this->validator->isInt($count, 1) ? (int) $count : 0;
+    }
+    
+    public function setLimit(int $limit)
+    {
+        $this->limit = $this->validator->isInt($limit, 1) ? (int) $limit : 0;
+    }
+    
+    public function setUrl(string $url)
+    {
+        $clean_url = $this->validator->trimString($url);
+        $this->url = $this->validator->isAlnumUnderscore($clean_url) ? $clean_url . '.php'
+                : TFISH_URL;
+    }
+    
+    public function setStart(int $start)
+    {
+        $this->start = $this->validator->isInt($start, 0) ? (int) $start : 0;
+    }
+    
+    public function setTag(int $tag)
+    {
+        $this->tag = $this->validator->isInt($tag, 0) ? (int) $tag : 0;
+    }
+    
+    // $extra_params is a potential XSS attack vector.
+    // The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
+    // avoid messing up the query and avoid unecessary decoding it is possible to maintain
+    // manual control over the operators. (Basically, input requiring encoding or escaping is
+    // absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
+    // actually *want* to use such input (check your sanity), you will need to decode it prior to
+    // use on the landing page.
+    public function setExtraParams(array $extra_params)
+    {
+        $clean_extra_params = array();
+        
+        foreach ($extra_params as $key => $value) {
+            if ($this->validator->hasTraversalorNullByte((string) $key)
+                    || $this->validator->hasTraversalorNullByte((string) $value)) {
+                trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+                return false;
+            }
+        
+            $clean_extra_params[] = $this->validator->encodeEscapeUrl($key) . '='
+                    . $this->validator->encodeEscapeUrl((string) $value);
+            unset($key, $value);
+        }
+        
+        if (empty($clean_extra_params)) {
+            $this->extra_params = '';
+        } else {
+            $this->extra_params = $this->validator->escapeForXss(implode("&", $clean_extra_params));
+        }   
     }
 
     /**

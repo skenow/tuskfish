@@ -182,10 +182,12 @@ if ($clean_id) {
 
     // Prepare pagination control.
     $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-    $count = $content_handler->getCount($criteria);
-    $tfish_template->pagination = $tfish_pagination->getPaginationControl($count,
-            $tfish_preference->user_pagination, TFISH_URL, $clean_start, $clean_tag);
-
+    $tfish_pagination->setCount($content_handler->getCount($criteria));
+    $tfish_pagination->setLimit($tfish_preference->user_pagination);
+    $tfish_pagination->setStart($clean_start);
+    $tfish_pagination->setTag($clean_tag);
+    $tfish_template->pagination = $tfish_pagination->getPaginationControl();
+    
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');
     $criteria->setOrderType('DESC');

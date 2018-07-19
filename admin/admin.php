@@ -509,25 +509,22 @@ if (in_array($op, $options_whitelist)) {
             $typelist = $content_handler->getTypes();
 
             // Pagination control.
-            $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-            $count = TfishDatabase::selectCount('content', $criteria);
             $extra_params = array();
-            
             if (isset($clean_online) && $tfish_validator->isInt($clean_online, 0, 1)) {
                 $extra_params['online'] = $clean_online;
             }
-            
-            if (isset($clean_type)) {
+            if (isset($clean_type) && !empty($clean_type)) {
                 $extra_params['type'] = $clean_type;
             }
             
-            $tfish_template->pagination = $tfish_pagination->getPaginationControl(
-                    $count,
-                    $tfish_preference->admin_pagination,
-                    'admin',
-                    $clean_start,
-                    $clean_tag,
-                    $extra_params);
+            $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
+            $tfish_pagination->setUrl('admin');
+            $tfish_pagination->setCount(TfishDatabase::selectCount('content', $criteria));
+            $tfish_pagination->setLimit($tfish_preference->admin_pagination);
+            $tfish_pagination->setStart($clean_start);
+            $tfish_pagination->setTag($clean_tag);
+            $tfish_pagination->setExtraParams($extra_params);
+            $tfish_template->pagination = $tfish_pagination->getPaginationControl();
 
             // Prepare select filters.
             $tag_handler = new TfishTagHandler($tfish_validator, $tfish_file_handler);
