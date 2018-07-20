@@ -182,7 +182,7 @@ class TfishTaglinkHandler
 
         // If the content object is a tag, it is not allowed to have taglinks, so there is no need
         // to proceed to insert new ones.
-        if ($type === 'TfishTag') {
+        if ($clean_type === 'TfishTag') {
             return true;
         }
         
@@ -199,7 +199,7 @@ class TfishTaglinkHandler
             }
             
             $tag['content_id'] = $clean_id;
-            $tag['content_type'] = $type;
+            $tag['content_type'] = $clean_type;
             $clean_tags[] = $tag;
             unset($tag);
         }
