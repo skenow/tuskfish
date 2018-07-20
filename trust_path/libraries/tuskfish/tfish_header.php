@@ -41,7 +41,7 @@ $tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
 // Initialise file handler.
-$tfish_file_handler = new TfishFileHandler($tfish_validator, $tfish_logger);
+$tfish_file_handler = new TfishFileHandler($tfish_validator);
 
 // Initialise database connection.
 TfishDatabase::connect();

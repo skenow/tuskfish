@@ -35,12 +35,10 @@ class TfishFileHandler
     use TfishMimetypes;
     
     protected $validator;
-    protected $logger;
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishLogger $tfish_logger)
+    public function __construct(TfishDataValidator $tfish_validator)
     {
         $this->validator = $tfish_validator;
-        $this->logger = $tfish_logger;
     }
 
     /**
@@ -132,8 +130,7 @@ class TfishFileHandler
                     }
                 }
             } catch (Exception $e) {
-                $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
-                        $e->getLine());
+                trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
                 return false;
             }
             return true;
@@ -235,8 +232,7 @@ class TfishFileHandler
                 rmdir($filepath);
                 return true;
             } catch (Exception $e) {
-                $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
-                        $e->getLine());
+                trigger_error(TFISH_ERROR_FAILED_TO_DELETE_DIRECTORY, E_USER_NOTICE);
                 return false;
             }
         }
@@ -289,8 +285,7 @@ class TfishFileHandler
             try {
                 unlink($filepath);
             } catch (Exeption $e) {
-                $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
-                        $e->getLine());
+                trigger_error(TFISH_ERROR_FAILED_TO_DELETE_FILE, E_USER_NOTICE);
             }
         } else {
             trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);

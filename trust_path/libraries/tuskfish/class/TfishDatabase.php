@@ -109,7 +109,7 @@ class TfishDatabase
     {
         self::$validator = new TfishDataValidator();
         self::$logger = new TfishLogger(self::$validator);
-        self::$file_handler = new TfishFileHandler(self::$validator, self::$logger);
+        self::$file_handler = new TfishFileHandler(self::$validator);
                 
         // SQLite just expects a file name, which was defined as a constant during create()
         self::$_db = new PDO('sqlite:' . TFISH_DATABASE);
