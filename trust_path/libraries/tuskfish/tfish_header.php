@@ -63,7 +63,7 @@ $tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);
 $tfish_template = new TfishTemplate($tfish_validator);
 
 // Initialise the cache.
-$tfish_cache = new TfishCache($tfish_validator, $tfish_logger);
+$tfish_cache = new TfishCache($tfish_validator);
 
 // Check if site is closed, if so redirect to the login page and exit.
 if ($tfish_preference->close_site && !TfishSession::isAdmin()) {

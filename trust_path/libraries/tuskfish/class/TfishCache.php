@@ -30,15 +30,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishCache
 {
-    /** @var object $loger Instance of TfishLogger class, used for logging errors. */
     protected $validator;
-    protected $logger;
     
-    /** @param object $preference Instance of TfishLogger class, used for logging errors. */
-    function __construct(TfishDataValidator $tfish_validator, TfishLogger $tfish_logger)
+    function __construct(TfishDataValidator $tfish_validator)
     {
-        $this->validator = $tfish_validator;
-        $this->logger = $tfish_logger;       
+        $this->validator = $tfish_validator;    
     }
 
     /**
@@ -189,31 +185,27 @@ class TfishCache
      */
     public function flushCache()
     {
-        try {
-            $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
-            
-            foreach ($directory_iterator as $file) {
-                
-                if ($file->isFile()) {
-                    $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
-                    
-                    if ($path && file_exists($path)) {
-                        try {
-                            unlink($path);
-                        } catch (Exeption $e) {
-                            $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(),
-                                    $e->getLine());
-                        }
-                    } else {
-                        trigger_error(TFISH_ERROR_BAD_PATH, E_USER_NOTICE);
+        $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
+
+        foreach ($directory_iterator as $file) {
+
+            if ($file->isFile()) {
+                $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
+
+                if ($path && file_exists($path)) {
+                    try {
+                        unlink($path);
+                    } catch (Exeption $e) {
+                        trigger_error(TFISH_CACHE_FLUSH_FAILED, E_USER_NOTICE);
                         return false;
                     }
+                } else {
+                    trigger_error(TFISH_CACHE_FLUSH_FAILED, E_USER_NOTICE);
+                    return false;
                 }
             }
-        } catch (Exception $e) {
-            $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-            return false;
         }
+        
         return true;
     }
 
