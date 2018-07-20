@@ -44,15 +44,17 @@ if (isset($_REQUEST['query'])) {
             ? $tfish_validator->trimString($_REQUEST['search_terms']) : false;
 }
 
-$type = isset($_REQUEST['search_type']) ? $tfish_validator->trimString($_REQUEST['search_type']) : false;
+$search_type = isset($_REQUEST['search_type']) ? $tfish_validator->trimString($_REQUEST['search_type']) : false;
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
-if ($clean_op && $clean_terms && $type) {
-    $content_handler = new TfishContentHandler($tfish_validator, $tfish_file_handler);
-    $search_results = $content_handler->searchContent($tfish_preference, $clean_terms, $type,
-            $tfish_preference->search_pagination, $start);
-    
+if ($clean_op && $clean_terms && $search_type) {
+    $search_engine = new TfishSearchContent($tfish_validator, $tfish_preference);
+    $search_engine->setSearchTerms($clean_terms);
+    $search_engine->setOperator($search_type);
+    $search_engine->setOffset($start);
+    $search_results = $search_engine->searchContent();
+
     if ($search_results && $search_results[0] > 0) {
         
         // Get a count of search results; this is used to build the pagination control.
@@ -69,7 +71,7 @@ if ($clean_op && $clean_terms && $type) {
         $tfish_pagination->setTag(0);
         $query_parameters = array(
             'op' => 'search',
-            'search_type' => $type,
+            'search_type' => $search_type,
             'query' => $clean_terms);
         $tfish_pagination->setExtraParams($query_parameters);
         $tfish_template->pagination = $tfish_pagination->getPaginationControl();
@@ -81,7 +83,7 @@ if ($clean_op && $clean_terms && $type) {
 // Assign template variables.
 $tfish_template->page_title = TFISH_SEARCH;
 $tfish_template->terms = $clean_terms;
-$tfish_template->type = $type;
+$tfish_template->type = $search_type;
 $tfish_template->form = TFISH_CONTENT_MODULE_FORM_PATH . 'search.html';
 $tfish_template->tfish_main_content = $tfish_template->render('form');
 
