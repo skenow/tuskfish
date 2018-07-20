@@ -196,11 +196,11 @@ class TfishCache
                     try {
                         unlink($path);
                     } catch (Exeption $e) {
-                        trigger_error(TFISH_CACHE_FLUSH_FAILED, E_USER_NOTICE);
+                        trigger_error(TFISH_CACHE_FLUSH_FAILED_TO_UNLINK, E_USER_NOTICE);
                         return false;
                     }
                 } else {
-                    trigger_error(TFISH_CACHE_FLUSH_FAILED, E_USER_NOTICE);
+                    trigger_error(TFISH_CACHE_FLUSH_FAILED_BAD_PATH, E_USER_NOTICE);
                     return false;
                 }
             }

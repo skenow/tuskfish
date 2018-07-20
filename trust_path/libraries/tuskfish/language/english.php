@@ -50,6 +50,8 @@ define("TFISH_DO_YOU_WANT_TO_FLUSH_CACHE", "Do you want to flush the cache?");
 define("TFISH_CONFIRM_FLUSH", "Are you sure?");
 define("TFISH_CACHE_WAS_FLUSHED", "Cache was flushed.");
 define("TFISH_CACHE_FLUSH_FAILED", "Cache flush failed.");
+define("TFISH_CACHE_FLUSH_FAILED_TO_UNLINK", "Cache flush failed, could not unlink file(s).");
+define("TFISH_CACHE_FLUSH_FAILED_BAD_PATH", "Cache flush failed due to bad file path(s).");
 define("TFISH_VIEW", "View");
 define("TFISH_SETTINGS", "Settings");
 
