@@ -85,10 +85,11 @@ class TfishAngryTree
     /**
      * Constructor
      *
-     * @param array $objectArr Array of collection objects.
-     * @param string $myId Name of object ID field.
-     * @param string $parentId Name of parent object ID field.
-     * @param string $rootId Name of root object ID field.
+     * @param array $objectArr Array of collection objects that the tree will be built from.
+     * @param string $myId Name of the ID field used to identify objects in the tree.
+     * @param string $parentId Name of ID field used to identify an object's parent in the tree.
+     * @param string $rootId Name of root object ID field. This is the object that will be used as 
+     * the base node for building a tree (or subtree) from the $objectArr.
      * */
     function __construct(array &$objectArr, string $myId, string $parentId, string $rootId = null)
     {
@@ -103,11 +104,7 @@ class TfishAngryTree
         $this->_initialize();
     }
 
-    /**
-     * Initialise the tree.
-     * 
-     * @internal
-     */
+    /** @internal */
     private function _initialize()
     {
         foreach (array_keys($this->_objects) as $i) {
