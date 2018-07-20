@@ -979,21 +979,10 @@ class TfishContentHandler
 
                 // Must call session_write_close() first otherwise the script gets locked.
                 session_write_close();
-
-                // Prevent caching
-                header("Pragma: public");
-                header("Expires: -1");
-                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-
-                // Set file-specific headers.
-                header('Content-Disposition: attachment; filename="' . $filename . '.'
-                        . $file_extension . '"');
-                //header('Content-Type: application/octet-stream');
-                header("Content-Type: " . $mimetype);
-                header("Content-Length: " . $file_size);
-                ob_clean();
-                flush();
-                readfile($filepath);
+                
+                // Output the header.
+                $this->_outputHeader($filename, $file_extension, $mimetype, $file_size, $filepath);
+                
             } else {
                 return false;
             }
@@ -1001,6 +990,23 @@ class TfishContentHandler
             trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_WARNING);
             return false;
         }
+    }
+    
+    private function _outputHeader($filename, $file_extension, $mimetype, $file_size, $filepath)
+    {
+        // Prevent caching
+        header("Pragma: public");
+        header("Expires: -1");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+        // Set file-specific headers.
+        header('Content-Disposition: attachment; filename="' . $filename . '.'
+                . $file_extension . '"');
+        header("Content-Type: " . $mimetype);
+        header("Content-Length: " . $file_size);
+        ob_clean();
+        flush();
+        readfile($filepath);
     }
 
     /**
