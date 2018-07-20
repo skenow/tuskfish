@@ -86,13 +86,7 @@ class TfishContentHandler
 
         // If object is a collection delete related parent references in child objects.
         if ($obj->type === 'TfishCollection') {
-            $criteria = new TfishCriteria($this->validator);
-            $criteria->add(new TfishCriteriaItem($this->validator, 'parent', $clean_id));
-            $result = TfishDatabase::updateAll('content', array('parent' => 0), $criteria);
-            
-            if (!$result) {
-                return false;
-            }
+            $this->deleteParentalReferences($clean_id);
         }
 
         // Finally, delete the object.
