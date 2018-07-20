@@ -87,7 +87,7 @@
         <!-- Publisher -->
         <div class="col-md-6 mb-3 text-left" id="publisherContainer">
             <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
-            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php echo $tfish_validator->escapeForXss($tfish_preference->site_author); ?>">
+            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfish_preference; echo $tfish_validator->escapeForXss($tfish_preference->site_author); ?>">
         </div>
 
         <!-- Parent -->
@@ -157,6 +157,7 @@
             <label for="language"><strong><?php echo TFISH_LANGUAGE; ?></strong></label>
                 <select class="form-control custom-select" name="language" id="language" required>
                     <?php
+                        global $tfish_preference;
                         foreach ($languages as $key => $value) {
                             if ($tfish_preference->default_language === $key) {
                                 echo '<option value="' . $tfish_validator->escapeForXss($key) . '" selected>' . $tfish_validator->escapeForXss($value) . '</option>';
