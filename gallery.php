@@ -66,7 +66,7 @@ $tfish_pagination->setLimit($tfish_preference->gallery_pagination);
 $tfish_pagination->setStart($clean_start);
 $tfish_pagination->setTag($clean_tag);
 
-if (isset($clean_type)) {
+if (isset($clean_type) && !empty($clean_type)) {
     $tfish_pagination->setExtraParams(array(['type'] => $clean_type));
 }
 
