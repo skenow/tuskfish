@@ -169,7 +169,7 @@ class TfishSession
     private static function _login(string $clean_email, string $dirty_password)
     {
         // Query the database for a matching user.
-        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
+        $statement = self::$db->preparedStatement("SELECT * FROM user WHERE "
                 . "`admin_email` = :clean_email");
         $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
         $statement->execute();
@@ -192,14 +192,14 @@ class TfishSession
                 $_SESSION['user_id'] = (int) $user['id'];
                 
                 // Reset failed login counter to zero.
-                TfishDatabase::update('user', (int) $user['id'], array('login_errors' => 0));
+                self::$db->update('user', (int) $user['id'], array('login_errors' => 0));
                 
                 // Redirect to admin page.
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
                 // Increment failed login counter, destroy session and redirect to the login page.
-                TfishDatabase::updateCounter((int) $user['id'], 'user', 'login_errors');
+                self::$db->updateCounter((int) $user['id'], 'user', 'login_errors');
                 self::logout(TFISH_ADMIN_URL . "login.php");
                 exit;
             }
@@ -265,7 +265,7 @@ class TfishSession
         $second_factor = false;
         
         // Query the database for a matching user.
-        $statement = TfishDatabase::preparedStatement("SELECT * FROM user WHERE "
+        $statement = self::$db->preparedStatement("SELECT * FROM user WHERE "
                 . "`yubikey_id` = :yubikey_id OR "
                 . "`yubikey_id2` = :yubikey_id");
         $statement->bindParam(':yubikey_id', $dirty_id, PDO::PARAM_STR);
