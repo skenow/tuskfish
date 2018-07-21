@@ -30,8 +30,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishSearchContent
 {
-    
     protected $validator;
+    protected $db;
     protected $preference;
     protected $search_terms;
     protected $escaped_search_terms;
@@ -39,9 +39,11 @@ class TfishSearchContent
     protected $offset;
     protected $operator; // and / or / exact
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishPreference $tfish_preference)
+    public function __construct(TfishDataValidator $tfish_validator,
+            TfishDatabase1 $tfish_database, TfishPreference $tfish_preference)
     {
         $this->validator = $tfish_validator;
+        $this->db = $tfish_database;
         $this->preference = $tfish_preference;
         $this->search_terms = array();
         $this->escaped_search_terms = array();
@@ -154,7 +156,7 @@ class TfishSearchContent
         $sql_count .= $sql;
         
         // Bind the search term values and execute the statement.
-        $statement = TfishDatabase::preparedStatement($sql_count);
+        $statement = $this->db->preparedStatement($sql_count);
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
@@ -186,7 +188,7 @@ class TfishSearchContent
         }
 
         $sql_search .= $sql;
-        $statement = TfishDatabase::preparedStatement($sql_search);
+        $statement = $this->db->preparedStatement($sql_search);
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {

@@ -49,7 +49,7 @@ $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $clean_terms && $search_type) {
-    $search_engine = new TfishSearchContent($tfish_validator, $tfish_preference);
+    $search_engine = new TfishSearchContent($tfish_validator, $tfish_database, $tfish_preference);
     $search_engine->setSearchTerms($clean_terms);
     $search_engine->setOperator($search_type);
     $search_engine->setOffset($start);
