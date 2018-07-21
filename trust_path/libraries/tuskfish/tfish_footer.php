@@ -27,7 +27,7 @@ $tfish_database->close();
 
 // Write the contents of the buffer to the cache.
 if ($tfish_preference->enable_cache && isset($basename)) {
-    $tfish_cache->cachePage($tfish_preference, $basename, $cache_parameters, ob_get_contents());
+    $tfish_cache->cachePage($basename, $cache_parameters, ob_get_contents());
 }
 
 // Flush the output buffer to screen and clear it.

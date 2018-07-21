@@ -31,10 +31,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishCache
 {
     protected $validator;
+    protected $preference;
     
-    function __construct(TfishDataValidator $tfish_validator)
+    function __construct(TfishDataValidator $tfish_validator, TfishPreference $tfish_preference)
     {
-        $this->validator = $tfish_validator;    
+        $this->validator = $tfish_validator; 
+        $this->preference = $tfish_preference;
     }
 
     /**
@@ -51,17 +53,15 @@ class TfishCache
      * request the page be written to cache. This function should be called after tfish_header.php
      * is included.
      * 
-     * @param object $tfish_preference TfishPreference object, to make site preferences available.
      * @param string $basename Page filename without extension, eg. 'article' (alphanumeric and 
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      */
-    public function getCachedPage(TfishPreference $tfish_preference, string $basename,
-            array $params = array())
+    public function getCachedPage(string $basename, array $params = array())
     {
         
         // Abort if cache is disabled.
-        if (!$tfish_preference->enable_cache) {
+        if (!$this->preference->enable_cache) {
             return;
         }
         
@@ -84,7 +84,7 @@ class TfishCache
         // Path is good, so check if the file actually exists and has not expired. If so, flush
         // the output buffer to screen. This buffer was opened in tfish_header.
         if (file_exists($resolved_path) && (filemtime($resolved_path) > 
-                (time() - $tfish_preference->cache_life))) {
+                (time() - $this->preference->cache_life))) {
             echo file_get_contents($resolved_path);
             ob_end_flush();
             exit;
@@ -147,11 +147,10 @@ class TfishCache
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
-    public function cachePage(TfishPreference $tfish_preference, string $basename,
-            array $params, string $buffer)
+    public function cachePage(string $basename, array $params, string $buffer)
     {        
         // Abort if cache is disabled.
-        if (!$tfish_preference->enable_cache) {
+        if (!$this->preference->enable_cache) {
             return;
         }
         

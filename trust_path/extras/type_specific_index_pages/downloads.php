@@ -48,7 +48,7 @@ if ($clean_id) {
     
     if (is_object($content) && $content->online) {        
         // Check if cached page is available.
-        $tfish_cache->getCachedPage($tfish_preference, $basename, $cache_parameters);
+        $tfish_cache->getCachedPage($basename, $cache_parameters);
         
         // Assign content to template. Counter is only updated when a file download is triggered.
         $tfish_template->content = $content;
@@ -109,7 +109,7 @@ if ($clean_id) {
 // View index page of multiple objects (teasers).
 } else {
     // Check if cached page is available.
-    $tfish_cache->getCachedPage($tfish_preference, $basename, $cache_parameters);
+    $tfish_cache->getCachedPage($basename, $cache_parameters);
     
     if ($clean_start)
         $criteria->setOffset($clean_start);
