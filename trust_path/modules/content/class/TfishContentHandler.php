@@ -39,13 +39,15 @@ class TfishContentHandler
     protected $validator;
     protected $db;
     protected $file_handler;
+    protected $taglink_handler;
     
     public function __construct(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
-            TfishFileHandler $tfish_file_handler)
+            TfishFileHandler $tfish_file_handler, TfishTaglinkHandler $taglink_handler)
     {
         $this->validator = $tfish_validator;
         $this->db = $tfish_database;
         $this->file_handler = $tfish_file_handler;
+        $this->taglink_handler = $taglink_handler;
     }
     
     /**
@@ -80,8 +82,7 @@ class TfishContentHandler
         }
 
         // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
-        $taglink_handler = new TfishTaglinkHandler($this->validator, $this->db);
-        $result = $taglink_handler->deleteTaglinks($obj);
+        $result = $this->taglink_handler->deleteTaglinks($obj);
         
         if (!$result) {
             return false;
@@ -208,8 +209,7 @@ class TfishContentHandler
                 exit;
             }
 
-            $taglink_handler = new TfishTaglinkHandler($this->validator, $this->db);
-            $result = $taglink_handler->insertTaglinks($content_id, $obj->type, $obj->tags);
+            $result = $this->taglink_handler->insertTaglinks($content_id, $obj->type, $obj->tags);
             if (!$result) {
                 return false;
             }
@@ -1083,8 +1083,7 @@ class TfishContentHandler
         }
 
         // Update tags
-        $taglink_handler = new TfishTaglinkHandler($this->validator, $this->db);
-        $result = $taglink_handler->updateTaglinks($clean_id, $obj->type, $obj->tags);
+        $result = $this->taglink_handler->updateTaglinks($clean_id, $obj->type, $obj->tags);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);

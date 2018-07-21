@@ -18,11 +18,11 @@ declare(strict_types=1);
 // 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 
-// 2. Module header must precede Tuskfish header. This file sets module-specific paths.
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
-
-// 3. Main Tuskfish header. This file bootstraps Tuskfish.
+// 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfish_header.php";
+
+// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Specify theme set, otherwise 'default' will be used.
 $tfish_template->setTheme('default');

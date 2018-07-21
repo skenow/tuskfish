@@ -96,3 +96,4 @@ define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a n
         . " failed");
 define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
         . " failed.");
+define("TFISH_ERROR_NO_SUCH_HANDLER", "No such content handler.");

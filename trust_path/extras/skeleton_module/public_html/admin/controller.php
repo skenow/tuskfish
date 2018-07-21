@@ -16,8 +16,8 @@ declare(strict_types=1);
 
 // Boot! Set file paths, preferences and connect to database.
 require_once "../mainfile.php";
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Specify the admin theme you want to use.
 $tfish_template->setTheme('admin');

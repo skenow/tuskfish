@@ -17,11 +17,11 @@ declare(strict_types=1);
 // 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
 
-// 2. Module header must precede Tuskfish header. This file sets module-specific paths.
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
-
-// 3. Main Tuskfish header. This file bootstraps Tuskfish.
+// 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
+
+// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Validate input parameters.
 $clean_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -71,7 +71,7 @@ if (in_array($op, $options_whitelist)) {
         TfishSession::validateToken($clean_token);
     }
     
-    $content_handler = new TfishContentHandler($tfish_validator, $tfish_database, $tfish_file_handler);
+    $content_handler = $tfish_content_handler_factory->getHandler('content');
     
     switch ($op) {
         // Add: Display an empty content object submission form.
@@ -86,8 +86,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->tags = $content_handler->getTagList(false);
 
             // Make a parent tree select box options.
-            $collection_handler = new TfishCollectionHandler($tfish_validator, $tfish_database,
-                    $tfish_file_handler);
+            $collection_handler = $tfish_content_handler_factory->getHandler('collection');
             $collections = $collection_handler->getObjects();
             $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
             $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox();
@@ -178,8 +177,7 @@ if (in_array($op, $options_whitelist)) {
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
 
                     // Make a parent tree select box options.
-                    $collection_handler = new TfishCollectionHandler($tfish_validator,
-                            $tfish_database, $tfish_file_handler);
+                    $collection_handler = $tfish_content_handler_factory->getHandler('collection');
                     $collections = $collection_handler->getObjects();
                     $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
                     
@@ -526,7 +524,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->pagination = $tfish_pagination->getPaginationControl();
 
             // Prepare select filters.
-            $tag_handler = new TfishTagHandler($tfish_validator, $tfish_database, $tfish_file_handler);
+            $tag_handler = $tfish_content_handler_factory->getHandler('tag');
             $tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
             $type_select_box = $content_handler->getTypeSelectBox($clean_type);
             $online_select_box = $content_handler->getOnlineSelectBox($clean_online);

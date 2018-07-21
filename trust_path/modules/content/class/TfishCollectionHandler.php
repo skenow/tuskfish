@@ -30,9 +30,9 @@ class TfishCollectionHandler extends TfishContentHandler
 {
     
     public function __construct(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
-            TfishFileHandler $tfish_file_handler)
+            TfishFileHandler $tfish_file_handler, TfishTaglinkHandler $taglink_handler)
     {
-        parent::__construct($tfish_validator, $tfish_database, $tfish_file_handler);
+        parent::__construct($tfish_validator, $tfish_database, $tfish_file_handler, $taglink_handler);
     }
 
     /**

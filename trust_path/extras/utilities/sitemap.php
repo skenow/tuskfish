@@ -20,9 +20,10 @@ declare(strict_types=1);
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Get a generic handler.
-$content_handler = new TfishContentHandler($tfish_validator, $tfish_database, $tfish_file_handler);
+$content_handler = $tfish_content_handler_factory->getHandler('content');
 
 /** 
  * Sitemap generation code.
