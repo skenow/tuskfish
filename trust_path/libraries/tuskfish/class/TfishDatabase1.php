@@ -890,7 +890,7 @@ class TfishDatabase1
                 . " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
 
         // Prepare the statement and bind the ID value.
-        $statement = TfishDatabase::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
@@ -927,7 +927,7 @@ class TfishDatabase1
                 . " = " . self::addBackticks($column) . " + 1 WHERE `id` = :id";
 
         // Prepare the statement and bind the ID value.
-        $statement = TfishDatabase::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
