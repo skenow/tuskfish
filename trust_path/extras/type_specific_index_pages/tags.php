@@ -20,7 +20,7 @@ require_once TFISH_PATH . "tfish_header.php";
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_TAGS;
-$content_handler = new TfishTagHandler($tfish_validator, $tfish_file_handler);
+$content_handler = new TfishTagHandler($tfish_validator, $tfish_database, $tfish_file_handler);
 $index_template = 'tags';
 $target_file_name = 'tags';
 $tfish_template->target_file_name = $target_file_name;

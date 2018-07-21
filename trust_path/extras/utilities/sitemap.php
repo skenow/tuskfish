@@ -22,7 +22,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfish_header.php";
 
 // Get a generic handler.
-$content_handler = new TfishContentHandler($tfish_validator, $tfish_file_handler);
+$content_handler = new TfishContentHandler($tfish_validator, $tfish_database, $tfish_file_handler);
 
 /** 
  * Sitemap generation code.
