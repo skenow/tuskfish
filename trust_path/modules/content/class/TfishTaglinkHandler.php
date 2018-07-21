@@ -33,7 +33,7 @@ class TfishTaglinkHandler
     
     protected $validator;
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database)
+    public function __construct(TfishValidator $tfish_validator, TfishDatabase $tfish_database)
     {
         $this->validator = $tfish_validator;
         $this->db = $tfish_database;

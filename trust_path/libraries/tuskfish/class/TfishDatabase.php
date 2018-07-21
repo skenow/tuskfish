@@ -40,12 +40,12 @@ class TfishDatabase
     /** @var object $_db Instance of the PDO base class */
     private $_db;
     
-    /** @var object $validator Instance of the TfishDataValidator class or equivalent */
+    /** @var object $validator Instance of the TfishValidator class or equivalent */
     private $validator;
     private $file_handler;
     private $logger;
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishLogger $tfish_logger,
+    public function __construct(TfishValidator $tfish_validator, TfishLogger $tfish_logger,
             TfishFileHandler $tfish_file_handler)
     {
         $this->validator = $tfish_validator;

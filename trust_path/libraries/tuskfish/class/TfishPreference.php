@@ -77,7 +77,7 @@ class TfishPreference
     protected $enable_cache;
     protected $cache_life;
     
-    function __construct(TfishDataValidator $tfish_validator, array $tfish_preferences)
+    function __construct(TfishValidator $tfish_validator, array $tfish_preferences)
     {
         $this->validator = $tfish_validator;
         $this->loadPropertiesFromArray($tfish_preferences);

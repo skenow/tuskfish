@@ -4,7 +4,7 @@
  * TfishMagicMethods trait file.
  * 
  * Provides common magic methods for non-write access to protected properties. Only to be used in
- * classes that have a TfishDataValidator instance as a property.
+ * classes that have a TfishValidator instance as a property.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -17,7 +17,7 @@
  * TfishMagicMethods trait.
  * 
  * Provides common magic methods for non-write access to protected properties. Only to be used in
- * classes that have a TfishDataValidator instance as a property.
+ * classes that have a TfishValidator instance as a property.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

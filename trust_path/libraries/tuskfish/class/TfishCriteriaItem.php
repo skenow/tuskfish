@@ -51,7 +51,7 @@ class TfishCriteriaItem
      * @param mixed $value Value of the column.
      * @param string $operator See getListOfPermittedOperators() for a list of acceptable operators.
      */
-    function __construct(TfishDataValidator $tfish_validator, string $column, $value, string $operator = '=')
+    function __construct(TfishValidator $tfish_validator, string $column, $value, string $operator = '=')
     {
 
         $this->validator = $tfish_validator;

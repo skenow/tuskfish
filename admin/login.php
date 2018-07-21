@@ -30,7 +30,7 @@ ob_start("ob_gzhandler");
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
 
 // Initialise data validator.
-$tfish_validator = new TfishDataValidator();
+$tfish_validator = new TfishValidator();
 
 // Set error reporting levels and custom error handler.
 error_reporting(E_ALL & ~E_NOTICE);

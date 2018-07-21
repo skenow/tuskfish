@@ -46,7 +46,7 @@ class TfishPaginationControl
     protected $extra_params;
     
     /** @param TfishPreference $preference Instance of TfishPreference, holding site preferences. */
-    function __construct(TfishDataValidator $tfish_validator, TfishPreference $tfish_preference)
+    function __construct(TfishValidator $tfish_validator, TfishPreference $tfish_preference)
     {
         $this->validator = $tfish_validator;
         $this->preference = $tfish_preference;

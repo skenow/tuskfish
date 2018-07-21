@@ -41,7 +41,7 @@ class TfishContentHandler
     protected $file_handler;
     protected $taglink_handler;
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
+    public function __construct(TfishValidator $tfish_validator, TfishDatabase $tfish_database,
             TfishFileHandler $tfish_file_handler, TfishTaglinkHandler $taglink_handler)
     {
         $this->validator = $tfish_validator;

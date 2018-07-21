@@ -36,7 +36,7 @@ class TfishTemplate
     protected $validator;
     protected $theme = 'default';  
     
-    public function __construct(TfishDataValidator $tfish_validator)
+    public function __construct(TfishValidator $tfish_validator)
     {
         $this->validator = $tfish_validator;
     }

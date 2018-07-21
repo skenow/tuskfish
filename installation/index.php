@@ -37,7 +37,7 @@ if (is_readable("../mainfile.php")) {
 }
 
 // Initialise data validator.
-$tfish_validator = new TfishDataValidator();
+$tfish_validator = new TfishValidator();
 
 // Initialise default content variable.
 $tfish_content = array('output' => '');

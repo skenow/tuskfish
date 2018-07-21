@@ -33,7 +33,7 @@ class TfishCache
     protected $validator;
     protected $preference;
     
-    function __construct(TfishDataValidator $tfish_validator, TfishPreference $tfish_preference)
+    function __construct(TfishValidator $tfish_validator, TfishPreference $tfish_preference)
     {
         $this->validator = $tfish_validator; 
         $this->preference = $tfish_preference;

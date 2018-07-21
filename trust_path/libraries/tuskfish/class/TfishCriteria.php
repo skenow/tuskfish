@@ -57,7 +57,7 @@ class TfishCriteria
     protected $secondary_order_type = "DESC";
     protected $tag = array();
     
-    public function __construct(TfishDataValidator $tfish_validator)
+    public function __construct(TfishValidator $tfish_validator)
     {
         $this->validator = $tfish_validator;
     }

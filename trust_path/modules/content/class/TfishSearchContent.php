@@ -39,7 +39,7 @@ class TfishSearchContent
     protected $offset;
     protected $operator; // and / or / exact
     
-    public function __construct(TfishDataValidator $tfish_validator,
+    public function __construct(TfishValidator $tfish_validator,
             TfishDatabase $tfish_database, TfishPreference $tfish_preference)
     {
         $this->validator = $tfish_validator;

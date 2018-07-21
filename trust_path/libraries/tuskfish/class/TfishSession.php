@@ -471,14 +471,14 @@ class TfishSession
      * 
      * @param object $tfish_preference TfishPreference object.
      */
-    public static function start(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
+    public static function start(TfishValidator $tfish_validator, TfishDatabase $tfish_database,
             TfishPreference $tfish_preference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', '1');
         ini_set('session.use_only_cookies', '1');
         
-        if (is_a($tfish_validator, 'TfishDataValidator')) {
+        if (is_a($tfish_validator, 'TfishValidator')) {
             self::$validator = $tfish_validator;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);

@@ -110,12 +110,12 @@ class TfishContentObject
     /** Initialise default content object properties and values. */
     function __construct()
     {
-        /** It would be better to inject TfishDataValidator as a dependency, but can't do this
+        /** It would be better to inject TfishValidator as a dependency, but can't do this
          * due to an issue with the use of the PDO FETCH_CLASSTYPE flag, to auto-instantiate
          * classes using the first column in the database table, as it does not allow constructor
          * arguments to be passed.
          */
-        $this->validator = new TfishDataValidator();
+        $this->validator = new TfishValidator();
         
         /**
          * Set default values of permitted properties.

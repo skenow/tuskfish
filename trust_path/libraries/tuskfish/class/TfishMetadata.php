@@ -61,7 +61,7 @@ class TfishMetadata
      * 
      * @param TfishPreference $preference Instance of TfishPreference, holding site preferences.
      */
-    function __construct(TfishDataValidator $tfish_validator, TfishPreference $preference)
+    function __construct(TfishValidator $tfish_validator, TfishPreference $preference)
     {
         $this->validator = $tfish_validator; 
         $this->setTitle($preference->site_name);
