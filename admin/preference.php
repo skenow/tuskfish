@@ -46,7 +46,7 @@ if (in_array($op, array('edit', 'update', false))) {
             $tfish_preference->loadPropertiesFromArray($_REQUEST);
 
             // Update the database row and display a response.
-            $tfish_preference_handler = new TfishPreferenceHandler;
+            $tfish_preference_handler = new TfishPreferenceHandler($tfish_database);
             $result = $tfish_preference_handler->writePreferences($tfish_preference);
             
             if ($result) {

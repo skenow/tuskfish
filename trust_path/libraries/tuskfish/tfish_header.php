@@ -56,7 +56,7 @@ $preference_handler = new TfishPreferenceHandler($tfish_database);
 $tfish_preference = new TfishPreference($tfish_validator, $preference_handler->readPreferencesFromDatabase());
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site.
-TfishSession::start($tfish_preference);
+TfishSession::start($tfish_validator, $tfish_database, $tfish_preference);
 
 // Initialise the metadata object and set default page-level metadata values (overwrite as required).
 $tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);

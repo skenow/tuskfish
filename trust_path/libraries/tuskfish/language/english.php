@@ -191,7 +191,7 @@ define("TFISH_ERROR_NOT_INT", "Not an integer, or integer range violation.");
 define("TFISH_ERROR_NOT_BOOL", "Not a boolean.");
 define("TFISH_ERROR_NOT_FLOAT", "Not a float.");
 define("TFISH_ERROR_NOT_EMAIL", "Not an email.");
-define("TFISH_ERROR_NOT_OBJECT", "Not an object, or illegal object type.");
+define("TFISH_ERROR_NOT_OBJECT", "Not an object, or illegal class type.");
 define("TFISH_ERROR_ILLEGAL_MIMETYPE", "Illegal mimetype.");
 define("TFISH_ERROR_UNKNOWN_MIMETYPE", "Unknown mimetype.");
 define("TFISH_ERROR_NO_STATEMENT", "No statement object.");

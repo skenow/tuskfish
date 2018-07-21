@@ -34,6 +34,8 @@ class TfishSession
     /** Set within the start() method; ideally this should be injected but I want to keep the
      * session class static for now. */
     private static $validator;
+    private static $db;
+    private static $preference;
     
     /** No instantiation permitted. */
     final private function __construct()
@@ -79,7 +81,7 @@ class TfishSession
      * @param object $tfish_preference TfishPreference object.
      * @return bool True if session has expired, false if not.
      */
-    public static function isExpired(object $tfish_preference)
+    public static function isExpired()
     {
         // Check if session carries a destroyed flag and kill it if the grace timer has expired.
         if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
@@ -90,8 +92,8 @@ class TfishSession
         $last_seen = isset($_SESSION['last_seen']) ? (int) $_SESSION['last_seen'] : false;
 
         // Check expiry (but not if session_life === 0).
-        if ($last_seen && $tfish_preference->session_life > 0) {
-            if ($last_seen && (time() - $last_seen) > ($tfish_preference->session_life * 60)) {
+        if ($last_seen && self::$preference->session_life > 0) {
+            if ($last_seen && (time() - $last_seen) > (self::$preference->session_life * 60)) {
                 return true;
             }
         }
@@ -469,13 +471,33 @@ class TfishSession
      * 
      * @param object $tfish_preference TfishPreference object.
      */
-    public static function start(object $tfish_preference)
+    public static function start(TfishDataValidator $tfish_validator, TfishDatabase1 $tfish_database,
+            TfishPreference $tfish_preference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', '1');
         ini_set('session.use_only_cookies', '1');
         
-        self::$validator = new TfishDataValidator();
+        if (is_a($tfish_validator, 'TfishDataValidator')) {
+            self::$validator = $tfish_validator;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            self::logout(TFISH_ADMIN_URL . "login.php");
+        }
+        
+        if (is_a($tfish_database, 'TfishDatabase1')) {
+            self::$db = $tfish_database;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            self::logout(TFISH_ADMIN_URL . "login.php");
+        }
+        
+        if (is_a($tfish_preference, 'TfishPreference')) {
+            self::$preference = $tfish_preference;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            self::logout(TFISH_ADMIN_URL . "login.php");
+        }
 
         // Session name. If the preference has been messed up it will assign one.
         $session_name = isset($tfish_preference->session_name)
