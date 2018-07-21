@@ -30,6 +30,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishPreferenceHandler
 {
+    protected $db;
+    
+    public function __construct(TfishDatabase1 $tfish_database)
+    {
+        $this->db = $tfish_database;
+    }
     
     /**
      * Read out the site preferences into an array.
@@ -39,7 +45,7 @@ class TfishPreferenceHandler
     public function readPreferencesFromDatabase()
     {
         $preferences = array();
-        $result = TfishDatabase::select('preference');
+        $result = $this->db->select('preference');
         
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $preferences[$row['title']] = $row['value'];
@@ -62,11 +68,11 @@ class TfishPreferenceHandler
         
         foreach ($key_values as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
-            $statement = TfishDatabase::preparedStatement($sql);
-            $statement->bindValue(':title', $key, TfishDatabase::setType($key));
-            $statement->bindValue(':value', $value, TfishDatabase::setType($value));
+            $statement = $this->db->preparedStatement($sql);
+            $statement->bindValue(':title', $key, $this->db->setType($key));
+            $statement->bindValue(':value', $value, $this->db->setType($value));
             unset($sql, $key, $value);
-            $result = TfishDatabase::executeTransaction($statement);
+            $result = $this->db->executeTransaction($statement);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);

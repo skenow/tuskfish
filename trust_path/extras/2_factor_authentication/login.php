@@ -48,7 +48,7 @@ TfishDatabase::connect();
 include TFISH_DEFAULT_LANGUAGE;
 
 // Ensure that global site preferences are available via $tfish_preference
-$preference_handler = new TfishPreferenceHandler();
+$preference_handler = new TfishPreferenceHandler($tfish_database);
 $tfish_preference = new TfishPreference($tfish_validator, $preference_handler->readPreferencesFromDatabase());
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site
