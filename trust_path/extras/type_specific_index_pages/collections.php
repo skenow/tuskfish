@@ -14,9 +14,14 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-// Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
+// 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
+
+// 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfish_header.php";
+
+// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_COLLECTIONS;
@@ -145,6 +150,7 @@ if ($clean_id) {
     
     // Set criteria for selecting content objects.
     $criteria = new TfishCriteria($tfish_validator);
+    $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishCollection'));
     
     if ($clean_start)
         $criteria->setOffset($clean_start);

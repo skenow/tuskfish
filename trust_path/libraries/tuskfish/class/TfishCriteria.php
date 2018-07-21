@@ -342,8 +342,8 @@ class TfishCriteria
         }
 
         // Reindex the arrays.
-        $this->setItem(array_values($this->item));
-        $this->setCondition(array_values($this->condition));
+        $this->item = array_values($this->item);
+        $this->condition = array_values($this->condition);
     }
 
 }

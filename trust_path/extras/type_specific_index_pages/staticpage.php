@@ -16,9 +16,14 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-// Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
+// 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
+
+// 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfish_header.php";
+
+// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Lock handler to static pages.
 $content_handler = $tfish_content_handler_factory->getHandler('content');
@@ -51,12 +56,12 @@ $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' =
 
 if ($clean_id) {
     
-    $content = $static_handler->getObject($clean_id);
+    $content = $content_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online) {
         // Update view counter and assign object to template.
         $content->counter += 1;
-        $static_handler->updateCounter($clean_id);
+        $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
         $tfish_cache->getCachedPage($basename, $cache_parameters);
@@ -77,7 +82,7 @@ if ($clean_id) {
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
-            $tags = $static_handler->makeTagLinks($content->tags, $target_file_name);
+            $tags = $content_handler->makeTagLinks($content->tags, $target_file_name);
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
@@ -91,7 +96,7 @@ if ($clean_id) {
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
-            $parent = $static_handler->getObject($content->parent);
+            $parent = $content_handler->getObject($content->parent);
             
             if (is_object($parent) && $parent->online) {
                 $tfish_template->parent = $parent;

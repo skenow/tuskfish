@@ -184,7 +184,7 @@ class TfishPaginationControl
         return $control;
     }
     
-    public function setCount(int $count)
+    public function setCount($count)
     {
         $this->count = $this->validator->isInt($count, 1) ? (int) $count : 0;
     }

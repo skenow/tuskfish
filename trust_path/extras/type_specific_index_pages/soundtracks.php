@@ -14,9 +14,14 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-// Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
+// 1. Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
+
+// 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfish_header.php";
+
+// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Lock handler to soundtracks.
 $content_handler = $tfish_content_handler_factory->getHandler('content');
@@ -119,7 +124,7 @@ if ($clean_id) {
 
     // Prepare pagination control.
     $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-    $tfish_pagination = $target_file_name;
+    $tfish_pagination->setUrl($target_file_name);
     $tfish_pagination->setCount($content_handler->getCount($criteria));
     $tfish_pagination->setLimit($tfish_preference->user_pagination);
     $tfish_pagination->setStart($clean_start);
