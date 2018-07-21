@@ -33,9 +33,10 @@ class TfishTaglinkHandler
     
     protected $validator;
     
-    public function __construct(TfishDataValidator $tfish_validator)
+    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase1 $tfish_database)
     {
         $this->validator = $tfish_validator;
+        $this->db = $tfish_database;
     }
 
     /**
@@ -60,7 +61,7 @@ class TfishTaglinkHandler
             $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_content_id));
         }
         
-        $result = TfishDatabase::deleteAll('taglink', $criteria);
+        $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {
             return false;
@@ -114,7 +115,7 @@ class TfishTaglinkHandler
             unset($tag);
         }
         foreach ($clean_tags as $clean_tag) {
-            $result = TfishDatabase::insert('taglink', $clean_tag);
+            $result = $this->db->insert('taglink', $clean_tag);
             
             if (!$result) {
                 return false;
@@ -172,7 +173,7 @@ class TfishTaglinkHandler
         // Delete any existing tags.
         $criteria = new TfishCriteria($this->validator);
         $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_id));
-        $result = TfishDatabase::deleteAll('taglink', $criteria);
+        $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {
             return false;
@@ -206,7 +207,7 @@ class TfishTaglinkHandler
 
         // Insert the new taglinks.
         foreach ($clean_tags as $clean_tag) {
-            $result = TfishDatabase::insert('taglink', $clean_tag);
+            $result = $this->db->insert('taglink', $clean_tag);
             
             if (!$result) {
                 return false;

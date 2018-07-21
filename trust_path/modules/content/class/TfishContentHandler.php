@@ -77,7 +77,7 @@ class TfishContentHandler
         }
 
         // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
-        $taglink_handler = new TfishTaglinkHandler($this->validator);
+        $taglink_handler = new TfishTaglinkHandler($this->validator, $this->db);
         $result = $taglink_handler->deleteTaglinks($obj);
         
         if (!$result) {
@@ -205,7 +205,7 @@ class TfishContentHandler
                 exit;
             }
 
-            $taglink_handler = new TfishTaglinkHandler($this->validator);
+            $taglink_handler = new TfishTaglinkHandler($this->validator, $this->db);
             $result = $taglink_handler->insertTaglinks($content_id, $obj->type, $obj->tags);
             if (!$result) {
                 return false;
@@ -1080,7 +1080,7 @@ class TfishContentHandler
         }
 
         // Update tags
-        $taglink_handler = new TfishTaglinkHandler($this->validator);
+        $taglink_handler = new TfishTaglinkHandler($this->validator, $this->db);
         $result = $taglink_handler->updateTaglinks($clean_id, $obj->type, $obj->tags);
         
         if (!$result) {
