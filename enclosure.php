@@ -28,7 +28,7 @@ require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($clean_id) {
-    $content_handler = $tfish_content_handler_factory->getHandler('content');
+    $content_handler = $content_handler_factory->getHandler('content');
     $content_handler->updateCounter($clean_id);
     $content_handler->streamDownloadToBrowser($clean_id);
 }

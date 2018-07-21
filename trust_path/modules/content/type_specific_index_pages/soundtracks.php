@@ -1,11 +1,9 @@
 <?php
 
 /**
- * Static page template script.
- * 
- * User-facing controller script for presenting a single static content page. Simply make a copy of
- * this file with whatever name you want and set the id of the content you want to display in the
- * configuration section. 
+ * Audio index page script.
+ *
+ * User-facing controller script for presenting a list of audio content in teaser format.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -25,28 +23,21 @@ require_once TFISH_PATH . "tfish_header.php";
 // 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
 require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
-// Lock handler to static pages.
-$content_handler = $tfish_content_handler_factory->getHandler('content');
+// Lock handler to soundtracks.
+$content_handler = $content_handler_factory->getHandler('content');
 $criteria = new TfishCriteria($tfish_validator);
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishStatic'));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishAudio'));
 
-////////// CONFIGURATION //////////
-// 1. Enter the ID of the content object you want to display on this page.
-$id = 10;
-
-// 2. Enter the name of the page you want headings and tags to link back to, without extension.
-$target_file_name = 'index';
+// Configure page.
+$tfish_template->page_title = TFISH_TYPE_AUDIO_FILES;
+$index_template = 'soundtracks';
+$target_file_name = 'soundtracks';
 $tfish_template->target_file_name = $target_file_name;
-
-// 3. Set the page title.
-$tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
-
-// 4. Specify theme set, otherwise 'default' will be used.
+// Specify theme, otherwise 'default' will be used.
 // $tfish_template->setTheme('jumbotron');
-////////// END CONFIGURATION //////////
 
 // Validate input parameters.
-$clean_id = (int) $id;
+$clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 
@@ -54,8 +45,8 @@ $clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
 $basename = basename(__FILE__);
 $cache_parameters = array('id' => $clean_id, 'start' => $clean_start, 'tag_id' => $clean_tag);
 
+// View single object description.
 if ($clean_id) {
-    
     $content = $content_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online) {
@@ -66,6 +57,7 @@ if ($clean_id) {
         // Check if cached page is available.
         $tfish_cache->getCachedPage($basename, $cache_parameters);
         
+        // Assign content to template.
         $tfish_template->content = $content;
 
         // Prepare meta information for display.
@@ -79,6 +71,12 @@ if ($clean_id) {
         
         if ($content->counter)
             $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
+        
+        if ($content->format)
+            $contentInfo[] = '.' . $content->escapeForXss('format');
+        
+        if ($content->file_size)
+            $contentInfo[] = $content->escapeForXss('file_size');
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
@@ -102,58 +100,41 @@ if ($clean_id) {
                 $tfish_template->parent = $parent;
             }
         }
-        
-        // Initialise criteria object.
-        $criteria = new TfishCriteria($tfish_validator);
-        $criteria->setOrder('date');
-        $criteria->setOrderType('DESC');
-        $criteria->setSecondaryOrder('submission_time');
-        $criteria->setSecondaryOrderType('DESC');
-
-        // If object is a collection check if has child objects; if so display teasers / links.
-        if ($content->type === 'TfishCollection') {
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $content->id));
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
-            
-            if ($clean_start) $criteria->setOffset($clean_start);
-            
-            $criteria->setLimit($tfish_preference->user_pagination);
-        }
-
-        // If object is a tag, then a different method is required to call the related content.
-        if ($content->type === 'TfishTag') {
-            if ($clean_start) $criteria->setOffset($clean_start);
-            
-            $criteria->setLimit($tfish_preference->user_pagination);
-            $criteria->setTag(array($content->id));
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!='));
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
-        }
-        
-        // Prepare pagination control.
-        if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-            $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-            $tfish_pagination->setUrl($target_file_name);
-            $tfish_pagination->setCount($content_handler->getCount($criteria));
-            $tfish_pagination->setLimit($tfish_preference->user_pagination);
-            $tfish_pagination->setStart($clean_start);
-            $tfish_pagination->setTag(0);
-            $tfish_pagination->setExtraParams(array('id' => $clean_id));
-            $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl();
-
-            // Retrieve content objects and assign to template.
-            $first_children = $content_handler->getObjects($criteria);
-            
-            if (!empty($first_children)) {
-                $tfish_template->first_children = $first_children;
-            }
-        }
 
         // Render template.
         $tfish_template->tfish_main_content = $tfish_template->render($content->template);
     } else {
-        $tfish_template->tfish_main_content = TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE;
+        $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
     }
+
+// View index page of multiple objects (teasers).
+} else {
+    // Check if cached page is available.
+    $tfish_cache->getCachedPage($basename, $cache_parameters);
+    
+    if ($clean_start)
+        $criteria->setOffset($clean_start);
+    
+    $criteria->setLimit($tfish_preference->user_pagination);
+    
+    if ($clean_tag)
+        $criteria->setTag(array($clean_tag));
+    
+    $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
+
+    // Prepare pagination control.
+    $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
+    $tfish_pagination->setUrl($target_file_name);
+    $tfish_pagination->setCount($content_handler->getCount($criteria));
+    $tfish_pagination->setLimit($tfish_preference->user_pagination);
+    $tfish_pagination->setStart($clean_start);
+    $tfish_pagination->setTag($clean_tag);
+    $tfish_template->pagination = $tfish_pagination->getPaginationControl();
+
+    // Retrieve content objects and assign to template.
+    $content_objects = $content_handler->getObjects($criteria);
+    $tfish_template->content_objects = $content_objects;
+    $tfish_template->tfish_main_content = $tfish_template->render($index_template);
 }
 
 /**

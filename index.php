@@ -24,7 +24,7 @@ require_once TFISH_PATH . "tfish_header.php";
 require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Get a content handler.
-$content_handler = $tfish_content_handler_factory->getHandler('content');
+$content_handler = $content_handler_factory->getHandler('content');
 
 // Specify theme, otherwise 'default' will be used.
 $tfish_template->setTheme('default');
@@ -201,7 +201,7 @@ if ($clean_id) {
 
     // Prepare tag select box.
     $tfish_template->select_action = 'index.php';
-    $tag_handler = $tfish_content_handler_factory->getHandler('tag');
+    $tag_handler = $content_handler_factory->getHandler('tag');
     $tfish_template->select_filters = $tag_handler->getTagSelectBox($clean_tag);
     $tfish_template->select_filters_form = $tfish_template->render('select_filters');
 }

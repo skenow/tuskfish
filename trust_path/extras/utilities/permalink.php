@@ -23,7 +23,7 @@ $tfish_template->setTheme('default');
 
 // Configure page.
 $tfish_template->page_title = TFISH_TYPE_PERMALINKS;
-$content_handler = $tfish_content_handler_factory->getHandler('content');
+$content_handler = $content_handler_factory->getHandler('content');
 $target_file_name = 'permalink';
 
 // Validate input parameters.

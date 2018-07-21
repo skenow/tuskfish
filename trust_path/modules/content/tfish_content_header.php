@@ -32,6 +32,6 @@ function tfish_content_module_autoload(string $classname) {
 spl_autoload_register('tfish_content_module_autoload');
 
 // Make the content handler factory available.
-$tfish_content_handler_factory = new TfishContentHandlerFactory($tfish_validator, $tfish_database,
+$content_handler_factory = new TfishContentHandlerFactory($tfish_validator, $tfish_database,
             $tfish_file_handler);
 

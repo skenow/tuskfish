@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Collection index page script.
+ * Image index page script.
  *
- * User-facing controller script for presenting a list of collection objects in teaser format.
+ * User-facing controller script for presenting a list of image content as a grid of thumbnails.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -23,11 +23,15 @@ require_once TFISH_PATH . "tfish_header.php";
 // 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
 require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
+// Lock handler to images.
+$content_handler = $content_handler_factory->getHandler('content');
+$criteria = new TfishCriteria($tfish_validator);
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishImage'));
+
 // Configure page.
-$tfish_template->page_title = TFISH_TYPE_COLLECTIONS;
-$content_handler = $tfish_content_handler_factory->getHandler('content');
-$index_template = 'collections';
-$target_file_name = 'collections';
+$tfish_template->page_title = TFISH_TYPE_IMAGES;
+$index_template = 'images';
+$target_file_name = 'images';
 $tfish_template->target_file_name = $target_file_name;
 // Specify theme, otherwise 'default' will be used.
 // $tfish_template->setTheme('jumbotron');
@@ -46,11 +50,9 @@ if ($clean_id) {
     $content = $content_handler->getObject($clean_id);
     
     if (is_object($content) && $content->online) {
-        // Update view counter (if not a downloadable resource) and assign object to template.
-        if (!$content->media) {
-            $content->counter += 1;
-            $content_handler->updateCounter($clean_id);
-        }
+        // Update view counter and assign object to template.
+        $content->counter += 1;
+        $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
         $tfish_cache->getCachedPage($basename, $cache_parameters);
@@ -60,26 +62,14 @@ if ($clean_id) {
 
         // Prepare meta information for display.
         $contentInfo = array();
-        
         if ($content->creator)
             $contentInfo[] = $content->escapeForXss('creator');
         
         if ($content->date)
             $contentInfo[] = $content->escapeForXss('date');
         
-        if ($content->media) { // Label the counter as downloads or views depending on whether the collection is a downloadable resource or not.
-            if ($content->counter)
-                $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_DOWNLOADS;
-        } else {
-            if ($content->counter)
-                $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
-        }
-        
-        if ($content->format)
-            $contentInfo[] = '.' . $content->escapeForXss('format');
-        
-        if ($content->file_size)
-            $contentInfo[] = $content->escapeForXss('file_size');
+        if ($content->counter)
+            $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
@@ -105,38 +95,6 @@ if ($clean_id) {
             }
         }
 
-        // Check if has child objects; if so display thumbnails and teasers / links.
-        $criteria = new TfishCriteria($tfish_validator);
-        $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $content->id));
-        $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
-        
-        if ($clean_start) {
-            $criteria->setOffset($clean_start);
-        }
-        
-        $criteria->setLimit($tfish_preference->user_pagination);
-        $criteria->setOrder('date');
-        $criteria->setOrderType('DESC');
-        $criteria->setSecondaryOrder('submission_time');
-        $criteria->setSecondaryOrderType('DESC');
-
-        // Prepare pagination control.
-        $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-        $tfish_pagination->setUrl($target_file_name);
-        $tfish_pagination->setCount($content_handler->getCount($criteria));
-        $tfish_pagination->setLimit($tfish_preference->user_pagination);
-        $tfish_pagination->setStart($clean_start);
-        $tfish_pagination->setTag(0);
-        $tfish_pagination->setExtraParams(array('id' => $clean_id));
-        $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl();
-
-        // Retrieve content objects and assign to template.
-        $first_children = $content_handler->getObjects($criteria);
-        
-        if (!empty($first_children)) {
-            $tfish_template->first_children = $first_children;
-        }
-
         // Render template.
         $tfish_template->tfish_main_content = $tfish_template->render($content->template);
     } else {
@@ -147,10 +105,6 @@ if ($clean_id) {
 } else {
     // Check if cached page is available.
     $tfish_cache->getCachedPage($basename, $cache_parameters);
-    
-    // Set criteria for selecting content objects.
-    $criteria = new TfishCriteria($tfish_validator);
-    $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishCollection'));
     
     if ($clean_start)
         $criteria->setOffset($clean_start);
@@ -168,14 +122,10 @@ if ($clean_id) {
     $tfish_pagination->setCount($content_handler->getCount($criteria));
     $tfish_pagination->setLimit($tfish_preference->user_pagination);
     $tfish_pagination->setStart($clean_start);
-    $tfish_pagination->setTag(0);
-    $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl();
+    $tfish_pagination->setTag($clean_tag);
+    $tfish_template->pagination = $tfish_pagination->getPaginationControl();
 
     // Retrieve content objects and assign to template.
-    $criteria->setOrder('date');
-    $criteria->setOrderType('DESC');
-    $criteria->setSecondaryOrder('submission_time');
-    $criteria->setSecondaryOrderType('DESC');
     $content_objects = $content_handler->getObjects($criteria);
     $tfish_template->content_objects = $content_objects;
     $tfish_template->tfish_main_content = $tfish_template->render($index_template);

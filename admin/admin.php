@@ -71,7 +71,7 @@ if (in_array($op, $options_whitelist)) {
         TfishSession::validateToken($clean_token);
     }
     
-    $content_handler = $tfish_content_handler_factory->getHandler('content');
+    $content_handler = $content_handler_factory->getHandler('content');
     
     switch ($op) {
         // Add: Display an empty content object submission form.
@@ -86,7 +86,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->tags = $content_handler->getTagList(false);
 
             // Make a parent tree select box options.
-            $collection_handler = $tfish_content_handler_factory->getHandler('collection');
+            $collection_handler = $content_handler_factory->getHandler('collection');
             $collections = $collection_handler->getObjects();
             $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
             $tfish_template->parent_select_options = $parent_tree->makeParentSelectBox();
@@ -177,7 +177,7 @@ if (in_array($op, $options_whitelist)) {
                     $row = $statement->fetch(PDO::FETCH_ASSOC);
 
                     // Make a parent tree select box options.
-                    $collection_handler = $tfish_content_handler_factory->getHandler('collection');
+                    $collection_handler = $content_handler_factory->getHandler('collection');
                     $collections = $collection_handler->getObjects();
                     $parent_tree = new TfishAngryTree($collections, 'id', 'parent');
                     
@@ -524,7 +524,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->pagination = $tfish_pagination->getPaginationControl();
 
             // Prepare select filters.
-            $tag_handler = $tfish_content_handler_factory->getHandler('tag');
+            $tag_handler = $content_handler_factory->getHandler('tag');
             $tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
             $type_select_box = $content_handler->getTypeSelectBox($clean_type);
             $online_select_box = $content_handler->getOnlineSelectBox($clean_online);

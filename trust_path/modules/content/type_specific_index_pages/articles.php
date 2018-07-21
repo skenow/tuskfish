@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Image index page script.
+ * Article index page script.
  *
- * User-facing controller script for presenting a list of image content as a grid of thumbnails.
+ * User-facing controller script for presenting a list of article content in teaser format.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -23,15 +23,15 @@ require_once TFISH_PATH . "tfish_header.php";
 // 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
 require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
-// Lock handler to images.
-$content_handler = $tfish_content_handler_factory->getHandler('content');
+// Lock handler to articles.
+$content_handler = $content_handler_factory->getHandler('content');
 $criteria = new TfishCriteria($tfish_validator);
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishImage'));
+$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishArticle'));
 
 // Configure page.
-$tfish_template->page_title = TFISH_TYPE_IMAGES;
-$index_template = 'images';
-$target_file_name = 'images';
+$tfish_template->page_title = TFISH_TYPE_ARTICLES;
+$index_template = 'articles';
+$target_file_name = 'articles';
 $tfish_template->target_file_name = $target_file_name;
 // Specify theme, otherwise 'default' will be used.
 // $tfish_template->setTheme('jumbotron');
@@ -62,6 +62,7 @@ if ($clean_id) {
 
         // Prepare meta information for display.
         $contentInfo = array();
+        
         if ($content->creator)
             $contentInfo[] = $content->escapeForXss('creator');
         
@@ -77,7 +78,6 @@ if ($clean_id) {
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
-        
         $tfish_template->contentInfo = implode(' | ', $contentInfo);
         
         if ($content->meta_title)

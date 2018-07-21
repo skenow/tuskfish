@@ -29,7 +29,7 @@ $tfish_template->setTheme('gallery');
 
 // Configure page.
 $tfish_template->page_title = TFISH_IMAGE_GALLERY;
-$content_handler = $tfish_content_handler_factory->getHandler('content');
+$content_handler = $content_handler_factory->getHandler('content');
 $index_template = 'admin_images';
 $target_file_name = 'gallery';
 $tfish_template->target_file_name = 'index';
@@ -87,7 +87,7 @@ if ($clean_start) $criteria->setOffset($clean_start);
 $criteria->setLimit($tfish_preference->gallery_pagination);
 
 // Prepare select filters.
-$tag_handler = $tfish_content_handler_factory->getHandler('tag');
+$tag_handler = $content_handler_factory->getHandler('tag');
 $tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
 $type_select_box = $content_handler->getTypeSelectBox($clean_type);
 $online_select_box = $content_handler->getOnlineSelectBox($clean_online);
