@@ -68,7 +68,7 @@ class TfishCriteria
      * @param object $criteria_item TfishCriteriaItem object.
      * @param string $condition Condition used to chain TfishCriteriaItems, "AND" or "OR" only.
      */
-    public function add(object $criteria_item, string $condition = "AND")
+    public function add(TfishCriteriaItem $criteria_item, string $condition = "AND")
     {
         $this->setItem($criteria_item);
         $this->setCondition($condition);

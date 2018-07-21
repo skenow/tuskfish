@@ -1121,7 +1121,7 @@ class TfishDatabase1
      * @param object $criteria TfishCriteria object.
      * @return object Validated TfishCriteria object.
      */
-    public function validateCriteriaObject(object $criteria)
+    public function validateCriteriaObject(TfishCriteria $criteria)
     {
         
         if ($criteria->item) {
