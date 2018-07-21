@@ -40,7 +40,7 @@ $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!=
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$content_ids = TfishDatabase::select('content', $criteria, $columns);
+$content_ids = $tfish_database->select('content', $criteria, $columns);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
 $criteria = new TfishCriteria($tfish_validator);

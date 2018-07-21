@@ -44,6 +44,8 @@ set_error_handler(array($tfish_logger, "logError"));
 $tfish_file_handler = new TfishFileHandler($tfish_validator);
 
 // Initialise database connection.
+$tfish_database = new TfishDatabase1($tfish_validator, $tfish_logger, $tfish_file_handler);
+$tfish_database->connect();
 TfishDatabase::connect();
 
 // Make core language files available.

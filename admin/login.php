@@ -37,7 +37,12 @@ error_reporting(E_ALL & ~E_NOTICE);
 $tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
+// Make file handler available.
+$tfish_file_handler = new TfishFileHandler($tfish_validator);
+
 // Ensure that a database connection is available
+$tfish_database = new TfishDatabase1($tfish_validator, $tfish_logger, $tfish_file_handler);
+$tfish_database->connect();
 TfishDatabase::connect();
 
 // Make core language files available.
