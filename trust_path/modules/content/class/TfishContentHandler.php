@@ -40,7 +40,7 @@ class TfishContentHandler
     protected $db;
     protected $file_handler;
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase1 $tfish_database,
+    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
             TfishFileHandler $tfish_file_handler)
     {
         $this->validator = $tfish_validator;

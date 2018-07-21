@@ -471,7 +471,7 @@ class TfishSession
      * 
      * @param object $tfish_preference TfishPreference object.
      */
-    public static function start(TfishDataValidator $tfish_validator, TfishDatabase1 $tfish_database,
+    public static function start(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
             TfishPreference $tfish_preference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
@@ -485,7 +485,7 @@ class TfishSession
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
-        if (is_a($tfish_database, 'TfishDatabase1')) {
+        if (is_a($tfish_database, 'TfishDatabase')) {
             self::$db = $tfish_database;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);

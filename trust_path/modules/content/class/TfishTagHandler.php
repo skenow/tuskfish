@@ -29,7 +29,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishTagHandler extends TfishContentHandler
 {
     
-    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase1 $tfish_database,
+    public function __construct(TfishDataValidator $tfish_validator, TfishDatabase $tfish_database,
             TfishFileHandler $tfish_file_handler)
     {
         parent::__construct($tfish_validator, $tfish_database, $tfish_file_handler);

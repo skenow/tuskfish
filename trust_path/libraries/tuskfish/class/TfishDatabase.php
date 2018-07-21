@@ -34,7 +34,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @since       1.0
  * @package     database
  */
-class TfishDatabase1
+class TfishDatabase
 {
 
     /** @var object $_db Instance of the PDO base class */

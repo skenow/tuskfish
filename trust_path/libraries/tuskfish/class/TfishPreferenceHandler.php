@@ -32,7 +32,7 @@ class TfishPreferenceHandler
 {
     protected $db;
     
-    public function __construct(TfishDatabase1 $tfish_database)
+    public function __construct(TfishDatabase $tfish_database)
     {
         $this->db = $tfish_database;
     }

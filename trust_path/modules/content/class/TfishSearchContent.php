@@ -40,7 +40,7 @@ class TfishSearchContent
     protected $operator; // and / or / exact
     
     public function __construct(TfishDataValidator $tfish_validator,
-            TfishDatabase1 $tfish_database, TfishPreference $tfish_preference)
+            TfishDatabase $tfish_database, TfishPreference $tfish_preference)
     {
         $this->validator = $tfish_validator;
         $this->db = $tfish_database;

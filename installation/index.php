@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // INITIALISE THE SQLITE DATABASE //
         ////////////////////////////////////
         // Create the database
-        $tfish_database = new TfishDatabase1($tfish_validator, $tfish_logger, $tfish_file_handler);
+        $tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
         $db_path = $tfish_database->create($db_name);
 
         if ($db_path) {
