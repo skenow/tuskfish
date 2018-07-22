@@ -59,10 +59,10 @@ class TfishDownload extends TfishContentObject
 {
 
     /** Initialise default property values and unset unneeded ones. */
-    function __construct()
+    function __construct(TfishValidator $tfish_validator)
     {
         // Must call parent constructor first.
-        parent::__construct();
+        parent::__construct($tfish_validator);
 
         // Declare the type, template and module for this this class
         $this->type = "download";

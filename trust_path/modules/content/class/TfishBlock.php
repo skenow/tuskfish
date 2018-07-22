@@ -42,10 +42,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishBlock extends TfishContentObject
 {
     /** Initialise default properties and values. */
-    public function __construct()
+    public function __construct(TfishValidator $tfish_validator)
     {
         // Must call parent constructor first.
-        parent::__construct();
+        parent::__construct($tfish_validator);
 
         // Declare the type, template, module and icon for this this class
         $this->type = "TfishBlock";

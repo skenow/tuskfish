@@ -76,7 +76,7 @@ if (in_array($op, $options_whitelist)) {
     switch ($op) {
         // Add: Display an empty content object submission form.
         case "add":
-            $content = new TfishContentObject();
+            $content = new TfishContentObject($tfish_validator);
             
             $tfish_template->page_title = TFISH_ADD_CONTENT;
             $tfish_template->op = 'submit'; // Critical to launch correct form submission action.
@@ -235,7 +235,7 @@ if (in_array($op, $options_whitelist)) {
                 exit;
             }
             
-            $content_object = new $clean_type;
+            $content_object = new $clean_type($tfish_validator);
             $content_object->loadPropertiesFromArray($_REQUEST);
 
             // Insert the object
@@ -294,7 +294,7 @@ if (in_array($op, $options_whitelist)) {
                 exit;
             }
 
-            $content_object = new $type;
+            $content_object = new $type($tfish_validator);
             $content_object->loadPropertiesFromArray($_REQUEST);
 
             // As this object is being sent to storage, need to decode some entities that got

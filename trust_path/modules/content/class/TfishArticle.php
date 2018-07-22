@@ -57,10 +57,10 @@ class TfishArticle extends TfishContentObject
 {
     
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct()
+    public function __construct(TfishValidator $tfish_validator)
     {
         // Must call parent constructor first.
-        parent::__construct();
+        parent::__construct($tfish_validator);
 
         // Declare the type, template, module and icon for this this class.
         $this->type = "TfishArticle";
