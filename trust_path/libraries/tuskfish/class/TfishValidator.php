@@ -40,6 +40,14 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishValidator
 {
     
+    protected $html_purifier;
+    
+    public function __construct(HTMLPurifier $html_purifier)
+    {
+        if (is_a($html_purifier, 'HTMLPurifier')) {
+            $this->html_purifier = $html_purifier;
+        }
+    }
     /**
      * Escape data for display to mitigate XSS attacks.
      * 
@@ -92,12 +100,10 @@ class TfishValidator
      * @param array $config_options HTMLPurifier configuration options (see HTMLPurifier documentation).
      * @return string Validated HTML content.
      */
-    public function filterHtml(string $dirty_html, array $config_options = array())
+    public function filterHtml(string $dirty_html)
     {
-        if ($this->isUtf8($dirty_html) && class_exists('HTMLPurifier')) {
-            $config = $this->_configureHTMLPurifier($config_options);
-            $html_purifier = new HTMLPurifier($config);
-            $clean_html = (string) $html_purifier->purify($dirty_html);
+        if ($this->isUtf8($dirty_html)) {
+            $clean_html = (string) $this->html_purifier->purify($dirty_html);
             return $clean_html;
         } else {
             return false;
