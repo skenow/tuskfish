@@ -42,7 +42,7 @@ $clean_type = isset($_GET['type']) && !empty($_GET['type'])
         ? $tfish_validator->trimString($_GET['type']) : '';
 
 // Select content objects where the image field is not null or empty.
-$criteria = new TfishCriteria($tfish_validator);
+$criteria = $tfish_criteria_factory->getCriteria();
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'image', '', '<>'));
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 

@@ -23,41 +23,55 @@ require_once "../mainfile.php";
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
-// tfish_header is manually duplicated on this page but without the site closed check and redirect
-// as that creates a redirect loop.
+// Lock charset to UTF-8.
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
 
 // HTMLPurifier library is used to validate the teaser and description fields of objects.
+// Note that the HTMLPurifier autoloader must be registered AFTER the Tfish autoloader.
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
 
-// Initialise data validator.
-$tfish_validator = new TfishValidator();
-
 // Set error reporting levels and custom error handler.
-error_reporting(E_ALL & ~E_NOTICE);
-$tfish_logger = new TfishLogger($tfish_validator);
-set_error_handler(array($tfish_logger, "logError"));
-
-// Make file handler available.
-$tfish_file_handler = new TfishFileHandler($tfish_validator);
-
-// Ensure that a database connection is available
-$tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
-$tfish_database->connect();
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;
+/**
+ * Initialise essential resources. Note that the order is important, as some are dependencies for
+ * those that follow.
+ */
+// Data validator.
+$tfish_validator_factory = new TfishValidatorFactory();
+$tfish_validator = $tfish_validator_factory->getValidator();
 
-// Ensure that global site preferences are available via $tfish_preference
+// Error logger.
+$tfish_logger = new TfishLogger($tfish_validator);
+set_error_handler(array($tfish_logger, "logError"));
+
+// File handler.
+$tfish_file_handler = new TfishFileHandler($tfish_validator);
+
+// Database connection.
+$tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
+$tfish_database->connect();
+
+// Criteria factory. Used to construct TfishCriteria for composing database queries.
+$tfish_criteria_factory = new TfishCriteriaFactory($tfish_validator);
+
+// Site preferences.
 $preference_handler = new TfishPreferenceHandler($tfish_database);
 $tfish_preference = new TfishPreference($tfish_validator, $preference_handler->readPreferencesFromDatabase());
 
-// Begin secure session. Note that cookies are only relevant in the /admin section of the site
+// Begin secure session. Note that cookies are only relevant in the /admin section of the site.
 TfishSession::start($tfish_validator, $tfish_database, $tfish_preference);
 
-// Set default page-level metadata values for essential template variables (overwrite as required).
+// Site metadata.
 $tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);
 
-// Instantiate the template object so that it will be available globally.
+// Template renderer.
 $tfish_template = new TfishTemplate($tfish_validator);
 
 /**

@@ -47,7 +47,7 @@ $mimetype_list = $content_handler->getListOfMimetypes();
 
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.
-$criteria = new TfishCriteria($tfish_validator);
+$criteria = $tfish_criteria_factory->getCriteria();
 $criteria->setOrder('submission_time');
 $criteria->setOrderType('DESC');
 $criteria->setOffset(0);

@@ -25,7 +25,7 @@ require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
 
 // Lock handler to videos.
 $content_handler = $content_handler_factory->getHandler('content');
-$criteria = new TfishCriteria($tfish_validator);
+$criteria = $tfish_criteria_factory->getCriteria();
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishVideo'));
 
 // Configure page.

@@ -22,16 +22,18 @@ class TfishContentHandlerFactory
 {
     protected $validator;
     protected $db;
+    protected $criteria_factory;
     protected $file_handler;
     protected $taglink_handler;
     
-    public function __construct(TfishValidator $tfish_validator, TfishDatabase $tfish_database,
-            TfishFileHandler $tfish_file_handler)
+    public function __construct(TfishValidator $validator, TfishDatabase $db,
+            TfishCriteriaFactory $criteria_factory, TfishFileHandler $file_handler)
     {
-        $this->validator = $tfish_validator;
-        $this->db = $tfish_database;
-        $this->file_handler = $tfish_file_handler;
-        $this->taglink_handler = new TfishTaglinkHandler($tfish_validator, $tfish_database);
+        $this->validator = $validator;
+        $this->db = $db;
+        $this->criteria_factory = $criteria_factory;
+        $this->file_handler = $file_handler;
+        $this->taglink_handler = new TfishTaglinkHandler($validator, $db);
     }
     
     public function getHandler(string $type)
@@ -39,18 +41,18 @@ class TfishContentHandlerFactory
         $clean_type = $this->validator->trimString($type);
         
         if ($clean_type === 'content') {
-            return new TfishContentHandler($this->validator, $this->db, $this->file_handler,
-                    $this->taglink_handler);
+            return new TfishContentHandler($this->validator, $this->db, $this->criteria_factory,
+                    $this->file_handler, $this->taglink_handler);
         }
         
         if ($clean_type === 'collection') {
-            return new TfishCollectionHandler($this->validator, $this->db, $this->file_handler,
-                    $this->taglink_handler);
+            return new TfishCollectionHandler($this->validator, $this->db, $this->criteria_factory,
+                    $this->file_handler, $this->taglink_handler);
         }
         
         if ($clean_type === 'tag') {
-            return new TfishTagHandler($this->validator, $this->db, $this->file_handler,
-                    $this->taglink_handler);
+            return new TfishTagHandler($this->validator, $this->db, $this->criteria_factory,
+                    $this->file_handler, $this->taglink_handler);
         }
         
         trigger_error(TFISH_ERROR_NO_SUCH_HANDLER, E_USER_ERROR);

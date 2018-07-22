@@ -174,7 +174,7 @@ class TfishSearchContent
 
         $row = $statement->fetch(PDO::FETCH_NUM);
         $result[0] = reset($row);
-        unset($statement);
+        unset($statement, $row);
 
         // Retrieve the subset of objects actually required.
         if (!$this->limit) {
@@ -206,13 +206,20 @@ class TfishSearchContent
             return false;
         }
 
-        // Execute the statement, fetch rows into the appropriate class type as determined by the
-        // first column of the table.
         $statement->execute();
-        $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
+        
+        /**$statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
         
         while ($object = $statement->fetch()) {
             $result[$object->id] = $object;
+        }*/
+        
+        // Alternative method - allows constructor arguments to be passed in.
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $object = new $row['type']($this->validator);
+            $object->loadPropertiesFromArray($row, true);
+            $result[$object->id] = $object;
+            unset($object, $row);
         }
         
         return $result;

@@ -29,10 +29,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishCollectionHandler extends TfishContentHandler
 {
     
-    public function __construct(TfishValidator $tfish_validator, TfishDatabase $tfish_database,
-            TfishFileHandler $tfish_file_handler, TfishTaglinkHandler $taglink_handler)
+    public function __construct(TfishValidator $validator, TfishDatabase $db,
+            TfishCriteriaFactory $criteria_factory, TfishFileHandler $file_handler,
+            TfishTaglinkHandler $taglink_handler)
     {
-        parent::__construct($tfish_validator, $tfish_database, $tfish_file_handler, $taglink_handler);
+        parent::__construct($validator, $db, $criteria_factory, $file_handler, $taglink_handler);
     }
 
     /**
@@ -45,7 +46,7 @@ class TfishCollectionHandler extends TfishContentHandler
     public function getCount(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria($this->validator);
+            $criteria = $this->criteria_factory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
@@ -79,7 +80,7 @@ class TfishCollectionHandler extends TfishContentHandler
     public function getObjects(object $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = new TfishCriteria($this->validator);
+            $criteria = $this->criteria_factory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
@@ -108,7 +109,7 @@ class TfishCollectionHandler extends TfishContentHandler
         $options = array(0 => TFISH_SELECT_PARENT);
         $select_box = '';
 
-        $criteria = new TfishCriteria($this->validator);
+        $criteria = $this->criteria_factory->getCriteria();
         $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishCollection'));
         $criteria->setOrder('title');
         $criteria->setOrderType('ASC');

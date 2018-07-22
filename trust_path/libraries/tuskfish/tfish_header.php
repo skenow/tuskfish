@@ -33,38 +33,44 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// Initialise data validator.
+// Make core language files available.
+include TFISH_DEFAULT_LANGUAGE;
+/**
+ * Initialise essential resources. Note that the order is important, as some are dependencies for
+ * those that follow.
+ */
+// Data validator.
 $tfish_validator_factory = new TfishValidatorFactory();
 $tfish_validator = $tfish_validator_factory->getValidator();
 
-// Initialise data logger.
+// Error logger.
 $tfish_logger = new TfishLogger($tfish_validator);
 set_error_handler(array($tfish_logger, "logError"));
 
-// Initialise file handler.
+// File handler.
 $tfish_file_handler = new TfishFileHandler($tfish_validator);
 
-// Initialise database connection.
+// Database connection.
 $tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
 $tfish_database->connect();
 
-// Make core language files available.
-include TFISH_DEFAULT_LANGUAGE;
+// Criteria factory. Used to construct TfishCriteria for composing database queries.
+$tfish_criteria_factory = new TfishCriteriaFactory($tfish_validator);
 
-// Initialise site preferences.
+// Site preferences.
 $preference_handler = new TfishPreferenceHandler($tfish_database);
 $tfish_preference = new TfishPreference($tfish_validator, $preference_handler->readPreferencesFromDatabase());
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site.
 TfishSession::start($tfish_validator, $tfish_database, $tfish_preference);
 
-// Initialise the metadata object and set default page-level metadata values (overwrite as required).
+// Site metadata.
 $tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);
 
-// Initialise the template object.
+// Template renderer.
 $tfish_template = new TfishTemplate($tfish_validator);
 
-// Initialise the cache.
+// Site cache.
 $tfish_cache = new TfishCache($tfish_validator, $tfish_preference);
 
 // Check if site is closed, if so redirect to the login page and exit.

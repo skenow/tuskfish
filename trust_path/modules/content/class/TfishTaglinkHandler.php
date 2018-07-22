@@ -53,7 +53,7 @@ class TfishTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $criteria = new TfishCriteria($this->validator);
+        $criteria = $this->criteria_factory->getCriteria();
         
         if ($obj->type === 'TfishTag') {
             $criteria->add(new TfishCriteriaItem($this->validator, 'tag_id', $clean_content_id));
@@ -171,7 +171,7 @@ class TfishTaglinkHandler
         }
 
         // Delete any existing tags.
-        $criteria = new TfishCriteria($this->validator);
+        $criteria = $this->criteria_factory->getCriteria();
         $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_id));
         $result = $this->db->deleteAll('taglink', $criteria);
         

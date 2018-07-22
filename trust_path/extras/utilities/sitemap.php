@@ -36,7 +36,7 @@ $columns = array('id', 'seo');
 $sitemap = '';
 
 // Get the IDs of all online objects (and offline tags), but not blocks.
-$criteria = new TfishCriteria($tfish_validator);
+$criteria = $tfish_criteria_factory->getCriteria();
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!='));
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
 $criteria->setOrder('id');
@@ -44,7 +44,7 @@ $criteria->setOrderType('ASC');
 $content_ids = $tfish_database->select('content', $criteria, $columns);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
-$criteria = new TfishCriteria($tfish_validator);
+$criteria = $tfish_criteria_factory->getCriteria();
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishTag'));
 $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 0));
 $criteria->setOrder('id');

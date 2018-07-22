@@ -106,7 +106,7 @@ if ($clean_id) {
         }
 
         // Check if has child objects; if so display thumbnails and teasers / links.
-        $criteria = new TfishCriteria($tfish_validator);
+        $tfish_critiera_factory->getCriteria();
         $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $content->id));
         $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
         
@@ -149,7 +149,7 @@ if ($clean_id) {
     $tfish_cache->getCachedPage($basename, $cache_parameters);
     
     // Set criteria for selecting content objects.
-    $criteria = new TfishCriteria($tfish_validator);
+    $tfish_critiera_factory->getCriteria();
     $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishCollection'));
     
     if ($clean_start)
