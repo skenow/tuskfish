@@ -523,7 +523,10 @@ class TfishContentHandler
         if ($statement) {
 
             // Fetch rows into the appropriate class type, as determined by the first column.
-            // Note that you can't pass constructor arguments using FETCH_CLASSTYPE.
+            // Note that you can't pass constructor arguments using FETCH_CLASSTYPE. This creates
+            // some problems in other areas, because content objects need to have a TfishValidator
+            // dependency injected (presently, it is hard coded in). It would be good to find
+            // another way to dynamically instantiate content objects.
             $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
 
             while ($object = $statement->fetch()) {

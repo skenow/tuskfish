@@ -95,13 +95,7 @@ if (in_array($op, $options_whitelist)) {
             $tfish_template->zeroed_properties = array(
                 'image' => array('image'),
                 'tags' => array(
-                    'caption',
-                    'format',
-                    'file_size',
                     'creator',
-                    'media',
-                    'date',
-                    'parent',
                     'language',
                     'rights',
                     'publisher',
