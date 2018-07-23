@@ -122,7 +122,7 @@ class TfishAngryTree
             }
         }
     }
-
+    
     /**
      * Get a category tree.
      *
@@ -132,38 +132,7 @@ class TfishAngryTree
     {
         return $this->_tree;
     }
-
-    /**
-     * returns an object from the category tree specified by its id.
-     *
-     * @param   string  $key    ID of the object to retrieve.
-     * @return  object  Object (node) within the tree.
-     * */
-    public function &getByKey(int $key)
-    {
-        return $this->_tree[$key]['obj'];
-    }
-
-    /**
-     * Returns an array of all the first child objects of a parental object specified by its id.
-     *
-     * @param   string $key ID of the parent object.
-     * @return  array Array of child objects.
-     * */
-    public function getFirstChild(int $key)
-    {
-        $ret = array();
-        
-        if (isset($this->_tree[$key]['child'])) {
-            foreach ($this->_tree[$key]['child'] as $childkey) {
-                $ret[$childkey] = & $this->_tree[$childkey]['obj'];
-            }
-            
-        }
-        
-        return $ret;
-    }
-
+    
     /**
      * Returns an array of all child objects of a parental object specified by its ID.
      *
@@ -213,32 +182,49 @@ class TfishAngryTree
     }
 
     /**
-     * Make options for a select box from tree.
+     * returns an object from the category tree specified by its id.
      *
-     * @param string $fieldName Name of the member variable from the node objects that should
-     * be used as the title for the options.
-     * @param int $selected Value to display as selected.
-     * @param int $key ID of the object to display as the root of select options.
-     * @param string $ret Result from previous recursions (reference to a string when called from outside).
-     * @param string $prefix_orig String to indent items at deeper levels.
-     * @param string $prefix_curr String to indent the current item.
-     */
-    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret,
-                $prefix_orig, $prefix_curr = '')
+     * @param   string  $key    ID of the object to retrieve.
+     * @return  object  Object (node) within the tree.
+     * */
+    public function &getByKey(int $key)
     {
-        if ($key > 0) {
-            $id_field = $this->_myId;
-            $value = $this->_tree[$key]['obj']->$id_field;
-            $ret[$value] = $prefix_curr . $this->_tree[$key]['obj']->$fieldName;
-            $prefix_curr .= $prefix_orig;
+        return $this->_tree[$key]['obj'];
+    }
+
+    /**
+     * Returns an array of all the first child objects of a parental object specified by its id.
+     *
+     * @param   string $key ID of the parent object.
+     * @return  array Array of child objects.
+     * */
+    public function getFirstChild(int $key)
+    {
+        $ret = array();
+        
+        if (isset($this->_tree[$key]['child'])) {
+            foreach ($this->_tree[$key]['child'] as $childkey) {
+                $ret[$childkey] = & $this->_tree[$childkey]['obj'];
+            }
+            
         }
         
-        if (isset($this->_tree[$key]['child']) && !empty($this->_tree[$key]['child'])) {
-            foreach ($this->_tree[$key]['child'] as $childkey) {
-                $this->_makeSelBoxOptions($fieldName, $selected, $childkey, $ret, $prefix_orig,
-                        $prefix_curr);
-            }
-        }
+        return $ret;
+    }
+    
+    /**
+     * Make a select box of parent collections from the tree.
+     * 
+     * @param int $selected Currently selected option.
+     * @param int $key ID of the object to display as root of the select options.
+     * @return string HTML select box.
+     */
+    public function makeParentSelectBox(int $selected = 0, int $key = 0)
+    {
+        $ret = array(0 => TFISH_SELECT_PARENT);
+        $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-- ');
+        
+        return $ret;
     }
 
     /**
@@ -265,20 +251,34 @@ class TfishAngryTree
         
         return $ret;
     }
-
+    
     /**
-     * Make a select box of parent collections from the tree.
-     * 
-     * @param int $selected Currently selected option.
-     * @param int $key ID of the object to display as root of the select options.
-     * @return string HTML select box.
+     * Make options for a select box from tree.
+     *
+     * @param string $fieldName Name of the member variable from the node objects that should
+     * be used as the title for the options.
+     * @param int $selected Value to display as selected.
+     * @param int $key ID of the object to display as the root of select options.
+     * @param string $ret Result from previous recursions (reference to a string when called from outside).
+     * @param string $prefix_orig String to indent items at deeper levels.
+     * @param string $prefix_curr String to indent the current item.
      */
-    public function makeParentSelectBox(int $selected = 0, int $key = 0)
+    private function _makeSelBoxOptions($fieldName, $selected, $key, &$ret,
+                $prefix_orig, $prefix_curr = '')
     {
-        $ret = array(0 => TFISH_SELECT_PARENT);
-        $this->_makeSelBoxOptions('title', $selected, $key, $ret, '-- ');
+        if ($key > 0) {
+            $id_field = $this->_myId;
+            $value = $this->_tree[$key]['obj']->$id_field;
+            $ret[$value] = $prefix_curr . $this->_tree[$key]['obj']->$fieldName;
+            $prefix_curr .= $prefix_orig;
+        }
         
-        return $ret;
+        if (isset($this->_tree[$key]['child']) && !empty($this->_tree[$key]['child'])) {
+            foreach ($this->_tree[$key]['child'] as $childkey) {
+                $this->_makeSelBoxOptions($fieldName, $selected, $childkey, $ret, $prefix_orig,
+                        $prefix_curr);
+            }
+        }
     }
 
 }
