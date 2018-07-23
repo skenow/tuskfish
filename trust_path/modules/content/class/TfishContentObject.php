@@ -128,381 +128,38 @@ class TfishContentObject
         $this->setTags(array());
     }
     
-    public function setId(int $id)
-    {
-        if ($this->validator->isInt($id, 0)) {
-            $this->id = $id;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setType(string $type)
-    {
-        $clean_type = (string) $this->validator->trimString($type);
-
-        if ($this->validator->isAlpha($clean_type)) {
-            $this->type = $clean_type;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-        }
-    }
-    
-    public function setTitle(string $title)
-    {
-        $clean_title = (string) $this->validator->trimString($title);
-        $this->title = $clean_title;
-    }
-    
-    public function setTeaser(string $teaser)
-    {
-        $teaser = (string) $this->validator->trimString($teaser);
-        $this->teaser = $this->validator->filterHtml($teaser);
-    }
-    
-    public function setDescription(string $description)
-    {
-        $description = (string) $this->validator->trimString($description);
-        $this->description = $this->validator->filterHtml($description);
-    }
-   
-    public function setMedia(string $media)
-    {
-        $media = (string) $this->validator->trimString($media);
-
-        // Check image/media paths for directory traversals and null byte injection.
-        if ($this->validator->hasTraversalorNullByte($media)) {
-            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
-            exit; // Hard stop due to high probability of abuse.
-        }
-
-        // Check media file is a permitted mimetype.
-        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
-        $extension = mb_strtolower(pathinfo($media, PATHINFO_EXTENSION), 'UTF-8');
-
-        if (empty($extension) 
-                || (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist))) {
-            $this->media = '';
-            $this->format = '';
-            $this->file_size = '';
-        } else {
-            $this->media = $media;
-        }        
-    }
-    
-    public function setFormat(string $format)
-    {
-        $format = (string) $this->validator->trimString($format);
-
-        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
-        if (!empty($format) && !in_array($format, $mimetype_whitelist)) {
-            trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
-        }
-        
-        $this->format = $format;
-    }
-    
-    public function setFileSize(int $file_size)
-    {
-        if ($this->validator->isInt($file_size, 0)) {
-            $this->file_size = $file_size;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setCreator(string $creator)
-    {
-        $clean_creator = (string) $this->validator->trimString($creator);
-        $this->creator = $clean_creator;
-    }
-    
-    public function setImage(string $image)
-    {
-        $image = (string) $this->validator->trimString($image);
-        
-        // Check image/media paths for directory traversals and null byte injection.
-        if ($this->validator->hasTraversalorNullByte($image)) {
-            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
-            exit; // Hard stop due to high probability of abuse.
-        }
-
-        // Check image file is a permitted mimetype.
-        $mimetype_whitelist = $this->getListOfAllowedImageMimetypes();
-        $extension = mb_strtolower(pathinfo($image, PATHINFO_EXTENSION), 'UTF-8');
-        
-        if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
-            $this->image = '';
-            trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
-        } else {
-            $this->image = $image;
-        }        
-    }
-    
-    public function setCaption(string $caption)
-    {
-        $clean_caption = (string) $this->validator->trimString($caption);
-        $this->caption = $clean_caption;
-    }
-    
-    public function setDate(string $date)
-    {
-        $date = (string) $this->validator->trimString($date);
-
-        // Ensure format complies with DATE_RSS
-        $check_date = date_parse_from_format('Y-m-d', $date);
-
-        if (!$check_date || $check_date['warning_count'] > 0
-                || $check_date['error_count'] > 0) {
-            // Bad date supplied, default to today.
-            $date = date(DATE_RSS, time());
-            trigger_error(TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY, E_USER_WARNING);
-        }
-        
-        $this->date = $date;
-    }
-    
-    // Parent ID must be different to content ID (cannot declare self as parent).
-    public function setParent(int $parent)
-    {        
-        if (!$this->validator->isInt($parent, 0)) {
-                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-
-        if ($parent === $this->id && $parent > 0) {
-            trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
-        } else {
-            $this->parent = $parent;
-        }
-    }
-    
-    public function setLanguage(string $language)
-    {        
-        $language = (string) $this->validator->trimString($language);
-        $language_whitelist = $this->getListOfLanguages();
-
-        if (!array_key_exists($language, $language_whitelist)) {
-            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-        }
-        
-        $this->language = $language;
-    }
-    
-    public function setRights(int $rights)
-    {
-        if ($this->validator->isInt($rights, 1)) {
-            $this->rights = $rights;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setPublisher(string $publisher)
-    {
-        $clean_publisher = (string) $this->validator->trimString($publisher);
-        $this->publisher = $clean_publisher;
-    }
-    
-    public function setTags(array $tags)
-    {
-        if ($this->validator->isArray($tags)) {
-            $clean_tags = array();
-
-            foreach ($tags as $tag) {
-                $clean_tag = (int) $tag;
-
-                if ($this->validator->isInt($clean_tag, 1)) {
-                    $clean_tags[] = $clean_tag;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                }
-                unset($clean_tag);
-            }
-
-            $this->tags = $clean_tags;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
-    }
-    
-    public function setOnline(int $online)
-    {
-        if ($this->validator->isInt($online, 0, 1)) {
-            $this->online = $online;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setSubmissionTime(int $submission_time)
-    {
-        if ($this->validator->isInt($submission_time, 1)) {
-            $this->submission_time = $submission_time;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setCounter(int $counter)
-    {
-        if ($this->validator->isInt($counter, 0)) {
-            $this->counter = $counter;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setMetaTitle(string $meta_title)
-    {
-        $clean_meta_title = (string) $this->validator->trimString($meta_title);
-        $this->meta_title = $clean_meta_title;
-    }
-    
-    public function setMetaDescription(string $meta_description)
-    {
-        $clean_meta_description = (string) $this->validator->trimString($meta_description);
-        $this->meta_description = $clean_meta_description;
-    }
-    
-    public function setSeo(string $seo)
-    {
-        $clean_seo = (string) $this->validator->trimString($seo);
-
-        // Replace spaces with dashes.
-        if ($this->validator->isUtf8($clean_seo)) {
-            $clean_seo = str_replace(' ', '-', $clean_seo);
-        } else {
-            trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
-        }
-        
-        $this->seo = $clean_seo;
-    }
-    
-    public function setHandler(string $handler)
-    {
-        $clean_handler = (string) $this->validator->trimString($handler);
-
-        if ($this->validator->isAlpha($clean_handler)) {
-            $this->handler = $clean_handler;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-        }
-    }
-    
-    public function setTemplate(string $template)
-    {
-        $clean_template = (string) $this->validator->trimString($template);
-
-        if ($this->validator->isAlnumUnderscore($clean_template)) {
-            $this->template = $clean_template;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-        }
-    }
-    
-    public function setModule(string $module)
-    {
-        $clean_module = (string) $this->validator->trimString($module);
-        $this->module = $clean_module;
-    }
-    
-    public function setIcon(string $icon)
-    {
-        $icon = (string) $this->validator->trimString($icon);
-        $this->icon = $this->validator->filterHtml($icon);
-    }
-    
     /**
-     * Converts properties to human readable form in preparation for output.
+     * Converts a content object to an array suitable for insert/update calls to the database.
      * 
-     * This method is overridden in child subclasses, to allow for the possibility of handling
-     * additional properties. The overrides refer back to this parent method for handling base
-     * (standard) properties of this parent class.
+     * Note that the returned array observes the PARENT object's getPropertyWhitelist() as a 
+     * restriction on the setting of keys. This whitelist explicitly excludes the handler, 
+     * template and module properties as these are part of the class definition and are not stored
+     * in the database. Calling the parent's property whitelist ensures that properties that are
+     * unset by child classes are zeroed (this is important when an object is changed to a
+     * different subclass, as the properties used may differ).
      * 
-     * @param string $property Name of property.
-     * @return string Property formatted to human readable form for output.
+     * @return array Array of object property/values.
      */
-    protected function makeDataHumanReadable(string $clean_property)
+    public function convertObjectToArray()
     {        
-        switch ($clean_property) {
-            case "date": // Stored in format yyyy-mm-dd
-                $date = new DateTime($this->$clean_property);
-                
-                return $date->format('j F Y');
-                break;
-
-            case "file_size": // Convert to human readable.
-                $bytes = (int) $this->$clean_property;
-                $unit = $val = '';
-
-                if ($bytes === 0 || $bytes < ONE_KILOBYTE) {
-                    $unit = ' bytes';
-                    $val = $bytes;
-                } elseif ($bytes >= ONE_KILOBYTE && $bytes < ONE_MEGABYTE) {
-                    $unit = ' KB';
-                    $val = ($bytes / ONE_KILOBYTE);
-                } elseif ($bytes >= ONE_MEGABYTE && $bytes < ONE_GIGABYTE) {
-                    $unit = ' MB';
-                    $val = ($bytes / ONE_MEGABYTE);
-                } else {
-                    $unit = ' GB';
-                    $val = ($bytes / ONE_GIGABYTE);
-                }
-
-                $val = round($val, 2);
-
-                return $val . ' ' . $unit;
-                break;
-
-            case "format": // Output the file extension as user-friendly "mimetype".
-                $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
-                $mimetype = array_search($this->$clean_property, $mimetype_whitelist);
-
-                if (!empty($mimetype)) {
-                    return $mimetype;
-                }
-                break;
-
-            case "description":
-            case "teaser":
-                // Do a simple string replace to allow TFISH_URL to be used as a constant,
-                // making the site portable.
-                $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
-                        $this->$clean_property);
-
-                return $tfish_url_enabled; 
-                break;
-
-            case "rights":
-                $rights = $this->getListOfRights();
-
-                return $rights[$this->$clean_property];
-                break;
-
-            case "submission_time":
-                $date = date('j F Y', $this->$clean_property);
-
-                return $date;
-                break;
-
-            case "tags":
-                $tags = array();
-
-                foreach ($this->$clean_property as $value) {
-                    $tags[] = (int) $value;
-                    unset($value);
-                }
-
-                return $tags;
-                break;
-                
-            // No special handling required. Return unmodified value.
-            default:
-                return $this->$clean_property;
-                break;
+        $key_values = array();
+        
+        foreach ($this as $key => $value) {
+            $key_values[$key] = $value;
         }
+        
+        // Unset non-persistanet properties that are not stored in the content table.
+        unset(
+            $key_values['tags'],
+            $key_values['icon'],
+            $key_values['handler'],
+            $key_values['module'],
+            $key_values['template']
+            );
+        
+        return $key_values;
     }
-
+    
     /**
      * Escapes object properties for output to browser.
      * 
@@ -748,6 +405,56 @@ class TfishContentObject
     }
     
     /**
+     * Returns an array of audio mimetypes that are permitted for content objects.
+     * 
+     * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
+     * is still acceptable, although it must no longer be used for video files.
+     * 
+     * @return array Array of permitted audio mimetypes in file extension => mimetype format.
+     */
+    public function getListOfAllowedAudioMimetypes()
+    {
+        return array(
+            "mp3" => "audio/mpeg",
+            "oga" => "audio/ogg",
+            "ogg" => "audio/ogg",
+            "wav" => "audio/x-wav"
+        );
+    }
+    
+    /**
+     * Returns an array of image mimetypes that are permitted for content objects.
+     * 
+     * @return array Array of permitted image mimetypes in file extension => mimetype format.
+     */
+    public function getListOfAllowedImageMimetypes()
+    {
+        return array(
+            "gif" => "image/gif",
+            "jpg" => "image/jpeg",
+            "png" => "image/png"
+        );
+    }            
+
+    /**
+     * Returns an array of video mimetypes that are permitted for upload.
+     * 
+     * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
+     * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
+     * wide use it is now presumed to refer to audio files only.
+     * 
+     * @return array Array of permitted video mimetypes in file extension => mimetype format.
+     */
+    public function getListOfAllowedVideoMimetypes()
+    {
+        return array(
+            "mp4" => "video/mp4",
+            "ogv" => "video/ogg",
+            "webm" => "video/webm"
+        );
+    }
+    
+    /**
      * Returns a list of intellectual property rights licenses for the content submission form.
      * 
      * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
@@ -770,6 +477,42 @@ class TfishContentObject
             '9' => TFISH_RIGHTS_GPL3,
             '10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
         );
+    }
+    
+    /**
+     * Returns an array of base object properties that are not used by this subclass.
+     * 
+     * This list is also used in update calls to the database to ensure that unused columns are
+     * cleared and reset with default values.
+     * 
+     * @return array
+     */
+    public function getListOfZeroedProperties()
+    {
+        return array();
+    }
+    
+    /**
+     * Returns a whitelist of object properties whose values are allowed be set.
+     * 
+     * This function is used to build a list of $allowed_vars for a content object. Child classes
+     * use this list to unset properties they do not use. Properties that are not resident in the
+     * database are also unset here (handler, template, module and icon).
+     * 
+     * @return array Array of object properties as keys.
+     */
+    public function getPropertyWhitelist()
+    {        
+        $properties = array();
+        
+        foreach ($this as $key => $value) {
+            $properties[$key] = '';
+        }
+        
+        unset($properties['handler'], $properties['template'], $properties['module'],
+                $properties['icon']);
+        
+        return $properties;
     }
 
     /**
@@ -804,6 +547,44 @@ class TfishContentObject
         }
 
         return $url;
+    }
+    
+    /**
+     * Determine if the media file (mime) type is valid for this content type.
+     * 
+     * Used in templates to determine whether a media file should be displayed or not.
+     * For example, if you attach a video file to an audio content object, the
+     * inline player will not be displayed (because it will not work).
+     * 
+     * @return boolean True if media mimetype is valid for this content type, otherwise false.
+     */
+    public function isValidMedia()
+    {
+        if (!$this->media) {
+            return false;
+        }
+        
+        $allowed_mimetypes = array();
+
+        switch($this->type) {
+            case "TfishAudio":
+                $allowed_mimetypes = $this->getListOfAllowedAudioMimetypes();
+                break;
+            case "TfishImage":
+                $allowed_mimetypes = $this->getListOfAllowedImageMimetypes();
+                break;
+            case "TfishVideo":
+                $allowed_mimetypes = $this->getListOfAllowedVideoMimetypes();
+                break;
+            default:
+                $allowed_mimetypes = $this->getListOfPermittedUploadMimetypes();
+        }
+
+        if (in_array($this->format, $allowed_mimetypes)) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -882,171 +663,94 @@ class TfishContentObject
     }
     
     /**
-     * Converts a content object to an array suitable for insert/update calls to the database.
+     * Converts properties to human readable form in preparation for output.
      * 
-     * Note that the returned array observes the PARENT object's getPropertyWhitelist() as a 
-     * restriction on the setting of keys. This whitelist explicitly excludes the handler, 
-     * template and module properties as these are part of the class definition and are not stored
-     * in the database. Calling the parent's property whitelist ensures that properties that are
-     * unset by child classes are zeroed (this is important when an object is changed to a
-     * different subclass, as the properties used may differ).
+     * This method is overridden in child subclasses, to allow for the possibility of handling
+     * additional properties. The overrides refer back to this parent method for handling base
+     * (standard) properties of this parent class.
      * 
-     * @return array Array of object property/values.
+     * @param string $property Name of property.
+     * @return string Property formatted to human readable form for output.
      */
-    public function convertObjectToArray()
+    protected function makeDataHumanReadable(string $clean_property)
     {        
-        $key_values = array();
-        
-        foreach ($this as $key => $value) {
-            $key_values[$key] = $value;
-        }
-        
-        // Unset non-persistanet properties that are not stored in the content table.
-        unset(
-            $key_values['tags'],
-            $key_values['icon'],
-            $key_values['handler'],
-            $key_values['module'],
-            $key_values['template']
-            );
-        
-        return $key_values;
-    }
-    
-    /**
-     * Determine if the media file (mime) type is valid for this content type.
-     * 
-     * Used in templates to determine whether a media file should be displayed or not.
-     * For example, if you attach a video file to an audio content object, the
-     * inline player will not be displayed (because it will not work).
-     * 
-     * @return boolean True if media mimetype is valid for this content type, otherwise false.
-     */
-    public function isValidMedia()
-    {
-        if (!$this->media) {
-            return false;
-        }
-        
-        $allowed_mimetypes = array();
+        switch ($clean_property) {
+            case "date": // Stored in format yyyy-mm-dd
+                $date = new DateTime($this->$clean_property);
+                
+                return $date->format('j F Y');
+                break;
 
-        switch($this->type) {
-            case "TfishAudio":
-                $allowed_mimetypes = $this->getListOfAllowedAudioMimetypes();
+            case "file_size": // Convert to human readable.
+                $bytes = (int) $this->$clean_property;
+                $unit = $val = '';
+
+                if ($bytes === 0 || $bytes < ONE_KILOBYTE) {
+                    $unit = ' bytes';
+                    $val = $bytes;
+                } elseif ($bytes >= ONE_KILOBYTE && $bytes < ONE_MEGABYTE) {
+                    $unit = ' KB';
+                    $val = ($bytes / ONE_KILOBYTE);
+                } elseif ($bytes >= ONE_MEGABYTE && $bytes < ONE_GIGABYTE) {
+                    $unit = ' MB';
+                    $val = ($bytes / ONE_MEGABYTE);
+                } else {
+                    $unit = ' GB';
+                    $val = ($bytes / ONE_GIGABYTE);
+                }
+
+                $val = round($val, 2);
+
+                return $val . ' ' . $unit;
                 break;
-            case "TfishImage":
-                $allowed_mimetypes = $this->getListOfAllowedImageMimetypes();
+
+            case "format": // Output the file extension as user-friendly "mimetype".
+                $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
+                $mimetype = array_search($this->$clean_property, $mimetype_whitelist);
+
+                if (!empty($mimetype)) {
+                    return $mimetype;
+                }
                 break;
-            case "TfishVideo":
-                $allowed_mimetypes = $this->getListOfAllowedVideoMimetypes();
+
+            case "description":
+            case "teaser":
+                // Do a simple string replace to allow TFISH_URL to be used as a constant,
+                // making the site portable.
+                $tfish_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
+                        $this->$clean_property);
+
+                return $tfish_url_enabled; 
                 break;
+
+            case "rights":
+                $rights = $this->getListOfRights();
+
+                return $rights[$this->$clean_property];
+                break;
+
+            case "submission_time":
+                $date = date('j F Y', $this->$clean_property);
+
+                return $date;
+                break;
+
+            case "tags":
+                $tags = array();
+
+                foreach ($this->$clean_property as $value) {
+                    $tags[] = (int) $value;
+                    unset($value);
+                }
+
+                return $tags;
+                break;
+                
+            // No special handling required. Return unmodified value.
             default:
-                $allowed_mimetypes = $this->getListOfPermittedUploadMimetypes();
+                return $this->$clean_property;
+                break;
         }
-
-        if (in_array($this->format, $allowed_mimetypes)) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Inserts a content object into the database.
-     * 
-     * Note that content child content classes that have unset unused properties from the parent
-     * should reset them to null before insertion or update. This is to guard against the case
-     * where the admin reassigns the type of a content object - it makes sure that unused properties
-     * are zeroed in the database. 
-     * 
-     * @param object $obj TfishContentObject subclass.
-     * @return bool True on success, false on failure.
-     */
-    
-    /**
-     * Returns an array of audio mimetypes that are permitted for content objects.
-     * 
-     * Note that ogg audio files should use the .oga extension, although the legacy .ogg extension
-     * is still acceptable, although it must no longer be used for video files.
-     * 
-     * @return array Array of permitted audio mimetypes in file extension => mimetype format.
-     */
-    public function getListOfAllowedAudioMimetypes()
-    {
-        return array(
-            "mp3" => "audio/mpeg",
-            "oga" => "audio/ogg",
-            "ogg" => "audio/ogg",
-            "wav" => "audio/x-wav"
-        );
-    }
-    
-    /**
-     * Returns an array of image mimetypes that are permitted for content objects.
-     * 
-     * @return array Array of permitted image mimetypes in file extension => mimetype format.
-     */
-    public function getListOfAllowedImageMimetypes()
-    {
-        return array(
-            "gif" => "image/gif",
-            "jpg" => "image/jpeg",
-            "png" => "image/png"
-        );
-    }            
-
-    /**
-     * Returns an array of video mimetypes that are permitted for upload.
-     * 
-     * Note that ogg video files must use the .ogv file extension. Please do not use .ogg for
-     * video files as this practice has been deprecated in favour of .ogv. While .ogg is still in
-     * wide use it is now presumed to refer to audio files only.
-     * 
-     * @return array Array of permitted video mimetypes in file extension => mimetype format.
-     */
-    public function getListOfAllowedVideoMimetypes()
-    {
-        return array(
-            "mp4" => "video/mp4",
-            "ogv" => "video/ogg",
-            "webm" => "video/webm"
-        );
-    }
-    
-    /**
-     * Returns a whitelist of object properties whose values are allowed be set.
-     * 
-     * This function is used to build a list of $allowed_vars for a content object. Child classes
-     * use this list to unset properties they do not use. Properties that are not resident in the
-     * database are also unset here (handler, template, module and icon).
-     * 
-     * @return array Array of object properties as keys.
-     */
-    public function getPropertyWhitelist()
-    {        
-        $properties = array();
-        
-        foreach ($this as $key => $value) {
-            $properties[$key] = '';
-        }
-        
-        unset($properties['handler'], $properties['template'], $properties['module'],
-                $properties['icon']);
-        
-        return $properties;
-    }
-
-    /**
-     * Returns an array of base object properties that are not used by this subclass.
-     * 
-     * This list is also used in update calls to the database to ensure that unused columns are
-     * cleared and reset with default values.
-     * 
-     * @return array
-     */
-    public function getListOfZeroedProperties()
-    {
-        return array();
     }
     
     /**
@@ -1152,4 +856,289 @@ class TfishContentObject
             // Not a permitted property, do not set.
         }
     }
+    
+    public function setCaption(string $caption)
+    {
+        $clean_caption = (string) $this->validator->trimString($caption);
+        $this->caption = $clean_caption;
+    }
+    
+    public function setCounter(int $counter)
+    {
+        if ($this->validator->isInt($counter, 0)) {
+            $this->counter = $counter;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setCreator(string $creator)
+    {
+        $clean_creator = (string) $this->validator->trimString($creator);
+        $this->creator = $clean_creator;
+    }
+    
+    public function setDate(string $date)
+    {
+        $date = (string) $this->validator->trimString($date);
+
+        // Ensure format complies with DATE_RSS
+        $check_date = date_parse_from_format('Y-m-d', $date);
+
+        if (!$check_date || $check_date['warning_count'] > 0
+                || $check_date['error_count'] > 0) {
+            // Bad date supplied, default to today.
+            $date = date(DATE_RSS, time());
+            trigger_error(TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY, E_USER_WARNING);
+        }
+        
+        $this->date = $date;
+    }
+    
+    public function setDescription(string $description)
+    {
+        $description = (string) $this->validator->trimString($description);
+        $this->description = $this->validator->filterHtml($description);
+    }
+    
+    public function setFileSize(int $file_size)
+    {
+        if ($this->validator->isInt($file_size, 0)) {
+            $this->file_size = $file_size;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setFormat(string $format)
+    {
+        $format = (string) $this->validator->trimString($format);
+
+        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
+        if (!empty($format) && !in_array($format, $mimetype_whitelist)) {
+            trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+        }
+        
+        $this->format = $format;
+    }
+    
+    public function setHandler(string $handler)
+    {
+        $clean_handler = (string) $this->validator->trimString($handler);
+
+        if ($this->validator->isAlpha($clean_handler)) {
+            $this->handler = $clean_handler;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+        }
+    }
+    
+    public function setIcon(string $icon)
+    {
+        $icon = (string) $this->validator->trimString($icon);
+        $this->icon = $this->validator->filterHtml($icon);
+    }
+    
+    public function setId(int $id)
+    {
+        if ($this->validator->isInt($id, 0)) {
+            $this->id = $id;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setImage(string $image)
+    {
+        $image = (string) $this->validator->trimString($image);
+        
+        // Check image/media paths for directory traversals and null byte injection.
+        if ($this->validator->hasTraversalorNullByte($image)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            exit; // Hard stop due to high probability of abuse.
+        }
+
+        // Check image file is a permitted mimetype.
+        $mimetype_whitelist = $this->getListOfAllowedImageMimetypes();
+        $extension = mb_strtolower(pathinfo($image, PATHINFO_EXTENSION), 'UTF-8');
+        
+        if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
+            $this->image = '';
+            trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
+        } else {
+            $this->image = $image;
+        }        
+    }
+    
+    public function setLanguage(string $language)
+    {        
+        $language = (string) $this->validator->trimString($language);
+        $language_whitelist = $this->getListOfLanguages();
+
+        if (!array_key_exists($language, $language_whitelist)) {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+        
+        $this->language = $language;
+    }
+    
+    public function setMedia(string $media)
+    {
+        $media = (string) $this->validator->trimString($media);
+
+        // Check image/media paths for directory traversals and null byte injection.
+        if ($this->validator->hasTraversalorNullByte($media)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            exit; // Hard stop due to high probability of abuse.
+        }
+
+        // Check media file is a permitted mimetype.
+        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
+        $extension = mb_strtolower(pathinfo($media, PATHINFO_EXTENSION), 'UTF-8');
+
+        if (empty($extension) 
+                || (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist))) {
+            $this->media = '';
+            $this->format = '';
+            $this->file_size = '';
+        } else {
+            $this->media = $media;
+        }        
+    }
+    
+    public function setMetaDescription(string $meta_description)
+    {
+        $clean_meta_description = (string) $this->validator->trimString($meta_description);
+        $this->meta_description = $clean_meta_description;
+    }
+    
+    public function setMetaTitle(string $meta_title)
+    {
+        $clean_meta_title = (string) $this->validator->trimString($meta_title);
+        $this->meta_title = $clean_meta_title;
+    }
+    
+    public function setModule(string $module)
+    {
+        $clean_module = (string) $this->validator->trimString($module);
+        $this->module = $clean_module;
+    }
+    
+    public function setOnline(int $online)
+    {
+        if ($this->validator->isInt($online, 0, 1)) {
+            $this->online = $online;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    // Parent ID must be different to content ID (cannot declare self as parent).
+    public function setParent(int $parent)
+    {        
+        if (!$this->validator->isInt($parent, 0)) {
+                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+
+        if ($parent === $this->id && $parent > 0) {
+            trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
+        } else {
+            $this->parent = $parent;
+        }
+    }
+    
+    public function setPublisher(string $publisher)
+    {
+        $clean_publisher = (string) $this->validator->trimString($publisher);
+        $this->publisher = $clean_publisher;
+    }
+    
+    public function setRights(int $rights)
+    {
+        if ($this->validator->isInt($rights, 1)) {
+            $this->rights = $rights;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setSeo(string $seo)
+    {
+        $clean_seo = (string) $this->validator->trimString($seo);
+
+        // Replace spaces with dashes.
+        if ($this->validator->isUtf8($clean_seo)) {
+            $clean_seo = str_replace(' ', '-', $clean_seo);
+        } else {
+            trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
+        }
+        
+        $this->seo = $clean_seo;
+    }
+    
+    public function setSubmissionTime(int $submission_time)
+    {
+        if ($this->validator->isInt($submission_time, 1)) {
+            $this->submission_time = $submission_time;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setTags(array $tags)
+    {
+        if ($this->validator->isArray($tags)) {
+            $clean_tags = array();
+
+            foreach ($tags as $tag) {
+                $clean_tag = (int) $tag;
+
+                if ($this->validator->isInt($clean_tag, 1)) {
+                    $clean_tags[] = $clean_tag;
+                } else {
+                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+                }
+                unset($clean_tag);
+            }
+
+            $this->tags = $clean_tags;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+    }
+    
+    public function setTeaser(string $teaser)
+    {
+        $teaser = (string) $this->validator->trimString($teaser);
+        $this->teaser = $this->validator->filterHtml($teaser);
+    }
+    
+    public function setTemplate(string $template)
+    {
+        $clean_template = (string) $this->validator->trimString($template);
+
+        if ($this->validator->isAlnumUnderscore($clean_template)) {
+            $this->template = $clean_template;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+        }
+    }
+    
+    public function setTitle(string $title)
+    {
+        $clean_title = (string) $this->validator->trimString($title);
+        $this->title = $clean_title;
+    }
+    
+    public function setType(string $type)
+    {
+        $clean_type = (string) $this->validator->trimString($type);
+
+        if ($this->validator->isAlpha($clean_type)) {
+            $this->type = $clean_type;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+        }
+    }
+
 }
