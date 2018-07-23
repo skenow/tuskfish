@@ -103,6 +103,17 @@ class TfishCriteriaItem
         }
     }
     
+    public function setOperator($value)
+    {
+        $clean_value = $this->validator->trimString($value);
+                    
+        if (in_array($clean_value, self::getListOfPermittedOperators())) {
+            $this->operator = $clean_value;
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+    }
+    
     public function setValue($value)
     {
         $type = gettype($value);
@@ -130,17 +141,6 @@ class TfishCriteriaItem
         }
 
         $this->value = $clean_value;
-    }
-    
-    public function setOperator($value)
-    {
-        $clean_value = $this->validator->trimString($value);
-                    
-        if (in_array($clean_value, self::getListOfPermittedOperators())) {
-            $this->operator = $clean_value;
-        } else {
-            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-        }
     }
         
 }
