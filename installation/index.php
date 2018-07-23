@@ -36,8 +36,24 @@ if (is_readable("../mainfile.php")) {
     exit;
 }
 
+// HTMLPurifier is a dependency of TfishValidator.
+require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
+
 // Initialise data validator.
-$tfish_validator = new TfishValidator();
+$tfish_validator_factory = new TfishValidatorFactory();
+$tfish_validator = $tfish_validator_factory->getValidator();
+
+// Initialise preference.
+$preference_config = array(
+    'site_name' => 'Tuskfish CMS',
+    'site_description' => 'A cutting edge micro-CMS',
+    'site_author' => '',
+    'site_copyright' => '',
+    'seo' => '',
+    'pagination_elements' => '5',
+    'enable_cache' => 0
+);
+$tfish_preference = new TfishPreference($tfish_validator, $preference_config);
 
 // Initialise default content variable.
 $tfish_content = array('output' => '');
@@ -53,37 +69,6 @@ set_error_handler(array($tfish_logger, "logError"));
 $tfish_template = new TfishTemplate($tfish_validator);
 $tfish_template->setTheme('signin');
 
-// TfishPreference is not available yet, so just set up an analogue for use with installation.
-/** @internal */
-class TfishPreference
-{
-    function __construct(object $tfish_validator) {}
-    
-    public function escapeForXss(string $property)
-    {
-        $clean_property = $tfish_validator->trimString($property);
-        
-        if (isset($this->__data[$clean_property])) {
-            switch ($clean_property) {
-                default:
-                    return htmlspecialchars($this->__data[$clean_property], ENT_NOQUOTES, 'UTF-8',
-                            false);
-                    break;
-            }
-        } else {
-            return null;
-        }
-    }
-}
-
-$tfish_preference = new TfishPreference($tfish_validator);
-$tfish_preference->site_name = 'Tuskfish CMS';
-$tfish_preference->site_description = 'A cutting edge micro-CMS';
-$tfish_preference->site_author = '';
-$tfish_preference->site_copyright = '';
-$tfish_preference->seo = '';
-$tfish_preference->pagination_elements = '5';
-$tfish_preference->enable_cache = 0;
 $tfish_template->tfish_url = getUrl();
 
 /**
@@ -175,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ////////////////////////////////////
         // INITIALISE THE SQLITE DATABASE //
         ////////////////////////////////////
+        
         // Create the database
         $tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
         $db_path = $tfish_database->create($db_name);
@@ -305,8 +291,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "content_type" => "TEXT",
             "content_id" => "INTEGER");
         $tfish_database->createTable('taglink', $taglink_columns, 'id');
-
-        // Close database.
+        
+        // Close the database connection.
         $tfish_database->close();
 
         // Report on status of database creation.
@@ -403,4 +389,12 @@ $tfish_metadata->setDescription('');
 $tfish_metadata->setRobots('noindex,nofollow');
 $tfish_metadata->setGenerator(''); // Do not advertise an installation script.
 
-require_once TFISH_PATH . "tfish_footer.php";
+// Manual duplication of footer (as database is not yet available on first page view).
+if ($tfish_template && !empty($tfish_template->getTheme())) {
+    include_once TFISH_THEMES_PATH . $tfish_template->getTheme() . "/theme.html";
+} else {
+    include_once TFISH_THEMES_PATH . "default/theme.html";
+}
+
+// Flush the output buffer to screen and clear it.
+ob_end_flush();
