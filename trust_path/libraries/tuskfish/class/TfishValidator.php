@@ -48,26 +48,7 @@ class TfishValidator
             $this->html_purifier = $html_purifier;
         }
     }
-    /**
-     * Escape data for display to mitigate XSS attacks.
-     * 
-     * Casts to string and applies htmlentities to text fields destined for output / display to
-     * limit XSS attacks. Encoding of quotes and use of UTF-8 character set is hardcoded in.
-     *
-     * @param mixed $output Unescaped string intended for display.
-     * @return string XSS-escaped output string safe for display.
-     */
-    public function escapeForXss($dirty_text)
-    {
-        $dirty_text = (string) $dirty_text;
-        
-        if (isset($dirty_text)) {
-            return htmlspecialchars($dirty_text, ENT_QUOTES, 'UTF-8', false);
-        } else {
-            return '';
-        }
-    }
-
+    
     /**
      * URL-encode and escape a query string for use in a URL.
      * 
@@ -87,6 +68,26 @@ class TfishValidator
         $clean_url = $this->escapeForXss($url); // Encode entities with htmlspecialchars()
 
         return $clean_url;
+    }
+    
+    /**
+     * Escape data for display to mitigate XSS attacks.
+     * 
+     * Casts to string and applies htmlentities to text fields destined for output / display to
+     * limit XSS attacks. Encoding of quotes and use of UTF-8 character set is hardcoded in.
+     *
+     * @param mixed $output Unescaped string intended for display.
+     * @return string XSS-escaped output string safe for display.
+     */
+    public function escapeForXss($dirty_text)
+    {
+        $dirty_text = (string) $dirty_text;
+        
+        if (isset($dirty_text)) {
+            return htmlspecialchars($dirty_text, ENT_QUOTES, 'UTF-8', false);
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -242,6 +243,17 @@ class TfishValidator
             return false;
         }
     }
+    
+    /**
+     * Test if input is an array.
+     *
+     * @param mixed $array Input to be tested.
+     * @return bool True if valid array otherwise false.
+     */
+    public function isArray($array)
+    {
+        return is_array($array);
+    }
 
     /**
      * Validate boolean input.
@@ -373,6 +385,39 @@ class TfishValidator
     }
 
     /**
+     * Tests if the input is null (ie set but without an assigned value) or not.
+     * 
+     * @param mixed $null Input to be tested.
+     * @return bool True if input is null otherwise false.
+     */
+    public function isNull($null)
+    {
+        return is_null($null);
+    }
+    
+    /**
+     * Test if input is an object.
+     * 
+     * @param mixed $object Input to be tested.
+     * @return bool True if valid object otherwise false.
+     */
+    public function isObject($object)
+    {
+        return is_object($object);
+    }
+
+    /**
+     * Tests if input is a resource.
+     * 
+     * @param mixed $resource Input to be tested.
+     * @return bool True if valid resource otherwise false.
+     */
+    public function isResource($resource)
+    {
+        return is_resource($resource);
+    }
+    
+    /**
      * Validate URL.
      * 
      * Only accepts http:// and https:// protocol and ASCII characters. Other protocols
@@ -392,50 +437,6 @@ class TfishValidator
         }
         
         return false;
-    }
-
-    /**
-     * Test if input is an array.
-     *
-     * @param mixed $array Input to be tested.
-     * @return bool True if valid array otherwise false.
-     */
-    public function isArray($array)
-    {
-        return is_array($array);
-    }
-
-    /**
-     * Test if input is an object.
-     * 
-     * @param mixed $object Input to be tested.
-     * @return bool True if valid object otherwise false.
-     */
-    public function isObject($object)
-    {
-        return is_object($object);
-    }
-
-    /**
-     * Tests if the input is null (ie set but without an assigned value) or not.
-     * 
-     * @param mixed $null Input to be tested.
-     * @return bool True if input is null otherwise false.
-     */
-    public function isNull($null)
-    {
-        return is_null($null);
-    }
-
-    /**
-     * Tests if input is a resource.
-     * 
-     * @param mixed $resource Input to be tested.
-     * @return bool True if valid resource otherwise false.
-     */
-    public function isResource($resource)
-    {
-        return is_resource($resource);
     }
     
     /**
