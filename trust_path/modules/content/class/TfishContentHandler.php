@@ -54,6 +54,60 @@ class TfishContentHandler
     }
     
     /**
+     * Convert a database content row to a corresponding content object.
+     * 
+     * Only use this function to convert single objects, as it does a separate query to look up
+     * the associated taglinks. Running it through a loop will therefore consume a lot of resources.
+     * To convert multiple objects, load them directly into the relevant class files using
+     * PDO::FETCH_CLASS, prepare a buffer of tags using getTags() and loop through the objects
+     * referring to the buffer rather than hitting the database every time.
+     * 
+     * @param array $row Array of result set from database.
+     * @return object|bool Content object on success, false on failure.
+     */
+    public function convertRowToObject(array $row)
+    {
+        if (empty($row) || !$this->validator->isArray($row)) {
+            return false;
+        }
+
+        // Check the content type is whitelisted.
+        $type_whitelist = $this->getTypes();
+        
+        if (!empty($row['type']) && array_key_exists($row['type'], $type_whitelist)) {
+            $content_object = new $row['type']($this->validator);
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+        
+        // Populate the object from the $row using whitelisted properties.
+        if ($content_object) {
+            $content_object->loadPropertiesFromArray($row, true);
+
+            // Populate the tag property.
+            if (isset($content_object->tags) && !empty($content_object->id)) {
+                $tags = array();
+                $criteria = $this->criteria_factory->getCriteria();
+                $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', (int) $content_object->id));
+                $statement = $this->db->select('taglink', $criteria, array('tag_id'));
+                
+                if ($statement) {
+                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                        $tags[] = $row['tag_id'];
+                    }
+                    $content_object->setTags($tags);
+                } else {
+                    trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+                }
+            }
+
+            return $content_object;
+        }
+
+        return false;
+    }
+    
+    /**
      * Delete a single object from the content table.
      * 
      * @param int $id ID of content object to delete.
@@ -107,31 +161,6 @@ class TfishContentHandler
     }
     
     /**
-     * Removes references to a collection when it is deleted or changed to another type.
-     * 
-     * @param int $id ID of the parent collection.
-     * @return boolean True on success, false on failure.
-     */
-    public function deleteParentalReferences(int $id)
-    {
-        $clean_id = $this->validator->isInt($id, 1) ? (int) $id : null;
-        
-        if (!$clean_id) {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-        
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add(new TfishCriteriaItem($this->validator, 'parent', $clean_id));
-        $result = $this->db->updateAll('content', array('parent' => 0), $criteria);
-
-        if (!$result) {
-            return false;
-        }
-        
-        return true;
-    }
-
-    /**
      * Deletes an uploaded image file associated with a content object.
      * 
      * @param string $filename Name of file.
@@ -157,6 +186,42 @@ class TfishContentHandler
         }
     }
     
+    /**
+     * Removes references to a collection when it is deleted or changed to another type.
+     * 
+     * @param int $id ID of the parent collection.
+     * @return boolean True on success, false on failure.
+     */
+    public function deleteParentalReferences(int $id)
+    {
+        $clean_id = $this->validator->isInt($id, 1) ? (int) $id : null;
+        
+        if (!$clean_id) {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+        
+        $criteria = $this->criteria_factory->getCriteria();
+        $criteria->add(new TfishCriteriaItem($this->validator, 'parent', $clean_id));
+        $result = $this->db->updateAll('content', array('parent' => 0), $criteria);
+
+        if (!$result) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Inserts a content object into the database.
+     * 
+     * Note that content child content classes that have unset unused properties from the parent
+     * should reset them to null before insertion or update. This is to guard against the case
+     * where the admin reassigns the type of a content object - it makes sure that unused properties
+     * are zeroed in the database. 
+     * 
+     * @param object $obj TfishContentObject subclass.
+     * @return bool True on success, false on failure.
+     */
     public function insert(object $obj)
     {
         $key_values = $obj->convertObjectToArray();
@@ -864,60 +929,6 @@ class TfishContentHandler
     {
         $clean_id = (int) $id;
         return $this->db->toggleBoolean($clean_id, 'content', 'online');
-    }
-
-    /**
-     * Convert a database content row to a corresponding content object.
-     * 
-     * Only use this function to convert single objects, as it does a separate query to look up
-     * the associated taglinks. Running it through a loop will therefore consume a lot of resources.
-     * To convert multiple objects, load them directly into the relevant class files using
-     * PDO::FETCH_CLASS, prepare a buffer of tags using getTags() and loop through the objects
-     * referring to the buffer rather than hitting the database every time.
-     * 
-     * @param array $row Array of result set from database.
-     * @return object|bool Content object on success, false on failure.
-     */
-    public function convertRowToObject(array $row)
-    {
-        if (empty($row) || !$this->validator->isArray($row)) {
-            return false;
-        }
-
-        // Check the content type is whitelisted.
-        $type_whitelist = $this->getTypes();
-        
-        if (!empty($row['type']) && array_key_exists($row['type'], $type_whitelist)) {
-            $content_object = new $row['type']($this->validator);
-        } else {
-            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-        }
-        
-        // Populate the object from the $row using whitelisted properties.
-        if ($content_object) {
-            $content_object->loadPropertiesFromArray($row, true);
-
-            // Populate the tag property.
-            if (isset($content_object->tags) && !empty($content_object->id)) {
-                $tags = array();
-                $criteria = $this->criteria_factory->getCriteria();
-                $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', (int) $content_object->id));
-                $statement = $this->db->select('taglink', $criteria, array('tag_id'));
-                
-                if ($statement) {
-                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                        $tags[] = $row['tag_id'];
-                    }
-                    $content_object->setTags($tags);
-                } else {
-                    trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-                }
-            }
-
-            return $content_object;
-        }
-
-        return false;
     }
 
     /**
