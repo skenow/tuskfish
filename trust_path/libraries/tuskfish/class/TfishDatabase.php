@@ -84,7 +84,7 @@ class TfishDatabase
      */
     public function close()
     {
-        return self::_close();
+        return $this->_close();
     }
 
     /** @internal */
@@ -104,7 +104,7 @@ class TfishDatabase
      */
     public function connect()
     {
-        return self::_connect();
+        return $this->_connect();
     }
 
     /** @internal */
@@ -137,7 +137,7 @@ class TfishDatabase
         $db_name = $this->validator->trimString($db_name);
         
         if ($this->validator->isAlnumUnderscore($db_name)) {
-            return self::_create($db_name . '.db');
+            return $this->_create($db_name . '.db');
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
@@ -188,13 +188,13 @@ class TfishDatabase
         $clean_columns = array();
 
         // Validate input parameters
-        $clean_table = self::validateTableName($table);
+        $clean_table = $this->validateTableName($table);
         
         if ($this->validator->isArray($columns) && !empty($columns)) {
             $type_whitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
             
             foreach ($columns as $key => $value) {
-                $key = self::escapeIdentifier($key);
+                $key = $this->escapeIdentifier($key);
                 
                 if (!$this->validator->isAlnumUnderscore($key)) {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
@@ -215,7 +215,7 @@ class TfishDatabase
         }
         
         if (isset($primary_key)) {
-            $primary_key = self::escapeIdentifier($primary_key);
+            $primary_key = $this->escapeIdentifier($primary_key);
             
             if (array_key_exists($primary_key, $clean_columns)) {
                 $clean_primary_key = $this->validator->isAlnumUnderscore($primary_key)
@@ -230,9 +230,9 @@ class TfishDatabase
 
         // Proceed with the query
         if ($clean_primary_key) {
-            return self::_createTable($clean_table, $clean_columns, $clean_primary_key);
+            return $this->_createTable($clean_table, $clean_columns, $clean_primary_key);
         } else {
-            return self::_createTable($clean_table, $clean_columns);
+            return $this->_createTable($clean_table, $clean_columns);
         }
     }
 
@@ -253,7 +253,7 @@ class TfishDatabase
             
             $sql = trim($sql, ', ');
             $sql .= ")";
-            $statement = self::preparedStatement($sql);
+            $statement = $this->preparedStatement($sql);
             $statement->execute();
             
             if ($statement) {
@@ -273,17 +273,17 @@ class TfishDatabase
      */
     public function delete(string $table, int $id)
     {
-        $clean_table = self::validateTableName($table);
-        $clean_id = self::validateId($id);
+        $clean_table = $this->validateTableName($table);
+        $clean_id = $this->validateId($id);
         
-        return self::_delete($clean_table, $clean_id);
+        return $this->_delete($clean_table, $clean_id);
     }
 
     /** @internal */
     private function _delete(string $table, int $id)
     {
-        $sql = "DELETE FROM " . self::addBackticks($table) . " WHERE `id` = :id";
-        $statement = self::preparedStatement($sql);
+        $sql = "DELETE FROM " . $this->addBackticks($table) . " WHERE `id` = :id";
+        $statement = $this->preparedStatement($sql);
         
         if ($statement) {
             $statement->bindValue(':id', $id, PDO::PARAM_INT);
@@ -291,7 +291,7 @@ class TfishDatabase
             return false;
         }
         
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -308,17 +308,17 @@ class TfishDatabase
      */
     public function deleteAll(string $table, object $criteria)
     {
-        $clean_table = self::validateTableName($table);
-        $clean_criteria = self::validateCriteriaObject($criteria);
+        $clean_table = $this->validateTableName($table);
+        $clean_criteria = $this->validateCriteriaObject($criteria);
         
-        return self::_deleteAll($clean_table, $clean_criteria);
+        return $this->_deleteAll($clean_table, $clean_criteria);
     }
 
     /** @internal */
     private function _deleteAll(string $table, object $criteria)
     {
         // Set table.
-        $sql = "DELETE FROM " . self::addBackticks($table) . " ";
+        $sql = "DELETE FROM " . $this->addBackticks($table) . " ";
 
         // Set WHERE criteria.
         if ($criteria) {
@@ -338,12 +338,12 @@ class TfishDatabase
             // Set the order (sort) column and order (default is ascending).
             if ($criteria->order) {
                 $sql .= "ORDER BY `t1`." 
-                        . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+                        . $this->addBackticks($this->escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
                     $sql .= ", `t1`."
-                         . self::addBackticks(self::escapeIdentifier($criteria->secondary_order)) . " ";
+                         . $this->addBackticks($this->escapeIdentifier($criteria->secondary_order)) . " ";
                     $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
@@ -357,13 +357,13 @@ class TfishDatabase
         }
 
         // Prepare the statement and bind the values.
-        $statement = self::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         
         if ($criteria) {
             if (!empty($pdo_placeholders)) {
                 
                 foreach ($pdo_placeholders as $placeholder => $value) {
-                    $statement->bindValue($placeholder, $value, self::setType($value));
+                    $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
@@ -376,7 +376,7 @@ class TfishDatabase
             }
         }
         
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -446,22 +446,22 @@ class TfishDatabase
      */
     public function insert(string $table, array $key_values)
     {
-        $clean_table = self::validateTableName($table);
-        $clean_keys = self::validateKeys($key_values);
+        $clean_table = $this->validateTableName($table);
+        $clean_keys = $this->validateKeys($key_values);
         
-        return self::_insert($clean_table, $clean_keys);
+        return $this->_insert($clean_table, $clean_keys);
     }
 
     /** @internal */
     private function _insert(string $table, array $key_values)
     {
         $pdo_placeholders = '';
-        $sql = "INSERT INTO " . self::addBackticks($table) . " (";
+        $sql = "INSERT INTO " . $this->addBackticks($table) . " (";
 
         // Prepare statement
         foreach ($key_values as $key => $value) {
             $pdo_placeholders .= ":" . $key . ", ";
-            $sql .= self::addBackticks($key) . ", ";
+            $sql .= $this->addBackticks($key) . ", ";
             unset($key, $value);
         }
         
@@ -473,11 +473,11 @@ class TfishDatabase
         $statement = $this->_db->prepare($sql);
         
         foreach ($key_values as $key => $value) {
-            $statement->bindValue(":" . $key, $value, self::setType($value));
+            $statement->bindValue(":" . $key, $value, $this->setType($value));
             unset($key, $value);
         }
         
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -508,7 +508,7 @@ class TfishDatabase
      */
     public function preparedStatement(string $sql)
     {
-        return self::_preparedStatement($sql);
+        return $this->_preparedStatement($sql);
     }
 
     /** @internal */
@@ -529,11 +529,11 @@ class TfishDatabase
      */
     public function select(string $table, object $criteria = null, array $columns = null)
     {
-        $clean_table = self::validateTableName($table);
-        $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
-        $clean_columns = isset($columns) ? self::validateColumns($columns) : array();
+        $clean_table = $this->validateTableName($table);
+        $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
+        $clean_columns = isset($columns) ? $this->validateColumns($columns) : array();
         
-        return self::_select($clean_table, $clean_criteria, $clean_columns);
+        return $this->_select($clean_table, $clean_criteria, $clean_columns);
     }
 
     /** @internal */
@@ -545,7 +545,7 @@ class TfishDatabase
         // Select columns.
         if ($columns) {
             foreach ($columns as $column) {
-                $sql .= '`t1`.' . self::addBackticks($column) . ", ";
+                $sql .= '`t1`.' . $this->addBackticks($column) . ", ";
             }
             
             $sql = rtrim($sql, ", ") . " ";
@@ -554,11 +554,11 @@ class TfishDatabase
         }
 
         // Set table.
-        $sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
+        $sql .= "FROM " . $this->addBackticks($table) . " AS `t1` ";
 
         // Check if a tag filter has been applied (JOIN is required).
         if (isset($criteria) && !empty($criteria->tag)) {
-            $sql .= self::_renderTagJoin($table);
+            $sql .= $this->_renderTagJoin($table);
         }
 
         // Set WHERE criteria.
@@ -588,18 +588,18 @@ class TfishDatabase
             // Set GROUP BY.
             if ($criteria->group_by) {
                 $sql .= " GROUP BY `t1`."
-                        . self::addBackticks(self::escapeIdentifier($criteria->group_by));
+                        . $this->addBackticks($this->escapeIdentifier($criteria->group_by));
             }
 
             // Set the order (sort) column and order (default is ascending).
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
-                        . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+                        . $this->addBackticks($this->escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
                     $sql .= ", `t1`."
-                         . self::addBackticks(self::escapeIdentifier($criteria->secondary_order)) . " ";
+                         . $this->addBackticks($this->escapeIdentifier($criteria->secondary_order)) . " ";
                     $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
@@ -613,12 +613,12 @@ class TfishDatabase
         }
 
         // Prepare the statement and bind the values.
-        $statement = self::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         
         if (isset($criteria) && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
-                    $statement->bindValue($placeholder, $value, self::setType($value));
+                    $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
@@ -655,11 +655,11 @@ class TfishDatabase
      */
     public function selectCount(string $table, object $criteria = null, string $column = '')
     {
-        $clean_table = self::validateTableName($table);
-        $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
+        $clean_table = $this->validateTableName($table);
+        $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
         
         if ($column) {
-            $column = self::escapeIdentifier($column);
+            $column = $this->escapeIdentifier($column);
             
             if ($this->validator->isAlnumUnderscore($column)) {
                 $clean_column = $column;
@@ -671,7 +671,7 @@ class TfishDatabase
             $clean_column = "*";
         }
         
-        return self::_selectCount($clean_table, $clean_criteria, $clean_column);
+        return $this->_selectCount($clean_table, $clean_criteria, $clean_column);
     }
 
     /** @internal */
@@ -679,15 +679,15 @@ class TfishDatabase
     {
         // Specify operation and column
         $sql = "SELECT COUNT(";
-        $sql .= $column = "*" ? $column : self::addBackticks($column);
+        $sql .= $column = "*" ? $column : $this->addBackticks($column);
         $sql .= ") ";
 
         // Set table.
-        $sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
+        $sql .= "FROM " . $this->addBackticks($table) . " AS `t1` ";
 
         // Check if a tag filter has been applied (JOIN is required).
         if (isset($criteria) && !empty($criteria->tag)) {
-            $sql .= self::_renderTagJoin($table);
+            $sql .= $this->_renderTagJoin($table);
         }
 
         // Set WHERE criteria.
@@ -718,11 +718,11 @@ class TfishDatabase
         }
 
         // Prepare the statement and bind the values.
-        $statement = self::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         if (isset($criteria) && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
-                    $statement->bindValue($placeholder, $value, self::setType($value));
+                    $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
@@ -757,11 +757,11 @@ class TfishDatabase
     public function selectDistinct(string $table, object $criteria = null, array $columns)
     {
         // Validate the tablename (alphanumeric characters only).
-        $clean_table = self::validateTableName($table);
-        $clean_criteria = isset($criteria) ? self::validateCriteriaObject($criteria) : null;
-        $clean_columns = !empty($columns) ? self::validateColumns($columns) : array();
+        $clean_table = $this->validateTableName($table);
+        $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
+        $clean_columns = !empty($columns) ? $this->validateColumns($columns) : array();
         
-        return self::_selectDistinct($clean_table, $clean_criteria, $clean_columns);
+        return $this->_selectDistinct($clean_table, $clean_criteria, $clean_columns);
     }
 
     /** @internal */
@@ -772,13 +772,13 @@ class TfishDatabase
 
         // Select columns.
         foreach ($columns as $column) {
-            $sql .= '`t1`.' . self::addBackticks($column) . ", ";
+            $sql .= '`t1`.' . $this->addBackticks($column) . ", ";
         }
         
         $sql = rtrim($sql, ", ") . " ";
 
         // Set table.
-        $sql .= "FROM " . self::addBackticks($table) . " AS `t1` ";
+        $sql .= "FROM " . $this->addBackticks($table) . " AS `t1` ";
 
         // Set parameters.
         if (isset($criteria)) {
@@ -809,18 +809,18 @@ class TfishDatabase
             // Set GROUP BY.
             if ($criteria->group_by) {
                 $sql .= " GROUP BY `t1`."
-                        . self::addBackticks(self::escapeIdentifier($criteria->group_by));
+                        . $this->addBackticks($this->escapeIdentifier($criteria->group_by));
             }
 
             // Set the order (sort) column and type (default is ascending)
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
-                        . self::addBackticks(self::escapeIdentifier($criteria->order)) . " ";
+                        . $this->addBackticks($this->escapeIdentifier($criteria->order)) . " ";
                 $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
                 
                 if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
                     $sql .= ", `t1`."
-                         . self::addBackticks(self::escapeIdentifier($criteria->secondary_order)) . " ";
+                         . $this->addBackticks($this->escapeIdentifier($criteria->secondary_order)) . " ";
                     $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
                 }
             }
@@ -834,11 +834,11 @@ class TfishDatabase
         }
 
         // Prepare the statement and bind the values.
-        $statement = self::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         if (isset($criteria) && $statement) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
-                    $statement->bindValue($placeholder, $value, self::setType($value));
+                    $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
@@ -874,19 +874,19 @@ class TfishDatabase
      */
     public function toggleBoolean(int $id, string $table, string $column)
     {
-        $clean_id = self::validateId($id);
-        $clean_table = self::validateTableName($table);
-        $clean_column = self::validateColumns(array($column));
+        $clean_id = $this->validateId($id);
+        $clean_table = $this->validateTableName($table);
+        $clean_column = $this->validateColumns(array($column));
         $clean_column = reset($clean_column);
         
-        return self::_toggleBoolean($clean_id, $clean_table, $clean_column);
+        return $this->_toggleBoolean($clean_id, $clean_table, $clean_column);
     }
 
     /** @internal */
     private function _toggleBoolean(int $id, string $table, string $column)
     {
-        $sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
-                . " = CASE WHEN " . self::addBackticks($column)
+        $sql = "UPDATE " . $this->addBackticks($table) . " SET " . $this->addBackticks($column)
+                . " = CASE WHEN " . $this->addBackticks($column)
                 . " = 1 THEN 0 ELSE 1 END WHERE `id` = :id";
 
         // Prepare the statement and bind the ID value.
@@ -896,7 +896,7 @@ class TfishDatabase
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
         }
 
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -912,19 +912,19 @@ class TfishDatabase
      */
     public function updateCounter(int $id, string $table, string $column)
     {
-        $clean_id = self::validateId($id);
-        $clean_table = self::validateTableName($table);
-        $clean_column = self::validateColumns(array($column));
+        $clean_id = $this->validateId($id);
+        $clean_table = $this->validateTableName($table);
+        $clean_column = $this->validateColumns(array($column));
         $clean_column = reset($clean_column);
         
-        return self::_updateCounter($clean_id, $clean_table, $clean_column);
+        return $this->_updateCounter($clean_id, $clean_table, $clean_column);
     }
 
     /** @internal */
     private function _updateCounter(int $id, string $table, string $column)
     {
-        $sql = "UPDATE " . self::addBackticks($table) . " SET " . self::addBackticks($column)
-                . " = " . self::addBackticks($column) . " + 1 WHERE `id` = :id";
+        $sql = "UPDATE " . $this->addBackticks($table) . " SET " . $this->addBackticks($column)
+                . " = " . $this->addBackticks($column) . " + 1 WHERE `id` = :id";
 
         // Prepare the statement and bind the ID value.
         $statement = $this->preparedStatement($sql);
@@ -933,7 +933,7 @@ class TfishDatabase
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
         }
 
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -946,42 +946,42 @@ class TfishDatabase
      */
     public function update(string $table, int $id, array $key_values)
     {
-        $clean_table = self::validateTableName($table);
-        $clean_id = self::validateId($id);
-        $clean_keys = self::validateKeys($key_values);
+        $clean_table = $this->validateTableName($table);
+        $clean_id = $this->validateId($id);
+        $clean_keys = $this->validateKeys($key_values);
         
-        return self::_update($clean_table, $clean_id, $clean_keys);
+        return $this->_update($clean_table, $clean_id, $clean_keys);
     }
 
     /** @internal */
     private function _update(string $table, int $id, array $key_values)
     {
         // Prepare the statement
-        $sql = "UPDATE " . self::addBackticks($table) . " SET ";
+        $sql = "UPDATE " . $this->addBackticks($table) . " SET ";
         
         foreach ($key_values as $key => $value) {
-            $sql .= self::addBackticks($key) . " = :" . $key . ", ";
+            $sql .= $this->addBackticks($key) . " = :" . $key . ", ";
         }
         
         $sql = trim($sql, ", ");
         $sql .= " WHERE `id` = :id";
 
         // Prepare the statement and bind the values.
-        $statement = self::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
             
             foreach ($key_values as $key => $value) {
                 $type = gettype($value);
-                $statement->bindValue(":" . $key, $value, self::setType($type));
+                $statement->bindValue(":" . $key, $value, $this->setType($type));
                 unset($type);
             }
         } else {
             return false;
         }
         
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -998,27 +998,27 @@ class TfishDatabase
      */
     public function updateAll(string $table, array $key_values, object $criteria = null)
     {
-        $clean_table = self::validateTableName($table);
-        $clean_keys = self::validateKeys($key_values);
+        $clean_table = $this->validateTableName($table);
+        $clean_keys = $this->validateKeys($key_values);
         
         if (isset($criteria)) {
-            $clean_criteria = self::validateCriteriaObject($criteria);
+            $clean_criteria = $this->validateCriteriaObject($criteria);
         } else {
             $clean_criteria = null;
         }
         
-        return self::_updateAll($clean_table, $clean_keys, $clean_criteria);
+        return $this->_updateAll($clean_table, $clean_keys, $clean_criteria);
     }
 
     /** @internal */
     private function _updateAll(string $table, array $key_values, object $criteria)
     {
         // Set table.
-        $sql = "UPDATE " . self::addBackticks($table) . " SET ";
+        $sql = "UPDATE " . $this->addBackticks($table) . " SET ";
 
         // Set key values.
         foreach ($key_values as $key => $value) {
-            $sql .= self::addBackticks($key) . " = :" . $key . ", ";
+            $sql .= $this->addBackticks($key) . " = :" . $key . ", ";
         }
         
         $sql = rtrim($sql, ", ") . " ";
@@ -1041,23 +1041,23 @@ class TfishDatabase
         }
 
         // Prepare the statement and bind the values.
-        $statement = self::preparedStatement($sql);
+        $statement = $this->preparedStatement($sql);
         
         foreach ($key_values as $key => $value) {
-            $statement->bindValue(':' . $key, $value, self::setType($value));
+            $statement->bindValue(':' . $key, $value, $this->setType($value));
             unset($key, $value);
         }
         
         if (isset($criteria)) {
             if (!empty($pdo_placeholders)) {
                 foreach ($pdo_placeholders as $placeholder => $value) {
-                    $statement->bindValue($placeholder, $value, self::setType($value));
+                    $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
         }
 
-        return self::executeTransaction($statement);
+        return $this->executeTransaction($statement);
     }
 
     /**
@@ -1211,7 +1211,7 @@ class TfishDatabase
         
         if ($this->validator->isArray($columns) && !empty($columns)) {
             foreach ($columns as $column) {
-                $column = self::escapeIdentifier($column);
+                $column = $this->escapeIdentifier($column);
                 
                 if ($this->validator->isAlnumUnderscore($column)) {
                     $clean_columns[] = $column;
@@ -1262,7 +1262,7 @@ class TfishDatabase
         
         if ($this->validator->isArray($key_values) && !empty($key_values)) {
             foreach ($key_values as $key => $value) {
-                $key = self::escapeIdentifier($key);
+                $key = $this->escapeIdentifier($key);
                 
                 if ($this->validator->isAlnumUnderscore($key)) {
                     $clean_keys[$key] = $value;
@@ -1289,7 +1289,7 @@ class TfishDatabase
      */
     public function validateTableName(string $table_name)
     {
-        $table_name = self::escapeIdentifier($table_name);
+        $table_name = $this->escapeIdentifier($table_name);
         
         if ($this->validator->isAlnum($table_name)) {
             return $table_name;
