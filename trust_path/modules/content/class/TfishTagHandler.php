@@ -35,6 +35,67 @@ class TfishTagHandler extends TfishContentHandler
     {
         parent::__construct($validator, $db, $criteria_factory, $file_handler, $taglink_handler);
     }
+    
+    /**
+     * Build a select box from an arbitrary array of tags.
+     * 
+     * Use this when you need to customise a tag select box. Pass in an array of the tags you want
+     * to use as $tag_list as key => value pairs. If you have multiple select boxes on one page then
+     * you need to assign them different keys and listen for matching input parameters. If you have
+     * organised tags into collections, you can run a query to retrieve that subset using the 
+     * parental ID as a selection criteria.
+     * 
+     * @param int $selected ID of selected option.
+     * @param array $tag_list Array of options in tag_id => title format.
+     * @param string $key_name The input parameter name you want to use as key for this select box.
+     * Defaults to 'tag_id'.
+     * @param string $zero_option The string that will be displayed for the 'zero' or no selection
+     * option.
+     * @return string HTML select box.
+     */
+    public function getArbitraryTagSelectBox($selected = null, $tag_list = array(),
+            $key_name = null, $zero_option = TFISH_SELECT_TAGS)
+    {
+        // Initialise variables.
+        $select_box = '';
+        $clean_key_name = '';
+        $clean_tag_list = array();
+
+        // Validate input.
+        // ID of a previously selected tag, if any.
+        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
+                ? (int) $selected : null;
+        
+        if ($this->validator->isArray($tag_list) && !empty($tag_list)) {
+            asort($tag_list);
+            
+            foreach ($tag_list as $key => $value) {
+                $clean_key = (int) $key;
+                $clean_value = $this->validator->escapeForXss($this->validator->trimString($value));
+                $clean_tag_list[$clean_key] = $clean_value;
+                unset($key, $clean_key, $value, $clean_value);
+            }
+        }
+        
+        // The text to display in the zero option of the select box.
+        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
+        $clean_key_name = isset($key_name)
+                ? $this->validator->escapeForXss($this->validator->trimString($key_name)) : 'tag_id';
+
+        // Build the select box.
+        $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
+        $select_box = '<select class="form-control custom-select" name="' . $clean_key_name . '" id="'
+                . $clean_key_name . '" onchange="this.form.submit()">';
+        
+        foreach ($clean_tag_list as $key => $value) {
+            $select_box .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
+                    . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
+        }
+        
+        $select_box .= '</select>';
+
+        return $select_box;
+    }
 
     /**
      * Count TfishTag objects, optionally matching conditions specified with a TfishCriteria object.
@@ -130,67 +191,6 @@ class TfishTagHandler extends TfishContentHandler
             $select_box = false;
         }
         
-        return $select_box;
-    }
-
-    /**
-     * Build a select box from an arbitrary array of tags.
-     * 
-     * Use this when you need to customise a tag select box. Pass in an array of the tags you want
-     * to use as $tag_list as key => value pairs. If you have multiple select boxes on one page then
-     * you need to assign them different keys and listen for matching input parameters. If you have
-     * organised tags into collections, you can run a query to retrieve that subset using the 
-     * parental ID as a selection criteria.
-     * 
-     * @param int $selected ID of selected option.
-     * @param array $tag_list Array of options in tag_id => title format.
-     * @param string $key_name The input parameter name you want to use as key for this select box.
-     * Defaults to 'tag_id'.
-     * @param string $zero_option The string that will be displayed for the 'zero' or no selection
-     * option.
-     * @return string HTML select box.
-     */
-    public function getArbitraryTagSelectBox($selected = null, $tag_list = array(),
-            $key_name = null, $zero_option = TFISH_SELECT_TAGS)
-    {
-        // Initialise variables.
-        $select_box = '';
-        $clean_key_name = '';
-        $clean_tag_list = array();
-
-        // Validate input.
-        // ID of a previously selected tag, if any.
-        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
-                ? (int) $selected : null;
-        
-        if ($this->validator->isArray($tag_list) && !empty($tag_list)) {
-            asort($tag_list);
-            
-            foreach ($tag_list as $key => $value) {
-                $clean_key = (int) $key;
-                $clean_value = $this->validator->escapeForXss($this->validator->trimString($value));
-                $clean_tag_list[$clean_key] = $clean_value;
-                unset($key, $clean_key, $value, $clean_value);
-            }
-        }
-        
-        // The text to display in the zero option of the select box.
-        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
-        $clean_key_name = isset($key_name)
-                ? $this->validator->escapeForXss($this->validator->trimString($key_name)) : 'tag_id';
-
-        // Build the select box.
-        $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
-        $select_box = '<select class="form-control custom-select" name="' . $clean_key_name . '" id="'
-                . $clean_key_name . '" onchange="this.form.submit()">';
-        
-        foreach ($clean_tag_list as $key => $value) {
-            $select_box .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
-                    . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
-        }
-        
-        $select_box .= '</select>';
-
         return $select_box;
     }
 
