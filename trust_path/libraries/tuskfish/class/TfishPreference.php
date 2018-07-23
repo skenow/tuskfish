@@ -84,22 +84,6 @@ class TfishPreference
     }
     
     /**
-     * Converts the preference object to an array suitable for insert/update calls to the database.
-     * 
-     * @return array Array of object property/values.
-     */
-    public function getPreferencesAsArray()
-    {
-        $key_values = array();
-        
-        foreach ($this as $key => $value) {
-            $key_values[$key] = $value;
-        }
-        
-        return $key_values;
-    }
-    
-    /**
      * Escape a property for on-screen display to prevent XSS.
      * 
      * Applies htmlspecialchars() to a property destined for display to mitigate XSS attacks.
@@ -118,6 +102,59 @@ class TfishPreference
         } else {
             return null;
         }
+    }
+    
+    /**
+     * Converts the preference object to an array suitable for insert/update calls to the database.
+     * 
+     * @return array Array of object property/values.
+     */
+    public function getPreferencesAsArray()
+    {
+        $key_values = array();
+        
+        foreach ($this as $key => $value) {
+            $key_values[$key] = $value;
+        }
+        
+        return $key_values;
+    }
+    
+    /**
+     * Update the preference object from an external data source (eg. form submission).
+     * 
+     * The preference object will conduct its own internal data type validation and range checks.
+     * 
+     * @param array $dirty_input Usually $_REQUEST data.
+     */
+    public function loadPropertiesFromArray(array $dirty_input)
+    {
+        if (!$this->validator->isArray($dirty_input)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+        
+        // Validate object properties as they are assigned.
+        if (isset($dirty_input['site_name'])) $this->setSiteName($dirty_input['site_name']);
+        if (isset($dirty_input['site_description'])) $this->setSiteDescription($dirty_input['site_description']);
+        if (isset($dirty_input['site_author'])) $this->setSiteAuthor($dirty_input['site_author']);
+        if (isset($dirty_input['site_email'])) $this->setSiteEmail($dirty_input['site_email']);
+        if (isset($dirty_input['site_copyright'])) $this->setSiteCopyright($dirty_input['site_copyright']);
+        if (isset($dirty_input['close_site'])) $this->setCloseSite((int) $dirty_input['close_site']);
+        if (isset($dirty_input['server_timezone'])) $this->setServerTimezone($dirty_input['server_timezone']);
+        if (isset($dirty_input['site_timezone'])) $this->setSiteTimezone($dirty_input['site_timezone']);
+        if (isset($dirty_input['min_search_length'])) $this->setMinSearchLength((int) $dirty_input['min_search_length']);
+        if (isset($dirty_input['search_pagination'])) $this->setSearchPagination((int) $dirty_input['search_pagination']);
+        if (isset($dirty_input['user_pagination'])) $this->setUserPagination((int) $dirty_input['user_pagination']);
+        if (isset($dirty_input['admin_pagination'])) $this->setAdminPagination((int) $dirty_input['admin_pagination']);
+        if (isset($dirty_input['gallery_pagination'])) $this->setGalleryPagination((int) $dirty_input['gallery_pagination']);
+        if (isset($dirty_input['rss_posts'])) $this->setRssPosts((int) $dirty_input['rss_posts']);
+        if (isset($dirty_input['pagination_elements'])) $this->setPaginationElements((int) $dirty_input['pagination_elements']);
+        if (isset($dirty_input['session_name'])) $this->setSessionName($dirty_input['session_name']);
+        if (isset($dirty_input['session_life'])) $this->setSessionLife((int) $dirty_input['session_life']);
+        if (isset($dirty_input['default_language'])) $this->setDefaultLanguage($dirty_input['default_language']);
+        if (isset($dirty_input['date_format'])) $this->setDateFormat($dirty_input['date_format']);
+        if (isset($dirty_input['enable_cache'])) $this->setEnableCache((int) $dirty_input['enable_cache']);
+        if (isset($dirty_input['cache_life'])) $this->setCacheLife((int) $dirty_input['cache_life']);
     }
 
     public function setAdminPagination(int $value)
@@ -313,43 +350,6 @@ class TfishPreference
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
-    }
-
-    /**
-     * Update the preference object from an external data source (eg. form submission).
-     * 
-     * The preference object will conduct its own internal data type validation and range checks.
-     * 
-     * @param array $dirty_input Usually $_REQUEST data.
-     */
-    public function loadPropertiesFromArray(array $dirty_input)
-    {
-        if (!$this->validator->isArray($dirty_input)) {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
-        
-        // Validate object properties as they are assigned.
-        if (isset($dirty_input['site_name'])) $this->setSiteName($dirty_input['site_name']);
-        if (isset($dirty_input['site_description'])) $this->setSiteDescription($dirty_input['site_description']);
-        if (isset($dirty_input['site_author'])) $this->setSiteAuthor($dirty_input['site_author']);
-        if (isset($dirty_input['site_email'])) $this->setSiteEmail($dirty_input['site_email']);
-        if (isset($dirty_input['site_copyright'])) $this->setSiteCopyright($dirty_input['site_copyright']);
-        if (isset($dirty_input['close_site'])) $this->setCloseSite((int) $dirty_input['close_site']);
-        if (isset($dirty_input['server_timezone'])) $this->setServerTimezone($dirty_input['server_timezone']);
-        if (isset($dirty_input['site_timezone'])) $this->setSiteTimezone($dirty_input['site_timezone']);
-        if (isset($dirty_input['min_search_length'])) $this->setMinSearchLength((int) $dirty_input['min_search_length']);
-        if (isset($dirty_input['search_pagination'])) $this->setSearchPagination((int) $dirty_input['search_pagination']);
-        if (isset($dirty_input['user_pagination'])) $this->setUserPagination((int) $dirty_input['user_pagination']);
-        if (isset($dirty_input['admin_pagination'])) $this->setAdminPagination((int) $dirty_input['admin_pagination']);
-        if (isset($dirty_input['gallery_pagination'])) $this->setGalleryPagination((int) $dirty_input['gallery_pagination']);
-        if (isset($dirty_input['rss_posts'])) $this->setRssPosts((int) $dirty_input['rss_posts']);
-        if (isset($dirty_input['pagination_elements'])) $this->setPaginationElements((int) $dirty_input['pagination_elements']);
-        if (isset($dirty_input['session_name'])) $this->setSessionName($dirty_input['session_name']);
-        if (isset($dirty_input['session_life'])) $this->setSessionLife((int) $dirty_input['session_life']);
-        if (isset($dirty_input['default_language'])) $this->setDefaultLanguage($dirty_input['default_language']);
-        if (isset($dirty_input['date_format'])) $this->setDateFormat($dirty_input['date_format']);
-        if (isset($dirty_input['enable_cache'])) $this->setEnableCache((int) $dirty_input['enable_cache']);
-        if (isset($dirty_input['cache_life'])) $this->setCacheLife((int) $dirty_input['cache_life']);
     }
     
 }
