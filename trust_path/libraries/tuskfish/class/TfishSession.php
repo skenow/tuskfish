@@ -57,6 +57,20 @@ class TfishSession
         session_start();
         self::setToken();
     }
+    
+    /**
+     * Returns a login or logout link for insertion in the template.
+     * 
+     * @return string HTML login or logout link.
+     */
+    public static function getLoginLink()
+    {
+        if (self::isAdmin()) {
+            return '<a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">' . TFISH_LOGOUT . '</a>';
+        } else {
+            return '<a href="' . TFISH_ADMIN_URL . 'login.php">' . TFISH_LOGIN . '</a>';
+        }
+    }
 
     /**
      * Shorthand admin privileges check.
@@ -74,36 +88,7 @@ class TfishSession
             return false;
         }
     }
-
-    /**
-     * Checks if a session has expired and sets last seen activity flag.
-     * 
-     * @param object $tfish_preference TfishPreference object.
-     * @return bool True if session has expired, false if not.
-     */
-    public static function isExpired()
-    {
-        // Check if session carries a destroyed flag and kill it if the grace timer has expired.
-        if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
-            return true;
-        }
-
-        // Check for "last seen" timestamp.
-        $last_seen = isset($_SESSION['last_seen']) ? (int) $_SESSION['last_seen'] : false;
-
-        // Check expiry (but not if session_life === 0).
-        if ($last_seen && self::$preference->session_life > 0) {
-            if ($last_seen && (time() - $last_seen) > (self::$preference->session_life * 60)) {
-                return true;
-            }
-        }
-
-        // Session not seen before, add an activity timestamp.
-        $_SESSION['last_seen'] = time();
-
-        return false;
-    }
-
+    
     /**
      * Checks if client IP address or user agent has changed.
      * 
@@ -133,6 +118,35 @@ class TfishSession
         $_SESSION['browser_profile'] = $browser_profile;
 
         return true;
+    }
+
+    /**
+     * Checks if a session has expired and sets last seen activity flag.
+     * 
+     * @param object $tfish_preference TfishPreference object.
+     * @return bool True if session has expired, false if not.
+     */
+    public static function isExpired()
+    {
+        // Check if session carries a destroyed flag and kill it if the grace timer has expired.
+        if (isset($_SESSION['destroyed']) && time() > $_SESSION['destroyed']) {
+            return true;
+        }
+
+        // Check for "last seen" timestamp.
+        $last_seen = isset($_SESSION['last_seen']) ? (int) $_SESSION['last_seen'] : false;
+
+        // Check expiry (but not if session_life === 0).
+        if ($last_seen && self::$preference->session_life > 0) {
+            if ($last_seen && (time() - $last_seen) > (self::$preference->session_life * 60)) {
+                return true;
+            }
+        }
+
+        // Session not seen before, add an activity timestamp.
+        $_SESSION['last_seen'] = time();
+
+        return false;
     }
 
     /**
@@ -206,6 +220,46 @@ class TfishSession
         } else {
             // Redirect to login page.
             self::logout(TFISH_ADMIN_URL . "login.php");
+            exit;
+        }
+    }
+    
+    /**
+     * Destroys the current session on logout
+     * 
+     * @param string $url_redirect The URL to redirect the user to on logging out. 
+     */
+    public static function logout(string $url_redirect = '')
+    {
+        $clean_url = '';
+        
+        if (!empty($url_redirect)) {
+            $clean_url = self::$validator->isUrl($url_redirect) ? $url_redirect : '';
+        }
+        
+        self::_logout($clean_url);
+    }
+
+    /** @internal */
+    private static function _logout(string $clean_url)
+    {
+        // Unset all of the session variables.
+        $_SESSION = [];
+
+        // Destroy the session cookie, DESTROY IT ISILDUR!
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"],
+                    $params["secure"], $params["httponly"]);
+        }
+
+        // Destroy the session and redirect
+        session_destroy();
+        if ($clean_url) {
+            header('location: ' . $clean_url);
+            exit;
+        } else {
+            header('location: ' . TFISH_URL);
             exit;
         }
     }
@@ -302,59 +356,45 @@ class TfishSession
         self::logout(TFISH_ADMIN_URL . "login.php");
         exit;
     }
-
+    
     /**
-     * Returns a login or logout link for insertion in the template.
+     * Regenerates the session ID.
      * 
-     * @return string HTML login or logout link.
-     */
-    public static function getLoginLink()
-    {
-        if (self::isAdmin()) {
-            return '<a href="' . TFISH_ADMIN_URL . 'login.php?op=logout">' . TFISH_LOGOUT . '</a>';
-        } else {
-            return '<a href="' . TFISH_ADMIN_URL . 'login.php">' . TFISH_LOGIN . '</a>';
-        }
-    }
-
-    /**
-     * Destroys the current session on logout
+     * Called whenever there is a privilege escalation (login) or at random intervals to reduce
+     * risk of session hijacking. Note that the cross-site request forgery validation token remains
+     * the same, unless the session is destroyed. This is to prevent the random session ID
+     * regeneration events creating false positive CSRF checks.
      * 
-     * @param string $url_redirect The URL to redirect the user to on logging out. 
+     * Note that it allows the new and  old sessions to co-exist for a short period, this is to 
+     * avoid headaches with flaky network connections and asynchronous (AJAX) requests, as explained
+     * in the PHP Manual warning: http://php.net/manual/en/function.session-regenerate-id.php
      */
-    public static function logout(string $url_redirect = '')
+    public static function regenerate()
     {
-        $clean_url = '';
-        
-        if (!empty($url_redirect)) {
-            $clean_url = self::$validator->isUrl($url_redirect) ? $url_redirect : '';
-        }
-        
-        self::_logout($clean_url);
-    }
-
-    /** @internal */
-    private static function _logout(string $clean_url)
-    {
-        // Unset all of the session variables.
-        $_SESSION = [];
-
-        // Destroy the session cookie, DESTROY IT ISILDUR!
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"],
-                    $params["secure"], $params["httponly"]);
+        // If destroyed flag is set, no need to regenerate ID as it has already been done.
+        if (isset($_SESSION['destroyed'])) {
+            return;
         }
 
-        // Destroy the session and redirect
-        session_destroy();
-        if ($clean_url) {
-            header('location: ' . $clean_url);
-            exit;
-        } else {
-            header('location: ' . TFISH_URL);
-            exit;
-        }
+        // Flag old session for destruction in (arbitrary) 10 seconds.
+        $_SESSION['destroyed'] = time() + 10;
+
+        // Create new session. Update ID and keep current session info. Old one is not destroyed.
+        session_regenerate_id(false);
+        // Get the (new) session ID.
+        $new_session_id = session_id();
+        // Lock the session and close it.
+        session_write_close();
+        // Set the session ID to the new value.
+        session_id($new_session_id);
+        // Now working with the new session. Note that old one still exists and both carry a
+        // 'destroyed' flag.
+        session_start();
+        // Set a cross-site request forgery token.
+        self::setToken();
+        // Remove the destroyed flag from the new session. Old one will be destroyed next time
+        // isExpired() is called on it.
+        unset($_SESSION['destroyed']);
     }
     
     /**
@@ -410,46 +450,6 @@ class TfishSession
         }
         
         $_SESSION['browser_profile'] = hash('sha256', $browser_profile);
-    }
-
-    /**
-     * Regenerates the session ID.
-     * 
-     * Called whenever there is a privilege escalation (login) or at random intervals to reduce
-     * risk of session hijacking. Note that the cross-site request forgery validation token remains
-     * the same, unless the session is destroyed. This is to prevent the random session ID
-     * regeneration events creating false positive CSRF checks.
-     * 
-     * Note that it allows the new and  old sessions to co-exist for a short period, this is to 
-     * avoid headaches with flaky network connections and asynchronous (AJAX) requests, as explained
-     * in the PHP Manual warning: http://php.net/manual/en/function.session-regenerate-id.php
-     */
-    public static function regenerate()
-    {
-        // If destroyed flag is set, no need to regenerate ID as it has already been done.
-        if (isset($_SESSION['destroyed'])) {
-            return;
-        }
-
-        // Flag old session for destruction in (arbitrary) 10 seconds.
-        $_SESSION['destroyed'] = time() + 10;
-
-        // Create new session. Update ID and keep current session info. Old one is not destroyed.
-        session_regenerate_id(false);
-        // Get the (new) session ID.
-        $new_session_id = session_id();
-        // Lock the session and close it.
-        session_write_close();
-        // Set the session ID to the new value.
-        session_id($new_session_id);
-        // Now working with the new session. Note that old one still exists and both carry a
-        // 'destroyed' flag.
-        session_start();
-        // Set a cross-site request forgery token.
-        self::setToken();
-        // Remove the destroyed flag from the new session. Old one will be destroyed next time
-        // isExpired() is called on it.
-        unset($_SESSION['destroyed']);
     }
     
     /**
