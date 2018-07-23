@@ -52,60 +52,6 @@ class TfishSearchContent
         $this->operator = 'AND';
     }
     
-    public function setSearchTerms(string $search_terms)
-    {
-        $clean_search_terms = $escaped_search_terms = $clean_escaped_search_terms = array();
-        
-        // Create an escaped copy that will be used to search the HTML teaser and description fields.
-        $escaped_search_terms = htmlspecialchars($search_terms, ENT_NOQUOTES, "UTF-8");
-
-        if ($this->operator === 'AND' || $this->operator === 'OR') {
-            $search_terms = explode(" ", $search_terms);
-            $escaped_search_terms = explode(" ", $escaped_search_terms);
-        } else {
-            $search_terms = array($search_terms);
-            $escaped_search_terms = array($escaped_search_terms);
-        }
-        
-        // Trim search terms and discard any that are less than the minimum search length characters.
-        foreach ($search_terms as $term) {
-            $term = $this->validator->trimString($term);
-            
-            if (!empty($term) && mb_strlen($term, 'UTF-8') >= $this->preference->min_search_length) {
-                $clean_search_terms[] = (string) $term;
-            }
-        }
-        
-        $this->search_terms = $clean_search_terms;
-        
-        foreach ($escaped_search_terms as $escaped_term) {
-            $escaped_term = $this->validator->trimString($escaped_term);
-            
-            if (!empty($escaped_term) && mb_strlen($escaped_term, 'UTF-8')
-                    >= $this->preference->min_search_length) {
-                $clean_escaped_search_terms[] = (string) $escaped_term;
-            }
-        }
-        
-        $this->escaped_search_terms = $escaped_search_terms;
-    }
-    
-    public function setLimit(int $limit)
-    {
-        $this->limit = $this->validator->isInt($limit, 0) ? (int) $limit : 0;
-    }
-    
-    public function setOffset(int $offset)
-    {
-        $this->offset = $this->validator->isInt($offset, 0) ? (int) $offset : 0;
-    }
-    
-    public function setOperator(string $operator)
-    {
-        $this->operator = in_array($operator, array('AND', 'OR', 'exact'))
-                ? $this->validator->trimString($operator) : 'AND';
-    }
-    
     /**
      * Provides global search functionality for content objects.
      * 
@@ -224,4 +170,59 @@ class TfishSearchContent
         
         return $result;
     }
+    
+    public function setLimit(int $limit)
+    {
+        $this->limit = $this->validator->isInt($limit, 0) ? (int) $limit : 0;
+    }
+    
+    public function setOffset(int $offset)
+    {
+        $this->offset = $this->validator->isInt($offset, 0) ? (int) $offset : 0;
+    }
+    
+    public function setOperator(string $operator)
+    {
+        $this->operator = in_array($operator, array('AND', 'OR', 'exact'))
+                ? $this->validator->trimString($operator) : 'AND';
+    }
+    
+    public function setSearchTerms(string $search_terms)
+    {
+        $clean_search_terms = $escaped_search_terms = $clean_escaped_search_terms = array();
+        
+        // Create an escaped copy that will be used to search the HTML teaser and description fields.
+        $escaped_search_terms = htmlspecialchars($search_terms, ENT_NOQUOTES, "UTF-8");
+
+        if ($this->operator === 'AND' || $this->operator === 'OR') {
+            $search_terms = explode(" ", $search_terms);
+            $escaped_search_terms = explode(" ", $escaped_search_terms);
+        } else {
+            $search_terms = array($search_terms);
+            $escaped_search_terms = array($escaped_search_terms);
+        }
+        
+        // Trim search terms and discard any that are less than the minimum search length characters.
+        foreach ($search_terms as $term) {
+            $term = $this->validator->trimString($term);
+            
+            if (!empty($term) && mb_strlen($term, 'UTF-8') >= $this->preference->min_search_length) {
+                $clean_search_terms[] = (string) $term;
+            }
+        }
+        
+        $this->search_terms = $clean_search_terms;
+        
+        foreach ($escaped_search_terms as $escaped_term) {
+            $escaped_term = $this->validator->trimString($escaped_term);
+            
+            if (!empty($escaped_term) && mb_strlen($escaped_term, 'UTF-8')
+                    >= $this->preference->min_search_length) {
+                $clean_escaped_search_terms[] = (string) $escaped_term;
+            }
+        }
+        
+        $this->escaped_search_terms = $escaped_search_terms;
+    }
+    
 }
