@@ -28,17 +28,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfishValidatorFactory
 {
+    
     protected $html_purifier;
     
     public function __construct(array $config_options = array())
     {
         $config = $this->configureHTMLPurifier($config_options);
         $this->html_purifier = new HTMLPurifier($config);
-    }
-    
-    public function getValidator()
-    {
-         return new TfishValidator($this->html_purifier);
     }
     
     /**
@@ -72,4 +68,10 @@ class TfishValidatorFactory
         
         return $config;
     }
+    
+    public function getValidator()
+    {
+         return new TfishValidator($this->html_purifier);
+    }
+    
 }
