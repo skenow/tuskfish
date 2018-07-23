@@ -53,74 +53,6 @@ class TfishUser
         $this->validator = $tfish_validator;
     }
     
-    public function setId(int $id)
-    {
-        $clean_id = (int) $id;
-        
-        if ($this->validator->isInt($clean_id, 1)) {    
-            $this->id = $clean_id;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setAdminEmail(string $email)
-    {
-        $clean_email = $this->validator->trimString($email);
-
-        if ($this->validator->isEmail($clean_email)) {
-            $this->admin_email = $clean_email;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-        }
-    }
-    
-    public function setPasswordHash(string $hash)
-    {
-        $clean_hash = $this->validator->trimString($hash);
-        $this->password_hash = $clean_hash;
-    }
-    
-    public function setUserSalt(string $salt)
-    {
-        $clean_salt = $this->validator->trimString($salt);
-        $this->user_salt = $clean_salt;
-    }
-    
-    public function setUserGroup(int $group)
-    {
-        $clean_group = (int) $group;
-        
-        if ($this->validator->isInt($clean_group, 1)) {
-            $this->user_group = $clean_group;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    public function setYubikeyId(string $id)
-    {
-        $clean_id = $this->validator->trimString($id);
-        $this->yubikey_id = $clean_id;
-    }
-    
-    public function setYubikeyId2(string $id)
-    {
-        $clean_id = $this->validator->trimString($id);
-        $this->yubikey_id2 = $clean_id;
-    }
-    
-    public function setLoginErrors(int $number_of_errors)
-    {
-        $clean_number_of_errors = (int) $number_of_errors;
-        
-        if ($this->validator->isInt($clean_number_of_errors, 0)) {
-            $this->login_errors = $clean_number_of_errors;
-        }  else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
     /**
      * Get the value of a property.
      * 
@@ -139,6 +71,74 @@ class TfishUser
         } else {
             return null;
         }
+    }
+    
+    public function setAdminEmail(string $email)
+    {
+        $clean_email = $this->validator->trimString($email);
+
+        if ($this->validator->isEmail($clean_email)) {
+            $this->admin_email = $clean_email;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    public function setId(int $id)
+    {
+        $clean_id = (int) $id;
+        
+        if ($this->validator->isInt($clean_id, 1)) {    
+            $this->id = $clean_id;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setLoginErrors(int $number_of_errors)
+    {
+        $clean_number_of_errors = (int) $number_of_errors;
+        
+        if ($this->validator->isInt($clean_number_of_errors, 0)) {
+            $this->login_errors = $clean_number_of_errors;
+        }  else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }    
+    
+    public function setPasswordHash(string $hash)
+    {
+        $clean_hash = $this->validator->trimString($hash);
+        $this->password_hash = $clean_hash;
+    }
+    
+    public function setUserGroup(int $group)
+    {
+        $clean_group = (int) $group;
+        
+        if ($this->validator->isInt($clean_group, 1)) {
+            $this->user_group = $clean_group;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    public function setUserSalt(string $salt)
+    {
+        $clean_salt = $this->validator->trimString($salt);
+        $this->user_salt = $clean_salt;
+    }
+    
+    public function setYubikeyId(string $id)
+    {
+        $clean_id = $this->validator->trimString($id);
+        $this->yubikey_id = $clean_id;
+    }
+    
+    public function setYubikeyId2(string $id)
+    {
+        $clean_id = $this->validator->trimString($id);
+        $this->yubikey_id2 = $clean_id;
     }
 
 }
