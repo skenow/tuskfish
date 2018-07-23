@@ -77,6 +77,34 @@ class TfishDownload extends TfishContentObject
             unset($this->$property);
         }
     }
+   
+    /**
+     * Returns an array of base object properties that are not used by this subclass.
+     * 
+     * This list is also used in update calls to the database to ensure that unused columns are
+     * cleared and reset with default values.
+     * 
+     * @return array Array of properties that should be zeroed (unset).
+     */
+    public function getListOfZeroedProperties()
+    {
+        return array();
+    }
+    
+    /**
+     * Converts properties to human readable form in preparation for output.
+     * 
+     * If you have added some custom properties to this content subclass that need to be formatted
+     * for output, add a switch above the call to the parent method. Structure it so that any case
+     * not explicitly handled will fall through to the parent method, while explicit cases will
+     * return a formatted value.
+     * 
+     * @param string $clean_property Name of content object property to be formatted.
+     */
+    protected function makeDataHumanReadable(string $clean_property)
+    {
+        return parent::makeDataHumanReadable($clean_property);
+    }
     
     /**
      * Set the value of a whitelisted property.
@@ -96,34 +124,6 @@ class TfishDownload extends TfishContentObject
     public function __set(string $property, $value)
     {
         parent::__set($property, $value);
-    }
-    
-    /**
-     * Converts properties to human readable form in preparation for output.
-     * 
-     * If you have added some custom properties to this content subclass that need to be formatted
-     * for output, add a switch above the call to the parent method. Structure it so that any case
-     * not explicitly handled will fall through to the parent method, while explicit cases will
-     * return a formatted value.
-     * 
-     * @param string $clean_property Name of content object property to be formatted.
-     */
-    protected function makeDataHumanReadable(string $clean_property)
-    {
-        return parent::makeDataHumanReadable($clean_property);
-    }
-    
-    /**
-     * Returns an array of base object properties that are not used by this subclass.
-     * 
-     * This list is also used in update calls to the database to ensure that unused columns are
-     * cleared and reset with default values.
-     * 
-     * @return array Array of properties that should be zeroed (unset).
-     */
-    public function getListOfZeroedProperties()
-    {
-        return array();
     }
 
 }
