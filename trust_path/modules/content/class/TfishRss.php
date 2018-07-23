@@ -56,7 +56,7 @@ class TfishRss
     protected $template;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct(object $tfish_preference, object $tfish_validator)
+    public function __construct(TfishPreference $tfish_preference, object $tfish_validator)
     {
         
         // Set default values of permitted properties.
@@ -77,9 +77,9 @@ class TfishRss
      * 
      * @param object $obj TfishCollection object.
      */
-    public function makeFeedForCollection(object $obj)
+    public function makeFeedForCollection(TfishCollection $obj)
     {
-        if (!is_object($obj)) {
+        if (!is_a($obj, 'TfishCollection')) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         

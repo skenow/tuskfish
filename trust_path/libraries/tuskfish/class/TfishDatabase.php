@@ -306,7 +306,7 @@ class TfishDatabase
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return bool True on success, false on failure.
      */
-    public function deleteAll(string $table, object $criteria)
+    public function deleteAll(string $table, TfishCriteria $criteria)
     {
         $clean_table = $this->validateTableName($table);
         $clean_criteria = $this->validateCriteriaObject($criteria);
@@ -315,7 +315,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private function _deleteAll(string $table, object $criteria)
+    private function _deleteAll(string $table, TfishCriteria $criteria)
     {
         // Set table.
         $sql = "DELETE FROM " . $this->addBackticks($table) . " ";
@@ -658,7 +658,7 @@ class TfishDatabase
      * @param array $columns Names of database columns to be selected.
      * @return object PDOStatement object on success PDOException on failure.
      */
-    public function select(string $table, object $criteria = null, array $columns = null)
+    public function select(string $table, TfishCriteria $criteria = null, array $columns = null)
     {
         $clean_table = $this->validateTableName($table);
         $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
@@ -668,7 +668,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private function _select(string $table, object $criteria = null, array $columns)
+    private function _select(string $table, TfishCriteria $criteria = null, array $columns)
     {
         // Specify operation.
         $sql = "SELECT ";
@@ -784,7 +784,7 @@ class TfishDatabase
      * @param string $column Name of column.
      * @return int|object Row count on success, PDOException object on failure.
      */
-    public function selectCount(string $table, object $criteria = null, string $column = '')
+    public function selectCount(string $table, TfishCriteria $criteria = null, string $column = '')
     {
         $clean_table = $this->validateTableName($table);
         $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
@@ -806,7 +806,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private function _selectCount(string $table, object $criteria, string $column)
+    private function _selectCount(string $table, TfishCriteria $criteria, string $column)
     {
         // Specify operation and column
         $sql = "SELECT COUNT(";
@@ -885,7 +885,7 @@ class TfishDatabase
      * @param array $columns Name of columns to filter results by.
      * @return object PDOStatement on success, PDOException on failure.
      */
-    public function selectDistinct(string $table, object $criteria = null, array $columns)
+    public function selectDistinct(string $table, TfishCriteria $criteria = null, array $columns)
     {
         // Validate the tablename (alphanumeric characters only).
         $clean_table = $this->validateTableName($table);
@@ -896,7 +896,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private function _selectDistinct(string $table, object $criteria, array $columns)
+    private function _selectDistinct(string $table, TfishCriteria $criteria, array $columns)
     {
         // Specify operation
         $sql = "SELECT DISTINCT ";
@@ -1127,7 +1127,7 @@ class TfishDatabase
      * @param array $key_values Array of column names and values to update.
      * @param object $criteria TfishCriteria object used to build conditional database query.
      */
-    public function updateAll(string $table, array $key_values, object $criteria = null)
+    public function updateAll(string $table, array $key_values, TfishCriteria $criteria = null)
     {
         $clean_table = $this->validateTableName($table);
         $clean_keys = $this->validateKeys($key_values);
@@ -1142,7 +1142,7 @@ class TfishDatabase
     }
 
     /** @internal */
-    private function _updateAll(string $table, array $key_values, object $criteria)
+    private function _updateAll(string $table, array $key_values, TfishCriteria $criteria)
     {
         // Set table.
         $sql = "UPDATE " . $this->addBackticks($table) . " SET ";

@@ -222,7 +222,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public function insert(object $obj)
+    public function insert(TfishContentObject $obj)
     {
         $key_values = $obj->convertObjectToArray();
         $key_values['submission_time'] = time(); // Automatically set submission time.
@@ -361,7 +361,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return int $count Number of objects matching conditions.
      */
-    public function getCount(object $criteria = null)
+    public function getCount(TfishCriteria $criteria = null)
     {
         if (!isset($criteria)) {
             $criteria = $this->criteria_factory->getCriteria();
@@ -507,7 +507,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
-    public function getListOfObjectTitles(object $criteria = null)
+    public function getListOfObjectTitles(TfishCriteria $criteria = null)
     {
         $content_list = array();
         $columns = array('id', 'title');
@@ -572,7 +572,7 @@ class TfishContentHandler
      * @param object $criteria TfishCriteria object used to build conditional database query.
      * @return array Array of content objects.
      */
-    public function getObjects(object $criteria = null)
+    public function getObjects(TfishCriteria $criteria = null)
     {
         $objects = array();
         
@@ -937,7 +937,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject subclass.
      * @return bool True on success, false on failure.
      */
-    public function update(object $obj)
+    public function update(TfishContentObject $obj)
     {
         $clean_id = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;
         $key_values = $obj->convertObjectToArray();
@@ -1152,7 +1152,7 @@ class TfishContentHandler
      * @return boolean True if content object is registered as a TfishCollection in database,
      * otherwise false.
      */
-    private function _checkExCollection(object $obj)
+    private function _checkExCollection(TfishContentObject $obj)
     {      
         if (!empty($obj->type) && $obj->type === 'TfishCollection') {
            return true; 
@@ -1167,7 +1167,7 @@ class TfishContentHandler
      * @param object $obj The TfishContentObject to be tested.
      * @return string Filename of associated image property.
      */
-    private function _checkImage(object $obj)
+    private function _checkImage(TfishContentObject $obj)
     {        
         if (!empty($obj->image)) {
             return $obj->image;
@@ -1182,7 +1182,7 @@ class TfishContentHandler
      * @param object $obj TfishContentObject to be tested.
      * @return string Filename of associated media property.
      */
-    private function _checkMedia(object $obj)
+    private function _checkMedia(TfishContentObject $obj)
     {
         if (!empty($obj->media)) {
             return $obj->media;
