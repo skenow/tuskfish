@@ -201,7 +201,7 @@ class TfishDatabase
                     exit;
                 }
                 
-                if (!in_array($value, $type_whitelist)) {
+                if (!in_array($value, $type_whitelist, true)) {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                     exit;
                 }

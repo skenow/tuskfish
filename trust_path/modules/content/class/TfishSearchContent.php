@@ -183,7 +183,7 @@ class TfishSearchContent
     
     public function setOperator(string $operator)
     {
-        $this->operator = in_array($operator, array('AND', 'OR', 'exact'))
+        $this->operator = in_array($operator, array('AND', 'OR', 'exact'), true)
                 ? $this->validator->trimString($operator) : 'AND';
     }
     

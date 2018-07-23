@@ -106,7 +106,7 @@ class TfishCriteriaItem
     {
         $clean_value = $this->validator->trimString($value);
                     
-        if (in_array($clean_value, $this->getListOfPermittedOperators())) {
+        if (in_array($clean_value, $this->getListOfPermittedOperators(), true)) {
             $this->operator = $clean_value;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);

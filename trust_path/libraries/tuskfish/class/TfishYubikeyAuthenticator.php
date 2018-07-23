@@ -231,7 +231,7 @@ class TfishYubikeyAuthenticator
             "u", "v");
 
         foreach (str_split($otp) as $char) {
-            if (!in_array($char, $modhexChars))
+            if (!in_array($char, $modhexChars, true))
                 return false;
         }
 

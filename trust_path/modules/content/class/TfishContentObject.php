@@ -192,13 +192,13 @@ class TfishContentObject
                 $html_fields = array('teaser', 'description', 'icon');
         
         // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
-        if (in_array($property, $html_fields) && $escape_html === false) {
+        if (in_array($property, $html_fields, true) && $escape_html === false) {
             return $human_readable_data;
         }
         
         // Output for display in the TinyMCE editor (edit mode): HTML must be DOUBLE
         // escaped to meet specification requirements.
-        if (in_array($property, $html_fields) && $escape_html === true) {    
+        if (in_array($property, $html_fields, true) && $escape_html === true) {    
             return htmlspecialchars($human_readable_data, ENT_NOQUOTES, 'UTF-8', 
                     true);
         }
@@ -580,7 +580,7 @@ class TfishContentObject
                 $allowed_mimetypes = $this->getListOfPermittedUploadMimetypes();
         }
 
-        if (in_array($this->format, $allowed_mimetypes)) {
+        if (in_array($this->format, $allowed_mimetypes, true)) {
             return true;
         }
         
@@ -915,7 +915,7 @@ class TfishContentObject
         $format = (string) $this->validator->trimString($format);
 
         $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
-        if (!empty($format) && !in_array($format, $mimetype_whitelist)) {
+        if (!empty($format) && !in_array($format, $mimetype_whitelist, true)) {
             trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
         }
         
