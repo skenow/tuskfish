@@ -88,55 +88,16 @@ class TfishRss
         $this->setDescription($obj->teaser);
     }
     
-    public function setTitle(string $title)
-    {
-        $clean_title = $this->validator->trimString($title);
-        $this->title = $clean_title;
-    }
-    
-    public function setLink(string $url)
-    {
-        $clean_url = $this->validator->trimString($url);
-
-        if ($this->validator->isUrl($clean_url)) {
-            $this->link = $clean_url;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
-        }
-    }
-    
-    public function setDescription(string $description)
-    {
-        $clean_description = $this->validator->trimString($description);
-        $this->description = $clean_description;
-    }
-    
     public function setCopyright(string $copyright)
     {
         $clean_copyright = $this->validator->trimString($copyright);
         $this->copyright = $clean_copyright;
     }
     
-    public function setManagingEditor(string $email)
+    public function setDescription(string $description)
     {
-        $clean_email = $this->validator->trimString($email);
-
-        if ($this->validator->isEmail($clean_email)) {
-            $this->managing_editor = $clean_email;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-        }
-    }
-    
-    public function setWebmaster(string $email)
-    {
-        $clean_email = $this->validator->trimString($email);
-
-        if ($this->validator->isEmail($clean_email)) {
-            $this->webmaster = $clean_email;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-        }
+        $clean_description = $this->validator->trimString($description);
+        $this->description = $clean_description;
     }
     
     public function setGenerator(string $generator)
@@ -171,10 +132,49 @@ class TfishRss
         }
     }
     
+    public function setLink(string $url)
+    {
+        $clean_url = $this->validator->trimString($url);
+
+        if ($this->validator->isUrl($clean_url)) {
+            $this->link = $clean_url;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+        }
+    }
+    
+    public function setManagingEditor(string $email)
+    {
+        $clean_email = $this->validator->trimString($email);
+
+        if ($this->validator->isEmail($clean_email)) {
+            $this->managing_editor = $clean_email;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    public function setTitle(string $title)
+    {
+        $clean_title = $this->validator->trimString($title);
+        $this->title = $clean_title;
+    }
+    
     private function setTemplate(string $template)
     {
         $clean_template = $this->validator->trimString($template);
         $this->template = $clean_template;
+    }
+    
+    public function setWebmaster(string $email)
+    {
+        $clean_email = $this->validator->trimString($email);
+
+        if ($this->validator->isEmail($clean_email)) {
+            $this->webmaster = $clean_email;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
     }
     
 }
