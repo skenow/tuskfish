@@ -54,8 +54,9 @@ $tfish_file_handler = new TfishFileHandler($tfish_validator);
 $tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
 $tfish_database->connect();
 
-// Criteria factory. Used to construct TfishCriteria for composing database queries.
+// CriteriaItem and Criteria factories. Used to compose database queries.
 $tfish_criteria_factory = new TfishCriteriaFactory($tfish_validator);
+$tfish_criteria_item_factory = new TfishCriteriaItemFactory($tfish_validator);
 
 // Site preferences.
 $preference_handler = new TfishPreferenceHandler($tfish_database);

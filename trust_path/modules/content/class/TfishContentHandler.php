@@ -39,18 +39,20 @@ class TfishContentHandler
     protected $validator;
     protected $db;
     protected $criteria_factory;
+    protected $item_factory;
     protected $file_handler;
     protected $taglink_handler;
     
     public function __construct(TfishValidator $validator, TfishDatabase $db,
-            TfishCriteriaFactory $criteria_factory, TfishFileHandler $file_handler,
-            TfishTaglinkHandler $taglink_handler)
+            TfishCriteriaFactory $criteria_factory, TfishCriteriaItemFactory $criteria_item_factory,
+            TfishFileHandler $file_handler, TfishTaglinkHandler $taglink_handler)
     {
         $this->validator = $validator;
         $this->db = $db;
+        $this->criteria_factory = $criteria_factory;
+        $this->item_factory = $criteria_item_factory;
         $this->file_handler = $file_handler;
         $this->taglink_handler = $taglink_handler;
-        $this->criteria_factory = $criteria_factory;
     }
     
     /**
@@ -88,7 +90,7 @@ class TfishContentHandler
             if (isset($content_object->tags) && !empty($content_object->id)) {
                 $tags = array();
                 $criteria = $this->criteria_factory->getCriteria();
-                $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', (int) $content_object->id));
+                $criteria->add($this->item_factory->getItem('content_id', (int) $content_object->id));
                 $statement = $this->db->select('taglink', $criteria, array('tag_id'));
                 
                 if ($statement) {
@@ -201,7 +203,7 @@ class TfishContentHandler
         }
         
         $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add(new TfishCriteriaItem($this->validator, 'parent', $clean_id));
+        $criteria->add($this->item_factory->getItem('parent', $clean_id));
         $result = $this->db->updateAll('content', array('parent' => 0), $criteria);
 
         if (!$result) {
@@ -335,7 +337,7 @@ class TfishContentHandler
 
         // Filter tags by type.
         if (isset($clean_type)) {
-            $criteria->add(new TfishCriteriaItem($this->validator, 'content_type', $clean_type));
+            $criteria->add($this->item_factory->getItem('content_type', $clean_type));
         }
 
         // Put a check for online status in here.
@@ -550,7 +552,7 @@ class TfishContentHandler
         
         if ($this->validator->isInt($clean_id, 1)) {
             $criteria = $this->criteria_factory->getCriteria();
-            $criteria->add(new TfishCriteriaItem($this->validator, 'id', $clean_id));
+            $criteria->add($this->item_factory->getItem('id', $clean_id));
             $statement = $this->db->select('content', $criteria);
             
             if ($statement) {
@@ -620,7 +622,7 @@ class TfishContentHandler
             $criteria = $this->criteria_factory->getCriteria();
             
             foreach ($object_ids as $id) {
-                $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', (int) $id), "OR");
+                $criteria->add($this->item_factory->getItem('content_id', (int) $id), "OR");
                 unset($id);
             }
 
@@ -692,10 +694,10 @@ class TfishContentHandler
         $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
         $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishTag'));
+        $criteria->add($this->item_factory->getItem('type', 'TfishTag'));
         
         if ($clean_online_only) {
-            $criteria->add(new TfishCriteriaItem($this->validator, 'online', true));
+            $criteria->add($this->item_factory->getItem('online', true));
         }
 
         $statement = $this->db->select('content', $criteria, $columns);
@@ -726,7 +728,7 @@ class TfishContentHandler
     {
         $tags = array();
         $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishTag'));
+        $criteria->add($this->item_factory->getItem('type', 'TfishTag'));
         $tags = $this->getObjects($criteria);
         
         return $tags;
@@ -864,7 +866,7 @@ class TfishContentHandler
     private function _streamDownloadToBrowser(int $id, string $filename)
     {
         $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add(new TfishCriteriaItem($this->validator, 'id', $id));
+        $criteria->add($this->item_factory->getItem('id', $id));
         $statement = $this->db->select('content', $criteria);
         
         if (!$statement) {

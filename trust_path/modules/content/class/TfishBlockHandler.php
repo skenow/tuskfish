@@ -29,9 +29,11 @@ class TfishBlockHandler extends TfishContentHandler
 {
     
     public function __construct(TfishValidator $validator, TfishDatabase $db,
-            TfishFileHandler $tfish_file_handler)
+            TfishCriteriaFactory $criteria_factory, TfishCriteriaItemFactory $criteria_item_factory,
+            TfishFileHandler $file_handler, TfishTaglinkHandler $taglink_handler)
     {
-        parent::__construct($validator, $db, $file_handler);
+        parent::__construct($validator, $db, $criteria_factory, $criteria_item_factory,
+                $file_handler, $taglink_handler);
     }
     
     /**
@@ -54,7 +56,7 @@ class TfishBlockHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishBlock'));
+        $criteria->add($this->item_factory->getItem('type', 'TfishBlock'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -87,7 +89,7 @@ class TfishBlockHandler extends TfishContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishBlock'));
+        $criteria->add($this->item_factory->getItem('type', 'TfishBlock'));
         $objects = parent::getObjects($criteria);
 
         return $objects;

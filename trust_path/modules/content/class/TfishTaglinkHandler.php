@@ -33,14 +33,16 @@ class TfishTaglinkHandler
     
     protected $validator;
     protected $db;
-    protected $criteria_factor;
+    protected $criteria_factory;
+    protected $item_factory;
     
     public function __construct(TfishValidator $validator, TfishDatabase $db, 
-            TfishCriteriaFactory $criteria_factory)
+            TfishCriteriaFactory $criteria_factory, TfishCriteriaItemFactory $item_factory)
     {
         $this->validator = $validator;
         $this->db = $db;
         $this->criteria_factory = $criteria_factory;
+        $this->item_factory = $item_factory;
     }
 
     /**
@@ -60,9 +62,9 @@ class TfishTaglinkHandler
         $criteria = $this->criteria_factory->getCriteria();
         
         if ($obj->type === 'TfishTag') {
-            $criteria->add(new TfishCriteriaItem($this->validator, 'tag_id', $clean_content_id));
+            $criteria->add($this->item_factory->getItem('tag_id', $clean_content_id));
         } else {
-            $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_content_id));
+            $criteria->add($this->item_factory->getItem('content_id', $clean_content_id));
         }
         
         $result = $this->db->deleteAll('taglink', $criteria);
@@ -176,7 +178,7 @@ class TfishTaglinkHandler
 
         // Delete any existing tags.
         $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add(new TfishCriteriaItem($this->validator, 'content_id', $clean_id));
+        $criteria->add($this->item_factory->getItem('content_id', $clean_id));
         $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {
