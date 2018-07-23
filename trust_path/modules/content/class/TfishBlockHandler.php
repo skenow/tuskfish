@@ -28,10 +28,36 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfishBlockHandler extends TfishContentHandler
 {
     
-    public function __construct(TfishValidator $tfish_validator, TfishDatabase $tfish_database,
+    public function __construct(TfishValidator $validator, TfishDatabase $db,
             TfishFileHandler $tfish_file_handler)
     {
-        parent::__construct($tfish_validator, $tfish_database, $tfish_file_handler);
+        parent::__construct($validator, $db, $file_handler);
+    }
+    
+    /**
+     * Count TfishBlock objects, optionally matching conditions specified in a TfishCriteria object.
+     * 
+     * @param object $criteria TfishCriteria object used to build conditional database query.
+     * @return int $count Count of TfishBlock objects matching conditions.
+     */
+    public function getCount(object $criteria = null)
+    {
+        if (!isset($criteria)) {
+            $criteria = $this->criteria_factory->getCriteria();
+        }
+
+        // Unset any pre-existing object type criteria.
+        $type_key = $this->getTypeIndex($criteria->item);
+        
+        if (isset($type_key)) {
+            $criteria->unsetType($type_key);
+        }
+
+        // Set new type criteria specific to this object.
+        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishBlock'));
+        $count = parent::getcount($criteria);
+
+        return $count;
     }
     
     /**
@@ -65,32 +91,6 @@ class TfishBlockHandler extends TfishContentHandler
         $objects = parent::getObjects($criteria);
 
         return $objects;
-    }
-
-    /**
-     * Count TfishBlock objects, optionally matching conditions specified in a TfishCriteria object.
-     * 
-     * @param object $criteria TfishCriteria object used to build conditional database query.
-     * @return int $count Count of TfishBlock objects matching conditions.
-     */
-    public function getCount(object $criteria = null)
-    {
-        if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
-        }
-
-        // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
-        
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
-        }
-
-        // Set new type criteria specific to this object.
-        $criteria->add(new TfishCriteriaItem($this->validator, 'type', 'TfishBlock'));
-        $count = parent::getcount($criteria);
-
-        return $count;
     }
 
 }
