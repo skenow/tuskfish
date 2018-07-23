@@ -77,23 +77,16 @@ class TfishArticle extends TfishContentObject
     }
     
     /**
-     * Set the value of a whitelisted property.
+     * Returns an array of base object properties that are not used by this subclass.
      * 
-     * Intercepts direct calls to set the value of an object property. This method is overridden by
-     * child classes to impose data type restrictions and range checks on custom subclass
-     * properties.
+     * This list is also used in update calls to the database to ensure that unused columns are
+     * cleared and reset with default values.
      * 
-     * If you have added some custom properties to this content subclass that need to be type
-     * and/or range checked before permitting assignment, add a switch above the call to the parent
-     * method. Structure it so that any case not explicitly handled will fall through to the parent
-     * method, while explicit cases will be handled here.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
+     * @return array Array of properties that should be zeroed (unset).
      */
-    public function __set(string $property, $value)
+    public function getListOfZeroedProperties()
     {
-        parent::__set($property, $value);
+        return array();
     }
     
     /**
@@ -112,16 +105,23 @@ class TfishArticle extends TfishContentObject
     }
     
     /**
-     * Returns an array of base object properties that are not used by this subclass.
+     * Set the value of a whitelisted property.
      * 
-     * This list is also used in update calls to the database to ensure that unused columns are
-     * cleared and reset with default values.
+     * Intercepts direct calls to set the value of an object property. This method is overridden by
+     * child classes to impose data type restrictions and range checks on custom subclass
+     * properties.
      * 
-     * @return array Array of properties that should be zeroed (unset).
+     * If you have added some custom properties to this content subclass that need to be type
+     * and/or range checked before permitting assignment, add a switch above the call to the parent
+     * method. Structure it so that any case not explicitly handled will fall through to the parent
+     * method, while explicit cases will be handled here.
+     * 
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
      */
-    public function getListOfZeroedProperties()
+    public function __set(string $property, $value)
     {
-        return array();
+        parent::__set($property, $value);
     }
 
 }
