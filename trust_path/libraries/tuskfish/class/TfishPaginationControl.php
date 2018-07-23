@@ -184,6 +184,19 @@ class TfishPaginationControl
         return $control;
     }
     
+    /**
+     * Disallow direct setting of properties.
+     * 
+     * @param string $property Name of property.
+     * @param mixed $value Value to assign to property.
+     */
+    
+    public function __set(string $property, $value)
+    {
+        trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);        
+        exit;    
+    }
+    
     public function setCount($count)
     {
         $this->count = $this->validator->isInt($count, 1) ? (int) $count : 0;
@@ -239,19 +252,6 @@ class TfishPaginationControl
         } else {
             $this->extra_params = $this->validator->escapeForXss(implode("&", $clean_extra_params));
         }   
-    }
-
-    /**
-     * Disallow direct setting of properties.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value to assign to property.
-     */
-    
-    public function __set(string $property, $value)
-    {
-        trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);        
-        exit;    
     }
     
 }
