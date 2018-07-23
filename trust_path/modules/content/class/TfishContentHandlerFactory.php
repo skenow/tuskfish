@@ -33,7 +33,7 @@ class TfishContentHandlerFactory
         $this->db = $db;
         $this->criteria_factory = $criteria_factory;
         $this->file_handler = $file_handler;
-        $this->taglink_handler = new TfishTaglinkHandler($validator, $db);
+        $this->taglink_handler = new TfishTaglinkHandler($validator, $db, $criteria_factory);
     }
     
     public function getHandler(string $type)

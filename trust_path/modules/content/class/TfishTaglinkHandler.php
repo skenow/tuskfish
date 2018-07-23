@@ -32,11 +32,15 @@ class TfishTaglinkHandler
     use TfishContentTypes;
     
     protected $validator;
+    protected $db;
+    protected $criteria_factor;
     
-    public function __construct(TfishValidator $tfish_validator, TfishDatabase $tfish_database)
+    public function __construct(TfishValidator $validator, TfishDatabase $db, 
+            TfishCriteriaFactory $criteria_factory)
     {
-        $this->validator = $tfish_validator;
-        $this->db = $tfish_database;
+        $this->validator = $validator;
+        $this->db = $db;
+        $this->criteria_factory = $criteria_factory;
     }
 
     /**

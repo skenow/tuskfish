@@ -38,6 +38,79 @@ class TfishCache
         $this->validator = $tfish_validator; 
         $this->preference = $tfish_preference;
     }
+    
+    /**
+     * Save a copy of this page to the cache directory.
+     * 
+     * This function should be called in tfish_footer.php, before ob_end_flush(). Note that
+     * warnings are suppressed when trying to open the file.
+     * 
+     * @param object $tfish_preference TfishPreference object, to make the site preferences
+     * available.
+     * @param string $basename Filename of this page, alphanumeric and underscore characters only.
+     * @param array $params URL Query string parameters for this page as $key => $value pairs.
+     * @param string $buffer HTML page output from ob_get_contents().
+     */
+    public function cachePage(string $basename, array $params, string $buffer)
+    {        
+        // Abort if cache is disabled.
+        if (!$this->preference->enable_cache) {
+            return;
+        }
+        
+        // Check for directory traversals and null byte injection.
+        if ($this->validator->hasTraversalorNullByte($basename)) {
+            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
+            return false;
+        }
+
+        // Resolve the file name and verify that the constructed path matches the canonical path.
+        $file_name = $this->_getCachedFileName($basename, $params);
+        $file_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
+        if ($file_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
+            return;
+        }
+
+        if (false !== ($f = @fopen($file_path, 'w'))) {
+            fwrite($f, $buffer);
+            fclose($f);
+        }
+    }
+    
+    /**
+     * Clear the private cache.
+     * 
+     * At the moment this is something of a blunt instrument; the entire cache will be cleared
+     * if a single object is added, edited or destroyed (this is to ensure that index pages and
+     * pagination controls stay up to date). Later it would be good to be more selective.
+     * 
+     * @return bool True on success, false on failure.
+     */
+    public function flushCache()
+    {
+        $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
+
+        foreach ($directory_iterator as $file) {
+
+            if ($file->isFile()) {
+                $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
+
+                if ($path && file_exists($path)) {
+                    try {
+                        unlink($path);
+                    } catch (Exeption $e) {
+                        trigger_error(TFISH_CACHE_FLUSH_FAILED_TO_UNLINK, E_USER_NOTICE);
+                        return false;
+                    }
+                } else {
+                    trigger_error(TFISH_CACHE_FLUSH_FAILED_BAD_PATH, E_USER_NOTICE);
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
 
     /**
      * Check if a cached page exists and has not expired, and displays it.
@@ -133,79 +206,6 @@ class TfishCache
         }
 
         return $clean_filename . '.html';
-    }
-
-    /**
-     * Save a copy of this page to the cache directory.
-     * 
-     * This function should be called in tfish_footer.php, before ob_end_flush(). Note that
-     * warnings are suppressed when trying to open the file.
-     * 
-     * @param object $tfish_preference TfishPreference object, to make the site preferences
-     * available.
-     * @param string $basename Filename of this page, alphanumeric and underscore characters only.
-     * @param array $params URL Query string parameters for this page as $key => $value pairs.
-     * @param string $buffer HTML page output from ob_get_contents().
-     */
-    public function cachePage(string $basename, array $params, string $buffer)
-    {        
-        // Abort if cache is disabled.
-        if (!$this->preference->enable_cache) {
-            return;
-        }
-        
-        // Check for directory traversals and null byte injection.
-        if ($this->validator->hasTraversalorNullByte($basename)) {
-            trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
-            return false;
-        }
-
-        // Resolve the file name and verify that the constructed path matches the canonical path.
-        $file_name = $this->_getCachedFileName($basename, $params);
-        $file_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
-        if ($file_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
-            return;
-        }
-
-        if (false !== ($f = @fopen($file_path, 'w'))) {
-            fwrite($f, $buffer);
-            fclose($f);
-        }
-    }
-
-    /**
-     * Clear the private cache.
-     * 
-     * At the moment this is something of a blunt instrument; the entire cache will be cleared
-     * if a single object is added, edited or destroyed (this is to ensure that index pages and
-     * pagination controls stay up to date). Later it would be good to be more selective.
-     * 
-     * @return bool True on success, false on failure.
-     */
-    public function flushCache()
-    {
-        $directory_iterator = new DirectoryIterator(TFISH_PRIVATE_CACHE_PATH);
-
-        foreach ($directory_iterator as $file) {
-
-            if ($file->isFile()) {
-                $path = TFISH_PRIVATE_CACHE_PATH . $file->getFileName();
-
-                if ($path && file_exists($path)) {
-                    try {
-                        unlink($path);
-                    } catch (Exeption $e) {
-                        trigger_error(TFISH_CACHE_FLUSH_FAILED_TO_UNLINK, E_USER_NOTICE);
-                        return false;
-                    }
-                } else {
-                    trigger_error(TFISH_CACHE_FLUSH_FAILED_BAD_PATH, E_USER_NOTICE);
-                    return false;
-                }
-            }
-        }
-        
-        return true;
     }
 
 }
