@@ -45,12 +45,12 @@ class TfishDatabase
     private $file_handler;
     private $logger;
     
-    public function __construct(TfishValidator $tfish_validator, TfishLogger $tfish_logger,
-            TfishFileHandler $tfish_file_handler)
+    public function __construct(TfishValidator $validator, TfishLogger $logger,
+            TfishFileHandler $file_handler)
     {
-        $this->validator = $tfish_validator;
-        $this->logger = $tfish_logger;
-        $this->file_handler = $tfish_file_handler;
+        $this->validator = $validator;
+        $this->logger = $logger;
+        $this->file_handler = $file_handler;
     }
 
     /** No cloning permitted. */
@@ -526,7 +526,7 @@ class TfishDatabase
      * 
      * @return array $pdo_placeholders Array of PDO placeholders used for building SQL query.
      */
-    public function renderPdo(TfishCriteria $criteria)
+    private function renderPdo(TfishCriteria $criteria)
     {
         $pdo_placeholders = array();
         $count = count($criteria->item);
@@ -550,7 +550,7 @@ class TfishDatabase
      * 
      * @return string $sql SQL query fragment.
      */
-    public function renderSql(TfishCriteria $criteria)
+    private function renderSql(TfishCriteria $criteria)
     {
         $sql = '';
         $count = count($criteria->item);
@@ -560,16 +560,41 @@ class TfishDatabase
             
             for ($i = 0; $i < $count; $i++) {
                 $sql .= "`" . $this->escapeIdentifier($criteria->item[$i]->column) . "` " 
-                        . $criteria->item[$i]->operator . " :placeholder" . (string) $i;
+                        . $this->renderOperator($criteria->item[$i]->operator) . " :placeholder"
+                        . (string) $i;
                 
                 if ($i < ($count - 1)) {
-                    $sql .= " " . $criteria->condition[$i] . " ";
+                    $sql .= " " . $this->renderAndOr($criteria->condition[$i]) . " ";
                 }
             }
             $sql .= ") ";
         }
 
         return $sql;
+    }
+    
+    private function renderAndOr(string $condition)
+    {
+        $clean_condition = $this->validator->trimString($condition);
+        
+        if ($clean_condition === "AND" || $clean_condition === "OR") {
+            return $clean_condition;
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+    }
+    
+    private function renderOperator(string $operator)
+    {
+        $clean_operator = $this->validator->trimString($operator);
+        $permitted_operators = array('=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
+        
+        if (in_array($clean_operator, $permitted_operators, true)) {
+            return $clean_operator;
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+        
     }
 
     /**
@@ -581,7 +606,7 @@ class TfishDatabase
      * 
      * @return string $sql SQL query fragment.
      */
-    public function renderTagSql(TfishCriteria $criteria)
+    private function renderTagSql(TfishCriteria $criteria)
     {
         $sql = '';
         $count = count($criteria->tag);
@@ -612,7 +637,7 @@ class TfishDatabase
      * 
      * @return array $tag_placeholders Array of PDO placeholders used for building SQL query.
      */
-    public function renderTagPdo(TfishCriteria $criteria)
+    private function renderTagPdo(TfishCriteria $criteria)
     {
         $tag_placeholders = array();
         
@@ -1252,7 +1277,7 @@ class TfishDatabase
             }
             
             foreach ($criteria->item as $item) {
-                if (!is_object($item)) {
+                if (!is_a($item, 'TfishCriteriaItem')) {
                     trigger_error(TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT, E_USER_ERROR);
                     exit;
                 }

@@ -77,8 +77,7 @@ class TfishCriteriaItem
      */
     public function getListOfPermittedOperators()
     {
-        return array(
-            '=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
+        return array('=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
     }
 
     /**
