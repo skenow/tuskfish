@@ -42,15 +42,15 @@ class TfDatabase
     
     /** @var object $validator Instance of the TfValidator class or equivalent */
     private $validator;
-    private $file_handler;
+    private $fileHandler;
     private $logger;
     
     public function __construct(TfValidator $validator, TfLogger $logger,
-            TfFileHandler $file_handler)
+            TfFileHandler $fileHandler)
     {
         $this->validator = $validator;
         $this->logger = $logger;
-        $this->file_handler = $file_handler;
+        $this->fileHandler = $fileHandler;
     }
 
     /** No cloning permitted. */
@@ -156,7 +156,7 @@ class TfDatabase
             $this->_db = new PDO('sqlite:' . $dbPath);
             $db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "'
                     . $dbPath . '");';
-            $result = $this->file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $db_constant);
+            $result = $this->fileHandler->appendToFile(TFISH_CONFIGURATION_PATH, $db_constant);
             
             if (!$result) {
                 trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_NOTICE);
@@ -441,25 +441,25 @@ class TfDatabase
      * Insert a single row into the database within a transaction.
      * 
      * @param string $table Name of table.
-     * @param array $key_values Column names and values to be inserted.
+     * @param array $keyValues Column names and values to be inserted.
      * @return bool True on success, false on failure.
      */
-    public function insert(string $table, array $key_values)
+    public function insert(string $table, array $keyValues)
     {
         $clean_table = $this->validateTableName($table);
-        $clean_keys = $this->validateKeys($key_values);
+        $clean_keys = $this->validateKeys($keyValues);
         
         return $this->_insert($clean_table, $clean_keys);
     }
 
     /** @internal */
-    private function _insert(string $table, array $key_values)
+    private function _insert(string $table, array $keyValues)
     {
         $pdo_placeholders = '';
         $sql = "INSERT INTO " . $this->addBackticks($table) . " (";
 
         // Prepare statement
-        foreach ($key_values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $pdo_placeholders .= ":" . $key . ", ";
             $sql .= $this->addBackticks($key) . ", ";
             unset($key, $value);
@@ -472,7 +472,7 @@ class TfDatabase
         // Prepare the statement and bind the values.
         $statement = $this->_db->prepare($sql);
         
-        foreach ($key_values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $statement->bindValue(":" . $key, $value, $this->setType($value));
             unset($key, $value);
         }
@@ -1072,25 +1072,25 @@ class TfDatabase
      * 
      * @param string $table Name of table.
      * @param int $id ID of row to update.
-     * @param array $key_values Array of column names and values to update.
+     * @param array $keyValues Array of column names and values to update.
      * @return bool True on success, false on failure.
      */
-    public function update(string $table, int $id, array $key_values)
+    public function update(string $table, int $id, array $keyValues)
     {
         $clean_table = $this->validateTableName($table);
         $cleanId = $this->validateId($id);
-        $clean_keys = $this->validateKeys($key_values);
+        $clean_keys = $this->validateKeys($keyValues);
         
         return $this->_update($clean_table, $cleanId, $clean_keys);
     }
 
     /** @internal */
-    private function _update(string $table, int $id, array $key_values)
+    private function _update(string $table, int $id, array $keyValues)
     {
         // Prepare the statement
         $sql = "UPDATE " . $this->addBackticks($table) . " SET ";
         
-        foreach ($key_values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $sql .= $this->addBackticks($key) . " = :" . $key . ", ";
         }
         
@@ -1103,7 +1103,7 @@ class TfDatabase
         if ($statement) {
             $statement->bindValue(":id", $id, PDO::PARAM_INT);
             
-            foreach ($key_values as $key => $value) {
+            foreach ($keyValues as $key => $value) {
                 $type = gettype($value);
                 $statement->bindValue(":" . $key, $value, $this->setType($type));
                 unset($type);
@@ -1124,13 +1124,13 @@ class TfDatabase
      * marginal it is probably just easier to work around it.
      * 
      * @param string $table Name of table.
-     * @param array $key_values Array of column names and values to update.
+     * @param array $keyValues Array of column names and values to update.
      * @param object $criteria TfCriteria object used to build conditional database query.
      */
-    public function updateAll(string $table, array $key_values, TfCriteria $criteria = null)
+    public function updateAll(string $table, array $keyValues, TfCriteria $criteria = null)
     {
         $clean_table = $this->validateTableName($table);
-        $clean_keys = $this->validateKeys($key_values);
+        $clean_keys = $this->validateKeys($keyValues);
         
         if (isset($criteria)) {
             $clean_criteria = $this->validateCriteriaObject($criteria);
@@ -1142,13 +1142,13 @@ class TfDatabase
     }
 
     /** @internal */
-    private function _updateAll(string $table, array $key_values, TfCriteria $criteria)
+    private function _updateAll(string $table, array $keyValues, TfCriteria $criteria)
     {
         // Set table.
         $sql = "UPDATE " . $this->addBackticks($table) . " SET ";
 
         // Set key values.
-        foreach ($key_values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $sql .= $this->addBackticks($key) . " = :" . $key . ", ";
         }
         
@@ -1174,7 +1174,7 @@ class TfDatabase
         // Prepare the statement and bind the values.
         $statement = $this->preparedStatement($sql);
         
-        foreach ($key_values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $statement->bindValue(':' . $key, $value, $this->setType($value));
             unset($key, $value);
         }
@@ -1385,15 +1385,15 @@ class TfDatabase
      * Keys may only consist of alphanumeric and underscore characters. SQLite identifier delimiters
      * are escaped.
      * 
-     * @param array $key_values Array of unescaped keys.
+     * @param array $keyValues Array of unescaped keys.
      * @return array Array of valid and escaped keys.
      */
-    public function validateKeys(array $key_values)
+    public function validateKeys(array $keyValues)
     {
         $clean_keys = array();
         
-        if ($this->validator->isArray($key_values) && !empty($key_values)) {
-            foreach ($key_values as $key => $value) {
+        if ($this->validator->isArray($keyValues) && !empty($keyValues)) {
+            foreach ($keyValues as $key => $value) {
                 $key = $this->escapeIdentifier($key);
                 
                 if ($this->validator->isAlnumUnderscore($key)) {

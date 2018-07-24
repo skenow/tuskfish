@@ -142,22 +142,22 @@ class TfContentObject
      */
     public function convertObjectToArray()
     {        
-        $key_values = array();
+        $keyValues = array();
         
         foreach ($this as $key => $value) {
-            $key_values[$key] = $value;
+            $keyValues[$key] = $value;
         }
         
         // Unset non-persistanet properties that are not stored in the content table.
         unset(
-            $key_values['tags'],
-            $key_values['icon'],
-            $key_values['handler'],
-            $key_values['module'],
-            $key_values['template']
+            $keyValues['tags'],
+            $keyValues['icon'],
+            $keyValues['handler'],
+            $keyValues['module'],
+            $keyValues['template']
             );
         
-        return $key_values;
+        return $keyValues;
     }
     
     /**
@@ -179,15 +179,15 @@ class TfContentObject
      */
     public function escapeForXss(string $property, bool $escape_html = false)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
         // If property is not set return null.
-        if (!isset($this->$clean_property)) {
+        if (!isset($this->$cleanProperty)) {
             return null;
         }
         
         // Format all data for display and convert TFISH_LINK to URL.
-        $human_readable_data = (string) $this->makeDataHumanReadable($clean_property);
+        $human_readable_data = (string) $this->makeDataHumanReadable($cleanProperty);
         
                 $html_fields = array('teaser', 'description', 'icon');
         
@@ -672,17 +672,17 @@ class TfContentObject
      * @param string $property Name of property.
      * @return string Property formatted to human readable form for output.
      */
-    protected function makeDataHumanReadable(string $clean_property)
+    protected function makeDataHumanReadable(string $cleanProperty)
     {        
-        switch ($clean_property) {
+        switch ($cleanProperty) {
             case "date": // Stored in format yyyy-mm-dd
-                $date = new DateTime($this->$clean_property);
+                $date = new DateTime($this->$cleanProperty);
                 
                 return $date->format('j F Y');
                 break;
 
             case "fileSize": // Convert to human readable.
-                $bytes = (int) $this->$clean_property;
+                $bytes = (int) $this->$cleanProperty;
                 $unit = $val = '';
 
                 if ($bytes === 0 || $bytes < ONE_KILOBYTE) {
@@ -706,7 +706,7 @@ class TfContentObject
 
             case "format": // Output the file extension as user-friendly "mimetype".
                 $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
-                $mimetype = array_search($this->$clean_property, $mimetypeWhitelist);
+                $mimetype = array_search($this->$cleanProperty, $mimetypeWhitelist);
 
                 if (!empty($mimetype)) {
                     return $mimetype;
@@ -718,7 +718,7 @@ class TfContentObject
                 // Do a simple string replace to allow TFISH_URL to be used as a constant,
                 // making the site portable.
                 $trUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
-                        $this->$clean_property);
+                        $this->$cleanProperty);
 
                 return $trUrlEnabled; 
                 break;
@@ -726,11 +726,11 @@ class TfContentObject
             case "rights":
                 $rights = $this->getListOfRights();
 
-                return $rights[$this->$clean_property];
+                return $rights[$this->$cleanProperty];
                 break;
 
             case "submissionTime":
-                $date = date('j F Y', $this->$clean_property);
+                $date = date('j F Y', $this->$cleanProperty);
 
                 return $date;
                 break;
@@ -738,7 +738,7 @@ class TfContentObject
             case "tags":
                 $tags = array();
 
-                foreach ($this->$clean_property as $value) {
+                foreach ($this->$cleanProperty as $value) {
                     $tags[] = (int) $value;
                     unset($value);
                 }
@@ -748,7 +748,7 @@ class TfContentObject
                 
             // No special handling required. Return unmodified value.
             default:
-                return $this->$clean_property;
+                return $this->$cleanProperty;
                 break;
         }
     }
@@ -766,10 +766,10 @@ class TfContentObject
      */
     public function __set(string $property, $value)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
-            switch ($clean_property) {
+        if (isset($this->$cleanProperty)) {
+            switch ($cleanProperty) {
                 case "id":
                     $this->setId((int) $value);
                     break;

@@ -64,10 +64,10 @@ class TfUser
      */
     public function __get(string $property)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($clean_property) && $clean_property !== 'passwordHash' && $clean_property !== 'userSalt') {
-            return $this->$clean_property;
+        if (isset($cleanProperty) && $cleanProperty !== 'passwordHash' && $cleanProperty !== 'userSalt') {
+            return $this->$cleanProperty;
         } else {
             return null;
         }

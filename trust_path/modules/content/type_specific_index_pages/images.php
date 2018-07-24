@@ -25,7 +25,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to images.
 $contentHandler = $contentHandlerFactory->getHandler('content');
-$tf_critiera_factory->getCriteria();
+$tfCriteriaFactory->getCriteria();
 $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfImage'));
 
 // Configure page.

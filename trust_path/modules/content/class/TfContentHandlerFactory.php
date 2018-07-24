@@ -22,22 +22,22 @@ class TfContentHandlerFactory
 {
     protected $validator;
     protected $db;
-    protected $criteria_factory;
-    protected $criteria_item_factory;
-    protected $file_handler;
-    protected $taglink_handler;
+    protected $criteriaFactory;
+    protected $criteriaItemFactory;
+    protected $fileHandler;
+    protected $taglinkHandler;
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $item_factory,
-            TfFileHandler $file_handler)
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
+            TfFileHandler $fileHandler)
     {
         $this->validator = $validator;
         $this->db = $db;
-        $this->criteria_factory = $criteria_factory;
-        $this->criteria_item_factory = $item_factory;
-        $this->file_handler = $file_handler;
-        $this->taglink_handler = new TfTaglinkHandler($validator, $db, $criteria_factory,
-                $item_factory);
+        $this->criteriaFactory = $criteriaFactory;
+        $this->criteriaItemFactory = $itemFactory;
+        $this->fileHandler = $fileHandler;
+        $this->taglinkHandler = new TfTaglinkHandler($validator, $db, $criteriaFactory,
+                $itemFactory);
     }
     
     public function getHandler(string $type)
@@ -45,18 +45,18 @@ class TfContentHandlerFactory
         $cleanType = $this->validator->trimString($type);
         
         if ($cleanType === 'content') {
-            return new TfContentHandler($this->validator, $this->db, $this->criteria_factory,
-                    $this->criteria_item_factory, $this->file_handler, $this->taglink_handler);
+            return new TfContentHandler($this->validator, $this->db, $this->criteriaFactory,
+                    $this->criteriaItemFactory, $this->fileHandler, $this->taglinkHandler);
         }
         
         if ($cleanType === 'collection') {
-            return new TfCollectionHandler($this->validator, $this->db, $this->criteria_factory,
-                    $this->criteria_item_factory, $this->file_handler, $this->taglink_handler);
+            return new TfCollectionHandler($this->validator, $this->db, $this->criteriaFactory,
+                    $this->criteriaItemFactory, $this->fileHandler, $this->taglinkHandler);
         }
         
         if ($cleanType === 'tag') {
-            return new TfTagHandler($this->validator, $this->db, $this->criteria_factory,
-                    $this->criteria_item_factory, $this->file_handler, $this->taglink_handler);
+            return new TfTagHandler($this->validator, $this->db, $this->criteriaFactory,
+                    $this->criteriaItemFactory, $this->fileHandler, $this->taglinkHandler);
         }
         
         trigger_error(TFISH_ERROR_NO_SUCH_HANDLER, E_USER_ERROR);

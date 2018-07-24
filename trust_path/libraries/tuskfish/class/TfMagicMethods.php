@@ -41,10 +41,10 @@ trait TfMagicMethods
      */
     public function __get(string $property)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
-            return $this->$clean_property;
+        if (isset($this->$cleanProperty)) {
+            return $this->$cleanProperty;
         } else {
             return null;
         }
@@ -61,9 +61,9 @@ trait TfMagicMethods
      */
     public function __isset(string $property)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
+        if (isset($this->$cleanProperty)) {
             return true;
         } else {
             return false;
@@ -80,9 +80,9 @@ trait TfMagicMethods
      */
     public function __set(string $property, $value)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
+        if (isset($this->$cleanProperty)) {
             trigger_error(TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED);
         } else {
             trigger_error(TFISH_ERROR_NO_SUCH_PROPERTY, E_USER_ERROR);
@@ -102,10 +102,10 @@ trait TfMagicMethods
      */
     public function __unset(string $property)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
-            unset($this->$clean_property);
+        if (isset($this->$cleanProperty)) {
+            unset($this->$cleanProperty);
             return true;
         } else {
             return false;

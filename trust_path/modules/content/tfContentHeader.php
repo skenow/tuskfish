@@ -24,12 +24,12 @@ include TFISH_CONTENT_MODULE_LANGUAGE_PATH . 'english.php';
  * Autoload Tuskfish content module classes. spl_autoload_register() avoids namespace clashes.
  * @param string $classname Name of class to autoload. 
  */
-function tf_content_module_autoload(string $classname) {
+function tfContentModuleAutoload(string $classname) {
     if (is_file(TFISH_CONTENT_MODULE_PATH . 'class/' . $classname . '.php')) {
         include TFISH_CONTENT_MODULE_PATH . 'class/' . $classname . '.php';
     }
 }
-spl_autoload_register('tf_content_module_autoload');
+spl_autoload_register('tfContentModuleAutoload');
 
 // Make the content handler factory available.
 $contentHandlerFactory = new TfContentHandlerFactory($tfValidator, $tfDatabase,

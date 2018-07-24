@@ -97,11 +97,11 @@ class TfTag extends TfContentObject
      * not explicitly handled will fall through to the parent method, while explicit cases will
      * return a formatted value.
      * 
-     * @param string $clean_property Name of content object property to be formatted.
+     * @param string $cleanProperty Name of content object property to be formatted.
      */
-    protected function makeDataHumanReadable(string $clean_property)
+    protected function makeDataHumanReadable(string $cleanProperty)
     {
-        return parent::makeDataHumanReadable($clean_property);
+        return parent::makeDataHumanReadable($cleanProperty);
     }
     
     /**

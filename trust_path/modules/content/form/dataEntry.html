@@ -53,8 +53,8 @@
             <label for="tags"><strong><?php echo TFISH_TAGS; ?></strong></label>
             <select multiple class="form-control custom-select" size="5"  name="tags[]" id="tags">
                 <?php
-                    foreach ($tags as $tagId => $tag_title) {
-                        echo '<option value="' . $tfValidator->escapeForXss($tagId) . '">' . $tfValidator->escapeForXss($tag_title) . '</option>';
+                    foreach ($tags as $tagId => $tagTitle) {
+                        echo '<option value="' . $tfValidator->escapeForXss($tagId) . '">' . $tfValidator->escapeForXss($tagTitle) . '</option>';
                     }
                 ?>
             </select>

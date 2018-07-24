@@ -40,8 +40,8 @@ if (isset($_REQUEST['query'])) {
     $terms = rawurldecode($terms);
     $clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
-    $clean_terms = isset($_REQUEST['search_terms'])
-            ? $tfValidator->trimString($_REQUEST['search_terms']) : false;
+    $clean_terms = isset($_REQUEST['searchTerms'])
+            ? $tfValidator->trimString($_REQUEST['searchTerms']) : false;
 }
 
 $searchType = isset($_REQUEST['searchType']) ? $tfValidator->trimString($_REQUEST['searchType']) : false;
@@ -53,19 +53,19 @@ if ($cleanOp && $clean_terms && $searchType) {
     $search_engine->setSearchTerms($clean_terms);
     $search_engine->setOperator($searchType);
     $search_engine->setOffset($start);
-    $search_results = $search_engine->searchContent();
+    $searchResults = $search_engine->searchContent();
 
-    if ($search_results && $search_results[0] > 0) {
+    if ($searchResults && $searchResults[0] > 0) {
         
         // Get a count of search results; this is used to build the pagination control.
-        $results_count = (int) array_shift($search_results);
-        $tfTemplate->results_count = $results_count;
-        $tfTemplate->search_results = $search_results;
+        $resultsCount = (int) array_shift($searchResults);
+        $tfTemplate->resultsCount = $resultsCount;
+        $tfTemplate->searchResults = $searchResults;
 
         // Prepare the pagination control, including parameters to be included in the link.
         $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
         $tfPagination->setUrl('search');
-        $tfPagination->setCount($results_count);
+        $tfPagination->setCount($resultsCount);
         $tfPagination->setLimit($tfPreference->searchPagination);
         $tfPagination->setStart($start);
         $tfPagination->setTag(0);
@@ -76,7 +76,7 @@ if ($cleanOp && $clean_terms && $searchType) {
         $tfPagination->setExtraParams($query_parameters);
         $tfTemplate->pagination = $tfPagination->getPaginationControl();
     } else {
-        $tfTemplate->search_results = false;
+        $tfTemplate->searchResults = false;
     }
 }
 

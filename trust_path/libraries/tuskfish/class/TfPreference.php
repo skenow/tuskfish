@@ -95,10 +95,10 @@ class TfPreference
      */
     public function escapeForXss(string $property)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
-            return htmlspecialchars($this->$clean_property, ENT_QUOTES, 'UTF-8', false);
+        if (isset($this->$cleanProperty)) {
+            return htmlspecialchars($this->$cleanProperty, ENT_QUOTES, 'UTF-8', false);
         } else {
             return null;
         }
@@ -111,13 +111,13 @@ class TfPreference
      */
     public function getPreferencesAsArray()
     {
-        $key_values = array();
+        $keyValues = array();
         
         foreach ($this as $key => $value) {
-            $key_values[$key] = $value;
+            $keyValues[$key] = $value;
         }
         
-        return $key_values;
+        return $keyValues;
     }
     
     /**

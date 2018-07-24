@@ -29,11 +29,11 @@ class TfBlockHandler extends TfContentHandler
 {
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $criteria_item_factory,
-            TfFileHandler $file_handler, TfTaglinkHandler $taglink_handler)
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $criteriaItemFactory,
+            TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
     {
-        parent::__construct($validator, $db, $criteria_factory, $criteria_item_factory,
-                $file_handler, $taglink_handler);
+        parent::__construct($validator, $db, $criteriaFactory, $criteriaItemFactory,
+                $fileHandler, $taglinkHandler);
     }
     
     /**
@@ -45,18 +45,18 @@ class TfBlockHandler extends TfContentHandler
     public function getCount(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
+        $typeKey = $this->getTypeIndex($criteria->item);
         
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
+        if (isset($typeKey)) {
+            $criteria->unsetType($typeKey);
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->item_factory->getItem('type', 'TfBlock'));
+        $criteria->add($this->itemFactory->getItem('type', 'TfBlock'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -78,18 +78,18 @@ class TfBlockHandler extends TfContentHandler
     public function getObjects(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
+        $typeKey = $this->getTypeIndex($criteria->item);
         
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
+        if (isset($typeKey)) {
+            $criteria->unsetType($typeKey);
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->item_factory->getItem('type', 'TfBlock'));
+        $criteria->add($this->itemFactory->getItem('type', 'TfBlock'));
         $objects = parent::getObjects($criteria);
 
         return $objects;

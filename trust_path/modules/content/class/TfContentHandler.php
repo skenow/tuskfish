@@ -38,21 +38,21 @@ class TfContentHandler
     
     protected $validator;
     protected $db;
-    protected $criteria_factory;
-    protected $item_factory;
-    protected $file_handler;
-    protected $taglink_handler;
+    protected $criteriaFactory;
+    protected $itemFactory;
+    protected $fileHandler;
+    protected $taglinkHandler;
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $criteria_item_factory,
-            TfFileHandler $file_handler, TfTaglinkHandler $taglink_handler)
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $criteriaItemFactory,
+            TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
     {
         $this->validator = $validator;
         $this->db = $db;
-        $this->criteria_factory = $criteria_factory;
-        $this->item_factory = $criteria_item_factory;
-        $this->file_handler = $file_handler;
-        $this->taglink_handler = $taglink_handler;
+        $this->criteriaFactory = $criteriaFactory;
+        $this->itemFactory = $criteriaItemFactory;
+        $this->fileHandler = $fileHandler;
+        $this->taglinkHandler = $taglinkHandler;
     }
     
     /**
@@ -89,8 +89,8 @@ class TfContentHandler
             // Populate the tag property.
             if (isset($contentObject->tags) && !empty($contentObject->id)) {
                 $tags = array();
-                $criteria = $this->criteria_factory->getCriteria();
-                $criteria->add($this->item_factory->getItem('contentId', (int) $contentObject->id));
+                $criteria = $this->criteriaFactory->getCriteria();
+                $criteria->add($this->itemFactory->getItem('contentId', (int) $contentObject->id));
                 $statement = $this->db->select('taglink', $criteria, array('tagId'));
                 
                 if ($statement) {
@@ -141,7 +141,7 @@ class TfContentHandler
         }
 
         // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
-        $result = $this->taglink_handler->deleteTaglinks($obj);
+        $result = $this->taglinkHandler->deleteTaglinks($obj);
         
         if (!$result) {
             return false;
@@ -171,7 +171,7 @@ class TfContentHandler
     private function _deleteImage(string $filename)
     {
         if ($filename) {
-            return $this->file_handler->deleteFile('image/' . $filename);
+            return $this->fileHandler->deleteFile('image/' . $filename);
         }
     }
 
@@ -184,7 +184,7 @@ class TfContentHandler
     private function _deleteMedia(string $filename)
     {
         if ($filename) {
-            return $this->file_handler->deleteFile('media/' . $filename);
+            return $this->fileHandler->deleteFile('media/' . $filename);
         }
     }
     
@@ -202,8 +202,8 @@ class TfContentHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('parent', $cleanId));
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->itemFactory->getItem('parent', $cleanId));
         $result = $this->db->updateAll('content', array('parent' => 0), $criteria);
 
         if (!$result) {
@@ -226,39 +226,39 @@ class TfContentHandler
      */
     public function insert(TfContentObject $obj)
     {
-        $key_values = $obj->convertObjectToArray();
-        $key_values['submissionTime'] = time(); // Automatically set submission time.
-        unset($key_values['id']); // ID is auto-incremented by the database on insert operations.
-        unset($key_values['tags']);
-        unset($key_values['validator']);
+        $keyValues = $obj->convertObjectToArray();
+        $keyValues['submissionTime'] = time(); // Automatically set submission time.
+        unset($keyValues['id']); // ID is auto-incremented by the database on insert operations.
+        unset($keyValues['tags']);
+        unset($keyValues['validator']);
 
         // Process image and media files before inserting the object, as related fields must be set.
         $property_whitelist = $obj->getPropertyWhitelist();
         
         if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
             $filename = $this->validator->trimString($_FILES['image']['name']);
-            $clean_filename = $this->file_handler->uploadFile($filename, 'image');
+            $clean_filename = $this->fileHandler->uploadFile($filename, 'image');
             
             if ($clean_filename) {
-                $key_values['image'] = $clean_filename;
+                $keyValues['image'] = $clean_filename;
             }
         }
 
         if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
             $filename = $this->validator->trimString($_FILES['media']['name']);
-            $clean_filename = $this->file_handler->uploadFile($filename, 'media');
+            $clean_filename = $this->fileHandler->uploadFile($filename, 'media');
             
             if ($clean_filename) {
-                $key_values['media'] = $clean_filename;
+                $keyValues['media'] = $clean_filename;
                 $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
                 $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
-                $key_values['format'] = $mimetypeWhitelist[$extension];
-                $key_values['fileSize'] = $_FILES['media']['size'];
+                $keyValues['format'] = $mimetypeWhitelist[$extension];
+                $keyValues['fileSize'] = $_FILES['media']['size'];
             }
         }
 
         // Insert the object into the database.
-        $result = $this->db->insert('content', $key_values);
+        $result = $this->db->insert('content', $keyValues);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
@@ -267,7 +267,7 @@ class TfContentHandler
             $contentId = $this->db->lastInsertId();
         }
         
-        unset($key_values, $result);
+        unset($keyValues, $result);
 
         // Tags are stored separately in the taglinks table. Tags are assembled in one batch before
         // proceeding to insertion; so if one fails a range check all should fail.
@@ -279,7 +279,7 @@ class TfContentHandler
                 exit;
             }
 
-            $result = $this->taglink_handler->insertTaglinks($contentId, $obj->type, $obj->tags);
+            $result = $this->taglinkHandler->insertTaglinks($contentId, $obj->type, $obj->tags);
             if (!$result) {
                 return false;
             }
@@ -333,11 +333,11 @@ class TfContentHandler
         $cleanType = (isset($type) && $this->isSanctionedType($type))
                 ? $this->validator->trimString($type) : null;
 
-        $criteria = $this->criteria_factory->getCriteria();
+        $criteria = $this->criteriaFactory->getCriteria();
 
         // Filter tags by type.
         if (isset($cleanType)) {
-            $criteria->add($this->item_factory->getItem('contentType', $cleanType));
+            $criteria->add($this->itemFactory->getItem('contentType', $cleanType));
         }
 
         // Put a check for online status in here.
@@ -366,7 +366,7 @@ class TfContentHandler
     public function getCount(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
         
         if ($criteria && !empty($criteria->limit)) {
@@ -515,7 +515,7 @@ class TfContentHandler
         $columns = array('id', 'title');
 
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
         
         // Set default sorting order by submission time descending.
@@ -551,8 +551,8 @@ class TfContentHandler
         $row = $object = '';
         
         if ($this->validator->isInt($cleanId, 1)) {
-            $criteria = $this->criteria_factory->getCriteria();
-            $criteria->add($this->item_factory->getItem('id', $cleanId));
+            $criteria = $this->criteriaFactory->getCriteria();
+            $criteria->add($this->itemFactory->getItem('id', $cleanId));
             $statement = $this->db->select('content', $criteria);
             
             if ($statement) {
@@ -579,7 +579,7 @@ class TfContentHandler
         $objects = array();
         
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Set default sorting order by submission time descending.        
@@ -619,10 +619,10 @@ class TfContentHandler
             $taglinks = array();
             $object_ids = array_keys($objects);
 
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
             
             foreach ($object_ids as $id) {
-                $criteria->add($this->item_factory->getItem('contentId', (int) $id), "OR");
+                $criteria->add($this->itemFactory->getItem('contentId', (int) $id), "OR");
                 unset($id);
             }
 
@@ -657,28 +657,28 @@ class TfContentHandler
     public function getOnlineSelectBox(int $selected = null,
             string $zero_option = TFISH_ONLINE_STATUS)
     {
-        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 0, 1)) 
+        $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 0, 1)) 
                 ? (int) $selected : null; // Offline (0) or online (1)
         $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
-        $select_box = '<select class="form-control custom-select" name="online" id="online" '
+        $selectBox = '<select class="form-control custom-select" name="online" id="online" '
                 . 'onchange="this.form.submit()">';
         
-        if (isset($clean_selected)) {
+        if (isset($cleanSelected)) {
             foreach ($options as $key => $value) {
-                $select_box .= ($key === $clean_selected) ? '<option value="' . $key . '" selected>' 
+                $selectBox .= ($key === $cleanSelected) ? '<option value="' . $key . '" selected>' 
                         . $value . '</option>' : '<option value="' . $key . '">' . $value 
                         . '</option>';
             }
         } else { // Nothing selected
-            $select_box .= '<option value="2" selected>' . TFISH_SELECT_STATUS . '</option>';
-            $select_box .= '<option value="1">' . TFISH_ONLINE . '</option>';
-            $select_box .= '<option value="0">' . TFISH_OFFLINE . '</option>';
+            $selectBox .= '<option value="2" selected>' . TFISH_SELECT_STATUS . '</option>';
+            $selectBox .= '<option value="1">' . TFISH_ONLINE . '</option>';
+            $selectBox .= '<option value="0">' . TFISH_OFFLINE . '</option>';
         }
 
-        $select_box .= '</select>';
+        $selectBox .= '</select>';
 
-        return $select_box;
+        return $selectBox;
     }
 
     /**
@@ -693,11 +693,11 @@ class TfContentHandler
         $statement = false;
         $cleanOnline_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('type', 'TfTag'));
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
         
         if ($cleanOnline_only) {
-            $criteria->add($this->item_factory->getItem('online', true));
+            $criteria->add($this->itemFactory->getItem('online', true));
         }
 
         $statement = $this->db->select('content', $criteria, $columns);
@@ -727,8 +727,8 @@ class TfContentHandler
     public function getTags()
     {
         $tags = array();
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('type', 'TfTag'));
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
         $tags = $this->getObjects($criteria);
         
         return $tags;
@@ -768,28 +768,28 @@ class TfContentHandler
             $clean_zero_option = TFISH_TYPE;
         }
         
-        $clean_selected = '';
+        $cleanSelected = '';
         $type_list = $this->getTypes();
 
         if ($selected && $this->validator->isAlnumUnderscore($selected)) {
             if (array_key_exists($selected, $type_list)) {
-                $clean_selected = $this->validator->trimString($selected);
+                $cleanSelected = $this->validator->trimString($selected);
             }
         }
 
         $options = array(0 => TFISH_SELECT_TYPE) + $type_list;
-        $select_box = '<select class="form-control custom-select" name="type" id="type" '
+        $selectBox = '<select class="form-control custom-select" name="type" id="type" '
                 . 'onchange="this.form.submit()">';
         
         foreach ($options as $key => $value) {
-            $select_box .= ($key === $clean_selected) ? '<option value="' . $this->validator->escapeForXss($key)
+            $selectBox .= ($key === $cleanSelected) ? '<option value="' . $this->validator->escapeForXss($key)
                     . '" selected>' . $this->validator->escapeForXss($value) . '</option>' : '<option value="'
                 . $this->validator->escapeForXss($key) . '">' . $this->validator->escapeForXss($value) . '</option>';
         }
         
-        $select_box .= '</select>';
+        $selectBox .= '</select>';
 
-        return $select_box;
+        return $selectBox;
     }
 
     /**
@@ -865,8 +865,8 @@ class TfContentHandler
     /** @internal */
     private function _streamDownloadToBrowser(int $id, string $filename)
     {
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('id', $id));
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->itemFactory->getItem('id', $id));
         $statement = $this->db->select('content', $criteria);
         
         if (!$statement) {
@@ -942,22 +942,22 @@ class TfContentHandler
     public function update(TfContentObject $obj)
     {
         $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;
-        $key_values = $obj->convertObjectToArray();
+        $keyValues = $obj->convertObjectToArray();
         
-        unset($key_values['submissionTime']); // Submission time should not be overwritten.
+        unset($keyValues['submissionTime']); // Submission time should not be overwritten.
         $zeroedProperties = $obj->getListOfZeroedProperties();
 
         foreach ($zeroedProperties as $property) {
-            $key_values[$property] = null;
+            $keyValues[$property] = null;
         }
 
         $property_whitelist = $obj->getPropertyWhitelist();
 
         // Tags are stored in a separate table and must be handled in a separate query.
-        unset($key_values['tags']);
+        unset($keyValues['tags']);
         
         // Validator is non-persistent and not stored in the database.
-        unset($key_values['validator']);
+        unset($keyValues['validator']);
 
         // Load the saved object from the database. This will be used to make comparisons with the
         // current object state and facilitate clean up of redundant tags, parent references, and
@@ -979,7 +979,7 @@ class TfContentHandler
 
             // 2. Is this content type allowed to have an image property?
             if (!array_key_exists('image', $property_whitelist)) {
-                $key_values['image'] = '';
+                $keyValues['image'] = '';
                 if ($existing_image) {
                     $this->_deleteImage($existing_image);
                     $existing_image = '';
@@ -989,7 +989,7 @@ class TfContentHandler
             // 3. Has an existing image file been flagged for deletion?
             if ($existing_image) {
                 if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
-                    $key_values['image'] = '';
+                    $keyValues['image'] = '';
                     $this->_deleteImage($existing_image);
                     $existing_image = '';
                 }
@@ -1000,28 +1000,28 @@ class TfContentHandler
 
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
                     $filename = $this->validator->trimString($_FILES['image']['name']);
-                    $clean_filename = $this->file_handler->uploadFile($filename, 'image');
+                    $clean_filename = $this->fileHandler->uploadFile($filename, 'image');
                     
                     if ($clean_filename) {
-                        $key_values['image'] = $clean_filename;
+                        $keyValues['image'] = $clean_filename;
                         
                         // Delete old image file, if any.
                         if ($existing_image) {
                             $this->_deleteImage($existing_image);
                         }
                     } else {
-                        $key_values['image'] = '';
+                        $keyValues['image'] = '';
                     }
                     
                 } else { // No new image, use the existing file name.
-                    $key_values['image'] = $existing_image;
+                    $keyValues['image'] = $existing_image;
                 }
             }
 
             // If the updated object has no image attached, or has been instructed to delete
             // attached image, delete any old image files.
             if ($existing_image &&
-                    ((!isset($key_values['image']) || empty($key_values['image']))
+                    ((!isset($keyValues['image']) || empty($keyValues['image']))
                     || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
                 $this->_deleteImage($existing_image);
             }
@@ -1035,9 +1035,9 @@ class TfContentHandler
             
             // 2. Is this content type allowed to have a media property?
             if (!array_key_exists('media', $property_whitelist)) {
-                $key_values['media'] = '';
-                $key_values['format'] = '';
-                $key_values['fileSize'] = '';
+                $keyValues['media'] = '';
+                $keyValues['format'] = '';
+                $keyValues['fileSize'] = '';
                 if ($existing_media) {
                     $this->_deleteMedia($existing_media);
                     $existing_media = '';
@@ -1047,9 +1047,9 @@ class TfContentHandler
             // 3. Has existing media been flagged for deletion?
             if ($existing_media) {
                 if (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])) {
-                    $key_values['media'] = '';
-                    $key_values['format'] = '';
-                    $key_values['fileSize'] = '';
+                    $keyValues['media'] = '';
+                    $keyValues['format'] = '';
+                    $keyValues['fileSize'] = '';
                     $this->_deleteMedia($existing_media);
                     $existing_media = '';
                 }
@@ -1065,7 +1065,7 @@ class TfContentHandler
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
                     $filename = $this->validator->trimString($_FILES['media']['name']);
-                    $clean_filename = $this->file_handler->uploadFile($filename, 'media'); 
+                    $clean_filename = $this->fileHandler->uploadFile($filename, 'media'); 
                 } else {
                     $clean_filename = $existing_media;
                 }
@@ -1075,9 +1075,9 @@ class TfContentHandler
                         $extension = mb_strtolower(pathinfo($clean_filename, PATHINFO_EXTENSION), 'UTF-8');
 
                         // Set values of new media file.
-                        $key_values['media'] = $clean_filename;
-                        $key_values['format'] = $mimetypeWhitelist[$extension];
-                        $key_values['fileSize'] = $_FILES['media']['size'];
+                        $keyValues['media'] = $clean_filename;
+                        $keyValues['format'] = $mimetypeWhitelist[$extension];
+                        $keyValues['fileSize'] = $_FILES['media']['size'];
 
                         // Delete any old media file.
                         if ($existing_media) {
@@ -1088,15 +1088,15 @@ class TfContentHandler
                     // content type may have changed.
                     } else {
                         if ($existing_media) {
-                            $key_values['media'] = $existing_media;
-                            $key_values['format'] = $obj->format;
-                            $key_values['fileSize'] = $obj->fileSize;
+                            $keyValues['media'] = $existing_media;
+                            $keyValues['format'] = $obj->format;
+                            $keyValues['fileSize'] = $obj->fileSize;
                         }
                     }           
                 } else {
-                    $key_values['media'] = '';
-                    $key_values['format'] = '';
-                    $key_values['fileSize'] = '';
+                    $keyValues['media'] = '';
+                    $keyValues['format'] = '';
+                    $keyValues['fileSize'] = '';
 
                     // Delete any old media file.
                     if ($existing_media) {
@@ -1108,7 +1108,7 @@ class TfContentHandler
         }
 
         // Update tags
-        $result = $this->taglink_handler->updateTaglinks($cleanId, $obj->type, $obj->tags);
+        $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->tags);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
@@ -1117,7 +1117,7 @@ class TfContentHandler
         
         // Check if this object used to be a collection. If it has been changed to something else
         // clean up any parental references to it.
-        if ($key_values['type'] !== 'TfCollection' && !empty($saved_object)) {
+        if ($keyValues['type'] !== 'TfCollection' && !empty($saved_object)) {
             $ex_collection = $this->_checkExCollection($saved_object);
             
             if ($ex_collection === true) {
@@ -1131,7 +1131,7 @@ class TfContentHandler
         }
 
         // Update the content object.
-        $result = $this->db->update('content', $cleanId, $key_values);
+        $result = $this->db->update('content', $cleanId, $keyValues);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);

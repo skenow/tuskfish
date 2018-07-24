@@ -33,16 +33,16 @@ class TfTaglinkHandler
     
     protected $validator;
     protected $db;
-    protected $criteria_factory;
-    protected $item_factory;
+    protected $criteriaFactory;
+    protected $itemFactory;
     
     public function __construct(TfValidator $validator, TfDatabase $db, 
-            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $item_factory)
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory)
     {
         $this->validator = $validator;
         $this->db = $db;
-        $this->criteria_factory = $criteria_factory;
-        $this->item_factory = $item_factory;
+        $this->criteriaFactory = $criteriaFactory;
+        $this->itemFactory = $itemFactory;
     }
 
     /**
@@ -59,12 +59,12 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $criteria = $this->criteria_factory->getCriteria();
+        $criteria = $this->criteriaFactory->getCriteria();
         
         if ($obj->type === 'TfTag') {
-            $criteria->add($this->item_factory->getItem('tagId', $clean_contentId));
+            $criteria->add($this->itemFactory->getItem('tagId', $clean_contentId));
         } else {
-            $criteria->add($this->item_factory->getItem('contentId', $clean_contentId));
+            $criteria->add($this->itemFactory->getItem('contentId', $clean_contentId));
         }
         
         $result = $this->db->deleteAll('taglink', $criteria);
@@ -177,8 +177,8 @@ class TfTaglinkHandler
         }
 
         // Delete any existing tags.
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('contentId', $cleanId));
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->itemFactory->getItem('contentId', $cleanId));
         $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {

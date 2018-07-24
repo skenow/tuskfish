@@ -106,7 +106,7 @@ if ($cleanId) {
         }
 
         // Check if has child objects; if so display thumbnails and teasers / links.
-        $tf_critiera_factory->getCriteria();
+        $tfCriteriaFactory->getCriteria();
         $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
         $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
         
@@ -149,7 +149,7 @@ if ($cleanId) {
     $tfCache->getCachedPage($basename, $cacheParameters);
     
     // Set criteria for selecting content objects.
-    $tf_critiera_factory->getCriteria();
+    $tfCriteriaFactory->getCriteria();
     $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfCollection'));
     
     if ($cleanStart)

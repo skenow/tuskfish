@@ -61,12 +61,12 @@ class TfPreferenceHandler
     public function writePreferences(TfPreference $tfPreference)
     {
         // Convert preference object to array of key => values.
-        $key_values = $tfPreference->getPreferencesAsArray();
+        $keyValues = $tfPreference->getPreferencesAsArray();
         
         // Unset the validator object as it is not stored in the database.
-        unset($key_values['validator']);
+        unset($keyValues['validator']);
         
-        foreach ($key_values as $key => $value) {
+        foreach ($keyValues as $key => $value) {
             $sql = "UPDATE `preference` SET `value` = :value WHERE `title` = :title";
             $statement = $this->db->preparedStatement($sql);
             $statement->bindValue(':title', $key, $this->db->setType($key));

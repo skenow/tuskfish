@@ -84,10 +84,10 @@ class TfMetadata
      */
     public function __get(string $property)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($this->$clean_property)) {
-            return htmlspecialchars((string) $this->$clean_property, ENT_QUOTES, "UTF-8",
+        if (isset($this->$cleanProperty)) {
+            return htmlspecialchars((string) $this->$cleanProperty, ENT_QUOTES, "UTF-8",
                     false);
         } else {
             return null;
@@ -141,9 +141,9 @@ class TfMetadata
     
     private function setProperty(string $property, string $value)
     {
-        $clean_property = $this->validator->trimString($property);
+        $cleanProperty = $this->validator->trimString($property);
         $clean_value = $this->validator->trimString($value);
-        $this->$clean_property = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
+        $this->$cleanProperty = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
     }
        
 }

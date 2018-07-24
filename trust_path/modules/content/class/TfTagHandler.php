@@ -30,11 +30,11 @@ class TfTagHandler extends TfContentHandler
 {
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $criteria_item_factory,
-            TfFileHandler $file_handler, TfTaglinkHandler $taglink_handler)
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $criteriaItemFactory,
+            TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
     {
-        parent::__construct($validator, $db, $criteria_factory, $criteria_item_factory,
-                $file_handler, $taglink_handler);
+        parent::__construct($validator, $db, $criteriaFactory, $criteriaItemFactory,
+                $fileHandler, $taglinkHandler);
     }
     
     /**
@@ -58,13 +58,13 @@ class TfTagHandler extends TfContentHandler
             $key_name = null, $zero_option = TFISH_SELECT_TAGS)
     {
         // Initialise variables.
-        $select_box = '';
+        $selectBox = '';
         $clean_key_name = '';
         $cleanTag_list = array();
 
         // Validate input.
         // ID of a previously selected tag, if any.
-        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
+        $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
         
         if ($this->validator->isArray($tag_list) && !empty($tag_list)) {
@@ -85,17 +85,17 @@ class TfTagHandler extends TfContentHandler
 
         // Build the select box.
         $cleanTag_list = array(0 => $clean_zero_option) + $cleanTag_list;
-        $select_box = '<select class="form-control custom-select" name="' . $clean_key_name . '" id="'
+        $selectBox = '<select class="form-control custom-select" name="' . $clean_key_name . '" id="'
                 . $clean_key_name . '" onchange="this.form.submit()">';
         
         foreach ($cleanTag_list as $key => $value) {
-            $select_box .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
+            $selectBox .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
                     . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
         }
         
-        $select_box .= '</select>';
+        $selectBox .= '</select>';
 
-        return $select_box;
+        return $selectBox;
     }
 
     /**
@@ -107,18 +107,18 @@ class TfTagHandler extends TfContentHandler
     public function getCount(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
+        $typeKey = $this->getTypeIndex($criteria->item);
         
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
+        if (isset($typeKey)) {
+            $criteria->unsetType($typeKey);
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->item_factory->getItem('type', 'TfTag'));
+        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -140,18 +140,18 @@ class TfTagHandler extends TfContentHandler
     public function getObjects(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
+        $typeKey = $this->getTypeIndex($criteria->item);
         
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
+        if (isset($typeKey)) {
+            $criteria->unsetType($typeKey);
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->item_factory->getItem('type', 'TfTag'));
+        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
         $objects = parent::getObjects($criteria);
 
         return $objects;
@@ -175,10 +175,10 @@ class TfTagHandler extends TfContentHandler
     public function getTagSelectBox(int $selected = null, string $type = '',
             string $zero_option = TFISH_SELECT_TAGS, bool $online_only = true)
     {
-        $select_box = '';
+        $selectBox = '';
         $tag_list = array();
 
-        $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
+        $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
         $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
         $cleanType = $this->isSanctionedType($type)
@@ -187,12 +187,12 @@ class TfTagHandler extends TfContentHandler
         $tag_list = $this->getActiveTagList($cleanType, $cleanOnline_only);
         
         if ($tag_list) {
-            $select_box = $this->getArbitraryTagSelectBox($clean_selected, $tag_list, 'tagId', $clean_zero_option);
+            $selectBox = $this->getArbitraryTagSelectBox($cleanSelected, $tag_list, 'tagId', $clean_zero_option);
         } else {
-            $select_box = false;
+            $selectBox = false;
         }
         
-        return $select_box;
+        return $selectBox;
     }
 
 }

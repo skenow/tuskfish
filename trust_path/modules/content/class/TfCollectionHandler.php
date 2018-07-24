@@ -30,11 +30,11 @@ class TfCollectionHandler extends TfContentHandler
 {
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $criteria_item_factory,
-            TfFileHandler $file_handler, TfTaglinkHandler $taglink_handler)
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $criteriaItemFactory,
+            TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
     {
-        parent::__construct($validator, $db, $criteria_factory, $criteria_item_factory,
-                $file_handler, $taglink_handler);
+        parent::__construct($validator, $db, $criteriaFactory, $criteriaItemFactory,
+                $fileHandler, $taglinkHandler);
     }
 
     /**
@@ -47,18 +47,18 @@ class TfCollectionHandler extends TfContentHandler
     public function getCount(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
+        $typeKey = $this->getTypeIndex($criteria->item);
         
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
+        if (isset($typeKey)) {
+            $criteria->unsetType($typeKey);
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->item_factory->getItem('type', 'TfCollection'));
+        $criteria->add($this->itemFactory->getItem('type', 'TfCollection'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -81,18 +81,18 @@ class TfCollectionHandler extends TfContentHandler
     public function getObjects(TfCriteria $criteria = null)
     {
         if (!isset($criteria)) {
-            $criteria = $this->criteria_factory->getCriteria();
+            $criteria = $this->criteriaFactory->getCriteria();
         }
 
         // Unset any pre-existing object type criteria.
-        $type_key = $this->getTypeIndex($criteria->item);
+        $typeKey = $this->getTypeIndex($criteria->item);
         
-        if (isset($type_key)) {
-            $criteria->unsetType($type_key);
+        if (isset($typeKey)) {
+            $criteria->unsetType($typeKey);
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->item_factory->getItem('type', 'TfCollection'));
+        $criteria->add($this->itemFactory->getItem('type', 'TfCollection'));
         $objects = parent::getObjects($criteria);
 
         return $objects;
@@ -106,32 +106,32 @@ class TfCollectionHandler extends TfContentHandler
      */
     public function getParentSelectBox(int $selected = 0)
     {
-        $clean_selected = $this->validator->isInt($selected, 1) ? $selected : 0;
+        $cleanSelected = $this->validator->isInt($selected, 1) ? $selected : 0;
         $options = array(0 => TFISH_SELECT_PARENT);
-        $select_box = '';
+        $selectBox = '';
 
-        $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('type', 'TfCollection'));
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->itemFactory->getItem('type', 'TfCollection'));
         $criteria->setOrder('title');
         $criteria->setOrderType('ASC');
         $options = $options + $this->getListOfObjectTitles($criteria);
 
-        $select_box = '<select id="parent" name="parent" class="form-control">';
+        $selectBox = '<select id="parent" name="parent" class="form-control">';
         
         if (!empty($options)) {
             foreach ($options as $key => $value) {
                 
-                if ($key === $clean_selected) {
-                    $select_box .= '<option value="' . $key . '" selected>' . $value . '</option>';
+                if ($key === $cleanSelected) {
+                    $selectBox .= '<option value="' . $key . '" selected>' . $value . '</option>';
                 } else {
-                    $select_box .= '<option value="' . $key . '">' . $value . '</option>';
+                    $selectBox .= '<option value="' . $key . '">' . $value . '</option>';
                 }
             }
         }
         
-        $select_box .= '</select>';
+        $selectBox .= '</select>';
 
-        return $select_box;
+        return $selectBox;
     }
 
 }
