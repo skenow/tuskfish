@@ -4,7 +4,7 @@
 <?php if (isset($page_title)): ?>
 <div class="row">
   <div class="col">
-    <h1 class="page-title"><?php echo $tfish_validator->escapeForXss($page_title); ?></h1>
+    <h1 class="page-title"><?php echo $tf_validator->escapeForXss($page_title); ?></h1>
   </div>
 </div>
 <?php endif; ?>
@@ -28,10 +28,10 @@
 <?php endif; ?>
 
 <!-- Main content of page -->
-<?php if (isset($tfish_main_content)): ?>
+<?php if (isset($tf_main_content)): ?>
 <div class="row">
   <div class="col main-content clearfix">
-    <?php echo $tfish_main_content; ?>
+    <?php echo $tf_main_content; ?>
   </div>
 </div>
 <?php endif; ?>

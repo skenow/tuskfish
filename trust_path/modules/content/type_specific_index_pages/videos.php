@@ -18,22 +18,22 @@ declare(strict_types=1);
 require_once "mainfile.php";
 
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
-require_once TFISH_PATH . "tfish_header.php";
+require_once TFISH_PATH . "tf_header.php";
 
-// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Lock handler to videos.
 $content_handler = $content_handler_factory->getHandler('content');
-$criteria = $tfish_criteria_factory->getCriteria();
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishVideo'));
+$criteria = $tf_criteria_factory->getCriteria();
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfVideo'));
 
 // Configure page.
-$tfish_template->page_title = TFISH_TYPE_VIDEOS;
+$tf_template->page_title = TFISH_TYPE_VIDEOS;
 $index_template = 'videos';
 $target_file_name = 'videos';
-$tfish_template->target_file_name = $target_file_name;
-// $tfish_template->setTheme('jumbotron');
+$tf_template->target_file_name = $target_file_name;
+// $tf_template->setTheme('jumbotron');
 
 // Validate input parameters.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -54,10 +54,10 @@ if ($clean_id) {
         $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
-        $tfish_cache->getCachedPage($basename, $cache_parameters);
+        $tf_cache->getCachedPage($basename, $cache_parameters);
         
         // Assign content to template.
-        $tfish_template->content = $content;
+        $tf_template->content = $content;
 
         // Prepare meta information for display.
         $contentInfo = array();
@@ -83,65 +83,65 @@ if ($clean_id) {
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
-        $tfish_template->contentInfo = implode(' | ', $contentInfo);
+        $tf_template->contentInfo = implode(' | ', $contentInfo);
         if ($content->meta_title)
-            $tfish_metadata->setTitle($content->meta_title);
+            $tf_metadata->setTitle($content->meta_title);
         
         if ($content->meta_description)
-            $tfish_metadata->setDescription($content->meta_description);
+            $tf_metadata->setDescription($content->meta_description);
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
             $parent = $content_handler->getObject($content->parent);
             
             if (is_object($parent) && $parent->online) {
-                $tfish_template->parent = $parent;
+                $tf_template->parent = $parent;
             }
         }
 
         // Render template.
-        $tfish_template->tfish_main_content = $tfish_template->render($content->template);
+        $tf_template->tf_main_content = $tf_template->render($content->template);
     } else {
-        $tfish_template->tfish_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+        $tf_template->tf_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
     }
 
 // View index page of multiple objects (teasers).
 } else {
     // Check if cached page is available.
-    $tfish_cache->getCachedPage($basename, $cache_parameters);
+    $tf_cache->getCachedPage($basename, $cache_parameters);
     
     if ($clean_start)
         $criteria->setOffset($clean_start);
     
-    $criteria->setLimit($tfish_preference->user_pagination);
+    $criteria->setLimit($tf_preference->user_pagination);
     
     if ($clean_tag)
         $criteria->setTag(array($clean_tag));
 
     // Prepare pagination control.
-    $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-    $tfish_pagination->setUrl($target_file_name);
-    $tfish_pagination->setCount($content_handler->getCount($criteria));
-    $tfish_pagination->setLimit($tfish_preference->user_pagination);
-    $tfish_pagination->setStart($clean_start);
-    $tfish_pagination->setTag($clean_tag);
-    $tfish_template->pagination = $tfish_pagination->getPaginationControl();
+    $tf_pagination = new TfPaginationControl($tf_validator, $tf_preference);
+    $tf_pagination->setUrl($target_file_name);
+    $tf_pagination->setCount($content_handler->getCount($criteria));
+    $tf_pagination->setLimit($tf_preference->user_pagination);
+    $tf_pagination->setStart($clean_start);
+    $tf_pagination->setTag($clean_tag);
+    $tf_template->pagination = $tf_pagination->getPaginationControl();
 
     // Retrieve content objects and assign to template.
     $content_objects = $content_handler->getObjects($criteria);
-    $tfish_template->content_objects = $content_objects;
-    $tfish_template->tfish_main_content = $tfish_template->render($index_template);
+    $tf_template->content_objects = $content_objects;
+    $tf_template->tf_main_content = $tf_template->render($index_template);
 }
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
-// $tfish_metadata->setTitle('');
-// $tfish_metadata->setDescription('');
-// $tfish_metadata->setAuthor('');
-// $tfish_metadata->setCopyright('');
-// $tfish_metadata->setGenerator('');
-// $tfish_metadata->setSeo('');
-// $tfish_metadata->setRobots('');
+// $tf_metadata->setTitle('');
+// $tf_metadata->setDescription('');
+// $tf_metadata->setAuthor('');
+// $tf_metadata->setCopyright('');
+// $tf_metadata->setGenerator('');
+// $tf_metadata->setSeo('');
+// $tf_metadata->setRobots('');
 // Include page template and flush buffer
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";

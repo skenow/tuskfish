@@ -19,8 +19,8 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
-require_once TFISH_PATH . "tfish_header.php";
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Get a generic handler.
 $content_handler = $content_handler_factory->getHandler('content');
@@ -36,17 +36,17 @@ $columns = array('id', 'seo');
 $sitemap = '';
 
 // Get the IDs of all online objects (and offline tags), but not blocks.
-$criteria = $tfish_criteria_factory->getCriteria();
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!='));
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
+$criteria = $tf_criteria_factory->getCriteria();
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfBlock', '!='));
+$criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$content_ids = $tfish_database->select('content', $criteria, $columns);
+$content_ids = $tf_database->select('content', $criteria, $columns);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
-$criteria = $tfish_criteria_factory->getCriteria();
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishTag'));
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 0));
+$criteria = $tf_criteria_factory->getCriteria();
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfTag'));
+$criteria->add(new TfCriteriaItem($tf_validator, 'online', 0));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
 $offline_tag_ids = $content_handler->getListOfObjectTitles($criteria);
@@ -69,4 +69,4 @@ foreach ($content_ids as $value) {
 echo $sitemap;
 
 // Footer.
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";

@@ -56,15 +56,15 @@ function checkMedia() {
     
     // Get a list of mime types appropriate for this content type.
     switch($("#type").val()) {
-        case 'TfishAudio':
+        case 'TfAudio':
             mimeTypes = getAudioMimeType();
             break;
 
-        case 'TfishImage':
+        case 'TfImage':
             mimeTypes = getImageMimeType();
             break;
 
-        case 'TfishVideo':
+        case 'TfVideo':
             mimeTypes = getVideoMimeType();
             break;
 
@@ -189,7 +189,7 @@ function showHide() {
     $.each(allowedProperties, function (i, value) {
         $('#' + value).show();
     });
-    if ($("#type").val() === 'TfishTag') {
+    if ($("#type").val() === 'TfTag') {
         var disabledProperties = [
             'creatorContainer', 'languageContainer', 'rightsContainer',
             'publisherContainer', 'tagsContainer'];
@@ -197,7 +197,7 @@ function showHide() {
             $('#' + value).hide();
         });
     }
-    if ($("#type").val() === 'TfishBlock') {
+    if ($("#type").val() === 'TfBlock') {
         var disabledProperties = [
             'teaserContainer', 'creatorContainer', 'parentContainer', 'rightsContainer',
             'publisherContainer', 'metaHeader', 'metaTitleContainer', 'seoContainer',

@@ -174,7 +174,7 @@ define("TFISH_ERROR_NO_RESULT", "Database query did not return a statement; quer
 define("TFISH_ERROR_NOT_ALPHA", "Illegal characters: Non-alpha.");
 define("TFISH_ERROR_NOT_ALNUM", "Illegal characters: Non-alnum.");
 define("TFISH_ERROR_NOT_ALNUMUNDER", "Illegal characters: Non-alnumunder.");
-define("TFISH_ERROR_NOT_CRITERIA_OBJECT", "Not a TfishCriteria object.");
+define("TFISH_ERROR_NOT_CRITERIA_OBJECT", "Not a TfCriteria object.");
 define("TFISH_ERROR_NOT_DIGIT", "Illegal characters: Non-digit.");
 define("TFISH_ERROR_NOT_IP", "Not an IP address.");
 define("TFISH_ERROR_INSERTION_FAILED", "Insertion to the database failed.");
@@ -183,7 +183,7 @@ define("TFISH_ERROR_NOT_ARRAY", "Not an array.");
 define("TFISH_ERROR_NOT_ARRAY_OR_EMPTY", "Not an array, or array empty.");
 define("TFISH_ERROR_REQUIRED_PROPERTY_NOT_SET", "Required object property not set.");
 define("TFISH_ERROR_COUNT_MISMATCH", "Count mismatch.");
-define("TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT", "Not a TfishCriteriaItem object.");
+define("TFISH_ERROR_NOT_CRITERIA_ITEM_OBJECT", "Not a TfCriteriaItem object.");
 define("TFISH_ERROR_ILLEGAL_TYPE", "Illegal data type (not whitelisted).");
 define("TFISH_ERROR_TYPE_MISMATCH", "Data type mismatch.");
 define("TFISH_ERROR_ILLEGAL_VALUE", "Illegal value (not whitelisted).");

@@ -7,31 +7,31 @@
     <!-- Site name -->
     <div class="col-12 mb-3 text-left">
       <label for="site_name"><strong><?php echo TFISH_PREFERENCE_SITE_NAME; ?></strong></label>
-      <input type="text" class="form-control" name="site_name" id="firstName" <?php if (isset($preferences['site_name'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['site_name']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="site_name" id="firstName" <?php if (isset($preferences['site_name'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['site_name']) . '"'; } ?> required>
     </div>
     
     <!-- Site description -->
     <div class="col-12 mb-3 text-left">
       <label for="site_description"><strong><?php echo TFISH_PREFERENCE_SITE_DESCRIPTION; ?></strong></label>
-      <input type="text" class="form-control" name="site_description" id="site_description" <?php if (isset($preferences['site_description'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['site_description']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="site_description" id="site_description" <?php if (isset($preferences['site_description'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['site_description']) . '"'; } ?> required>
     </div>
         
     <!-- Site author -->
     <div class="col-md-6 mb-3 text-left">
       <label for="site_author"><strong><?php echo TFISH_PREFERENCE_SITE_AUTHOR; ?></strong></label>
-      <input type="text" class="form-control" name="site_author" id="site_author" <?php if (isset($preferences['site_author'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['site_author']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="site_author" id="site_author" <?php if (isset($preferences['site_author'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['site_author']) . '"'; } ?> required>
     </div>
         
     <!-- Site email -->
     <div class="col-md-6 mb-3 text-left">
       <label for="site_email"><strong><?php echo TFISH_PREFERENCE_SITE_EMAIL; ?></strong></label>
-      <input type="text" class="form-control" name="site_email" id="site_email" <?php if (isset($preferences['site_email'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['site_email']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="site_email" id="site_email" <?php if (isset($preferences['site_email'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['site_email']) . '"'; } ?> required>
     </div>
         
     <!-- Site copyright -->
     <div class="col-sm-12 col-md-8 mb-3 text-left">
       <label for="site_copyright"><strong><?php echo TFISH_PREFERENCE_SITE_COPYRIGHT; ?></strong></label>
-      <input type="text" class="form-control" name="site_copyright" id="site_copyright" <?php if (isset($preferences['site_copyright'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['site_copyright']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="site_copyright" id="site_copyright" <?php if (isset($preferences['site_copyright'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['site_copyright']) . '"'; } ?> required>
     </div>
         
     <!-- Close site -->      
@@ -84,31 +84,31 @@
     <!-- Minimum search length -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="min_search_length"><strong><?php echo TFISH_PREFERENCE_MIN_SEARCH_LENGTH; ?></strong></label>
-      <input type="number" min="3" class="form-control" name="min_search_length" id="min_search_length" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['min_search_length']) . '"'; } ?> required>
+      <input type="number" min="3" class="form-control" name="min_search_length" id="min_search_length" <?php if (isset($preferences['min_search_length'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['min_search_length']) . '"'; } ?> required>
     </div>
         
     <!-- Search pagination -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="search_pagination"><strong><?php echo TFISH_PREFERENCE_SEARCH_PAGINATION; ?></strong></label>
-      <input type="number" min="1" class="form-control" name="search_pagination" id="search_pagination" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['search_pagination']) . '"'; } ?> required>
+      <input type="number" min="1" class="form-control" name="search_pagination" id="search_pagination" <?php if (isset($preferences['search_pagination'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['search_pagination']) . '"'; } ?> required>
     </div>
       
     <!-- User pagination -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="user_pagination"><strong><?php echo TFISH_PREFERENCE_USER_PAGINATION; ?></strong></label>
-      <input type="number" min="1" class="form-control" name="user_pagination" id="user_pagination" <?php if (isset($preferences['user_pagination'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['user_pagination']) . '"'; } ?> required>
+      <input type="number" min="1" class="form-control" name="user_pagination" id="user_pagination" <?php if (isset($preferences['user_pagination'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['user_pagination']) . '"'; } ?> required>
     </div>
       
     <!-- Admin pagination -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="admin_pagination"><strong><?php echo TFISH_PREFERENCE_ADMIN_PAGINATION; ?></strong></label>
-      <input type="number" min="1" class="form-control" name="admin_pagination" id="admin_pagination" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['admin_pagination']) . '"'; } ?> required>
+      <input type="number" min="1" class="form-control" name="admin_pagination" id="admin_pagination" <?php if (isset($preferences['admin_pagination'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['admin_pagination']) . '"'; } ?> required>
     </div>
         
     <!-- Gallery pagination -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="gallery_pagination"><strong><?php echo TFISH_PREFERENCE_GALLERY_PAGINATION; ?></strong></label>
-      <input type="number" min="1" class="form-control" name="gallery_pagination" id="gallery_pagination" <?php if (isset($preferences['gallery_pagination'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['gallery_pagination']) . '"'; } ?> required>
+      <input type="number" min="1" class="form-control" name="gallery_pagination" id="gallery_pagination" <?php if (isset($preferences['gallery_pagination'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['gallery_pagination']) . '"'; } ?> required>
     </div>
       
     <!-- Maximum number of elements in the pagination control -->
@@ -120,19 +120,19 @@
     <!-- Number of posts to be included in RSS feeds -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="rss_posts"><strong><?php echo TFISH_PREFERENCE_RSS_POSTS; ?></strong></label>
-      <input type="number" min="3" class="form-control" name="rss_posts" id="rss_posts" <?php if (isset($preferences['rss_posts'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['rss_posts']) . '"'; } ?> required>
+      <input type="number" min="3" class="form-control" name="rss_posts" id="rss_posts" <?php if (isset($preferences['rss_posts'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['rss_posts']) . '"'; } ?> required>
     </div>
         
     <!-- Session name -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="session_name"><strong><?php echo TFISH_PREFERENCE_SESSION_NAME; ?></strong></label>
-      <input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['session_name']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['session_name']) . '"'; } ?> required>
     </div>
         
     <!-- Session life -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="session_life"><strong><?php echo TFISH_PREFERENCE_SESSION_LIFE; ?></strong></label>
-      <input type="number" min="0" class="form-control" name="session_life" id="session_life" <?php if (isset($preferences['session_life'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['session_life']) . '"'; } ?> required>
+      <input type="number" min="0" class="form-control" name="session_life" id="session_life" <?php if (isset($preferences['session_life'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['session_life']) . '"'; } ?> required>
     </div>
       
     <!-- Default language -->
@@ -154,7 +154,7 @@
     <!-- Date format -->
     <div class="col-md-12 col-lg-4 mb-3 text-left">
       <label for="site_name"><strong><?php echo TFISH_PREFERENCE_DATE_FORMAT; ?></strong></label>
-      <input type="text" class="form-control" name="date_format" id="date_format" <?php if (isset($preferences['date_format'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['date_format']) . '"'; } ?> required>
+      <input type="text" class="form-control" name="date_format" id="date_format" <?php if (isset($preferences['date_format'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['date_format']) . '"'; } ?> required>
     </div>
         
     <!-- Enable cache -->
@@ -173,7 +173,7 @@
     <!-- Cache life -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
       <label for="cache_life"><strong><?php echo TFISH_PREFERENCE_CACHE_LIFE; ?></strong></label>
-      <input type="number" min="1" class="form-control" name="cache_life" id="cache_life" <?php if (isset($preferences['cache_life'])) { echo 'value="' . $tfish_validator->escapeForXss($preferences['cache_life']) . '"'; } ?> required>
+      <input type="number" min="1" class="form-control" name="cache_life" id="cache_life" <?php if (isset($preferences['cache_life'])) { echo 'value="' . $tf_validator->escapeForXss($preferences['cache_life']) . '"'; } ?> required>
     </div>    
     
     <!-- Update / cancel buttons -->

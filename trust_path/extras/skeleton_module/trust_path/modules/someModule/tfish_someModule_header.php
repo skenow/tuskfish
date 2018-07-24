@@ -24,9 +24,9 @@ include TFISH_SOME_MODULE_LANGUAGE_PATH . 'english.php';
  * Autoload Tuskfish content module classes. spl_autoload_register() avoids namespace clashes.
  * @param string $classname Name of class to autoload. 
  */
-function tfish_some_module_autoload(string $classname) {
+function tf_some_module_autoload(string $classname) {
     if (is_file(TFISH_SOME_MODULE_PATH . 'class/' . $classname . '.php')) {
         include TFISH_SOME_MODULE_PATH . 'class/' . $classname . '.php';
     }
 }
-spl_autoload_register('tfish_some_module_autoload');
+spl_autoload_register('tf_some_module_autoload');

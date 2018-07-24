@@ -15,7 +15,7 @@
   <?php if ($contentInfo): ?>
   <p class="contentInfo">
     <span class="small">
-    <?php if (TfishSession::isAdmin()): ?>
+    <?php if (TfSession::isAdmin()): ?>
     <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escapeForXss('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
     <?php endif; ?>
     <?php echo $contentInfo; ?>

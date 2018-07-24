@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * TfCollectionHandler class file.
+ * 
+ * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
+ * @since       1.0
+ * @package     content
+ */
+
+// Enable strict type declaration.
+declare(strict_types=1);
+
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
+/**
+ * Handler class for collection content objects.
+ *
+ * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
+ * @since       1.0
+ * @package     content
+ */
+class TfCollectionHandler extends TfContentHandler
+{
+    
+    public function __construct(TfValidator $validator, TfDatabase $db,
+            TfCriteriaFactory $criteria_factory, TfCriteriaItemFactory $criteria_item_factory,
+            TfFileHandler $file_handler, TfTaglinkHandler $taglink_handler)
+    {
+        parent::__construct($validator, $db, $criteria_factory, $criteria_item_factory,
+                $file_handler, $taglink_handler);
+    }
+
+    /**
+     * Count TfCollection objects, optionally matching conditions specified with a TfCriteria\
+     * object.
+     * 
+     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @return int $count Number of collection objects matching the criteria.
+     */
+    public function getCount(TfCriteria $criteria = null)
+    {
+        if (!isset($criteria)) {
+            $criteria = $this->criteria_factory->getCriteria();
+        }
+
+        // Unset any pre-existing object type criteria.
+        $type_key = $this->getTypeIndex($criteria->item);
+        
+        if (isset($type_key)) {
+            $criteria->unsetType($type_key);
+        }
+
+        // Set new type criteria specific to this object.
+        $criteria->add($this->item_factory->getItem('type', 'TfCollection'));
+        $count = parent::getcount($criteria);
+
+        return $count;
+    }
+
+    /**
+     * Get TfCollection objects, optionally matching conditions specified with a TfCriteria
+     * object.
+     * 
+     * Note that the object type is automatically set, so it is unnecessary to set it when calling
+     * TfCollectionHandler::getObjects($criteria). However, if you want to use the generic
+     * handler TfContentHandler::getObjects($criteria) then you do need to specify the object
+     * type, otherwise you will get all types of content returned. It is acceptable to use either
+     * handler, although good practice to use the type-specific one when you know you want a
+     * specific kind of object.
+     * 
+     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @return array $objects TfCollection objects.
+     */
+    public function getObjects(TfCriteria $criteria = null)
+    {
+        if (!isset($criteria)) {
+            $criteria = $this->criteria_factory->getCriteria();
+        }
+
+        // Unset any pre-existing object type criteria.
+        $type_key = $this->getTypeIndex($criteria->item);
+        
+        if (isset($type_key)) {
+            $criteria->unsetType($type_key);
+        }
+
+        // Set new type criteria specific to this object.
+        $criteria->add($this->item_factory->getItem('type', 'TfCollection'));
+        $objects = parent::getObjects($criteria);
+
+        return $objects;
+    }
+
+    /**
+     * Get a select box listing a tree of parent (TfCollection) objects.
+     * 
+     * @param int $selected Currently selected option.
+     * @return string HTML select box.
+     */
+    public function getParentSelectBox(int $selected = 0)
+    {
+        $clean_selected = $this->validator->isInt($selected, 1) ? $selected : 0;
+        $options = array(0 => TFISH_SELECT_PARENT);
+        $select_box = '';
+
+        $criteria = $this->criteria_factory->getCriteria();
+        $criteria->add($this->item_factory->getItem('type', 'TfCollection'));
+        $criteria->setOrder('title');
+        $criteria->setOrderType('ASC');
+        $options = $options + $this->getListOfObjectTitles($criteria);
+
+        $select_box = '<select id="parent" name="parent" class="form-control">';
+        
+        if (!empty($options)) {
+            foreach ($options as $key => $value) {
+                
+                if ($key === $clean_selected) {
+                    $select_box .= '<option value="' . $key . '" selected>' . $value . '</option>';
+                } else {
+                    $select_box .= '<option value="' . $key . '">' . $value . '</option>';
+                }
+            }
+        }
+        
+        $select_box .= '</select>';
+
+        return $select_box;
+    }
+
+}

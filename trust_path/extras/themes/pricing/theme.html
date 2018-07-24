@@ -1,15 +1,15 @@
 <?php declare(strict_types=1); ?>
 
 <!doctype html>
-<html lang="<?php echo $tfish_preference->escapeForXss('default_language'); ?>">
+<html lang="<?php echo $tf_preference->escapeForXss('default_language'); ?>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
-    <meta name="description" content="<?php echo $tfish_metadata->description; ?>">
-    <meta name="author" content="<?php echo $tfish_metadata->author; ?>">
-    <meta name="dcterms.rights" content="<?php echo $tfish_metadata->copyright; ?>">
-    <meta name="generator" content="<?php echo $tfish_metadata->generator; ?>">
-    <meta name="robots" content="<?php echo $tfish_metadata->robots; ?>">
+    <meta name="description" content="<?php echo $tf_metadata->description; ?>">
+    <meta name="author" content="<?php echo $tf_metadata->author; ?>">
+    <meta name="dcterms.rights" content="<?php echo $tf_metadata->copyright; ?>">
+    <meta name="generator" content="<?php echo $tf_metadata->generator; ?>">
+    <meta name="robots" content="<?php echo $tf_metadata->robots; ?>">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo TFISH_URL . 'rss.php'; ?>" />
     <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
     
@@ -22,7 +22,7 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <title><?php echo $tfish_metadata->title; ?></title>
+    <title><?php echo $tf_metadata->title; ?></title>
     
     <!-- jQuery -->
     <script src="<?php echo TFISH_JS_URL . 'jquery/jquery.min.js'; ?>"></script>
@@ -44,7 +44,7 @@
   <body>
 
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-      <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?php echo TFISH_URL; ?>"><?php echo $tfish_preference->escapeForXss('site_name'); ?></a></h5>
+      <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<?php echo TFISH_URL; ?>"><?php echo $tf_preference->escapeForXss('site_name'); ?></a></h5>
       <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark" href="#">Features</a>
         <a class="p-2 text-dark" href="#">Enterprise</a>
@@ -57,14 +57,14 @@
     <div class="container">
         
       <!-- Main page -->
-      <?php echo $tfish_template->render('main'); ?>
+      <?php echo $tf_template->render('main'); ?>
 
       <!-- Footer -->
       <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
           <div class="col-12 col-md">
             <img class="mb-2" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
-            <small class="d-block mb-3 text-muted">Copyright &copy; 2018 | <?php echo TfishSession::getLoginLink(); ?></small>
+            <small class="d-block mb-3 text-muted">Copyright &copy; 2018 | <?php echo TfSession::getLoginLink(); ?></small>
           </div>
           <div class="col-6 col-md">
             <h5>Features</h5>

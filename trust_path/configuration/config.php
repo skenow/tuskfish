@@ -79,11 +79,11 @@ define("ONE_GIGABYTE", 1073741824);
  * 
  * @param string $classname Name of class to autoload. 
  */
-function tfish_autoload(string $classname) {
+function tf_autoload(string $classname) {
     if (is_file(TFISH_CLASS_PATH . $classname . '.php')) {
         include TFISH_CLASS_PATH . $classname . '.php';
     }
 }
-spl_autoload_register('tfish_autoload');
+spl_autoload_register('tf_autoload');
 
 // Site salt, key and database name are appended here.

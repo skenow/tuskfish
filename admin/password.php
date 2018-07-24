@@ -17,28 +17,28 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
-require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
+require_once TFISH_ADMIN_PATH . "tf_admin_header.php";
 
 // Specify theme set, otherwise 'default' will be used.
-$tfish_template->setTheme('admin');
+$tf_template->setTheme('admin');
 
 // Validate input parameters. Note that passwords are not sanitised in any way.
-$op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? $tf_validator->trimString($_REQUEST['op']) : false;
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 $dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword'] : false;
-$clean_token = isset($_POST['token']) ? $tfish_validator->trimString($_POST['token']) : '';
+$clean_token = isset($_POST['token']) ? $tf_validator->trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.
 if (in_array($op, array('submit', false), true)) {
     switch ($op) {
         case "submit":
-            TfishSession::validateToken($clean_token); // CSRF check.
+            TfSession::validateToken($clean_token); // CSRF check.
             $error = [];
             $password_quality = [];
 
             // Get the admin user details.
             $user_id = (int) $_SESSION['user_id'];
-            $statement = $tfish_database->preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
+            $statement = $tf_database->preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
             $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -59,7 +59,7 @@ if (in_array($op, array('submit', false), true)) {
             }
 
             // Check that password meets minimum strength requirements.
-            $security_utility = new TfishSecurityUtility();
+            $security_utility = new TfSecurityUtility();
             $password_quality = $security_utility->checkPasswordStrength($dirty_password);
             
             if ($password_quality['strong'] === false) {
@@ -71,9 +71,9 @@ if (in_array($op, array('submit', false), true)) {
 
             // Display errors.
             if (!empty($error)) {
-                $tfish_template->report = $error;
-                $tfish_template->form = TFISH_FORM_PATH . "change_password.html";
-                $tfish_template->tfish_main_content = $tfish_template->render('form');
+                $tf_template->report = $error;
+                $tf_template->form = TFISH_FORM_PATH . "change_password.html";
+                $tf_template->tf_main_content = $tf_template->render('form');
             }
 
             /**
@@ -81,45 +81,45 @@ if (in_array($op, array('submit', false), true)) {
              */
             if (empty($error)) {
                 $password_hash = '';
-                $password_hash = TfishSession::recursivelyHashPassword($dirty_password, 
+                $password_hash = TfSession::recursivelyHashPassword($dirty_password, 
                         100000, TFISH_SITE_SALT, $user['user_salt']);
-                $tfish_template->back_url = 'admin.php';
-                    $tfish_template->form = TFISH_FORM_PATH . "response.html";
+                $tf_template->back_url = 'admin.php';
+                    $tf_template->form = TFISH_FORM_PATH . "response.html";
 
                 if ($password_hash) {
-                    $result = $tfish_database->update('user', $user_id, 
+                    $result = $tf_database->update('user', $user_id, 
                             array('password_hash' => $password_hash));
                     
                     // Display response.
-                    $tfish_template->back_url = 'admin.php';
-                    $tfish_template->form = TFISH_FORM_PATH . "response.html";
+                    $tf_template->back_url = 'admin.php';
+                    $tf_template->form = TFISH_FORM_PATH . "response.html";
                     
                     if ($result) {
-                        $tfish_template->page_title = TFISH_SUCCESS;
-                        $tfish_template->alert_class = 'alert-success';
-                        $tfish_template->message = TFISH_PASSWORD_CHANGED_SUCCESSFULLY;
+                        $tf_template->page_title = TFISH_SUCCESS;
+                        $tf_template->alert_class = 'alert-success';
+                        $tf_template->message = TFISH_PASSWORD_CHANGED_SUCCESSFULLY;
                         
                     } else {
-                        $tfish_template->page_title = TFISH_FAILED;
-                        $tfish_template->alert_class = 'alert-danger';
-                        $tfish_template->message = TFISH_PASSWORD_CHANGE_FAILED;
+                        $tf_template->page_title = TFISH_FAILED;
+                        $tf_template->alert_class = 'alert-danger';
+                        $tf_template->message = TFISH_PASSWORD_CHANGE_FAILED;
                     }
                     
-                    $tfish_template->tfish_main_content = $tfish_template->render('form');
+                    $tf_template->tf_main_content = $tf_template->render('form');
                 }
             }
             break;
 
         default:
-            $tfish_template->form = TFISH_FORM_PATH . "change_password.html";
-            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            $tf_template->form = TFISH_FORM_PATH . "change_password.html";
+            $tf_template->tf_main_content = $tf_template->render('form');
             break;
     }
 }
 
 // Assign to template.
-$tfish_template->page_title = TFISH_CHANGE_PASSWORD;
-$tfish_metadata->setRobots('noindex,nofollow');
+$tf_template->page_title = TFISH_CHANGE_PASSWORD;
+$tf_metadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";

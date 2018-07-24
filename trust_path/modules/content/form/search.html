@@ -36,7 +36,7 @@
 <hr>
 <div class="text-left">
     <?php if (!empty($search_results)): ?>
-    <h2><?php echo $tfish_validator->escapeForXss($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
+    <h2><?php echo $tf_validator->escapeForXss($results_count) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
     <?php foreach ($search_results as $key => $object): ?>
     <div class="clearfix">
         <h3><a href="<?php echo $object->getUrl($target_file_name); ?>"><?php echo $object->icon; ?> <?php echo $object->escapeForXss('title'); ?></a></h3>

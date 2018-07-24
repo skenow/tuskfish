@@ -17,25 +17,25 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
-require_once TFISH_PATH . "tfish_header.php";
+require_once TFISH_PATH . "tf_header.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('default');
+$tf_template->setTheme('default');
 
-$tfish_template->page_title = TFISH_INVALID_TOKEN;
-$tfish_template->error_message = TFISH_SORRY_INVALID_TOKEN;
-$tfish_template->tfish_main_content = $tfish_template->render('error');
+$tf_template->page_title = TFISH_INVALID_TOKEN;
+$tf_template->error_message = TFISH_SORRY_INVALID_TOKEN;
+$tf_template->tf_main_content = $tf_template->render('error');
 
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tfish_metadata->setTitle(TFISH_INVALID_TOKEN);
-// $tfish_metadata->setDescription('');
-// $tfish_metadata->setAuthor('');
-// $tfish_metadata->setCopyright('');
-// $tfish_metadata->setGenerator('');
-// $tfish_metadata->setSeo('');
-// $tfish_metadata->setRobots('');
+$tf_metadata->setTitle(TFISH_INVALID_TOKEN);
+// $tf_metadata->setDescription('');
+// $tf_metadata->setAuthor('');
+// $tf_metadata->setCopyright('');
+// $tf_metadata->setGenerator('');
+// $tf_metadata->setSeo('');
+// $tf_metadata->setRobots('');
         
 // Include page template and flush buffer
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";

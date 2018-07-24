@@ -1,12 +1,12 @@
 <?php declare(strict_types=1); ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title><?php echo $tfish_validator->escapeForXss($rss_feed->title); ?></title>
-    <link><?php echo $tfish_validator->escapeForXss($rss_feed->link); ?></link>
-    <description><?php echo $tfish_validator->escapeForXss(strip_tags($rss_feed->description)); ?></description>
-    <generator><?php echo $tfish_validator->escapeForXss($rss_feed->generator); ?></generator>
-    <managingEditor><?php echo $tfish_validator->escapeForXss($rss_feed->managing_editor); ?></managingEditor>
-    <webMaster><?php echo $tfish_validator->escapeForXss($rss_feed->webmaster); ?></webMaster>
+    <title><?php echo $tf_validator->escapeForXss($rss_feed->title); ?></title>
+    <link><?php echo $tf_validator->escapeForXss($rss_feed->link); ?></link>
+    <description><?php echo $tf_validator->escapeForXss(strip_tags($rss_feed->description)); ?></description>
+    <generator><?php echo $tf_validator->escapeForXss($rss_feed->generator); ?></generator>
+    <managingEditor><?php echo $tf_validator->escapeForXss($rss_feed->managing_editor); ?></managingEditor>
+    <webMaster><?php echo $tf_validator->escapeForXss($rss_feed->webmaster); ?></webMaster>
     <atom:link href="<?php echo $rss_feed->link; ?>" rel="self" type="application/rss+xml" />
     <?php if (isset($items) && !empty($items)): ?>
     <?php foreach ($items as $item): ?>
@@ -21,12 +21,12 @@
       <?php if (($item->media) && is_readable(TFISH_MEDIA_PATH . $item->media)):
       $length = filesize(TFISH_MEDIA_PATH . $item->escapeForXss('media'));
       $mimetype = $mimetype_list[pathinfo($item->media, PATHINFO_EXTENSION)]; ?>
-      <enclosure url="<?php echo TFISH_ENCLOSURE_URL . $tfish_validator->escapeForXss($item->id); ?>" length="<?php echo $tfish_validator->escapeForXss($length); ?>" type="<?php echo $tfish_validator->escapeForXss($mimetype); ?>" />
+      <enclosure url="<?php echo TFISH_ENCLOSURE_URL . $tf_validator->escapeForXss($item->id); ?>" length="<?php echo $tf_validator->escapeForXss($length); ?>" type="<?php echo $tf_validator->escapeForXss($mimetype); ?>" />
       <?php unset($length, $mimetype); endif; ?>
       <?php if ($item->submission_time): ?>
-      <pubDate><?php echo $tfish_validator->escapeForXss(gmdate(DATE_RSS, (int) $item->submission_time)); ?></pubDate>
+      <pubDate><?php echo $tf_validator->escapeForXss(gmdate(DATE_RSS, (int) $item->submission_time)); ?></pubDate>
       <?php endif; ?>
-      <guid isPermaLink="true"><?php echo $tfish_validator->escapeForXss(TFISH_PERMALINK_URL . '?id=' . $item->escapeForXss('id')); ?></guid>
+      <guid isPermaLink="true"><?php echo $tf_validator->escapeForXss(TFISH_PERMALINK_URL . '?id=' . $item->escapeForXss('id')); ?></guid>
     </item>
     <?php endforeach; ?>
     <?php endif; ?>

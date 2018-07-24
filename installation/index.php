@@ -36,12 +36,12 @@ if (is_readable("../mainfile.php")) {
     exit;
 }
 
-// HTMLPurifier is a dependency of TfishValidator.
+// HTMLPurifier is a dependency of TfValidator.
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
 
 // Initialise data validator.
-$tfish_validator_factory = new TfishValidatorFactory();
-$tfish_validator = $tfish_validator_factory->getValidator();
+$tf_validator_factory = new TfValidatorFactory();
+$tf_validator = $tf_validator_factory->getValidator();
 
 // Initialise preference.
 $preference_config = array(
@@ -53,23 +53,23 @@ $preference_config = array(
     'pagination_elements' => '5',
     'enable_cache' => 0
 );
-$tfish_preference = new TfishPreference($tfish_validator, $preference_config);
+$tf_preference = new TfPreference($tf_validator, $preference_config);
 
 // Initialise default content variable.
-$tfish_content = array('output' => '');
+$tf_content = array('output' => '');
 
 // Set error reporting levels and custom error handler.
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL & ~E_NOTICE);
-$tfish_logger = new TfishLogger($tfish_validator);
-set_error_handler(array($tfish_logger, "logError"));
+$tf_logger = new TfLogger($tf_validator);
+set_error_handler(array($tf_logger, "logError"));
 
 // Set theme.
-$tfish_template = new TfishTemplate($tfish_validator);
-$tfish_template->setTheme('signin');
+$tf_template = new TfTemplate($tf_validator);
+$tf_template->setTheme('signin');
 
-$tfish_template->tfish_url = getUrl();
+$tf_template->tf_url = getUrl();
 
 /**
  * Helper function to grab the site URL and protocol during installation.
@@ -94,63 +94,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Check that form was completed.
     if (empty($_POST['db_name']) || empty($_POST['admin_email']) || empty($_POST['admin_password'])) {
-        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE_FORM . '</p>';
+        $tf_content['output'] .= '<p>' . TFISH_INSTALLATION_COMPLETE_FORM . '</p>';
     }
 
     // Database name is restricted to alphanumeric and underscore characters only.
-    $db_name = $tfish_validator->trimString($_POST['db_name']);
-    if (!$tfish_validator->isAlnumUnderscore($db_name)) {
-        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DB_ALNUMUNDERSCORE . '</p>';
+    $db_name = $tf_validator->trimString($_POST['db_name']);
+    if (!$tf_validator->isAlnumUnderscore($db_name)) {
+        $tf_content['output'] .= '<p>' . TFISH_INSTALLATION_DB_ALNUMUNDERSCORE . '</p>';
     }
 
     // Admin email must conform to email specification.
-    $admin_email = $tfish_validator->trimString($_POST['admin_email']);
-    if (!$tfish_validator->isEmail($admin_email)) {
-        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_BAD_EMAIL . '</p>';
+    $admin_email = $tf_validator->trimString($_POST['admin_email']);
+    if (!$tf_validator->isEmail($admin_email)) {
+        $tf_content['output'] .= '<p>' . TFISH_INSTALLATION_BAD_EMAIL . '</p>';
     }
 
     // There are no restrictions on what characters you use for a password. Only only on what you
     // don't use!
-    $admin_password = $tfish_validator->trimString($_POST['admin_password']);
+    $admin_password = $tf_validator->trimString($_POST['admin_password']);
 
     // Check password length and quality.
-    $security_utility = new TfishSecurityUtility();
+    $security_utility = new TfSecurityUtility();
     $password_quality = $security_utility->checkPasswordStrength($admin_password);
 
     if ($password_quality['strong'] === false) {
-        $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_WEAK_PASSWORD . '</p>';
+        $tf_content['output'] .= '<p>' . TFISH_INSTALLATION_WEAK_PASSWORD . '</p>';
         unset($password_quality['strong']);
-        $tfish_content['output'] .= '<ul>';
+        $tf_content['output'] .= '<ul>';
 
         foreach ($password_quality as $weakness) {
-            $tfish_content['output'] .= '<li>' . $weakness . '</li>';
+            $tf_content['output'] .= '<li>' . $weakness . '</li>';
         }
         
-        $tfish_content['output'] .= '</ul>';
+        $tf_content['output'] .= '</ul>';
     }
     
     // Report errors.
-    if (!empty($tfish_content['output'])) {
-        $tfish_content['output'] = '<h1 class="text-center">' . TFISH_INSTALLATION_WARNING . '</h1>'
-                . $tfish_content['output'];
-        $tfish_template->output = $tfish_content['output'];
-        $tfish_template->form = "db_credentials_form.html";
-        $tfish_template->tfish_main_content = $tfish_template->render('form');
+    if (!empty($tf_content['output'])) {
+        $tf_content['output'] = '<h1 class="text-center">' . TFISH_INSTALLATION_WARNING . '</h1>'
+                . $tf_content['output'];
+        $tf_template->output = $tf_content['output'];
+        $tf_template->form = "db_credentials_form.html";
+        $tf_template->tf_main_content = $tf_template->render('form');
         
     // All input validated, proceed to process and set up database.    
     } else {
         // Salt and iteratively hash the password 100,000 times to resist brute force attacks.
-        $security_utility = new TfishSecurityUtility();
+        $security_utility = new TfSecurityUtility();
         $site_salt = $security_utility->generateSalt(64);
         $user_salt = $security_utility->generateSalt(64);
-        $password_hash = TfishSession::recursivelyHashPassword($admin_password, 100000,
+        $password_hash = TfSession::recursivelyHashPassword($admin_password, 100000,
                 $site_salt, $user_salt);
 
         // Append site salt to config.php.
         $site_salt_constant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
                 . $site_salt . '");';
-        $tfish_file_handler = new TfishFileHandler($tfish_validator);
-        $result = $tfish_file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
+        $tf_file_handler = new TfFileHandler($tf_validator);
+        $result = $tf_file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $site_salt_constant);
 
         if (!$result) {
             trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);
@@ -162,8 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ////////////////////////////////////
         
         // Create the database
-        $tfish_database = new TfishDatabase($tfish_validator, $tfish_logger, $tfish_file_handler);
-        $db_path = $tfish_database->create($db_name);
+        $tf_database = new TfDatabase($tf_validator, $tf_logger, $tf_file_handler);
+        $db_path = $tf_database->create($db_name);
 
         if ($db_path) {
             if (!defined("TFISH_DATABASE"))
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "login_errors" => "INTEGER"
         );
 
-        $tfish_database->createTable('user', $user_columns, 'id');
+        $tf_database->createTable('user', $user_columns, 'id');
         // Insert admin user's details to database.
         $user_data = array(
             'admin_email' => $admin_email,
@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'yubikey_id2' => '',
             'login_errors' => '0'
             );
-        $query = $tfish_database->insert('user', $user_data);
+        $query = $tf_database->insert('user', $user_data);
 
         // Create preference table.
         $preference_columns = array(
@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "title" => "TEXT",
             "value" => "TEXT"
         );
-        $tfish_database->createTable('preference', $preference_columns, 'id');
+        $tf_database->createTable('preference', $preference_columns, 'id');
 
         // Insert default preferences to database.
         $preference_data = array(
@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             array('title' => 'gallery_pagination', 'value' => '20'),
             array('title' => 'pagination_elements', 'value' => '5'),
             array('title' => 'rss_posts', 'value' => '10'),
-            array('title' => 'session_name', 'value' => 'tfish'),
+            array('title' => 'session_name', 'value' => 'tf'),
             array('title' => 'session_life', 'value' => '20'),
             array('title' => 'default_language', 'value' => 'en'),
             array('title' => 'date_format', 'value' => 'j F Y'),
@@ -229,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         foreach ($preference_data as $preference) {
-            $tfish_database->insert('preference', $preference, 'id');
+            $tf_database->insert('preference', $preference, 'id');
         }
 
         // Create session table.
@@ -238,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "last_active" => "INTEGER",
             "data" => "TEXT"
         );
-        $tfish_database->createTable('session', $session_columns, 'id');
+        $tf_database->createTable('session', $session_columns, 'id');
 
         // Create content object table. Note that the type must be first column to enable
         // the PDO::FETCH_CLASS|PDO::FETCH_CLASSTYPE functionality, which automatically
@@ -266,11 +266,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "meta_title" => "TEXT", // Set a custom page title for this content.
             "meta_description" => "TEXT", // Set a custom page meta description for this content.
             "seo" => "TEXT"); // SEO-friendly string; it will be appended to the URL for this content.
-        $tfish_database->createTable('content', $content_columns, 'id');
+        $tf_database->createTable('content', $content_columns, 'id');
 
         // Insert a "General" tag content object.
         $content_data = array(
-            "type" => "TfishTag",
+            "type" => "TfTag",
             "title" => "General",
             "teaser" => "Default content tag.",
             "description" => "Default content tag, please edit it to something useful.",
@@ -282,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "meta_title" => "General",
             "meta_description" => "General information.",
             "seo" => "general");
-        $query = $tfish_database->insert('content', $content_data);
+        $query = $tf_database->insert('content', $content_data);
 
         // Create taglink table.
         $taglink_columns = array(
@@ -290,32 +290,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "tag_id" => "INTEGER",
             "content_type" => "TEXT",
             "content_id" => "INTEGER");
-        $tfish_database->createTable('taglink', $taglink_columns, 'id');
+        $tf_database->createTable('taglink', $taglink_columns, 'id');
         
         // Close the database connection.
-        $tfish_database->close();
+        $tf_database->close();
 
         // Report on status of database creation.
         if ($db_path && $query) {
-            $tfish_template->page_title = TFISH_INSTALLATION_COMPLETE;
-            $tfish_content['output'] .= '<div class="row"><div class="text-left col-8 offset-2 mt-3"><h3><i class="fas fa-exclamation-triangle text-danger"></i> ' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3></div></div>';
-            $tfish_content['output'] .= '<div class="row"><div class="text-left col-8 offset-2">' . TFISH_INSTALLATION_SECURITY_INSTRUCTIONS . '</div></div>';
-            $tfish_template->output = $tfish_content['output'];
-            $tfish_template->form = "success.html";
-            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            $tf_template->page_title = TFISH_INSTALLATION_COMPLETE;
+            $tf_content['output'] .= '<div class="row"><div class="text-left col-8 offset-2 mt-3"><h3><i class="fas fa-exclamation-triangle text-danger"></i> ' . TFISH_INSTALLATION_SECURE_YOUR_SITE . '</h3></div></div>';
+            $tf_content['output'] .= '<div class="row"><div class="text-left col-8 offset-2">' . TFISH_INSTALLATION_SECURITY_INSTRUCTIONS . '</div></div>';
+            $tf_template->output = $tf_content['output'];
+            $tf_template->form = "success.html";
+            $tf_template->tf_main_content = $tf_template->render('form');
         } else {
             // If database creation failed, complain and display data entry form again.
-            $tfish_content['output'] .= '<p>' . TFISH_INSTALLATION_DATABASE_FAILED . '</p>';
-            $tfish_template->output = $tfish_content['output'];
-            $tfish_template->form = "db_credentials_form.html";
-            $tfish_template->tfish_main_content = $tfish_template->render('form');
+            $tf_content['output'] .= '<p>' . TFISH_INSTALLATION_DATABASE_FAILED . '</p>';
+            $tf_template->output = $tf_content['output'];
+            $tf_template->form = "db_credentials_form.html";
+            $tf_template->tf_main_content = $tf_template->render('form');
         }
     }
 } else {
     /**
      * Preflight checks
      */
-    $tfish_content['output'] .= '<div class="row"><div class="col-xs-6 offset-xs-3 col-lg-4 offset-md-4 text-left">';
+    $tf_content['output'] .= '<div class="row"><div class="col-xs-6 offset-xs-3 col-lg-4 offset-md-4 text-left">';
 
     $required_extensions = array('sqlite3', 'PDO', 'pdo_sqlite', 'gd');
     $loaded_extensions = get_loaded_extensions();
@@ -361,37 +361,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($present_list) {
         $present_list = '<ul class="fa-ul">' . $present_list . '</ul>';
-        $tfish_content['output'] .= '<p><b>' . TFISH_SYSTEM_REQUIREMENTS_MET . '</b></p>'
+        $tf_content['output'] .= '<p><b>' . TFISH_SYSTEM_REQUIREMENTS_MET . '</b></p>'
                 . $present_list;
     }
 
     if ($missing_list) {
         $missing_list = '<ul class="fa-ul">' . $missing_list . '</ul>';
-        $tfish_content['output'] .= '<p><b>' . TFISH_SYSTEM_REQUIREMENTS_NOT_MET . '</b></p>'
+        $tf_content['output'] .= '<p><b>' . TFISH_SYSTEM_REQUIREMENTS_NOT_MET . '</b></p>'
                 . $missing_list;
     }
     
-    $tfish_content['output'] .= '</div></div>';
+    $tf_content['output'] .= '</div></div>';
     
     // Display data entry form.
-    $tfish_template->page_title = TFISH_INSTALLATION_TUSKFISH;
-    $tfish_template->tfish_root_path = realpath('../') . '/';
-    $tfish_template->form = "db_credentials_form.html";
-    $tfish_template->tfish_main_content = $tfish_content['output'] . $tfish_template->render('form');
+    $tf_template->page_title = TFISH_INSTALLATION_TUSKFISH;
+    $tf_template->tf_root_path = realpath('../') . '/';
+    $tf_template->form = "db_credentials_form.html";
+    $tf_template->tf_main_content = $tf_content['output'] . $tf_template->render('form');
 }
 
 /**
  * Manually instantiate the metadata object.
  */
-$tfish_metadata = new TfishMetadata($tfish_validator, $tfish_preference);
-$tfish_metadata->setTitle(TFISH_INSTALLATION_TUSKFISH);
-$tfish_metadata->setDescription('');
-$tfish_metadata->setRobots('noindex,nofollow');
-$tfish_metadata->setGenerator(''); // Do not advertise an installation script.
+$tf_metadata = new TfMetadata($tf_validator, $tf_preference);
+$tf_metadata->setTitle(TFISH_INSTALLATION_TUSKFISH);
+$tf_metadata->setDescription('');
+$tf_metadata->setRobots('noindex,nofollow');
+$tf_metadata->setGenerator(''); // Do not advertise an installation script.
 
 // Manual duplication of footer (as database is not yet available on first page view).
-if ($tfish_template && !empty($tfish_template->getTheme())) {
-    include_once TFISH_THEMES_PATH . $tfish_template->getTheme() . "/theme.html";
+if ($tf_template && !empty($tf_template->getTheme())) {
+    include_once TFISH_THEMES_PATH . $tf_template->getTheme() . "/theme.html";
 } else {
     include_once TFISH_THEMES_PATH . "default/theme.html";
 }

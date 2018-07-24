@@ -18,14 +18,14 @@ declare(strict_types=1);
 require_once "mainfile.php";
 
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
-require_once TFISH_PATH . "tfish_header.php";
+require_once TFISH_PATH . "tf_header.php";
 
-// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tfish_template->setTheme('rss');
-$tfish_template->target_file_name = '';
+$tf_template->setTheme('rss');
+$tf_template->target_file_name = '';
 
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
 $clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0; // ID of a collection object.
@@ -37,7 +37,7 @@ if ($clean_id && $clean_tag_id) {
 
 // Initialise RSS object.
 header('Content-Type: application/rss+xml');
-$rss = new TfishRss($tfish_preference, $tfish_validator);
+$rss = new TfRss($tf_preference, $tf_validator);
 
 // Get a generic content object handler.
 $content_handler = $content_handler_factory->getHandler('content');
@@ -47,11 +47,11 @@ $mimetype_list = $content_handler->getListOfMimetypes();
 
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.
-$criteria = $tfish_criteria_factory->getCriteria();
+$criteria = $tf_criteria_factory->getCriteria();
 $criteria->setOrder('submission_time');
 $criteria->setOrderType('DESC');
 $criteria->setOffset(0);
-$criteria->setLimit($tfish_preference->rss_posts);
+$criteria->setLimit($tf_preference->rss_posts);
 
 if ($clean_tag_id) {
     $criteria->setTag(array($clean_tag_id));
@@ -62,25 +62,25 @@ if ($clean_tag_id) {
 if ($clean_id) {
     $collection = $content_handler->getObject($clean_id);
     
-    if ($collection && $tfish_validator->isObject($collection)) {
+    if ($collection && $tf_validator->isObject($collection)) {
         $rss->makeFeedForCollection($collection);
-        $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $clean_id));
+        $criteria->add(new TfCriteriaItem($tf_validator, 'parent', $clean_id));
     }
 }
 
 // Do not allow tags, blocks or offline content objects to show in the feed.
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishTag', '!='));
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!='));
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishStatic', '!='));
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfTag', '!='));
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfBlock', '!='));
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfStatic', '!='));
+$criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
 $content_objects = $content_handler->getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.
-$tfish_template->rss_feed = $rss;
-$tfish_template->items = $content_objects;
-$tfish_template->mimetype_list = $mimetype_list;
-$tfish_template->tag_id = !empty($clean_tag_id) ? '?tag_id=' . (string) $clean_tag_id : '';
-$tfish_template->tfish_main_content = $tfish_template->render('feed');
+$tf_template->rss_feed = $rss;
+$tf_template->items = $content_objects;
+$tf_template->mimetype_list = $mimetype_list;
+$tf_template->tag_id = !empty($clean_tag_id) ? '?tag_id=' . (string) $clean_tag_id : '';
+$tf_template->tf_main_content = $tf_template->render('feed');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";

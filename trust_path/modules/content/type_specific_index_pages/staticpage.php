@@ -20,15 +20,15 @@ declare(strict_types=1);
 require_once "mainfile.php";
 
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
-require_once TFISH_PATH . "tfish_header.php";
+require_once TFISH_PATH . "tf_header.php";
 
-// 3. Content header sets module-specific paths and makes TfishContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Lock handler to static pages.
 $content_handler = $content_handler_factory->getHandler('content');
-$tfish_critiera_factory->getCriteria();
-$criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishStatic'));
+$tf_critiera_factory->getCriteria();
+$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfStatic'));
 
 ////////// CONFIGURATION //////////
 // 1. Enter the ID of the content object you want to display on this page.
@@ -36,13 +36,13 @@ $id = 10;
 
 // 2. Enter the name of the page you want headings and tags to link back to, without extension.
 $target_file_name = 'index';
-$tfish_template->target_file_name = $target_file_name;
+$tf_template->target_file_name = $target_file_name;
 
 // 3. Set the page title.
-$tfish_template->page_title = TFISH_TYPE_STATIC_PAGES;
+$tf_template->page_title = TFISH_TYPE_STATIC_PAGES;
 
 // 4. Specify theme set, otherwise 'default' will be used.
-// $tfish_template->setTheme('jumbotron');
+// $tf_template->setTheme('jumbotron');
 ////////// END CONFIGURATION //////////
 
 // Validate input parameters.
@@ -64,9 +64,9 @@ if ($clean_id) {
         $content_handler->updateCounter($clean_id);
         
         // Check if cached page is available.
-        $tfish_cache->getCachedPage($basename, $cache_parameters);
+        $tf_cache->getCachedPage($basename, $cache_parameters);
         
-        $tfish_template->content = $content;
+        $tf_template->content = $content;
 
         // Prepare meta information for display.
         $contentInfo = array();
@@ -86,86 +86,86 @@ if ($clean_id) {
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
-        $tfish_template->contentInfo = implode(' | ', $contentInfo);
+        $tf_template->contentInfo = implode(' | ', $contentInfo);
         
         if ($content->meta_title)
-            $tfish_metadata->setTitle($content->meta_title);
+            $tf_metadata->setTitle($content->meta_title);
         
         if ($content->meta_description)
-            $tfish_metadata->setDescription($content->meta_description);
+            $tf_metadata->setDescription($content->meta_description);
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
             $parent = $content_handler->getObject($content->parent);
             
             if (is_object($parent) && $parent->online) {
-                $tfish_template->parent = $parent;
+                $tf_template->parent = $parent;
             }
         }
         
         // Initialise criteria object.
-        $tfish_critiera_factory->getCriteria();
+        $tf_critiera_factory->getCriteria();
         $criteria->setOrder('date');
         $criteria->setOrderType('DESC');
         $criteria->setSecondaryOrder('submission_time');
         $criteria->setSecondaryOrderType('DESC');
 
         // If object is a collection check if has child objects; if so display teasers / links.
-        if ($content->type === 'TfishCollection') {
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'parent', $content->id));
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
+        if ($content->type === 'TfCollection') {
+            $criteria->add(new TfCriteriaItem($tf_validator, 'parent', $content->id));
+            $criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
             
             if ($clean_start) $criteria->setOffset($clean_start);
             
-            $criteria->setLimit($tfish_preference->user_pagination);
+            $criteria->setLimit($tf_preference->user_pagination);
         }
 
         // If object is a tag, then a different method is required to call the related content.
-        if ($content->type === 'TfishTag') {
+        if ($content->type === 'TfTag') {
             if ($clean_start) $criteria->setOffset($clean_start);
             
-            $criteria->setLimit($tfish_preference->user_pagination);
+            $criteria->setLimit($tf_preference->user_pagination);
             $criteria->setTag(array($content->id));
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'type', 'TfishBlock', '!='));
-            $criteria->add(new TfishCriteriaItem($tfish_validator, 'online', 1));
+            $criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfBlock', '!='));
+            $criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
         }
         
         // Prepare pagination control.
-        if ($content->type === 'TfishCollection' || $content->type === 'TfishTag') {
-            $tfish_pagination = new TfishPaginationControl($tfish_validator, $tfish_preference);
-            $tfish_pagination->setUrl($target_file_name);
-            $tfish_pagination->setCount($content_handler->getCount($criteria));
-            $tfish_pagination->setLimit($tfish_preference->user_pagination);
-            $tfish_pagination->setStart($clean_start);
-            $tfish_pagination->setTag(0);
-            $tfish_pagination->setExtraParams(array('id' => $clean_id));
-            $tfish_template->collection_pagination = $tfish_pagination->getPaginationControl();
+        if ($content->type === 'TfCollection' || $content->type === 'TfTag') {
+            $tf_pagination = new TfPaginationControl($tf_validator, $tf_preference);
+            $tf_pagination->setUrl($target_file_name);
+            $tf_pagination->setCount($content_handler->getCount($criteria));
+            $tf_pagination->setLimit($tf_preference->user_pagination);
+            $tf_pagination->setStart($clean_start);
+            $tf_pagination->setTag(0);
+            $tf_pagination->setExtraParams(array('id' => $clean_id));
+            $tf_template->collection_pagination = $tf_pagination->getPaginationControl();
 
             // Retrieve content objects and assign to template.
             $first_children = $content_handler->getObjects($criteria);
             
             if (!empty($first_children)) {
-                $tfish_template->first_children = $first_children;
+                $tf_template->first_children = $first_children;
             }
         }
 
         // Render template.
-        $tfish_template->tfish_main_content = $tfish_template->render($content->template);
+        $tf_template->tf_main_content = $tf_template->render($content->template);
     } else {
-        $tfish_template->tfish_main_content = TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE;
+        $tf_template->tf_main_content = TFISH_ERROR_NEED_TO_CONFIGURE_STATIC_PAGE;
     }
 }
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
-// $tfish_metadata->setTitle('');
-// $tfish_metadata->setDescription('');
-// $tfish_metadata->setAuthor('');
-// $tfish_metadata->setCopyright('');
-// $tfish_metadata->setGenerator('');
-// $tfish_metadata->setSeo('');
-// $tfish_metadata->setRobots('');
+// $tf_metadata->setTitle('');
+// $tf_metadata->setDescription('');
+// $tf_metadata->setAuthor('');
+// $tf_metadata->setCopyright('');
+// $tf_metadata->setGenerator('');
+// $tf_metadata->setSeo('');
+// $tf_metadata->setRobots('');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";

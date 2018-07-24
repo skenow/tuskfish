@@ -16,18 +16,18 @@ declare(strict_types=1);
 
 // Boot! Set file paths, preferences and connect to database.
 require_once "../mainfile.php";
-require_once TFISH_ADMIN_PATH . "tfish_admin_header.php";
-require_once TFISH_MODULE_PATH . "content/tfish_content_header.php";
+require_once TFISH_ADMIN_PATH . "tf_admin_header.php";
+require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Specify the admin theme you want to use.
-$tfish_template->setTheme('admin');
+$tf_template->setTheme('admin');
 
 /**
  * Validate input parameters here.
  **/
 
 // Permitted options.
-$op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? $tf_validator->trimString($_REQUEST['op']) : false;
 $options_whitelist = array();
 
 if (in_array($op, $options_whitelist, true)) {
@@ -36,7 +36,7 @@ if (in_array($op, $options_whitelist, true)) {
     
 // Cross-site request forgery check.
 if (!in_array($op, $options_whitelist, true)) {
-    TfishSession::validateToken($clean_token);
+    TfSession::validateToken($clean_token);
 }
 
 // Business logic goes here.
@@ -47,13 +47,13 @@ switch ($op) {
 /**
  * Override page template here (otherwise default site metadata will display).
  */
-// $tfish_metadata->setTitle('');
-// $tfish_metadata->setDescription('');
-// $tfish_metadata->setAuthor('');
-// $tfish_metadata->setCopyright('');
-// $tfish_metadata->setGenerator('');
-// $tfish_metadata->setSeo('');
-$tfish_metadata->setRobots('noindex,nofollow');
+// $tf_metadata->setTitle('');
+// $tf_metadata->setDescription('');
+// $tf_metadata->setAuthor('');
+// $tf_metadata->setCopyright('');
+// $tf_metadata->setGenerator('');
+// $tf_metadata->setSeo('');
+$tf_metadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tfish_footer.php";
+require_once TFISH_PATH . "tf_footer.php";
