@@ -21,16 +21,16 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Validate input parameters.
 $cleanId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-$clean_tag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
-$clean_online = isset($_GET['online']) ? (int) $_GET['online'] : null;
+$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanOnline = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $cleanType = isset($_GET['type']) && !empty($_GET['type'])
         ? $tfValidator->trimString($_GET['type']) : '';
-$clean_token = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
+$cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 
 // Specify the admin theme and the template to be used to preview content (user side template).
@@ -68,7 +68,7 @@ if (in_array($op, $optionsWhitelist, true)) {
     // message, iii) the action is trivial to undo and iv) it would reduce the functionality of
     // one-click status toggling.
     if (!in_array($op, array('confirmDelete', 'confirmFlush', 'edit', 'toggle', 'view', false), true)) {
-        TfSession::validateToken($clean_token);
+        TfSession::validateToken($cleanToken);
     }
     
     $contentHandler = $contentHandlerFactory->getHandler('content');
@@ -228,9 +228,9 @@ if (in_array($op, $optionsWhitelist, true)) {
             
             $cleanType = $tfValidator->trimString($_REQUEST['type']);
             
-            $type_whitelist = $contentHandler->getTypes();
+            $typeWhitelist = $contentHandler->getTypes();
             
-            if (!array_key_exists($cleanType, $type_whitelist)) {
+            if (!array_key_exists($cleanType, $typeWhitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
@@ -287,9 +287,9 @@ if (in_array($op, $optionsWhitelist, true)) {
             }
 
             $type = $tfValidator->trimString($_REQUEST['type']);
-            $type_whitelist = $contentHandler->getTypes();
+            $typeWhitelist = $contentHandler->getTypes();
             
-            if (!array_key_exists($type, $type_whitelist)) {
+            if (!array_key_exists($type, $typeWhitelist)) {
                 trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 exit;
             }
@@ -299,9 +299,9 @@ if (in_array($op, $optionsWhitelist, true)) {
 
             // As this object is being sent to storage, need to decode some entities that got
             // encoded for display.
-            $fields_to_decode = array('title', 'creator', 'publisher', 'caption');
+            $fieldsToDecode = array('title', 'creator', 'publisher', 'caption');
 
-            foreach ($fields_to_decode as $field) {
+            foreach ($fieldsToDecode as $field) {
                 if (isset($contentObject->field)) {
                     $contentObject->$field = htmlspecialchars_decode($contentObject->field,
                             ENT_NOQUOTES);
@@ -309,9 +309,9 @@ if (in_array($op, $optionsWhitelist, true)) {
             }
 
             // Properties that are used within attributes must have quotes encoded.
-            $fields_to_decode = array('metaTitle', 'seo', 'metaDescription');
+            $fieldsToDecode = array('metaTitle', 'seo', 'metaDescription');
             
-            foreach ($fields_to_decode as $field) {
+            foreach ($fieldsToDecode as $field) {
                 if (isset($contentObject->field)) {
                     $contentObject->$field = htmlspecialchars_decode($contentObject->field,
                             ENT_QUOTES);
@@ -416,7 +416,7 @@ if (in_array($op, $optionsWhitelist, true)) {
                         $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
                         $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
                         
-                        if ($clean_start) $criteria->setOffset($clean_start);
+                        if ($cleanStart) $criteria->setOffset($cleanStart);
                         
                         $criteria->setLimit($tfPreference->userPagination);
                     }
@@ -424,7 +424,7 @@ if (in_array($op, $optionsWhitelist, true)) {
                     // If object is a tag, then a different method is required to call the related
                     // content.
                     if ($content->type === 'TfTag') {
-                        if ($clean_start) $criteria->setOffset($clean_start);
+                        if ($cleanStart) $criteria->setOffset($cleanStart);
                         
                         $criteria->setLimit($tfPreference->userPagination);
                         $criteria->setTag(array($content->id));
@@ -433,20 +433,20 @@ if (in_array($op, $optionsWhitelist, true)) {
 
                     // Prepare pagination control.
                     if ($content->type === 'TfCollection' || $content->type === 'TfTag') {                        
-                        $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-                        $tf_pagination->setUrl($targetFileName);
-                        $tf_pagination->setCount($contentHandler->getCount($criteria));
-                        $tf_pagination->setLimit($tfPreference->userPagination);
-                        $tf_pagination->setStart($clean_start);
-                        $tf_pagination->setTag(0);
-                        $tf_pagination->setExtraParams(array('id' => $cleanId));
-                        $tfTemplate->collection_pagination = $tf_pagination->getPaginationControl();
+                        $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+                        $tfPagination->setUrl($targetFileName);
+                        $tfPagination->setCount($contentHandler->getCount($criteria));
+                        $tfPagination->setLimit($tfPreference->userPagination);
+                        $tfPagination->setStart($cleanStart);
+                        $tfPagination->setTag(0);
+                        $tfPagination->setExtraParams(array('id' => $cleanId));
+                        $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
 
                         // Retrieve content objects and assign to template.
-                        $first_children = $contentHandler->getObjects($criteria);
+                        $firstChildren = $contentHandler->getObjects($criteria);
                         
-                        if (!empty($first_children)) {
-                            $tfTemplate->first_children = $first_children;
+                        if (!empty($firstChildren)) {
+                            $tfTemplate->firstChildren = $firstChildren;
                         }
                     }
 
@@ -464,10 +464,10 @@ if (in_array($op, $optionsWhitelist, true)) {
             $criteria = $tfCriteriaFactory->getCriteria();
 
             // Select box filter input.
-            if ($clean_tag) $criteria->setTag(array($clean_tag));
+            if ($cleanTag) $criteria->setTag(array($cleanTag));
             
-            if ($tfValidator->isInt($clean_online, 0, 1)) {
-                $criteria->add(new TfCriteriaItem($tfValidator, 'online', $clean_online));
+            if ($tfValidator->isInt($cleanOnline, 0, 1)) {
+                $criteria->add(new TfCriteriaItem($tfValidator, 'online', $cleanOnline));
             }
             
             if ($cleanType) {
@@ -479,7 +479,7 @@ if (in_array($op, $optionsWhitelist, true)) {
             }
 
             // Other criteria.
-            $criteria->setOffset($clean_start);
+            $criteria->setOffset($cleanStart);
             $criteria->setLimit($tfPreference->adminPagination);
             $criteria->setOrder('submissionTime');
             $criteria->setOrderType('DESC');
@@ -500,28 +500,28 @@ if (in_array($op, $optionsWhitelist, true)) {
             $typelist = $contentHandler->getTypes();
 
             // Pagination control.
-            $extra_params = array();
-            if (isset($clean_online) && $tfValidator->isInt($clean_online, 0, 1)) {
-                $extra_params['online'] = $clean_online;
+            $extraParams = array();
+            if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
+                $extraParams['online'] = $cleanOnline;
             }
             if (isset($cleanType) && !empty($cleanType)) {
-                $extra_params['type'] = $cleanType;
+                $extraParams['type'] = $cleanType;
             }
             
-            $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-            $tf_pagination->setUrl('admin');
-            $tf_pagination->setCount($tfDatabase->selectCount('content', $criteria));
-            $tf_pagination->setLimit($tfPreference->adminPagination);
-            $tf_pagination->setStart($clean_start);
-            $tf_pagination->setTag($clean_tag);
-            $tf_pagination->setExtraParams($extra_params);
-            $tfTemplate->pagination = $tf_pagination->getPaginationControl();
+            $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+            $tfPagination->setUrl('admin');
+            $tfPagination->setCount($tfDatabase->selectCount('content', $criteria));
+            $tfPagination->setLimit($tfPreference->adminPagination);
+            $tfPagination->setStart($cleanStart);
+            $tfPagination->setTag($cleanTag);
+            $tfPagination->setExtraParams($extraParams);
+            $tfTemplate->pagination = $tfPagination->getPaginationControl();
 
             // Prepare select filters.
-            $tag_handler = $contentHandlerFactory->getHandler('tag');
-            $tagSelectBox = $tag_handler->getTagSelectBox($clean_tag);
+            $tagHandler = $contentHandlerFactory->getHandler('tag');
+            $tagSelectBox = $tagHandler->getTagSelectBox($cleanTag);
             $typeSelectBox = $contentHandler->getTypeSelectBox($cleanType);
-            $onlineSelectBox = $contentHandler->getOnlineSelectBox($clean_online);
+            $onlineSelectBox = $contentHandler->getOnlineSelectBox($cleanOnline);
             $tfTemplate->selectAction = 'admin.php';
             $tfTemplate->tagSelect = $tagSelectBox;
             $tfTemplate->typeSelect = $typeSelectBox;

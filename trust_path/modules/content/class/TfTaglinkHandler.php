@@ -104,7 +104,7 @@ class TfTaglinkHandler
             exit;
         }
 
-        $clean_tags = array();
+        $cleanTags = array();
         
         foreach ($tags as $tagId) {
             $tag = array();
@@ -117,11 +117,11 @@ class TfTaglinkHandler
             
             $tag['contentId'] = $clean_contentId;
             $tag['contentType'] = $cleanType;
-            $clean_tags[] = $tag;
+            $cleanTags[] = $tag;
             unset($tag);
         }
-        foreach ($clean_tags as $clean_tag) {
-            $result = $this->db->insert('taglink', $clean_tag);
+        foreach ($cleanTags as $cleanTag) {
+            $result = $this->db->insert('taglink', $cleanTag);
             
             if (!$result) {
                 return false;
@@ -163,12 +163,12 @@ class TfTaglinkHandler
         }
 
         // Validate tags.
-        $clean_tagId = array();
+        $cleanTagId = array();
         
         if ($this->validator->isArray($tags)) {
             foreach ($tags as $tag) {
                 if ($this->validator->isInt($tag, 1)) {
-                    $clean_tagId[] = (int) $tag;
+                    $cleanTagId[] = (int) $tag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                 }
@@ -194,9 +194,9 @@ class TfTaglinkHandler
         }
         
         // Insert new taglinks, if any.
-        $clean_tags = array();
+        $cleanTags = array();
         
-        foreach ($clean_tagId as $tagId) {
+        foreach ($cleanTagId as $tagId) {
             $tag = array();
             
             if ($this->validator->isInt($tagId, 1)) {
@@ -207,13 +207,13 @@ class TfTaglinkHandler
             
             $tag['contentId'] = $cleanId;
             $tag['contentType'] = $cleanType;
-            $clean_tags[] = $tag;
+            $cleanTags[] = $tag;
             unset($tag);
         }
 
         // Insert the new taglinks.
-        foreach ($clean_tags as $clean_tag) {
-            $result = $this->db->insert('taglink', $clean_tag);
+        foreach ($cleanTags as $cleanTag) {
+            $result = $this->db->insert('taglink', $cleanTag);
             
             if (!$result) {
                 return false;

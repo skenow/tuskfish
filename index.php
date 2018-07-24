@@ -21,27 +21,27 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Get a content handler.
 $contentHandler = $contentHandlerFactory->getHandler('content');
 
 // Specify theme, otherwise 'default' will be used.
 $tfTemplate->setTheme('default');
-$index_template = 'singleStream';
+$indexTemplate = 'singleStream';
 $targetFileName = 'index';
 $tfTemplate->targetFileName = $targetFileName;
 
 // Validate input parameters.
 $cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-$clean_tag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $clean_start, 'tagId' => $clean_tag);
+$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
-$rss_url = !empty($clean_tag) ? TFISH_RSS_URL . '?tagId=' . $clean_tag : TFISH_RSS_URL;
+$rss_url = !empty($cleanTag) ? TFISH_RSS_URL . '?tagId=' . $cleanTag : TFISH_RSS_URL;
 
 // Retrieve a single object if an ID is set.
 if ($cleanId) {
@@ -120,14 +120,14 @@ if ($cleanId) {
             $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
             $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
             
-            if ($clean_start) $criteria->setOffset($clean_start);
+            if ($cleanStart) $criteria->setOffset($cleanStart);
             
             $criteria->setLimit($tfPreference->userPagination);
         }
 
         // If object is a tag, then a different method is required to call the related content.
         if ($content->type === 'TfTag') {
-            if ($clean_start) $criteria->setOffset($clean_start);
+            if ($cleanStart) $criteria->setOffset($cleanStart);
             
             $criteria->setLimit($tfPreference->userPagination);
             $criteria->setTag(array($content->id));
@@ -137,20 +137,20 @@ if ($cleanId) {
 
         // Prepare pagination control.        
         if ($content->type === 'TfCollection' || $content->type === 'TfTag') {
-            $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-            $tf_pagination->setUrl($targetFileName);
-            $tf_pagination->setCount($contentHandler->getCount($criteria));
-            $tf_pagination->setLimit($tfPreference->userPagination);
-            $tf_pagination->setStart($clean_start);
-            $tf_pagination->setTag($clean_tag);
-            $tf_pagination->setExtraParams(array('id' => $cleanId));
-            $tfTemplate->collection_pagination = $tf_pagination->getPaginationControl();
+            $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+            $tfPagination->setUrl($targetFileName);
+            $tfPagination->setCount($contentHandler->getCount($criteria));
+            $tfPagination->setLimit($tfPreference->userPagination);
+            $tfPagination->setStart($cleanStart);
+            $tfPagination->setTag($cleanTag);
+            $tfPagination->setExtraParams(array('id' => $cleanId));
+            $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
 
             // Retrieve content objects and assign to template.
-            $first_children = $contentHandler->getObjects($criteria);
+            $firstChildren = $contentHandler->getObjects($criteria);
             
-            if (!empty($first_children)) {
-                $tfTemplate->first_children = $first_children;
+            if (!empty($firstChildren)) {
+                $tfTemplate->firstChildren = $firstChildren;
             }
         }
 
@@ -171,11 +171,11 @@ if ($cleanId) {
     // Exclude static pages, tags and blocks from the index page.
     $criteria = $tfCriteriaFactory->getCriteria();
     
-    if ($clean_start) $criteria->setOffset($clean_start);
+    if ($cleanStart) $criteria->setOffset($cleanStart);
     
     $criteria->setLimit($tfPreference->userPagination);
     
-    if ($clean_tag) $criteria->setTag(array($clean_tag));
+    if ($cleanTag) $criteria->setTag(array($cleanTag));
     
     $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag', '!='));
     $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfStatic', '!='));
@@ -183,12 +183,12 @@ if ($cleanId) {
     $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 
     // Prepare pagination control.
-    $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-    $tf_pagination->setCount($contentHandler->getCount($criteria));
-    $tf_pagination->setLimit($tfPreference->userPagination);
-    $tf_pagination->setStart($clean_start);
-    $tf_pagination->setTag($clean_tag);
-    $tfTemplate->pagination = $tf_pagination->getPaginationControl();
+    $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+    $tfPagination->setCount($contentHandler->getCount($criteria));
+    $tfPagination->setLimit($tfPreference->userPagination);
+    $tfPagination->setStart($cleanStart);
+    $tfPagination->setTag($cleanTag);
+    $tfTemplate->pagination = $tfPagination->getPaginationControl();
     
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');
@@ -197,12 +197,12 @@ if ($cleanId) {
     $criteria->setSecondaryOrderType('DESC');
     $contentObjects = $contentHandler->getObjects($criteria);
     $tfTemplate->contentObjects = $contentObjects;
-    $tfTemplate->tfMainContent = $tfTemplate->render($index_template);
+    $tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);
 
     // Prepare tag select box.
     $tfTemplate->selectAction = 'index.php';
-    $tag_handler = $contentHandlerFactory->getHandler('tag');
-    $tfTemplate->selectFilters = $tag_handler->getTagSelectBox($clean_tag);
+    $tagHandler = $contentHandlerFactory->getHandler('tag');
+    $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag);
     $tfTemplate->selectFiltersForm = $tfTemplate->render('selectFilters');
 }
 

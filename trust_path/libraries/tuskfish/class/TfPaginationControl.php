@@ -43,7 +43,7 @@ class TfPaginationControl
     protected $url;
     protected $start;
     protected $tag;
-    protected $extra_params;
+    protected $extraParams;
     
     /** @param TfPreference $preference Instance of TfPreference, holding site preferences. */
     function __construct(TfValidator $tfValidator, TfPreference $tfPreference)
@@ -55,7 +55,7 @@ class TfPaginationControl
         $this->url = '';
         $this->start = 0;
         $this->tag = 0;
-        $this->extra_params = array();
+        $this->extraParams = array();
     }
     
     /**
@@ -74,7 +74,7 @@ class TfPaginationControl
      * @param string $url Target base URL for pagination control links.
      * @param int $start Position in result set to retrieve content objects from.
      * @param int $tag ID of tag used to filter content.
-     * @param array $extra_params Query string to be appended to the URLs (control script params).
+     * @param array $extraParams Query string to be appended to the URLs (control script params).
      * @return string HTML pagination control.
      */
     public function getPaginationControl()
@@ -150,7 +150,7 @@ class TfPaginationControl
             $this->start = (int) ($key * $this->limit);
 
             // Set the arguments.
-            if ($this->start || $this->tag || $this->extra_params) {
+            if ($this->start || $this->tag || $this->extraParams) {
                 $arg_array = array();
                 
                 if (!empty($this->start)) {
@@ -161,8 +161,8 @@ class TfPaginationControl
                     $arg_array[] = 'tagId=' . $this->tag;
                 }
                 
-                if (!empty($this->extra_params)) {
-                    $arg_array[] = $this->extra_params;
+                if (!empty($this->extraParams)) {
+                    $arg_array[] = $this->extraParams;
                 }
                 
                 $query = '?' . implode('&amp;', $arg_array);
@@ -224,33 +224,33 @@ class TfPaginationControl
         $this->tag = $this->validator->isInt($tag, 0) ? (int) $tag : 0;
     }
     
-    // $extra_params is a potential XSS attack vector.
+    // $extraParams is a potential XSS attack vector.
     // The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
     // avoid messing up the query and avoid unecessary decoding it is possible to maintain
     // manual control over the operators. (Basically, input requiring encoding or escaping is
     // absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
     // actually *want* to use such input (check your sanity), you will need to decode it prior to
     // use on the landing page.
-    public function setExtraParams(array $extra_params)
+    public function setExtraParams(array $extraParams)
     {
-        $clean_extra_params = array();
+        $clean_extraParams = array();
         
-        foreach ($extra_params as $key => $value) {
+        foreach ($extraParams as $key => $value) {
             if ($this->validator->hasTraversalorNullByte((string) $key)
                     || $this->validator->hasTraversalorNullByte((string) $value)) {
                 trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
                 return false;
             }
         
-            $clean_extra_params[] = $this->validator->encodeEscapeUrl($key) . '='
+            $clean_extraParams[] = $this->validator->encodeEscapeUrl($key) . '='
                     . $this->validator->encodeEscapeUrl((string) $value);
             unset($key, $value);
         }
         
-        if (empty($clean_extra_params)) {
-            $this->extra_params = '';
+        if (empty($clean_extraParams)) {
+            $this->extraParams = '';
         } else {
-            $this->extra_params = $this->validator->escapeForXss(implode("&", $clean_extra_params));
+            $this->extraParams = $this->validator->escapeForXss(implode("&", $clean_extraParams));
         }   
     }
     

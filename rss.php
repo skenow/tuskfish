@@ -21,7 +21,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
 $tfTemplate->setTheme('rss');
@@ -29,10 +29,10 @@ $tfTemplate->targetFileName = '';
 
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
 $cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0; // ID of a collection object.
-$clean_tagId = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanTagId = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
-if ($cleanId && $clean_tagId) {
-    $clean_tagId = false;
+if ($cleanId && $cleanTagId) {
+    $cleanTagId = false;
 }
 
 // Initialise RSS object.
@@ -53,9 +53,9 @@ $criteria->setOrderType('DESC');
 $criteria->setOffset(0);
 $criteria->setLimit($tfPreference->rssPosts);
 
-if ($clean_tagId) {
-    $criteria->setTag(array($clean_tagId));
-    $rss->setLink(TFISH_RSS_URL . '?tagId=' . $clean_tagId);
+if ($cleanTagId) {
+    $criteria->setTag(array($cleanTagId));
+    $rss->setLink(TFISH_RSS_URL . '?tagId=' . $cleanTagId);
 }
 
 // Optionally make a feed specific to a collection object.
@@ -79,7 +79,7 @@ $contentObjects = $contentHandler->getObjects($criteria);
 $tfTemplate->rss_feed = $rss;
 $tfTemplate->items = $contentObjects;
 $tfTemplate->mimetype_list = $mimetype_list;
-$tfTemplate->tagId = !empty($clean_tagId) ? '?tagId=' . (string) $clean_tagId : '';
+$tfTemplate->tagId = !empty($cleanTagId) ? '?tagId=' . (string) $cleanTagId : '';
 $tfTemplate->tfMainContent = $tfTemplate->render('feed');
 
 // Include page template and flush buffer

@@ -23,7 +23,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 $cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 

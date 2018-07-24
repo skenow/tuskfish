@@ -22,7 +22,7 @@ require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 $tfTemplate->setTheme('admin');
 
 // Collect CSRF token if available.
-$clean_token = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
+$cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
 // Set view option
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
@@ -31,7 +31,7 @@ if (in_array($op, array('edit', 'update', false), true)) {
 
         // Edit: Display a data entry form containing the preference settings.
         case "edit":
-            TfSession::validateToken($clean_token); // CSRF check.
+            TfSession::validateToken($cleanToken); // CSRF check.
             $tfTemplate->pageTitle = TFISH_PREFERENCE_EDIT_PREFERENCES;
             $tfTemplate->preferences = $tfPreference->getPreferencesAsArray();
             $tfTemplate->languages = $tfPreference->getListOfLanguages();
@@ -42,12 +42,12 @@ if (in_array($op, array('edit', 'update', false), true)) {
 
         // Update: Submit the modified object and update the corresponding database row.
         case "update":
-            TfSession::validateToken($clean_token); // CSRF check.
+            TfSession::validateToken($cleanToken); // CSRF check.
             $tfPreference->loadPropertiesFromArray($_REQUEST);
 
             // Update the database row and display a response.
-            $tfPreference_handler = new TfPreferenceHandler($tfDatabase);
-            $result = $tfPreference_handler->writePreferences($tfPreference);
+            $tfPreferenceHandler = new TfPreferenceHandler($tfDatabase);
+            $result = $tfPreferenceHandler->writePreferences($tfPreference);
             
             if ($result) {
                 $tfTemplate->pageTitle = TFISH_SUCCESS;

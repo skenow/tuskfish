@@ -36,7 +36,7 @@ if (in_array($op, $optionsWhitelist, true)) {
     
 // Cross-site request forgery check.
 if (!in_array($op, $optionsWhitelist, true)) {
-    TfSession::validateToken($clean_token);
+    TfSession::validateToken($cleanToken);
 }
 
 // Business logic goes here.

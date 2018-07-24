@@ -73,7 +73,7 @@
 <?php endif; ?>
 
 <!-- Display other works linked to this tag -->    
-<?php if (!empty($first_children)): ?>
+<?php if (!empty($firstChildren)): ?>
 <?php if (isset($collection_pagination)): ?>
 <div class="d-flex justify-content-end collection-pagination-top clearfix">
   <?php echo $collection_pagination; ?>
@@ -83,7 +83,7 @@
   <h3 class="mb-3">In this collection</h3>
 </div>
 <div>
-  <?php foreach ($first_children as $child): ?>
+  <?php foreach ($firstChildren as $child): ?>
   <div class="clearfix">
     <h4 class="child-title"><a href="<?php echo $child->getUrl($targetFileName); ?>"><?php echo $child->icon; ?> <?php echo $child->escapeForXss('title'); ?></a></h4>
     <?php if ($child->image): ?>

@@ -23,7 +23,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to static pages.
 $contentHandler = $contentHandlerFactory->getHandler('content');
@@ -47,12 +47,12 @@ $tfTemplate->pageTitle = TFISH_TYPE_STATIC_PAGES;
 
 // Validate input parameters.
 $cleanId = (int) $id;
-$clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-$clean_tag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $clean_start, 'tagId' => $clean_tag);
+$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 if ($cleanId) {
     
@@ -115,14 +115,14 @@ if ($cleanId) {
             $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
             $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
             
-            if ($clean_start) $criteria->setOffset($clean_start);
+            if ($cleanStart) $criteria->setOffset($cleanStart);
             
             $criteria->setLimit($tfPreference->userPagination);
         }
 
         // If object is a tag, then a different method is required to call the related content.
         if ($content->type === 'TfTag') {
-            if ($clean_start) $criteria->setOffset($clean_start);
+            if ($cleanStart) $criteria->setOffset($cleanStart);
             
             $criteria->setLimit($tfPreference->userPagination);
             $criteria->setTag(array($content->id));
@@ -132,20 +132,20 @@ if ($cleanId) {
         
         // Prepare pagination control.
         if ($content->type === 'TfCollection' || $content->type === 'TfTag') {
-            $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-            $tf_pagination->setUrl($targetFileName);
-            $tf_pagination->setCount($contentHandler->getCount($criteria));
-            $tf_pagination->setLimit($tfPreference->userPagination);
-            $tf_pagination->setStart($clean_start);
-            $tf_pagination->setTag(0);
-            $tf_pagination->setExtraParams(array('id' => $cleanId));
-            $tfTemplate->collection_pagination = $tf_pagination->getPaginationControl();
+            $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+            $tfPagination->setUrl($targetFileName);
+            $tfPagination->setCount($contentHandler->getCount($criteria));
+            $tfPagination->setLimit($tfPreference->userPagination);
+            $tfPagination->setStart($cleanStart);
+            $tfPagination->setTag(0);
+            $tfPagination->setExtraParams(array('id' => $cleanId));
+            $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
 
             // Retrieve content objects and assign to template.
-            $first_children = $contentHandler->getObjects($criteria);
+            $firstChildren = $contentHandler->getObjects($criteria);
             
-            if (!empty($first_children)) {
-                $tfTemplate->first_children = $first_children;
+            if (!empty($firstChildren)) {
+                $tfTemplate->firstChildren = $firstChildren;
             }
         }
 

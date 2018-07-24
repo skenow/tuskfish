@@ -168,10 +168,10 @@ class TfSession
             self::logout(TFISH_ADMIN_URL . "login.php");
         } else {
             // Validate the admin email (which functions as the username in Tuskfish CMS)
-            $clean_email = self::$validator->trimString($email);
+            $cleanEmail = self::$validator->trimString($email);
             
-            if (self::$validator->isEmail($clean_email)) {
-                self::_login($clean_email, $password);
+            if (self::$validator->isEmail($cleanEmail)) {
+                self::_login($cleanEmail, $password);
             } else {
                 // Issue warning - email should follow email format
                 self::logout(TFISH_ADMIN_URL . "login.php");
@@ -180,12 +180,12 @@ class TfSession
     }
 
     /** @internal */
-    private static function _login(string $clean_email, string $dirty_password)
+    private static function _login(string $cleanEmail, string $dirtyPassword)
     {
         // Query the database for a matching user.
         $statement = self::$db->preparedStatement("SELECT * FROM user WHERE "
                 . "`adminEmail` = :clean_email");
-        $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
+        $statement->bindParam(':clean_email', $cleanEmail, PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -196,14 +196,14 @@ class TfSession
                 sleep((int) $user['loginErrors']);
             }
             
-            $passwordHash = self::recursivelyHashPassword($dirty_password, 100000,
+            $passwordHash = self::recursivelyHashPassword($dirtyPassword, 100000,
                     TFISH_SITE_SALT, $user['userSalt']);
             
             // If login successful regenerate session due to privilege escalation.
             if ($passwordHash === $user['passwordHash']) {
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
-                $_SESSION['user_id'] = (int) $user['id'];
+                $_SESSION['userId'] = (int) $user['id'];
                 
                 // Reset failed login counter to zero.
                 self::$db->update('user', (int) $user['id'], array('loginErrors' => 0));
@@ -271,15 +271,15 @@ class TfSession
      * is not declared, as the desired response is to logout and redirect, rather than to throw
      * an error.
      * 
-     * @param string $dirty_password Input password.
+     * @param string $dirtyPassword Input password.
      * @param string $dirty_otp Input Yubikey one-time password.
      * @param object $yubikey Instance of the TfYubikeyAuthenticator class.
      */
-    public static function twoFactorLogin(string $dirty_password, string $dirty_otp,
+    public static function twoFactorLogin(string $dirtyPassword, string $dirty_otp,
             TfYubikeyAuthenticator $yubikey)
     {
         // Check password, OTP and Yubikey have been supplied
-        if (empty($dirty_password) || empty($dirty_otp) || empty($yubikey)) {
+        if (empty($dirtyPassword) || empty($dirty_otp) || empty($yubikey)) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
@@ -307,11 +307,11 @@ class TfSession
         // Public ID is the first 12 characters of the OTP.
         $dirty_id = mb_substr($dirty_otp, 0, 12, 'UTF-8');
         
-        self::_twoFactorLogin($dirty_id, $dirty_password, $dirty_otp, $yubikey);
+        self::_twoFactorLogin($dirty_id, $dirtyPassword, $dirty_otp, $yubikey);
     }
     
     /** @internal */
-    private static function _twoFactorLogin(string $dirty_id, string $dirty_password, string $dirty_otp,
+    private static function _twoFactorLogin(string $dirty_id, string $dirtyPassword, string $dirty_otp,
             TfYubikeyAuthenticator $yubikey)
     {
         $user = false;
@@ -332,7 +332,7 @@ class TfSession
         }
         
         // First factor authentication: Calculate password hash and compare to the one on file.
-        $passwordHash = self::recursivelyHashPassword($dirty_password, 100000,
+        $passwordHash = self::recursivelyHashPassword($dirtyPassword, 100000,
                 TFISH_SITE_SALT, $user['userSalt']);
         
         if ($passwordHash === $user['passwordHash']) {
@@ -347,7 +347,7 @@ class TfSession
             self::regenerate();
             $_SESSION['TFISH_LOGIN'] = true;
             // Added as a handle for the password change script.
-            $_SESSION['user_id'] = (int) $user['id'];
+            $_SESSION['userId'] = (int) $user['id'];
             header('location: ' . TFISH_ADMIN_URL . "admin.php");
             exit;
         }
@@ -555,10 +555,10 @@ class TfSession
      */
     public static function validateToken(string $token)
     {
-        $clean_token = self::$validator->trimString($token);
+        $cleanToken = self::$validator->trimString($token);
 
         // Valid token.
-        if (!empty($_SESSION['token']) && $_SESSION['token'] === $clean_token) {
+        if (!empty($_SESSION['token']) && $_SESSION['token'] === $cleanToken) {
             return true;
         }
         

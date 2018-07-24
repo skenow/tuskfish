@@ -22,7 +22,7 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify theme set, otherwise 'default' will be used.
 $tfTemplate->setTheme('default');
@@ -31,7 +31,7 @@ $tfTemplate->setTheme('default');
 $tfTemplate->targetFileName = '';
 
 // Validate data and separate the search terms.
-$clean_op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
+$cleanOp = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 
 // Search terms passed in from a pagination control link, in which case it has been previously
 // i) encoded and ii) escaped. This process needs to be reversed.
@@ -48,7 +48,7 @@ $search_type = isset($_REQUEST['search_type']) ? $tfValidator->trimString($_REQU
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
-if ($clean_op && $clean_terms && $search_type) {
+if ($cleanOp && $clean_terms && $search_type) {
     $search_engine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
     $search_engine->setSearchTerms($clean_terms);
     $search_engine->setOperator($search_type);
@@ -63,18 +63,18 @@ if ($clean_op && $clean_terms && $search_type) {
         $tfTemplate->search_results = $search_results;
 
         // Prepare the pagination control, including parameters to be included in the link.
-        $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-        $tf_pagination->setUrl('search');
-        $tf_pagination->setCount($results_count);
-        $tf_pagination->setLimit($tfPreference->searchPagination);
-        $tf_pagination->setStart($start);
-        $tf_pagination->setTag(0);
+        $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $tfPagination->setUrl('search');
+        $tfPagination->setCount($results_count);
+        $tfPagination->setLimit($tfPreference->searchPagination);
+        $tfPagination->setStart($start);
+        $tfPagination->setTag(0);
         $query_parameters = array(
             'op' => 'search',
             'search_type' => $search_type,
             'query' => $clean_terms);
-        $tf_pagination->setExtraParams($query_parameters);
-        $tfTemplate->pagination = $tf_pagination->getPaginationControl();
+        $tfPagination->setExtraParams($query_parameters);
+        $tfTemplate->pagination = $tfPagination->getPaginationControl();
     } else {
         $tfTemplate->search_results = false;
     }

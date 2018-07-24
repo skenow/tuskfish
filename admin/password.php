@@ -24,22 +24,22 @@ $tfTemplate->setTheme('admin');
 
 // Validate input parameters. Note that passwords are not sanitised in any way.
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-$dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
-$dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword'] : false;
-$clean_token = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
+$dirtyPassword = isset($_POST['password']) ? $_POST['password'] : false;
+$dirtyConfirmation = isset($_POST['confirmPassword']) ? $_POST['confirmPassword'] : false;
+$cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.
 if (in_array($op, array('submit', false), true)) {
     switch ($op) {
         case "submit":
-            TfSession::validateToken($clean_token); // CSRF check.
+            TfSession::validateToken($cleanToken); // CSRF check.
             $error = [];
             $passwordQuality = [];
 
             // Get the admin user details.
-            $user_id = (int) $_SESSION['user_id'];
+            $userId = (int) $_SESSION['userId'];
             $statement = $tfDatabase->preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
-            $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
+            $statement->bindParam(':id', $userId, PDO::PARAM_INT);
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
@@ -49,18 +49,18 @@ if (in_array($op, array('submit', false), true)) {
             }
 
             // Check both password and confirmation submitted.
-            if (empty($dirty_password) || empty($dirty_confirmation)) {
+            if (empty($dirtyPassword) || empty($dirtyConfirmation)) {
                 $error[] = TFISH_ENTER_PASSWORD_TWICE;
             }
 
             // Check that password and confirmation match.
-            if ($dirty_password !== $dirty_confirmation) {
+            if ($dirtyPassword !== $dirtyConfirmation) {
                 $error[] = TFISH_PASSWORDS_DO_NOT_MATCH;
             }
 
             // Check that password meets minimum strength requirements.
             $securityUtility = new TfSecurityUtility();
-            $passwordQuality = $securityUtility->checkPasswordStrength($dirty_password);
+            $passwordQuality = $securityUtility->checkPasswordStrength($dirtyPassword);
             
             if ($passwordQuality['strong'] === false) {
                 unset($passwordQuality['strong']);
@@ -72,7 +72,7 @@ if (in_array($op, array('submit', false), true)) {
             // Display errors.
             if (!empty($error)) {
                 $tfTemplate->report = $error;
-                $tfTemplate->form = TFISH_FORM_PATH . "change_password.html";
+                $tfTemplate->form = TFISH_FORM_PATH . "changePassword.html";
                 $tfTemplate->tfMainContent = $tfTemplate->render('form');
             }
 
@@ -81,13 +81,13 @@ if (in_array($op, array('submit', false), true)) {
              */
             if (empty($error)) {
                 $passwordHash = '';
-                $passwordHash = TfSession::recursivelyHashPassword($dirty_password, 
+                $passwordHash = TfSession::recursivelyHashPassword($dirtyPassword, 
                         100000, TFISH_SITE_SALT, $user['userSalt']);
                 $tfTemplate->backUrl = 'admin.php';
                     $tfTemplate->form = TFISH_FORM_PATH . "response.html";
 
                 if ($passwordHash) {
-                    $result = $tfDatabase->update('user', $user_id, 
+                    $result = $tfDatabase->update('user', $userId, 
                             array('passwordHash' => $passwordHash));
                     
                     // Display response.
@@ -111,7 +111,7 @@ if (in_array($op, array('submit', false), true)) {
             break;
 
         default:
-            $tfTemplate->form = TFISH_FORM_PATH . "change_password.html";
+            $tfTemplate->form = TFISH_FORM_PATH . "changePassword.html";
             $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
     }

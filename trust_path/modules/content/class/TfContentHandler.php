@@ -74,9 +74,9 @@ class TfContentHandler
         }
 
         // Check the content type is whitelisted.
-        $type_whitelist = $this->getTypes();
+        $typeWhitelist = $this->getTypes();
         
-        if (!empty($row['type']) && array_key_exists($row['type'], $type_whitelist)) {
+        if (!empty($row['type']) && array_key_exists($row['type'], $typeWhitelist)) {
             $contentObject = new $row['type']($this->validator);
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -250,9 +250,9 @@ class TfContentHandler
             
             if ($clean_filename) {
                 $key_values['media'] = $clean_filename;
-                $mimetype_whitelist = $obj->getListOfPermittedUploadMimetypes();
+                $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
                 $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
-                $key_values['format'] = $mimetype_whitelist[$extension];
+                $key_values['format'] = $mimetypeWhitelist[$extension];
                 $key_values['fileSize'] = $_FILES['media']['size'];
             }
         }
@@ -322,8 +322,8 @@ class TfContentHandler
     {
         $tags = $distinct_tags = array();
 
-        $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
-        $tags = $this->getTagList($clean_online_only);
+        $cleanOnline_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
+        $tags = $this->getTagList($cleanOnline_only);
         
         if (empty($tags)) {
             return false;
@@ -691,12 +691,12 @@ class TfContentHandler
     {
         $tags = array();
         $statement = false;
-        $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
+        $cleanOnline_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
         $columns = array('id', 'title');
         $criteria = $this->criteria_factory->getCriteria();
         $criteria->add($this->item_factory->getItem('type', 'TfTag'));
         
-        if ($clean_online_only) {
+        if ($cleanOnline_only) {
             $criteria->add($this->item_factory->getItem('online', true));
         }
 
@@ -1060,7 +1060,7 @@ class TfContentHandler
                 $clean_filename = '';
                 
                 // Get a whitelist of permitted mimetypes.
-                $mimetype_whitelist = $obj->getListOfPermittedUploadMimetypes();
+                $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
                 
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
@@ -1076,7 +1076,7 @@ class TfContentHandler
 
                         // Set values of new media file.
                         $key_values['media'] = $clean_filename;
-                        $key_values['format'] = $mimetype_whitelist[$extension];
+                        $key_values['format'] = $mimetypeWhitelist[$extension];
                         $key_values['fileSize'] = $_FILES['media']['size'];
 
                         // Delete any old media file.

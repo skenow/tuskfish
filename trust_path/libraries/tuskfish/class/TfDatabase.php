@@ -191,7 +191,7 @@ class TfDatabase
         $clean_table = $this->validateTableName($table);
         
         if ($this->validator->isArray($columns) && !empty($columns)) {
-            $type_whitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
+            $typeWhitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
             
             foreach ($columns as $key => $value) {
                 $key = $this->escapeIdentifier($key);
@@ -201,7 +201,7 @@ class TfDatabase
                     exit;
                 }
                 
-                if (!in_array($value, $type_whitelist, true)) {
+                if (!in_array($value, $typeWhitelist, true)) {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                     exit;
                 }
@@ -586,11 +586,11 @@ class TfDatabase
     
     private function renderOperator(string $operator)
     {
-        $clean_operator = $this->validator->trimString($operator);
+        $cleanOperator = $this->validator->trimString($operator);
         $permitted_operators = array('=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
         
-        if (in_array($clean_operator, $permitted_operators, true)) {
-            return $clean_operator;
+        if (in_array($cleanOperator, $permitted_operators, true)) {
+            return $cleanOperator;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }

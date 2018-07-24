@@ -20,7 +20,7 @@ declare(strict_types=1);
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Get a generic handler.
 $contentHandler = $contentHandlerFactory->getHandler('content');

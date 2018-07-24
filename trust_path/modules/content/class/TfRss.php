@@ -145,10 +145,10 @@ class TfRss
     
     public function setManagingEditor(string $email)
     {
-        $clean_email = $this->validator->trimString($email);
+        $cleanEmail = $this->validator->trimString($email);
 
-        if ($this->validator->isEmail($clean_email)) {
-            $this->managing_editor = $clean_email;
+        if ($this->validator->isEmail($cleanEmail)) {
+            $this->managing_editor = $cleanEmail;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }
@@ -168,10 +168,10 @@ class TfRss
     
     public function setWebmaster(string $email)
     {
-        $clean_email = $this->validator->trimString($email);
+        $cleanEmail = $this->validator->trimString($email);
 
-        if ($this->validator->isEmail($clean_email)) {
-            $this->webmaster = $clean_email;
+        if ($this->validator->isEmail($cleanEmail)) {
+            $this->webmaster = $cleanEmail;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }

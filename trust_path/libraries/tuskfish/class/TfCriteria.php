@@ -170,18 +170,18 @@ class TfCriteria
     public function setTag(array $tags)
     {
         if ($this->validator->isArray($tags)) {
-            $clean_tags = array();
+            $cleanTags = array();
 
             foreach ($tags as $tag) {
                 if ($this->validator->isInt($tag, 1)) {
-                    $clean_tags[] = (int) $tag;
+                    $cleanTags[] = (int) $tag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                 }
                 unset($tag);
             }
 
-            $this->tag = $clean_tags;
+            $this->tag = $cleanTags;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }

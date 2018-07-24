@@ -652,11 +652,11 @@ class TfContentObject
             $clean_media_filename = $this->validator->trimString($_FILES['media']['name']);
             
             if ($clean_media_filename) {
-                $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
+                $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
                 $extension = mb_strtolower(pathinfo($clean_media_filename, PATHINFO_EXTENSION), 'UTF-8');
                 
                 $this->setMedia($clean_media_filename);
-                $this->setFormat($mimetype_whitelist[$extension]);
+                $this->setFormat($mimetypeWhitelist[$extension]);
                 $this->setFileSize($_FILES['media']['size']);
             }
         }
@@ -705,8 +705,8 @@ class TfContentObject
                 break;
 
             case "format": // Output the file extension as user-friendly "mimetype".
-                $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
-                $mimetype = array_search($this->$clean_property, $mimetype_whitelist);
+                $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
+                $mimetype = array_search($this->$clean_property, $mimetypeWhitelist);
 
                 if (!empty($mimetype)) {
                     return $mimetype;
@@ -914,8 +914,8 @@ class TfContentObject
     {
         $format = (string) $this->validator->trimString($format);
 
-        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
-        if (!empty($format) && !in_array($format, $mimetype_whitelist, true)) {
+        $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
+        if (!empty($format) && !in_array($format, $mimetypeWhitelist, true)) {
             trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
         }
         
@@ -959,10 +959,10 @@ class TfContentObject
         }
 
         // Check image file is a permitted mimetype.
-        $mimetype_whitelist = $this->getListOfAllowedImageMimetypes();
+        $mimetypeWhitelist = $this->getListOfAllowedImageMimetypes();
         $extension = mb_strtolower(pathinfo($image, PATHINFO_EXTENSION), 'UTF-8');
         
-        if (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist)) {
+        if (!empty($extension) && !array_key_exists($extension, $mimetypeWhitelist)) {
             $this->image = '';
             trigger_error(TFISH_ERROR_ILLEGAL_MIMETYPE, E_USER_ERROR);
         } else {
@@ -993,11 +993,11 @@ class TfContentObject
         }
 
         // Check media file is a permitted mimetype.
-        $mimetype_whitelist = $this->getListOfPermittedUploadMimetypes();
+        $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
         $extension = mb_strtolower(pathinfo($media, PATHINFO_EXTENSION), 'UTF-8');
 
         if (empty($extension) 
-                || (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist))) {
+                || (!empty($extension) && !array_key_exists($extension, $mimetypeWhitelist))) {
             $this->media = '';
             $this->format = '';
             $this->fileSize = '';
@@ -1088,20 +1088,20 @@ class TfContentObject
     public function setTags(array $tags)
     {
         if ($this->validator->isArray($tags)) {
-            $clean_tags = array();
+            $cleanTags = array();
 
             foreach ($tags as $tag) {
-                $clean_tag = (int) $tag;
+                $cleanTag = (int) $tag;
 
-                if ($this->validator->isInt($clean_tag, 1)) {
-                    $clean_tags[] = $clean_tag;
+                if ($this->validator->isInt($cleanTag, 1)) {
+                    $cleanTags[] = $cleanTag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                 }
-                unset($clean_tag);
+                unset($cleanTag);
             }
 
-            $this->tags = $clean_tags;
+            $this->tags = $cleanTags;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }

@@ -17,7 +17,7 @@ declare(strict_types=1);
 // Boot! Set file paths, preferences and connect to database.
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
-require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify the admin theme you want to use.
 $tfTemplate->setTheme('admin');
@@ -36,7 +36,7 @@ if (in_array($op, $optionsWhitelist, true)) {
     
 // Cross-site request forgery check.
 if (!in_array($op, $optionsWhitelist, true)) {
-    TfSession::validateToken($clean_token);
+    TfSession::validateToken($cleanToken);
 }
 
 // Business logic goes here.

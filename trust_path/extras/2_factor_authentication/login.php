@@ -68,28 +68,28 @@ $tfTemplate->setTheme('signin');
 $tfTemplate->pageTitle = TFISH_LOGIN;
 
 // Initialise and whitelist allowed parameters
-$clean_op = false;
-$dirty_password = false;
+$cleanOp = false;
+$dirtyPassword = false;
 $dirty_otp = false;
-$allowed_options = array("login", "logout", "");
+$allowedOptions = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NOT sanitised and therefore it is dangerous.
 if (!empty($_POST['op'])) {
     $op = $tfValidator->trimString($_POST['op']);
-    $clean_op = $tfValidator->isAlpha($op) ? $op : false;
+    $cleanOp = $tfValidator->isAlpha($op) ? $op : false;
 } elseif (!empty($_GET['op'])) {
     $op = $tfValidator->trimString($_GET['op']);
-    $clean_op = $tfValidator->isAlpha($op) ? $op : false;
+    $cleanOp = $tfValidator->isAlpha($op) ? $op : false;
 }
 
-$dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
+$dirtyPassword = isset($_POST['password']) ? $_POST['password'] : false;
 $dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubikey_otp'] : false;
 
-if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
-    switch ($clean_op) {
+if (isset($cleanOp) && in_array($cleanOp, $allowedOptions, true)) {
+    switch ($cleanOp) {
         case "login":
             $yubikey = new TfYubikeyAuthenticator($tfValidator);
-            TfSession::twoFactorLogin($dirty_password, $dirty_otp, $yubikey);
+            TfSession::twoFactorLogin($dirtyPassword, $dirty_otp, $yubikey);
             break;
 
         case "logout":

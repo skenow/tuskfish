@@ -84,31 +84,31 @@ $tfTemplate->setTheme('signin');
 $tfTemplate->pageTitle = TFISH_LOGIN;
 
 // Initialise and whitelist allowed parameters
-$clean_op = $clean_email = $dirty_password = '';
-$allowed_options = array("login", "logout", "");
+$cleanOp = $cleanEmail = $dirtyPassword = '';
+$allowedOptions = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NEVER sanitised and therefore dangerous.
 if (!empty($_POST['op'])) {
     $op = $tfValidator->trimString($_POST['op']);
-    $clean_op = $tfValidator->isAlpha($op) ? $op : '';
+    $cleanOp = $tfValidator->isAlpha($op) ? $op : '';
 } elseif (!empty($_GET['op'])) {
     $op = $tfValidator->trimString($_GET['op']);
-    $clean_op = $tfValidator->isAlpha($op) ? $op : '';
+    $cleanOp = $tfValidator->isAlpha($op) ? $op : '';
 }
 
 if (isset($_POST['email'])) {
     $email = $tfValidator->trimString($_POST['email']);
-    $clean_email = $tfValidator->isEmail($email) ? $email : '';
+    $cleanEmail = $tfValidator->isEmail($email) ? $email : '';
 }
 
-$dirty_password = isset($_POST['password']) ? $_POST['password'] : '';
-$clean_token = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
+$dirtyPassword = isset($_POST['password']) ? $_POST['password'] : '';
+$cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
-if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
-    switch ($clean_op) {
+if (isset($cleanOp) && in_array($cleanOp, $allowedOptions, true)) {
+    switch ($cleanOp) {
         case "login":
-            TfSession::validateToken($clean_token); // CSRF check.
-            TfSession::login($clean_email, $dirty_password);
+            TfSession::validateToken($cleanToken); // CSRF check.
+            TfSession::login($cleanEmail, $dirtyPassword);
             break;
 
         case "logout":

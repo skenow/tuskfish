@@ -75,10 +75,10 @@ class TfUser
     
     public function setAdminEmail(string $email)
     {
-        $clean_email = $this->validator->trimString($email);
+        $cleanEmail = $this->validator->trimString($email);
 
-        if ($this->validator->isEmail($clean_email)) {
-            $this->adminEmail = $clean_email;
+        if ($this->validator->isEmail($cleanEmail)) {
+            $this->adminEmail = $cleanEmail;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }

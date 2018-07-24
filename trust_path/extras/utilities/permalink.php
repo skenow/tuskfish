@@ -28,7 +28,7 @@ $targetFileName = 'permalink';
 
 // Validate input parameters.
 $cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 
 // View single object description.
 if ($cleanId) {
@@ -77,8 +77,8 @@ if ($cleanId) {
         $criteria = $tfCriteriaFactory->getCriteria();
         $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
         $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
-        if ($clean_start) {
-            $criteria->setOffset($clean_start);
+        if ($cleanStart) {
+            $criteria->setOffset($cleanStart);
         }
         $criteria->setLimit($tfPreference->userPagination);
         $criteria->setOrder('date');
@@ -87,19 +87,19 @@ if ($cleanId) {
         $criteria->setSecondaryOrderType('DESC');
 
         // Prepare pagination control.
-        $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
-        $tf_pagination->setUrl($targetFileName);
-        $tf_pagination->setCount($contentHandler->getCount($criteria));
-        $tf_pagination->setLimit($tfPreference->userPagination);
-        $tf_pagination->setStart($clean_start);
-        $tf_pagination->setTag(0);
+        $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $tfPagination->setUrl($targetFileName);
+        $tfPagination->setCount($contentHandler->getCount($criteria));
+        $tfPagination->setLimit($tfPreference->userPagination);
+        $tfPagination->setStart($cleanStart);
+        $tfPagination->setTag(0);
         $tfTemplate->setExtraParams(array('id' => $cleanId));
-        $tfTemplate->pagination = $tf_pagination->getPaginationControl();
+        $tfTemplate->pagination = $tfPagination->getPaginationControl();
 
         // Retrieve content objects and assign to template.
-        $first_children = $contentHandler->getObjects($criteria);
-        if (!empty($first_children)) {
-            $tfTemplate->first_children = $first_children;
+        $firstChildren = $contentHandler->getObjects($criteria);
+        if (!empty($firstChildren)) {
+            $tfTemplate->firstChildren = $firstChildren;
         }
 
         // Render template.
