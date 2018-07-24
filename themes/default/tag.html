@@ -74,9 +74,9 @@
 
 <!-- Display other works linked to this tag -->    
 <?php if (!empty($firstChildren)): ?>
-<?php if (isset($collection_pagination)): ?>
+<?php if (isset($collectionPagination)): ?>
 <div class="d-flex justify-content-end collection-pagination-top clearfix">
-  <?php echo $collection_pagination; ?>
+  <?php echo $collectionPagination; ?>
 </div>
 <?php endif; ?>
 <div>
@@ -108,9 +108,9 @@
 </div>
 
 <!-- Intra-collection pagination -->
-<?php if (isset($collection_pagination)): ?>
+<?php if (isset($collectionPagination)): ?>
 <div class="d-flex justify-content-end collection-pagination-bottom clearfix">
-  <?php echo $collection_pagination; ?>
+  <?php echo $collectionPagination; ?>
 </div>
 <?php endif; ?>
 <?php endif; ?>

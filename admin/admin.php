@@ -440,7 +440,7 @@ if (in_array($op, $optionsWhitelist, true)) {
                         $tfPagination->setStart($cleanStart);
                         $tfPagination->setTag(0);
                         $tfPagination->setExtraParams(array('id' => $cleanId));
-                        $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
+                        $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
 
                         // Retrieve content objects and assign to template.
                         $firstChildren = $contentHandler->getObjects($criteria);

@@ -70,7 +70,7 @@ $tfTemplate->pageTitle = TFISH_LOGIN;
 // Initialise and whitelist allowed parameters
 $cleanOp = false;
 $dirtyPassword = false;
-$dirty_otp = false;
+$dirtyOtp = false;
 $allowedOptions = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NOT sanitised and therefore it is dangerous.
@@ -83,13 +83,13 @@ if (!empty($_POST['op'])) {
 }
 
 $dirtyPassword = isset($_POST['password']) ? $_POST['password'] : false;
-$dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubikey_otp'] : false;
+$dirtyOtp = isset($_POST['yubikeyOtp']) ? $_POST['yubikeyOtp'] : false;
 
 if (isset($cleanOp) && in_array($cleanOp, $allowedOptions, true)) {
     switch ($cleanOp) {
         case "login":
             $yubikey = new TfYubikeyAuthenticator($tfValidator);
-            TfSession::twoFactorLogin($dirtyPassword, $dirty_otp, $yubikey);
+            TfSession::twoFactorLogin($dirtyPassword, $dirtyOtp, $yubikey);
             break;
 
         case "logout":

@@ -43,7 +43,7 @@ declare(strict_types=1);
  * 1. More than 15 characters long.
  * 2. At least one upper and lower case letter, number and symbol (!@#$%^& etc). 
  */
-$new_password = "";
+$newPassword = "";
 
 /**
  * Enter your site salt here. You will find it in the file below: 
@@ -62,11 +62,11 @@ $userSalt = "";
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 // You filled in all the fields, right?
-if (empty($new_password) || empty($siteSalt) || empty($userSalt)) {
+if (empty($newPassword) || empty($siteSalt) || empty($userSalt)) {
 
     echo '<h2>Error(s)</h2>';
 
-    if (empty($new_password)) {
+    if (empty($newPassword)) {
         echo '<p>You forgot to enter the <i>new password</i> in the configuration section of the script.</p>';
     }
 
@@ -82,11 +82,11 @@ if (empty($new_password) || empty($siteSalt) || empty($userSalt)) {
 }
 
 // Check password strength.
-$passwordQuality = checkPasswordStrength($new_password);
+$passwordQuality = checkPasswordStrength($newPassword);
 if ($passwordQuality['strong'] === true) {
 
     // Salt and iteratively hash the password 100,000 times to resist brute force attacks
-    $passwordHash = recursivelyHashPassword($new_password, 100000, $siteSalt, $userSalt);
+    $passwordHash = recursivelyHashPassword($newPassword, 100000, $siteSalt, $userSalt);
 
     echo '<h2>Here is your new password hash</h2>';
     echo '<p>' . $passwordHash . '</p>';

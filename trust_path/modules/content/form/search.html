@@ -16,7 +16,7 @@
     
     <!-- Search type -->
     <div class="col-md-6 offset-md-3 form-group input-group">
-      <select class="form-control custom-select is-valid" name="search_type" id="search_type">
+      <select class="form-control custom-select is-valid" name="searchType" id="searchType">
         <option <?php if (isset($type) && $type === "AND") echo "selected"; ?> value="AND"><?php echo TFISH_SEARCH_ALL; ?></option>
         <option <?php if (isset($type) && $type === "OR") echo "selected"; ?> value="OR"><?php echo TFISH_SEARCH_ANY; ?></option>
         <option <?php if (isset($type) && $type === "exact") echo "selected"; ?> value="exact"><?php echo TFISH_SEARCH_EXACT; ?></option>	

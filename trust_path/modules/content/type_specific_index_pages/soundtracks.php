@@ -43,7 +43,7 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 // View single object description.
 if ($cleanId) {
@@ -55,7 +55,7 @@ if ($cleanId) {
         $contentHandler->updateCounter($cleanId);
         
         // Check if cached page is available.
-        $tfCache->getCachedPage($basename, $cache_parameters);
+        $tfCache->getCachedPage($basename, $cacheParameters);
         
         // Assign content to template.
         $tfTemplate->content = $content;
@@ -110,7 +110,7 @@ if ($cleanId) {
 // View index page of multiple objects (teasers).
 } else {
     // Check if cached page is available.
-    $tfCache->getCachedPage($basename, $cache_parameters);
+    $tfCache->getCachedPage($basename, $cacheParameters);
     
     if ($cleanStart)
         $criteria->setOffset($cleanStart);

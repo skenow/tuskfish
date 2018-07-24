@@ -23,7 +23,7 @@ require_once TFISH_PATH . "tfHeader.php";
 $tfTemplate->setTheme('default');
 
 $tfTemplate->pageTitle = TFISH_INVALID_TOKEN;
-$tfTemplate->error_message = TFISH_SORRY_INVALID_TOKEN;
+$tfTemplate->errorMessage = TFISH_SORRY_INVALID_TOKEN;
 $tfTemplate->tfMainContent = $tfTemplate->render('error');
 
 /**

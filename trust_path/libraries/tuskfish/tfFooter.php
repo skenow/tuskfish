@@ -27,7 +27,7 @@ $tfDatabase->close();
 
 // Write the contents of the buffer to the cache.
 if ($tfPreference->enableCache && isset($basename)) {
-    $tfCache->cachePage($basename, $cache_parameters, ob_get_contents());
+    $tfCache->cachePage($basename, $cacheParameters, ob_get_contents());
 }
 
 // Flush the output buffer to screen and clear it.

@@ -272,28 +272,28 @@ class TfSession
      * an error.
      * 
      * @param string $dirtyPassword Input password.
-     * @param string $dirty_otp Input Yubikey one-time password.
+     * @param string $dirtyOtp Input Yubikey one-time password.
      * @param object $yubikey Instance of the TfYubikeyAuthenticator class.
      */
-    public static function twoFactorLogin(string $dirtyPassword, string $dirty_otp,
+    public static function twoFactorLogin(string $dirtyPassword, string $dirtyOtp,
             TfYubikeyAuthenticator $yubikey)
     {
         // Check password, OTP and Yubikey have been supplied
-        if (empty($dirtyPassword) || empty($dirty_otp) || empty($yubikey)) {
+        if (empty($dirtyPassword) || empty($dirtyOtp) || empty($yubikey)) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
         
-        $dirty_otp = self::$validator->trimString($dirty_otp);
+        $dirtyOtp = self::$validator->trimString($dirtyOtp);
         
         // Yubikey OTP should be 44 characters long.
-        if (mb_strlen($dirty_otp, "UTF-8") != 44) {
+        if (mb_strlen($dirtyOtp, "UTF-8") != 44) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
         
         // Yubikey OTP should be alphabetic characters only.
-        if (!self::$validator->isAlpha($dirty_otp)) {
+        if (!self::$validator->isAlpha($dirtyOtp)) {
             self::logout(TFISH_ADMIN_URL . "login.php");
             exit;
         }
@@ -305,13 +305,13 @@ class TfSession
         }
         
         // Public ID is the first 12 characters of the OTP.
-        $dirty_id = mb_substr($dirty_otp, 0, 12, 'UTF-8');
+        $dirty_id = mb_substr($dirtyOtp, 0, 12, 'UTF-8');
         
-        self::_twoFactorLogin($dirty_id, $dirtyPassword, $dirty_otp, $yubikey);
+        self::_twoFactorLogin($dirty_id, $dirtyPassword, $dirtyOtp, $yubikey);
     }
     
     /** @internal */
-    private static function _twoFactorLogin(string $dirty_id, string $dirtyPassword, string $dirty_otp,
+    private static function _twoFactorLogin(string $dirty_id, string $dirtyPassword, string $dirtyOtp,
             TfYubikeyAuthenticator $yubikey)
     {
         $user = false;
@@ -340,7 +340,7 @@ class TfSession
         }
         
         // Second factor authentication: Submit one-time password to Yubico authentication server.
-        $second_factor = $yubikey->verify($dirty_otp);
+        $second_factor = $yubikey->verify($dirtyOtp);
         
         // If both checks are good regenerate session due to priviledge escalation and login.
         if ($first_factor === true && $second_factor === true) {

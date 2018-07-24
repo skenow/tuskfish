@@ -30,8 +30,8 @@ $contentHandler = $contentHandlerFactory->getHandler('content');
  */
 
 // Initialise.
-$online_contentIds = array();
-$offline_tagIds = array();
+$onlineContentIds = array();
+$offlineTagIds = array();
 $columns = array('id', 'seo');
 $sitemap = '';
 
@@ -49,10 +49,10 @@ $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag'));
 $criteria->add(new TfCriteriaItem($tfValidator, 'online', 0));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$offline_tagIds = $contentHandler->getListOfObjectTitles($criteria);
+$offlineTagIds = $contentHandler->getListOfObjectTitles($criteria);
 
 // Combine the list
-$contentIds = $contentIds + $offline_tagIds;
+$contentIds = $contentIds + $offlineTagIds;
 
 // Generate the URLs using TFISH_URL as a base.
 foreach ($contentIds as $value) {

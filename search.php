@@ -44,14 +44,14 @@ if (isset($_REQUEST['query'])) {
             ? $tfValidator->trimString($_REQUEST['search_terms']) : false;
 }
 
-$search_type = isset($_REQUEST['search_type']) ? $tfValidator->trimString($_REQUEST['search_type']) : false;
+$searchType = isset($_REQUEST['searchType']) ? $tfValidator->trimString($_REQUEST['searchType']) : false;
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
-if ($cleanOp && $clean_terms && $search_type) {
+if ($cleanOp && $clean_terms && $searchType) {
     $search_engine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
     $search_engine->setSearchTerms($clean_terms);
-    $search_engine->setOperator($search_type);
+    $search_engine->setOperator($searchType);
     $search_engine->setOffset($start);
     $search_results = $search_engine->searchContent();
 
@@ -71,7 +71,7 @@ if ($cleanOp && $clean_terms && $search_type) {
         $tfPagination->setTag(0);
         $query_parameters = array(
             'op' => 'search',
-            'search_type' => $search_type,
+            'searchType' => $searchType,
             'query' => $clean_terms);
         $tfPagination->setExtraParams($query_parameters);
         $tfTemplate->pagination = $tfPagination->getPaginationControl();
@@ -83,7 +83,7 @@ if ($cleanOp && $clean_terms && $search_type) {
 // Assign template variables.
 $tfTemplate->pageTitle = TFISH_SEARCH;
 $tfTemplate->terms = $clean_terms;
-$tfTemplate->type = $search_type;
+$tfTemplate->type = $searchType;
 $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . 'search.html';
 $tfTemplate->tfMainContent = $tfTemplate->render('form');
 

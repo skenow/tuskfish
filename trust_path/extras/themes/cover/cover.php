@@ -28,7 +28,7 @@ $tfTemplate->lead = 'Cover is a one-page template for building simple and beauti
         . 'own.';
 
 // Set button text.
-$tfTemplate->button_text = "Learn more";
+$tfTemplate->buttonText = "Learn more";
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).

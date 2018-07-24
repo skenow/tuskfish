@@ -39,7 +39,7 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 $rss_url = !empty($cleanTag) ? TFISH_RSS_URL . '?tagId=' . $cleanTag : TFISH_RSS_URL;
 
@@ -60,7 +60,7 @@ if ($cleanId) {
         }
 
         // Check if cached page is available.
-        $tfCache->getCachedPage($basename, $cache_parameters);
+        $tfCache->getCachedPage($basename, $cacheParameters);
 
         // Assign content object to template.
         $tfTemplate->content = $content;
@@ -144,7 +144,7 @@ if ($cleanId) {
             $tfPagination->setStart($cleanStart);
             $tfPagination->setTag($cleanTag);
             $tfPagination->setExtraParams(array('id' => $cleanId));
-            $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
+            $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
 
             // Retrieve content objects and assign to template.
             $firstChildren = $contentHandler->getObjects($criteria);
@@ -163,7 +163,7 @@ if ($cleanId) {
 } else {
 
     // Check if cached page is available.
-    $tfCache->getCachedPage($basename, $cache_parameters);
+    $tfCache->getCachedPage($basename, $cacheParameters);
 
     // Page title, customise it as you see fit.
     $tfTemplate->pageTitle = TFISH_LATEST_POSTS;

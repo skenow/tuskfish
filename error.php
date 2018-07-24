@@ -20,7 +20,7 @@ require_once TFISH_PATH . "tfHeader.php";
 $tfTemplate->setTheme('default');
 
 $tfTemplate->pageTitle = TFISH_ERROR;
-$tfTemplate->error_message = TFISH_SORRY_WE_ENCOUNTERED_AN_ERROR;
+$tfTemplate->errorMessage = TFISH_SORRY_WE_ENCOUNTERED_AN_ERROR;
 $tfTemplate->tfMainContent = $tfTemplate->render('error');
 
 /**

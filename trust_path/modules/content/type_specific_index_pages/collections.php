@@ -39,7 +39,7 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 // View single object description.
 if ($cleanId) {
@@ -53,7 +53,7 @@ if ($cleanId) {
         }
         
         // Check if cached page is available.
-        $tfCache->getCachedPage($basename, $cache_parameters);
+        $tfCache->getCachedPage($basename, $cacheParameters);
         
         // Assign content to template.
         $tfTemplate->content = $content;
@@ -128,7 +128,7 @@ if ($cleanId) {
         $tfPagination->setStart($cleanStart);
         $tfPagination->setTag(0);
         $tfPagination->setExtraParams(array('id' => $cleanId));
-        $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
+        $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
 
         // Retrieve content objects and assign to template.
         $firstChildren = $contentHandler->getObjects($criteria);
@@ -146,7 +146,7 @@ if ($cleanId) {
 // View index page of multiple objects (teasers).
 } else {
     // Check if cached page is available.
-    $tfCache->getCachedPage($basename, $cache_parameters);
+    $tfCache->getCachedPage($basename, $cacheParameters);
     
     // Set criteria for selecting content objects.
     $tf_critiera_factory->getCriteria();
@@ -169,7 +169,7 @@ if ($cleanId) {
     $tfPagination->setLimit($tfPreference->userPagination);
     $tfPagination->setStart($cleanStart);
     $tfPagination->setTag(0);
-    $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
+    $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
 
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');

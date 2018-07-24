@@ -52,7 +52,7 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 if ($cleanId) {
     
@@ -64,7 +64,7 @@ if ($cleanId) {
         $contentHandler->updateCounter($cleanId);
         
         // Check if cached page is available.
-        $tfCache->getCachedPage($basename, $cache_parameters);
+        $tfCache->getCachedPage($basename, $cacheParameters);
         
         $tfTemplate->content = $content;
 
@@ -139,7 +139,7 @@ if ($cleanId) {
             $tfPagination->setStart($cleanStart);
             $tfPagination->setTag(0);
             $tfPagination->setExtraParams(array('id' => $cleanId));
-            $tfTemplate->collection_pagination = $tfPagination->getPaginationControl();
+            $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
 
             // Retrieve content objects and assign to template.
             $firstChildren = $contentHandler->getObjects($criteria);

@@ -44,7 +44,7 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cache_parameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 // View single object description.
 if ($cleanId) {
@@ -52,7 +52,7 @@ if ($cleanId) {
     
     if (is_object($content) && $content->online) {        
         // Check if cached page is available.
-        $tfCache->getCachedPage($basename, $cache_parameters);
+        $tfCache->getCachedPage($basename, $cacheParameters);
         
         // Assign content to template. Counter is only updated when a file download is triggered.
         $tfTemplate->content = $content;
@@ -113,7 +113,7 @@ if ($cleanId) {
 // View index page of multiple objects (teasers).
 } else {
     // Check if cached page is available.
-    $tfCache->getCachedPage($basename, $cache_parameters);
+    $tfCache->getCachedPage($basename, $cacheParameters);
     
     if ($cleanStart)
         $criteria->setOffset($cleanStart);
