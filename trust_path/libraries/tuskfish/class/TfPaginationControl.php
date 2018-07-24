@@ -209,8 +209,8 @@ class TfPaginationControl
     
     public function setUrl(string $url)
     {
-        $clean_url = $this->validator->trimString($url);
-        $this->url = $this->validator->isAlnumUnderscore($clean_url) ? $clean_url . '.php'
+        $cleanUrl = $this->validator->trimString($url);
+        $this->url = $this->validator->isAlnumUnderscore($cleanUrl) ? $cleanUrl . '.php'
                 : TFISH_URL;
     }
     

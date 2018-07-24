@@ -233,25 +233,25 @@ class TfContentHandler
         unset($keyValues['validator']);
 
         // Process image and media files before inserting the object, as related fields must be set.
-        $property_whitelist = $obj->getPropertyWhitelist();
+        $propertyWhitelist = $obj->getPropertyWhitelist();
         
-        if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
+        if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
             $filename = $this->validator->trimString($_FILES['image']['name']);
-            $clean_filename = $this->fileHandler->uploadFile($filename, 'image');
+            $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
             
-            if ($clean_filename) {
-                $keyValues['image'] = $clean_filename;
+            if ($cleanFilename) {
+                $keyValues['image'] = $cleanFilename;
             }
         }
 
-        if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
+        if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
             $filename = $this->validator->trimString($_FILES['media']['name']);
-            $clean_filename = $this->fileHandler->uploadFile($filename, 'media');
+            $cleanFilename = $this->fileHandler->uploadFile($filename, 'media');
             
-            if ($clean_filename) {
-                $keyValues['media'] = $clean_filename;
+            if ($cleanFilename) {
+                $keyValues['media'] = $cleanFilename;
                 $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
-                $extension = pathinfo($clean_filename, PATHINFO_EXTENSION);
+                $extension = pathinfo($cleanFilename, PATHINFO_EXTENSION);
                 $keyValues['format'] = $mimetypeWhitelist[$extension];
                 $keyValues['fileSize'] = $_FILES['media']['size'];
             }
@@ -299,9 +299,9 @@ class TfContentHandler
     public function isSanctionedType(string $type)
     {
         $type = $this->validator->trimString($type);
-        $sanctioned_types = $this->getTypes();
+        $sanctionedTypes = $this->getTypes();
         
-        if (array_key_exists($type, $sanctioned_types)) {
+        if (array_key_exists($type, $sanctionedTypes)) {
             return true;
         } else {
             return false;
@@ -311,19 +311,19 @@ class TfContentHandler
     /**
      * Get a list of tags actually in use by other content objects, optionally filtered by type.
      * 
-     * Used primarily to build select box controls. Use $online_only to select only those tags that
+     * Used primarily to build select box controls. Use $onlineOnly to select only those tags that
      * are marked as online (true), or all tags (false).
      * 
      * @param string $type Type of content object.
-     * @param bool $online_only True if marked as online, false if marked as offline.
+     * @param bool $onlineOnly True if marked as online, false if marked as offline.
      * @return array|bool List of tags if available, false if empty.
      */
-    public function getActiveTagList(string $type = null, bool $online_only = true)
+    public function getActiveTagList(string $type = null, bool $onlineOnly = true)
     {
-        $tags = $distinct_tags = array();
+        $tags = $distinctTags = array();
 
-        $cleanOnline_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
-        $tags = $this->getTagList($cleanOnline_only);
+        $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
+        $tags = $this->getTagList($cleanOnlineOnly);
         
         if (empty($tags)) {
             return false;
@@ -346,15 +346,15 @@ class TfContentHandler
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 if (isset($tags[$row['tagId']])) {
-                    $distinct_tags[$row['tagId']] = $tags[$row['tagId']];
+                    $distinctTags[$row['tagId']] = $tags[$row['tagId']];
                 }
             }
         }
 
         // Sort the tags into alphabetical order.
-        asort($distinct_tags);
+        asort($distinctTags);
 
-        return $distinct_tags;
+        return $distinctTags;
     }
 
     /**
@@ -511,7 +511,7 @@ class TfContentHandler
      */
     public function getListOfObjectTitles(TfCriteria $criteria = null)
     {
-        $content_list = array();
+        $contentList = array();
         $columns = array('id', 'title');
 
         if (!isset($criteria)) {
@@ -529,14 +529,14 @@ class TfContentHandler
         
         if ($statement) {
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                $content_list[$row['id']] = $row['title'];
+                $contentList[$row['id']] = $row['title'];
             }
             unset($statement);
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
         }
 
-        return $content_list;
+        return $contentList;
     }
 
     /**
@@ -617,11 +617,11 @@ class TfContentHandler
         // Get the tags for these objects.
         if (!empty($objects)) {
             $taglinks = array();
-            $object_ids = array_keys($objects);
+            $objectIds = array_keys($objects);
 
             $criteria = $this->criteriaFactory->getCriteria();
             
-            foreach ($object_ids as $id) {
+            foreach ($objectIds as $id) {
                 $criteria->add($this->itemFactory->getItem('contentId', (int) $id), "OR");
                 unset($id);
             }
@@ -651,15 +651,15 @@ class TfContentHandler
      * Generates an online/offline select box.
      * 
      * @param int $selected The currently option.
-     * @param string $zero_option The text to display in the zero option of the select box.
+     * @param string $zeroOption The text to display in the zero option of the select box.
      * @return string HTML select box.
      */
     public function getOnlineSelectBox(int $selected = null,
-            string $zero_option = TFISH_ONLINE_STATUS)
+            string $zeroOption = TFISH_ONLINE_STATUS)
     {
         $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 0, 1)) 
                 ? (int) $selected : null; // Offline (0) or online (1)
-        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
+        $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
         $options = array(2 => TFISH_SELECT_STATUS, 1 => TFISH_ONLINE, 0 => TFISH_OFFLINE);
         $selectBox = '<select class="form-control custom-select" name="online" id="online" '
                 . 'onchange="this.form.submit()">';
@@ -687,16 +687,16 @@ class TfContentHandler
      * @param bool Get tags marked online only.
      * @return array Array of tag IDs and titles.
      */
-    public function getTagList(bool $online_only = true)
+    public function getTagList(bool $onlineOnly = true)
     {
         $tags = array();
         $statement = false;
-        $cleanOnline_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
+        $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
         $columns = array('id', 'title');
         $criteria = $this->criteriaFactory->getCriteria();
         $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
         
-        if ($cleanOnline_only) {
+        if ($cleanOnlineOnly) {
             $criteria->add($this->itemFactory->getItem('online', true));
         }
 
@@ -738,12 +738,12 @@ class TfContentHandler
      * Search the filtering criteria ($criteria->items) to see if object type has been set and
      * return the key.
      * 
-     * @param array $criteria_items Array of TfCriteriaItem objects.
+     * @param array $criteriaItems Array of TfCriteriaItem objects.
      * @return int|null Key of relevant TfCriteriaItem or null.
      */
-    protected function getTypeIndex(array $criteria_items)
+    protected function getTypeIndex(array $criteriaItems)
     {
-        foreach ($criteria_items as $key => $item) {
+        foreach ($criteriaItems as $key => $item) {
             if ($item->column === 'type') {
                 return $key;
             }
@@ -756,28 +756,28 @@ class TfContentHandler
      * Get a content type select box.
      * 
      * @param string $selected Currently selected option.
-     * @param string $zero_option The default text to show at top of select box.
+     * @param string $zeroOption The default text to show at top of select box.
      * @return string HTML select box.
      */
-    public function getTypeSelectBox(string $selected = '', string $zero_option = null)
+    public function getTypeSelectBox(string $selected = '', string $zeroOption = null)
     {
         // The text to display in the zero option of the select box.
-        if (isset($zero_option)) {
-            $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
+        if (isset($zeroOption)) {
+            $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
         } else {
-            $clean_zero_option = TFISH_TYPE;
+            $cleanZeroOption = TFISH_TYPE;
         }
         
         $cleanSelected = '';
-        $type_list = $this->getTypes();
+        $typeList = $this->getTypes();
 
         if ($selected && $this->validator->isAlnumUnderscore($selected)) {
-            if (array_key_exists($selected, $type_list)) {
+            if (array_key_exists($selected, $typeList)) {
                 $cleanSelected = $this->validator->trimString($selected);
             }
         }
 
-        $options = array(0 => TFISH_SELECT_TYPE) + $type_list;
+        $options = array(0 => TFISH_SELECT_TYPE) + $typeList;
         $selectBox = '<select class="form-control custom-select" name="type" id="type" '
                 . 'onchange="this.form.submit()">';
         
@@ -800,36 +800,36 @@ class TfContentHandler
      * site will be prepended and .php plus the tagId will be appended.
      * 
      * @param array $tags Array of tag IDs.
-     * @param string $target_filename Name of file for tag links to point at.
+     * @param string $targetFilename Name of file for tag links to point at.
      * @return array Array of HTML tag links.
      */
-    public function makeTagLinks(array $tags, string $target_filename = '')
+    public function makeTagLinks(array $tags, string $targetFilename = '')
     {
-        if (empty($target_filename)) {
-            $clean_filename = TFISH_URL . '?tagId=';
+        if (empty($targetFilename)) {
+            $cleanFilename = TFISH_URL . '?tagId=';
         } else {
-            if (!$this->validator->isAlnumUnderscore($target_filename)) {
+            if (!$this->validator->isAlnumUnderscore($targetFilename)) {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             } else {
-                $target_filename = $this->validator->trimString($target_filename);
-                $clean_filename = TFISH_URL . $this->validator->escapeForXss($target_filename)
+                $targetFilename = $this->validator->trimString($targetFilename);
+                $cleanFilename = TFISH_URL . $this->validator->escapeForXss($targetFilename)
                         . '.php?tagId=';
             }
         }
 
-        $tag_list = $this->getTagList(false);
-        $tag_links = array();
+        $tagList = $this->getTagList(false);
+        $tagLinks = array();
         
         foreach ($tags as $tag) {
-            if ($this->validator->isInt($tag, 1) && array_key_exists($tag, $tag_list)) {
-                $tag_links[$tag] = '<a href="' . $this->validator->escapeForXss($clean_filename . $tag) . '">'
-                        . $this->validator->escapeForXss($tag_list[$tag]) . '</a>';
+            if ($this->validator->isInt($tag, 1) && array_key_exists($tag, $tagList)) {
+                $tagLinks[$tag] = '<a href="' . $this->validator->escapeForXss($cleanFilename . $tag) . '">'
+                        . $this->validator->escapeForXss($tagList[$tag]) . '</a>';
             }
             
             unset($tag);
         }
 
-        return $tag_links;
+        return $tagLinks;
     }
     
     /**
@@ -849,10 +849,10 @@ class TfContentHandler
     public function streamDownloadToBrowser(int $id, string $filename = '')
     {
         $cleanId = $this->validator->isInt($id, 1) ? (int) $id : false;
-        $clean_filename = !empty($filename) ? $this->validator->trimString($filename) : '';
+        $cleanFilename = !empty($filename) ? $this->validator->trimString($filename) : '';
         
         if ($cleanId) {
-            $result = $this->_streamDownloadToBrowser($cleanId, $clean_filename);
+            $result = $this->_streamDownloadToBrowser($cleanId, $cleanFilename);
             if ($result === false) {
                 return false;
             }
@@ -884,16 +884,16 @@ class TfContentHandler
                 ob_start();
                 $filepath = TFISH_MEDIA_PATH . $content->media;
                 $filename = empty($filename) ? pathinfo($filepath, PATHINFO_FILENAME) : $filename;
-                $file_extension = pathinfo($filepath, PATHINFO_EXTENSION);
+                $fileExtension = pathinfo($filepath, PATHINFO_EXTENSION);
                 $fileSize = filesize(TFISH_MEDIA_PATH . $content->media);
-                $mimetype_list = $this->getListOfMimetypes();
-                $mimetype = $mimetype_list[$file_extension];
+                $mimetypeList = $this->getListOfMimetypes();
+                $mimetype = $mimetypeList[$fileExtension];
 
                 // Must call session_write_close() first otherwise the script gets locked.
                 session_write_close();
                 
                 // Output the header.
-                $this->_outputHeader($filename, $file_extension, $mimetype, $fileSize, $filepath);
+                $this->_outputHeader($filename, $fileExtension, $mimetype, $fileSize, $filepath);
                 
             } else {
                 return false;
@@ -904,7 +904,7 @@ class TfContentHandler
         }
     }
     
-    private function _outputHeader($filename, $file_extension, $mimetype, $fileSize, $filepath)
+    private function _outputHeader($filename, $fileExtension, $mimetype, $fileSize, $filepath)
     {
         // Prevent caching
         header("Pragma: public");
@@ -913,7 +913,7 @@ class TfContentHandler
 
         // Set file-specific headers.
         header('Content-Disposition: attachment; filename="' . $filename . '.'
-                . $file_extension . '"');
+                . $fileExtension . '"');
         header("Content-Type: " . $mimetype);
         header("Content-Length: " . $fileSize);
         ob_clean();
@@ -951,7 +951,7 @@ class TfContentHandler
             $keyValues[$property] = null;
         }
 
-        $property_whitelist = $obj->getPropertyWhitelist();
+        $propertyWhitelist = $obj->getPropertyWhitelist();
 
         // Tags are stored in a separate table and must be handled in a separate query.
         unset($keyValues['tags']);
@@ -963,67 +963,67 @@ class TfContentHandler
         // current object state and facilitate clean up of redundant tags, parent references, and
         // image/media files.
         
-        $saved_object = $this->getObject($cleanId);
+        $savedObject = $this->getObject($cleanId);
         
         /**
          * Handle image / media files for existing objects.
          */
-        if (!empty($saved_object)) {
+        if (!empty($savedObject)) {
 
             /**
              * Image property.
              */
             
             // 1. Check if there is an existing image file associated with this content object.
-            $existing_image = $this->_checkImage($saved_object);
+            $existingImage = $this->_checkImage($savedObject);
 
             // 2. Is this content type allowed to have an image property?
-            if (!array_key_exists('image', $property_whitelist)) {
+            if (!array_key_exists('image', $propertyWhitelist)) {
                 $keyValues['image'] = '';
-                if ($existing_image) {
-                    $this->_deleteImage($existing_image);
-                    $existing_image = '';
+                if ($existingImage) {
+                    $this->_deleteImage($existingImage);
+                    $existingImage = '';
                 }
             }
             
             // 3. Has an existing image file been flagged for deletion?
-            if ($existing_image) {
+            if ($existingImage) {
                 if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
                     $keyValues['image'] = '';
-                    $this->_deleteImage($existing_image);
-                    $existing_image = '';
+                    $this->_deleteImage($existingImage);
+                    $existingImage = '';
                 }
             }
             
             // 4. Check if a new image file has been uploaded by looking in $_FILES.
-            if (array_key_exists('image', $property_whitelist)) {
+            if (array_key_exists('image', $propertyWhitelist)) {
 
                 if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
                     $filename = $this->validator->trimString($_FILES['image']['name']);
-                    $clean_filename = $this->fileHandler->uploadFile($filename, 'image');
+                    $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
                     
-                    if ($clean_filename) {
-                        $keyValues['image'] = $clean_filename;
+                    if ($cleanFilename) {
+                        $keyValues['image'] = $cleanFilename;
                         
                         // Delete old image file, if any.
-                        if ($existing_image) {
-                            $this->_deleteImage($existing_image);
+                        if ($existingImage) {
+                            $this->_deleteImage($existingImage);
                         }
                     } else {
                         $keyValues['image'] = '';
                     }
                     
                 } else { // No new image, use the existing file name.
-                    $keyValues['image'] = $existing_image;
+                    $keyValues['image'] = $existingImage;
                 }
             }
 
             // If the updated object has no image attached, or has been instructed to delete
             // attached image, delete any old image files.
-            if ($existing_image &&
+            if ($existingImage &&
                     ((!isset($keyValues['image']) || empty($keyValues['image']))
                     || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
-                $this->_deleteImage($existing_image);
+                $this->_deleteImage($existingImage);
             }
 
             /**
@@ -1031,33 +1031,33 @@ class TfContentHandler
              */
             
             // 1. Check if there is an existing media file associated with this content object.
-            $existing_media = $this->_checkMedia($saved_object);
+            $existingMedia = $this->_checkMedia($savedObject);
             
             // 2. Is this content type allowed to have a media property?
-            if (!array_key_exists('media', $property_whitelist)) {
+            if (!array_key_exists('media', $propertyWhitelist)) {
                 $keyValues['media'] = '';
                 $keyValues['format'] = '';
                 $keyValues['fileSize'] = '';
-                if ($existing_media) {
-                    $this->_deleteMedia($existing_media);
-                    $existing_media = '';
+                if ($existingMedia) {
+                    $this->_deleteMedia($existingMedia);
+                    $existingMedia = '';
                 }
             }
             
             // 3. Has existing media been flagged for deletion?
-            if ($existing_media) {
+            if ($existingMedia) {
                 if (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])) {
                     $keyValues['media'] = '';
                     $keyValues['format'] = '';
                     $keyValues['fileSize'] = '';
-                    $this->_deleteMedia($existing_media);
-                    $existing_media = '';
+                    $this->_deleteMedia($existingMedia);
+                    $existingMedia = '';
                 }
             }
             
             // 4. Process media file.
-            if (array_key_exists('media', $property_whitelist)) {
-                $clean_filename = '';
+            if (array_key_exists('media', $propertyWhitelist)) {
+                $cleanFilename = '';
                 
                 // Get a whitelist of permitted mimetypes.
                 $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
@@ -1065,30 +1065,30 @@ class TfContentHandler
                 // Get name of newly uploaded file (overwrites old one).
                 if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
                     $filename = $this->validator->trimString($_FILES['media']['name']);
-                    $clean_filename = $this->fileHandler->uploadFile($filename, 'media'); 
+                    $cleanFilename = $this->fileHandler->uploadFile($filename, 'media'); 
                 } else {
-                    $clean_filename = $existing_media;
+                    $cleanFilename = $existingMedia;
                 }
 
-                if ($clean_filename) {
+                if ($cleanFilename) {
                     if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
-                        $extension = mb_strtolower(pathinfo($clean_filename, PATHINFO_EXTENSION), 'UTF-8');
+                        $extension = mb_strtolower(pathinfo($cleanFilename, PATHINFO_EXTENSION), 'UTF-8');
 
                         // Set values of new media file.
-                        $keyValues['media'] = $clean_filename;
+                        $keyValues['media'] = $cleanFilename;
                         $keyValues['format'] = $mimetypeWhitelist[$extension];
                         $keyValues['fileSize'] = $_FILES['media']['size'];
 
                         // Delete any old media file.
-                        if ($existing_media) {
-                            $this->_deleteMedia($existing_media);
-                            $existing_media = '';
+                        if ($existingMedia) {
+                            $this->_deleteMedia($existingMedia);
+                            $existingMedia = '';
                         }
                     // No new media, use the existing file name. Still need to validate it as the
                     // content type may have changed.
                     } else {
-                        if ($existing_media) {
-                            $keyValues['media'] = $existing_media;
+                        if ($existingMedia) {
+                            $keyValues['media'] = $existingMedia;
                             $keyValues['format'] = $obj->format;
                             $keyValues['fileSize'] = $obj->fileSize;
                         }
@@ -1099,9 +1099,9 @@ class TfContentHandler
                     $keyValues['fileSize'] = '';
 
                     // Delete any old media file.
-                    if ($existing_media) {
-                        $this->_deleteMedia($existing_media);
-                        $existing_media = '';
+                    if ($existingMedia) {
+                        $this->_deleteMedia($existingMedia);
+                        $existingMedia = '';
                     }
                 }
             }
@@ -1117,10 +1117,10 @@ class TfContentHandler
         
         // Check if this object used to be a collection. If it has been changed to something else
         // clean up any parental references to it.
-        if ($keyValues['type'] !== 'TfCollection' && !empty($saved_object)) {
-            $ex_collection = $this->_checkExCollection($saved_object);
+        if ($keyValues['type'] !== 'TfCollection' && !empty($savedObject)) {
+            $exCollection = $this->_checkExCollection($savedObject);
             
-            if ($ex_collection === true) {
+            if ($exCollection === true) {
                 $result = $this->deleteParentalReferences($cleanId);
                 
                 if (!$result) {

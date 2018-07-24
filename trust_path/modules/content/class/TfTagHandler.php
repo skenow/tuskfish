@@ -41,54 +41,54 @@ class TfTagHandler extends TfContentHandler
      * Build a select box from an arbitrary array of tags.
      * 
      * Use this when you need to customise a tag select box. Pass in an array of the tags you want
-     * to use as $tag_list as key => value pairs. If you have multiple select boxes on one page then
+     * to use as $tagList as key => value pairs. If you have multiple select boxes on one page then
      * you need to assign them different keys and listen for matching input parameters. If you have
      * organised tags into collections, you can run a query to retrieve that subset using the 
      * parental ID as a selection criteria.
      * 
      * @param int $selected ID of selected option.
-     * @param array $tag_list Array of options in tagId => title format.
-     * @param string $key_name The input parameter name you want to use as key for this select box.
+     * @param array $tagList Array of options in tagId => title format.
+     * @param string $keyName The input parameter name you want to use as key for this select box.
      * Defaults to 'tagId'.
-     * @param string $zero_option The string that will be displayed for the 'zero' or no selection
+     * @param string $zeroOption The string that will be displayed for the 'zero' or no selection
      * option.
      * @return string HTML select box.
      */
-    public function getArbitraryTagSelectBox($selected = null, $tag_list = array(),
-            $key_name = null, $zero_option = TFISH_SELECT_TAGS)
+    public function getArbitraryTagSelectBox($selected = null, $tagList = array(),
+            $keyName = null, $zeroOption = TFISH_SELECT_TAGS)
     {
         // Initialise variables.
         $selectBox = '';
-        $clean_key_name = '';
-        $cleanTag_list = array();
+        $cleanKeyName = '';
+        $cleanTagList = array();
 
         // Validate input.
         // ID of a previously selected tag, if any.
         $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
         
-        if ($this->validator->isArray($tag_list) && !empty($tag_list)) {
-            asort($tag_list);
+        if ($this->validator->isArray($tagList) && !empty($tagList)) {
+            asort($tagList);
             
-            foreach ($tag_list as $key => $value) {
-                $clean_key = (int) $key;
-                $clean_value = $this->validator->escapeForXss($this->validator->trimString($value));
-                $cleanTag_list[$clean_key] = $clean_value;
-                unset($key, $clean_key, $value, $clean_value);
+            foreach ($tagList as $key => $value) {
+                $cleanKey = (int) $key;
+                $cleanValue = $this->validator->escapeForXss($this->validator->trimString($value));
+                $cleanTagList[$cleanKey] = $cleanValue;
+                unset($key, $cleanKey, $value, $cleanValue);
             }
         }
         
         // The text to display in the zero option of the select box.
-        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
-        $clean_key_name = isset($key_name)
-                ? $this->validator->escapeForXss($this->validator->trimString($key_name)) : 'tagId';
+        $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
+        $cleanKeyName = isset($keyName)
+                ? $this->validator->escapeForXss($this->validator->trimString($keyName)) : 'tagId';
 
         // Build the select box.
-        $cleanTag_list = array(0 => $clean_zero_option) + $cleanTag_list;
-        $selectBox = '<select class="form-control custom-select" name="' . $clean_key_name . '" id="'
-                . $clean_key_name . '" onchange="this.form.submit()">';
+        $cleanTagList = array(0 => $cleanZeroOption) + $cleanTagList;
+        $selectBox = '<select class="form-control custom-select" name="' . $cleanKeyName . '" id="'
+                . $cleanKeyName . '" onchange="this.form.submit()">';
         
-        foreach ($cleanTag_list as $key => $value) {
+        foreach ($cleanTagList as $key => $value) {
             $selectBox .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
                     . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
         }
@@ -160,34 +160,34 @@ class TfTagHandler extends TfContentHandler
     /**
      * Generates a tag select box control.
      * 
-     * Use the $online_only parameter to control whether you retrieve all tags, or just those marked
+     * Use the $onlineOnly parameter to control whether you retrieve all tags, or just those marked
      * as online. Essentially this provides a way to keep your select box uncluttered; mark tags
      * that are not important enough to serve as navigation elements as 'offline'. They are still
      * available, but they won't appear in the select box list.
      * 
      * @param int $selected ID of selected option.
      * @param string $type Type of content object, eg. TfArticle.
-     * @param string $zero_option The string that will be displayed for the 'zero' or no selection
+     * @param string $zeroOption The string that will be displayed for the 'zero' or no selection
      * option.
-     * @param bool $online_only Get all tags or just those marked online.
+     * @param bool $onlineOnly Get all tags or just those marked online.
      * @return bool|string False if no tags or a HTML select box if there are.
      */
     public function getTagSelectBox(int $selected = null, string $type = '',
-            string $zero_option = TFISH_SELECT_TAGS, bool $online_only = true)
+            string $zeroOption = TFISH_SELECT_TAGS, bool $onlineOnly = true)
     {
         $selectBox = '';
-        $tag_list = array();
+        $tagList = array();
 
         $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
-        $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
+        $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
         $cleanType = $this->isSanctionedType($type)
                 ? $this->validator->trimString($type) : null;
-        $cleanOnline_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
-        $tag_list = $this->getActiveTagList($cleanType, $cleanOnline_only);
+        $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
+        $tagList = $this->getActiveTagList($cleanType, $cleanOnlineOnly);
         
-        if ($tag_list) {
-            $selectBox = $this->getArbitraryTagSelectBox($cleanSelected, $tag_list, 'tagId', $clean_zero_option);
+        if ($tagList) {
+            $selectBox = $this->getArbitraryTagSelectBox($cleanSelected, $tagList, 'tagId', $cleanZeroOption);
         } else {
             $selectBox = false;
         }

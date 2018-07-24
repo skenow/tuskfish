@@ -43,7 +43,7 @@ $rss = new TfRss($tfPreference, $tfValidator);
 $contentHandler = $contentHandlerFactory->getHandler('content');
 
 // Prepare a mimetype lookup buffer.
-$mimetype_list = $contentHandler->getListOfMimetypes();
+$mimetypeList = $contentHandler->getListOfMimetypes();
 
 // Add items to feed. The number of items is controlled by the 'RSS posts' preference, but you can
 // set a different limit here if you wish.
@@ -78,7 +78,7 @@ $contentObjects = $contentHandler->getObjects($criteria);
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.
 $tfTemplate->rss_feed = $rss;
 $tfTemplate->items = $contentObjects;
-$tfTemplate->mimetype_list = $mimetype_list;
+$tfTemplate->mimetypeList = $mimetypeList;
 $tfTemplate->tagId = !empty($cleanTagId) ? '?tagId=' . (string) $cleanTagId : '';
 $tfTemplate->tfMainContent = $tfTemplate->render('feed');
 

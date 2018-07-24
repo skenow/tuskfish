@@ -174,10 +174,10 @@ class TfContentObject
      * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
      * 
      * @param string $property Name of property.
-     * @param bool $escape_html Whether to escape HTML fields (teaser, description).
+     * @param bool $escapeHtml Whether to escape HTML fields (teaser, description).
      * @return string Human readable value escaped for display.
      */
-    public function escapeForXss(string $property, bool $escape_html = false)
+    public function escapeForXss(string $property, bool $escapeHtml = false)
     {
         $cleanProperty = $this->validator->trimString($property);
         
@@ -187,24 +187,24 @@ class TfContentObject
         }
         
         // Format all data for display and convert TFISH_LINK to URL.
-        $human_readable_data = (string) $this->makeDataHumanReadable($cleanProperty);
+        $humanReadableData = (string) $this->makeDataHumanReadable($cleanProperty);
         
-                $html_fields = array('teaser', 'description', 'icon');
+                $htmlFields = array('teaser', 'description', 'icon');
         
         // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
-        if (in_array($property, $html_fields, true) && $escape_html === false) {
-            return $human_readable_data;
+        if (in_array($property, $htmlFields, true) && $escapeHtml === false) {
+            return $humanReadableData;
         }
         
         // Output for display in the TinyMCE editor (edit mode): HTML must be DOUBLE
         // escaped to meet specification requirements.
-        if (in_array($property, $html_fields, true) && $escape_html === true) {    
-            return htmlspecialchars($human_readable_data, ENT_NOQUOTES, 'UTF-8', 
+        if (in_array($property, $htmlFields, true) && $escapeHtml === true) {    
+            return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', 
                     true);
         }
                 
         // All other cases: Escape data for display.        
-        return htmlspecialchars($human_readable_data, ENT_NOQUOTES, 'UTF-8', false);
+        return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', false);
     }
 
     /**
@@ -225,10 +225,10 @@ class TfContentObject
     public function getCachedImage(int $width = 0, int $height = 0)
     {
         // Validate parameters; and at least one must be set.
-        $clean_width = $this->validator->isInt($width, 1) ? (int) $width : 0;
-        $clean_height = $this->validator->isInt($height, 1) ? (int) $height : 0;
+        $cleanWidth = $this->validator->isInt($width, 1) ? (int) $width : 0;
+        $cleanHeight = $this->validator->isInt($height, 1) ? (int) $height : 0;
         
-        if (!$clean_width && !$clean_height) {
+        if (!$cleanWidth && !$cleanHeight) {
             return false;
         }
 
@@ -239,32 +239,32 @@ class TfContentObject
 
         // Check if a cached copy of the requested dimensions already exists in the cache and return
         // URL. CONVENTION: Thumbnail name should follow the pattern:
-        // image_file_name . '-' . $width . 'x' . $height
+        // imageFileName . '-' . $width . 'x' . $height
         $filename = pathinfo($this->image, PATHINFO_FILENAME);
         $extension = '.' . pathinfo($this->image, PATHINFO_EXTENSION);
-        $cached_path = TFISH_PUBLIC_CACHE_PATH . $filename . '-';
-        $cached_url = TFISH_CACHE_URL . $filename . '-';
-        $original_path = TFISH_IMAGE_PATH . $filename . $extension;
+        $cachedPath = TFISH_PUBLIC_CACHE_PATH . $filename . '-';
+        $cachedUrl = TFISH_CACHE_URL . $filename . '-';
+        $originalPath = TFISH_IMAGE_PATH . $filename . $extension;
         
-        if ($clean_width > $clean_height) {
-            $cached_path .= $clean_width . 'w' . $extension;
-            $cached_url .= $clean_width . 'w' . $extension;
+        if ($cleanWidth > $cleanHeight) {
+            $cachedPath .= $cleanWidth . 'w' . $extension;
+            $cachedUrl .= $cleanWidth . 'w' . $extension;
         } else {
-            $cached_path .= $clean_height . 'h' . $extension;
-            $cached_url .= $clean_height . 'h' . $extension;
+            $cachedPath .= $cleanHeight . 'h' . $extension;
+            $cachedUrl .= $cleanHeight . 'h' . $extension;
         }
 
-        // Security check - is the cached_path actually pointing at the cache directory? Because
+        // Security check - is the cachedPath actually pointing at the cache directory? Because
         // if it isn't, then we don't want to cooperate by returning anything.
-        if (is_readable($cached_path)) {
-            return $cached_url;
+        if (is_readable($cachedPath)) {
+            return $cachedUrl;
         } else {
 
             // Get the size. Note that:
             // $properties['mime'] holds the mimetype, eg. 'image/jpeg'.
             // $properties[0] = width, [1] = height, [2] = width = "x" height = "y" which is useful
             // for outputting size attribute.
-            $properties = getimagesize($original_path);
+            $properties = getimagesize($originalPath);
             
             if (!$properties) {
                 return false;
@@ -274,17 +274,17 @@ class TfContentObject
              * Resizing image with GD installed.
              */
             // In order to preserve proportions, need to calculate the size of the other dimension.
-            if ($clean_width > $clean_height) {
-                $destination_width = $clean_width;
-                $destination_height = (int) (($clean_width / $properties[0]) * $properties[1]);
+            if ($cleanWidth > $cleanHeight) {
+                $destinationWidth = $cleanWidth;
+                $destinationHeight = (int) (($cleanWidth / $properties[0]) * $properties[1]);
             } else {
-                $destination_width = (int) (($clean_height / $properties[1]) * $properties[0]);
-                $destination_height = $clean_height;
+                $destinationWidth = (int) (($cleanHeight / $properties[1]) * $properties[0]);
+                $destinationHeight = $cleanHeight;
             }
 
             // Get a reference to a new image resource.
             // Creates a blank (black) image RESOURCE of the specified size.
-            $thumbnail = imagecreatetruecolor($destination_width, $destination_height);
+            $thumbnail = imagecreatetruecolor($destinationWidth, $destinationHeight);
             // Different image types require different handling. JPEG and PNG support optional
             // quality parameter
             // TODO: Create a preference.
@@ -292,19 +292,19 @@ class TfContentObject
             
             switch ($properties['mime']) {
                 case "image/jpeg":
-                    $original = imagecreatefromjpeg($original_path);
-                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width,
-                            $destination_height, $properties[0], $properties[1]);
+                    $original = imagecreatefromjpeg($originalPath);
+                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destinationWidth,
+                            $destinationHeight, $properties[0], $properties[1]);
                     // Optional third quality argument 0-99, higher is better quality.
-                    $result = imagejpeg($thumbnail, $cached_path, 80);
+                    $result = imagejpeg($thumbnail, $cachedPath, 80);
                     break;
 
                 case "image/png":
                 case "image/gif":
                     if ($properties['mime'] === "image/gif") {
-                        $original = imagecreatefromgif($original_path);
+                        $original = imagecreatefromgif($originalPath);
                     } else {
-                        $original = imagecreatefrompng($original_path);
+                        $original = imagecreatefrompng($originalPath);
                     }
 
                     /**
@@ -340,16 +340,16 @@ class TfContentObject
                     // Sets the transparent colour in the given image, using a colour identifier
                     // created with imagecolorallocate().
                     $transparency = imagecolortransparent($original);
-                    $number_of_colours = imagecolorstotal($original);
+                    $numberOfColours = imagecolorstotal($original);
 
-                    if ($transparency >= 0 && $transparency < $number_of_colours) {
+                    if ($transparency >= 0 && $transparency < $numberOfColours) {
                         // Get the colours for an index.
-                        $transparent_colour = imagecolorsforindex($original, $transparency);
+                        $transparentColour = imagecolorsforindex($original, $transparency);
                         // Allocate a colour for an image. The first call to imagecolorallocate() 
                         // fills the background colour in palette-based images created using 
                         // imagecreate().
-                        $transparency = imagecolorallocate($thumbnail, $transparent_colour['red'],
-                                $transparent_colour['green'], $transparent_colour['blue']);
+                        $transparency = imagecolorallocate($thumbnail, $transparentColour['red'],
+                                $transparentColour['green'], $transparentColour['blue']);
                         // Flood fill with the given colour starting at the given coordinate
                         // (0,0 is top left).
                         imagefill($thumbnail, 0, 0, $transparency);
@@ -375,16 +375,16 @@ class TfContentObject
                      */
                     
                     // Copy and resize part of an image with resampling.
-                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destination_width,
-                            $destination_height, $properties[0], $properties[1]);
+                    imagecopyresampled($thumbnail, $original, 0, 0, 0, 0, $destinationWidth,
+                            $destinationHeight, $properties[0], $properties[1]);
 
                     // Output a useable png or gif from the image resource.
                     if ($properties['mime'] === "image/gif") {
-                        $result = imagegif($thumbnail, $cached_path);
+                        $result = imagegif($thumbnail, $cachedPath);
                     } else {
                         // Quality is controlled through an optional third argument (0-9, lower is
                         // better).
-                        $result = imagepng($thumbnail, $cached_path, 0);
+                        $result = imagepng($thumbnail, $cachedPath, 0);
                     }
                     break;
 
@@ -395,12 +395,12 @@ class TfContentObject
 
             if ($result) {
                 imagedestroy($thumbnail); // Free memory.
-                return $cached_url; // Return the URL to the cached file.
+                return $cachedUrl; // Return the URL to the cached file.
             } else {
                 return false;
             }
 
-            return $cached_url;
+            return $cachedUrl;
         }
     }
     
@@ -495,7 +495,7 @@ class TfContentObject
     /**
      * Returns a whitelist of object properties whose values are allowed be set.
      * 
-     * This function is used to build a list of $allowed_vars for a content object. Child classes
+     * This function is used to build a list of $allowedVars for a content object. Child classes
      * use this list to unset properties they do not use. Properties that are not resident in the
      * database are also unset here (handler, template, module and icon).
      * 
@@ -528,16 +528,16 @@ class TfContentObject
      * subclass-specific pages are found in the trust_path/extras folder. Just drop
      * them into your site root to use them.
      * 
-     * @param string $custom_page Use an arbitrary target page or the home page (index.php).
+     * @param string $customPage Use an arbitrary target page or the home page (index.php).
      * @return string URL to view this object.
      */
-    public function getUrl(string $custom_page = '')
+    public function getUrl(string $customPage = '')
     {
-        $url = empty($custom_page) ? TFISH_PERMALINK_URL : TFISH_URL;
+        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
         
-        if ($custom_page) {
-            $url .= $this->validator->isAlnumUnderscore($custom_page)
-                    ? $this->validator->trimString($custom_page) . '.php' : '';
+        if ($customPage) {
+            $url .= $this->validator->isAlnumUnderscore($customPage)
+                    ? $this->validator->trimString($customPage) . '.php' : '';
         }
         
         $url .= '?id=' . (int) $this->id;
@@ -564,23 +564,23 @@ class TfContentObject
             return false;
         }
         
-        $allowed_mimetypes = array();
+        $allowedMimetypes = array();
 
         switch($this->type) {
             case "TfAudio":
-                $allowed_mimetypes = $this->getListOfAllowedAudioMimetypes();
+                $allowedMimetypes = $this->getListOfAllowedAudioMimetypes();
                 break;
             case "TfImage":
-                $allowed_mimetypes = $this->getListOfAllowedImageMimetypes();
+                $allowedMimetypes = $this->getListOfAllowedImageMimetypes();
                 break;
             case "TfVideo":
-                $allowed_mimetypes = $this->getListOfAllowedVideoMimetypes();
+                $allowedMimetypes = $this->getListOfAllowedVideoMimetypes();
                 break;
             default:
-                $allowed_mimetypes = $this->getListOfPermittedUploadMimetypes();
+                $allowedMimetypes = $this->getListOfPermittedUploadMimetypes();
         }
 
-        if (in_array($this->format, $allowed_mimetypes, true)) {
+        if (in_array($this->format, $allowedMimetypes, true)) {
             return true;
         }
         
@@ -592,70 +592,70 @@ class TfContentObject
      * 
      * Note that the supplied data is internally validated by __set().
      * 
-     * @param array $dirty_input Usually raw form $_REQUEST data.
-     * @param bool $live_urls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
+     * @param array $dirtyInput Usually raw form $_REQUEST data.
+     * @param bool $liveUrls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
      */
-    public function loadPropertiesFromArray(array $dirty_input, $live_urls = true)
+    public function loadPropertiesFromArray(array $dirtyInput, $liveUrls = true)
     {
-        $delete_image = (isset($dirty_input['deleteImage']) && !empty($dirty_input['deleteImage']))
+        $deleteImage = (isset($dirtyInput['deleteImage']) && !empty($dirtyInput['deleteImage']))
                 ? true : false;
-        $delete_media = (isset($dirty_input['deleteMedia']) && !empty($dirty_input['deleteMedia']))
+        $deleteMedia = (isset($dirtyInput['deleteMedia']) && !empty($dirtyInput['deleteMedia']))
                 ? true : false;
 
         // Note that handler, template and module are not accessible through this method.
-        $property_whitelist = $this->getPropertyWhitelist();
+        $propertyWhitelist = $this->getPropertyWhitelist();
 
-        foreach ($property_whitelist as $key => $type) {
-            if (array_key_exists($key, $dirty_input)) {
-                $this->__set($key, $dirty_input[$key]);
+        foreach ($propertyWhitelist as $key => $type) {
+            if (array_key_exists($key, $dirtyInput)) {
+                $this->__set($key, $dirtyInput[$key]);
             }
             unset($key, $type);
         }
 
-        if (array_key_exists('date', $property_whitelist) && empty($dirty_input['date'])) {
+        if (array_key_exists('date', $propertyWhitelist) && empty($dirtyInput['date'])) {
             $this->setDate(date(DATE_RSS, time()));
         }
 
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
-        if (array_key_exists('teaser', $property_whitelist) && !empty($dirty_input['teaser'])) {
+        if (array_key_exists('teaser', $propertyWhitelist) && !empty($dirtyInput['teaser'])) {
             
-            if ($live_urls === true) {
-                $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['teaser']);
+            if ($liveUrls === true) {
+                $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['teaser']);
             } else {
-                $teaser = str_replace('TFISH_LINK', TFISH_LINK, $dirty_input['teaser']);
+                $teaser = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['teaser']);
             }
             
             $this->setTeaser($teaser);
         }
 
-        if (array_key_exists('description', $property_whitelist)
-                && !empty($dirty_input['description'])) {
+        if (array_key_exists('description', $propertyWhitelist)
+                && !empty($dirtyInput['description'])) {
             
-            if ($live_urls === true) {
-                $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirty_input['description']);
+            if ($liveUrls === true) {
+                $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['description']);
             } else {
-                $description = str_replace('TFISH_LINK', TFISH_LINK, $dirty_input['description']);
+                $description = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['description']);
             }
             
             $this->setDescription($description);
         }
 
-        if (array_key_exists('image', $property_whitelist) && !empty($_FILES['image']['name'])) {
-            $clean_image_filename = $this->validator->trimString($_FILES['image']['name']);
+        if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
+            $cleanImageFilename = $this->validator->trimString($_FILES['image']['name']);
             
-            if ($clean_image_filename) {
-                $this->setImage($clean_image_filename);
+            if ($cleanImageFilename) {
+                $this->setImage($cleanImageFilename);
             }
         }
       
-        if (array_key_exists('media', $property_whitelist) && !empty($_FILES['media']['name'])) {
-            $clean_media_filename = $this->validator->trimString($_FILES['media']['name']);
+        if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
+            $cleanMediaFilename = $this->validator->trimString($_FILES['media']['name']);
             
-            if ($clean_media_filename) {
+            if ($cleanMediaFilename) {
                 $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
-                $extension = mb_strtolower(pathinfo($clean_media_filename, PATHINFO_EXTENSION), 'UTF-8');
+                $extension = mb_strtolower(pathinfo($cleanMediaFilename, PATHINFO_EXTENSION), 'UTF-8');
                 
-                $this->setMedia($clean_media_filename);
+                $this->setMedia($cleanMediaFilename);
                 $this->setFormat($mimetypeWhitelist[$extension]);
                 $this->setFileSize($_FILES['media']['size']);
             }
@@ -859,8 +859,8 @@ class TfContentObject
     
     public function setCaption(string $caption)
     {
-        $clean_caption = (string) $this->validator->trimString($caption);
-        $this->caption = $clean_caption;
+        $cleanCaption = (string) $this->validator->trimString($caption);
+        $this->caption = $cleanCaption;
     }
     
     public function setCounter(int $counter)
@@ -874,8 +874,8 @@ class TfContentObject
     
     public function setCreator(string $creator)
     {
-        $clean_creator = (string) $this->validator->trimString($creator);
-        $this->creator = $clean_creator;
+        $cleanCreator = (string) $this->validator->trimString($creator);
+        $this->creator = $cleanCreator;
     }
     
     public function setDate(string $date)
@@ -883,10 +883,10 @@ class TfContentObject
         $date = (string) $this->validator->trimString($date);
 
         // Ensure format complies with DATE_RSS
-        $check_date = date_parse_from_format('Y-m-d', $date);
+        $checkDate = date_parse_from_format('Y-m-d', $date);
 
-        if (!$check_date || $check_date['warning_count'] > 0
-                || $check_date['error_count'] > 0) {
+        if (!$checkDate || $checkDate['warning_count'] > 0
+                || $checkDate['error_count'] > 0) {
             // Bad date supplied, default to today.
             $date = date(DATE_RSS, time());
             trigger_error(TFISH_ERROR_BAD_DATE_DEFAULTING_TO_TODAY, E_USER_WARNING);
@@ -924,10 +924,10 @@ class TfContentObject
     
     public function setHandler(string $handler)
     {
-        $clean_handler = (string) $this->validator->trimString($handler);
+        $cleanHandler = (string) $this->validator->trimString($handler);
 
-        if ($this->validator->isAlpha($clean_handler)) {
-            $this->handler = $clean_handler;
+        if ($this->validator->isAlpha($cleanHandler)) {
+            $this->handler = $cleanHandler;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
@@ -973,9 +973,9 @@ class TfContentObject
     public function setLanguage(string $language)
     {        
         $language = (string) $this->validator->trimString($language);
-        $language_whitelist = $this->getListOfLanguages();
+        $languageWhitelist = $this->getListOfLanguages();
 
-        if (!array_key_exists($language, $language_whitelist)) {
+        if (!array_key_exists($language, $languageWhitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
         
@@ -1008,20 +1008,20 @@ class TfContentObject
     
     public function setMetaDescription(string $metaDescription)
     {
-        $clean_metaDescription = (string) $this->validator->trimString($metaDescription);
-        $this->metaDescription = $clean_metaDescription;
+        $cleanMetaDescription = (string) $this->validator->trimString($metaDescription);
+        $this->metaDescription = $cleanMetaDescription;
     }
     
     public function setMetaTitle(string $metaTitle)
     {
-        $clean_metaTitle = (string) $this->validator->trimString($metaTitle);
-        $this->metaTitle = $clean_metaTitle;
+        $cleanMetaTitle = (string) $this->validator->trimString($metaTitle);
+        $this->metaTitle = $cleanMetaTitle;
     }
     
     public function setModule(string $module)
     {
-        $clean_module = (string) $this->validator->trimString($module);
-        $this->module = $clean_module;
+        $cleanModule = (string) $this->validator->trimString($module);
+        $this->module = $cleanModule;
     }
     
     public function setOnline(int $online)
@@ -1049,8 +1049,8 @@ class TfContentObject
     
     public function setPublisher(string $publisher)
     {
-        $clean_publisher = (string) $this->validator->trimString($publisher);
-        $this->publisher = $clean_publisher;
+        $cleanPublisher = (string) $this->validator->trimString($publisher);
+        $this->publisher = $cleanPublisher;
     }
     
     public function setRights(int $rights)
@@ -1064,16 +1064,16 @@ class TfContentObject
     
     public function setSeo(string $seo)
     {
-        $clean_seo = (string) $this->validator->trimString($seo);
+        $cleanSeo = (string) $this->validator->trimString($seo);
 
         // Replace spaces with dashes.
-        if ($this->validator->isUtf8($clean_seo)) {
-            $clean_seo = str_replace(' ', '-', $clean_seo);
+        if ($this->validator->isUtf8($cleanSeo)) {
+            $cleanSeo = str_replace(' ', '-', $cleanSeo);
         } else {
             trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
         }
         
-        $this->seo = $clean_seo;
+        $this->seo = $cleanSeo;
     }
     
     public function setSubmissionTime(int $submissionTime)
@@ -1115,10 +1115,10 @@ class TfContentObject
     
     public function setTemplate(string $template)
     {
-        $clean_template = (string) $this->validator->trimString($template);
+        $cleanTemplate = (string) $this->validator->trimString($template);
 
-        if ($this->validator->isAlnumUnderscore($clean_template)) {
-            $this->template = $clean_template;
+        if ($this->validator->isAlnumUnderscore($cleanTemplate)) {
+            $this->template = $cleanTemplate;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -1126,8 +1126,8 @@ class TfContentObject
     
     public function setTitle(string $title)
     {
-        $clean_title = (string) $this->validator->trimString($title);
-        $this->title = $clean_title;
+        $cleanTitle = (string) $this->validator->trimString($title);
+        $this->title = $cleanTitle;
     }
     
     public function setType(string $type)

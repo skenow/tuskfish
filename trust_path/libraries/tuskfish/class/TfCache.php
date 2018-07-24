@@ -174,7 +174,7 @@ class TfCache
      */
     private function _getCachedFileName(string $basename, array $params)
     {
-        $clean_filename = false;
+        $cleanFilename = false;
         
         // Remove the extension.
         $basename = rtrim($basename, '.php');
@@ -183,7 +183,7 @@ class TfCache
         $basename = $this->validator->trimString($basename);
         
         if ($basename && $this->validator->isAlnumUnderscore($basename)) {
-            $clean_filename = $basename;
+            $cleanFilename = $basename;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
@@ -193,19 +193,19 @@ class TfCache
             
             foreach ($params as $key => $value) {  
                 if ($value) {
-                    $clean_key = $this->validator->trimString($key);
-                    $clean_value = $this->validator->trimString($value);
-                    if ($this->validator->isAlnumUnderscore($clean_key)
-                            && $this->validator->isAlnumUnderscore($clean_value)) {
-                        $clean_filename .= '&' . $clean_key . '=' . $clean_value;
+                    $cleanKey = $this->validator->trimString($key);
+                    $cleanValue = $this->validator->trimString($value);
+                    if ($this->validator->isAlnumUnderscore($cleanKey)
+                            && $this->validator->isAlnumUnderscore($cleanValue)) {
+                        $cleanFilename .= '&' . $cleanKey . '=' . $cleanValue;
                     }
                 }
                 
-                unset($key, $value, $clean_key, $clean_value);
+                unset($key, $value, $cleanKey, $cleanValue);
             }
         }
 
-        return $clean_filename . '.html';
+        return $cleanFilename . '.html';
     }
 
 }

@@ -231,17 +231,17 @@ class TfSession
      */
     public static function logout(string $url_redirect = '')
     {
-        $clean_url = '';
+        $cleanUrl = '';
         
         if (!empty($url_redirect)) {
-            $clean_url = self::$validator->isUrl($url_redirect) ? $url_redirect : '';
+            $cleanUrl = self::$validator->isUrl($url_redirect) ? $url_redirect : '';
         }
         
-        self::_logout($clean_url);
+        self::_logout($cleanUrl);
     }
 
     /** @internal */
-    private static function _logout(string $clean_url)
+    private static function _logout(string $cleanUrl)
     {
         // Unset all of the session variables.
         $_SESSION = [];
@@ -255,8 +255,8 @@ class TfSession
 
         // Destroy the session and redirect
         session_destroy();
-        if ($clean_url) {
-            header('location: ' . $clean_url);
+        if ($cleanUrl) {
+            header('location: ' . $cleanUrl);
             exit;
         } else {
             header('location: ' . TFISH_URL);

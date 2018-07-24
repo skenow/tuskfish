@@ -65,9 +65,9 @@ class TfValidator
     {
         $url = $this->trimString($url); // Trim control characters, verify UTF-8 character set.
         $url = rawurlencode($url); // Encode characters to make them URL safe.
-        $clean_url = $this->escapeForXss($url); // Encode entities with htmlspecialchars()
+        $cleanUrl = $this->escapeForXss($url); // Encode entities with htmlspecialchars()
 
-        return $clean_url;
+        return $cleanUrl;
     }
     
     /**

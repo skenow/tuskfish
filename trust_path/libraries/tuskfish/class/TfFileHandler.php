@@ -311,7 +311,7 @@ class TfFileHandler
         }
         
         $filename = $this->validator->trimString($filename);
-        $clean_filename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
+        $cleanFilename = mb_strtolower(pathinfo($filename, PATHINFO_FILENAME), 'UTF-8');
         
         // Check that target directory is whitelisted (locked to uploads/image or uploads/media).
         if ($fieldname === 'image' || $fieldname === 'media') {
@@ -321,13 +321,13 @@ class TfFileHandler
             exit;
         }
 
-        $mimetype_list = $this->getListOfPermittedUploadMimetypes(); // extension => mimetype
+        $mimetypeList = $this->getListOfPermittedUploadMimetypes(); // extension => mimetype
         $extension = mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION), 'UTF-8');
-        $clean_extension = array_key_exists($extension, $mimetype_list)
+        $clean_extension = array_key_exists($extension, $mimetypeList)
                 ? $this->validator->trimString($extension) : false;
         
-        if ($clean_filename && $clean_fieldname && $clean_extension) {
-            return $this->_uploadFile($clean_filename, $clean_fieldname, $clean_extension);
+        if ($cleanFilename && $clean_fieldname && $clean_extension) {
+            return $this->_uploadFile($cleanFilename, $clean_fieldname, $clean_extension);
         }
         
         if (!$clean_extension) {

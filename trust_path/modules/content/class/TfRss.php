@@ -49,7 +49,7 @@ class TfRss
     protected $link;
     protected $description;
     protected $copyright;
-    protected $managing_editor;
+    protected $managingEditor;
     protected $webmaster;
     protected $generator;
     protected $items;
@@ -90,20 +90,20 @@ class TfRss
     
     public function setCopyright(string $copyright)
     {
-        $clean_copyright = $this->validator->trimString($copyright);
-        $this->copyright = $clean_copyright;
+        $cleanCopyright = $this->validator->trimString($copyright);
+        $this->copyright = $cleanCopyright;
     }
     
     public function setDescription(string $description)
     {
-        $clean_description = $this->validator->trimString($description);
-        $this->description = $clean_description;
+        $cleanDescription = $this->validator->trimString($description);
+        $this->description = $cleanDescription;
     }
     
     public function setGenerator(string $generator)
     {
-        $clean_generator = $this->validator->trimString($generator);
-        $this->generator = $clean_generator;
+        $cleanGenerator = $this->validator->trimString($generator);
+        $this->generator = $cleanGenerator;
     }
     
     public function setImage(string $image)
@@ -114,11 +114,11 @@ class TfRss
     public function setItems(array $items)
     {
         if ($this->validator->isArray($items)) {
-            $clean_items = array();
+            $cleanItems = array();
 
             foreach ($items as $item) {
                 if (is_object($item)) {
-                    $clean_items[] = $item;
+                    $cleanItems[] = $item;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                 }
@@ -126,7 +126,7 @@ class TfRss
                 unset($item);
             }
 
-            $this->items = $clean_items;
+            $this->items = $cleanItems;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
@@ -134,10 +134,10 @@ class TfRss
     
     public function setLink(string $url)
     {
-        $clean_url = $this->validator->trimString($url);
+        $cleanUrl = $this->validator->trimString($url);
 
-        if ($this->validator->isUrl($clean_url)) {
-            $this->link = $clean_url;
+        if ($this->validator->isUrl($cleanUrl)) {
+            $this->link = $cleanUrl;
         } else {
             trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
         }
@@ -148,7 +148,7 @@ class TfRss
         $cleanEmail = $this->validator->trimString($email);
 
         if ($this->validator->isEmail($cleanEmail)) {
-            $this->managing_editor = $cleanEmail;
+            $this->managingEditor = $cleanEmail;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }
@@ -156,14 +156,14 @@ class TfRss
     
     public function setTitle(string $title)
     {
-        $clean_title = $this->validator->trimString($title);
-        $this->title = $clean_title;
+        $cleanTitle = $this->validator->trimString($title);
+        $this->title = $cleanTitle;
     }
     
     private function setTemplate(string $template)
     {
-        $clean_template = $this->validator->trimString($template);
-        $this->template = $clean_template;
+        $cleanTemplate = $this->validator->trimString($template);
+        $this->template = $cleanTemplate;
     }
     
     public function setWebmaster(string $email)

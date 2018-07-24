@@ -125,44 +125,44 @@ class TfPreference
      * 
      * The preference object will conduct its own internal data type validation and range checks.
      * 
-     * @param array $dirty_input Usually $_REQUEST data.
+     * @param array $dirtyInput Usually $_REQUEST data.
      */
-    public function loadPropertiesFromArray(array $dirty_input)
+    public function loadPropertiesFromArray(array $dirtyInput)
     {
-        if (!$this->validator->isArray($dirty_input)) {
+        if (!$this->validator->isArray($dirtyInput)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
         
         // Validate object properties as they are assigned.
-        if (isset($dirty_input['siteName'])) $this->setSiteName($dirty_input['siteName']);
-        if (isset($dirty_input['siteDescription'])) $this->setSiteDescription($dirty_input['siteDescription']);
-        if (isset($dirty_input['siteAuthor'])) $this->setSiteAuthor($dirty_input['siteAuthor']);
-        if (isset($dirty_input['siteEmail'])) $this->setSiteEmail($dirty_input['siteEmail']);
-        if (isset($dirty_input['siteCopyright'])) $this->setSiteCopyright($dirty_input['siteCopyright']);
-        if (isset($dirty_input['closeSite'])) $this->setCloseSite((int) $dirty_input['closeSite']);
-        if (isset($dirty_input['serverTimezone'])) $this->setServerTimezone($dirty_input['serverTimezone']);
-        if (isset($dirty_input['siteTimezone'])) $this->setSiteTimezone($dirty_input['siteTimezone']);
-        if (isset($dirty_input['minSearchLength'])) $this->setMinSearchLength((int) $dirty_input['minSearchLength']);
-        if (isset($dirty_input['searchPagination'])) $this->setSearchPagination((int) $dirty_input['searchPagination']);
-        if (isset($dirty_input['userPagination'])) $this->setUserPagination((int) $dirty_input['userPagination']);
-        if (isset($dirty_input['adminPagination'])) $this->setAdminPagination((int) $dirty_input['adminPagination']);
-        if (isset($dirty_input['galleryPagination'])) $this->setGalleryPagination((int) $dirty_input['galleryPagination']);
-        if (isset($dirty_input['rssPosts'])) $this->setRssPosts((int) $dirty_input['rssPosts']);
-        if (isset($dirty_input['paginationElements'])) $this->setPaginationElements((int) $dirty_input['paginationElements']);
-        if (isset($dirty_input['session_name'])) $this->setSessionName($dirty_input['session_name']);
-        if (isset($dirty_input['session_life'])) $this->setSessionLife((int) $dirty_input['session_life']);
-        if (isset($dirty_input['defaultLanguage'])) $this->setDefaultLanguage($dirty_input['defaultLanguage']);
-        if (isset($dirty_input['dateFormat'])) $this->setDateFormat($dirty_input['dateFormat']);
-        if (isset($dirty_input['enableCache'])) $this->setEnableCache((int) $dirty_input['enableCache']);
-        if (isset($dirty_input['cacheLife'])) $this->setCacheLife((int) $dirty_input['cacheLife']);
+        if (isset($dirtyInput['siteName'])) $this->setSiteName($dirtyInput['siteName']);
+        if (isset($dirtyInput['siteDescription'])) $this->setSiteDescription($dirtyInput['siteDescription']);
+        if (isset($dirtyInput['siteAuthor'])) $this->setSiteAuthor($dirtyInput['siteAuthor']);
+        if (isset($dirtyInput['siteEmail'])) $this->setSiteEmail($dirtyInput['siteEmail']);
+        if (isset($dirtyInput['siteCopyright'])) $this->setSiteCopyright($dirtyInput['siteCopyright']);
+        if (isset($dirtyInput['closeSite'])) $this->setCloseSite((int) $dirtyInput['closeSite']);
+        if (isset($dirtyInput['serverTimezone'])) $this->setServerTimezone($dirtyInput['serverTimezone']);
+        if (isset($dirtyInput['siteTimezone'])) $this->setSiteTimezone($dirtyInput['siteTimezone']);
+        if (isset($dirtyInput['minSearchLength'])) $this->setMinSearchLength((int) $dirtyInput['minSearchLength']);
+        if (isset($dirtyInput['searchPagination'])) $this->setSearchPagination((int) $dirtyInput['searchPagination']);
+        if (isset($dirtyInput['userPagination'])) $this->setUserPagination((int) $dirtyInput['userPagination']);
+        if (isset($dirtyInput['adminPagination'])) $this->setAdminPagination((int) $dirtyInput['adminPagination']);
+        if (isset($dirtyInput['galleryPagination'])) $this->setGalleryPagination((int) $dirtyInput['galleryPagination']);
+        if (isset($dirtyInput['rssPosts'])) $this->setRssPosts((int) $dirtyInput['rssPosts']);
+        if (isset($dirtyInput['paginationElements'])) $this->setPaginationElements((int) $dirtyInput['paginationElements']);
+        if (isset($dirtyInput['session_name'])) $this->setSessionName($dirtyInput['session_name']);
+        if (isset($dirtyInput['session_life'])) $this->setSessionLife((int) $dirtyInput['session_life']);
+        if (isset($dirtyInput['defaultLanguage'])) $this->setDefaultLanguage($dirtyInput['defaultLanguage']);
+        if (isset($dirtyInput['dateFormat'])) $this->setDateFormat($dirtyInput['dateFormat']);
+        if (isset($dirtyInput['enableCache'])) $this->setEnableCache((int) $dirtyInput['enableCache']);
+        if (isset($dirtyInput['cacheLife'])) $this->setCacheLife((int) $dirtyInput['cacheLife']);
     }
 
     public function setAdminPagination(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 1)) {
-            $this->adminPagination = $clean_value;
+        if ($this->validator->isInt($cleanValue, 1)) {
+            $this->adminPagination = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -175,10 +175,10 @@ class TfPreference
     
     public function setCacheLife(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 1)) {
-            $this->cacheLife = $clean_value;
+        if ($this->validator->isInt($cleanValue, 1)) {
+            $this->cacheLife = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -186,10 +186,10 @@ class TfPreference
     
     public function setCloseSite(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 0, 1)) {
-            $this->closeSite = $clean_value;
+        if ($this->validator->isInt($cleanValue, 0, 1)) {
+            $this->closeSite = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -202,16 +202,16 @@ class TfPreference
     
     public function setDefaultLanguage(string $value)
     {
-        $clean_value = $this->validator->trimString($value);
+        $cleanValue = $this->validator->trimString($value);
         
-        if (!$this->validator->isAlpha($clean_value)) {
+        if (!$this->validator->isAlpha($cleanValue)) {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
 
-        $language_whitelist = $this->getListOfLanguages();
+        $languageWhitelist = $this->getListOfLanguages();
 
-        if (array_key_exists($clean_value, $language_whitelist)) {
-            $this->defaultLanguage = $clean_value;
+        if (array_key_exists($cleanValue, $languageWhitelist)) {
+            $this->defaultLanguage = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
@@ -224,10 +224,10 @@ class TfPreference
     
     public function setSiteEmail(string $value)
     {
-        $clean_value = $this->validator->trimString($value);
+        $cleanValue = $this->validator->trimString($value);
 
-        if ($this->validator->isEmail($clean_value)) {
-            $this->siteEmail = $clean_value;
+        if ($this->validator->isEmail($cleanValue)) {
+            $this->siteEmail = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }
@@ -235,10 +235,10 @@ class TfPreference
     
     public function setEnableCache(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 0, 1)) {
-            $this->enableCache = $clean_value;
+        if ($this->validator->isInt($cleanValue, 0, 1)) {
+            $this->enableCache = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -246,10 +246,10 @@ class TfPreference
     
     public function setGalleryPagination(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 1)) {
-            $this->galleryPagination = $clean_value;
+        if ($this->validator->isInt($cleanValue, 1)) {
+            $this->galleryPagination = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -257,10 +257,10 @@ class TfPreference
     
     public function setMinSearchLength(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 3)) {
-            $this->minSearchLength = $clean_value;
+        if ($this->validator->isInt($cleanValue, 3)) {
+            $this->minSearchLength = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -268,10 +268,10 @@ class TfPreference
     
     public function setPaginationElements(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 3)) {
-            $this->paginationElements = $clean_value;
+        if ($this->validator->isInt($cleanValue, 3)) {
+            $this->paginationElements = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -279,10 +279,10 @@ class TfPreference
     
     public function setRssPosts(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 1)) {
-            $this->rssPosts = $clean_value;
+        if ($this->validator->isInt($cleanValue, 1)) {
+            $this->rssPosts = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -290,10 +290,10 @@ class TfPreference
     
     public function setSearchPagination(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 0)) {
-            $this->searchPagination = $clean_value;
+        if ($this->validator->isInt($cleanValue, 0)) {
+            $this->searchPagination = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -306,10 +306,10 @@ class TfPreference
     
     public function setSessionLife(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 0)) {
-            $this->session_life = $clean_value;
+        if ($this->validator->isInt($cleanValue, 0)) {
+            $this->session_life = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -317,10 +317,10 @@ class TfPreference
     
     public function setSessionName(string $value)
     {
-        $clean_value = $this->validator->trimString($value);
+        $cleanValue = $this->validator->trimString($value);
 
-        if ($this->validator->isAlnum($clean_value)) {
-            $this->session_name = $clean_value;
+        if ($this->validator->isAlnum($cleanValue)) {
+            $this->session_name = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
         }
@@ -343,10 +343,10 @@ class TfPreference
     
     public function setUserPagination(int $value)
     {
-        $clean_value = (int) $value;
+        $cleanValue = (int) $value;
         
-        if ($this->validator->isInt($clean_value, 1)) {
-            $this->userPagination = $clean_value;
+        if ($this->validator->isInt($cleanValue, 1)) {
+            $this->userPagination = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }

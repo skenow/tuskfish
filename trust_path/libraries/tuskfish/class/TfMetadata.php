@@ -142,8 +142,8 @@ class TfMetadata
     private function setProperty(string $property, string $value)
     {
         $cleanProperty = $this->validator->trimString($property);
-        $clean_value = $this->validator->trimString($value);
-        $this->$cleanProperty = htmlspecialchars($clean_value, ENT_QUOTES, "UTF-8", false);
+        $cleanValue = $this->validator->trimString($value);
+        $this->$cleanProperty = htmlspecialchars($cleanValue, ENT_QUOTES, "UTF-8", false);
     }
        
 }

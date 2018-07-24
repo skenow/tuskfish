@@ -5,7 +5,7 @@
     <link><?php echo $tfValidator->escapeForXss($rss_feed->link); ?></link>
     <description><?php echo $tfValidator->escapeForXss(strip_tags($rss_feed->description)); ?></description>
     <generator><?php echo $tfValidator->escapeForXss($rss_feed->generator); ?></generator>
-    <managingEditor><?php echo $tfValidator->escapeForXss($rss_feed->managing_editor); ?></managingEditor>
+    <managingEditor><?php echo $tfValidator->escapeForXss($rss_feed->managingEditor); ?></managingEditor>
     <webMaster><?php echo $tfValidator->escapeForXss($rss_feed->webmaster); ?></webMaster>
     <atom:link href="<?php echo $rss_feed->link; ?>" rel="self" type="application/rss+xml" />
     <?php if (isset($items) && !empty($items)): ?>
@@ -20,7 +20,7 @@
       <?php endif; ?>
       <?php if (($item->media) && is_readable(TFISH_MEDIA_PATH . $item->media)):
       $length = filesize(TFISH_MEDIA_PATH . $item->escapeForXss('media'));
-      $mimetype = $mimetype_list[pathinfo($item->media, PATHINFO_EXTENSION)]; ?>
+      $mimetype = $mimetypeList[pathinfo($item->media, PATHINFO_EXTENSION)]; ?>
       <enclosure url="<?php echo TFISH_ENCLOSURE_URL . $tfValidator->escapeForXss($item->id); ?>" length="<?php echo $tfValidator->escapeForXss($length); ?>" type="<?php echo $tfValidator->escapeForXss($mimetype); ?>" />
       <?php unset($length, $mimetype); endif; ?>
       <?php if ($item->submissionTime): ?>

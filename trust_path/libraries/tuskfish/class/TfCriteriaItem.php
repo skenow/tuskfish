@@ -93,10 +93,10 @@ class TfCriteriaItem
     
     public function setColumn($value)
     {
-        $clean_value = $this->validator->trimString($value);
+        $cleanValue = $this->validator->trimString($value);
                     
-        if ($this->validator->isAlnumUnderscore($clean_value)) {
-            $this->column = $clean_value;
+        if ($this->validator->isAlnumUnderscore($cleanValue)) {
+            $this->column = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -104,10 +104,10 @@ class TfCriteriaItem
     
     public function setOperator($value)
     {
-        $clean_value = $this->validator->trimString($value);
+        $cleanValue = $this->validator->trimString($value);
                     
-        if (in_array($clean_value, $this->getListOfPermittedOperators(), true)) {
-            $this->operator = $clean_value;
+        if (in_array($cleanValue, $this->getListOfPermittedOperators(), true)) {
+            $this->operator = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
@@ -119,7 +119,7 @@ class TfCriteriaItem
 
         switch ($type) {
             case "string":
-                $clean_value = $this->validator->trimString($value);
+                $cleanValue = $this->validator->trimString($value);
                 break;
 
             // Types that can't be validated further in the current context.
@@ -127,7 +127,7 @@ class TfCriteriaItem
             case "boolean":
             case "integer":
             case "double":
-                $clean_value = $value;
+                $cleanValue = $value;
                 break;
 
             // Illegal types.
@@ -139,7 +139,7 @@ class TfCriteriaItem
                 break;
         }
 
-        $this->value = $clean_value;
+        $this->value = $cleanValue;
     }
         
 }

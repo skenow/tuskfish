@@ -447,9 +447,9 @@ class TfDatabase
     public function insert(string $table, array $keyValues)
     {
         $clean_table = $this->validateTableName($table);
-        $clean_keys = $this->validateKeys($keyValues);
+        $cleanKeys = $this->validateKeys($keyValues);
         
-        return $this->_insert($clean_table, $clean_keys);
+        return $this->_insert($clean_table, $cleanKeys);
     }
 
     /** @internal */
@@ -1079,9 +1079,9 @@ class TfDatabase
     {
         $clean_table = $this->validateTableName($table);
         $cleanId = $this->validateId($id);
-        $clean_keys = $this->validateKeys($keyValues);
+        $cleanKeys = $this->validateKeys($keyValues);
         
-        return $this->_update($clean_table, $cleanId, $clean_keys);
+        return $this->_update($clean_table, $cleanId, $cleanKeys);
     }
 
     /** @internal */
@@ -1130,7 +1130,7 @@ class TfDatabase
     public function updateAll(string $table, array $keyValues, TfCriteria $criteria = null)
     {
         $clean_table = $this->validateTableName($table);
-        $clean_keys = $this->validateKeys($keyValues);
+        $cleanKeys = $this->validateKeys($keyValues);
         
         if (isset($criteria)) {
             $clean_criteria = $this->validateCriteriaObject($criteria);
@@ -1138,7 +1138,7 @@ class TfDatabase
             $clean_criteria = null;
         }
         
-        return $this->_updateAll($clean_table, $clean_keys, $clean_criteria);
+        return $this->_updateAll($clean_table, $cleanKeys, $clean_criteria);
     }
 
     /** @internal */
@@ -1390,14 +1390,14 @@ class TfDatabase
      */
     public function validateKeys(array $keyValues)
     {
-        $clean_keys = array();
+        $cleanKeys = array();
         
         if ($this->validator->isArray($keyValues) && !empty($keyValues)) {
             foreach ($keyValues as $key => $value) {
                 $key = $this->escapeIdentifier($key);
                 
                 if ($this->validator->isAlnumUnderscore($key)) {
-                    $clean_keys[$key] = $value;
+                    $cleanKeys[$key] = $value;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
@@ -1406,7 +1406,7 @@ class TfDatabase
                 unset($key, $value);
             }
             
-            return $clean_keys;
+            return $cleanKeys;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
             exit;

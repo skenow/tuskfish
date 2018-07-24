@@ -34,7 +34,7 @@ class TfSearchContent
     protected $db;
     protected $preference;
     protected $searchTerms;
-    protected $escaped_searchTerms;
+    protected $escapedSearchTerms;
     protected $limit;
     protected $offset;
     protected $operator; // and / or / exact
@@ -46,7 +46,7 @@ class TfSearchContent
         $this->db = $tfDatabase;
         $this->preference = $tfPreference;
         $this->searchTerms = array();
-        $this->escaped_searchTerms = array();
+        $this->escapedSearchTerms = array();
         $this->limit = $tfPreference->searchPagination;
         $this->offset = 0;
         $this->operator = 'AND';
@@ -67,10 +67,10 @@ class TfSearchContent
     public function searchContent()
     {
         $sql = $count = '';
-        $search_term_placeholders = $escaped_term_placeholders = $results = array();
+        $searchTermPlaceholders = $escapedTermPlaceholders = $results = array();
         
-        $sql_count = "SELECT count(*) ";
-        $sql_search = "SELECT * ";
+        $sqlCount = "SELECT count(*) ";
+        $sqlSearch = "SELECT * ";
         $result = array();
 
         $sql = "FROM `content` ";
@@ -80,15 +80,15 @@ class TfSearchContent
             $sql .= "WHERE ";
             
             for ($i = 0; $i < $count; $i++) {
-                $search_term_placeholders[$i] = ':search_term' . (string) $i;
-                $escaped_term_placeholders[$i] = ':escaped_search_term' . (string) $i;
+                $searchTermPlaceholders[$i] = ':searchTerm' . (string) $i;
+                $escapedTermPlaceholders[$i] = ':escapedSearchTerm' . (string) $i;
                 $sql .= "(";
-                $sql .= "`title` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`teaser` LIKE " . $escaped_term_placeholders[$i] . " OR ";
-                $sql .= "`description` LIKE " . $escaped_term_placeholders[$i] . " OR ";
-                $sql .= "`caption` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`creator` LIKE " . $search_term_placeholders[$i] . " OR ";
-                $sql .= "`publisher` LIKE " . $search_term_placeholders[$i];
+                $sql .= "`title` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`teaser` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
+                $sql .= "`description` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
+                $sql .= "`caption` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`creator` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`publisher` LIKE " . $searchTermPlaceholders[$i];
                 $sql .= ")";
                 
                 if ($i != ($count - 1)) {
@@ -99,16 +99,16 @@ class TfSearchContent
         
         $sql .= " AND `online` = 1 AND `type` != 'TfBlock' ";
         $sql .= "ORDER BY `date` DESC, `submissionTime` DESC ";
-        $sql_count .= $sql;
+        $sqlCount .= $sql;
         
         // Bind the search term values and execute the statement.
-        $statement = $this->db->preparedStatement($sql_count);
+        $statement = $this->db->preparedStatement($sqlCount);
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
-                $statement->bindValue($search_term_placeholders[$i], "%" . $this->searchTerms[$i] . "%",
+                $statement->bindValue($searchTermPlaceholders[$i], "%" . $this->searchTerms[$i] . "%",
                         PDO::PARAM_STR);
-                $statement->bindValue($escaped_term_placeholders[$i], "%" . $this->escaped_searchTerms[$i] . "%",
+                $statement->bindValue($escapedTermPlaceholders[$i], "%" . $this->escapedSearchTerms[$i] . "%",
                         PDO::PARAM_STR);
             }
         } else {
@@ -133,14 +133,14 @@ class TfSearchContent
             $sql .= "OFFSET :offset ";
         }
 
-        $sql_search .= $sql;
-        $statement = $this->db->preparedStatement($sql_search);
+        $sqlSearch .= $sql;
+        $statement = $this->db->preparedStatement($sqlSearch);
         
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
-                $statement->bindValue($search_term_placeholders[$i], "%" . $this->searchTerms[$i] . "%",
+                $statement->bindValue($searchTermPlaceholders[$i], "%" . $this->searchTerms[$i] . "%",
                         PDO::PARAM_STR);
-                $statement->bindValue($escaped_term_placeholders[$i], "%" . $this->escaped_searchTerms[$i]
+                $statement->bindValue($escapedTermPlaceholders[$i], "%" . $this->escapedSearchTerms[$i]
                         . "%", PDO::PARAM_STR);
                 $statement->bindValue(":limit", (int) $this->limit, PDO::PARAM_INT);
                 
@@ -189,17 +189,17 @@ class TfSearchContent
     
     public function setSearchTerms(string $searchTerms)
     {
-        $clean_searchTerms = $escaped_searchTerms = $clean_escaped_searchTerms = array();
+        $cleanSearchTerms = $escapedSearchTerms = $cleanEscapedSearchTerms = array();
         
         // Create an escaped copy that will be used to search the HTML teaser and description fields.
-        $escaped_searchTerms = htmlspecialchars($searchTerms, ENT_NOQUOTES, "UTF-8");
+        $escapedSearchTerms = htmlspecialchars($searchTerms, ENT_NOQUOTES, "UTF-8");
 
         if ($this->operator === 'AND' || $this->operator === 'OR') {
             $searchTerms = explode(" ", $searchTerms);
-            $escaped_searchTerms = explode(" ", $escaped_searchTerms);
+            $escapedSearchTerms = explode(" ", $escapedSearchTerms);
         } else {
             $searchTerms = array($searchTerms);
-            $escaped_searchTerms = array($escaped_searchTerms);
+            $escapedSearchTerms = array($escapedSearchTerms);
         }
         
         // Trim search terms and discard any that are less than the minimum search length characters.
@@ -207,22 +207,22 @@ class TfSearchContent
             $term = $this->validator->trimString($term);
             
             if (!empty($term) && mb_strlen($term, 'UTF-8') >= $this->preference->minSearchLength) {
-                $clean_searchTerms[] = (string) $term;
+                $cleanSearchTerms[] = (string) $term;
             }
         }
         
-        $this->searchTerms = $clean_searchTerms;
+        $this->searchTerms = $cleanSearchTerms;
         
-        foreach ($escaped_searchTerms as $escaped_term) {
-            $escaped_term = $this->validator->trimString($escaped_term);
+        foreach ($escapedSearchTerms as $escapedTerm) {
+            $escapedTerm = $this->validator->trimString($escapedTerm);
             
-            if (!empty($escaped_term) && mb_strlen($escaped_term, 'UTF-8')
+            if (!empty($escapedTerm) && mb_strlen($escapedTerm, 'UTF-8')
                     >= $this->preference->minSearchLength) {
-                $clean_escaped_searchTerms[] = (string) $escaped_term;
+                $cleanEscapedSearchTerms[] = (string) $escapedTerm;
             }
         }
         
-        $this->escaped_searchTerms = $escaped_searchTerms;
+        $this->escapedSearchTerms = $escapedSearchTerms;
     }
     
 }
