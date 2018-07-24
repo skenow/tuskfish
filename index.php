@@ -41,7 +41,7 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 $basename = basename(__FILE__);
 $cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
-$rss_url = !empty($cleanTag) ? TFISH_RSS_URL . '?tagId=' . $cleanTag : TFISH_RSS_URL;
+$rssUrl = !empty($cleanTag) ? TFISH_RSS_URL . '?tagId=' . $cleanTag : TFISH_RSS_URL;
 
 // Retrieve a single object if an ID is set.
 if ($cleanId) {

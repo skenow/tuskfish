@@ -1,13 +1,13 @@
 <?php declare(strict_types=1); ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title><?php echo $tfValidator->escapeForXss($rss_feed->title); ?></title>
-    <link><?php echo $tfValidator->escapeForXss($rss_feed->link); ?></link>
-    <description><?php echo $tfValidator->escapeForXss(strip_tags($rss_feed->description)); ?></description>
-    <generator><?php echo $tfValidator->escapeForXss($rss_feed->generator); ?></generator>
-    <managingEditor><?php echo $tfValidator->escapeForXss($rss_feed->managingEditor); ?></managingEditor>
-    <webMaster><?php echo $tfValidator->escapeForXss($rss_feed->webmaster); ?></webMaster>
-    <atom:link href="<?php echo $rss_feed->link; ?>" rel="self" type="application/rss+xml" />
+    <title><?php echo $tfValidator->escapeForXss($rssFeed->title); ?></title>
+    <link><?php echo $tfValidator->escapeForXss($rssFeed->link); ?></link>
+    <description><?php echo $tfValidator->escapeForXss(strip_tags($rssFeed->description)); ?></description>
+    <generator><?php echo $tfValidator->escapeForXss($rssFeed->generator); ?></generator>
+    <managingEditor><?php echo $tfValidator->escapeForXss($rssFeed->managingEditor); ?></managingEditor>
+    <webMaster><?php echo $tfValidator->escapeForXss($rssFeed->webmaster); ?></webMaster>
+    <atom:link href="<?php echo $rssFeed->link; ?>" rel="self" type="application/rss+xml" />
     <?php if (isset($items) && !empty($items)): ?>
     <?php foreach ($items as $item): ?>
     <item>

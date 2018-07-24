@@ -38,9 +38,9 @@ $cleanOp = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : 
 if (isset($_REQUEST['query'])) {
     $terms = $tfValidator->trimString($_REQUEST['query']);
     $terms = rawurldecode($terms);
-    $clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
+    $cleanTerms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
-    $clean_terms = isset($_REQUEST['searchTerms'])
+    $cleanTerms = isset($_REQUEST['searchTerms'])
             ? $tfValidator->trimString($_REQUEST['searchTerms']) : false;
 }
 
@@ -48,12 +48,12 @@ $searchType = isset($_REQUEST['searchType']) ? $tfValidator->trimString($_REQUES
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
-if ($cleanOp && $clean_terms && $searchType) {
-    $search_engine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
-    $search_engine->setSearchTerms($clean_terms);
-    $search_engine->setOperator($searchType);
-    $search_engine->setOffset($start);
-    $searchResults = $search_engine->searchContent();
+if ($cleanOp && $cleanTerms && $searchType) {
+    $searchEngine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
+    $searchEngine->setSearchTerms($cleanTerms);
+    $searchEngine->setOperator($searchType);
+    $searchEngine->setOffset($start);
+    $searchResults = $searchEngine->searchContent();
 
     if ($searchResults && $searchResults[0] > 0) {
         
@@ -69,11 +69,11 @@ if ($cleanOp && $clean_terms && $searchType) {
         $tfPagination->setLimit($tfPreference->searchPagination);
         $tfPagination->setStart($start);
         $tfPagination->setTag(0);
-        $query_parameters = array(
+        $queryParameters = array(
             'op' => 'search',
             'searchType' => $searchType,
-            'query' => $clean_terms);
-        $tfPagination->setExtraParams($query_parameters);
+            'query' => $cleanTerms);
+        $tfPagination->setExtraParams($queryParameters);
         $tfTemplate->pagination = $tfPagination->getPaginationControl();
     } else {
         $tfTemplate->searchResults = false;
@@ -82,7 +82,7 @@ if ($cleanOp && $clean_terms && $searchType) {
 
 // Assign template variables.
 $tfTemplate->pageTitle = TFISH_SEARCH;
-$tfTemplate->terms = $clean_terms;
+$tfTemplate->terms = $cleanTerms;
 $tfTemplate->type = $searchType;
 $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . 'search.html';
 $tfTemplate->tfMainContent = $tfTemplate->render('form');

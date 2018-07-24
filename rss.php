@@ -76,7 +76,7 @@ $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 $contentObjects = $contentHandler->getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.
-$tfTemplate->rss_feed = $rss;
+$tfTemplate->rssFeed = $rss;
 $tfTemplate->items = $contentObjects;
 $tfTemplate->mimetypeList = $mimetypeList;
 $tfTemplate->tagId = !empty($cleanTagId) ? '?tagId=' . (string) $cleanTagId : '';
