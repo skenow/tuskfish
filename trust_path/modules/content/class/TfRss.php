@@ -27,7 +27,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
- * @param       object $tf_preference TfPreference object to make site preferences available.
+ * @param       object $tfPreference TfPreference object to make site preferences available.
  * @property    string $title Name of channel.
  * @property    string $link URL to website associated with this channel.
  * @property    string $description Sentence describing the channel.
@@ -56,17 +56,17 @@ class TfRss
     protected $template;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct(TfPreference $tf_preference, object $tf_validator)
+    public function __construct(TfPreference $tfPreference, object $tfValidator)
     {
         
         // Set default values of permitted properties.
-        $this->validator = $tf_validator;
-        $this->setTitle($tf_preference->site_name);
+        $this->validator = $tfValidator;
+        $this->setTitle($tfPreference->siteName);
         $this->setLink(TFISH_RSS_URL);
-        $this->setDescription($tf_preference->site_description);
-        $this->setCopyright($tf_preference->site_copyright);
-        $this->setManagingEditor($tf_preference->site_email);
-        $this->setWebMaster($tf_preference->site_email);
+        $this->setDescription($tfPreference->siteDescription);
+        $this->setCopyright($tfPreference->siteCopyright);
+        $this->setManagingEditor($tfPreference->siteEmail);
+        $this->setWebMaster($tfPreference->siteEmail);
         $this->setGenerator('Tuskfish');
         $this->setItems(array());
         $this->setTemplate('rss');

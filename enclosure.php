@@ -20,17 +20,17 @@ declare(strict_types=1);
 require_once "mainfile.php";
 
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
 require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
-$clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-if ($clean_id) {
-    $content_handler = $content_handler_factory->getHandler('content');
-    $content_handler->updateCounter($clean_id);
-    $content_handler->streamDownloadToBrowser($clean_id);
+if ($cleanId) {
+    $contentHandler = $contentHandlerFactory->getHandler('content');
+    $contentHandler->updateCounter($cleanId);
+    $contentHandler->streamDownloadToBrowser($cleanId);
 }
 
 exit;

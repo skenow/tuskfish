@@ -33,7 +33,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $description The full article or description of the content. [HTML]
  * @properties  array $tags Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
  * @properties  int $online Toggle object on or offline.
- * @properties  int $submission_time Timestamp representing submission time.
+ * @properties  int $submissionTime Timestamp representing submission time.
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
  * @properties  string $module The module that handles this content type (not persistent).
@@ -42,10 +42,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfBlock extends TfContentObject
 {
     /** Initialise default properties and values. */
-    public function __construct(TfValidator $tf_validator)
+    public function __construct(TfValidator $tfValidator)
     {
         // Must call parent constructor first.
-        parent::__construct($tf_validator);
+        parent::__construct($tfValidator);
 
         // Declare the type, template, module and icon for this this class
         $this->type = "TfBlock";
@@ -78,8 +78,8 @@ class TfBlock extends TfContentObject
             'rights',
             'publisher',
             'counter',
-            'meta_title',
-            'meta_description',
+            'metaTitle',
+            'metaDescription',
             'seo'
         );
     }

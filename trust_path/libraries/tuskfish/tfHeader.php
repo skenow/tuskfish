@@ -40,42 +40,42 @@ include TFISH_DEFAULT_LANGUAGE;
  * those that follow.
  */
 // Data validator.
-$tf_validator_factory = new TfValidatorFactory();
-$tf_validator = $tf_validator_factory->getValidator();
+$tfValidatorFactory = new TfValidatorFactory();
+$tfValidator = $tfValidatorFactory->getValidator();
 
 // Error logger.
-$tf_logger = new TfLogger($tf_validator);
-set_error_handler(array($tf_logger, "logError"));
+$tfLogger = new TfLogger($tfValidator);
+set_error_handler(array($tfLogger, "logError"));
 
 // File handler.
-$tf_file_handler = new TfFileHandler($tf_validator);
+$tfFileHandler = new TfFileHandler($tfValidator);
 
 // Database connection.
-$tf_database = new TfDatabase($tf_validator, $tf_logger, $tf_file_handler);
-$tf_database->connect();
+$tfDatabase = new TfDatabase($tfValidator, $tfLogger, $tfFileHandler);
+$tfDatabase->connect();
 
 // CriteriaItem and Criteria factories. Used to compose database queries.
-$tf_criteria_factory = new TfCriteriaFactory($tf_validator);
-$tf_criteria_item_factory = new TfCriteriaItemFactory($tf_validator);
+$tfCriteriaFactory = new TfCriteriaFactory($tfValidator);
+$tfCriteriaItemFactory = new TfCriteriaItemFactory($tfValidator);
 
 // Site preferences.
-$preference_handler = new TfPreferenceHandler($tf_database);
-$tf_preference = new TfPreference($tf_validator, $preference_handler->readPreferencesFromDatabase());
+$preferenceHandler = new TfPreferenceHandler($tfDatabase);
+$tfPreference = new TfPreference($tfValidator, $preferenceHandler->readPreferencesFromDatabase());
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site.
-TfSession::start($tf_validator, $tf_database, $tf_preference);
+TfSession::start($tfValidator, $tfDatabase, $tfPreference);
 
 // Site metadata.
-$tf_metadata = new TfMetadata($tf_validator, $tf_preference);
+$tfMetadata = new TfMetadata($tfValidator, $tfPreference);
 
 // Template renderer.
-$tf_template = new TfTemplate($tf_validator);
+$tfTemplate = new TfTemplate($tfValidator);
 
 // Site cache.
-$tf_cache = new TfCache($tf_validator, $tf_preference);
+$tfCache = new TfCache($tfValidator, $tfPreference);
 
 // Check if site is closed, if so redirect to the login page and exit.
-if ($tf_preference->close_site && !TfSession::isAdmin()) {
+if ($tfPreference->closeSite && !TfSession::isAdmin()) {
     header('Location: ' . TFISH_ADMIN_URL . "login.php");
     exit;
 }

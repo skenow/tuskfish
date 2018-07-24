@@ -47,9 +47,9 @@ class TfTagHandler extends TfContentHandler
      * parental ID as a selection criteria.
      * 
      * @param int $selected ID of selected option.
-     * @param array $tag_list Array of options in tag_id => title format.
+     * @param array $tag_list Array of options in tagId => title format.
      * @param string $key_name The input parameter name you want to use as key for this select box.
-     * Defaults to 'tag_id'.
+     * Defaults to 'tagId'.
      * @param string $zero_option The string that will be displayed for the 'zero' or no selection
      * option.
      * @return string HTML select box.
@@ -81,7 +81,7 @@ class TfTagHandler extends TfContentHandler
         // The text to display in the zero option of the select box.
         $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
         $clean_key_name = isset($key_name)
-                ? $this->validator->escapeForXss($this->validator->trimString($key_name)) : 'tag_id';
+                ? $this->validator->escapeForXss($this->validator->trimString($key_name)) : 'tagId';
 
         // Build the select box.
         $clean_tag_list = array(0 => $clean_zero_option) + $clean_tag_list;
@@ -181,13 +181,13 @@ class TfTagHandler extends TfContentHandler
         $clean_selected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
         $clean_zero_option = $this->validator->escapeForXss($this->validator->trimString($zero_option));
-        $clean_type = $this->isSanctionedType($type)
+        $cleanType = $this->isSanctionedType($type)
                 ? $this->validator->trimString($type) : null;
         $clean_online_only = $this->validator->isBool($online_only) ? (bool) $online_only : true;
-        $tag_list = $this->getActiveTagList($clean_type, $clean_online_only);
+        $tag_list = $this->getActiveTagList($cleanType, $clean_online_only);
         
         if ($tag_list) {
-            $select_box = $this->getArbitraryTagSelectBox($clean_selected, $tag_list, 'tag_id', $clean_zero_option);
+            $select_box = $this->getArbitraryTagSelectBox($clean_selected, $tag_list, 'tagId', $clean_zero_option);
         } else {
             $select_box = false;
         }

@@ -128,16 +128,16 @@ class TfDatabase
      * Database name must be alphanumeric and underscore characters only. The database will
      * automatically be appended with the suffix .db
      * 
-     * @param string $db_name Database name.
+     * @param string $dbName Database name.
      * @return string|bool Path to database file on success, false on failure.
      */
-    public function create(string $db_name)
+    public function create(string $dbName)
     {
         // Validate input parameters
-        $db_name = $this->validator->trimString($db_name);
+        $dbName = $this->validator->trimString($dbName);
         
-        if ($this->validator->isAlnumUnderscore($db_name)) {
-            return $this->_create($db_name . '.db');
+        if ($this->validator->isAlnumUnderscore($dbName)) {
+            return $this->_create($dbName . '.db');
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
@@ -145,17 +145,17 @@ class TfDatabase
     }
 
     /** @internal */
-    private function _create(string $db_name)
+    private function _create(string $dbName)
     {
         // Generate a random prefix for the database filename to make it unpredictable.
         $prefix = mt_rand();
 
         // Create database file and append a constant with the database path to config.php
         try {
-            $db_path = TFISH_DATABASE_PATH . $prefix . '_' . $db_name;
-            $this->_db = new PDO('sqlite:' . $db_path);
+            $dbPath = TFISH_DATABASE_PATH . $prefix . '_' . $dbName;
+            $this->_db = new PDO('sqlite:' . $dbPath);
             $db_constant = PHP_EOL . 'if (!defined("TFISH_DATABASE")) define("TFISH_DATABASE", "'
-                    . $db_path . '");';
+                    . $dbPath . '");';
             $result = $this->file_handler->appendToFile(TFISH_CONFIGURATION_PATH, $db_constant);
             
             if (!$result) {
@@ -163,7 +163,7 @@ class TfDatabase
                 return false;
             }
             
-            return $db_path;
+            return $dbPath;
         } catch (PDOException $e) {
             $this->logger->logError($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
             return false;
@@ -274,9 +274,9 @@ class TfDatabase
     public function delete(string $table, int $id)
     {
         $clean_table = $this->validateTableName($table);
-        $clean_id = $this->validateId($id);
+        $cleanId = $this->validateId($id);
         
-        return $this->_delete($clean_table, $clean_id);
+        return $this->_delete($clean_table, $cleanId);
     }
 
     /** @internal */
@@ -402,14 +402,14 @@ class TfDatabase
      */
     public function escapeIdentifier(string $identifier)
     {
-        $clean_identifier = '';
+        $cleanIdentifier = '';
         $identifier = $this->validator->trimString($identifier);
         $identifier = str_replace('"', '""', $identifier);
         $identifier = str_replace('`', '``', $identifier);
         $identifier = str_replace('[', '[[', $identifier);
-        $clean_identifier = str_replace(']', ']]', $identifier);
+        $cleanIdentifier = str_replace(']', ']]', $identifier);
         
-        return $clean_identifier;
+        return $cleanIdentifier;
     }
 
     /**
@@ -612,9 +612,9 @@ class TfDatabase
         $count = count($criteria->tag);
         
         if ($count === 1) {
-            $sql .= "`taglink`.`tag_id` = :tag0 ";
+            $sql .= "`taglink`.`tagId` = :tag0 ";
         } elseif ($count > 1) {
-            $sql .= "`taglink`.`tag_id` IN (";
+            $sql .= "`taglink`.`tagId` IN (";
             
             for ($i = 0; $i < count($criteria->tag); $i++) {
                 $sql .= ':tag' . (string) $i . ',';
@@ -1005,12 +1005,12 @@ class TfDatabase
      */
     public function toggleBoolean(int $id, string $table, string $column)
     {
-        $clean_id = $this->validateId($id);
+        $cleanId = $this->validateId($id);
         $clean_table = $this->validateTableName($table);
         $clean_column = $this->validateColumns(array($column));
         $clean_column = reset($clean_column);
         
-        return $this->_toggleBoolean($clean_id, $clean_table, $clean_column);
+        return $this->_toggleBoolean($cleanId, $clean_table, $clean_column);
     }
 
     /** @internal */
@@ -1043,12 +1043,12 @@ class TfDatabase
      */
     public function updateCounter(int $id, string $table, string $column)
     {
-        $clean_id = $this->validateId($id);
+        $cleanId = $this->validateId($id);
         $clean_table = $this->validateTableName($table);
         $clean_column = $this->validateColumns(array($column));
         $clean_column = reset($clean_column);
         
-        return $this->_updateCounter($clean_id, $clean_table, $clean_column);
+        return $this->_updateCounter($cleanId, $clean_table, $clean_column);
     }
 
     /** @internal */
@@ -1078,10 +1078,10 @@ class TfDatabase
     public function update(string $table, int $id, array $key_values)
     {
         $clean_table = $this->validateTableName($table);
-        $clean_id = $this->validateId($id);
+        $cleanId = $this->validateId($id);
         $clean_keys = $this->validateKeys($key_values);
         
-        return $this->_update($clean_table, $clean_id, $clean_keys);
+        return $this->_update($clean_table, $cleanId, $clean_keys);
     }
 
     /** @internal */
@@ -1241,7 +1241,7 @@ class TfDatabase
      */
     private function _renderTagJoin(string $table)
     {
-        $sql = "INNER JOIN `taglink` ON `t1`.`id` = `taglink`.`content_id` ";
+        $sql = "INNER JOIN `taglink` ON `t1`.`id` = `taglink`.`contentId` ";
 
         return $sql;
     }
@@ -1370,9 +1370,9 @@ class TfDatabase
      */
     public function validateId(int $id)
     {
-        $clean_id = (int) $id;
-        if ($this->validator->isInt($clean_id, 1)) {
-            return $clean_id;
+        $cleanId = (int) $id;
+        if ($this->validator->isInt($cleanId, 1)) {
+            return $cleanId;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;

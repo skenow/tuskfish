@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 require_once "../mainfile.php";
 
-// tf_header is manually duplicated on this page but without the site closed check and redirect
+// tfHeader is manually duplicated on this page but without the site closed check and redirect
 // as that creates a redirect loop.
 
 // Initialise output buffering with gzip compression.
@@ -30,42 +30,42 @@ ob_start("ob_gzhandler");
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
 
 // Initialise data validator.
-$tf_validator = new TfValidator();
+$tfValidator = new TfValidator();
 
 // Set error reporting levels and custom error handler.
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL & ~E_NOTICE);
-$tf_logger = new TfLogger($tf_validator);
-set_error_handler(array($tf_logger, "logError"));
+$tfLogger = new TfLogger($tfValidator);
+set_error_handler(array($tfLogger, "logError"));
 
 // Ensure that a database connection is available
-$tf_database = new TfDatabase($tf_validator, $tf_logger, $tf_file_handler);
-$tf_database->connect();
+$tfDatabase = new TfDatabase($tfValidator, $tfLogger, $tfFileHandler);
+$tfDatabase->connect();
 
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;
 
-// Ensure that global site preferences are available via $tf_preference
-$preference_handler = new TfPreferenceHandler($tf_database);
-$tf_preference = new TfPreference($tf_validator, $preference_handler->readPreferencesFromDatabase());
+// Ensure that global site preferences are available via $tfPreference
+$preferenceHandler = new TfPreferenceHandler($tfDatabase);
+$tfPreference = new TfPreference($tfValidator, $preferenceHandler->readPreferencesFromDatabase());
 
 // Begin secure session. Note that cookies are only relevant in the /admin section of the site
-TfSession::start($tf_validator, $tf_database, $tf_preference);
+TfSession::start($tfValidator, $tfDatabase, $tfPreference);
 
 // Set default page-level metadata values for essential template variables (overwrite as required).
-$tf_metadata = new TfMetadata($tf_validator, $tf_preference);
+$tfMetadata = new TfMetadata($tfValidator, $tfPreference);
 
 // Instantiate the template object so that it will be available globally.
-$tf_template = new TfTemplate($tf_validator);
+$tfTemplate = new TfTemplate($tfValidator);
 
 // End manual duplication of header.
 
 // Specify theme, otherwise 'default' will be used.
-$tf_template->setTheme('signin');
+$tfTemplate->setTheme('signin');
 
 // Page title.
-$tf_template->page_title = TFISH_LOGIN;
+$tfTemplate->pageTitle = TFISH_LOGIN;
 
 // Initialise and whitelist allowed parameters
 $clean_op = false;
@@ -75,11 +75,11 @@ $allowed_options = array("login", "logout", "");
 
 // Collect and sanitise parameters. Note that password is NOT sanitised and therefore it is dangerous.
 if (!empty($_POST['op'])) {
-    $op = $tf_validator->trimString($_POST['op']);
-    $clean_op = $tf_validator->isAlpha($op) ? $op : false;
+    $op = $tfValidator->trimString($_POST['op']);
+    $clean_op = $tfValidator->isAlpha($op) ? $op : false;
 } elseif (!empty($_GET['op'])) {
-    $op = $tf_validator->trimString($_GET['op']);
-    $clean_op = $tf_validator->isAlpha($op) ? $op : false;
+    $op = $tfValidator->trimString($_GET['op']);
+    $clean_op = $tfValidator->isAlpha($op) ? $op : false;
 }
 
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
@@ -88,7 +88,7 @@ $dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubikey_otp'] : false;
 if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
     switch ($clean_op) {
         case "login":
-            $yubikey = new TfYubikeyAuthenticator($tf_validator);
+            $yubikey = new TfYubikeyAuthenticator($tfValidator);
             TfSession::twoFactorLogin($dirty_password, $dirty_otp, $yubikey);
             break;
 
@@ -98,7 +98,7 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
 
         // Display the login form or a logout link, depending on whether the user is signed in or not
         default:
-            $tf_template->tf_main_content = $tf_template->render('yubikey');
+            $tfTemplate->tfMainContent = $tfTemplate->render('yubikey');
             break;
     }
 } else {
@@ -109,13 +109,13 @@ if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tf_metadata->setTitle(TFISH_LOGIN);
-$tf_metadata->setDescription(TFISH_LOGIN_DESCRIPTION);
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-$tf_metadata->setRobots('noindex,nofollow');
+$tfMetadata->setTitle(TFISH_LOGIN);
+$tfMetadata->setDescription(TFISH_LOGIN_DESCRIPTION);
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+$tfMetadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

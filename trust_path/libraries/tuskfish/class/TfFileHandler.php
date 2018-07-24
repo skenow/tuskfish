@@ -36,9 +36,9 @@ class TfFileHandler
     
     protected $validator;
     
-    public function __construct(TfValidator $tf_validator)
+    public function __construct(TfValidator $tfValidator)
     {
-        $this->validator = $tf_validator;
+        $this->validator = $tfValidator;
     }
 
     /**

@@ -38,10 +38,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $caption Caption of the image file.
  * @properties  int $parent A source work or collection of which this content is part.
  * @properties  int $online Toggle object on or offline.
- * @properties  int $submission_time Timestamp representing submission time.
+ * @properties  int $submissionTime Timestamp representing submission time.
  * @properties  int $counter Number of times this content was viewed or downloaded.
- * @properties  string $meta_title Set a custom page title for this content.
- * @properties  string $meta_description Set a custom page meta description for this content.
+ * @properties  string $metaTitle Set a custom page title for this content.
+ * @properties  string $metaDescription Set a custom page meta description for this content.
  * @properties  string $seo SEO-friendly string; it will be appended to the URL for this content.
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
@@ -52,10 +52,10 @@ class TfTag extends TfContentObject
 {
 
     /** Initialise default property values and unset unneeded ones. */
-    function __construct(TfValidator $tf_validator)
+    function __construct(TfValidator $tfValidator)
     {
         // Must call parent constructor first.
-        parent::__construct($tf_validator);
+        parent::__construct($tfValidator);
 
         // Declare the type, template and module for this this class.
         $this->type = "TfTag";

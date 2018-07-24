@@ -19,37 +19,37 @@ declare(strict_types=1);
 require_once "mainfile.php";
 
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
 require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Specify theme set, otherwise 'default' will be used.
-$tf_template->setTheme('default');
+$tfTemplate->setTheme('default');
 
 // Specify the landing page that search results should point to. Default (blank) is index.php.
-$tf_template->target_file_name = '';
+$tfTemplate->targetFileName = '';
 
 // Validate data and separate the search terms.
-$clean_op = isset($_REQUEST['op']) ? $tf_validator->trimString($_REQUEST['op']) : false;
+$clean_op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 
 // Search terms passed in from a pagination control link, in which case it has been previously
 // i) encoded and ii) escaped. This process needs to be reversed.
 if (isset($_REQUEST['query'])) {
-    $terms = $tf_validator->trimString($_REQUEST['query']);
+    $terms = $tfValidator->trimString($_REQUEST['query']);
     $terms = rawurldecode($terms);
     $clean_terms = htmlspecialchars_decode($terms, ENT_QUOTES);
 } else { // Search terms entered directly into the search form.
     $clean_terms = isset($_REQUEST['search_terms'])
-            ? $tf_validator->trimString($_REQUEST['search_terms']) : false;
+            ? $tfValidator->trimString($_REQUEST['search_terms']) : false;
 }
 
-$search_type = isset($_REQUEST['search_type']) ? $tf_validator->trimString($_REQUEST['search_type']) : false;
+$search_type = isset($_REQUEST['search_type']) ? $tfValidator->trimString($_REQUEST['search_type']) : false;
 $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($clean_op && $clean_terms && $search_type) {
-    $search_engine = new TfSearchContent($tf_validator, $tf_database, $tf_preference);
+    $search_engine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
     $search_engine->setSearchTerms($clean_terms);
     $search_engine->setOperator($search_type);
     $search_engine->setOffset($start);
@@ -59,14 +59,14 @@ if ($clean_op && $clean_terms && $search_type) {
         
         // Get a count of search results; this is used to build the pagination control.
         $results_count = (int) array_shift($search_results);
-        $tf_template->results_count = $results_count;
-        $tf_template->search_results = $search_results;
+        $tfTemplate->results_count = $results_count;
+        $tfTemplate->search_results = $search_results;
 
         // Prepare the pagination control, including parameters to be included in the link.
-        $tf_pagination = new TfPaginationControl($tf_validator, $tf_preference);
+        $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
         $tf_pagination->setUrl('search');
         $tf_pagination->setCount($results_count);
-        $tf_pagination->setLimit($tf_preference->search_pagination);
+        $tf_pagination->setLimit($tfPreference->searchPagination);
         $tf_pagination->setStart($start);
         $tf_pagination->setTag(0);
         $query_parameters = array(
@@ -74,29 +74,29 @@ if ($clean_op && $clean_terms && $search_type) {
             'search_type' => $search_type,
             'query' => $clean_terms);
         $tf_pagination->setExtraParams($query_parameters);
-        $tf_template->pagination = $tf_pagination->getPaginationControl();
+        $tfTemplate->pagination = $tf_pagination->getPaginationControl();
     } else {
-        $tf_template->search_results = false;
+        $tfTemplate->search_results = false;
     }
 }
 
 // Assign template variables.
-$tf_template->page_title = TFISH_SEARCH;
-$tf_template->terms = $clean_terms;
-$tf_template->type = $search_type;
-$tf_template->form = TFISH_CONTENT_MODULE_FORM_PATH . 'search.html';
-$tf_template->tf_main_content = $tf_template->render('form');
+$tfTemplate->pageTitle = TFISH_SEARCH;
+$tfTemplate->terms = $clean_terms;
+$tfTemplate->type = $search_type;
+$tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . 'search.html';
+$tfTemplate->tfMainContent = $tfTemplate->render('form');
 
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-$tf_metadata->setTitle(TFISH_SEARCH);
-$tf_metadata->setDescription(TFISH_SEARCH_DESCRIPTION);
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-// $tf_metadata->setRobots('');
+$tfMetadata->setTitle(TFISH_SEARCH);
+$tfMetadata->setDescription(TFISH_SEARCH_DESCRIPTION);
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+// $tfMetadata->setRobots('');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

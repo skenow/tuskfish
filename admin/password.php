@@ -17,16 +17,16 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
-require_once TFISH_ADMIN_PATH . "tf_admin_header.php";
+require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 
 // Specify theme set, otherwise 'default' will be used.
-$tf_template->setTheme('admin');
+$tfTemplate->setTheme('admin');
 
 // Validate input parameters. Note that passwords are not sanitised in any way.
-$op = isset($_REQUEST['op']) ? $tf_validator->trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 $dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword'] : false;
-$clean_token = isset($_POST['token']) ? $tf_validator->trimString($_POST['token']) : '';
+$clean_token = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.
 if (in_array($op, array('submit', false), true)) {
@@ -34,17 +34,17 @@ if (in_array($op, array('submit', false), true)) {
         case "submit":
             TfSession::validateToken($clean_token); // CSRF check.
             $error = [];
-            $password_quality = [];
+            $passwordQuality = [];
 
             // Get the admin user details.
             $user_id = (int) $_SESSION['user_id'];
-            $statement = $tf_database->preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
+            $statement = $tfDatabase->preparedStatement("SELECT * FROM `user` WHERE `id` = :id");
             $statement->bindParam(':id', $user_id, PDO::PARAM_INT);
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
             // Make sure that the user salt is available otherwise the hash will be weak.
-            if (empty($user) || empty($user['user_salt'])) {
+            if (empty($user) || empty($user['userSalt'])) {
                 $error[] = TFISH_USER_SALT_UNAVAILABLE;
             }
 
@@ -59,67 +59,67 @@ if (in_array($op, array('submit', false), true)) {
             }
 
             // Check that password meets minimum strength requirements.
-            $security_utility = new TfSecurityUtility();
-            $password_quality = $security_utility->checkPasswordStrength($dirty_password);
+            $securityUtility = new TfSecurityUtility();
+            $passwordQuality = $securityUtility->checkPasswordStrength($dirty_password);
             
-            if ($password_quality['strong'] === false) {
-                unset($password_quality['strong']);
-                foreach ($password_quality as $key => $problem) {
+            if ($passwordQuality['strong'] === false) {
+                unset($passwordQuality['strong']);
+                foreach ($passwordQuality as $key => $problem) {
                     $error[] = $problem;
                 }
             }
 
             // Display errors.
             if (!empty($error)) {
-                $tf_template->report = $error;
-                $tf_template->form = TFISH_FORM_PATH . "change_password.html";
-                $tf_template->tf_main_content = $tf_template->render('form');
+                $tfTemplate->report = $error;
+                $tfTemplate->form = TFISH_FORM_PATH . "change_password.html";
+                $tfTemplate->tfMainContent = $tfTemplate->render('form');
             }
 
             /**
              * All good: Calculate the password hash and update the user table.
              */
             if (empty($error)) {
-                $password_hash = '';
-                $password_hash = TfSession::recursivelyHashPassword($dirty_password, 
-                        100000, TFISH_SITE_SALT, $user['user_salt']);
-                $tf_template->back_url = 'admin.php';
-                    $tf_template->form = TFISH_FORM_PATH . "response.html";
+                $passwordHash = '';
+                $passwordHash = TfSession::recursivelyHashPassword($dirty_password, 
+                        100000, TFISH_SITE_SALT, $user['userSalt']);
+                $tfTemplate->backUrl = 'admin.php';
+                    $tfTemplate->form = TFISH_FORM_PATH . "response.html";
 
-                if ($password_hash) {
-                    $result = $tf_database->update('user', $user_id, 
-                            array('password_hash' => $password_hash));
+                if ($passwordHash) {
+                    $result = $tfDatabase->update('user', $user_id, 
+                            array('passwordHash' => $passwordHash));
                     
                     // Display response.
-                    $tf_template->back_url = 'admin.php';
-                    $tf_template->form = TFISH_FORM_PATH . "response.html";
+                    $tfTemplate->backUrl = 'admin.php';
+                    $tfTemplate->form = TFISH_FORM_PATH . "response.html";
                     
                     if ($result) {
-                        $tf_template->page_title = TFISH_SUCCESS;
-                        $tf_template->alert_class = 'alert-success';
-                        $tf_template->message = TFISH_PASSWORD_CHANGED_SUCCESSFULLY;
+                        $tfTemplate->pageTitle = TFISH_SUCCESS;
+                        $tfTemplate->alertClass = 'alert-success';
+                        $tfTemplate->message = TFISH_PASSWORD_CHANGED_SUCCESSFULLY;
                         
                     } else {
-                        $tf_template->page_title = TFISH_FAILED;
-                        $tf_template->alert_class = 'alert-danger';
-                        $tf_template->message = TFISH_PASSWORD_CHANGE_FAILED;
+                        $tfTemplate->pageTitle = TFISH_FAILED;
+                        $tfTemplate->alertClass = 'alert-danger';
+                        $tfTemplate->message = TFISH_PASSWORD_CHANGE_FAILED;
                     }
                     
-                    $tf_template->tf_main_content = $tf_template->render('form');
+                    $tfTemplate->tfMainContent = $tfTemplate->render('form');
                 }
             }
             break;
 
         default:
-            $tf_template->form = TFISH_FORM_PATH . "change_password.html";
-            $tf_template->tf_main_content = $tf_template->render('form');
+            $tfTemplate->form = TFISH_FORM_PATH . "change_password.html";
+            $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
     }
 }
 
 // Assign to template.
-$tf_template->page_title = TFISH_CHANGE_PASSWORD;
-$tf_metadata->setRobots('noindex,nofollow');
+$tfTemplate->pageTitle = TFISH_CHANGE_PASSWORD;
+$tfMetadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

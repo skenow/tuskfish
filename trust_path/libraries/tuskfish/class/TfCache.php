@@ -33,19 +33,19 @@ class TfCache
     protected $validator;
     protected $preference;
     
-    function __construct(TfValidator $tf_validator, TfPreference $tf_preference)
+    function __construct(TfValidator $tfValidator, TfPreference $tfPreference)
     {
-        $this->validator = $tf_validator; 
-        $this->preference = $tf_preference;
+        $this->validator = $tfValidator; 
+        $this->preference = $tfPreference;
     }
     
     /**
      * Save a copy of this page to the cache directory.
      * 
-     * This function should be called in tf_footer.php, before ob_end_flush(). Note that
+     * This function should be called in tfFooter.php, before ob_end_flush(). Note that
      * warnings are suppressed when trying to open the file.
      * 
-     * @param object $tf_preference TfPreference object, to make the site preferences
+     * @param object $tfPreference TfPreference object, to make the site preferences
      * available.
      * @param string $basename Filename of this page, alphanumeric and underscore characters only.
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
@@ -54,7 +54,7 @@ class TfCache
     public function cachePage(string $basename, array $params, string $buffer)
     {        
         // Abort if cache is disabled.
-        if (!$this->preference->enable_cache) {
+        if (!$this->preference->enableCache) {
             return;
         }
         
@@ -122,8 +122,8 @@ class TfCache
      * Note that only alphanumeric and underscore characters are permitted in the
      * basename parameter; this is to avoid directory traversals.
      * 
-     * If a cached page is not available execution will simply proceed and tf_footer.php will
-     * request the page be written to cache. This function should be called after tf_header.php
+     * If a cached page is not available execution will simply proceed and tfFooter.php will
+     * request the page be written to cache. This function should be called after tfHeader.php
      * is included.
      * 
      * @param string $basename Page filename without extension, eg. 'article' (alphanumeric and 
@@ -134,7 +134,7 @@ class TfCache
     {
         
         // Abort if cache is disabled.
-        if (!$this->preference->enable_cache) {
+        if (!$this->preference->enableCache) {
             return;
         }
         
@@ -155,9 +155,9 @@ class TfCache
         }
 
         // Path is good, so check if the file actually exists and has not expired. If so, flush
-        // the output buffer to screen. This buffer was opened in tf_header.
+        // the output buffer to screen. This buffer was opened in tfHeader.
         if (file_exists($resolved_path) && (filemtime($resolved_path) > 
-                (time() - $this->preference->cache_life))) {
+                (time() - $this->preference->cacheLife))) {
             echo file_get_contents($resolved_path);
             ob_end_flush();
             exit;

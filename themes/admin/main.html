@@ -1,19 +1,19 @@
 <?php declare(strict_types=1); ?>
 
 <!-- Page title -->
-<?php if (isset($page_title)): ?>
+<?php if (isset($pageTitle)): ?>
 <div class="row">
   <div class="col">
-    <h1 class="page-title"><?php echo $tf_validator->escapeForXss($page_title); ?></h1>
+    <h1 class="page-title"><?php echo $tfValidator->escapeForXss($pageTitle); ?></h1>
   </div>
 </div>
 <?php endif; ?>
 
 <!-- Select controls -->
-<?php if (isset($select_filters_form)): ?>
+<?php if (isset($selectFiltersForm)): ?>
 <div class="row">
-  <div class="col col-md-12 col-lg-8 select_filters mx-auto clearfix">
-    <?php echo $select_filters_form; ?>
+  <div class="col col-md-12 col-lg-8 selectFilters mx-auto clearfix">
+    <?php echo $selectFiltersForm; ?>
   </div>
 </div>
 <?php endif; ?>
@@ -28,10 +28,10 @@
 <?php endif; ?>
 
 <!-- Main content of page -->
-<?php if (isset($tf_main_content)): ?>
+<?php if (isset($tfMainContent)): ?>
 <div class="row">
   <div class="col main-content clearfix">
-    <?php echo $tf_main_content; ?>
+    <?php echo $tfMainContent; ?>
   </div>
 </div>
 <?php endif; ?>

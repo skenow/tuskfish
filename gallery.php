@@ -19,85 +19,85 @@ declare(strict_types=1);
 require_once "mainfile.php";
 
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 // 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
 require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tf_template->setTheme('default');
+$tfTemplate->setTheme('default');
 
 // Configure page.
-$tf_template->page_title = TFISH_IMAGE_GALLERY;
-$content_handler = $content_handler_factory->getHandler('content');
+$tfTemplate->pageTitle = TFISH_IMAGE_GALLERY;
+$contentHandler = $contentHandlerFactory->getHandler('content');
 $index_template = 'gallery';
-$target_file_name = 'gallery';
-$tf_template->target_file_name = $target_file_name;
+$targetFileName = 'gallery';
+$tfTemplate->targetFileName = $targetFileName;
 
 // Validate input parameters.
-$clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-$clean_tag = isset($_GET['tag_id']) ? (int) $_GET['tag_id'] : 0;
-$clean_type = isset($_GET['type']) && !empty($_GET['type']) 
-        ? $tf_validator->trimString($_GET['type']) : '';
+$clean_tag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanType = isset($_GET['type']) && !empty($_GET['type']) 
+        ? $tfValidator->trimString($_GET['type']) : '';
 
 // Select content objects where the image field is not null or empty.
-$criteria = $tf_criteria_factory->getCriteria();
-$criteria->add(new TfCriteriaItem($tf_validator, 'image', '', '<>'));
-$criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
+$criteria = $tfCriteriaFactory->getCriteria();
+$criteria->add(new TfCriteriaItem($tfValidator, 'image', '', '<>'));
+$criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 
 // Optional selection criteria.
 if ($clean_tag)
     $criteria->setTag(array($clean_tag));
 
-if ($clean_type) {
-    if (array_key_exists($clean_type, $content_handler->getTypes())) {
-        $criteria->add(new TfCriteriaItem($tf_validator, 'type', $clean_type));
+if ($cleanType) {
+    if (array_key_exists($cleanType, $contentHandler->getTypes())) {
+        $criteria->add(new TfCriteriaItem($tfValidator, 'type', $cleanType));
     } else {
         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
     }
 }
 
 // Prepare pagination control.
-$tf_pagination = new TfPaginationControl($tf_validator, $tf_preference);          
-$tf_pagination->setUrl($target_file_name);
-$tf_pagination->setCount($content_handler->getCount($criteria));
-$tf_pagination->setLimit($tf_preference->gallery_pagination);
+$tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);          
+$tf_pagination->setUrl($targetFileName);
+$tf_pagination->setCount($contentHandler->getCount($criteria));
+$tf_pagination->setLimit($tfPreference->galleryPagination);
 $tf_pagination->setStart($clean_start);
 $tf_pagination->setTag($clean_tag);
 
-if (isset($clean_type) && !empty($clean_type)) {
-    $tf_pagination->setExtraParams(array(['type'] => $clean_type));
+if (isset($cleanType) && !empty($cleanType)) {
+    $tf_pagination->setExtraParams(array(['type'] => $cleanType));
 }
 
-$tf_template->pagination = $tf_pagination->getPaginationControl();
+$tfTemplate->pagination = $tf_pagination->getPaginationControl();
 
 // Set offset and limit.
 if ($clean_start) $criteria->setOffset($clean_start);
-$criteria->setLimit($tf_preference->gallery_pagination);
+$criteria->setLimit($tfPreference->galleryPagination);
 
 // Prepare select filters.
-$tag_handler = $content_handler_factory->getHandler('tag');
-$tag_select_box = $tag_handler->getTagSelectBox($clean_tag);
-$tf_template->select_action = 'gallery.php';
-$tf_template->tag_select = $tag_select_box;
-$tf_template->select_filters_form = $tf_template->render('gallery_filters');
+$tag_handler = $contentHandlerFactory->getHandler('tag');
+$tagSelectBox = $tag_handler->getTagSelectBox($clean_tag);
+$tfTemplate->selectAction = 'gallery.php';
+$tfTemplate->tagSelect = $tagSelectBox;
+$tfTemplate->selectFiltersForm = $tfTemplate->render('galleryFilters');
 
 // Retrieve content objects and assign to template.
-$content_objects = $content_handler->getObjects($criteria);
-$tf_template->content_objects = $content_objects;
-$tf_template->tf_main_content = $tf_template->render($index_template);
+$contentObjects = $contentHandler->getObjects($criteria);
+$tfTemplate->contentObjects = $contentObjects;
+$tfTemplate->tfMainContent = $tfTemplate->render($index_template);
 
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-// $tf_metadata->setTitle('');
-// $tf_metadata->setDescription('');
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-// $tf_metadata->setRobots('');
+// $tfMetadata->setTitle('');
+// $tfMetadata->setDescription('');
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+// $tfMetadata->setRobots('');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

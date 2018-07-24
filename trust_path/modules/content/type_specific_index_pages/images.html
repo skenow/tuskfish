@@ -1,16 +1,16 @@
 <?php declare(strict_types=1); ?>
 
 <!-- Display a list of images in teaser view -->
-<?php if ($content_objects): ?>
-<?php foreach ($content_objects as $content): ?>
+<?php if ($contentObjects): ?>
+<?php foreach ($contentObjects as $content): ?>
 <div class="clearfix">
     <div class="text-left">
-        <h3><a href="<?php echo $content->getUrl($target_file_name); ?>"><?php echo $content->icon; ?> <?php echo $content->escapeForXss('title'); ?></a></h3>
+        <h3><a href="<?php echo $content->getUrl($targetFileName); ?>"><?php echo $content->icon; ?> <?php echo $content->escapeForXss('title'); ?></a></h3>
     </div>
     <?php if ($content->image): ?>
     <div class="float-left">
         <figure class="figure-left">
-            <a href="<?php echo $content->getUrl($target_file_name); ?>">
+            <a href="<?php echo $content->getUrl($targetFileName); ?>">
                 <img class="img-fluid" src="<?php echo $content->getCachedImage(100); ?>" 
                      <?php if ($content->caption): ?>
                      title="<?php echo $content->escapeForXss('caption'); ?>" alt="<?php echo $content->escapeForXss('caption'); ?>"

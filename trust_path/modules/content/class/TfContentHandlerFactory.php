@@ -42,19 +42,19 @@ class TfContentHandlerFactory
     
     public function getHandler(string $type)
     {        
-        $clean_type = $this->validator->trimString($type);
+        $cleanType = $this->validator->trimString($type);
         
-        if ($clean_type === 'content') {
+        if ($cleanType === 'content') {
             return new TfContentHandler($this->validator, $this->db, $this->criteria_factory,
                     $this->criteria_item_factory, $this->file_handler, $this->taglink_handler);
         }
         
-        if ($clean_type === 'collection') {
+        if ($cleanType === 'collection') {
             return new TfCollectionHandler($this->validator, $this->db, $this->criteria_factory,
                     $this->criteria_item_factory, $this->file_handler, $this->taglink_handler);
         }
         
-        if ($clean_type === 'tag') {
+        if ($cleanType === 'tag') {
             return new TfTagHandler($this->validator, $this->db, $this->criteria_factory,
                     $this->criteria_item_factory, $this->file_handler, $this->taglink_handler);
         }

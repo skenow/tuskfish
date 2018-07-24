@@ -46,10 +46,10 @@ class TfPaginationControl
     protected $extra_params;
     
     /** @param TfPreference $preference Instance of TfPreference, holding site preferences. */
-    function __construct(TfValidator $tf_validator, TfPreference $tf_preference)
+    function __construct(TfValidator $tfValidator, TfPreference $tfPreference)
     {
-        $this->validator = $tf_validator;
-        $this->preference = $tf_preference;
+        $this->validator = $tfValidator;
+        $this->preference = $tfPreference;
         $this->count = 0;
         $this->limit = 0;
         $this->url = '';
@@ -104,8 +104,8 @@ class TfPaginationControl
         $current_page = (int) (($this->start / $this->limit) + 1);
 
         // 3. Calculate length of pagination control (number of slots).
-        $elements = ((int) $this->preference->pagination_elements > $page_count)
-                ? $page_count : (int) $this->preference->pagination_elements;
+        $elements = ((int) $this->preference->paginationElements > $page_count)
+                ? $page_count : (int) $this->preference->paginationElements;
 
         // 4. Calculate the fore offset and initial (pre-adjustment) starting position.
         $offset_int = (int) (($elements - 1) / 2);
@@ -158,7 +158,7 @@ class TfPaginationControl
                 }
                 
                 if (!empty($this->tag)) {
-                    $arg_array[] = 'tag_id=' . $this->tag;
+                    $arg_array[] = 'tagId=' . $this->tag;
                 }
                 
                 if (!empty($this->extra_params)) {

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1); ?>
 
 <div>
-  <div class="alert <?php echo $tf_validator->escapeForXss($alert_class); ?>">
-    <strong><?php echo $tf_validator->escapeForXss($message); ?></strong>
+  <div class="alert <?php echo $tfValidator->escapeForXss($alertClass); ?>">
+    <strong><?php echo $tfValidator->escapeForXss($message); ?></strong>
   </div>
-  <form class="form-horizontal" method="post" role="form" action="<?php echo $back_url; ?>">
+  <form class="form-horizontal" method="post" role="form" action="<?php echo $backUrl; ?>">
     <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
     <button type="submit" class="btn btn-primary m-0"><?php echo TFISH_BACK; ?></button>
   </form>

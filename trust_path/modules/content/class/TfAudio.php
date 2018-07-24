@@ -34,7 +34,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $description The full article or description of the content. [HTML]
  * @properties  string $media An associated download/audio/video file. [FILEPATH OR URL]
  * @properties  string $format Mimetype
- * @properties  string $file_size Specify in bytes.
+ * @properties  string $fileSize Specify in bytes.
  * @properties  string $creator Author.
  * @properties  string image An associated image file, eg. a screenshot a good way to handle it. [FILEPATH OR URL]
  * @properties  string $caption Caption of the image file.
@@ -45,10 +45,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $publisher The entity responsible for distributing this work.
  * @properties  array $tags Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
  * @properties  int $online Toggle object on or offline.
- * @properties  int $submission_time Timestamp representing submission time.
+ * @properties  int $submissionTime Timestamp representing submission time.
  * @properties  int $counter Number of times this content was viewed or downloaded.
- * @properties  string $meta_title Set a custom page title for this content.
- * @properties  string $meta_description Set a custom page meta description for this content.
+ * @properties  string $metaTitle Set a custom page title for this content.
+ * @properties  string $metaDescription Set a custom page meta description for this content.
  * @properties  string $seo SEO-friendly string; it will be appended to the URL for this content.
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
@@ -59,10 +59,10 @@ class TfAudio extends TfContentObject
 {
     
     /** Initialise default property values and unset unneeded ones. */
-    function __construct(TfValidator $tf_validator)
+    function __construct(TfValidator $tfValidator)
     {
         // Must call parent constructor first.
-        parent::__construct($tf_validator);
+        parent::__construct($tfValidator);
 
         // Declare the type, template and module for this this class
         $this->type = "TfAudio";

@@ -39,15 +39,15 @@ class TfSearchContent
     protected $offset;
     protected $operator; // and / or / exact
     
-    public function __construct(TfValidator $tf_validator,
-            TfDatabase $tf_database, TfPreference $tf_preference)
+    public function __construct(TfValidator $tfValidator,
+            TfDatabase $tfDatabase, TfPreference $tfPreference)
     {
-        $this->validator = $tf_validator;
-        $this->db = $tf_database;
-        $this->preference = $tf_preference;
+        $this->validator = $tfValidator;
+        $this->db = $tfDatabase;
+        $this->preference = $tfPreference;
         $this->search_terms = array();
         $this->escaped_search_terms = array();
-        $this->limit = $tf_preference->search_pagination;
+        $this->limit = $tfPreference->searchPagination;
         $this->offset = 0;
         $this->operator = 'AND';
     }
@@ -98,7 +98,7 @@ class TfSearchContent
         }
         
         $sql .= " AND `online` = 1 AND `type` != 'TfBlock' ";
-        $sql .= "ORDER BY `date` DESC, `submission_time` DESC ";
+        $sql .= "ORDER BY `date` DESC, `submissionTime` DESC ";
         $sql_count .= $sql;
         
         // Bind the search term values and execute the statement.
@@ -124,7 +124,7 @@ class TfSearchContent
 
         // Retrieve the subset of objects actually required.
         if (!$this->limit) {
-            $limit = $this->preference->search_pagination;
+            $limit = $this->preference->searchPagination;
         }
         
         $sql .= "LIMIT :limit ";
@@ -206,7 +206,7 @@ class TfSearchContent
         foreach ($search_terms as $term) {
             $term = $this->validator->trimString($term);
             
-            if (!empty($term) && mb_strlen($term, 'UTF-8') >= $this->preference->min_search_length) {
+            if (!empty($term) && mb_strlen($term, 'UTF-8') >= $this->preference->minSearchLength) {
                 $clean_search_terms[] = (string) $term;
             }
         }
@@ -217,7 +217,7 @@ class TfSearchContent
             $escaped_term = $this->validator->trimString($escaped_term);
             
             if (!empty($escaped_term) && mb_strlen($escaped_term, 'UTF-8')
-                    >= $this->preference->min_search_length) {
+                    >= $this->preference->minSearchLength) {
                 $clean_escaped_search_terms[] = (string) $escaped_term;
             }
         }

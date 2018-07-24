@@ -123,7 +123,7 @@ class TfSession
     /**
      * Checks if a session has expired and sets last seen activity flag.
      * 
-     * @param object $tf_preference TfPreference object.
+     * @param object $tfPreference TfPreference object.
      * @return bool True if session has expired, false if not.
      */
     public static function isExpired()
@@ -184,7 +184,7 @@ class TfSession
     {
         // Query the database for a matching user.
         $statement = self::$db->preparedStatement("SELECT * FROM user WHERE "
-                . "`admin_email` = :clean_email");
+                . "`adminEmail` = :clean_email");
         $statement->bindParam(':clean_email', $clean_email, PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
@@ -192,28 +192,28 @@ class TfSession
         // Authenticate user by calculating their password hash and comparing it to the one on file.
         if ($user) {
             // If the user has previous failed login atttempts sleep to frustrate brute force attacks.
-            if ($user['login_errors']) {
-                sleep((int) $user['login_errors']);
+            if ($user['loginErrors']) {
+                sleep((int) $user['loginErrors']);
             }
             
-            $password_hash = self::recursivelyHashPassword($dirty_password, 100000,
-                    TFISH_SITE_SALT, $user['user_salt']);
+            $passwordHash = self::recursivelyHashPassword($dirty_password, 100000,
+                    TFISH_SITE_SALT, $user['userSalt']);
             
             // If login successful regenerate session due to privilege escalation.
-            if ($password_hash === $user['password_hash']) {
+            if ($passwordHash === $user['passwordHash']) {
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
                 $_SESSION['user_id'] = (int) $user['id'];
                 
                 // Reset failed login counter to zero.
-                self::$db->update('user', (int) $user['id'], array('login_errors' => 0));
+                self::$db->update('user', (int) $user['id'], array('loginErrors' => 0));
                 
                 // Redirect to admin page.
                 header('location: ' . TFISH_ADMIN_URL . "admin.php");
                 exit;
             } else {
                 // Increment failed login counter, destroy session and redirect to the login page.
-                self::$db->updateCounter((int) $user['id'], 'user', 'login_errors');
+                self::$db->updateCounter((int) $user['id'], 'user', 'loginErrors');
                 self::logout(TFISH_ADMIN_URL . "login.php");
                 exit;
             }
@@ -320,9 +320,9 @@ class TfSession
         
         // Query the database for a matching user.
         $statement = self::$db->preparedStatement("SELECT * FROM user WHERE "
-                . "`yubikey_id` = :yubikey_id OR "
-                . "`yubikey_id2` = :yubikey_id");
-        $statement->bindParam(':yubikey_id', $dirty_id, PDO::PARAM_STR);
+                . "`yubikeyId` = :yubikeyId OR "
+                . "`yubikeyId2` = :yubikeyId");
+        $statement->bindParam(':yubikeyId', $dirty_id, PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
         
@@ -332,10 +332,10 @@ class TfSession
         }
         
         // First factor authentication: Calculate password hash and compare to the one on file.
-        $password_hash = self::recursivelyHashPassword($dirty_password, 100000,
-                TFISH_SITE_SALT, $user['user_salt']);
+        $passwordHash = self::recursivelyHashPassword($dirty_password, 100000,
+                TFISH_SITE_SALT, $user['userSalt']);
         
-        if ($password_hash === $user['password_hash']) {
+        if ($passwordHash === $user['passwordHash']) {
             $first_factor = true;
         }
         
@@ -407,13 +407,13 @@ class TfSession
      * @param string $password Input password.
      * @param int $iterations Number of iterations to run, you want this to be a large number
      * (100,000 or more).
-     * @param string $site_salt The Tuskfish site salt, found in the configuration file.
-     * @param string $user_salt The user-specific salt for this user, found in the user database
+     * @param string $siteSalt The Tuskfish site salt, found in the configuration file.
+     * @param string $userSalt The user-specific salt for this user, found in the user database
      * table.
      * @return string Password hash.
      */
     public static function recursivelyHashPassword(string $password, int $iterations,
-            string $site_salt, string $user_salt = '')
+            string $siteSalt, string $userSalt = '')
     {
 
         $iterations = (int) $iterations;
@@ -421,10 +421,10 @@ class TfSession
         // Force a minimum number of iterations (1).
         $iterations = $iterations > 0 ? $iterations : 1;
 
-        $password = $site_salt . $password;
+        $password = $siteSalt . $password;
         
-        if ($user_salt) {
-            $password .= $user_salt;
+        if ($userSalt) {
+            $password .= $userSalt;
         }
         
         for ($i = 0; $i < $iterations; $i++) {
@@ -469,42 +469,42 @@ class TfSession
     /**
      * Initialises a session and sets session cookie parameters to security-conscious values. 
      * 
-     * @param object $tf_preference TfPreference object.
+     * @param object $tfPreference TfPreference object.
      */
-    public static function start(TfValidator $tf_validator, TfDatabase $tf_database,
-            TfPreference $tf_preference)
+    public static function start(TfValidator $tfValidator, TfDatabase $tfDatabase,
+            TfPreference $tfPreference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', '1');
         ini_set('session.use_only_cookies', '1');
         
-        if (is_a($tf_validator, 'TfValidator')) {
-            self::$validator = $tf_validator;
+        if (is_a($tfValidator, 'TfValidator')) {
+            self::$validator = $tfValidator;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
-        if (is_a($tf_database, 'TfDatabase')) {
-            self::$db = $tf_database;
+        if (is_a($tfDatabase, 'TfDatabase')) {
+            self::$db = $tfDatabase;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
-        if (is_a($tf_preference, 'TfPreference')) {
-            self::$preference = $tf_preference;
+        if (is_a($tfPreference, 'TfPreference')) {
+            self::$preference = $tfPreference;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
 
         // Session name. If the preference has been messed up it will assign one.
-        $session_name = isset($tf_preference->session_name)
-                ? $tf_preference->session_name : 'tf';
+        $session_name = isset($tfPreference->session_name)
+                ? $tfPreference->session_name : 'tf';
 
         // Session life time, in seconds. '0' means until the browser is closed.
-        $lifetime = $tf_preference->session_lifetime;
+        $lifetime = $tfPreference->session_lifetime;
 
         // Path on the domain where the cookie will work. Use a single slash for all paths (default,
         // as there are admin checks in some templates).
@@ -529,7 +529,7 @@ class TfSession
         self::setToken();
 
         // Check if the session has expired.
-        if (self::isExpired($tf_preference))
+        if (self::isExpired($tfPreference))
             self::destroy();
 
         // Check for signs of session hijacking and regenerate if at risk. 10% chance of doing it

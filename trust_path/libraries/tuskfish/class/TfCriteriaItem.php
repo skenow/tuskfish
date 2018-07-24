@@ -51,10 +51,10 @@ class TfCriteriaItem
      * @param mixed $value Value of the column.
      * @param string $operator See getListOfPermittedOperators() for a list of acceptable operators.
      */
-    function __construct(TfValidator $tf_validator, string $column, $value, string $operator = '=')
+    function __construct(TfValidator $tfValidator, string $column, $value, string $operator = '=')
     {
 
-        $this->validator = $tf_validator;
+        $this->validator = $tfValidator;
         $this->setColumn($column);
         $this->setValue($value);
         $this->setOperator($operator);

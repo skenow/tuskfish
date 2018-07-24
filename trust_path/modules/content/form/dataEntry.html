@@ -1,7 +1,7 @@
 <?php declare(strict_types=1); ?>
 
 <!-- Custom form manager script to show or hide fields used by specific content subclasses and manage media file uploads -->
-<script type="text/javascript" src="<?php echo TFISH_THEMES_URL . 'admin/tf_form.js'; ?>"></script>
+<script type="text/javascript" src="<?php echo TFISH_THEMES_URL . 'admin/tfForm.js'; ?>"></script>
     
 <form class="form-horizontal" action="admin.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
     
@@ -22,9 +22,9 @@
         <label for="type"><strong><?php echo TFISH_TYPE; ?></strong></label>
         <select class="form-control custom-select" name="type" id="type" required>
             <?php
-                foreach ($content_types as $key => $type) {
-                    echo '<option value="' . $tf_validator->escapeForXss($key) . '">'
-                    . $tf_validator->escapeForXss($type) . '</option>';
+                foreach ($contentTypes as $key => $type) {
+                    echo '<option value="' . $tfValidator->escapeForXss($key) . '">'
+                    . $tfValidator->escapeForXss($type) . '</option>';
                 }
             ?>
         </select>
@@ -53,8 +53,8 @@
             <label for="tags"><strong><?php echo TFISH_TAGS; ?></strong></label>
             <select multiple class="form-control custom-select" size="5"  name="tags[]" id="tags">
                 <?php
-                    foreach ($tags as $tag_id => $tag_title) {
-                        echo '<option value="' . $tf_validator->escapeForXss($tag_id) . '">' . $tf_validator->escapeForXss($tag_title) . '</option>';
+                    foreach ($tags as $tagId => $tag_title) {
+                        echo '<option value="' . $tfValidator->escapeForXss($tagId) . '">' . $tfValidator->escapeForXss($tag_title) . '</option>';
                     }
                 ?>
             </select>
@@ -87,14 +87,14 @@
         <!-- Publisher -->
         <div class="col-md-6 mb-3 text-left" id="publisherContainer">
             <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
-            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tf_preference; echo $tf_validator->escapeForXss($tf_preference->site_author); ?>">
+            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfPreference; echo $tfValidator->escapeForXss($tfPreference->siteAuthor); ?>">
         </div>
 
         <!-- Parent -->
         <div class="col-12 mb-3 text-left" id="parentContainer">
             <label for="publisher"><strong><?php echo TFISH_PARENT; ?></strong></label>
             <select class="form-control custom-select" name="parent" id="parent" required>
-            <?php foreach ($parent_select_options as $key => $option): ?>
+            <?php foreach ($parentSelectOptions as $key => $option): ?>
                 <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
             <?php endforeach; ?>
             </select>
@@ -148,7 +148,7 @@
         <div class="col-md-6 mb-3 text-left" id="rightsContainer">
             <label for="rights"><strong><?php echo TFISH_RIGHTS; ?></strong></label>
             <select class="form-control custom-select" name="rights" id="rights" required>
-                <?php foreach ($rights as $key => $right) { echo '<option value="' . $tf_validator->escapeForXss($key) . '">' . $tf_validator->escapeForXss($right) . '</option>';} ?>
+                <?php foreach ($rights as $key => $right) { echo '<option value="' . $tfValidator->escapeForXss($key) . '">' . $tfValidator->escapeForXss($right) . '</option>';} ?>
             </select>
         </div>
 
@@ -157,12 +157,12 @@
             <label for="language"><strong><?php echo TFISH_LANGUAGE; ?></strong></label>
                 <select class="form-control custom-select" name="language" id="language" required>
                     <?php
-                        global $tf_preference;
+                        global $tfPreference;
                         foreach ($languages as $key => $value) {
-                            if ($tf_preference->default_language === $key) {
-                                echo '<option value="' . $tf_validator->escapeForXss($key) . '" selected>' . $tf_validator->escapeForXss($value) . '</option>';
+                            if ($tfPreference->defaultLanguage === $key) {
+                                echo '<option value="' . $tfValidator->escapeForXss($key) . '" selected>' . $tfValidator->escapeForXss($value) . '</option>';
                             } else {
-                                echo '<option value="' . $tf_validator->escapeForXss($key) . '">' . $tf_validator->escapeForXss($value) . '</option>';
+                                echo '<option value="' . $tfValidator->escapeForXss($key) . '">' . $tfValidator->escapeForXss($value) . '</option>';
                             }
                         }
                     ?>
@@ -192,8 +192,8 @@
 
         <!-- Meta title -->
         <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
-            <label for="meta_title"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="meta_title" id="meta_title">
+            <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
+            <input type="text" class="form-control" name="metaTitle" id="metaTitle">
         </div>
 
         <!-- SEO -->
@@ -204,8 +204,8 @@
 
         <!-- Meta description -->
         <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
-            <label for="meta_description"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
-            <input type="text" class="form-control" name="meta_description" id="meta_description">
+            <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
+            <input type="text" class="form-control" name="metaDescription" id="metaDescription">
         </div>
     
     </div> <!-- /row -->

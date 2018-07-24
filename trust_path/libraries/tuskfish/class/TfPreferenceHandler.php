@@ -32,9 +32,9 @@ class TfPreferenceHandler
 {
     protected $db;
     
-    public function __construct(TfDatabase $tf_database)
+    public function __construct(TfDatabase $tfDatabase)
     {
-        $this->db = $tf_database;
+        $this->db = $tfDatabase;
     }
     
     /**
@@ -58,10 +58,10 @@ class TfPreferenceHandler
      * 
      * @return bool True on success false on failure.
      */
-    public function writePreferences(TfPreference $tf_preference)
+    public function writePreferences(TfPreference $tfPreference)
     {
         // Convert preference object to array of key => values.
-        $key_values = $tf_preference->getPreferencesAsArray();
+        $key_values = $tfPreference->getPreferencesAsArray();
         
         // Unset the validator object as it is not stored in the database.
         unset($key_values['validator']);

@@ -20,7 +20,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * Tuskfish template object.
  * 
  * Used to hold template variables and to render templates for display. A template object is
- * automatically made available on every page via tf_header.php.
+ * automatically made available on every page via tfHeader.php.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -36,9 +36,9 @@ class TfTemplate
     protected $validator;
     protected $theme = 'default';  
     
-    public function __construct(TfValidator $tf_validator)
+    public function __construct(TfValidator $tfValidator)
     {
-        $this->validator = $tf_validator;
+        $this->validator = $tfValidator;
     }
     
     public function getTheme()
@@ -64,7 +64,7 @@ class TfTemplate
     public function render(string $template)
     {
         // Make the data validator available within scope of the templates.
-        $tf_validator = $this->validator;
+        $tfValidator = $this->validator;
         
         $template = $this->validator->trimString($template);
         
@@ -92,7 +92,7 @@ class TfTemplate
      * 
      * The theme must be specified through this method. This is a safety measure to prevent
      * someone accidentally overwriting the template set when assigning a variable to the template
-     * object (if content were assigned to $tf_template->setTheme() it would mess things up). 
+     * object (if content were assigned to $tfTemplate->setTheme() it would mess things up). 
      * 
      * @param string $theme Name of theme (alphanumeric and underscore characters only).
      */

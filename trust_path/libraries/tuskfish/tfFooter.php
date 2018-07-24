@@ -16,18 +16,18 @@
 declare(strict_types=1);
 
 // Include the relevant page template, or the default if not set.
-if ($tf_template && !empty($tf_template->getTheme())) {
-    include_once TFISH_THEMES_PATH . $tf_template->getTheme() . "/theme.html";
+if ($tfTemplate && !empty($tfTemplate->getTheme())) {
+    include_once TFISH_THEMES_PATH . $tfTemplate->getTheme() . "/theme.html";
 } else {
     include_once TFISH_THEMES_PATH . "default/theme.html";
 }
 
 // Close the database connection.
-$tf_database->close();
+$tfDatabase->close();
 
 // Write the contents of the buffer to the cache.
-if ($tf_preference->enable_cache && isset($basename)) {
-    $tf_cache->cachePage($basename, $cache_parameters, ob_get_contents());
+if ($tfPreference->enableCache && isset($basename)) {
+    $tfCache->cachePage($basename, $cache_parameters, ob_get_contents());
 }
 
 // Flush the output buffer to screen and clear it.

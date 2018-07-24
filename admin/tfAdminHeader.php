@@ -3,7 +3,7 @@
 /**
  * Tuskfish admin header script. Must be included on every admin page.
  * 
- * Identical to tf_header.php except that it conducts an admin check and denies access if false.
+ * Identical to tfHeader.php except that it conducts an admin check and denies access if false.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -15,7 +15,7 @@
 declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 /** CRITICAL - ADMIN CHECK - DENY ACCESS UNLESS LOGGED IN. */
 if (!TfSession::isAdmin()) {

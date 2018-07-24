@@ -17,25 +17,25 @@ declare(strict_types=1);
 // Boot! Set file paths, preferences and connect to database.
 require_once "mainfile.php";
 require_once TFISH_MODULE_PATH . "someModuleDirectory/tf_someModule_header.php";
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 // Specify the theme you want to use.
-$tf_template->setTheme('default');
+$tfTemplate->setTheme('default');
 
 /**
  * Validate input parameters here.
  **/
 
 // Permitted options.
-$op = isset($_REQUEST['op']) ? $tf_validator->trimString($_REQUEST['op']) : false;
-$options_whitelist = array();
+$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
+$optionsWhitelist = array();
 
-if (in_array($op, $options_whitelist, true)) {
+if (in_array($op, $optionsWhitelist, true)) {
     exit;
 }
     
 // Cross-site request forgery check.
-if (!in_array($op, $options_whitelist, true)) {
+if (!in_array($op, $optionsWhitelist, true)) {
     TfSession::validateToken($clean_token);
 }
 
@@ -47,13 +47,13 @@ switch ($op) {
 /**
  * Override page template here (otherwise default site metadata will display).
  */
-// $tf_metadata->setTitle('');
-// $tf_metadata->setDescription('');
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-$tf_metadata->setRobots('noindex,nofollow');
+// $tfMetadata->setTitle('');
+// $tfMetadata->setDescription('');
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+$tfMetadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

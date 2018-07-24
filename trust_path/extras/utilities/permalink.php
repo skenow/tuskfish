@@ -16,31 +16,31 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tf_template->setTheme('default');
+$tfTemplate->setTheme('default');
 
 // Configure page.
-$tf_template->page_title = TFISH_TYPE_PERMALINKS;
-$content_handler = $content_handler_factory->getHandler('content');
-$target_file_name = 'permalink';
+$tfTemplate->pageTitle = TFISH_TYPE_PERMALINKS;
+$contentHandler = $contentHandlerFactory->getHandler('content');
+$targetFileName = 'permalink';
 
 // Validate input parameters.
-$clean_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $clean_start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 
 // View single object description.
-if ($clean_id) {
-    $content = $content_handler->getObject($clean_id);
+if ($cleanId) {
+    $content = $contentHandler->getObject($cleanId);
     if (is_object($content) && $content->online) {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
         if ($content->type != 'TfDownload') {
             $content->counter += 1;
-            $content_handler->updateCounter($clean_id);
+            $contentHandler->updateCounter($cleanId);
         }
-        $tf_template->content = $content;
+        $tfTemplate->content = $content;
 
         // Prepare meta information for display.
         $contentInfo = array();
@@ -52,75 +52,75 @@ if ($clean_id) {
             $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
         if ($content->format)
             $contentInfo[] = '.' . $content->escapeForXss('format');
-        if ($content->file_size)
-            $contentInfo[] = $content->escapeForXss('file_size');
+        if ($content->fileSize)
+            $contentInfo[] = $content->escapeForXss('fileSize');
         if ($content->tags) {
-            $tags = $content_handler->makeTagLinks($content->tags); // For a content type-specific page use $content->tags, $content->template
+            $tags = $contentHandler->makeTagLinks($content->tags); // For a content type-specific page use $content->tags, $content->template
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $contentInfo[] = $tags;
         }
-        $tf_template->contentInfo = implode(' | ', $contentInfo);
-        if ($content->meta_title)
-            $tf_metadata->setTitle($content->meta_title);
-        if ($content->meta_description)
-            $tf_metadata->setDescription($content->meta_description);
+        $tfTemplate->contentInfo = implode(' | ', $contentInfo);
+        if ($content->metaTitle)
+            $tfMetadata->setTitle($content->metaTitle);
+        if ($content->metaDescription)
+            $tfMetadata->setDescription($content->metaDescription);
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($content->parent)) {
-            $parent = $content_handler->getObject($content->parent);
+            $parent = $contentHandler->getObject($content->parent);
             if (is_object($parent) && $parent->online) {
-                $tf_template->parent = $parent;
+                $tfTemplate->parent = $parent;
             }
         }
 
         // Check if has child objects; if so display thumbnails and teasers / links.
-        $criteria = $tf_criteria_factory->getCriteria();
-        $criteria->add(new TfCriteriaItem($tf_validator, 'parent', $content->id));
-        $criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
+        $criteria = $tfCriteriaFactory->getCriteria();
+        $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
+        $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
         if ($clean_start) {
             $criteria->setOffset($clean_start);
         }
-        $criteria->setLimit($tf_preference->user_pagination);
+        $criteria->setLimit($tfPreference->userPagination);
         $criteria->setOrder('date');
         $criteria->setOrderType('DESC');
-        $criteria->setSecondaryOrder('submission_time');
+        $criteria->setSecondaryOrder('submissionTime');
         $criteria->setSecondaryOrderType('DESC');
 
         // Prepare pagination control.
-        $tf_pagination = new TfPaginationControl($tf_validator, $tf_preference);
-        $tf_pagination->setUrl($target_file_name);
-        $tf_pagination->setCount($content_handler->getCount($criteria));
-        $tf_pagination->setLimit($tf_preference->user_pagination);
+        $tf_pagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $tf_pagination->setUrl($targetFileName);
+        $tf_pagination->setCount($contentHandler->getCount($criteria));
+        $tf_pagination->setLimit($tfPreference->userPagination);
         $tf_pagination->setStart($clean_start);
         $tf_pagination->setTag(0);
-        $tf_template->setExtraParams(array('id' => $clean_id));
-        $tf_template->pagination = $tf_pagination->getPaginationControl();
+        $tfTemplate->setExtraParams(array('id' => $cleanId));
+        $tfTemplate->pagination = $tf_pagination->getPaginationControl();
 
         // Retrieve content objects and assign to template.
-        $first_children = $content_handler->getObjects($criteria);
+        $first_children = $contentHandler->getObjects($criteria);
         if (!empty($first_children)) {
-            $tf_template->first_children = $first_children;
+            $tfTemplate->first_children = $first_children;
         }
 
         // Render template.
-        $tf_template->tf_main_content = $tf_template->render($content->template);
+        $tfTemplate->tfMainContent = $tfTemplate->render($content->template);
     } else {
-        $tf_template->tf_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+        $tfTemplate->tfMainContent = TFISH_ERROR_NO_SUCH_CONTENT;
     }
 } else {
-    $tf_template->tf_main_content = TFISH_ERROR_NO_SUCH_CONTENT;
+    $tfTemplate->tfMainContent = TFISH_ERROR_NO_SUCH_CONTENT;
 }
 
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-// $tf_metadata->setTitle('');
-// $tf_metadata->setDescription('');
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-$tf_metadata->setRobots('noindex,nofollow'); // Don't want search engines indexing duplicate content.
+// $tfMetadata->setTitle('');
+// $tfMetadata->setDescription('');
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+$tfMetadata->setRobots('noindex,nofollow'); // Don't want search engines indexing duplicate content.
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

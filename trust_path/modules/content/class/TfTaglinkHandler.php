@@ -54,7 +54,7 @@ class TfTaglinkHandler
     public function deleteTaglinks(TfContentObject $obj)
     {
         if ($this->validator->isInt($obj->id, 1)) {
-            $clean_content_id = (int) $obj->id;
+            $clean_contentId = (int) $obj->id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -62,9 +62,9 @@ class TfTaglinkHandler
         $criteria = $this->criteria_factory->getCriteria();
         
         if ($obj->type === 'TfTag') {
-            $criteria->add($this->item_factory->getItem('tag_id', $clean_content_id));
+            $criteria->add($this->item_factory->getItem('tagId', $clean_contentId));
         } else {
-            $criteria->add($this->item_factory->getItem('content_id', $clean_content_id));
+            $criteria->add($this->item_factory->getItem('contentId', $clean_contentId));
         }
         
         $result = $this->db->deleteAll('taglink', $criteria);
@@ -81,15 +81,15 @@ class TfTaglinkHandler
      * 
      * Taglinks represent relationships between tags and content objects.
      * 
-     * @param int $content_id ID of content object.
+     * @param int $contentId ID of content object.
      * @param string $type Type of content object as whitelisted in TfTaglinkHandler::getType().
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function insertTaglinks(int $content_id, string $type, array $tags)
+    public function insertTaglinks(int $contentId, string $type, array $tags)
     {
-        if ($this->validator->isInt($content_id, 1)) {
-            $clean_content_id = (int) $content_id;
+        if ($this->validator->isInt($contentId, 1)) {
+            $clean_contentId = (int) $contentId;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;
@@ -98,7 +98,7 @@ class TfTaglinkHandler
         $typeList = $this->getTypes();
         
         if ($this->validator->isAlpha($type) && array_key_exists($type, $typeList)) {
-            $clean_type = $this->validator->trimString($type);
+            $cleanType = $this->validator->trimString($type);
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
@@ -106,17 +106,17 @@ class TfTaglinkHandler
 
         $clean_tags = array();
         
-        foreach ($tags as $tag_id) {
+        foreach ($tags as $tagId) {
             $tag = array();
             
-            if ($this->validator->isInt($tag_id, 1)) {
-                $tag['tag_id'] = (int) $tag_id;
+            if ($this->validator->isInt($tagId, 1)) {
+                $tag['tagId'] = (int) $tagId;
             } else {
                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             }
             
-            $tag['content_id'] = $clean_content_id;
-            $tag['content_type'] = $clean_type;
+            $tag['contentId'] = $clean_contentId;
+            $tag['contentType'] = $cleanType;
             $clean_tags[] = $tag;
             unset($tag);
         }
@@ -147,7 +147,7 @@ class TfTaglinkHandler
     {
         // Validate ID.
         if ($this->validator->isInt($id, 1)) {
-            $clean_id = (int) $id;
+            $cleanId = (int) $id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -156,19 +156,19 @@ class TfTaglinkHandler
         $typeList = $this->getTypes();
         
         if ($this->validator->isAlpha($type) && array_key_exists($type, $typeList)) {
-            $clean_type = $this->validator->trimString($type);
+            $cleanType = $this->validator->trimString($type);
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
         }
 
         // Validate tags.
-        $clean_tag_id = array();
+        $clean_tagId = array();
         
         if ($this->validator->isArray($tags)) {
             foreach ($tags as $tag) {
                 if ($this->validator->isInt($tag, 1)) {
-                    $clean_tag_id[] = (int) $tag;
+                    $clean_tagId[] = (int) $tag;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
                 }
@@ -178,7 +178,7 @@ class TfTaglinkHandler
 
         // Delete any existing tags.
         $criteria = $this->criteria_factory->getCriteria();
-        $criteria->add($this->item_factory->getItem('content_id', $clean_id));
+        $criteria->add($this->item_factory->getItem('contentId', $cleanId));
         $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {
@@ -189,24 +189,24 @@ class TfTaglinkHandler
 
         // If the content object is a tag, it is not allowed to have taglinks, so there is no need
         // to proceed to insert new ones.
-        if ($clean_type === 'TfTag') {
+        if ($cleanType === 'TfTag') {
             return true;
         }
         
         // Insert new taglinks, if any.
         $clean_tags = array();
         
-        foreach ($clean_tag_id as $tag_id) {
+        foreach ($clean_tagId as $tagId) {
             $tag = array();
             
-            if ($this->validator->isInt($tag_id, 1)) {
-                $tag['tag_id'] = (int) $tag_id;
+            if ($this->validator->isInt($tagId, 1)) {
+                $tag['tagId'] = (int) $tagId;
             } else {
                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             }
             
-            $tag['content_id'] = $clean_id;
-            $tag['content_type'] = $clean_type;
+            $tag['contentId'] = $cleanId;
+            $tag['contentType'] = $cleanType;
             $clean_tags[] = $tag;
             unset($tag);
         }

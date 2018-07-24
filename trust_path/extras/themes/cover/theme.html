@@ -1,15 +1,15 @@
 <?php declare(strict_types=1); ?>
 
 <!doctype html>
-<html lang="<?php echo $tf_preference->escapeForXss('default_language'); ?>">
+<html lang="<?php echo $tfPreference->escapeForXss('defaultLanguage'); ?>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
-    <meta name="description" content="<?php echo $tf_metadata->description; ?>">
-    <meta name="author" content="<?php echo $tf_metadata->author; ?>">
-    <meta name="dcterms.rights" content="<?php echo $tf_metadata->copyright; ?>">
-    <meta name="generator" content="<?php echo $tf_metadata->generator; ?>">
-    <meta name="robots" content="<?php echo $tf_metadata->robots; ?>">
+    <meta name="description" content="<?php echo $tfMetadata->description; ?>">
+    <meta name="author" content="<?php echo $tfMetadata->author; ?>">
+    <meta name="dcterms.rights" content="<?php echo $tfMetadata->copyright; ?>">
+    <meta name="generator" content="<?php echo $tfMetadata->generator; ?>">
+    <meta name="robots" content="<?php echo $tfMetadata->robots; ?>">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo TFISH_URL . 'rss.php'; ?>" />
     <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
     
@@ -22,7 +22,7 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <title><?php echo $tf_metadata->title; ?></title>
+    <title><?php echo $tfMetadata->title; ?></title>
     
     <!-- jQuery -->
     <script src="<?php echo TFISH_JS_URL . 'jquery/jquery.min.js'; ?>"></script>
@@ -46,7 +46,7 @@
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand"><a href="<?php echo TFISH_URL; ?>"><?php echo $tf_preference->escapeForXss('site_name'); ?></a></h3>
+          <h3 class="masthead-brand"><a href="<?php echo TFISH_URL; ?>"><?php echo $tfPreference->escapeForXss('siteName'); ?></a></h3>
           <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link active" href="#">Home</a>
             <a class="nav-link" href="#">Features</a>
@@ -58,13 +58,13 @@
       <main role="main" class="inner cover">
           
         <!-- Main page -->
-        <?php echo $tf_template->render('main'); ?>
+        <?php echo $tfTemplate->render('main'); ?>
         
       </main>
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p>Copyright &copy; <?php echo $tf_preference->escapeForXss('site_author'); ?> 2018 | <?php echo TfSession::getLoginLink(); ?></p>
+          <p>Copyright &copy; <?php echo $tfPreference->escapeForXss('siteAuthor'); ?> 2018 | <?php echo TfSession::getLoginLink(); ?></p>
         </div>
       </footer>
     </div>

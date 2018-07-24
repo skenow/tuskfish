@@ -1,14 +1,14 @@
 <?php declare(strict_types=1); ?>
 
 <!doctype html>
-<html lang="<?php echo $tf_preference->escapeForXss('default_language'); ?>">
+<html lang="<?php echo $tfPreference->escapeForXss('defaultLanguage'); ?>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
-    <meta name="description" content="<?php echo $tf_metadata->description; ?>">
-    <meta name="author" content="<?php echo $tf_metadata->author; ?>">
-    <meta name="dcterms.rights" content="<?php echo $tf_metadata->copyright; ?>">
-    <meta name="robots" content="<?php echo $tf_metadata->robots; ?>">
+    <meta name="description" content="<?php echo $tfMetadata->description; ?>">
+    <meta name="author" content="<?php echo $tfMetadata->author; ?>">
+    <meta name="dcterms.rights" content="<?php echo $tfMetadata->copyright; ?>">
+    <meta name="robots" content="<?php echo $tfMetadata->robots; ?>">
     <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo TFISH_URL . 'rss.php'; ?>" />
     <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
     
@@ -21,7 +21,7 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <title><?php echo $tf_metadata->title; ?></title>
+    <title><?php echo $tfMetadata->title; ?></title>
     
     <!-- jQuery -->
     <script src="<?php echo TFISH_JS_URL . 'jquery/jquery.min.js'; ?>"></script>
@@ -69,7 +69,7 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tf_preference->escapeForXss('site_name'); ?></a>
+      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfPreference->escapeForXss('siteName'); ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -83,7 +83,7 @@
             <div class="dropdown-menu" aria-labelledby="settings">
               <a class="dropdown-item" href="<?php echo TFISH_ADMIN_URL . 'preference.php'; ?>"><?php echo TFISH_PREFERENCES; ?></a>
               <a class="dropdown-item" href="<?php echo TFISH_ADMIN_URL . 'password.php'; ?>"><?php echo TFISH_PASSWORD; ?></a>
-              <a class="dropdown-item" href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=confirm_flush'; ?>"><?php echo TFISH_FLUSH_CACHE; ?></a>
+              <a class="dropdown-item" href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=confirmFlush'; ?>"><?php echo TFISH_FLUSH_CACHE; ?></a>
             </div>
           </li>
           <li class="nav-item"><a class="nav-link" href="<?php echo TFISH_ADMIN_URL . 'gallery.php'; ?>"><?php echo TFISH_IMAGE_GALLERY; ?></a></li>
@@ -104,14 +104,14 @@
       <div class="starter-template">
 
       <!-- Main page -->
-      <?php echo $tf_template->render('main'); ?>
+      <?php echo $tfTemplate->render('main'); ?>
       
       <!-- Footer -->
       <div class="row">
         <div class="col">
           <hr>
           <footer class="clearfix">
-            <p class="copyright">Copyright &copy; <?php echo $tf_preference->escapeForXss('site_author'); ?> 2018</p>
+            <p class="copyright">Copyright &copy; <?php echo $tfPreference->escapeForXss('siteAuthor'); ?> 2018</p>
           </footer>
           </div>
       </div>

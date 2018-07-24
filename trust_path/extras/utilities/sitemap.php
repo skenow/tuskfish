@@ -19,43 +19,43 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 require_once TFISH_MODULE_PATH . "content/tf_content_header.php";
 
 // Get a generic handler.
-$content_handler = $content_handler_factory->getHandler('content');
+$contentHandler = $contentHandlerFactory->getHandler('content');
 
 /** 
  * Sitemap generation code.
  */
 
 // Initialise.
-$online_content_ids = array();
-$offline_tag_ids = array();
+$online_contentIds = array();
+$offline_tagIds = array();
 $columns = array('id', 'seo');
 $sitemap = '';
 
 // Get the IDs of all online objects (and offline tags), but not blocks.
-$criteria = $tf_criteria_factory->getCriteria();
-$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfBlock', '!='));
-$criteria->add(new TfCriteriaItem($tf_validator, 'online', 1));
+$criteria = $tfCriteriaFactory->getCriteria();
+$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
+$criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$content_ids = $tf_database->select('content', $criteria, $columns);
+$contentIds = $tfDatabase->select('content', $criteria, $columns);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
-$criteria = $tf_criteria_factory->getCriteria();
-$criteria->add(new TfCriteriaItem($tf_validator, 'type', 'TfTag'));
-$criteria->add(new TfCriteriaItem($tf_validator, 'online', 0));
+$criteria = $tfCriteriaFactory->getCriteria();
+$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag'));
+$criteria->add(new TfCriteriaItem($tfValidator, 'online', 0));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$offline_tag_ids = $content_handler->getListOfObjectTitles($criteria);
+$offline_tagIds = $contentHandler->getListOfObjectTitles($criteria);
 
 // Combine the list
-$content_ids = $content_ids + $offline_tag_ids;
+$contentIds = $contentIds + $offline_tagIds;
 
 // Generate the URLs using TFISH_URL as a base.
-foreach ($content_ids as $value) {
+foreach ($contentIds as $value) {
 	$entry = '';
 	$entry = TFISH_URL . '?id=' . $value['id'];
 	if ($value['seo']) {
@@ -69,4 +69,4 @@ foreach ($content_ids as $value) {
 echo $sitemap;
 
 // Footer.
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

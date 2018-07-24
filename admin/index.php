@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 // Need to start a session in order to use session variables
 require_once "../mainfile.php";
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 if (TfSession::isAdmin()) {
     header('location: ' . TFISH_ADMIN_URL . 'admin.php');

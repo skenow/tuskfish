@@ -1,13 +1,13 @@
 <?php declare(strict_types=1); ?>
 
 <!-- Display a list of images in grid view -->
-<?php if ($content_objects): ?>
+<?php if ($contentObjects): ?>
 
 <div class="row">
-    <?php $i = 1; foreach ($content_objects as $content): ?>
+    <?php $i = 1; foreach ($contentObjects as $content): ?>
     
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <a href="<?php echo $content->getUrl($target_file_name); ?>">
+            <a href="<?php echo $content->getUrl($targetFileName); ?>">
                 <img class="img-thumbnail img-responsive mb-3" src="<?php echo $content->getCachedImage(400); ?>"
                 <?php if ($content->caption): ?>
                     alt="<?php echo $content->escapeForXss('caption'); ?>" 

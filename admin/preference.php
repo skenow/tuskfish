@@ -16,71 +16,71 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "../mainfile.php";
-require_once TFISH_ADMIN_PATH . "tf_admin_header.php";
+require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tf_template->setTheme('admin');
+$tfTemplate->setTheme('admin');
 
 // Collect CSRF token if available.
-$clean_token = isset($_POST['token']) ? $tf_validator->trimString($_POST['token']) : '';
+$clean_token = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
 // Set view option
-$op = isset($_REQUEST['op']) ? $tf_validator->trimString($_REQUEST['op']) : false;
+$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 if (in_array($op, array('edit', 'update', false), true)) {
     switch ($op) {
 
         // Edit: Display a data entry form containing the preference settings.
         case "edit":
             TfSession::validateToken($clean_token); // CSRF check.
-            $tf_template->page_title = TFISH_PREFERENCE_EDIT_PREFERENCES;
-            $tf_template->preferences = $tf_preference->getPreferencesAsArray();
-            $tf_template->languages = $tf_preference->getListOfLanguages();
-            $tf_template->timezones = TfUtils::getListOfTimezones();
-            $tf_template->form = TFISH_FORM_PATH . "preference_edit.html";
-            $tf_template->tf_main_content = $tf_template->render('form');
+            $tfTemplate->pageTitle = TFISH_PREFERENCE_EDIT_PREFERENCES;
+            $tfTemplate->preferences = $tfPreference->getPreferencesAsArray();
+            $tfTemplate->languages = $tfPreference->getListOfLanguages();
+            $tfTemplate->timezones = TfUtils::getListOfTimezones();
+            $tfTemplate->form = TFISH_FORM_PATH . "preferenceEdit.html";
+            $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
 
         // Update: Submit the modified object and update the corresponding database row.
         case "update":
             TfSession::validateToken($clean_token); // CSRF check.
-            $tf_preference->loadPropertiesFromArray($_REQUEST);
+            $tfPreference->loadPropertiesFromArray($_REQUEST);
 
             // Update the database row and display a response.
-            $tf_preference_handler = new TfPreferenceHandler($tf_database);
-            $result = $tf_preference_handler->writePreferences($tf_preference);
+            $tfPreference_handler = new TfPreferenceHandler($tfDatabase);
+            $result = $tfPreference_handler->writePreferences($tfPreference);
             
             if ($result) {
-                $tf_template->page_title = TFISH_SUCCESS;
-                $tf_template->alert_class = 'alert-success';
-                $tf_template->message = TFISH_PREFERENCES_WERE_UPDATED;
+                $tfTemplate->pageTitle = TFISH_SUCCESS;
+                $tfTemplate->alertClass = 'alert-success';
+                $tfTemplate->message = TFISH_PREFERENCES_WERE_UPDATED;
             } else {
-                $tf_template->page_title = TFISH_FAILED;
-                $tf_template->alert_class = 'alert-danger';
-                $tf_template->message = TFISH_PREFERENCES_UPDATE_FAILED;
+                $tfTemplate->pageTitle = TFISH_FAILED;
+                $tfTemplate->alertClass = 'alert-danger';
+                $tfTemplate->message = TFISH_PREFERENCES_UPDATE_FAILED;
             }
             
-            $tf_template->back_url = 'preference.php';
-            $tf_template->form = TFISH_FORM_PATH . "response.html";
-            $tf_template->tf_main_content = $tf_template->render('form');
+            $tfTemplate->backUrl = 'preference.php';
+            $tfTemplate->form = TFISH_FORM_PATH . "response.html";
+            $tfTemplate->tfMainContent = $tfTemplate->render('form');
             
             // Flush the cache.
-            $tf_cache->flushCache();
+            $tfCache->flushCache();
             break;
 
         // Default: Display a table of existing preferences.
         default:
-            $tf_template->page_title = TFISH_PREFERENCES;
-            $preferences = $tf_preference->getPreferencesAsArray();
-            $languages = $tf_preference->getListOfLanguages();
-            $preferences['default_language'] = $languages[$preferences['default_language']];
+            $tfTemplate->pageTitle = TFISH_PREFERENCES;
+            $preferences = $tfPreference->getPreferencesAsArray();
+            $languages = $tfPreference->getListOfLanguages();
+            $preferences['defaultLanguage'] = $languages[$preferences['defaultLanguage']];
             $timezones = TfUtils::getListOfTimezones();
-            $preferences['server_timezone'] = $timezones[$preferences['server_timezone']];
-            $preferences['site_timezone'] = $timezones[$preferences['site_timezone']];
-            $preferences['close_site'] = empty($preferences['close_site']) ? TFISH_NO : TFISH_YES;
-            $preferences['enable_cache'] = empty($preferences['enable_cache']) ? TFISH_NO : TFISH_YES;
-            $tf_template->preferences = $preferences;
-            $tf_template->form = TFISH_FORM_PATH . "preference_table.html";
-            $tf_template->tf_main_content = $tf_template->render('form');
+            $preferences['serverTimezone'] = $timezones[$preferences['serverTimezone']];
+            $preferences['siteTimezone'] = $timezones[$preferences['siteTimezone']];
+            $preferences['closeSite'] = empty($preferences['closeSite']) ? TFISH_NO : TFISH_YES;
+            $preferences['enableCache'] = empty($preferences['enableCache']) ? TFISH_NO : TFISH_YES;
+            $tfTemplate->preferences = $preferences;
+            $tfTemplate->form = TFISH_FORM_PATH . "preferenceTable.html";
+            $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
     }
 } else {
@@ -91,13 +91,13 @@ if (in_array($op, array('edit', 'update', false), true)) {
 /**
  * Override page metadata here (otherwise default site metadata will display).
  */
-// $tf_metadata->setTitle('');
-// $tf_metadata->setDescription('');
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-$tf_metadata->setRobots('noindex,nofollow');
+// $tfMetadata->setTitle('');
+// $tfMetadata->setDescription('');
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+$tfMetadata->setRobots('noindex,nofollow');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";

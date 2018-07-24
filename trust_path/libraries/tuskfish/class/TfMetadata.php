@@ -21,7 +21,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * 
  * Generates metadata for the page. User-facing controller scripts can override the site-level
  * defaults by uncommenting the options at the bottom of each file. A good example of this is when
- * viewing a single content object; if it has the meta_title and meta_description fields set you can
+ * viewing a single content object; if it has the metaTitle and metaDescription fields set you can
  * assign those to this object in order to customise the page title and description to the object,
  * thereby improving your SEO.
  *
@@ -38,7 +38,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    string $generator Software system that generated this page.
  * @property    string $seo SEO optimisation string to append to page URL.
  * @property    string $robots Meta instructions to robots.
- * @property    int $pagination_elements Number of slots in the pagination control.
+ * @property    int $paginationElements Number of slots in the pagination control.
  */
 class TfMetadata
 {
@@ -61,13 +61,13 @@ class TfMetadata
      * 
      * @param TfPreference $preference Instance of TfPreference, holding site preferences.
      */
-    function __construct(TfValidator $tf_validator, TfPreference $preference)
+    function __construct(TfValidator $tfValidator, TfPreference $preference)
     {
-        $this->validator = $tf_validator; 
-        $this->setTitle($preference->site_name);
-        $this->setDescription($preference->site_description);
-        $this->setAuthor($preference->site_author);
-        $this->setCopyright($preference->site_copyright);
+        $this->validator = $tfValidator; 
+        $this->setTitle($preference->siteName);
+        $this->setDescription($preference->siteDescription);
+        $this->setAuthor($preference->siteAuthor);
+        $this->setCopyright($preference->siteCopyright);
         $this->setGenerator('Tuskfish CMS');
         $this->setSeo('');
         $this->setRobots('index,follow');

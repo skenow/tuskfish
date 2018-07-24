@@ -1,12 +1,12 @@
 <?php declare(strict_types=1); ?>
 
 <div>
-  <div class="alert <?php echo $tf_validator->escapeForXss($alert_class); ?>">
-      <strong><?php echo $tf_validator->escapeForXss($message); ?></strong>
+  <div class="alert <?php echo $tfValidator->escapeForXss($alertClass); ?>">
+      <strong><?php echo $tfValidator->escapeForXss($message); ?></strong>
   </div>
   <form class="form-horizontal" action="admin.php" method="post" accept-charset="UTF-8">
     <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
-    <input name="id" value="<?php echo $tf_validator->escapeForXss($id); ?>" type="hidden">
+    <input name="id" value="<?php echo $tfValidator->escapeForXss($id); ?>" type="hidden">
     <button name="op" value="view" type="submit" class="btn btn-primary"><?php echo TFISH_VIEW; ?></button>
     <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_ADMIN; ?></button>
   </form>

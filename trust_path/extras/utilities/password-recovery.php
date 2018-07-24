@@ -49,20 +49,20 @@ $new_password = "";
  * Enter your site salt here. You will find it in the file below: 
  * trust_path/libraries/tuskfish/configuration/config.php
  */
-$site_salt = "";
+$siteSalt = "";
 
 /**
  * Enter your user salt below. You will find it in the 'user' table in your database. You can
  * browse your database using the excelent phpLiteAdmin tool, please see the user manual for how to
  * set it up. You can get phpLiteAdmin from https://www.phpliteadmin.org/
  */
-$user_salt = "";
+$userSalt = "";
 
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
 // You filled in all the fields, right?
-if (empty($new_password) || empty($site_salt) || empty($user_salt)) {
+if (empty($new_password) || empty($siteSalt) || empty($userSalt)) {
 
     echo '<h2>Error(s)</h2>';
 
@@ -70,11 +70,11 @@ if (empty($new_password) || empty($site_salt) || empty($user_salt)) {
         echo '<p>You forgot to enter the <i>new password</i> in the configuration section of the script.</p>';
     }
 
-    if (empty($site_salt)) {
+    if (empty($siteSalt)) {
         echo '<p>You forgot to enter the <i>site salt</i> in the configuration section of the script.</p>';
     }
 
-    if (empty($user_salt)) {
+    if (empty($userSalt)) {
         echo '<p>You forgot to enter the <i>user salt</i> in the configuration section of the script.</p>';
     }
 
@@ -82,15 +82,15 @@ if (empty($new_password) || empty($site_salt) || empty($user_salt)) {
 }
 
 // Check password strength.
-$password_quality = checkPasswordStrength($new_password);
-if ($password_quality['strong'] === true) {
+$passwordQuality = checkPasswordStrength($new_password);
+if ($passwordQuality['strong'] === true) {
 
     // Salt and iteratively hash the password 100,000 times to resist brute force attacks
-    $password_hash = recursivelyHashPassword($new_password, 100000, $site_salt, $user_salt);
+    $passwordHash = recursivelyHashPassword($new_password, 100000, $siteSalt, $userSalt);
 
     echo '<h2>Here is your new password hash</h2>';
-    echo '<p>' . $password_hash . '</p>';
-    echo '<p>Edit the "user" table of your database and replace the "password_hash" value with this '
+    echo '<p>' . $passwordHash . '</p>';
+    echo '<p>Edit the "user" table of your database and replace the "passwordHash" value with this '
     . 'one; you should then be able to login with your new password.</p>';
     echo '</p>Please see the user manual for instructions on how to edit your database with phpLiteAdmin.</p>';
     echo '<p><b>DELETE this file from your webserver immediately.</b></p>';
@@ -99,9 +99,9 @@ if ($password_quality['strong'] === true) {
     // Failed password check.
     echo '<h2>Sorry</h3>';
     echo '<p>Password did not meet minimum requirements. Please read the instructions inside this file and try again.</p>';
-    unset($password_quality['strong']);
+    unset($passwordQuality['strong']);
     echo '<ul>';
-    foreach ($password_quality as $weakness) {
+    foreach ($passwordQuality as $weakness) {
         echo '<li>' . $weakness . '</li>';
     }
     echo '</ul>';
@@ -138,16 +138,16 @@ function checkPasswordStrength(string $password) {
  * @param string $password Password to be hashed.
  * @param int $iterations Number of iterations to process, you want this to be a large number
  *  (100,000 or more).
- * @param string $site_salt Site salt drawn from trust_path/configuration/config.php
- * @param string $user_salt User-specific salt as drawn from the user table
+ * @param string $siteSalt Site salt drawn from trust_path/configuration/config.php
+ * @param string $userSalt User-specific salt as drawn from the user table
  * @return string
  */
-function recursivelyHashPassword(string $password, int $iterations, string $site_salt,
-        string $user_salt = '') {
+function recursivelyHashPassword(string $password, int $iterations, string $siteSalt,
+        string $userSalt = '') {
     $iterations = (int) $iterations;
-    $password = $site_salt . $password;
-    if ($user_salt) {
-        $password .= $user_salt;
+    $password = $siteSalt . $password;
+    if ($userSalt) {
+        $password .= $userSalt;
     }
     for ($i = 0; $i < $iterations; $i++) {
         $password = hash('sha256', $password);

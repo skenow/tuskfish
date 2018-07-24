@@ -48,7 +48,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $description The full article or description of the content. [HTML]
  * @properties  string $media An associated download/audio/video file. [FILEPATH OR URL]
  * @properties  string $format Mimetype
- * @properties  string $file_size Specify in bytes.
+ * @properties  string $fileSize Specify in bytes.
  * @properties  string $creator Author.
  * @properties  string image An associated image file, eg. a screenshot a good way to handle it. [FILEPATH OR URL]
  * @properties  string $caption Caption of the image file.
@@ -59,10 +59,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  string $publisher The entity responsible for distributing this work.
  * @properties  array $tags Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
  * @properties  int $online Toggle object on or offline.
- * @properties  int $submission_time Timestamp representing submission time.
+ * @properties  int $submissionTime Timestamp representing submission time.
  * @properties  int $counter Number of times this content was viewed or downloaded.
- * @properties  string $meta_title Set a custom page title for this content.
- * @properties  string $meta_description Set a custom page meta description for this content.
+ * @properties  string $metaTitle Set a custom page title for this content.
+ * @properties  string $metaDescription Set a custom page meta description for this content.
  * @properties  string $seo SEO-friendly string; it will be appended to the URL for this content.
  * @properties  string $handler Handler for this object (not persistent).
  * @properties  string $template The template that should be used to display this object (not persistent).
@@ -86,7 +86,7 @@ class TfContentObject
     protected $description = '';
     protected $media = '';
     protected $format = '';
-    protected $file_size = '';
+    protected $fileSize = '';
     protected $creator = '';
     protected $image = '';
     protected $caption = '';
@@ -97,10 +97,10 @@ class TfContentObject
     protected $publisher = '';
     protected $tags = '';
     protected $online = '';
-    protected $submission_time = '';
+    protected $submissionTime = '';
     protected $counter = '';
-    protected $meta_title = '';
-    protected $meta_description = '';
+    protected $metaTitle = '';
+    protected $metaDescription = '';
     protected $seo = '';
     protected $handler = '';
     protected $template = '';
@@ -108,10 +108,10 @@ class TfContentObject
     protected $icon = '';
     
     /** Initialise default content object properties and values. */
-    function __construct(TfValidator $tf_validator)
+    function __construct(TfValidator $tfValidator)
     {
-        if (is_a($tf_validator, 'TfValidator')) {
-            $this->validator = $tf_validator;
+        if (is_a($tfValidator, 'TfValidator')) {
+            $this->validator = $tfValidator;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
@@ -681,7 +681,7 @@ class TfContentObject
                 return $date->format('j F Y');
                 break;
 
-            case "file_size": // Convert to human readable.
+            case "fileSize": // Convert to human readable.
                 $bytes = (int) $this->$clean_property;
                 $unit = $val = '';
 
@@ -717,10 +717,10 @@ class TfContentObject
             case "teaser":
                 // Do a simple string replace to allow TFISH_URL to be used as a constant,
                 // making the site portable.
-                $tf_url_enabled = str_replace('TFISH_LINK', TFISH_LINK,
+                $trUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
                         $this->$clean_property);
 
-                return $tf_url_enabled; 
+                return $trUrlEnabled; 
                 break;
 
             case "rights":
@@ -729,7 +729,7 @@ class TfContentObject
                 return $rights[$this->$clean_property];
                 break;
 
-            case "submission_time":
+            case "submissionTime":
                 $date = date('j F Y', $this->$clean_property);
 
                 return $date;
@@ -791,7 +791,7 @@ class TfContentObject
                 case "format":
                     $this->setFormat((string) $value);
                     break;
-                case "file_size":
+                case "fileSize":
                     $this->setFileSize((int) $value);
                     break;
                 case "creator":
@@ -824,16 +824,16 @@ class TfContentObject
                 case "online":
                     $this->setOnline((int) $value);
                     break;
-                case "submission_time":
+                case "submissionTime":
                     $this->setSubmissionTime((int) $value);
                     break;
                 case "counter":
                     $this->setCounter((int) $value);
                     break;
-                case "meta_title":
+                case "metaTitle":
                     $this->setMetaTitle((string) $value);
                     break;
-                case "meta_description":
+                case "metaDescription":
                     $this->setMetaDescription((string) $value);
                     break;
                 case "seo":
@@ -901,10 +901,10 @@ class TfContentObject
         $this->description = $this->validator->filterHtml($description);
     }
     
-    public function setFileSize(int $file_size)
+    public function setFileSize(int $fileSize)
     {
-        if ($this->validator->isInt($file_size, 0)) {
-            $this->file_size = $file_size;
+        if ($this->validator->isInt($fileSize, 0)) {
+            $this->fileSize = $fileSize;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -1000,22 +1000,22 @@ class TfContentObject
                 || (!empty($extension) && !array_key_exists($extension, $mimetype_whitelist))) {
             $this->media = '';
             $this->format = '';
-            $this->file_size = '';
+            $this->fileSize = '';
         } else {
             $this->media = $media;
         }        
     }
     
-    public function setMetaDescription(string $meta_description)
+    public function setMetaDescription(string $metaDescription)
     {
-        $clean_meta_description = (string) $this->validator->trimString($meta_description);
-        $this->meta_description = $clean_meta_description;
+        $clean_metaDescription = (string) $this->validator->trimString($metaDescription);
+        $this->metaDescription = $clean_metaDescription;
     }
     
-    public function setMetaTitle(string $meta_title)
+    public function setMetaTitle(string $metaTitle)
     {
-        $clean_meta_title = (string) $this->validator->trimString($meta_title);
-        $this->meta_title = $clean_meta_title;
+        $clean_metaTitle = (string) $this->validator->trimString($metaTitle);
+        $this->metaTitle = $clean_metaTitle;
     }
     
     public function setModule(string $module)
@@ -1076,10 +1076,10 @@ class TfContentObject
         $this->seo = $clean_seo;
     }
     
-    public function setSubmissionTime(int $submission_time)
+    public function setSubmissionTime(int $submissionTime)
     {
-        if ($this->validator->isInt($submission_time, 1)) {
-            $this->submission_time = $submission_time;
+        if ($this->validator->isInt($submissionTime, 1)) {
+            $this->submissionTime = $submissionTime;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -1132,10 +1132,10 @@ class TfContentObject
     
     public function setType(string $type)
     {
-        $clean_type = (string) $this->validator->trimString($type);
+        $cleanType = (string) $this->validator->trimString($type);
 
-        if ($this->validator->isAlpha($clean_type)) {
-            $this->type = $clean_type;
+        if ($this->validator->isAlpha($cleanType)) {
+            $this->type = $cleanType;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }

@@ -14,27 +14,27 @@ declare(strict_types=1);
 
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
-require_once TFISH_PATH . "tf_header.php";
+require_once TFISH_PATH . "tfHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
-$tf_template->setTheme('pricing');
+$tfTemplate->setTheme('pricing');
 
 // Page title, customise it as you see fit.
-$tf_template->page_title = "Pricing";
+$tfTemplate->pageTitle = "Pricing";
 
 // Set template.
-$tf_template->tf_main_content = $tf_template->render('main');
+$tfTemplate->tfMainContent = $tfTemplate->render('main');
 
 /**
  * Override page template and metadata here (otherwise default site metadata will display).
  */
-// $tf_metadata->setTitle('');
-// $tf_metadata->setDescription('');
-// $tf_metadata->setAuthor('');
-// $tf_metadata->setCopyright('');
-// $tf_metadata->setGenerator('');
-// $tf_metadata->setSeo('');
-// $tf_metadata->setRobots('');
+// $tfMetadata->setTitle('');
+// $tfMetadata->setDescription('');
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
+// $tfMetadata->setRobots('');
 
 // Include page template and flush buffer
-require_once TFISH_PATH . "tf_footer.php";
+require_once TFISH_PATH . "tfFooter.php";
