@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             array('title' => 'galleryPagination', 'value' => '20'),
             array('title' => 'paginationElements', 'value' => '5'),
             array('title' => 'rssPosts', 'value' => '10'),
-            array('title' => 'session_name', 'value' => 'tf'),
+            array('title' => 'session_name', 'value' => 'tfish'),
             array('title' => 'session_life', 'value' => '20'),
             array('title' => 'defaultLanguage', 'value' => 'en'),
             array('title' => 'dateFormat', 'value' => 'j F Y'),
