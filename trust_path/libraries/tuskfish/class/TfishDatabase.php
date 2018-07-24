@@ -1287,7 +1287,8 @@ class TfishDatabase
                     exit;
                 }
                 
-                if ($item->operator && !in_array($item->operator, $item->getListOfPermittedOperators())) {
+                if ($item->operator && !in_array($item->operator, $item->getListOfPermittedOperators(),
+                        true)) {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                     exit;
                 }

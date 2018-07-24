@@ -60,14 +60,14 @@ $options_whitelist = array(
     false
     );
 
-if (in_array($op, $options_whitelist)) {
+if (in_array($op, $options_whitelist, true)) {
     
     // Cross-site request forgery check for all options except for view and toggle online/offline.
     // The rationale for not including a check on the toggle option is that i) no data is lost,
     // ii) the admin will be alerted to the change by the unexpected display of a confirmation
     // message, iii) the action is trivial to undo and iv) it would reduce the functionality of
     // one-click status toggling.
-    if (!in_array($op, array('confirm_delete', 'confirm_flush', 'edit', 'toggle', 'view', false))) {
+    if (!in_array($op, array('confirm_delete', 'confirm_flush', 'edit', 'toggle', 'view', false), true)) {
         TfishSession::validateToken($clean_token);
     }
     

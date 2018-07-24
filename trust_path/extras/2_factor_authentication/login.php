@@ -85,7 +85,7 @@ if (!empty($_POST['op'])) {
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : false;
 $dirty_otp = isset($_POST['yubikey_otp']) ? $_POST['yubikey_otp'] : false;
 
-if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
+if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
     switch ($clean_op) {
         case "login":
             $yubikey = new TfishYubikeyAuthenticator($tfish_validator);

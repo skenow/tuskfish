@@ -104,7 +104,7 @@ if (isset($_POST['email'])) {
 $dirty_password = isset($_POST['password']) ? $_POST['password'] : '';
 $clean_token = isset($_POST['token']) ? $tfish_validator->trimString($_POST['token']) : '';
 
-if (isset($clean_op) && in_array($clean_op, $allowed_options)) {
+if (isset($clean_op) && in_array($clean_op, $allowed_options, true)) {
     switch ($clean_op) {
         case "login":
             TfishSession::validateToken($clean_token); // CSRF check.

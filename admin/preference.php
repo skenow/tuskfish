@@ -26,7 +26,7 @@ $clean_token = isset($_POST['token']) ? $tfish_validator->trimString($_POST['tok
 
 // Set view option
 $op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
-if (in_array($op, array('edit', 'update', false))) {
+if (in_array($op, array('edit', 'update', false), true)) {
     switch ($op) {
 
         // Edit: Display a data entry form containing the preference settings.

@@ -60,7 +60,7 @@
             <select multiple class="form-control custom-select" size="5" name="tags[]" id="tags">
                 <?php
                     foreach ($tags as $tag_id => $tag_title) {
-                        if (isset($content->tags) && in_array($tag_id, $content->tags)) {
+                        if (isset($content->tags) && in_array($tag_id, $content->tags, true)) {
                             echo '<option value="' . $tfish_validator->escapeForXss($tag_id) . '" selected>' . $tfish_validator->escapeForXss($tag_title) . '</option>';
                         } else {
                             echo '<option value="' . $tfish_validator->escapeForXss($tag_id) . '">' . $tfish_validator->escapeForXss($tag_title) . '</option>';

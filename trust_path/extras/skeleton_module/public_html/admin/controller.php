@@ -30,12 +30,12 @@ $tfish_template->setTheme('admin');
 $op = isset($_REQUEST['op']) ? $tfish_validator->trimString($_REQUEST['op']) : false;
 $options_whitelist = array();
 
-if (in_array($op, $options_whitelist)) {
+if (in_array($op, $options_whitelist, true)) {
     exit;
 }
     
 // Cross-site request forgery check.
-if (!in_array($op, $options_whitelist)) {
+if (!in_array($op, $options_whitelist, true)) {
     TfishSession::validateToken($clean_token);
 }
 

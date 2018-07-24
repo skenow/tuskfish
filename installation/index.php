@@ -331,7 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check extensions.
     foreach ($required_extensions as $extension) {
-        if (in_array($extension, $loaded_extensions)) {
+        if (in_array($extension, $loaded_extensions, true)) {
             $present_list .= '<li><i class="fas fa-check text-success"></i> ' . $extension . ' '
                     . TFISH_EXTENSION . '</li>';
         } else {

@@ -29,7 +29,7 @@ $dirty_confirmation = isset($_POST['confirmpassword']) ? $_POST['confirmpassword
 $clean_token = isset($_POST['token']) ? $tfish_validator->trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.
-if (in_array($op, array('submit', false))) {
+if (in_array($op, array('submit', false), true)) {
     switch ($op) {
         case "submit":
             TfishSession::validateToken($clean_token); // CSRF check.
