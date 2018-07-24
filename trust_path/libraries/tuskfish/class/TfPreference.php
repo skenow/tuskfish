@@ -55,6 +55,8 @@ class TfPreference
     use TfLanguage;
 
     protected $validator;
+    
+    /** Preferences */
     protected $siteName;
     protected $siteDescription;
     protected $siteAuthor;

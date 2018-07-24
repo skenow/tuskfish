@@ -60,7 +60,7 @@ $optionsWhitelist = array(
     false
     );
 
-if (in_array($op, $optionsWhitelist, true)) {
+if (in_array($op, $optionsWhitelist)) {
     
     // Cross-site request forgery check for all options except for view and toggle online/offline.
     // The rationale for not including a check on the toggle option is that i) no data is lost,

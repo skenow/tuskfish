@@ -9,17 +9,90 @@
             </tr>
         </thead>
         <tbody>
-            <?php
-            unset($preferences['validator']);
-            foreach($preferences as $key => &$value) {
-            $lang = "TFISH_PREFERENCE_" . strtoupper($key);
-            ?>
             <tr>
-                <td><?php echo constant($lang); ?></td>
-                <td><?php echo $tfValidator->escapeForXss($value); ?></td>
-                <?php unset($key, $value, $lang); ?>
+                <td><?php echo TFISH_PREFERENCE_SITE_NAME; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['siteName']); ?></td>
             </tr>
-            <?php } ?>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SITE_DESCRIPTION; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['siteDescription']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SITE_AUTHOR; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['siteAuthor']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SITE_EMAIL; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['siteEmail']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SITE_COPYRIGHT; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['siteCopyright']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_CLOSE_SITE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['closeSite']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SERVER_TIMEZONE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['serverTimezone']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SITE_TIMEZONE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['siteTimezone']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_MIN_SEARCH_LENGTH; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['minSearchLength']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SEARCH_PAGINATION; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['searchPagination']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_USER_PAGINATION; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['userPagination']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_ADMIN_PAGINATION; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['adminPagination']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_GALLERY_PAGINATION; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['galleryPagination']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_RSS_POSTS; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['rssPosts']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_PAGINATION_ELEMENTS; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['paginationElements']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SESSION_NAME; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['session_name']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_SESSION_LIFE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['session_life']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_DEFAULT_LANGUAGE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['defaultLanguage']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_DATE_FORMAT; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['dateFormat']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_ENABLE_CACHE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['enableCache']); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo TFISH_PREFERENCE_CACHE_LIFE; ?></td>
+                <td><?php echo $tfValidator->escapeForXss($preferences['cacheLife']); ?></td>
+            </tr>
         </tbody>
     </table>
 </div>

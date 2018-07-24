@@ -26,7 +26,7 @@ $cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token'])
 
 // Set view option
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-if (in_array($op, array('edit', 'update', false), true)) {
+if (in_array($op, array('edit', 'update', false))) {
     switch ($op) {
 
         // Edit: Display a data entry form containing the preference settings.
