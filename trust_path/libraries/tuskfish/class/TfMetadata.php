@@ -31,6 +31,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
+ * @property    TfValidator $tfValidator Instance of the Tuskfish data validator class.
+ * @property    TfPreference $preference Instance of Tuskfish site preferences class.
  * @property    string $title Meta title of this website.
  * @property    string $description Meta description of this website.
  * @property    string $author Author of this website.
@@ -45,10 +48,7 @@ class TfMetadata
     use TfMagicMethods;
     
     protected $validator;
-    
-    /** @var object $preference Instance of TfPreference class, holds site preference info. */
     protected $preference;
-    
     protected $title = '';
     protected $description = '';
     protected $author = '';
@@ -93,7 +93,77 @@ class TfMetadata
             return null;
         }
     }
-
+    
+    /**
+     * Sets the page meta title property.
+     * 
+     * @param string $value Page title.
+     */
+    public function setTitle(string $value)
+    {
+        $this->setProperty('title', $value);
+    }
+    
+    /**
+     * Sets the meta description property.
+     * 
+     * @param string $value Page description.
+     */
+    public function setDescription(string $value)
+    {
+        $this->setProperty('description', $value);
+    }
+    
+    /**
+     * Sets the page meta author property.
+     * 
+     * @param string $value Page author.
+     */
+    public function setAuthor(string $value)
+    {
+        $this->setProperty('author', $value);
+    }
+    
+    /**
+     * Sets the page meta copyright property.
+     * 
+     * @param string $value Page copyright.
+     */
+    public function setCopyright(string $value)
+    {
+        $this->setProperty('copyright', $value);
+    }
+    
+    /**
+     * Sets the meta generatorf (software used) property, which is not used in the default theme.
+     * 
+     * @param string $value Site generator.
+     */
+    public function setGenerator(string $value)
+    {
+        $this->setProperty('generator', $value);
+    }
+    
+    /**
+     * Sets the SEO-friendly URL string for this page.
+     * 
+     * @param string $value SEO string.
+     */
+    public function setSeo(string $value)
+    {
+        $this->setProperty('seo', $value);
+    }
+    
+    /**
+     * Sets the meta robots directive for this page.
+     * 
+     * @param string $value Robots directive.
+     */
+    public function setRobots(string $value)
+    {
+        $this->setProperty('robots', $value);
+    }
+    
     /**
      * Set an existing property.
      * 
@@ -103,42 +173,6 @@ class TfMetadata
      * Note that htmlspecialchars() should use the ENT_QUOTES flag, as most of these values are
      * used within attributes of meta tags, and a double quote would break them.
      */
-    
-    public function setTitle(string $value)
-    {
-        $this->setProperty('title', $value);
-    }
-    
-    public function setDescription(string $value)
-    {
-        $this->setProperty('description', $value);
-    }
-    
-    public function setAuthor(string $value)
-    {
-        $this->setProperty('author', $value);
-    }
-    
-    public function setCopyright(string $value)
-    {
-        $this->setProperty('copyright', $value);
-    }
-    
-    public function setGenerator(string $value)
-    {
-        $this->setProperty('generator', $value);
-    }
-    
-    public function setSeo(string $value)
-    {
-        $this->setProperty('seo', $value);
-    }
-    
-    public function setRobots(string $value)
-    {
-        $this->setProperty('robots', $value);
-    }
-    
     private function setProperty(string $property, string $value)
     {
         $cleanProperty = $this->validator->trimString($property);
