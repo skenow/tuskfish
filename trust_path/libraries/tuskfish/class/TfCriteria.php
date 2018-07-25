@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Query composer class for SQLite database.
+ * Query composer class.
  * 
  * Use this class to set parameters on database-related actions. Individual conditions are held
  * within the item property, as TfCriteriaItem objects. Criteria holds the basic query parameters
