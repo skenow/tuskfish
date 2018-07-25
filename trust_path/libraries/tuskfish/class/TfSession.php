@@ -27,6 +27,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     security
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         TfDatabase $db Instance of the Tuskfish database class.
+ * @var         TfPreference $preference Instance of the Tuskfish site preference class.
  */
 class TfSession
 {
@@ -471,40 +474,40 @@ class TfSession
      * 
      * @param object $tfPreference TfPreference object.
      */
-    public static function start(TfValidator $tfValidator, TfDatabase $tfDatabase,
-            TfPreference $tfPreference)
+    public static function start(TfValidator $validator, TfDatabase $db,
+            TfPreference $preference)
     {        
         // Force session to use cookies to prevent the session ID being passed in the URL.
         ini_set('session.use_cookies', '1');
         ini_set('session.use_only_cookies', '1');
         
-        if (is_a($tfValidator, 'TfValidator')) {
-            self::$validator = $tfValidator;
+        if (is_a($validator, 'TfValidator')) {
+            self::$validator = $validator;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
-        if (is_a($tfDatabase, 'TfDatabase')) {
-            self::$db = $tfDatabase;
+        if (is_a($db, 'TfDatabase')) {
+            self::$db = $db;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
-        if (is_a($tfPreference, 'TfPreference')) {
-            self::$preference = $tfPreference;
+        if (is_a($preference, 'TfPreference')) {
+            self::$preference = $preference;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
 
         // Session name. If the preference has been messed up it will assign one.
-        $session_name = isset($tfPreference->session_name)
-                ? $tfPreference->session_name : 'tf';
+        $session_name = isset($preference->session_name)
+                ? $preference->session_name : 'tf';
 
         // Session life time, in seconds. '0' means until the browser is closed.
-        $lifetime = $tfPreference->session_lifetime;
+        $lifetime = $preference->session_lifetime;
 
         // Path on the domain where the cookie will work. Use a single slash for all paths (default,
         // as there are admin checks in some templates).
@@ -529,7 +532,7 @@ class TfSession
         self::setToken();
 
         // Check if the session has expired.
-        if (self::isExpired($tfPreference))
+        if (self::isExpired($preference))
             self::destroy();
 
         // Check for signs of session hijacking and regenerate if at risk. 10% chance of doing it

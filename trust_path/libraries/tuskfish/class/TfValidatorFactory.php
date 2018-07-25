@@ -25,16 +25,17 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     security
+ * @var         HTMLPurifier $htmlPurifier Instance of HTMLPurifier, used to filter HTML data.
  */
 class TfValidatorFactory
 {
     
-    protected $html_purifier;
+    protected $htmlPurifier;
     
     public function __construct(array $config_options = array())
     {
         $config = $this->configureHTMLPurifier($config_options);
-        $this->html_purifier = new HTMLPurifier($config);
+        $this->htmlPurifier = new HTMLPurifier($config);
     }
     
     /**
@@ -71,7 +72,7 @@ class TfValidatorFactory
     
     public function getValidator()
     {
-         return new TfValidator($this->html_purifier);
+         return new TfValidator($this->htmlPurifier);
     }
     
 }

@@ -39,6 +39,7 @@ if (!defined("TFISH_ROOT_PATH"))
 class TfYubikeyAuthenticator
 {
     
+    /** @var TfValidator $validator Instance of the Tuskfish data validator class. */
     protected $validator;
 
     // Input.
@@ -67,9 +68,9 @@ class TfYubikeyAuthenticator
     private $_curlTimeout;
 
     /** Initialise default property values and unset unneeded ones. */
-    public function __construct(TfValidator $tfValidator)
+    public function __construct(TfValidator $validator)
     {
-        $this->validator = $tfValidator;
+        $this->validator = $validator;
         
         if (defined("TFISH_YUBIKEY_ID")) {
             $this->_id = (int) TFISH_YUBIKEY_ID;

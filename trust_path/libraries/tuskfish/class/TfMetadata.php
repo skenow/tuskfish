@@ -32,7 +32,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @since       1.0
  * @package     content
  * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
- * @property    TfValidator $tfValidator Instance of the Tuskfish data validator class.
+ * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  * @property    TfPreference $preference Instance of Tuskfish site preferences class.
  * @property    string $title Meta title of this website.
  * @property    string $description Meta description of this website.
@@ -61,9 +61,9 @@ class TfMetadata
      * 
      * @param TfPreference $preference Instance of TfPreference, holding site preferences.
      */
-    function __construct(TfValidator $tfValidator, TfPreference $preference)
+    function __construct(TfValidator $validator, TfPreference $preference)
     {
-        $this->validator = $tfValidator; 
+        $this->validator = $validator; 
         $this->setTitle($preference->siteName);
         $this->setDescription($preference->siteDescription);
         $this->setAuthor($preference->siteAuthor);

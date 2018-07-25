@@ -28,7 +28,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
- * @property    string $theme The theme (template set) in use on this page.
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         string $theme The theme (template set) in use on this page.
  */
 class TfTemplate
 {
@@ -41,6 +42,11 @@ class TfTemplate
         $this->validator = $tfValidator;
     }
     
+    /**
+     * Retrieve the name of the theme in use on this page.
+     * 
+     * @return string Returns the the name of the theme in use.
+     */
     public function getTheme()
     {
         if (isset($this->theme)) {

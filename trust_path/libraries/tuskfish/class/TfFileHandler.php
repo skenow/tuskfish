@@ -29,7 +29,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @since       1.0
  * @package     core
  * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
- * @var         TfValidator $tfValidator Instance of the Tuskfish data validator class.
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  */
 class TfFileHandler
 {

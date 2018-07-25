@@ -36,7 +36,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         PDO $_db Instance of the PDO base class.
  * @var         TfValidator $validator Instance of the Tuskfish data validator.
  * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler.
- * @var         TfLogger $tfLogger Instance of the Tuskfish error logger.
+ * @var         TfLogger $logger Instance of the Tuskfish error logger.
  */
 class TfDatabase
 {

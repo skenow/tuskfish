@@ -28,8 +28,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.1
  * @since       1.0
  * @package     core
- * @var         TfishValidator $tfValidator An instance of the Tuskfish data validator class.
- * @var         TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+ * @var         TfishValidator $validator An instance of the Tuskfish data validator class.
+ * @var         TfPreference $preference An instance of the Tuskfish site preferences class.
  * 
  */
 class TfCache

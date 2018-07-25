@@ -27,14 +27,15 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     core
+ * @var         TfDatabase $db Instance of the Tuskfish database class.
  */
 class TfPreferenceHandler
 {
     protected $db;
     
-    public function __construct(TfDatabase $tfDatabase)
+    public function __construct(TfDatabase $db)
     {
-        $this->db = $tfDatabase;
+        $this->db = $db;
     }
     
     /**
@@ -56,12 +57,13 @@ class TfPreferenceHandler
     /**
      * Updates the site preferences in the database.
      * 
+     * @param TfPreference $preference Instance of the Tuskfish site preference class.
      * @return bool True on success false on failure.
      */
-    public function writePreferences(TfPreference $tfPreference)
+    public function writePreferences(TfPreference $preference)
     {
         // Convert preference object to array of key => values.
-        $keyValues = $tfPreference->getPreferencesAsArray();
+        $keyValues = $preference->getPreferencesAsArray();
         
         // Unset the validator object as it is not stored in the database.
         unset($keyValues['validator']);

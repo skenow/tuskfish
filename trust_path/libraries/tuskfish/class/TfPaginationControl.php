@@ -50,10 +50,10 @@ class TfPaginationControl
     protected $extraParams;
     
     /** @param TfPreference $preference Instance of TfPreference, holding site preferences. */
-    function __construct(TfValidator $tfValidator, TfPreference $tfPreference)
+    function __construct(TfValidator $validator, TfPreference $preference)
     {
-        $this->validator = $tfValidator;
-        $this->preference = $tfPreference;
+        $this->validator = $validator;
+        $this->preference = $preference;
         $this->count = 0;
         $this->limit = 0;
         $this->url = '';

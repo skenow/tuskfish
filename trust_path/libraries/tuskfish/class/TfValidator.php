@@ -36,16 +36,17 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     security
+ * @var         HTMLPurifier $htmlPurifier Instance of HTMLPurifier, used to filter HTML data.
  */
 class TfValidator
 {
     
-    protected $html_purifier;
+    protected $htmlPurifier;
     
-    public function __construct(HTMLPurifier $html_purifier)
+    public function __construct(HTMLPurifier $htmlPurifier)
     {
-        if (is_a($html_purifier, 'HTMLPurifier')) {
-            $this->html_purifier = $html_purifier;
+        if (is_a($htmlPurifier, 'HTMLPurifier')) {
+            $this->htmlPurifier = $htmlPurifier;
         }
     }
     
@@ -98,13 +99,12 @@ class TfValidator
      * UTF-8 encoding and to enable HTML5-style IDs (anchor targets).
      *
      * @param string $dirty_html Unvalidated HTML input.
-     * @param array $config_options HTMLPurifier configuration options (see HTMLPurifier documentation).
      * @return string Validated HTML content.
      */
     public function filterHtml(string $dirty_html)
     {
         if ($this->isUtf8($dirty_html)) {
-            $clean_html = (string) $this->html_purifier->purify($dirty_html);
+            $clean_html = (string) $this->htmlPurifier->purify($dirty_html);
             return $clean_html;
         } else {
             return false;

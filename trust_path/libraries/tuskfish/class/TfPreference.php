@@ -27,6 +27,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     core
+ * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
+ * @uses        trait TfLanguage to obtain a list of available translations.
+ * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  * @property    string $siteName Name of website.
  * @property    string $siteDescription Meta description of website.
  * @property    string $siteAuthor Author of website.
@@ -55,8 +58,6 @@ class TfPreference
     use TfLanguage;
 
     protected $validator;
-    
-    /** Preferences */
     protected $siteName;
     protected $siteDescription;
     protected $siteAuthor;
@@ -79,10 +80,10 @@ class TfPreference
     protected $enableCache;
     protected $cacheLife;
     
-    function __construct(TfValidator $tfValidator, array $tfPreferences)
+    function __construct(TfValidator $validator, array $preferences)
     {
-        $this->validator = $tfValidator;
-        $this->loadPropertiesFromArray($tfPreferences);
+        $this->validator = $validator;
+        $this->loadPropertiesFromArray($preferences);
     }
     
     /**
@@ -159,6 +160,11 @@ class TfPreference
         if (isset($dirtyInput['cacheLife'])) $this->setCacheLife((int) $dirtyInput['cacheLife']);
     }
 
+    /**
+     * Set the number of objects to display in a single admin page view. 
+     * 
+     * @param int $value Number of objects to view on a single page.
+     */
     public function setAdminPagination(int $value)
     {
         $cleanValue = (int) $value;
@@ -170,11 +176,24 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the name of the site author. Used to population page meta author tag.
+     * 
+     * @param string $value Name of the site author.
+     */
     public function setSiteAuthor(string $value)
     {
         $this->siteAuthor = $this->validator->trimString($value);
     }
     
+    /**
+     * Set life of items in cache (seconds).
+     * 
+     * Items that expire will be rebuilt and re-written to the cache the next time the page is
+     * requested.
+     * 
+     * @param int $value Expiry timer on cached items (seconds).
+     */
     public function setCacheLife(int $value)
     {
         $cleanValue = (int) $value;
@@ -186,6 +205,11 @@ class TfPreference
         }
     }
     
+    /**
+     * Open our close the site.
+     * 
+     * @param int $value Site open (0) or closed (1).
+     */
     public function setCloseSite(int $value)
     {
         $cleanValue = (int) $value;
@@ -197,11 +221,23 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the date format, used to convert timestamps to human readable form.
+     * 
+     * See the PHP manual for date formatting templates: http://php.net/manual/en/function.date.php
+     * 
+     * @param string $value Template for formatting dates.
+     */
     public function setDateFormat(string $value)
     {
         $this->dateFormat = $this->validator->trimString($value);
     }
     
+    /**
+     * Set the default language for this Tuskfish installation.
+     * 
+     * @param string $value ISO 639-1 two-letter language codes.
+     */
     public function setDefaultLanguage(string $value)
     {
         $cleanValue = $this->validator->trimString($value);
@@ -219,11 +255,23 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the site description. Used in meta description tag.
+     * 
+     * @param string $value Site description.
+     */
     public function setSiteDescription(string $value)
     {
         $this->siteDescription = $this->validator->trimString($value);
     }
     
+    /**
+     * Set the admin email address for the site.
+     * 
+     * Used in RSS feeds to populate the managingEditor and webmaster tags.
+     * 
+     * @param string $value Email address.
+     */
     public function setSiteEmail(string $value)
     {
         $cleanValue = $this->validator->trimString($value);
@@ -235,6 +283,11 @@ class TfPreference
         }
     }
     
+    /**
+     * Enable or disable the cache.
+     * 
+     * @param int $value Enabled (1) or disabled (0).
+     */
     public function setEnableCache(int $value)
     {
         $cleanValue = (int) $value;
@@ -246,6 +299,11 @@ class TfPreference
         }
     }
     
+    /**
+     * Set number of objects to display on the gallery page.
+     * 
+     * @param int $value Number of objects to display on a single page view.
+     */
     public function setGalleryPagination(int $value)
     {
         $cleanValue = (int) $value;
@@ -257,6 +315,15 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the minimum length of search terms (characters).
+     * 
+     * Search terms less than this number of characters will be discarded. It is usually best to
+     * allow a minimum length of 3 characters; this allows searching for common acronyms without
+     * returning massive numbers of hits.
+     * 
+     * @param int $value Minimum number of characters.
+     */
     public function setMinSearchLength(int $value)
     {
         $cleanValue = (int) $value;
@@ -268,6 +335,13 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the default number of page slots to display in pagination elements.
+     * 
+     * Can be overridden manually in TfishPaginationControl.
+     * 
+     * @param int $value Number of page slots to display in pagination control.
+     */
     public function setPaginationElements(int $value)
     {
         $cleanValue = (int) $value;
@@ -279,6 +353,11 @@ class TfPreference
         }
     }
     
+    /**
+     * Set number of items to display in RSS feeds.
+     * 
+     * @param int $value Number of items to include in feed.
+     */
     public function setRssPosts(int $value)
     {
         $cleanValue = (int) $value;
@@ -290,6 +369,11 @@ class TfPreference
         }
     }
     
+    /**
+     * Set number of results to display on a search page view.
+     * 
+     * @param int $value Number of objects to display in a single page view.
+     */
     public function setSearchPagination(int $value)
     {
         $cleanValue = (int) $value;
@@ -301,11 +385,23 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the server timezone.
+     * 
+     * @param string $value Timezone.
+     */
     public function setServerTimezone(string $value)
     {
         $this->serverTimezone = $this->validator->trimString($value);
     }
     
+    /**
+     * Set the life of an idle session.
+     * 
+     * User will be logged out after being idle for this many minutes.
+     * 
+     * @param int $value Session life (minutes).
+     */
     public function setSessionLife(int $value)
     {
         $cleanValue = (int) $value;
@@ -317,6 +413,13 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the name (prefix) used to identify Tuskfish sessions.
+     * 
+     * If you change it, use something unpredictable.
+     * 
+     * @param string $value Session name.
+     */
     public function setSessionName(string $value)
     {
         $cleanValue = $this->validator->trimString($value);
@@ -328,21 +431,52 @@ class TfPreference
         }
     }
     
+    /**
+     * Set the site meta copyright.
+     * 
+     * Used to populate the dcterms.rights meta tag in the theme. Can be overriden in the
+     * theme.html file.
+     * 
+     * @param string $value Copyright statement.
+     */
     public function setSiteCopyright(string $value)
     {
         $this->siteCopyright = $this->validator->trimString($value);
     }
     
+    /**
+     * Set the title of the page.
+     * 
+     * Used to populate the meta title tag. Usually each page / object will specify a title, but
+     * if none is set this value will be used as the default. The title can be manually overriden
+     * on each page using the TfishMetadata object (see comments at the bottom of controller
+     * scripts).
+     * 
+     * @param string $value
+     */
     public function setSiteName(string $value)
     {
         $this->siteName = $this->validator->trimString($value);
     }
     
+    /**
+     * Set the site timezone.
+     * 
+     * This is normally the timezone for your principal target audience.
+     * 
+     * @param string $value Timezone.
+     */
     public function setSiteTimezone(string $value)
     {
         $this->siteTimezone = $this->validator->trimString($value);
     }
     
+    /**
+     * Set the number of objects to display in a single page view on the public facing side of the
+     * site.
+     * 
+     * @param int $value Number of objects to display.
+     */
     public function setUserPagination(int $value)
     {
         $cleanValue = (int) $value;
