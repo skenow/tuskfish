@@ -28,16 +28,20 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
- * @property    object $preference TfPreference object containing the site preference information.
+ * @var         TfValidator $validator Instance of the Tuskfish data valiator class.
+ * @var         TfPreference $preference Instance of the Tuskfish site preference class.
+ * @var         int $count Number of content objects (pages) matching these parameters.
+ * @var         int $limit Number of content objects to retrieve in current view.
+ * @var         string $url Target base URL for pagination control links.
+ * @var         int $start Position in result set to retrieve content objects from.
+ * @var         int $tag ID of tag used to filter content.
+ * @var         array $extraParams Query string to be appended to the URLs (control script params).
  */
 class TfPaginationControl
 {
     
     protected $validator;
-    
-    /** @var object $preference Instance of TfPreference class, holds site preference info. */
     protected $preference;
-    
     protected $count;
     protected $limit;
     protected $url;
@@ -69,12 +73,6 @@ class TfPaginationControl
      * If you want to create pagination controls for other presentation-side libraries add
      * additional methods to this class.
      * 
-     * @param int $count Number of content objects (pages) matching these parameters.
-     * @param int $limit Number of content objects to retrieve in current view.
-     * @param string $url Target base URL for pagination control links.
-     * @param int $start Position in result set to retrieve content objects from.
-     * @param int $tag ID of tag used to filter content.
-     * @param array $extraParams Query string to be appended to the URLs (control script params).
      * @return string HTML pagination control.
      */
     public function getPaginationControl()
@@ -197,40 +195,73 @@ class TfPaginationControl
         exit;    
     }
     
+    /**
+     * Set the count property, which represents the number of objects matching the page parameters.
+     * 
+     * @param int $count
+     */
     public function setCount($count)
     {
         $this->count = $this->validator->isInt($count, 1) ? (int) $count : 0;
     }
     
+    /**
+     * Sets the limit property, which controls the number of objects to be retrieved in a single
+     * page view.
+     * 
+     * @param int $limit Number of content objects to retrieve in current view.
+     */
     public function setLimit(int $limit)
     {
         $this->limit = $this->validator->isInt($limit, 1) ? (int) $limit : 0;
     }
     
+    /**
+     * Set the base URL for pagination control links.
+     * 
+     * @param string $url Base file name for constructing URLs, without the extention.
+     */
     public function setUrl(string $url)
     {
         $cleanUrl = $this->validator->trimString($url);
         $this->url = $this->validator->isAlnumUnderscore($cleanUrl) ? $cleanUrl . '.php'
                 : TFISH_URL;
     }
-    
+
+    /**
+     * Set the starting position in the set of available object.
+     * 
+     * @param int $start ID of first object to view in the set of available records.
+     */
     public function setStart(int $start)
     {
         $this->start = $this->validator->isInt($start, 0) ? (int) $start : 0;
     }
     
+    /**
+     * Set the ID of a tag used to filter content.
+     * 
+     * @param int $tag ID of tag used to filter content.
+     */
     public function setTag(int $tag)
     {
         $this->tag = $this->validator->isInt($tag, 0) ? (int) $tag : 0;
     }
     
-    // $extraParams is a potential XSS attack vector.
-    // The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
-    // avoid messing up the query and avoid unecessary decoding it is possible to maintain
-    // manual control over the operators. (Basically, input requiring encoding or escaping is
-    // absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
-    // actually *want* to use such input (check your sanity), you will need to decode it prior to
-    // use on the landing page.
+    /**
+     * Set extra parameters to be included in pagination control links.
+     * 
+     * $extraParams is a potential XSS attack vector.
+     * The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
+     * avoid messing up the query and avoid unecessary decoding it is possible to maintain
+     * manual control over the operators. (Basically, input requiring encoding or escaping is
+     * absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
+     * actually *want* to use such input (check your sanity), you will need to decode it prior to
+     * use on the landing page.
+     * 
+     * @param array $extraParams Query string to be appended to the URLs (control script params)
+     * @return boolean Returns false on failure.
+     */
     public function setExtraParams(array $extraParams)
     {
         $clean_extraParams = array();
