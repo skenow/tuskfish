@@ -35,13 +35,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  * @property    array $item Array of TfCriteriaItem.
  * @property    array $condition Array of conditions used to join TfCriteriaItem (AND, OR).
- * @property    string $group_by Column to group results by.
+ * @property    string $groupBy Column to group results by.
  * @property    int $limit Number of records to retrieve.
  * @property    int $offset Starting point for retrieving records.
  * @property    string $order Primary column to sort records by.
- * @property    string $order_type Sort ascending (ASC) or descending(DESC).
- * @property    string $secondary_order secondary column to sort records by.
- * @property    string $secondary_order_type Sort ascending (ASC) or descending (DESC).
+ * @property    string $orderType Sort ascending (ASC) or descending(DESC).
+ * @property    string $secondaryOrder secondary column to sort records by.
+ * @property    string $secondaryOrderType Sort ascending (ASC) or descending (DESC).
  * @property    array $tag Array of tag IDs.
  */
 class TfCriteria
@@ -52,13 +52,13 @@ class TfCriteria
     protected $validator;
     protected $item = array();
     protected $condition = array();
-    protected $group_by = '';
+    protected $groupBy = '';
     protected $limit = 0;
     protected $offset = 0;
     protected $order = '';
-    protected $order_type = "DESC";
-    protected $secondary_order = '';
-    protected $secondary_order_type = "DESC";
+    protected $orderType = "DESC";
+    protected $secondaryOrder = '';
+    protected $secondaryOrderType = "DESC";
     protected $tag = array();
     
     public function __construct(TfValidator $tfValidator)
@@ -97,14 +97,14 @@ class TfCriteria
     /**
      * Set a GROUP BY condition on a query.
      * 
-     * @param string $group_by Column to group results by.
+     * @param string $groupBy Column to group results by.
      */
-    public function setGroupBy(string $group_by)
+    public function setGroupBy(string $groupBy)
     {
-        $clean_group_by = $this->validator->trimString($group_by);
+        $cleanGroupBy = $this->validator->trimString($groupBy);
 
-        if ($this->validator->isAlnumUnderscore($clean_group_by)) {
-            $this->group_by = $clean_group_by;
+        if ($this->validator->isAlnumUnderscore($cleanGroupBy)) {
+            $this->groupBy = $cleanGroupBy;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -171,30 +171,30 @@ class TfCriteria
     /**
      * Sets the sort type (ascending or descending) for the primary order column of a result set.
      * 
-     * @param string $order_type Ascending (ASC) or descending (DESC) order.
+     * @param string $orderType Ascending (ASC) or descending (DESC) order.
      */
-    public function setOrderType(string $order_type)
+    public function setOrderType(string $orderType)
     {
-        $clean_order_type = $this->validator->trimString($order_type);
+        $cleanOrderType = $this->validator->trimString($orderType);
         
-        if ($clean_order_type === "ASC") {
-            $this->order_type = "ASC";
+        if ($cleanOrderType === "ASC") {
+            $this->orderType = "ASC";
         } else {
-            $this->order_type = "DESC";
+            $this->orderType = "DESC";
         }
     }
     
     /**
      * Sets the secondary column to order query results by.
      * 
-     * @param string $secondary_order Name of the secondary column to order the query results by.
+     * @param string $secondaryOrder Name of the secondary column to order the query results by.
      */
-    public function setSecondaryOrder(string $secondary_order)
+    public function setSecondaryOrder(string $secondaryOrder)
     {
-        $clean_secondary_order = $this->validator->trimString($secondary_order);
+        $cleanSecondaryOrder = $this->validator->trimString($secondaryOrder);
 
-        if ($this->validator->isAlnumUnderscore($clean_secondary_order)) {
-            $this->secondary_order = $clean_secondary_order;
+        if ($this->validator->isAlnumUnderscore($cleanSecondaryOrder)) {
+            $this->secondaryOrder = $cleanSecondaryOrder;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
@@ -203,17 +203,17 @@ class TfCriteria
     /**
      * Sets the secondary column to order query results by.
      * 
-     * @param string $secondary_order_type order Name of the secondary column to order the query
+     * @param string $secondaryOrderType order Name of the secondary column to order the query
      * results by.
      */
-    public function setSecondaryOrderType(string $secondary_order_type)
+    public function setSecondaryOrderType(string $secondaryOrderType)
     {
-        $clean_secondary_order_type = $this->validator->trimString($secondary_order_type);
+        $cleanSecondaryOrderType = $this->validator->trimString($secondaryOrderType);
         
-        if ($clean_secondary_order_type === "ASC") {
-            $this->secondary_order_type = "ASC";
+        if ($cleanSecondaryOrderType === "ASC") {
+            $this->secondaryOrderType = "ASC";
         } else {
-            $this->secondary_order_type = "DESC";
+            $this->secondaryOrderType = "DESC";
         }
     }
     

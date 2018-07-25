@@ -339,12 +339,12 @@ class TfDatabase
             if ($criteria->order) {
                 $sql .= "ORDER BY `t1`." 
                         . $this->addBackticks($this->escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->orderType === "DESC" ? "DESC" : "ASC";
                 
-                if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
+                if ($criteria->secondaryOrder && ($criteria->secondaryOrder != $criteria->order)) {
                     $sql .= ", `t1`."
-                         . $this->addBackticks($this->escapeIdentifier($criteria->secondary_order)) . " ";
-                    $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
+                         . $this->addBackticks($this->escapeIdentifier($criteria->secondaryOrder)) . " ";
+                    $sql .= $criteria->secondaryOrderType === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -717,21 +717,21 @@ class TfDatabase
             }
 
             // Set GROUP BY.
-            if ($criteria->group_by) {
+            if ($criteria->groupBy) {
                 $sql .= " GROUP BY `t1`."
-                        . $this->addBackticks($this->escapeIdentifier($criteria->group_by));
+                        . $this->addBackticks($this->escapeIdentifier($criteria->groupBy));
             }
 
             // Set the order (sort) column and order (default is ascending).
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
                         . $this->addBackticks($this->escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->orderType === "DESC" ? "DESC" : "ASC";
                 
-                if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
+                if ($criteria->secondaryOrder && ($criteria->secondaryOrder != $criteria->order)) {
                     $sql .= ", `t1`."
-                         . $this->addBackticks($this->escapeIdentifier($criteria->secondary_order)) . " ";
-                    $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
+                         . $this->addBackticks($this->escapeIdentifier($criteria->secondaryOrder)) . " ";
+                    $sql .= $criteria->secondaryOrderType === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -938,21 +938,21 @@ class TfDatabase
             }
 
             // Set GROUP BY.
-            if ($criteria->group_by) {
+            if ($criteria->groupBy) {
                 $sql .= " GROUP BY `t1`."
-                        . $this->addBackticks($this->escapeIdentifier($criteria->group_by));
+                        . $this->addBackticks($this->escapeIdentifier($criteria->groupBy));
             }
 
             // Set the order (sort) column and type (default is ascending)
             if ($criteria->order) {
                 $sql .= " ORDER BY `t1`."
                         . $this->addBackticks($this->escapeIdentifier($criteria->order)) . " ";
-                $sql .= $criteria->order_type === "DESC" ? "DESC" : "ASC";
+                $sql .= $criteria->orderType === "DESC" ? "DESC" : "ASC";
                 
-                if ($criteria->secondary_order && ($criteria->secondary_order != $criteria->order)) {
+                if ($criteria->secondaryOrder && ($criteria->secondaryOrder != $criteria->order)) {
                     $sql .= ", `t1`."
-                         . $this->addBackticks($this->escapeIdentifier($criteria->secondary_order)) . " ";
-                    $sql .= $criteria->secondary_order_type === "DESC" ? "DESC" : "ASC";
+                         . $this->addBackticks($this->escapeIdentifier($criteria->secondaryOrder)) . " ";
+                    $sql .= $criteria->secondaryOrderType === "DESC" ? "DESC" : "ASC";
                 }
             }
 
@@ -1302,7 +1302,7 @@ class TfDatabase
             }
         }
         
-        if ($criteria->group_by && !$this->validator->isAlnumUnderscore($criteria->group_by)) {
+        if ($criteria->groupBy && !$this->validator->isAlnumUnderscore($criteria->groupBy)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             exit;
         }
@@ -1322,8 +1322,8 @@ class TfDatabase
             exit;
         }
         
-        if ($criteria->order_type &&
-                ($criteria->order_type != "ASC" && $criteria->order_type != "DESC")) {
+        if ($criteria->orderType &&
+                ($criteria->orderType != "ASC" && $criteria->orderType != "DESC")) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
