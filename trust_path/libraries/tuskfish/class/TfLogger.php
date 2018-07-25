@@ -28,6 +28,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     core
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  */
 class TfLogger
 {
@@ -53,8 +54,7 @@ class TfLogger
      * @param string $error The error message.
      * @param string $file Name of the file where the error occurred.
      * @param int $line Line number the error was raised at.
-     * @param array $context Active symbol table, ie. an array of every variable in scope when the
-     * error was triggered.
+     * @return bool Returns false to halt script execution.
      */
     public function logError(int $errno = null, string $error = '',
             string $file = '', int $line = null)
