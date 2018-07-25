@@ -27,16 +27,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since       1.0
+ * @since       1.1
  * @package     database
- * @property    array $item Array of TfCriteriaItem
- * @property    array $condition Array of conditions used to join TfCriteriaItem (AND, OR)
- * @property    string $groupBy Column to group results by
- * @property    int $limit Number of records to retrieve
- * @property    int $offset Starting point for retrieving records
- * @property    string $order Sort order
- * @property    string $orderType Sort ascending (ASC) or descending(DESC)
- * @property    array $tag Array of tag IDs
+ * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  */
 class TfCriteriaFactory
 {
@@ -49,6 +42,11 @@ class TfCriteriaFactory
         }
     }
     
+    /**
+     * Factory method to instantiate and return a TfCriteria object.
+     * 
+     * @return \TfCriteria Instance of a TfCriteria object.
+     */
     public function getCriteria()
     {
         return new TfCriteria($this->validator);
