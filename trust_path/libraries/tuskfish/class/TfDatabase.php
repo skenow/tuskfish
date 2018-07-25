@@ -33,14 +33,15 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     database
+ * @var         PDO $_db Instance of the PDO base class.
+ * @var         TfValidator $validator Instance of the Tuskfish data validator.
+ * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler.
+ * @var         TfLogger $tfLogger Instance of the Tuskfish error logger.
  */
 class TfDatabase
 {
 
-    /** @var object $_db Instance of the PDO base class */
     private $_db;
-    
-    /** @var object $validator Instance of the TfValidator class or equivalent */
     private $validator;
     private $fileHandler;
     private $logger;
@@ -524,6 +525,7 @@ class TfDatabase
      * should be used together; use renderSql() to create a WHERE clause with named placeholders,
      * and renderPdo() to get a list of the named placeholders so that you can bind values to them.
      * 
+     * @param TfCriteria $criteria Query composer object containing parameters for building a query.
      * @return array $pdo_placeholders Array of PDO placeholders used for building SQL query.
      */
     private function renderPdo(TfCriteria $criteria)
@@ -548,6 +550,7 @@ class TfDatabase
      * Enclose column identifiers in backticks to escape them. Link criteria items with AND/OR
      * except on the last iteration ($count-1).
      * 
+     * @param TfCriteria $criteria Query composer object containing parameters for building a query.
      * @return string $sql SQL query fragment.
      */
     private function renderSql(TfCriteria $criteria)
@@ -573,6 +576,12 @@ class TfDatabase
         return $sql;
     }
     
+    /**
+     * Validates and renders an "AND" or "OR" for use in a query.
+     * 
+     * @param string $condition Must be either "AND" or "OR".
+     * @return string Validated AND/OR condition.
+     */
     private function renderAndOr(string $condition)
     {
         $clean_condition = $this->validator->trimString($condition);
@@ -584,6 +593,12 @@ class TfDatabase
         }
     }
     
+    /**
+     * Validates and renders an expression operator for use in query.
+     * 
+     * @param string $operator
+     * @return string Validated operator.
+     */
     private function renderOperator(string $operator)
     {
         $cleanOperator = $this->validator->trimString($operator);
@@ -604,6 +619,7 @@ class TfDatabase
      * with the SQL. These will be used to bind the values in the statement to prevent
      * SQL injection. Note that values are NOT inserted into the SQL directly.
      * 
+     * @param TfCriteria $criteria Query composer object containing parameters for building a query.
      * @return string $sql SQL query fragment.
      */
     private function renderTagSql(TfCriteria $criteria)
@@ -635,6 +651,7 @@ class TfDatabase
      * placeholders, and renderTagPdo() to get a list of the named placeholders so that you can
      * bind values to them.
      * 
+     * @param TfCriteria $criteria Query composer object containing parameters for building a query.
      * @return array $tag_placeholders Array of PDO placeholders used for building SQL query.
      */
     private function renderTagPdo(TfCriteria $criteria)
@@ -654,7 +671,7 @@ class TfDatabase
      * Returns a PDO statement object, from which results can be extracted with standard PDO calls.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @param array $columns Names of database columns to be selected.
      * @return object PDOStatement object on success PDOException on failure.
      */
@@ -780,7 +797,7 @@ class TfDatabase
      * Count the number of rows matching a set of conditions.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @param string $column Name of column.
      * @return int|object Row count on success, PDOException object on failure.
      */
@@ -881,7 +898,7 @@ class TfDatabase
      * Use the $columns array to specify which fields you want to filter the results by.
      * 
      * @param string $table Name of table.
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @param array $columns Name of columns to filter results by.
      * @return object PDOStatement on success, PDOException on failure.
      */
@@ -1125,7 +1142,7 @@ class TfDatabase
      * 
      * @param string $table Name of table.
      * @param array $keyValues Array of column names and values to update.
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      */
     public function updateAll(string $table, array $keyValues, TfCriteria $criteria = null)
     {
@@ -1249,8 +1266,8 @@ class TfDatabase
     /**
      * Validates the properties of a TfCriteria object to be used in constructing a query.
      * 
-     * @param object $criteria TfCriteria object.
-     * @return object Validated TfCriteria object.
+     * @param TfCriteria $criteria Query composer object.
+     * @return TfCriteria Validated TfCriteria object.
      */
     public function validateCriteriaObject(TfCriteria $criteria)
     {
