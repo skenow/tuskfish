@@ -70,13 +70,15 @@ class TfAngryTree
     /** @var array $_objects Array of objects to be assembled into a category tree. */
     private $_objects;
     
-    /** @var string $_myId Name of object ID field. */
+    /** @var string $_myId Name of the ID field used to identify objects in the tree. */
     private $_myId;
     
-    /** @var string $_parentId Name of parent object ID field. */
+    /** @var string $_parentId Name of ID field used to identify an object's parent in the tree. */
     private $_parentId;
     
-    /** @var int $_rootId Name of root object ID, to be used as the root node of the tree. */
+    /** @var int $_rootId  Name of root object ID field. This is the object that will be used as 
+     * the base node for building a tree (or subtree) from the broader tree structure. You can use
+     * it to build a tree based on a particular branch. */
     private $_rootId = null;
     
     /** @var object $_tree Associative array that comprises the category tree. */
@@ -228,7 +230,7 @@ class TfAngryTree
     }
 
     /**
-     * Make select box options from the tree
+     * Make select box options from the tree.
      * 
      * Returns an indented array of options that can be used to build a HTML select box, indented
      * according to the relative hierarchy.
