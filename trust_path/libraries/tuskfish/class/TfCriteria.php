@@ -31,14 +31,18 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     database
- * @property    array $item Array of TfCriteriaItem
- * @property    array $condition Array of conditions used to join TfCriteriaItem (AND, OR)
- * @property    string $group_by Column to group results by
- * @property    int $limit Number of records to retrieve
- * @property    int $offset Starting point for retrieving records
- * @property    string $order Sort order
- * @property    string $order_type Sort ascending (ASC) or descending(DESC)
- * @property    array $tag Array of tag IDs
+ * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
+ * @property    TfValidator $validator Instance of the Tuskfish data validator class.
+ * @property    array $item Array of TfCriteriaItem.
+ * @property    array $condition Array of conditions used to join TfCriteriaItem (AND, OR).
+ * @property    string $group_by Column to group results by.
+ * @property    int $limit Number of records to retrieve.
+ * @property    int $offset Starting point for retrieving records.
+ * @property    string $order Primary column to sort records by.
+ * @property    string $order_type Sort ascending (ASC) or descending(DESC).
+ * @property    string $secondary_order secondary column to sort records by.
+ * @property    string $secondary_order_type Sort ascending (ASC) or descending (DESC).
+ * @property    array $tag Array of tag IDs.
  */
 class TfCriteria
 {
@@ -74,6 +78,11 @@ class TfCriteria
         $this->setCondition($condition);
     }
     
+    /**
+     * Add a condition (AND, OR) to a query.
+     * 
+     * @param string $condition AND or OR, only.
+     */
     private function setCondition(string $condition)
     {
         $clean_condition = $this->validator->trimString($condition);
@@ -85,6 +94,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Set a GROUP BY condition on a query.
+     * 
+     * @param string $group_by Column to group results by.
+     */
     public function setGroupBy(string $group_by)
     {
         $clean_group_by = $this->validator->trimString($group_by);
@@ -96,6 +110,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Add an item to filter a query with.
+     * 
+     * @param TfCriteriaItem $item Contains database column, value and operator to filter a query.
+     */
     private function setItem(TfCriteriaItem $item)
     {
         if (is_a($item, 'TfCriteriaItem')) {
@@ -105,6 +124,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Sets a limit on the number of database records to retrieve in a database query. 
+     * 
+     * @param int $limit The number of records to retrieve.
+     */
     public function setLimit(int $limit)
     {
         if ($this->validator->isInt($limit, 0)) {
@@ -114,6 +138,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Sets an offset (starting point) for retrieving records in a database query.
+     * 
+     * @param int $offset The record to start retrieving results from, from a result set.
+     */
     public function setOffset(int $offset)
     {
         if ($this->validator->isInt($offset, 0)) {
@@ -123,6 +152,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Sets the primary column to order query results by.
+     * 
+     * @param string $order Name of the primary column to order the query results by.
+     */
     public function setOrder(string $order)
     {
         $clean_order = $this->validator->trimString($order);
@@ -134,6 +168,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Sets the sort type (ascending or descending) for the primary order column of a result set.
+     * 
+     * @param string $order_type Ascending (ASC) or descending (DESC) order.
+     */
     public function setOrderType(string $order_type)
     {
         $clean_order_type = $this->validator->trimString($order_type);
@@ -145,6 +184,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Sets the secondary column to order query results by.
+     * 
+     * @param string $secondary_order Name of the secondary column to order the query results by.
+     */
     public function setSecondaryOrder(string $secondary_order)
     {
         $clean_secondary_order = $this->validator->trimString($secondary_order);
@@ -156,6 +200,12 @@ class TfCriteria
         }
     }
     
+    /**
+     * Sets the secondary column to order query results by.
+     * 
+     * @param string $secondary_order_type order Name of the secondary column to order the query
+     * results by.
+     */
     public function setSecondaryOrderType(string $secondary_order_type)
     {
         $clean_secondary_order_type = $this->validator->trimString($secondary_order_type);
@@ -167,6 +217,11 @@ class TfCriteria
         }
     }
     
+    /**
+     * Set tag(s) to filter query results by.
+     * 
+     * @param array $tags Array of tag IDs to be used to filter a query.
+     */
     public function setTag(array $tags)
     {
         if ($this->validator->isArray($tags)) {
