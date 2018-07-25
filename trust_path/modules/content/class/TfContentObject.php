@@ -76,7 +76,6 @@ class TfContentObject
     use TfMagicMethods;
     use TfMimetypes;
 
-    /** @var array Holds values of permitted preference object properties. */
     protected $validator;
     
     protected $id = '';
@@ -107,7 +106,6 @@ class TfContentObject
     protected $module = '';
     protected $icon = '';
     
-    /** Initialise default content object properties and values. */
     function __construct(TfValidator $tfValidator)
     {
         if (is_a($tfValidator, 'TfValidator')) {
@@ -115,10 +113,7 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
-               
-        /**
-         * Set default values of permitted properties.
-         */
+        
         $this->setId(0);
         $this->setType(get_class($this));
         $this->setHandler($this->type . 'Handler');

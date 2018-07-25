@@ -17,16 +17,20 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Handles Tuskfish cache operations.
+ * Handles Tuskfish page-level caching operations.
  * 
- * The cache can be enabled / disabled and expiry timer set in Tuskfish preferences.
+ * Cached pages are written to the private cache directory(trust_path/cache). The cache can be
+ * enabled / disabled and a expiry timer set in Tuskfish preferences.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
- * @version     Release: 1.0
+ * @version     Release: 1.1
  * @since       1.0
  * @package     core
+ * @var         TfishValidator $tfValidator An instance of the Tuskfish data validator class.
+ * @var         TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+ * 
  */
 class TfCache
 {
@@ -43,11 +47,11 @@ class TfCache
      * Save a copy of this page to the cache directory.
      * 
      * This function should be called in tfFooter.php, before ob_end_flush(). Note that
-     * warnings are suppressed when trying to open the file.
+     * warnings are suppressed when trying to open the file. The query parameters are important
+     * to retrieve the precise representation of the page requested, since they change its state.
      * 
-     * @param object $tfPreference TfPreference object, to make the site preferences
-     * available.
-     * @param string $basename Filename of this page, alphanumeric and underscore characters only.
+     * @param string $basename Filename of this page (without extension), alphanumeric and
+     * underscore characters only.
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
      * @param string $buffer HTML page output from ob_get_contents().
      */
@@ -71,6 +75,7 @@ class TfCache
             return;
         }
 
+        // Write the page to the cache.
         if (false !== ($f = @fopen($file_path, 'w'))) {
             fwrite($f, $buffer);
             fclose($f);
@@ -80,9 +85,8 @@ class TfCache
     /**
      * Clear the private cache.
      * 
-     * At the moment this is something of a blunt instrument; the entire cache will be cleared
-     * if a single object is added, edited or destroyed (this is to ensure that index pages and
-     * pagination controls stay up to date). Later it would be good to be more selective.
+     * The entire cache will be cleared. This method is called if a single object is added, edited
+     * or destroyed to ensure that index pages and pagination controls stay up to date.
      * 
      * @return bool True on success, false on failure.
      */
@@ -122,13 +126,14 @@ class TfCache
      * Note that only alphanumeric and underscore characters are permitted in the
      * basename parameter; this is to avoid directory traversals.
      * 
-     * If a cached page is not available execution will simply proceed and tfFooter.php will
-     * request the page be written to cache. This function should be called after tfHeader.php
-     * is included.
+     * If a cached page is not available controller script execution will simply proceed and 
+     * tfFooter.php will request the page be written to cache, assuming that caching is enabled.
+     * This function should be called after tfHeader.php is included.
      * 
      * @param string $basename Page filename without extension, eg. 'article' (alphanumeric and 
      * underscore characters only).
      * @param array $params URL Query string parameters for this page as $key => $value pairs.
+     * @return string|bool Return cached page if exists, otherwise false.
      */
     public function getCachedPage(string $basename, array $params = array())
     {
@@ -151,7 +156,7 @@ class TfCache
         $resolved_path = realpath(TFISH_PRIVATE_CACHE_PATH) . '/' . $file_name;
         
         if ($resolved_path != TFISH_PRIVATE_CACHE_PATH . $file_name) {
-            return;
+            return false;
         }
 
         // Path is good, so check if the file actually exists and has not expired. If so, flush
@@ -166,11 +171,12 @@ class TfCache
     }
 
     /**
-     * Calculate the return the name of a cached file, based on input parameters.
+     * Calculate the return the name of a cached file, based on query string parameters.
      * 
      * @param string $basename Page filename without extension, eg. 'article'. Alphanumeric and 
      * underscore characters only.
      * @param array $params URL query string parameters for this page as $key => $value pairs.
+     * @return string Name of the cached version of a file.
      */
     private function _getCachedFileName(string $basename, array $params)
     {
