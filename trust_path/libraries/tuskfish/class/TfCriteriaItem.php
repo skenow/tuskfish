@@ -29,6 +29,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     database
+ * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  * @property    string $column Name of column in database table
  * @property    mixed $value Value to compare
  * @property    string $operator The operator to use for evaluation (=, +, >, < etc)
@@ -46,6 +47,7 @@ class TfCriteriaItem
     /**
      * Constructor.
      * 
+     * @param TfValidator $validator Instance of the Tuskfish data validator class.
      * @param string $column Name of column in database table. Alphanumeric and underscore
      * characters only.
      * @param mixed $value Value of the column.
@@ -81,14 +83,9 @@ class TfCriteriaItem
     }
 
     /**
-     * Set the value of an object property and will not allow non-whitelisted properties to be set.
+     * Specifies the column to use in a query clause. 
      * 
-     * Intercepts direct calls to set the value of an object property. This method can be modified
-     * to impose data type restrictions and range checks before allowing the property
-     * to be set. 
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
+     * @param string $value Name of column.
      */
     
     public function setColumn($value)
@@ -102,6 +99,11 @@ class TfCriteriaItem
         }
     }
     
+    /**
+     * Sets the operator (=, <, >, etc) to use in a query clause.
+     * 
+     * @param string $value An operator to use in a clause.
+     */
     public function setOperator($value)
     {
         $cleanValue = $this->validator->trimString($value);
@@ -113,6 +115,11 @@ class TfCriteriaItem
         }
     }
     
+    /**
+     * Sets the value of a column to use in a query clause.
+     * 
+     * @param mixed $value Value of column.
+     */
     public function setValue($value)
     {
         $type = gettype($value);
