@@ -29,14 +29,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     database
- * @property    array $item Array of TfCriteriaItem
- * @property    array $condition Array of conditions used to join TfCriteriaItem (AND, OR)
- * @property    string $groupBy Column to group results by
- * @property    int $limit Number of records to retrieve
- * @property    int $offset Starting point for retrieving records
- * @property    string $order Sort order
- * @property    string $orderType Sort ascending (ASC) or descending(DESC)
- * @property    array $tag Array of tag IDs
+ * @var      TfValidator $validator Instance of the Tuskfish data validator class.
  */
 class TfCriteriaItemFactory
 {
@@ -49,6 +42,16 @@ class TfCriteriaItemFactory
         }
     }
     
+    /**
+     * Factory method to instantiate and return a TfCriteriaItem object.
+     * 
+     * @param string $column Name of column in database table. Alphanumeric and underscore
+     * characters only.
+     * @param mixed $value Value of the column.
+     * @param string $operator See TfishCriteriaItem::getListOfPermittedOperators() for a list of
+     * acceptable operators.
+     * @return \TfCriteriaItem
+     */
     public function getItem(string $column, $value, string $operator = '=')
     {
         return new TfCriteriaItem($this->validator, $column, $value, $operator);
