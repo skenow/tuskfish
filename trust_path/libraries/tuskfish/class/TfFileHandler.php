@@ -28,6 +28,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     core
+ * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
+ * @var         TfValidator $tfValidator Instance of the Tuskfish data validator class.
  */
 class TfFileHandler
 {
@@ -90,7 +92,6 @@ class TfFileHandler
      * @param string $filepath Path to the target directory.
      * @return bool True on success false on failure.
      */
-    
     public function clearDirectory(string $filepath)
     {
         // Check for directory traversals and null byte injection.
@@ -156,9 +157,8 @@ class TfFileHandler
             $filepath = TFISH_UPLOADS_PATH . $filepath;
             $resolved_path = realpath($filepath);
             
-            // Basically this checks for directory traversals. This is a limited use function and
-            // directory traversals are unnecessary. If any are found the input is suspect and
-            // rejected.
+            // Checks for directory traversals, which are not permitted in Tuskfish. If any are 
+            // found the input is suspect and rejected.
             if ($filepath === $resolved_path) {
                 return $filepath; // Path is good.
             } else {

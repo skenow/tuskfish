@@ -29,7 +29,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.1
  * @package     database
- * @property    TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var   TfValidator $validator Instance of the Tuskfish data validator class.
  */
 class TfCriteriaFactory
 {
