@@ -17,9 +17,9 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Searches database for content objects.
+ * TfSearchCOntent class file.
  * 
- * Provides search functionality for the content module.
+ * Provides search functionality for the content module, returning content objects.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -27,6 +27,14 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.1
  * @package     content
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         TfDatabase $db Instance of the Tuskfish database class.
+ * @var         TfPreference $preference Instance of the Tuskfish site preferences class.
+ * @var         array $searchTerms Search terms provided by user.
+ * @var         array $escapedSearchTerms XSS escaped copies of the search terms, used for display.
+ * @var         int $limit Number of records to retrieve in a single page view.
+ * @var         int $offset Starting point for reading records from a result set.
+ * @var         string $operator Type of search, options are AND, OR and exact.
  */
 class TfSearchContent
 {
@@ -37,7 +45,7 @@ class TfSearchContent
     protected $escapedSearchTerms;
     protected $limit;
     protected $offset;
-    protected $operator; // and / or / exact
+    protected $operator; // AND / OR / exact
     
     public function __construct(TfValidator $tfValidator,
             TfDatabase $tfDatabase, TfPreference $tfPreference)
@@ -63,6 +71,8 @@ class TfSearchContent
      * Search terms have entity encoding (htmlspecialchars) applied on the teaser and description
      * fields (only) to ensure consistency with the entity encoding treatment that these HTML fields
      * have been subjected to, otherwise searches involving entities will not return results.
+     * 
+     * @return object|bool Content objects if results found, false if no results or on failure.
      */
     public function searchContent()
     {
@@ -171,22 +181,57 @@ class TfSearchContent
         return $result;
     }
     
+    /**
+     * Set a limit on the number of results to retrieve.
+     * 
+     * Usually this will be the number of objects you want to display in a single page view, as
+     * it is related to pagination, for example a search may return 50 results but you only want
+     * to display 10 per page.
+     * 
+     * @param int $limit Number of objects to retrieve.
+     */
     public function setLimit(int $limit)
     {
         $this->limit = $this->validator->isInt($limit, 0) ? (int) $limit : 0;
     }
     
+    /**
+     * Set a starting point for retrieving objects from a result set.
+     * 
+     * Related to pagination, for example you have 50 search results and display 10 per page, and
+     * are currently viewing the third page of results, you would set this as 29.
+     * 
+     * @param int $offset Starting point to retrieve objects from a result set.
+     */
     public function setOffset(int $offset)
     {
         $this->offset = $this->validator->isInt($offset, 0) ? (int) $offset : 0;
     }
     
+    /**
+     * Set the search type operator (AND, OR or exact).
+     * 
+     * Determines whether the search terms will be used inclusively (OR), exclusively (AND) or
+     * exactly.
+     * 
+     * @param string $operator AND, OR or exact.
+     */
     public function setOperator(string $operator)
     {
         $this->operator = in_array($operator, array('AND', 'OR', 'exact'), true)
                 ? $this->validator->trimString($operator) : 'AND';
     }
     
+    /**
+     * Set and escape search terms for use in a query.
+     * 
+     * As some content fields require entities to be encoded (the HTML fields, ie. teaser,
+     * description and icon) and others don't, both encoded and unencoded copies of the terms are
+     * required for a comprehensive database search. Terms that do not meet the minimum length
+     * preference requirement are discarded.
+     * 
+     * @param string $searchTerms Search terms provided by user.
+     */
     public function setSearchTerms(string $searchTerms)
     {
         $cleanSearchTerms = $escapedSearchTerms = $cleanEscapedSearchTerms = array();
