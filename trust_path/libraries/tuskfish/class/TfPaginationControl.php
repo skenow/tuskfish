@@ -7,7 +7,7 @@
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since       1.0
+ * @since       1.1
  * @package     content
  */
 
@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Generates pagination controls for display.
+ * TfPaginationControl class file. Generates pagination controls for display.
  * 
  * The number of pagination control slots is set in Tuskfish Preferences. Choose an odd number for
  * best results.
@@ -26,7 +26,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since       1.0
+ * @since       1.1
  * @package     content
  * @var         TfValidator $validator Instance of the Tuskfish data valiator class.
  * @var         TfPreference $preference Instance of the Tuskfish site preference class.

@@ -7,7 +7,7 @@
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since       1.0
+ * @since       1.1
  * @package     database
  */
 
@@ -17,17 +17,17 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Factory for instantiating TfCriteriaItem objects and injecting dependencies.
+ * TfCriteriaItemFactory class file.
  * 
- * Use this class to delegate construction of TfCriteriaItem objects.
- * 
- * See the Tuskfish Developer Guide for a full explanation and examples.
+ * Factory for instantiating TfCriteriaItem objects and injecting dependencies. Use this class to
+ * delegate construction of TfCriteriaItem objects. See the Tuskfish Developer Guide for a full
+ * explanation and examples.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since       1.0
+ * @since       1.1
  * @package     database
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  */

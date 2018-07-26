@@ -3,13 +3,28 @@
 /**
  * TfContentHandlerFactory class file.
  * 
+ * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
+ * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
+ * @author      Simon Wilkinson <simon@isengard.biz>
+ * @version     Release: 1.0
+ * @since       1.1
+ * @package     core
+ */
+// Enable strict type declaration.
+declare(strict_types=1);
+
+if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
+
+/**
+ * TfContentHandlerFactory class file.
+ * 
  * Instantiates TfContentHandler objects and handles dependency injection.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
- * @since       1.0
+ * @since       1.1
  * @package     content
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
@@ -18,11 +33,6 @@
  * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler class.
  * @var         TfTaglinkHandler $taglinkHandler Instance of the Tuskfish taglink handler class.
  */
-
-// Enable strict type declaration.
-declare(strict_types=1);
-
-if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 class TfContentHandlerFactory
 {
