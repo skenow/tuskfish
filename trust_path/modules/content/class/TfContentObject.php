@@ -41,6 +41,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        trait TfLanguage to obtain a list of available translations.
+ * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
+ * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
+ * @properties  TfValidator $validator Instance of the Tuskfish data validator class.
  * @properties  int $id Auto-increment, set by database.
  * @properties  string $type Content object type eg. TfArticle etc. [ALPHA]
  * @properties  string $title The name of this content.
@@ -77,7 +81,6 @@ class TfContentObject
     use TfMimetypes;
 
     protected $validator;
-    
     protected $id = '';
     protected $type = '';
     protected $title = '';
@@ -170,7 +173,8 @@ class TfContentObject
      * 
      * @param string $property Name of property.
      * @param bool $escapeHtml Whether to escape HTML fields (teaser, description).
-     * @return string Human readable value escaped for display.
+     * @return string|null Human readable value escaped for display or null if property does not
+     * exist.
      */
     public function escapeForXss(string $property, bool $escapeHtml = false)
     {
@@ -712,10 +716,10 @@ class TfContentObject
             case "teaser":
                 // Do a simple string replace to allow TFISH_URL to be used as a constant,
                 // making the site portable.
-                $trUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
+                $tfUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
                         $this->$cleanProperty);
 
-                return $trUrlEnabled; 
+                return $tfUrlEnabled; 
                 break;
 
             case "rights":
@@ -852,12 +856,22 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the caption that will accompany the image property.
+     * 
+     * @param string $caption Caption describing image.
+     */
     public function setCaption(string $caption)
     {
         $cleanCaption = (string) $this->validator->trimString($caption);
         $this->caption = $cleanCaption;
     }
     
+    /**
+     * Set the view/download counter for this object.
+     * 
+     * @param int $counter Counter value.
+     */
     public function setCounter(int $counter)
     {
         if ($this->validator->isInt($counter, 0)) {
@@ -867,12 +881,22 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the creator of this object.
+     * 
+     * @param string $creator Name of the creator.
+     */
     public function setCreator(string $creator)
     {
         $cleanCreator = (string) $this->validator->trimString($creator);
         $this->creator = $cleanCreator;
     }
     
+    /**
+     * Set the publication date of this object expressed as a string.
+     * 
+     * @param string $date Publication date.
+     */
     public function setDate(string $date)
     {
         $date = (string) $this->validator->trimString($date);
@@ -890,12 +914,22 @@ class TfContentObject
         $this->date = $date;
     }
     
+    /**
+     * Set the description of this object (HTML field).
+     * 
+     * @param string $description Description in HTML.
+     */
     public function setDescription(string $description)
     {
         $description = (string) $this->validator->trimString($description);
         $this->description = $this->validator->filterHtml($description);
     }
     
+    /**
+     * Set the file size for the media attachment to this object.
+     * 
+     * @param int $fileSize Filesize in bytes.
+     */
     public function setFileSize(int $fileSize)
     {
         if ($this->validator->isInt($fileSize, 0)) {
@@ -905,6 +939,14 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the format (mimetype) for the media attachment to this object.
+     * 
+     * Mimetypes must be official/correct as they are used in headers to initiate streaming of
+     * media files.
+     * 
+     * @param string $format Mimetype.
+     */
     public function setFormat(string $format)
     {
         $format = (string) $this->validator->trimString($format);
@@ -917,6 +959,14 @@ class TfContentObject
         $this->format = $format;
     }
     
+    /**
+     * Set the handler class for this content type.
+     * 
+     * For most content subclasses this will be the general TfishContentHandler. However, some
+     * subclasses use their own handler subclass (eg. TfishTagHandler and TfishCollection handler).
+     * 
+     * @param string $handler Handler name (alphabetical characters only).f
+     */
     public function setHandler(string $handler)
     {
         $cleanHandler = (string) $this->validator->trimString($handler);
@@ -928,12 +978,24 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the icon for this content object.
+     * 
+     * This is a HTML field.
+     * 
+     * @param string $icon Icon expressed as a FontAwesome tag, eg. '<i class="fas fa-file-alt"></i>'
+     */
     public function setIcon(string $icon)
     {
         $icon = (string) $this->validator->trimString($icon);
         $this->icon = $this->validator->filterHtml($icon);
     }
     
+    /**
+     * Set the ID for this object.
+     * 
+     * @param int $id ID of this object.
+     */
     public function setId(int $id)
     {
         if ($this->validator->isInt($id, 0)) {
@@ -943,6 +1005,11 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the image for this content object.
+     * 
+     * @param string $image Filename of the image.
+     */
     public function setImage(string $image)
     {
         $image = (string) $this->validator->trimString($image);
@@ -965,6 +1032,11 @@ class TfContentObject
         }        
     }
     
+    /**
+     * Set the language of this content object.
+     * 
+     * @param string $language ISO_639-1 two-letter language code.
+     */
     public function setLanguage(string $language)
     {        
         $language = (string) $this->validator->trimString($language);
@@ -977,6 +1049,11 @@ class TfContentObject
         $this->language = $language;
     }
     
+    /**
+     * Set the media attachment for this content object.
+     * 
+     * @param string $media Filename of the media attachment.
+     */
     public function setMedia(string $media)
     {
         $media = (string) $this->validator->trimString($media);
@@ -1001,24 +1078,48 @@ class TfContentObject
         }        
     }
     
+    /**
+     * Set the meta description for this content object.
+     * 
+     * @param string $metaDescription Meta description of this object.
+     */
     public function setMetaDescription(string $metaDescription)
     {
         $cleanMetaDescription = (string) $this->validator->trimString($metaDescription);
         $this->metaDescription = $cleanMetaDescription;
     }
     
+    /**
+     * Set the meta title for this object.
+     * 
+     * @param string $metaTitle Meta title for this object.
+     */
     public function setMetaTitle(string $metaTitle)
     {
         $cleanMetaTitle = (string) $this->validator->trimString($metaTitle);
         $this->metaTitle = $cleanMetaTitle;
     }
     
+    /**
+     * Set the module for this content object.
+     * 
+     * Usually handled by the object's constructor.
+     * 
+     * @param string $module Module name.
+     */
     public function setModule(string $module)
     {
         $cleanModule = (string) $this->validator->trimString($module);
         $this->module = $cleanModule;
     }
     
+    /**
+     * Set this content object as online (1) or offline (0).
+     * 
+     * Offline objects are not displayed on the front end or returned in search results.
+     * 
+     * @param int $online Online (1) or offline (0).
+     */
     public function setOnline(int $online)
     {
         if ($this->validator->isInt($online, 0, 1)) {
@@ -1028,7 +1129,13 @@ class TfContentObject
         }
     }
     
-    // Parent ID must be different to content ID (cannot declare self as parent).
+    /**
+     * Set the ID of the parent for this object (must be a collection).
+     * 
+     * Parent ID must be different to content ID (cannot declare self as parent).
+     * 
+     * @param int $parent ID of parent object.
+     */
     public function setParent(int $parent)
     {        
         if (!$this->validator->isInt($parent, 0)) {
@@ -1042,12 +1149,24 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the publisher of this content object.
+     * 
+     * @param string $publisher Name of the publisher.
+     */
     public function setPublisher(string $publisher)
     {
         $cleanPublisher = (string) $this->validator->trimString($publisher);
         $this->publisher = $cleanPublisher;
     }
     
+    /**
+     * Set the intellectual property rights for this content object.
+     * 
+     * See getListOfRights() for the available licenses, which you can customise to suit yourself.
+     * 
+     * @param int $rights ID of a copyright license.
+     */
     public function setRights(int $rights)
     {
         if ($this->validator->isInt($rights, 1)) {
@@ -1057,6 +1176,13 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the SEO-friendly search string for this content object.
+     * 
+     * The SEO string will be appended to the URL for this object.
+     * 
+     * @param string $seo Dash-separated-title-of-this-object.
+     */
     public function setSeo(string $seo)
     {
         $cleanSeo = (string) $this->validator->trimString($seo);
@@ -1071,6 +1197,11 @@ class TfContentObject
         $this->seo = $cleanSeo;
     }
     
+    /**
+     * Set the submission time for this content object (timestamp).
+     * 
+     * @param int $submissionTime Timestamp.
+     */
     public function setSubmissionTime(int $submissionTime)
     {
         if ($this->validator->isInt($submissionTime, 1)) {
@@ -1080,6 +1211,11 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the tags associated with this content object.
+     * 
+     * @param array $tags IDs of associated tags.
+     */
     public function setTags(array $tags)
     {
         if ($this->validator->isArray($tags)) {
@@ -1102,12 +1238,24 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the teaser (short form description) for this content object.(HTML).
+     * 
+     * @param string $teaser Teaser (in HTML).
+     */
     public function setTeaser(string $teaser)
     {
         $teaser = (string) $this->validator->trimString($teaser);
         $this->teaser = $this->validator->filterHtml($teaser);
     }
     
+    /**
+     * Set the template file for displaying this content object.
+     * 
+     * The equivalent HTML template file must be present in the active theme.
+     * 
+     * @param string $template Template filename without extension, eg. 'article'.
+     */
     public function setTemplate(string $template)
     {
         $cleanTemplate = (string) $this->validator->trimString($template);
@@ -1119,12 +1267,24 @@ class TfContentObject
         }
     }
     
+    /**
+     * Set the title of this content object.
+     * 
+     * @param string $title Title of this object.
+     */
     public function setTitle(string $title)
     {
         $cleanTitle = (string) $this->validator->trimString($title);
         $this->title = $cleanTitle;
     }
     
+    /**
+     * Set the content type for this object.
+     * 
+     * Type must be the name of a content subclass.
+     * 
+     * @param string $type Class name for this content object.
+     */
     public function setType(string $type)
     {
         $cleanType = (string) $this->validator->trimString($type);
