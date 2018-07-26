@@ -32,3 +32,4 @@ if ($tfPreference->enableCache && isset($basename)) {
 
 // Flush the output buffer to screen and clear it.
 ob_end_flush();
+
