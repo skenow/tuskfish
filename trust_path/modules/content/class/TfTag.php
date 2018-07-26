@@ -29,6 +29,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        trait TfLanguage to obtain a list of available translations.
+ * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
+ * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
+ * @properties  TfValidator $validator Instance of the Tuskfish data validator class.
  * @properties  int $id Auto-increment, set by database.
  * @properties  string $type Content object type eg. TfArticle etc. [ALPHA]
  * @properties  string $title The name of this content.
@@ -51,7 +55,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfTag extends TfContentObject
 {
 
-    /** Initialise default property values and unset unneeded ones. */
     function __construct(TfValidator $tfValidator)
     {
         // Must call parent constructor first.

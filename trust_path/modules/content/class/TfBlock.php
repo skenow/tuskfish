@@ -27,6 +27,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        trait TfLanguage to obtain a list of available translations.
+ * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
+ * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
+ * @properties  TfValidator $validator Instance of the Tuskfish data validator class.
  * @properties  int $id Auto-increment, set by database.
  * @properties  string $type Content object type eg. TfArticle etc. [ALPHA]
  * @properties  string $title The name of this content.
@@ -41,11 +45,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  */
 class TfBlock extends TfContentObject
 {
-    /** Initialise default properties and values. */
-    public function __construct(TfValidator $tfValidator)
+    public function __construct(TfValidator $validator)
     {
         // Must call parent constructor first.
-        parent::__construct($tfValidator);
+        parent::__construct($validator);
 
         // Declare the type, template, module and icon for this this class
         $this->type = "TfBlock";
