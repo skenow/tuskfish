@@ -46,6 +46,12 @@ class TfContentHandlerFactory
                 $itemFactory);
     }
     
+    /**
+     * Instantiates and returns the requested TfishContentHandler subclass.
+     * 
+     * @param string $type Name of the requested handler.
+     * @return \TfCollectionHandler|\TfContentHandler|\TfTagHandler
+     */
     public function getHandler(string $type)
     {        
         $cleanType = $this->validator->trimString($type);

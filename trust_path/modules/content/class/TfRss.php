@@ -27,7 +27,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
- * @uses        TfMagicMethods Common implementation of magic methods to restrict direct property access.
+ * @uses        TfMagicMethods Implementation of magic methods to restrict direct property access.
  * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  * @property    string $title Name of channel.
  * @property    string $link URL to website associated with this channel.
@@ -59,7 +59,6 @@ class TfRss
     public function __construct(TfPreference $tfPreference, TfValidator $tfValidator)
     {
         
-        // Set default values of permitted properties.
         $this->validator = $tfValidator;
         $this->setTitle($tfPreference->siteName);
         $this->setLink(TFISH_RSS_URL);
@@ -75,7 +74,7 @@ class TfRss
     /**
      * Make a RSS feed for a collection object.
      * 
-     * @param object $obj TfCollection object.
+     * @param TfCollection $obj A collection object.
      */
     public function makeFeedForCollection(TfCollection $obj)
     {
@@ -88,29 +87,56 @@ class TfRss
         $this->setDescription($obj->teaser);
     }
     
+    /**
+     * Set the copyright notice for this feed.
+     * 
+     * @param string $copyright Copyright notice.
+     */
     public function setCopyright(string $copyright)
     {
         $cleanCopyright = $this->validator->trimString($copyright);
         $this->copyright = $cleanCopyright;
     }
     
+    /**
+     * Set the description of this feed.
+     * 
+     * @param string $description Description of feed.
+     */
     public function setDescription(string $description)
     {
         $cleanDescription = $this->validator->trimString($description);
         $this->description = $cleanDescription;
     }
     
+    /**
+     * Set the software generator for this feed.
+     * 
+     * @param string $generator Name of the software used to generate this feed. For security
+     * reasons, the generator tag has been removed from the Tuskfish RSS template, but you can
+     * add it in if you don't mind people knowing what software your site is running.
+     */
     public function setGenerator(string $generator)
     {
         $cleanGenerator = $this->validator->trimString($generator);
         $this->generator = $cleanGenerator;
     }
     
+    /**
+     * Set the image for this feed (not implemented).
+     * 
+     * @param string $image Image for this feed.
+     */
     public function setImage(string $image)
     {
         // Not implemented.
     }
     
+    /**
+     * Set the content/posts for this feed.
+     * 
+     * @param array $items Items to be included in the feed.
+     */
     public function setItems(array $items)
     {
         if ($this->validator->isArray($items)) {
@@ -132,6 +158,13 @@ class TfRss
         }
     }
     
+    /**
+     * Set the base URL for this feed.
+     * 
+     * Defaults to the value of TFISH_RSS.
+     * 
+     * @param string $url Base URL for this feed.
+     */
     public function setLink(string $url)
     {
         $cleanUrl = $this->validator->trimString($url);
@@ -143,6 +176,11 @@ class TfRss
         }
     }
     
+    /**
+     * Set the managing editor of this feed.
+     * 
+     * @param string $email Email address of the managing editor.
+     */
     public function setManagingEditor(string $email)
     {
         $cleanEmail = $this->validator->trimString($email);
@@ -154,18 +192,33 @@ class TfRss
         }
     }
     
+    /**
+     * Set the title of this feed.
+     * 
+     * @param string $title Title of the feed.
+     */
     public function setTitle(string $title)
     {
         $cleanTitle = $this->validator->trimString($title);
         $this->title = $cleanTitle;
     }
     
+    /**
+     * Set the template (theme) to display this feed, defaults to 'rss'.
+     * 
+     * @param string $template Name of the template set.
+     */
     private function setTemplate(string $template)
     {
         $cleanTemplate = $this->validator->trimString($template);
         $this->template = $cleanTemplate;
     }
     
+    /**
+     * Set the webmaster property.
+     * 
+     * @param string $email email of the webmaster responsible for the feed.
+     */
     public function setWebmaster(string $email)
     {
         $cleanEmail = $this->validator->trimString($email);
