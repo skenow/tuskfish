@@ -25,6 +25,12 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        TfContentTypes Whitelist of sanctioned content subclasses.
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         TfDatabase $db Instance of the Tuskfish database class.
+ * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
+ * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item
+ * factory class.
  */
 class TfTaglinkHandler
 {
@@ -48,7 +54,7 @@ class TfTaglinkHandler
     /**
      * Delete taglinks associated with a particular content object.
      * 
-     * @param object $obj A TfContentObject subclass object.
+     * @param TfContentObject $obj A content subclass object.
      * @return bool True for success, false on failure.
      */
     public function deleteTaglinks(TfContentObject $obj)

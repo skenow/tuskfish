@@ -31,6 +31,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        TfContentTypes Whitelist of sanctioned TfishContentObject subclasses.
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         TfDatabase $db Instance of the Tuskfish database class.
+ * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
+ * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item factory.
+ * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler class.
+ * @var         TfTaglinkHandler $taglinkHandler Instance of the Tuskfish taglink handler class.
  */
 class TfContentHandler
 {
@@ -44,13 +51,13 @@ class TfContentHandler
     protected $taglinkHandler;
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $criteriaItemFactory,
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
             TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
     {
         $this->validator = $validator;
         $this->db = $db;
         $this->criteriaFactory = $criteriaFactory;
-        $this->itemFactory = $criteriaItemFactory;
+        $this->itemFactory = $itemFactory;
         $this->fileHandler = $fileHandler;
         $this->taglinkHandler = $taglinkHandler;
     }
@@ -221,7 +228,7 @@ class TfContentHandler
      * where the admin reassigns the type of a content object - it makes sure that unused properties
      * are zeroed in the database. 
      * 
-     * @param object $obj TfContentObject subclass.
+     * @param TfContentObject $obj A content object subclass.
      * @return bool True on success, false on failure.
      */
     public function insert(TfContentObject $obj)
@@ -314,7 +321,7 @@ class TfContentHandler
      * Used primarily to build select box controls. Use $onlineOnly to select only those tags that
      * are marked as online (true), or all tags (false).
      * 
-     * @param string $type Type of content object.
+     * @param string $type Type of content object (subclass name).
      * @param bool $onlineOnly True if marked as online, false if marked as offline.
      * @return array|bool List of tags if available, false if empty.
      */
@@ -360,7 +367,7 @@ class TfContentHandler
     /**
      * Count content objects optionally matching conditions specified with a TfCriteria object.
      * 
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @return int $count Number of objects matching conditions.
      */
     public function getCount(TfCriteria $criteria = null)
@@ -506,7 +513,7 @@ class TfContentHandler
     /**
      * Returns a list of content object titles with ID as key.
      * 
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
     public function getListOfObjectTitles(TfCriteria $criteria = null)
@@ -543,7 +550,7 @@ class TfContentHandler
      * Retrieves a single content object based on its ID.
      * 
      * @param int $id ID of content object.
-     * @return object|bool $object Object on success, false on failure.
+     * @return TfContentObject|bool $object Content object on success, false on failure.
      */
     public function getObject(int $id)
     {
@@ -571,7 +578,7 @@ class TfContentHandler
     /**
      * Get content objects, optionally matching conditions specified with a TfCriteria object.
      * 
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @return array Array of content objects.
      */
     public function getObjects(TfCriteria $criteria = null)
@@ -654,8 +661,7 @@ class TfContentHandler
      * @param string $zeroOption The text to display in the zero option of the select box.
      * @return string HTML select box.
      */
-    public function getOnlineSelectBox(int $selected = null,
-            string $zeroOption = TFISH_ONLINE_STATUS)
+    public function getOnlineSelectBox(int $selected = null, string $zeroOption = TFISH_ONLINE_STATUS)
     {
         $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 0, 1)) 
                 ? (int) $selected : null; // Offline (0) or online (1)
@@ -904,6 +910,7 @@ class TfContentHandler
         }
     }
     
+    /** @internal */
     private function _outputHeader($filename, $fileExtension, $mimetype, $fileSize, $filepath)
     {
         // Prevent caching
@@ -936,7 +943,7 @@ class TfContentHandler
     /**
      * Updates a content object in the database.
      * 
-     * @param object $obj TfContentObject subclass.
+     * @param TfContentObject $obj A content object subclass.
      * @return bool True on success, false on failure.
      */
     public function update(TfContentObject $obj)
@@ -1150,7 +1157,7 @@ class TfContentHandler
      * pass in the SAVED copy of the object from the database, rather than the 'current' version, 
      * as the purpose of the method is to determine if the object *used to be* a collection.
      * 
-     * @param object $obj The TfContentObject to be tested.
+     * @param TfContentObject $obj The content object to be tested.
      * @return boolean True if content object is registered as a TfCollection in database,
      * otherwise false.
      */
@@ -1166,7 +1173,7 @@ class TfContentHandler
     /**
      * Check if an existing object has an associated image file upload.
      * 
-     * @param object $obj The TfContentObject to be tested.
+     * @param TfContentObject $obj The content object to be tested.
      * @return string Filename of associated image property.
      */
     private function _checkImage(TfContentObject $obj)
@@ -1181,7 +1188,7 @@ class TfContentHandler
     /**
      * Check if an existing object has an associated media file upload.
      * 
-     * @param object $obj TfContentObject to be tested.
+     * @param TfContentObject $obj The content object to be tested.
      * @return string Filename of associated media property.
      */
     private function _checkMedia(TfContentObject $obj)

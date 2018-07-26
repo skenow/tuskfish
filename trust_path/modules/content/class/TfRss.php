@@ -27,7 +27,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
- * @param       object $tfPreference TfPreference object to make site preferences available.
+ * @uses        TfMagicMethods Common implementation of magic methods to restrict direct property access.
+ * @property    TfValidator $validator Instance of the Tuskfish data validator class.
  * @property    string $title Name of channel.
  * @property    string $link URL to website associated with this channel.
  * @property    string $description Sentence describing the channel.
@@ -55,8 +56,7 @@ class TfRss
     protected $items;
     protected $template;
 
-    /** Initialise default property values and unset unneeded ones. */
-    public function __construct(TfPreference $tfPreference, object $tfValidator)
+    public function __construct(TfPreference $tfPreference, TfValidator $tfValidator)
     {
         
         // Set default values of permitted properties.

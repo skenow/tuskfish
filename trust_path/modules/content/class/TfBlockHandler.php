@@ -24,22 +24,29 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
+ * @uses        TfContentTypes Whitelist of sanctioned TfishContentObject subclasses.
+ * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         TfDatabase $db Instance of the Tuskfish database class.
+ * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
+ * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item factory.
+ * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler class.
+ * @var         TfTaglinkHandler $taglinkHandler Instance of the Tuskfish taglink handler class.
  */
 class TfBlockHandler extends TfContentHandler
 {
     
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $criteriaItemFactory,
+            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
             TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
     {
-        parent::__construct($validator, $db, $criteriaFactory, $criteriaItemFactory,
+        parent::__construct($validator, $db, $criteriaFactory, $itemFactory,
                 $fileHandler, $taglinkHandler);
     }
     
     /**
      * Count TfBlock objects, optionally matching conditions specified in a TfCriteria object.
      * 
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @return int $count Count of TfBlock objects matching conditions.
      */
     public function getCount(TfCriteria $criteria = null)
@@ -72,7 +79,7 @@ class TfBlockHandler extends TfContentHandler
      * acceptable to use either handler, although probably good practice to use the object-
      * specific one when you know you want a specific kind of object.
      * 
-     * @param object $criteria TfCriteria object used to build conditional database query.
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @return array $objects content objects.
      */
     public function getObjects(TfCriteria $criteria = null)
