@@ -12,5 +12,5 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
-$tfVersion = 'Tuskfish V 1.1 test';
-$tfReleased = '24 July 2018';
+$tfVersion = 'Tuskfish V1.1 release candidate';
+$tfReleased = '27 July 2018';
