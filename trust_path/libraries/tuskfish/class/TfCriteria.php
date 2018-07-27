@@ -61,9 +61,9 @@ class TfCriteria
     protected $secondaryOrderType = "DESC";
     protected $tag = array();
     
-    public function __construct(TfValidator $tfValidator)
+    public function __construct(TfValidator $validator)
     {
-        $this->validator = $tfValidator;
+        $this->validator = $validator;
     }
     
     /**

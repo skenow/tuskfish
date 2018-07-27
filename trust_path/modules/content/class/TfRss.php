@@ -56,10 +56,10 @@ class TfRss
     protected $items;
     protected $template;
 
-    public function __construct(TfPreference $tfPreference, TfValidator $tfValidator)
+    public function __construct(TfPreference $tfPreference, TfValidator $validator)
     {
         
-        $this->validator = $tfValidator;
+        $this->validator = $validator;
         $this->setTitle($tfPreference->siteName);
         $this->setLink(TFISH_RSS_URL);
         $this->setDescription($tfPreference->siteDescription);

@@ -47,10 +47,10 @@ class TfSearchContent
     protected $offset;
     protected $operator; // AND / OR / exact
     
-    public function __construct(TfValidator $tfValidator,
+    public function __construct(TfValidator $validator,
             TfDatabase $tfDatabase, TfPreference $tfPreference)
     {
-        $this->validator = $tfValidator;
+        $this->validator = $validator;
         $this->db = $tfDatabase;
         $this->preference = $tfPreference;
         $this->searchTerms = array();

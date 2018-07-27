@@ -37,9 +37,9 @@ class TfCache
     protected $validator;
     protected $preference;
     
-    function __construct(TfValidator $tfValidator, TfPreference $tfPreference)
+    function __construct(TfValidator $validator, TfPreference $tfPreference)
     {
-        $this->validator = $tfValidator; 
+        $this->validator = $validator; 
         $this->preference = $tfPreference;
     }
     

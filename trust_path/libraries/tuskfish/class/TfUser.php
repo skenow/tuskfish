@@ -58,9 +58,9 @@ class TfUser
     protected $yubikeyId2;
     protected $loginErrors;
     
-    public function __construct(TfValidator $tfValidator)
+    public function __construct(TfValidator $validator)
     {
-        $this->validator = $tfValidator;
+        $this->validator = $validator;
     }
     
     /**

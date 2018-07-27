@@ -37,9 +37,9 @@ class TfTemplate
     protected $validator;
     protected $theme = 'default';  
     
-    public function __construct(TfValidator $tfValidator)
+    public function __construct(TfValidator $validator)
     {
-        $this->validator = $tfValidator;
+        $this->validator = $validator;
     }
     
     /**
@@ -70,7 +70,7 @@ class TfTemplate
     public function render(string $template)
     {
         // Make the data validator available within scope of the templates.
-        $tfValidator = $this->validator;
+        $validator = $this->validator;
         
         $template = $this->validator->trimString($template);
         

@@ -55,10 +55,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfTag extends TfContentObject
 {
 
-    function __construct(TfValidator $tfValidator)
+    function __construct(TfValidator $validator)
     {
         // Must call parent constructor first.
-        parent::__construct($tfValidator);
+        parent::__construct($validator);
 
         // Declare the type, template and module for this this class.
         $this->type = "TfTag";

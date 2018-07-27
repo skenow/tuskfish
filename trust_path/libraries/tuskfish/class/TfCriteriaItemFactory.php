@@ -35,10 +35,10 @@ class TfCriteriaItemFactory
 {
     protected $validator;
     
-    public function __construct(TfValidator $tfValidator)
+    public function __construct(TfValidator $validator)
     {
-        if (is_a($tfValidator, 'TfValidator')) {
-            $this->validator = $tfValidator;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator;
         }
     }
     

@@ -109,10 +109,10 @@ class TfContentObject
     protected $module = '';
     protected $icon = '';
     
-    function __construct(TfValidator $tfValidator)
+    function __construct(TfValidator $validator)
     {
-        if (is_a($tfValidator, 'TfValidator')) {
-            $this->validator = $tfValidator;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator;
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
