@@ -26,7 +26,7 @@
 <?php if ($content->isValidMedia()): ?>
 <div class="audio-player text-left">
   <audio controls>
-    <source src="<?php echo TFISH_MEDIA_URL . $content->escapeForXss('media'); ?>" type="<?php echo $content->escapeForXss('format'); ?>">
+    <source src="<?php echo TFISH_MEDIA_URL . $content->escapeForXss('media'); ?>" type="<?php echo $tfValidator->escapeForXss($content->format); ?>">
     <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO; ?>
   </audio>
 </div>
