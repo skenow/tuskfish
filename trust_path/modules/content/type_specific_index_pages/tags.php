@@ -25,7 +25,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Configure page.
 $tfTemplate->pageTitle = TFISH_TYPE_TAGS;
-$contentHandler = $contentHandlerFactory->getHandler('content');
+$contentHandler = $contentHandlerFactory->getHandler('tag');
 $indexTemplate = 'tags';
 $targetFileName = 'tags';
 $tfTemplate->targetFileName = $targetFileName;

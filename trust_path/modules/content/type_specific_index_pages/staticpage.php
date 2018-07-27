@@ -27,7 +27,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to static pages.
 $contentHandler = $contentHandlerFactory->getHandler('content');
-$tfCriteriaFactory->getCriteria();
+$criteria = $tfCriteriaFactory->getCriteria();
 $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfStatic'));
 
 ////////// CONFIGURATION //////////
@@ -104,7 +104,7 @@ if ($cleanId) {
         }
         
         // Initialise criteria object.
-        $tfCriteriaFactory->getCriteria();
+        $criteria = $tfCriteriaFactory->getCriteria();
         $criteria->setOrder('date');
         $criteria->setOrderType('DESC');
         $criteria->setSecondaryOrder('submissionTime');

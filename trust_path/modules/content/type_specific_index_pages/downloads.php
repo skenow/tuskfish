@@ -26,7 +26,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to downloads.
 $contentHandler = $contentHandlerFactory->getHandler('content');
-$tfCriteriaFactory->getCriteria();
+$criteria = $tfCriteriaFactory->getCriteria();
 $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfDownload'));
 
 // Configure page.

@@ -25,7 +25,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to articles.
 $contentHandler = $contentHandlerFactory->getHandler('content');
-$tfCriteriaFactory->getCriteria();
+$criteria = $tfCriteriaFactory->getCriteria();
 $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfArticle'));
 
 // Configure page.
