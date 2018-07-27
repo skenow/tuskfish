@@ -70,12 +70,12 @@ class TfTemplate
     public function render(string $template)
     {
         // Make the data validator available within scope of the templates.
-        $validator = $this->validator;
+        $tfValidator = $this->tfValidator;
         
-        $template = $this->validator->trimString($template);
+        $template = $this->tfValidator->trimString($template);
         
         // Check for directory traversals and null byte injection.
-        if ($this->validator->hasTraversalorNullByte($template)) {
+        if ($this->tfValidator->hasTraversalorNullByte($template)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
@@ -105,12 +105,12 @@ class TfTemplate
     public function setTheme(string $theme)
     {
         // Check for directory traversals and null byte injection.
-        if ($this->validator->hasTraversalorNullByte($theme)) {
+        if ($this->tfValidator->hasTraversalorNullByte($theme)) {
             trigger_error(TFISH_ERROR_TRAVERSAL_OR_NULL_BYTE, E_USER_ERROR);
         }
         
-        if ($this->validator->isAlnumUnderscore($theme)) {
-            $clean_theme = $this->validator->trimString($theme);
+        if ($this->tfValidator->isAlnumUnderscore($theme)) {
+            $clean_theme = $this->tfValidator->trimString($theme);
             $this->theme = $clean_theme;
         }
     }
