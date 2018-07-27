@@ -28,18 +28,18 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     content
- * @var         TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var         TfValidator $tfValidator Instance of the Tuskfish data validator class.
  * @var         string $theme The theme (template set) in use on this page.
  */
 class TfTemplate
 {
     // Note that the data validator is *required* to escape data within the scope of templates.
-    protected $validator;
+    protected $tfValidator;
     protected $theme = 'default';  
     
     public function __construct(TfValidator $validator)
     {
-        $this->validator = $validator;
+        $this->tfValidator = $validator;
     }
     
     /**
