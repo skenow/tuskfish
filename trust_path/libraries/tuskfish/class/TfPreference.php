@@ -44,8 +44,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    int adminPagination Number of content objects to show on admin index page.
  * @property    int galleryPagination Number of images to show in admin gallery.
  * @property    int paginationElements Number of slots to include on pagination controls.
- * @property    string session_name Name of session.
- * @property    int session_life Expiry timer for inactive sessions (minutes).
+ * @property    string sessionName Name of session.
+ * @property    int sessionLife Expiry timer for inactive sessions (minutes).
  * @property    string defaultLanguage Default language of site.
  * @property    string dateFormat Format to display dates, as per PHP date() function.
  * @property    int enableCache Enable site cache.
@@ -73,8 +73,8 @@ class TfPreference
     protected $galleryPagination;
     protected $rssPosts;
     protected $paginationElements;
-    protected $session_name;
-    protected $session_life;
+    protected $sessionName;
+    protected $sessionLife;
     protected $defaultLanguage;
     protected $dateFormat;
     protected $enableCache;
@@ -152,8 +152,8 @@ class TfPreference
         if (isset($dirtyInput['galleryPagination'])) $this->setGalleryPagination((int) $dirtyInput['galleryPagination']);
         if (isset($dirtyInput['rssPosts'])) $this->setRssPosts((int) $dirtyInput['rssPosts']);
         if (isset($dirtyInput['paginationElements'])) $this->setPaginationElements((int) $dirtyInput['paginationElements']);
-        if (isset($dirtyInput['session_name'])) $this->setSessionName($dirtyInput['session_name']);
-        if (isset($dirtyInput['session_life'])) $this->setSessionLife((int) $dirtyInput['session_life']);
+        if (isset($dirtyInput['sessionName'])) $this->setSessionName($dirtyInput['sessionName']);
+        if (isset($dirtyInput['sessionLife'])) $this->setSessionLife((int) $dirtyInput['sessionLife']);
         if (isset($dirtyInput['defaultLanguage'])) $this->setDefaultLanguage($dirtyInput['defaultLanguage']);
         if (isset($dirtyInput['dateFormat'])) $this->setDateFormat($dirtyInput['dateFormat']);
         if (isset($dirtyInput['enableCache'])) $this->setEnableCache((int) $dirtyInput['enableCache']);
@@ -407,7 +407,7 @@ class TfPreference
         $cleanValue = (int) $value;
         
         if ($this->validator->isInt($cleanValue, 0)) {
-            $this->session_life = $cleanValue;
+            $this->sessionLife = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
@@ -425,7 +425,7 @@ class TfPreference
         $cleanValue = $this->validator->trimString($value);
 
         if ($this->validator->isAlnum($cleanValue)) {
-            $this->session_name = $cleanValue;
+            $this->sessionName = $cleanValue;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
         }

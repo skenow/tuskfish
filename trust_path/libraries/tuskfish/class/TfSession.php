@@ -139,9 +139,9 @@ class TfSession
         // Check for "last seen" timestamp.
         $last_seen = isset($_SESSION['last_seen']) ? (int) $_SESSION['last_seen'] : false;
 
-        // Check expiry (but not if session_life === 0).
-        if ($last_seen && self::$preference->session_life > 0) {
-            if ($last_seen && (time() - $last_seen) > (self::$preference->session_life * 60)) {
+        // Check expiry (but not if sessionLife === 0).
+        if ($last_seen && self::$preference->sessionLife > 0) {
+            if ($last_seen && (time() - $last_seen) > (self::$preference->sessionLife * 60)) {
                 return true;
             }
         }
@@ -503,11 +503,11 @@ class TfSession
         }
 
         // Session name. If the preference has been messed up it will assign one.
-        $session_name = isset($preference->session_name)
-                ? $preference->session_name : 'tf';
+        $sessionName = isset($preference->sessionName)
+                ? $preference->sessionName : 'tf';
 
         // Session life time, in seconds. '0' means until the browser is closed.
-        $lifetime = $preference->session_lifetime;
+        $lifetime = $preference->sessionLifetime;
 
         // Path on the domain where the cookie will work. Use a single slash for all paths (default,
         // as there are admin checks in some templates).
@@ -524,7 +524,7 @@ class TfSession
         $http_only = true;
 
         // Set the parameters and start the session.
-        session_name($session_name);
+        session_name($sessionName);
         session_set_cookie_params($lifetime, $path, $domain, $secure, $http_only);
         session_start();
         

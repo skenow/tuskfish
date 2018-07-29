@@ -125,14 +125,14 @@
         
     <!-- Session name -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
-      <label for="session_name"><strong><?php echo TFISH_PREFERENCE_SESSION_NAME; ?></strong></label>
-      <input type="text" class="form-control" name="session_name" id="session_name" <?php if (isset($preferences['session_name'])) { echo 'value="' . $tfValidator->escapeForXss($preferences['session_name']) . '"'; } ?> required>
+      <label for="sessionName"><strong><?php echo TFISH_PREFERENCE_SESSION_NAME; ?></strong></label>
+      <input type="text" class="form-control" name="sessionName" id="sessionName" <?php if (isset($preferences['sessionName'])) { echo 'value="' . $tfValidator->escapeForXss($preferences['sessionName']) . '"'; } ?> required>
     </div>
         
     <!-- Session life -->
     <div class="col-md-6 col-lg-4 mb-3 text-left">
-      <label for="session_life"><strong><?php echo TFISH_PREFERENCE_SESSION_LIFE; ?></strong></label>
-      <input type="number" min="0" class="form-control" name="session_life" id="session_life" <?php if (isset($preferences['session_life'])) { echo 'value="' . $tfValidator->escapeForXss($preferences['session_life']) . '"'; } ?> required>
+      <label for="sessionLife"><strong><?php echo TFISH_PREFERENCE_SESSION_LIFE; ?></strong></label>
+      <input type="number" min="0" class="form-control" name="sessionLife" id="sessionLife" <?php if (isset($preferences['sessionLife'])) { echo 'value="' . $tfValidator->escapeForXss($preferences['sessionLife']) . '"'; } ?> required>
     </div>
       
     <!-- Default language -->
