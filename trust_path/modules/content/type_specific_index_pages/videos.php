@@ -131,6 +131,12 @@ if ($cleanId) {
     $contentObjects = $contentHandler->getObjects($criteria);
     $tfTemplate->contentObjects = $contentObjects;
     $tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);
+    
+    // Prepare tag select box.
+    $tfTemplate->selectAction = $targetFileName . '.php';
+    $tagHandler = $contentHandlerFactory->getHandler('tag');
+    $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag);
+    $tfTemplate->selectFiltersForm = $tfTemplate->render('selectFilters');
 }
 
 /**
