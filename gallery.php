@@ -32,6 +32,7 @@ $tfTemplate->pageTitle = TFISH_IMAGE_GALLERY;
 $contentHandler = $contentHandlerFactory->getHandler('content');
 $indexTemplate = 'gallery';
 $targetFileName = 'gallery';
+$tfTemplate->singleViewTargetFileName = 'index'; // Thumbnail link points to content object.
 $tfTemplate->targetFileName = $targetFileName;
 
 // Validate input parameters.

@@ -7,7 +7,7 @@
     <?php $i = 1; foreach ($contentObjects as $content): ?>
     
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <a href="<?php echo $content->getUrl($targetFileName); ?>">
+            <a href="<?php echo $content->getUrl($singleViewTargetFileName); ?>">
                 <img class="img-thumbnail img-responsive mb-3" src="<?php echo $content->getCachedImage(400); ?>"
                 <?php if ($content->caption): ?>
                     alt="<?php echo $content->escapeForXss('caption'); ?>" 
