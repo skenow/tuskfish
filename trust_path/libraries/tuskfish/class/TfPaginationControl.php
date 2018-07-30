@@ -49,7 +49,12 @@ class TfPaginationControl
     protected $tag;
     protected $extraParams;
     
-    /** @param TfPreference $preference Instance of TfPreference, holding site preferences. */
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @param TfPreference $preference An instance of the Tuskfish site preferences class.
+     */
     function __construct(TfValidator $validator, TfPreference $preference)
     {
         $this->validator = $validator;

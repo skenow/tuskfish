@@ -85,7 +85,7 @@ class TfAngryTree
     private $_tree = array();
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $objectArr Array of collection objects that the tree will be built from.
      * @param string $myId Name of the ID field used to identify objects in the tree.

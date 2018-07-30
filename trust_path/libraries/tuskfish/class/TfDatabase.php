@@ -46,6 +46,12 @@ class TfDatabase
     private $fileHandler;
     private $logger;
     
+    /**
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @param TfLogger $logger An instance of the Tuskfish error logger class.
+     * @param TfFileHandler $fileHandler An instance of the Tuskfish file handler class.
+     */
     public function __construct(TfValidator $validator, TfLogger $logger,
             TfFileHandler $fileHandler)
     {

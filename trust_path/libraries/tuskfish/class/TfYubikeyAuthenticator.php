@@ -35,39 +35,34 @@ if (!defined("TFISH_ROOT_PATH"))
  * @version     Release: 1.0
  * @since       1.0
  * @package     security
+ * @var TfValidator $validator Instance of the Tuskfish data validator class.
+ * @var int $_id ID of the Yubikey hardware token (first 12 characters of output).
+ * @var string $_signatureKey Yubikey API key obtained from https://upgrade.yubico.com/getapikey/
+ * @var string $_response Response message from last verification attempt
+ * @var array $_curlResult Response from cURL request to Yubico authentication server.
+ * @var string $_curlError Error message.
+ * @var int $_timestampTolerance Timeout limit (expiry) for authentication requests.
+ * @var int $_curlTimeout Timeout limit when contacting Yubico authentication server.
+ * 
  */
 class TfYubikeyAuthenticator
 {
     
-    /** @var TfValidator $validator Instance of the Tuskfish data validator class. */
     protected $validator;
-
-    // Input.
-    /** @var int $_id ID of the Yubikey hardware token (first 12 characters of output). */
     private $_id;
-
-    /** @var string $_signatureKey Yubikey API key obtained from
-     * https://upgrade.yubico.com/getapikey/ */
     private $_signatureKey;
-    
-    // Output.
-    /** @var string $_response Response message from last verification attempt */
     private $_response;
-    
-    // Internal.
-    /** @var array $_curlResult Response from cURL request to Yubico authentication server. */
     private $_curlResult;
-
-    /** @var string $_curlError Error message. */
     private $_curlError;
-
-    /** @var int $_timestampTolerance Timeout limit (expiry) for authentication requests. */
     private $_timestampTolerance;
-
-    /** @var int $_curlTimeout Timeout limit when contacting Yubico authentication server. */
     private $_curlTimeout;
 
-    /** Initialise default property values and unset unneeded ones. */
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @return boolean
+     */
     public function __construct(TfValidator $validator)
     {
         $this->validator = $validator;

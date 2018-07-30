@@ -43,6 +43,14 @@ class TfValidator
     
     protected $htmlPurifier;
     
+    /**
+     * Constructor.
+     * 
+     * @param HTMLPurifier $htmlPurifier Instance of the HTMLPurifier library, used to validate
+     * HTML. Note that HTMLPurifier should be configured before it is passed in, which is handled
+     * automatically for you if you instantiate it via the TfValidatorFactory->getValidator()
+     * factory class/method.
+     */
     public function __construct(HTMLPurifier $htmlPurifier)
     {
         if (is_a($htmlPurifier, 'HTMLPurifier')) {

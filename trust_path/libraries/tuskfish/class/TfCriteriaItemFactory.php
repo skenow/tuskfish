@@ -35,6 +35,11 @@ class TfCriteriaItemFactory
 {
     protected $validator;
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     */
     public function __construct(TfValidator $validator)
     {
         if (is_a($validator, 'TfValidator')) {

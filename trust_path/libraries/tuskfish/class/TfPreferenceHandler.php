@@ -35,6 +35,11 @@ class TfPreferenceHandler
 {
     protected $db;
     
+    /**
+     * Constructor.
+     * 
+     * @param TfDatabase $db Instance of the database class.
+     */
     public function __construct(TfDatabase $db)
     {
         $this->db = $db;

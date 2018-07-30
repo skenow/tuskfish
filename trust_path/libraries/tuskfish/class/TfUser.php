@@ -58,6 +58,11 @@ class TfUser
     protected $yubikeyId2;
     protected $loginErrors;
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     */
     public function __construct(TfValidator $validator)
     {
         $this->validator = $validator;

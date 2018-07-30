@@ -57,8 +57,10 @@ class TfMetadata
     protected $seo = '';
     protected $robots = '';
 
-    /** Initialise object properties and default values.
+    /**
+     * Constructor.
      * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
      * @param TfPreference $preference Instance of TfPreference, holding site preferences.
      */
     function __construct(TfValidator $validator, TfPreference $preference)

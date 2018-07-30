@@ -37,6 +37,11 @@ class TfTemplate
     protected $tfValidator;
     protected $theme = 'default';  
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     */
     public function __construct(TfValidator $validator)
     {
         $this->tfValidator = $validator;

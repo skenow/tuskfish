@@ -36,9 +36,10 @@ trait TfMimetypes
     /**
      * Returns an array of mimetypes that are permitted for upload to the media directory.
      * 
-     * NOTE: Adding HTML to this list would be a BAD IDEA, as such files can include PHP code,
-     * although uploaded files have execution permissions removed and are stored outside of the
-     * web root in order to prevent direct access by browser. 
+     * NOTE: Adding HTML or any other scripting language or executable to this list would be a
+     * BAD IDEA, as such files can include PHP code, although uploaded files have execution
+     * permissions removed and are stored outside of the web root in order to prevent direct access
+     * by browser. 
      * 
      * @return array Array of permitted mimetypes as file extensions.
      *

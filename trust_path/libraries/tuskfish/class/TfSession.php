@@ -50,7 +50,7 @@ class TfSession
     {
     }
 
-    /**
+    /** 
      * Unset session variables and destroy the session.
      */
     public static function destroy()

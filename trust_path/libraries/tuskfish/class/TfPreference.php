@@ -80,6 +80,13 @@ class TfPreference
     protected $enableCache;
     protected $cacheLife;
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @param array $preferences An associative array holding Tuskfish preference settings, may
+     * be read from the database or passed in via the preference form.
+     */
     function __construct(TfValidator $validator, array $preferences)
     {
         $this->validator = $validator;

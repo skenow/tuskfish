@@ -58,8 +58,9 @@ trait TfMagicMethods
     /**
      * Check if a property is set.
      * 
-     * Intercepts isset() calls to correctly read object properties. Can be overridden in child
-     * objects to add processing logic for specific properties.
+     * Intercepts isset() calls to correctly read object properties. Prevents non-whitelisted,
+     * arbitrary properties from being set. Can be overridden in child objects to add processing
+     * logic for specific properties.
      * 
      * @param string $property Name of property.
      * @return bool True if set otherwise false.
