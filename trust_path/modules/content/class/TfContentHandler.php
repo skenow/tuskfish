@@ -272,6 +272,10 @@ class TfContentHandler
      */
     public function insert(TfContentObject $obj)
     {
+        if (!is_a($obj, 'TfContentObject')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $keyValues = $obj->convertObjectToArray();
         $keyValues['submissionTime'] = time(); // Automatically set submission time.
         unset($keyValues['id']); // ID is auto-incremented by the database on insert operations.
@@ -411,6 +415,10 @@ class TfContentHandler
      */
     public function getCount(TfCriteria $criteria = null)
     {
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if (!isset($criteria)) {
             $criteria = $this->criteriaFactory->getCriteria();
         }
@@ -560,6 +568,10 @@ class TfContentHandler
         $contentList = array();
         $columns = array('id', 'title');
 
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if (!isset($criteria)) {
             $criteria = $this->criteriaFactory->getCriteria();
         }
@@ -623,6 +635,10 @@ class TfContentHandler
     public function getObjects(TfCriteria $criteria = null)
     {
         $objects = array();
+        
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
         
         if (!isset($criteria)) {
             $criteria = $this->criteriaFactory->getCriteria();
@@ -788,6 +804,10 @@ class TfContentHandler
      */
     protected function getTypeIndex(array $criteriaItems)
     {
+        if (!$this->validator->isArray($criteriaItems)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_NOTICE);
+        }
+        
         foreach ($criteriaItems as $key => $item) {
             if ($item->column === 'type') {
                 return $key;
@@ -806,7 +826,6 @@ class TfContentHandler
      */
     public function getTypeSelectBox(string $selected = '', string $zeroOption = null)
     {
-        // The text to display in the zero option of the select box.
         if (isset($zeroOption)) {
             $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
         } else {
@@ -850,6 +869,10 @@ class TfContentHandler
      */
     public function makeTagLinks(array $tags, string $targetFilename = '')
     {
+        if (!$this->validator->isArray($tags)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+        
         if (empty($targetFilename)) {
             $cleanFilename = TFISH_URL . '?tagId=';
         } else {
@@ -987,6 +1010,10 @@ class TfContentHandler
      */
     public function update(TfContentObject $obj)
     {
+        if (!is_a($obj, 'TfContentObject')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;
         $keyValues = $obj->convertObjectToArray();
         

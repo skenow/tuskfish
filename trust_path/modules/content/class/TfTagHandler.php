@@ -123,6 +123,10 @@ class TfTagHandler extends TfContentHandler
      */
     public function getCount(TfCriteria $criteria = null)
     {
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if (!isset($criteria)) {
             $criteria = $this->criteriaFactory->getCriteria();
         }
@@ -156,6 +160,10 @@ class TfTagHandler extends TfContentHandler
      */
     public function getObjects(TfCriteria $criteria = null)
     {
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if (!isset($criteria)) {
             $criteria = $this->criteriaFactory->getCriteria();
         }

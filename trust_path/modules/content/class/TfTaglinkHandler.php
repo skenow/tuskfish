@@ -86,6 +86,10 @@ class TfTaglinkHandler
      */
     public function deleteTaglinks(TfContentObject $obj)
     {
+        if (!is_a($obj, 'TfContentObject')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         if ($this->validator->isInt($obj->id, 1)) {
             $cleanContentId = (int) $obj->id;
         } else {
@@ -136,6 +140,10 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
         }
+        
+        if (!is_array($tags)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
+        }
 
         $cleanTags = array();
         
@@ -178,14 +186,12 @@ class TfTaglinkHandler
      */
     public function updateTaglinks(int $id, string $type, array $tags = null)
     {
-        // Validate ID.
         if ($this->validator->isInt($id, 1)) {
             $cleanId = (int) $id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
 
-        // Validate type.
         $typeList = $this->getTypes();
         
         if ($this->validator->isAlpha($type) && array_key_exists($type, $typeList)) {
@@ -195,7 +201,10 @@ class TfTaglinkHandler
             exit;
         }
 
-        // Validate tags.
+        if (!is_array($tags)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
+        }
+        
         $cleanTagId = array();
         
         if ($this->validator->isArray($tags)) {

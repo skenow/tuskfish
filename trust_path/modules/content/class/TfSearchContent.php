@@ -256,6 +256,8 @@ class TfSearchContent
      */
     public function setSearchTerms(string $searchTerms)
     {
+        $searchTerms = $this->validator->trimString($searchTerms);
+        
         $cleanSearchTerms = $escapedSearchTerms = $cleanEscapedSearchTerms = array();
         
         // Create an escaped copy that will be used to search the HTML teaser and description fields.
