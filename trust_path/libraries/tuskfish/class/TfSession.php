@@ -237,6 +237,7 @@ class TfSession
         $cleanUrl = '';
         
         if (!empty($url_redirect)) {
+            $url_redirect = self::$validator->trimString($url_redirect);
             $cleanUrl = self::$validator->isUrl($url_redirect) ? $url_redirect : '';
         }
         

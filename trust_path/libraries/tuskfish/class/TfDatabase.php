@@ -199,17 +199,17 @@ class TfDatabase
      * 
      * @param string $table Table name (alphanumeric characters only). 
      * @param array $columns Array of column names (keys) and types (values).
-     * @param string $primary_key Name of field to be used as primary key.
+     * @param string $primaryKey Name of field to be used as primary key.
      * @return bool True on success, false on failure.
      */
-    public function createTable(string $table, array $columns, string $primary_key = null)
+    public function createTable(string $table, array $columns, string $primaryKey = null)
     {
         // Initialise
-        $clean_primary_key = null;
-        $clean_columns = array();
+        $cleanPrimaryKey = null;
+        $cleanColumns = array();
 
         // Validate input parameters
-        $clean_table = $this->validateTableName($table);
+        $cleanTable = $this->validateTableName($table);
         
         if ($this->validator->isArray($columns) && !empty($columns)) {
             $typeWhitelist = array("BLOB", "TEXT", "INTEGER", "NULL", "REAL");
@@ -227,7 +227,7 @@ class TfDatabase
                     exit;
                 }
                 
-                $clean_columns[$key] = $value;
+                $cleanColumns[$key] = $value;
                 unset($key, $value);
             }
         } else {
@@ -235,38 +235,38 @@ class TfDatabase
             exit;
         }
         
-        if (isset($primary_key)) {
-            $primary_key = $this->escapeIdentifier($primary_key);
+        if (isset($primaryKey)) {
+            $primaryKey = $this->escapeIdentifier($primaryKey);
             
-            if (array_key_exists($primary_key, $clean_columns)) {
-                $clean_primary_key = $this->validator->isAlnumUnderscore($primary_key)
-                        ? $primary_key : null;
+            if (array_key_exists($primaryKey, $cleanColumns)) {
+                $cleanPrimaryKey = $this->validator->isAlnumUnderscore($primaryKey)
+                        ? $primaryKey : null;
             }
             
-            if (!isset($clean_primary_key)) {
+            if (!isset($cleanPrimaryKey)) {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                 exit;
             }
         }
 
         // Proceed with the query
-        if ($clean_primary_key) {
-            return $this->_createTable($clean_table, $clean_columns, $clean_primary_key);
+        if ($cleanPrimaryKey) {
+            return $this->_createTable($cleanTable, $cleanColumns, $cleanPrimaryKey);
         } else {
-            return $this->_createTable($clean_table, $clean_columns);
+            return $this->_createTable($cleanTable, $cleanColumns);
         }
     }
 
     /** @internal */
     private function _createTable(string $table_name, array $columns,
-            string $primary_key = null)
+            string $primaryKey = null)
     {
         if (mb_strlen($table_name, 'UTF-8') > 0 && is_array($columns)) {
             $sql = "CREATE TABLE IF NOT EXISTS `" . $table_name . "` (";
             
             foreach ($columns as $key => $value) {
                 $sql .= "`" . $key . "` " . $value . "";
-                if (isset($primary_key) && $primary_key === $key) {
+                if (isset($primaryKey) && $primaryKey === $key) {
                     $sql .= " PRIMARY KEY";
                 }
                 $sql .= ", ";
@@ -294,10 +294,10 @@ class TfDatabase
      */
     public function delete(string $table, int $id)
     {
-        $clean_table = $this->validateTableName($table);
+        $cleanTable = $this->validateTableName($table);
         $cleanId = $this->validateId($id);
         
-        return $this->_delete($clean_table, $cleanId);
+        return $this->_delete($cleanTable, $cleanId);
     }
 
     /** @internal */
@@ -329,10 +329,10 @@ class TfDatabase
      */
     public function deleteAll(string $table, TfCriteria $criteria)
     {
-        $clean_table = $this->validateTableName($table);
-        $clean_criteria = $this->validateCriteriaObject($criteria);
+        $cleanTable = $this->validateTableName($table);
+        $cleanCriteria = $this->validateCriteriaObject($criteria);
         
-        return $this->_deleteAll($clean_table, $clean_criteria);
+        return $this->_deleteAll($cleanTable, $cleanCriteria);
     }
 
     /** @internal */
@@ -349,9 +349,9 @@ class TfDatabase
             }
 
             if ($this->validator->isArray($criteria->item)) {
-                $pdo_placeholders = array();
+                $pdoPlaceholders = array();
                 $sql .= $this->renderSql($criteria);
-                $pdo_placeholders = $this->renderPdo($criteria);
+                $pdoPlaceholders = $this->renderPdo($criteria);
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
             }
@@ -381,9 +381,9 @@ class TfDatabase
         $statement = $this->preparedStatement($sql);
         
         if ($criteria) {
-            if (!empty($pdo_placeholders)) {
+            if (!empty($pdoPlaceholders)) {
                 
-                foreach ($pdo_placeholders as $placeholder => $value) {
+                foreach ($pdoPlaceholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
@@ -467,28 +467,28 @@ class TfDatabase
      */
     public function insert(string $table, array $keyValues)
     {
-        $clean_table = $this->validateTableName($table);
+        $cleanTable = $this->validateTableName($table);
         $cleanKeys = $this->validateKeys($keyValues);
         
-        return $this->_insert($clean_table, $cleanKeys);
+        return $this->_insert($cleanTable, $cleanKeys);
     }
 
     /** @internal */
     private function _insert(string $table, array $keyValues)
     {
-        $pdo_placeholders = '';
+        $pdoPlaceholders = '';
         $sql = "INSERT INTO " . $this->addBackticks($table) . " (";
 
         // Prepare statement
         foreach ($keyValues as $key => $value) {
-            $pdo_placeholders .= ":" . $key . ", ";
+            $pdoPlaceholders .= ":" . $key . ", ";
             $sql .= $this->addBackticks($key) . ", ";
             unset($key, $value);
         }
         
-        $pdo_placeholders = trim($pdo_placeholders, ', ');
+        $pdoPlaceholders = trim($pdoPlaceholders, ', ');
         $sql = trim($sql, ', ');
-        $sql .= ") VALUES (" . $pdo_placeholders . ")";
+        $sql .= ") VALUES (" . $pdoPlaceholders . ")";
 
         // Prepare the statement and bind the values.
         $statement = $this->_db->prepare($sql);
@@ -546,18 +546,18 @@ class TfDatabase
      * and renderPdo() to get a list of the named placeholders so that you can bind values to them.
      * 
      * @param TfCriteria $criteria Query composer object containing parameters for building a query.
-     * @return array $pdo_placeholders Array of PDO placeholders used for building SQL query.
+     * @return array $pdoPlaceholders Array of PDO placeholders used for building SQL query.
      */
     private function renderPdo(TfCriteria $criteria)
-    {
-        $pdo_placeholders = array();
+    {        
+        $pdoPlaceholders = array();
         $count = count($criteria->item);
         
         for ($i = 0; $i < $count; $i++) {
-            $pdo_placeholders[":placeholder" . (string) $i] = $criteria->item[$i]->value;
+            $pdoPlaceholders[":placeholder" . (string) $i] = $criteria->item[$i]->value;
         }
 
-        return $pdo_placeholders;
+        return $pdoPlaceholders;
     }
 
     /**
@@ -574,7 +574,7 @@ class TfDatabase
      * @return string $sql SQL query fragment.
      */
     private function renderSql(TfCriteria $criteria)
-    {
+    {        
         $sql = '';
         $count = count($criteria->item);
         
@@ -604,10 +604,10 @@ class TfDatabase
      */
     private function renderAndOr(string $condition)
     {
-        $clean_condition = $this->validator->trimString($condition);
+        $cleanCondition = $this->validator->trimString($condition);
         
-        if ($clean_condition === "AND" || $clean_condition === "OR") {
-            return $clean_condition;
+        if ($cleanCondition === "AND" || $cleanCondition === "OR") {
+            return $cleanCondition;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
@@ -622,9 +622,9 @@ class TfDatabase
     private function renderOperator(string $operator)
     {
         $cleanOperator = $this->validator->trimString($operator);
-        $permitted_operators = array('=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
+        $permittedOperators = array('=', '==', '<', '<=', '>', '>=', '!=', '<>', 'LIKE');
         
-        if (in_array($cleanOperator, $permitted_operators, true)) {
+        if (in_array($cleanOperator, $permittedOperators, true)) {
             return $cleanOperator;
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
@@ -643,7 +643,7 @@ class TfDatabase
      * @return string $sql SQL query fragment.
      */
     private function renderTagSql(TfCriteria $criteria)
-    {
+    {        
         $sql = '';
         $count = count($criteria->tag);
         
@@ -672,17 +672,17 @@ class TfDatabase
      * bind values to them.
      * 
      * @param TfCriteria $criteria Query composer object containing parameters for building a query.
-     * @return array $tag_placeholders Array of PDO placeholders used for building SQL query.
+     * @return array $tagPlaceholders Array of PDO placeholders used for building SQL query.
      */
     private function renderTagPdo(TfCriteria $criteria)
     {
-        $tag_placeholders = array();
+        $tagPlaceholders = array();
         
         for ($i = 0; $i < count($criteria->tag); $i++) {
-            $tag_placeholders[":tag" . (string) $i] = (int) $criteria->tag[$i];
+            $tagPlaceholders[":tag" . (string) $i] = (int) $criteria->tag[$i];
         }
         
-        return $tag_placeholders;
+        return $tagPlaceholders;
     }
 
     /**
@@ -697,11 +697,11 @@ class TfDatabase
      */
     public function select(string $table, TfCriteria $criteria = null, array $columns = null)
     {
-        $clean_table = $this->validateTableName($table);
-        $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
-        $clean_columns = isset($columns) ? $this->validateColumns($columns) : array();
+        $cleanTable = $this->validateTableName($table);
+        $cleanCriteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
+        $cleanColumns = isset($columns) ? $this->validateColumns($columns) : array();
         
-        return $this->_select($clean_table, $clean_criteria, $clean_columns);
+        return $this->_select($cleanTable, $cleanCriteria, $cleanColumns);
     }
 
     /** @internal */
@@ -736,9 +736,9 @@ class TfDatabase
             }
 
             if ($this->validator->isArray($criteria->item)) {
-                $pdo_placeholders = array();
+                $pdoPlaceholders = array();
                 $sql .= $this->renderSql($criteria);
-                $pdo_placeholders = $this->renderPdo($criteria);
+                $pdoPlaceholders = $this->renderPdo($criteria);
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
             }
@@ -750,7 +750,7 @@ class TfDatabase
             // Set tag(s).
             if (!empty($criteria->tag)) {
                 $sql .= $this->renderTagSql($criteria);
-                $tag_placeholders = $this->renderTagPdo($criteria);
+                $tagPlaceholders = $this->renderTagPdo($criteria);
             }
 
             // Set GROUP BY.
@@ -784,15 +784,15 @@ class TfDatabase
         $statement = $this->preparedStatement($sql);
         
         if (isset($criteria) && $statement) {
-            if (!empty($pdo_placeholders)) {
-                foreach ($pdo_placeholders as $placeholder => $value) {
+            if (!empty($pdoPlaceholders)) {
+                foreach ($pdoPlaceholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
 
-            if (isset($tag_placeholders) && !empty($tag_placeholders)) {
-                foreach ($tag_placeholders as $tag_placeholder => $value) {
+            if (isset($tagPlaceholders) && !empty($tagPlaceholders)) {
+                foreach ($tagPlaceholders as $tag_placeholder => $value) {
                     $statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
                     unset($placeholder);
                 }
@@ -823,23 +823,23 @@ class TfDatabase
      */
     public function selectCount(string $table, TfCriteria $criteria = null, string $column = '')
     {
-        $clean_table = $this->validateTableName($table);
-        $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
+        $cleanTable = $this->validateTableName($table);
+        $cleanCriteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
         
         if ($column) {
             $column = $this->escapeIdentifier($column);
             
             if ($this->validator->isAlnumUnderscore($column)) {
-                $clean_column = $column;
+                $cleanColumn = $column;
             } else {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                 exit;
             }
         } else {
-            $clean_column = "*";
+            $cleanColumn = "*";
         }
         
-        return $this->_selectCount($clean_table, $clean_criteria, $clean_column);
+        return $this->_selectCount($cleanTable, $cleanCriteria, $cleanColumn);
     }
 
     /** @internal */
@@ -866,9 +866,9 @@ class TfDatabase
             }
 
             if ($this->validator->isArray($criteria->item)) {
-                $pdo_placeholders = array();
+                $pdoPlaceholders = array();
                 $sql .= $this->renderSql($criteria);
-                $pdo_placeholders = $this->renderPdo($criteria);
+                $pdoPlaceholders = $this->renderPdo($criteria);
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
@@ -881,23 +881,23 @@ class TfDatabase
             // Set tag(s).
             if (!empty($criteria->tag)) {
                 $sql .= $this->renderTagSql($criteria);
-                $tag_placeholders = $this->renderTagPdo($criteria);
+                $tagPlaceholders = $this->renderTagPdo($criteria);
             }
         }
 
         // Prepare the statement and bind the values.
         $statement = $this->preparedStatement($sql);
         if (isset($criteria) && $statement) {
-            if (!empty($pdo_placeholders)) {
-                foreach ($pdo_placeholders as $placeholder => $value) {
+            if (!empty($pdoPlaceholders)) {
+                foreach ($pdoPlaceholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
             }
         }
         
-        if (isset($tag_placeholders) && !empty($tag_placeholders)) {
-            foreach ($tag_placeholders as $tag_placeholder => $value) {
+        if (isset($tagPlaceholders) && !empty($tagPlaceholders)) {
+            foreach ($tagPlaceholders as $tag_placeholder => $value) {
                 $statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
                 unset($placeholder);
             }
@@ -925,11 +925,11 @@ class TfDatabase
     public function selectDistinct(string $table, TfCriteria $criteria = null, array $columns)
     {
         // Validate the tablename (alphanumeric characters only).
-        $clean_table = $this->validateTableName($table);
-        $clean_criteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
-        $clean_columns = !empty($columns) ? $this->validateColumns($columns) : array();
+        $cleanTable = $this->validateTableName($table);
+        $cleanCriteria = isset($criteria) ? $this->validateCriteriaObject($criteria) : null;
+        $cleanColumns = !empty($columns) ? $this->validateColumns($columns) : array();
         
-        return $this->_selectDistinct($clean_table, $clean_criteria, $clean_columns);
+        return $this->_selectDistinct($cleanTable, $cleanCriteria, $cleanColumns);
     }
 
     /** @internal */
@@ -956,9 +956,9 @@ class TfDatabase
             }
 
             if ($this->validator->isArray($criteria->item)) {
-                $pdo_placeholders = array();
+                $pdoPlaceholders = array();
                 $sql .= $this->renderSql($criteria);
-                $pdo_placeholders = $this->renderPdo($criteria);
+                $pdoPlaceholders = $this->renderPdo($criteria);
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
@@ -971,7 +971,7 @@ class TfDatabase
             // Set tag(s).
             if (!empty($criteria->tag)) {
                 $sql .= $this->renderTagSql($criteria);
-                $tag_placeholders = $this->renderTagPdo($criteria);
+                $tagPlaceholders = $this->renderTagPdo($criteria);
             }
 
             // Set GROUP BY.
@@ -1004,8 +1004,8 @@ class TfDatabase
         // Prepare the statement and bind the values.
         $statement = $this->preparedStatement($sql);
         if (isset($criteria) && $statement) {
-            if (!empty($pdo_placeholders)) {
-                foreach ($pdo_placeholders as $placeholder => $value) {
+            if (!empty($pdoPlaceholders)) {
+                foreach ($pdoPlaceholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
@@ -1019,8 +1019,8 @@ class TfDatabase
             }
         }
         
-        if (isset($tag_placeholders) && !empty($tag_placeholders)) {
-            foreach ($tag_placeholders as $tag_placeholder => $value) {
+        if (isset($tagPlaceholders) && !empty($tagPlaceholders)) {
+            foreach ($tagPlaceholders as $tag_placeholder => $value) {
                 $statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
                 unset($placeholder);
             }
@@ -1043,11 +1043,11 @@ class TfDatabase
     public function toggleBoolean(int $id, string $table, string $column)
     {
         $cleanId = $this->validateId($id);
-        $clean_table = $this->validateTableName($table);
-        $clean_column = $this->validateColumns(array($column));
-        $clean_column = reset($clean_column);
+        $cleanTable = $this->validateTableName($table);
+        $cleanColumn = $this->validateColumns(array($column));
+        $cleanColumn = reset($cleanColumn);
         
-        return $this->_toggleBoolean($cleanId, $clean_table, $clean_column);
+        return $this->_toggleBoolean($cleanId, $cleanTable, $cleanColumn);
     }
 
     /** @internal */
@@ -1081,11 +1081,11 @@ class TfDatabase
     public function updateCounter(int $id, string $table, string $column)
     {
         $cleanId = $this->validateId($id);
-        $clean_table = $this->validateTableName($table);
-        $clean_column = $this->validateColumns(array($column));
-        $clean_column = reset($clean_column);
+        $cleanTable = $this->validateTableName($table);
+        $cleanColumn = $this->validateColumns(array($column));
+        $cleanColumn = reset($cleanColumn);
         
-        return $this->_updateCounter($cleanId, $clean_table, $clean_column);
+        return $this->_updateCounter($cleanId, $cleanTable, $cleanColumn);
     }
 
     /** @internal */
@@ -1114,11 +1114,11 @@ class TfDatabase
      */
     public function update(string $table, int $id, array $keyValues)
     {
-        $clean_table = $this->validateTableName($table);
+        $cleanTable = $this->validateTableName($table);
         $cleanId = $this->validateId($id);
         $cleanKeys = $this->validateKeys($keyValues);
         
-        return $this->_update($clean_table, $cleanId, $cleanKeys);
+        return $this->_update($cleanTable, $cleanId, $cleanKeys);
     }
 
     /** @internal */
@@ -1166,16 +1166,16 @@ class TfDatabase
      */
     public function updateAll(string $table, array $keyValues, TfCriteria $criteria = null)
     {
-        $clean_table = $this->validateTableName($table);
+        $cleanTable = $this->validateTableName($table);
         $cleanKeys = $this->validateKeys($keyValues);
         
         if (isset($criteria)) {
-            $clean_criteria = $this->validateCriteriaObject($criteria);
+            $cleanCriteria = $this->validateCriteriaObject($criteria);
         } else {
-            $clean_criteria = null;
+            $cleanCriteria = null;
         }
         
-        return $this->_updateAll($clean_table, $cleanKeys, $clean_criteria);
+        return $this->_updateAll($cleanTable, $cleanKeys, $cleanCriteria);
     }
 
     /** @internal */
@@ -1199,9 +1199,9 @@ class TfDatabase
             }
 
             if ($this->validator->isArray($criteria->item)) {
-                $pdo_placeholders = array();
+                $pdoPlaceholders = array();
                 $sql .= $this->renderSql($criteria);
-                $pdo_placeholders = $this->renderPdo($criteria);
+                $pdoPlaceholders = $this->renderPdo($criteria);
             } else {
                 trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
                 exit;
@@ -1217,8 +1217,8 @@ class TfDatabase
         }
         
         if (isset($criteria)) {
-            if (!empty($pdo_placeholders)) {
-                foreach ($pdo_placeholders as $placeholder => $value) {
+            if (!empty($pdoPlaceholders)) {
+                foreach ($pdoPlaceholders as $placeholder => $value) {
                     $statement->bindValue($placeholder, $value, $this->setType($value));
                     unset($placeholder);
                 }
@@ -1376,14 +1376,14 @@ class TfDatabase
      */
     public function validateColumns(array $columns)
     {
-        $clean_columns = array();
+        $cleanColumns = array();
         
         if ($this->validator->isArray($columns) && !empty($columns)) {
             foreach ($columns as $column) {
                 $column = $this->escapeIdentifier($column);
                 
                 if ($this->validator->isAlnumUnderscore($column)) {
-                    $clean_columns[] = $column;
+                    $cleanColumns[] = $column;
                 } else {
                     trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
                     exit;
@@ -1392,7 +1392,7 @@ class TfDatabase
                 unset($column);
             }
             
-            return $clean_columns;
+            return $cleanColumns;
         } else {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
             exit;
@@ -1453,15 +1453,15 @@ class TfDatabase
     /**
      * Validate and escape a table name to be used in constructing a database query.
      * 
-     * @param string $table_name Table name to be checked.
+     * @param string $tableName Table name to be checked.
      * @return string Valid and escaped table name.
      */
-    public function validateTableName(string $table_name)
+    public function validateTableName(string $tableName)
     {
-        $table_name = $this->escapeIdentifier($table_name);
+        $tableName = $this->escapeIdentifier($tableName);
         
-        if ($this->validator->isAlnum($table_name)) {
-            return $table_name;
+        if ($this->validator->isAlnum($tableName)) {
+            return $tableName;
         } else {
             trigger_error(TFISH_ERROR_NOT_ALNUM, E_USER_ERROR);
             exit;

@@ -78,12 +78,12 @@ class TfCriteria
     /**
      * Add conditions (TfCriteriaItem) to a query.
      * 
-     * @param object $criteria_item TfCriteriaItem object.
+     * @param object $criteriaItem TfCriteriaItem object.
      * @param string $condition Condition used to chain TfCriteriaItems, "AND" or "OR" only.
      */
-    public function add(TfCriteriaItem $criteria_item, string $condition = "AND")
+    public function add(TfCriteriaItem $criteriaItem, string $condition = "AND")
     {
-        $this->setItem($criteria_item);
+        $this->setItem($criteriaItem);
         $this->setCondition($condition);
     }
     
