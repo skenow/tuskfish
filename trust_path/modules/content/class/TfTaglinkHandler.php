@@ -53,10 +53,29 @@ class TfTaglinkHandler
     public function __construct(TfValidator $validator, TfDatabase $db, 
             TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory)
     {
-        $this->validator = $validator;
-        $this->db = $db;
-        $this->criteriaFactory = $criteriaFactory;
-        $this->itemFactory = $itemFactory;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($db, 'TfDatabase')) {
+            $this->db = $db; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($criteriaFactory, 'TfCriteriaFactory')) {
+            $this->criteriaFactory = $criteriaFactory; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($itemFactory, 'TfCriteriaItemFactory')) {
+            $this->itemFactory = $itemFactory; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }        
     }
 
     /**

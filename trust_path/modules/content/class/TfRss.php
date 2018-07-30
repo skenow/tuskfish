@@ -60,18 +60,29 @@ class TfRss
      * Constructor.
      * 
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
-     * @param TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+     * @param TfPreference $preference An instance of the Tuskfish site preferences class.
      */
-    public function __construct(TfValidator $validator, TfPreference $tfPreference)
+    public function __construct(TfValidator $validator, TfPreference $preference)
     {
         
-        $this->validator = $validator;
-        $this->setTitle($tfPreference->siteName);
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($preference, 'TfPreference')) {
+            $this->preference = $preference;
+        }  else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        $this->setTitle($preference->siteName);
         $this->setLink(TFISH_RSS_URL);
-        $this->setDescription($tfPreference->siteDescription);
-        $this->setCopyright($tfPreference->siteCopyright);
-        $this->setManagingEditor($tfPreference->siteEmail);
-        $this->setWebMaster($tfPreference->siteEmail);
+        $this->setDescription($preference->siteDescription);
+        $this->setCopyright($preference->siteCopyright);
+        $this->setManagingEditor($preference->siteEmail);
+        $this->setWebMaster($preference->siteEmail);
         $this->setGenerator('Tuskfish');
         $this->setItems(array());
         $this->setTemplate('rss');

@@ -51,18 +51,33 @@ class TfSearchContent
      * Constructor.
      * 
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
-     * @param TfDatabase $tfDatabase An instance of the database class.
-     * @param TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+     * @param TfDatabase $db An instance of the database class.
+     * @param TfPreference $preference An instance of the Tuskfish site preferences class.
      */
     public function __construct(TfValidator $validator,
-            TfDatabase $tfDatabase, TfPreference $tfPreference)
+            TfDatabase $db, TfPreference $preference)
     {
-        $this->validator = $validator;
-        $this->db = $tfDatabase;
-        $this->preference = $tfPreference;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($db, 'TfDatabase')) {
+            $this->db = $db; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($preference, 'TfPreference')) {
+            $this->preference = $preference;
+        }  else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $this->searchTerms = array();
         $this->escapedSearchTerms = array();
-        $this->limit = $tfPreference->searchPagination;
+        $this->limit = $preference->searchPagination;
         $this->offset = 0;
         $this->operator = 'AND';
     }
