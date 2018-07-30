@@ -71,9 +71,7 @@ class TfRss
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
-        if (is_a($preference, 'TfPreference')) {
-            $this->preference = $preference;
-        }  else {
+        if (!is_a($preference, 'TfPreference')) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         

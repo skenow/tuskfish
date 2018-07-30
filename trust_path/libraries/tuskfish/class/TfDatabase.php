@@ -67,7 +67,7 @@ class TfDatabase
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
-        if (is_a($filehandler, 'TfFileHandler')) {
+        if (is_a($fileHandler, 'TfFileHandler')) {
             $this->fileHandler = $fileHandler; 
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
