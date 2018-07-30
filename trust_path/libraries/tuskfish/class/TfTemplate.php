@@ -44,7 +44,11 @@ class TfTemplate
      */
     public function __construct(TfValidator $validator)
     {
-        $this->tfValidator = $validator;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
     }
     
     /**

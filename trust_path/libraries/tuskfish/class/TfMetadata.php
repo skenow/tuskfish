@@ -65,7 +65,12 @@ class TfMetadata
      */
     function __construct(TfValidator $validator, TfPreference $preference)
     {
-        $this->validator = $validator; 
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $this->setTitle($preference->siteName);
         $this->setDescription($preference->siteDescription);
         $this->setAuthor($preference->siteAuthor);

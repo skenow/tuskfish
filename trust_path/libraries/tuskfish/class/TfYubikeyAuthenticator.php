@@ -65,7 +65,11 @@ class TfYubikeyAuthenticator
      */
     public function __construct(TfValidator $validator)
     {
-        $this->validator = $validator;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
         
         if (defined("TFISH_YUBIKEY_ID")) {
             $this->_id = (int) TFISH_YUBIKEY_ID;

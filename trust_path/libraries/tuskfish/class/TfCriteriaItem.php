@@ -57,7 +57,12 @@ class TfCriteriaItem
     function __construct(TfValidator $validator, string $column, $value, string $operator = '=')
     {
 
-        $this->validator = $validator;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
         $this->setColumn($column);
         $this->setValue($value);
         $this->setOperator($operator);

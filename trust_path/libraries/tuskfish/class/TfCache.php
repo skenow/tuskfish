@@ -41,12 +41,21 @@ class TfCache
      * Constructor.
      * 
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
-     * @param TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+     * @param TfPreference $preference An instance of the Tuskfish site preferences class.
      */
-    function __construct(TfValidator $validator, TfPreference $tfPreference)
+    function __construct(TfValidator $validator, TfPreference $preference)
     {
-        $this->validator = $validator; 
-        $this->preference = $tfPreference;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($preference, 'TfPreference')) {
+            $this->preference = $preference;
+        }  else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
     }
     
     /**

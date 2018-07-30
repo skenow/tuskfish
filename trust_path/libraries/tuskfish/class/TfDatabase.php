@@ -55,9 +55,23 @@ class TfDatabase
     public function __construct(TfValidator $validator, TfLogger $logger,
             TfFileHandler $fileHandler)
     {
-        $this->validator = $validator;
-        $this->logger = $logger;
-        $this->fileHandler = $fileHandler;
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($logger, 'TfLogger')) {
+            $this->logger = $logger; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (is_a($filehandler, 'TfFileHandler')) {
+            $this->fileHandler = $fileHandler; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
     }
 
     /** No cloning permitted. */

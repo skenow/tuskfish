@@ -42,7 +42,11 @@ class TfPreferenceHandler
      */
     public function __construct(TfDatabase $db)
     {
-        $this->db = $db;
+        if (is_a($db, 'TfDatabase')) {
+            $this->db = $db; 
+        } else {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
     }
     
     /**
