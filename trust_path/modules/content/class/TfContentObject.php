@@ -22,18 +22,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * There is only one 'archtype' of content object in Tuskfish; it uses a subset of standard
  * Dublin Core metadata fields plus a few more that are common to most content objects. Why? If you
  * look at most common content types - articles, photos, downloads etc. - you will see that for the
- * most part they all use the same fields. For example, everything has a title, everything has a
- * description, everything has an author, everything has a hit counter.
- * 
- * Traditionally, most modular CMS create a separate database table for every type of content so you
- * get duplication of column names across tables. And it works just fine until you want to publish
- * a single content stream containing different kinds of content objects. Then, suddenly, your
- * queries are full of complex joins and other rubbish and it becomes very painful to work with.
+ * most part they all use the same fields (title, teaser, description, etc).
  * 
  * By using a single table for content objects with common field names our queries become very
- * simple and much redundancy is avoided. Of course, some types of content might not require a few
- * particular properties; and so subclassed content types simply unset() any properties that they 
- * don't need in their constructor.
+ * simple and much redundancy is avoided. Content subclasses that don't need particular properties
+ * unset() them in their constructor.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -109,6 +102,11 @@ class TfContentObject
     protected $module = '';
     protected $icon = '';
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     */
     function __construct(TfValidator $validator)
     {
         if (is_a($validator, 'TfValidator')) {

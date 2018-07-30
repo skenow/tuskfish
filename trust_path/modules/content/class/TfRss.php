@@ -56,7 +56,13 @@ class TfRss
     protected $items;
     protected $template;
 
-    public function __construct(TfPreference $tfPreference, TfValidator $validator)
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @param TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+     */
+    public function __construct(TfValidator $validator, TfPreference $tfPreference)
     {
         
         $this->validator = $validator;

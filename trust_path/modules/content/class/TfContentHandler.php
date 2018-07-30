@@ -50,6 +50,16 @@ class TfContentHandler
     protected $fileHandler;
     protected $taglinkHandler;
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @param TfDatabase $db An instance of the database class.
+     * @param TfCriteriaFactory $criteriaFactory an instance of the Tuskfish criteria factory class.
+     * @param TfCriteriaItemFactory $itemFactory An instance of the Tuskfish criteria item factory class.
+     * @param TfFileHandler $fileHandler An instance of the Tuskfish file handler class.
+     * @param TfTaglinkHandler $taglinkHandler An instance of the Tuskfish taglink handler class.
+     */
     public function __construct(TfValidator $validator, TfDatabase $db,
             TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
             TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)

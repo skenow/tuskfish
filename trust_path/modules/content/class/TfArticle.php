@@ -59,6 +59,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class TfArticle extends TfContentObject
 {
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     */
     public function __construct(TfValidator $validator)
     {
         // Must call parent constructor first.

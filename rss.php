@@ -37,7 +37,7 @@ if ($cleanId && $cleanTagId) {
 
 // Initialise RSS object.
 header('Content-Type: application/rss+xml');
-$rss = new TfRss($tfPreference, $tfValidator);
+$rss = new TfRss($tfValidator, $tfPreference);
 
 // Get a generic content object handler.
 $contentHandler = $contentHandlerFactory->getHandler('content');

@@ -34,7 +34,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         array $escapedSearchTerms XSS escaped copies of the search terms, used for display.
  * @var         int $limit Number of records to retrieve in a single page view.
  * @var         int $offset Starting point for reading records from a result set.
- * @var         string $operator Type of search, options are AND, OR and exact.
+ * @var         string $operator Type of search, options are 'AND', 'OR' and 'exact'.
  */
 class TfSearchContent
 {
@@ -45,8 +45,15 @@ class TfSearchContent
     protected $escapedSearchTerms;
     protected $limit;
     protected $offset;
-    protected $operator; // AND / OR / exact
+    protected $operator;
     
+    /**
+     * Constructor.
+     * 
+     * @param TfValidator $validator An instance of the Tuskfish data validator class.
+     * @param TfDatabase $tfDatabase An instance of the database class.
+     * @param TfPreference $tfPreference An instance of the Tuskfish site preferences class.
+     */
     public function __construct(TfValidator $validator,
             TfDatabase $tfDatabase, TfPreference $tfPreference)
     {
