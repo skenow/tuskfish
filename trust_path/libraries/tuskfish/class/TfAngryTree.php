@@ -63,25 +63,21 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @version     Release: 1.0
  * @since       1.0
  * @package     core
+ * @var array $_objects Array of objects to be assembled into a category tree.
+ * @var string $_myId Name of the ID field used to identify objects in the tree.
+ * @var string $_parentId Name of ID field used to identify an object's parent in the tree.
+ * @var int $_rootId  Name of root object ID field. This is the object that will be used as 
+    the base node for building a tree (or subtree) from the broader tree structure.
+ * @var object $_tree Associative array that comprises the category tree.
+ * 
  */
 class TfAngryTree
 {
     
-    /** @var array $_objects Array of objects to be assembled into a category tree. */
     private $_objects;
-    
-    /** @var string $_myId Name of the ID field used to identify objects in the tree. */
     private $_myId;
-    
-    /** @var string $_parentId Name of ID field used to identify an object's parent in the tree. */
     private $_parentId;
-    
-    /** @var int $_rootId  Name of root object ID field. This is the object that will be used as 
-     * the base node for building a tree (or subtree) from the broader tree structure. You can use
-     * it to build a tree based on a particular branch. */
     private $_rootId = null;
-    
-    /** @var object $_tree Associative array that comprises the category tree. */
     private $_tree = array();
 
     /**
