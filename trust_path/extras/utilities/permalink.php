@@ -17,6 +17,7 @@ declare(strict_types=1);
 // Access trust path, DB credentials and preferences. This file must be included in *ALL* pages.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
 $tfTemplate->setTheme('default');
@@ -25,6 +26,7 @@ $tfTemplate->setTheme('default');
 $tfTemplate->pageTitle = TFISH_TYPE_PERMALINKS;
 $contentHandler = $contentHandlerFactory->getHandler('content');
 $targetFileName = 'permalink';
+$tfTemplate->targetFileName = $targetFileName;
 
 // Validate input parameters.
 $cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -93,7 +95,7 @@ if ($cleanId) {
         $tfPagination->setLimit($tfPreference->userPagination);
         $tfPagination->setStart($cleanStart);
         $tfPagination->setTag(0);
-        $tfTemplate->setExtraParams(array('id' => $cleanId));
+        $tfPagination->setExtraParams(array('id' => $cleanId));
         $tfTemplate->pagination = $tfPagination->getPaginationControl();
 
         // Retrieve content objects and assign to template.
