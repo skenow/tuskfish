@@ -133,7 +133,7 @@ if ($cleanId) {
     // Prepare tag select box.
     $tfTemplate->selectAction = $targetFileName . '.php';
     $tagHandler = $contentHandlerFactory->getHandler('tag');
-    $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag);
+    $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag, 'TfArticle');
     $tfTemplate->selectFiltersForm = $tfTemplate->render('selectFilters');
 }
 
