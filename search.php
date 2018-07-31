@@ -50,8 +50,8 @@ $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($cleanOp && $cleanTerms && $searchType) {
     $searchEngine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
-    $searchEngine->setSearchTerms($cleanTerms);
     $searchEngine->setOperator($searchType);
+    $searchEngine->setSearchTerms($cleanTerms);
     $searchEngine->setOffset($start);
     $searchResults = $searchEngine->searchContent();
 

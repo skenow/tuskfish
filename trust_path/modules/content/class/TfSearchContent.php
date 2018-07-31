@@ -252,6 +252,9 @@ class TfSearchContent
      * required for a comprehensive database search. Terms that do not meet the minimum length
      * preference requirement are discarded.
      * 
+     * Note that search operator MUST be set before the search terms are set, otherwise the default
+     * AND operator will be used.
+     * 
      * @param string $searchTerms Search terms provided by user.
      */
     public function setSearchTerms(string $searchTerms)
