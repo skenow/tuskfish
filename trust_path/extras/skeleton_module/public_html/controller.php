@@ -16,8 +16,8 @@ declare(strict_types=1);
 
 // Boot! Set file paths, preferences and connect to database.
 require_once "mainfile.php";
-require_once TFISH_MODULE_PATH . "someModuleDirectory/tfSomeModuleHeader.php";
 require_once TFISH_PATH . "tfHeader.php";
+require_once TFISH_MODULE_PATH . "someModule/tfSomeModuleHeader.php";
 
 // Specify the theme you want to use.
 $tfTemplate->setTheme('default');
