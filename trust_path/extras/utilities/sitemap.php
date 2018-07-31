@@ -41,7 +41,7 @@ $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
 $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$contentIds = $tfDatabase->select('content', $criteria, $columns);
+$contentIds = $contentHandler->getListOfObjectTitles($criteria);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
 $criteria = $tfCriteriaFactory->getCriteria();
@@ -55,12 +55,9 @@ $offlineTagIds = $contentHandler->getListOfObjectTitles($criteria);
 $contentIds = $contentIds + $offlineTagIds;
 
 // Generate the URLs using TFISH_URL as a base.
-foreach ($contentIds as $value) {
+foreach ($contentIds as $key => $value) {
 	$entry = '';
-	$entry = TFISH_URL . '?id=' . $value['id'];
-	if ($value['seo']) {
-		$entry .= '&amp;title=' . $value['seo'];
-	}
+	$entry = TFISH_URL . '?id=' . $key;
 	$sitemap .= $entry . '<br />';
 	unset($entry);
 }
