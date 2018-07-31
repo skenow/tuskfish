@@ -250,7 +250,7 @@ class TfYubikeyAuthenticator
     
         // Turn times into 'seconds since Unix Epoch' for easy comparison
         $now = date("U");
-        $timestampSeconds = (int) (dateFormat(date_create(mb_substr($timestamp, 0, -4, "UTF-8")), "U"));
+        $timestampSeconds = (int) (date_format(date_create(mb_substr($timestamp, 0, -4, "UTF-8")), "U"));
 
         // If date() functions above fail for any reason, so do we
         if (!$timestamp || !$now)

@@ -26,25 +26,35 @@ require_once "../mainfile.php";
 // Initialise output buffering with gzip compression.
 ob_start("ob_gzhandler");
 
+// Lock charset to UTF-8.
+header('Content-Type: text/html; charset=utf-8');
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
+
 // HTMLPurifier library is used to validate the teaser and description fields of objects.
 require_once TFISH_LIBRARIES_PATH . 'htmlpurifier/library/HTMLPurifier.auto.php';
-
-// Initialise data validator.
-$tfValidator = new TfValidator();
 
 // Set error reporting levels and custom error handler.
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL & ~E_NOTICE);
+
+// Make core language files available.
+include TFISH_DEFAULT_LANGUAGE;
+
+// Initialise data validator.
+$tfValidatorFactory = new TfValidatorFactory();
+$tfValidator = $tfValidatorFactory->getValidator();
+
 $tfLogger = new TfLogger($tfValidator);
 set_error_handler(array($tfLogger, "logError"));
+
+// File handler.
+$tfFileHandler = new TfFileHandler($tfValidator);
 
 // Ensure that a database connection is available
 $tfDatabase = new TfDatabase($tfValidator, $tfLogger, $tfFileHandler);
 $tfDatabase->connect();
-
-// Make core language files available.
-include TFISH_DEFAULT_LANGUAGE;
 
 // Ensure that global site preferences are available via $tfPreference
 $preferenceHandler = new TfPreferenceHandler($tfDatabase);
@@ -58,7 +68,6 @@ $tfMetadata = new TfMetadata($tfValidator, $tfPreference);
 
 // Instantiate the template object so that it will be available globally.
 $tfTemplate = new TfTemplate($tfValidator);
-
 // End manual duplication of header.
 
 // Specify theme, otherwise 'default' will be used.
@@ -68,7 +77,7 @@ $tfTemplate->setTheme('signin');
 $tfTemplate->pageTitle = TFISH_LOGIN;
 
 // Initialise and whitelist allowed parameters
-$cleanOp = false;
+$cleanOp = "";
 $dirtyPassword = false;
 $dirtyOtp = false;
 $allowedOptions = array("login", "logout", "");
@@ -102,8 +111,7 @@ if (isset($cleanOp) && in_array($cleanOp, $allowedOptions, true)) {
             break;
     }
 } else {
-    // Bad input, do nothing
-    exit;
+    exit;// Bad input.
 }
 
 /**
