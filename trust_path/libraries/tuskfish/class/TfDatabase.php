@@ -258,8 +258,7 @@ class TfDatabase
     }
 
     /** @internal */
-    private function _createTable(string $table_name, array $columns,
-            string $primaryKey = null)
+    private function _createTable(string $table_name, array $columns, string $primaryKey = null)
     {
         if (mb_strlen($table_name, 'UTF-8') > 0 && is_array($columns)) {
             $sql = "CREATE TABLE IF NOT EXISTS `" . $table_name . "` (";

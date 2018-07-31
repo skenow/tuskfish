@@ -200,10 +200,6 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
         }
-
-        if (!is_array($tags)) {
-            trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
-        }
         
         $cleanTagId = array();
         
