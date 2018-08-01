@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Base class for content handler objects.
+ * Base content handler class. Manipulates content objects (TfContentObject and subclasses).
  * 
  * Provides base content handler methods that are inherited or overridden by subclass-specific
  * content handlers. You can use it as a generic handler when you want to retrieve mixed content

@@ -15,10 +15,8 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/**
- * TfContentHandlerFactory class file.
- * 
- * Instantiates TfContentHandler objects and handles dependency injection.
+/** 
+ * Factory class that instantiates TfContentHandler objects and handles dependency injection.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

@@ -18,8 +18,6 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Content object types trait.
- * 
  * Provides definition of permitted content object types.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)

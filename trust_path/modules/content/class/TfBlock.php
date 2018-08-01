@@ -17,8 +17,6 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Static block object class.
- * 
  * Represents a block of content, use it to create HTML blocks to insert into your site layout.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)

@@ -17,8 +17,6 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Static content object class.
- * 
  * Represents a static content page, such as an 'about' page or staff directory.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)

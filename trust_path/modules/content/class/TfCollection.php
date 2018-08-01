@@ -16,13 +16,12 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/**
- * Collection content object class.
+/** 
+ * Represents a collection of content objects (analogous to a category). Hierarchical.
  * 
- * Represents a collection of content objects. For example, issues of a magazine produced at regular
- * intervals (download content objects) can be bound to a collection object via the 'parent'
- * property. Collections can contain mixed sets of content, for example images, videos, audio files
- * etc.
+ * For example, issues of a magazine produced at regular intervals (download content objects) can
+ * be bound to a collection object via the 'parent' property. Collections can contain mixed sets of 
+ * content, for example images, videos, audio files etc.
  * 
  * Collections can be nested by assigning another collection as a parent object. In this way,
  * collections can effectively serve as categories and you can construct independent category trees.

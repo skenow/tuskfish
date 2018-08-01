@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * RSS feed generator class.
+ * Generates RSS feeds for the whole site, individual collections and tags.
  * 
  * For information about the RSS 2.0 spec see http://cyber.harvard.edu/rss/rss.html
  *

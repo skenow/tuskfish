@@ -16,7 +16,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Tag content object class.
+ * Represents a subject tag used to label and sort content objects. Non-hierarchical.
  * 
  * Tags are basically 'subjects' that can be used to label content objects, to facilitate retrieval
  * of related items. However, tags are content objects in their own right and can be used as a

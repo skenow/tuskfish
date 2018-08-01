@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Parent content object class, represents a single content object.
+ * Base class for content objects. Represents a single content object.
  *
  * There is only one 'archtype' of content object in Tuskfish; it uses a subset of standard
  * Dublin Core metadata fields plus a few more that are common to most content objects. Why? If you

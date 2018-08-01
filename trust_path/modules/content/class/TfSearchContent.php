@@ -16,10 +16,8 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/**
- * TfSearchCOntent class file.
- * 
- * Provides search functionality for the content module, returning content objects.
+/** * 
+ * Provides search functionality for the content module, returning mixed content objects.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

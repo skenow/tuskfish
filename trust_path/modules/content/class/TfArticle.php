@@ -15,8 +15,6 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Article content object class.
- * 
  * Represents a text article such as a new story or blog entry.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
