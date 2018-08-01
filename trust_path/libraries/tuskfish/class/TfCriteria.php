@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Query composer class.
+ * Sets conditions on database queries, used to compose a query.
  * 
  * Use this class to set parameters on database-related actions. Individual conditions are held
  * within the item property, as TfCriteriaItem objects. Criteria holds the basic query parameters

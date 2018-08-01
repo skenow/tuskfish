@@ -17,11 +17,10 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Clause composer class for SQLite database
+ * Represents a single clause in the WHERE component of a database query. 
  * 
- * Represents a single clause in the WHERE component of a database query. Add TfCriteriaItem to
- * TfCriteria to build your queries. Please see the Tuskfish Developer Guide for a full
- * explanation and examples.
+ * Add TfCriteriaItem to TfCriteria to build your queries. Please see the Tuskfish Developer Guide
+ * for a full explanation and examples.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

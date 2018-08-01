@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Holds Tuskfish site configuration data.
+ * Holds Tuskfish site configuration (preference) data.
  * 
  * A preference object is automatically instantiated on every page via tfHeader.php.
  *

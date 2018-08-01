@@ -18,11 +18,10 @@ if (!defined("TFISH_ROOT_PATH"))
     die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Two-factor authentication class.
+ * Handles two-factor authentication via a Yubikey hardware token. 
  * 
- * Handles two-factor authentication via a Yubikey hardware token, available from yubico.com.
- * Set up requires obtaining a Client ID and secret key from Yubico, please refer to the manual for
- * instructions on how to set it up.
+ * Tokens are available from yubico.com. Set up requires obtaining a Client ID and secret key from
+ * Yubico, please refer to the manual for instructions on how to set it up.
  * 
  * Note that the Yubikey authentication methods within this class are Copyright Tom Corwine and
  * distributed under the GPL (V2). Please see the separate copyright block within the class file.

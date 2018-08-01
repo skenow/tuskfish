@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * TfPaginationControl class file. Generates pagination controls for display.
+ * Generates pagination controls for paging through content.
  * 
  * The number of pagination control slots is set in Tuskfish Preferences. Choose an odd number for
  * best results.

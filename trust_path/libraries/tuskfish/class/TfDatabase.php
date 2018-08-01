@@ -17,15 +17,11 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Tuskfish database handler class.
+ * Tuskfish database handler class, implements PDO and exclusively uses prepared statements.
  * 
- * Implements PDO and makes exclusive use of prepared statements with bound values to mitigate SQL
- * injection attacks. Table and column identifiers are also escaped.
- * 
- * It is expected that by the time data trickles down to this class it will have ALREADY BEEN
- * THOROUGHLY VALIDATED AND RANGE CHECKED by user-facing control scripts and internal object checks.
- * As the validation conducted by this class is the last line of defense any failures will trigger
- * FATAL errors and angry log entries.
+ * Prepared statements with bound values are used to mitigate SQL injection attacks. Table and
+ * column identifiers are also escaped. However, you should have thoroughly validated and range
+ * checked data before it reaches this class.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

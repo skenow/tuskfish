@@ -17,9 +17,7 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/**
- * TfMimetypes trait.
- * 
+/** 
  * Provides a list of common (permitted) mimetypes for file uploads.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)

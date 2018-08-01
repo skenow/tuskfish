@@ -13,8 +13,6 @@
  */
 
 /**
- * TfLanguage trait.
- * 
  * Provides common access to system languages.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)

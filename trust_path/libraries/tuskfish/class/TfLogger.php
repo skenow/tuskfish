@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Custom error logger class.
+ * Provides a custom error handler which writes to a logfile.
  * 
  * Custom error handler functions such as this one should return FALSE; otherwise calls to 
  * trigger_error($msg, E_USER_ERROR) will not cause a script to stop execution!

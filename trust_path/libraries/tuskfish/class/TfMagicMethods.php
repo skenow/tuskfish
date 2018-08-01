@@ -19,10 +19,10 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * TfMagicMethods trait.
+ * Allows for non-write access to protected properties and prevents non-whitelisted properties from
+ * being set.
  * 
- * Provides common magic methods for non-write access to protected properties. Only to be used in
- * classes that have a TfValidator instance as a property.
+ * Only to be used in classes that have a TfValidator instance as a property.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

@@ -16,10 +16,8 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/**
- * Tuskfish session security class.
- * 
- * Provides functions for managing sessions in a security-conscious manner.
+/** 
+ * Provides functions for managing user sessions in a security-conscious manner.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

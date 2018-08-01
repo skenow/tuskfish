@@ -17,13 +17,12 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Holds page-level metadata.
+ * Provides page-level metadata.
  * 
- * Generates metadata for the page. User-facing controller scripts can override the site-level
- * defaults by uncommenting the options at the bottom of each file. A good example of this is when
- * viewing a single content object; if it has the metaTitle and metaDescription fields set you can
- * assign those to this object in order to customise the page title and description to the object,
- * thereby improving your SEO.
+ * User-facing controller scripts can override the site-level defaults by uncommenting the options
+ * at the bottom of each file. A good example of this is when viewing a single content object; if
+ * it has the metaTitle and metaDescription fields set you can assign those to this object in order
+ * to customise the page title and description to the object, thereby improving your SEO.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2

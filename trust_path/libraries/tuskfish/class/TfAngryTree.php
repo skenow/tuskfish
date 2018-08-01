@@ -46,7 +46,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Represents hierarchical relationships between collections and member content objects.
+ * Build and manipulate a tree representing hierarchical relationships between objects.
  * 
  * Essentially this is a category tree, although collections (category analogues) are fully-fledged
  * content objects in their own right. Pass in an array of collection objects; you can choose to
