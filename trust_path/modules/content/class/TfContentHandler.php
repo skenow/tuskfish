@@ -106,9 +106,9 @@ class TfContentHandler
      * 
      * Only use this function to convert single objects, as it does a separate query to look up
      * the associated taglinks. Running it through a loop will therefore consume a lot of resources.
-     * To convert multiple objects, load them directly into the relevant class files using
-     * PDO::FETCH_CLASS, prepare a buffer of tags using getTags() and loop through the objects
-     * referring to the buffer rather than hitting the database every time.
+     * To convert multiple objects, load them directly into the relevant class files, prepare a
+     * buffer of tags using getTags() and loop through the objects referring to the buffer rather
+     * than hitting the database every time.
      * 
      * @param array $row Array of result set from database.
      * @return object|bool Content object on success, false on failure.
@@ -654,16 +654,6 @@ class TfContentHandler
         $statement = $this->db->select('content', $criteria);
         if ($statement) {
 
-            // Fetch rows into the appropriate class type, as determined by the first column.
-            // Note that you can't pass constructor arguments using FETCH_CLASSTYPE.
-            
-            /**$statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
-
-            while ($object = $statement->fetch()) {
-                $objects[$object->id] = $object;
-            }*/
-
-            // Alternative method - allows constructor arguments to be passed in.
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $object = new $row['type']($this->validator);
                 $object->loadPropertiesFromArray($row, true);
