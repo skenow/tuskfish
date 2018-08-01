@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/** * 
+/**
  * Provides search functionality for the content module, returning mixed content objects.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)

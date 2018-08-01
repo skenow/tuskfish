@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/** * 
+/**
  * Factory for instantiating TfCriteriaItem objects and injecting dependencies.
  * 
  * Use this class to delegate construction of TfCriteriaItem objects. See the Tuskfish Developer

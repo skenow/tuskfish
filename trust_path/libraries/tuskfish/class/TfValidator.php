@@ -17,7 +17,7 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Provides methods to validate different data types and to conduct range checks.
+ * Provides methods to validate data types and to conduct range checks on parameters.
  * 
  * WARNING: The methods in this class validate TYPE COMPLIANCE ONLY. They DO NOT PROVIDE DATABASE
  * SAFETY in their own right. Use them in conjunction with prepared statements and bound values to

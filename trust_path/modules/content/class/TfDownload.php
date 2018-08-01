@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
-/** * 
+/** 
  * Represents a downloadable file, for example a publication or software archive.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
