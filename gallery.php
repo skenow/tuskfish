@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Admin image manager script.
+ * Gallery.
  * 
- * Display and filter image content, including offline content and images associated with non-image
- * content objects. Use it to locate and re-use image assets.
+ * Display and filter image content.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -42,8 +41,9 @@ $cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
 $cleanType = isset($_GET['type']) && !empty($_GET['type']) 
         ? $tfValidator->trimString($_GET['type']) : '';
 
-// Select content objects where the image field is not null or empty.
+// Select image objects where the image field is not null or empty.
 $criteria = $tfCriteriaFactory->getCriteria();
+$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfImage'));
 $criteria->add(new TfCriteriaItem($tfValidator, 'image', '', '<>'));
 $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 
@@ -79,7 +79,7 @@ $criteria->setLimit($tfPreference->galleryPagination);
 
 // Prepare select filters.
 $tagHandler = $contentHandlerFactory->getHandler('tag');
-$tagSelectBox = $tagHandler->getTagSelectBox($cleanTag);
+$tagSelectBox = $tagHandler->getTagSelectBox($cleanTag, 'TfImage');
 $tfTemplate->selectAction = 'gallery.php';
 $tfTemplate->tagSelect = $tagSelectBox;
 $tfTemplate->selectFiltersForm = $tfTemplate->render('galleryFilters');
