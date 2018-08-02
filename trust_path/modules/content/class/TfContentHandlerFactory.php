@@ -98,8 +98,15 @@ class TfContentHandlerFactory
     {        
         $cleanType = $this->validator->trimString($type);
         
+        // Content is a generic handler that manipulates content objects that do not have dedicated
+        // handlers.
         if ($cleanType === 'content') {
             return new TfContentHandler($this->validator, $this->db, $this->criteriaFactory,
+                    $this->itemFactory, $this->fileHandler, $this->taglinkHandler);
+        }
+        
+        if ($cleanType === 'block') {
+            return new TfBlockHandler($this->validator, $this->db, $this->criteriaFactory,
                     $this->itemFactory, $this->fileHandler, $this->taglinkHandler);
         }
         
