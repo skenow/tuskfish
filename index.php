@@ -217,5 +217,5 @@ if ($cleanId) {
 // $tfMetadata->setSeo('');
 // $tfMetadata->setRobots('');
 
-// Include page template and flush buffer
+// Include the main theme.html template and flush buffer
 require_once TFISH_PATH . "tfFooter.php";
