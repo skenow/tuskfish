@@ -21,7 +21,7 @@ Features include:
 * SQLite database: There is no database server to worry about.
 * Exclusive use of prepared statements with bound values and parameters as protection against SQL injection.
 * Minimal public-facing code base: Most of the code lives outside the web root.
-* Lightweight core library ~ 500 KB in size.
+* Lightweight core library ~ 220 KB in size.
 
 System requirements
 * PHP 7.2+
