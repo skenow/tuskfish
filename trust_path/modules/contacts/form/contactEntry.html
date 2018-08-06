@@ -1,0 +1,125 @@
+<!-- Custom form manager script to show or hide fields used by specific content subclasses and manage media file uploads -->
+<script type="text/javascript" src="<?php echo TFISH_THEMES_URL . 'admin/tf_form.js'; ?>"></script>
+    
+<form class="form-horizontal" action="contacts.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
+    
+    <div class="row">
+    
+      <!-- Title -->
+      <div class="col-md-2 mb-3 text-left" id="titleContainer">
+        <label for="title"><strong><?php echo TFISH_CONTACTS_TITLE; ?></strong></label>
+        <select class="form-control custom-select" name="title" id="title" required>
+            <?php
+                foreach ($titles as $key => $value) {
+                    echo '<option value="' . $tfValidator->escapeForXss($key) . '">'
+                    . $tfValidator->escapeForXss($value) . '</option>';
+                }
+            ?>
+        </select>
+      </div>
+      
+      <!-- Firstname -->
+      <div class="col-md-3 mb-3 text-left" id="firstnameContainer">
+        <label for="firstname"><strong><?php echo TFISH_CONTACTS_FIRSTNAME; ?></strong></label>
+        <input type="text" class="form-control" name="firstname" id="firstname">
+      </div>
+
+      <!-- Midname -->
+      <div class="col-md-3 mb-3 text-left" id="midnameContainer">
+        <label for="midname"><strong><?php echo TFISH_CONTACTS_MIDNAME; ?></strong></label>
+        <input type="text" class="form-control" name="midname" id="midname">
+      </div>
+
+      <!-- Lastname -->
+      <div class="col-md-4 mb-3 text-left" id="lastnameContainer">
+        <label for="lastname"><strong><?php echo TFISH_CONTACTS_LASTNAME; ?></strong></label>
+        <input type="text" class="form-control" name="lastname" id="lastname">
+      </div>
+      
+      <!-- Job -->
+      <div class="col-md-4 mb-3 text-left" id="jobContainer">
+        <label for="job"><strong><?php echo TFISH_CONTACTS_JOB; ?></strong></label>
+        <input type="text" class="form-control" name="job" id="job">
+      </div>
+      
+      <!-- Business unit -->
+      <div class="col-md-4 mb-3 text-left" id="businessContainer">
+        <label for="businessUnit"><strong><?php echo TFISH_CONTACTS_BUSINESS_UNIT; ?></strong></label>
+        <input type="text" class="form-control" name="businessUnit" id="businessUnit">
+      </div>
+      
+      <!-- Organisation -->
+      <div class="col-md-4 mb-3 text-left" id="organisationContainer">
+        <label for="organisation"><strong><?php echo TFISH_CONTACTS_ORGANISATION; ?></strong></label>
+        <input type="text" class="form-control" name="organisation" id="organisation">
+      </div>
+      
+      <!-- Email -->
+      <div class="col-md-4 mb-3 text-left" id="emailContainer">
+        <label for="email"><strong><?php echo TFISH_EMAIL; ?></strong></label>
+        <input type="text" class="form-control" name="email" id="email">
+      </div>
+      
+      <!-- State -->
+      <div class="col-md-4 mb-3 text-left" id="stateContainer">
+        <label for="state"><strong><?php echo TFISH_CONTACTS_STATE; ?></strong></label>
+        <input type="text" class="form-control" name="state" id="state">
+      </div>
+      
+      <!-- Country -->
+      <div class="col-md-4 mb-3 text-left" id="countryContainer">
+        <label for="country"><strong><?php echo TFISH_CONTACTS_COUNTRY; ?></strong></label>
+        <select class="form-control custom-select" name="country" id="country">
+            <?php
+                foreach ($countryList as $countryId => $countryTitle) {
+                    echo '<option value="' . $tfValidator->escapeForXss($countryId) . '">' . $tfValidator->escapeForXss($countryTitle) . '</option>';
+                }
+            ?>
+          </select>
+      </div>
+    
+      <!-- Tags (activities) -->
+      <div class="col-md-5 col-lg-4 mb-3 text-left" id="tagsContainer">
+        <label for="tags"><strong><?php echo TFISH_CONTACTS_ACTIVITIES; ?></strong></label>
+          <select class="form-control custom-select" name="tags" id="tags">
+            <?php
+                foreach ($tags as $tag_id => $tag_title) {
+                    echo '<option value="' . $tfValidator->escapeForXss($tag_id) . '">' . $tfValidator->escapeForXss($tag_title) . '</option>';
+                }
+            ?>
+          </select>
+      </div>
+      
+      <!-- Mobile -->
+      <div class="col-md-4 mb-3 text-left" id="mobileContainer">
+        <label for="mobile"><strong><?php echo TFISH_CONTACTS_MOBILE; ?></strong></label>
+        <input type="text" class="form-control" name="mobile" id="mobile">
+      </div>
+      
+      <!-- Gender -->
+      <div class="col-md-3 mb-3 text-left" id="genderContainer">
+        <p><strong><?php echo TFISH_CONTACTS_GENDER; ?></strong></p>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="male" name="gender" value="1" checked class="custom-control-input" required>
+            <label class="custom-control-label" for="male"><?php echo TFISH_CONTACTS_MALE; ?></label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="female" name="gender" value="2" class="custom-control-input" required>
+            <label class="custom-control-label" for="female"><?php echo TFISH_CONTACTS_FEMALE; ?></label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="unknown" name="gender" value="3" class="custom-control-input" required>
+            <label class="custom-control-label" for="unknown"><?php echo TFISH_CONTACTS_UNKNOWN_GENDER; ?></label>
+        </div>
+      </div>
+    
+    </div> <!-- /row -->
+    
+    <!-- Action buttons -->
+    <div class="float-left clearfix">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+        <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
+        <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+    </div>
+
+</form>

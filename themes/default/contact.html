@@ -1,0 +1,75 @@
+<!-- Display a single contact -->
+<?php if ($contact): ?>
+<div>
+    <h3 class="title">
+        <?php if (TfSession::isAdmin()): ?>
+            <a href="<?php echo TFISH_ADMIN_URL . 'contacts.php?op=edit&amp;id=' . (int)$contact->id; ?>"><i class="fas fa-edit"></i></a>
+        <?php endif; ?>
+        <?php
+            if ($contact->gender === 1) {
+                echo '<i class="fas fa-male"></i> ';
+            } elseif ($contact->gender === 2) {
+                echo '<i class="fas fa-female"></i> ';
+            } else {
+                echo '<i class="fas fa-question"></i> ';
+            }
+            echo $titles[$contact->title];
+            if ($contact->firstname) {
+                echo ' ' . $contact->escapeForXss('firstname');
+            }
+            if ($contact->midname) {
+                echo ' ' . $contact->escapeForXss('midname');
+            }
+            if ($contact->lastname) {
+                echo ' ' . $contact->escapeForXss('lastname');
+            }
+        ?>
+    </h3>
+    <?php
+        echo '<p>';
+        if ($contact->job) {
+            echo '<b>' . $contact->escapeForXss('job') . '</b><br />';
+        }
+        if ($contact->businessUnit) {
+            echo $contact->escapeForXss('businessUnit') . '<br />';
+        }
+        if ($contact->organisation) {
+            echo $contact->escapeForXss('organisation') . '<br />';
+        }
+        if ($contact->address) {
+            echo $contact->escapeForXss('address') . '<br />';
+        }
+        if ($contact->city && $contact->state) {
+            echo $contact->escapeForXss('city') . ', ' . $contact->escapeForXss('state') . '<br />';
+        } else {
+            if ($contact->city) {
+                echo $contact->escapeForXss('city') . '<br />';
+            }
+            if ($contact->state) {
+                echo $contact->escapeForXss('state') . '<br />';
+            }
+        }
+        if ($contact->country) {
+            echo strtoupper($countryList[$contact->country]) . '<br />';
+        }
+        if ($contact->mobile) {
+            echo $contact->escapeForXss('mobile') . '<br />';
+        }
+        if ($contact->email) {
+            echo $contact->escapeForXss('email');
+        }
+        echo '</p>';
+        
+        if (isset($activity) && !empty($activity)) {
+            echo '<h4>' . TFISH_CONTACTS_ACTIVITY . '</h4>';
+            echo '<p><a href="' . TFISH_ADMIN_URL . 'contacts.php?tagId=' 
+            . $activity->id . '">' . $activity->escapeForXss('title') . '</a> ('
+            . $activity->escapeForXss('date') . ').</p>';
+        }
+    ?>
+</div>
+
+<?php else: ?>
+<h3><?php echo TFISH_ERROR; ?></h3>
+<p><?php echo TFISH_ERROR_NO_SUCH_CONTENT; ?></p>
+<?php endif; ?>
