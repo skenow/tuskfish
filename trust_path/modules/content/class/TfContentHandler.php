@@ -35,7 +35,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
  * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
- * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item factory.
  * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler class.
  * @var         TfTaglinkHandler $taglinkHandler Instance of the Tuskfish taglink handler class.
  */
@@ -46,7 +45,6 @@ class TfContentHandler
     protected $validator;
     protected $db;
     protected $criteriaFactory;
-    protected $itemFactory;
     protected $fileHandler;
     protected $taglinkHandler;
     
@@ -56,13 +54,12 @@ class TfContentHandler
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
      * @param TfDatabase $db An instance of the database class.
      * @param TfCriteriaFactory $criteriaFactory an instance of the Tuskfish criteria factory class.
-     * @param TfCriteriaItemFactory $itemFactory An instance of the Tuskfish criteria item factory class.
      * @param TfFileHandler $fileHandler An instance of the Tuskfish file handler class.
      * @param TfTaglinkHandler $taglinkHandler An instance of the Tuskfish taglink handler class.
      */
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
-            TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
+            TfCriteriaFactory $criteriaFactory, TfFileHandler $fileHandler,
+            TfTaglinkHandler $taglinkHandler)
     {
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
@@ -78,12 +75,6 @@ class TfContentHandler
         
         if (is_a($criteriaFactory, 'TfCriteriaFactory')) {
             $this->criteriaFactory = $criteriaFactory; 
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        if (is_a($itemFactory, 'TfCriteriaItemFactory')) {
-            $this->itemFactory = $itemFactory; 
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
@@ -136,7 +127,7 @@ class TfContentHandler
             if (isset($contentObject->tags) && !empty($contentObject->id)) {
                 $tags = array();
                 $criteria = $this->criteriaFactory->getCriteria();
-                $criteria->add($this->itemFactory->getItem('contentId', (int) $contentObject->id));
+                $criteria->add($this->criteriaFactory->getItem('contentId', (int) $contentObject->id));
                 $statement = $this->db->select('taglink', $criteria, array('tagId'));
                 
                 if ($statement) {
@@ -249,7 +240,7 @@ class TfContentHandler
         }
         
         $criteria = $this->criteriaFactory->getCriteria();
-        $criteria->add($this->itemFactory->getItem('parent', $cleanId));
+        $criteria->add($this->criteriaFactory->getItem('parent', $cleanId));
         $result = $this->db->updateAll('content', array('parent' => 0), $criteria);
 
         if (!$result) {
@@ -387,7 +378,7 @@ class TfContentHandler
 
         // Filter tags by type.
         if (isset($cleanType)) {
-            $criteria->add($this->itemFactory->getItem('contentType', $cleanType));
+            $criteria->add($this->criteriaFactory->getItem('contentType', $cleanType));
         }
 
         // Put a check for online status in here.
@@ -602,7 +593,7 @@ class TfContentHandler
         
         if ($this->validator->isInt($cleanId, 1)) {
             $criteria = $this->criteriaFactory->getCriteria();
-            $criteria->add($this->itemFactory->getItem('id', $cleanId));
+            $criteria->add($this->criteriaFactory->getItem('id', $cleanId));
             $statement = $this->db->select('content', $criteria);
             
             if ($statement) {
@@ -666,7 +657,7 @@ class TfContentHandler
             $criteria = $this->criteriaFactory->getCriteria();
             
             foreach ($objectIds as $id) {
-                $criteria->add($this->itemFactory->getItem('contentId', (int) $id), "OR");
+                $criteria->add($this->criteriaFactory->getItem('contentId', (int) $id), "OR");
                 unset($id);
             }
 
@@ -737,10 +728,10 @@ class TfContentHandler
         $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
         $columns = array('id', 'title');
         $criteria = $this->criteriaFactory->getCriteria();
-        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
+        $criteria->add($this->criteriaFactory->getItem('type', 'TfTag'));
         
         if ($cleanOnlineOnly) {
-            $criteria->add($this->itemFactory->getItem('online', true));
+            $criteria->add($this->criteriaFactory->getItem('online', true));
         }
 
         $statement = $this->db->select('content', $criteria, $columns);
@@ -771,7 +762,7 @@ class TfContentHandler
     {
         $tags = array();
         $criteria = $this->criteriaFactory->getCriteria();
-        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
+        $criteria->add($this->criteriaFactory->getItem('type', 'TfTag'));
         $tags = $this->getObjects($criteria);
         
         return $tags;
@@ -916,7 +907,7 @@ class TfContentHandler
     private function _streamDownloadToBrowser(int $id, string $filename)
     {
         $criteria = $this->criteriaFactory->getCriteria();
-        $criteria->add($this->itemFactory->getItem('id', $id));
+        $criteria->add($this->criteriaFactory->getItem('id', $id));
         $statement = $this->db->select('content', $criteria);
         
         if (!$statement) {

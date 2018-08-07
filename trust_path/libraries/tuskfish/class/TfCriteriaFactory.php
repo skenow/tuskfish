@@ -55,4 +55,19 @@ class TfCriteriaFactory
     {
         return new TfCriteria($this->validator);
     }
+    
+    /**
+     * Factory method to instantiate and return a TfCriteriaItem object.
+     * 
+     * @param string $column Name of column in database table. Alphanumeric and underscore
+     * characters only.
+     * @param mixed $value Value of the column.
+     * @param string $operator See TfishCriteriaItem::getListOfPermittedOperators() for a list of
+     * acceptable operators.
+     * @return \TfCriteriaItem
+     */
+    public function getItem(string $column, $value, string $operator = '=')
+    {
+        return new TfCriteriaItem($this->validator, $column, $value, $operator);
+    }
 }

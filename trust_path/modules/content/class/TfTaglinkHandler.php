@@ -29,7 +29,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
  * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
- * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item
  * factory class.
  */
 class TfTaglinkHandler
@@ -40,7 +39,6 @@ class TfTaglinkHandler
     protected $validator;
     protected $db;
     protected $criteriaFactory;
-    protected $itemFactory;
     
     /**
      * Constructor.
@@ -48,10 +46,9 @@ class TfTaglinkHandler
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
      * @param TfDatabase $db An instance of the database class.
      * @param TfCriteriaFactory $criteriaFactory an instance of the Tuskfish criteria factory class.
-     * @param TfCriteriaItemFactory $itemFactory An instance of the Tuskfish criteria item factory class.
      */
-    public function __construct(TfValidator $validator, TfDatabase $db, 
-            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory)
+    public function __construct(TfValidator $validator, TfDatabase $db,
+            TfCriteriaFactory $criteriaFactory)
     {
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
@@ -69,13 +66,7 @@ class TfTaglinkHandler
             $this->criteriaFactory = $criteriaFactory; 
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
-        if (is_a($itemFactory, 'TfCriteriaItemFactory')) {
-            $this->itemFactory = $itemFactory; 
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }        
+        }     
     }
 
     /**
@@ -99,9 +90,9 @@ class TfTaglinkHandler
         $criteria = $this->criteriaFactory->getCriteria();
         
         if ($obj->type === 'TfTag') {
-            $criteria->add($this->itemFactory->getItem('tagId', $cleanContentId));
+            $criteria->add($this->criteriaFactory->getItem('tagId', $cleanContentId));
         } else {
-            $criteria->add($this->itemFactory->getItem('contentId', $cleanContentId));
+            $criteria->add($this->criteriaFactory->getItem('contentId', $cleanContentId));
         }
         
         $result = $this->db->deleteAll('taglink', $criteria);
@@ -216,7 +207,7 @@ class TfTaglinkHandler
 
         // Delete any existing tags.
         $criteria = $this->criteriaFactory->getCriteria();
-        $criteria->add($this->itemFactory->getItem('contentId', $cleanId));
+        $criteria->add($this->criteriaFactory->getItem('contentId', $cleanId));
         $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {

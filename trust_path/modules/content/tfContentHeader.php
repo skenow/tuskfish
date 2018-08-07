@@ -33,6 +33,6 @@ spl_autoload_register('tfContentModuleAutoload');
 
 // Make the content handler factory available.
 $contentHandlerFactory = new TfContentHandlerFactory($tfValidator, $tfDatabase,
-            $tfCriteriaFactory, $tfCriteriaItemFactory, $tfFileHandler);
+            $tfCriteriaFactory, $tfFileHandler);
 
 

@@ -29,7 +29,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
  * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
- * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item factory.
  * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler class.
  * @var         TfTaglinkHandler $taglinkHandler Instance of the Tuskfish taglink handler class.
  */
@@ -42,16 +41,14 @@ class TfTagHandler extends TfContentHandler
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
      * @param TfDatabase $db An instance of the database class.
      * @param TfCriteriaFactory $criteriaFactory an instance of the Tuskfish criteria factory class.
-     * @param TfCriteriaItemFactory $itemFactory An instance of the Tuskfish criteria item factory class.
      * @param TfFileHandler $fileHandler An instance of the Tuskfish file handler class.
      * @param TfTaglinkHandler $taglinkHandler An instance of the Tuskfish taglink handler class.
      */
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
-            TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler)
+            TfCriteriaFactory $criteriaFactory, TfFileHandler $fileHandler,
+            TfTaglinkHandler $taglinkHandler)
     {
-        parent::__construct($validator, $db, $criteriaFactory, $itemFactory,
-                $fileHandler, $taglinkHandler);
+        parent::__construct($validator, $db, $criteriaFactory, $fileHandler, $taglinkHandler);
     }
     
     /**
@@ -139,7 +136,7 @@ class TfTagHandler extends TfContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
+        $criteria->add($this->criteriaFactory->getItem('type', 'TfTag'));
         $count = parent::getcount($criteria);
 
         return $count;
@@ -176,7 +173,7 @@ class TfTagHandler extends TfContentHandler
         }
 
         // Set new type criteria specific to this object.
-        $criteria->add($this->itemFactory->getItem('type', 'TfTag'));
+        $criteria->add($this->criteriaFactory->getItem('type', 'TfTag'));
         $objects = parent::getObjects($criteria);
 
         return $objects;

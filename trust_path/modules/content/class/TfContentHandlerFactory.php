@@ -27,7 +27,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
  * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
- * @var         TfCriteriaItemFactory $itemFactory Instance of the Tuskfish criteria item factory.
  * @var         TfFileHandler $fileHandler Instance of the Tuskfish file handler class.
  * @var         TfTaglinkHandler $taglinkHandler Instance of the Tuskfish taglink handler class.
  */
@@ -37,7 +36,6 @@ class TfContentHandlerFactory
     protected $validator;
     protected $db;
     protected $criteriaFactory;
-    protected $itemFactory;
     protected $fileHandler;
     protected $taglinkHandler;
     
@@ -47,12 +45,10 @@ class TfContentHandlerFactory
      * @param TfValidator $validator An instance of the Tuskfish data validator class.
      * @param TfDatabase $db An instance of the database class.
      * @param TfCriteriaFactory $criteriaFactory an instance of the Tuskfish criteria factory class.
-     * @param TfCriteriaItemFactory $itemFactory An instance of the Tuskfish criteria item factory class.
      * @param TfFileHandler $fileHandler An instance of the Tuskfish file handler class.
      */
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfCriteriaItemFactory $itemFactory,
-            TfFileHandler $fileHandler)
+            TfCriteriaFactory $criteriaFactory, TfFileHandler $fileHandler)
     {
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
@@ -72,20 +68,13 @@ class TfContentHandlerFactory
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
-        if (is_a($itemFactory, 'TfCriteriaItemFactory')) {
-            $this->itemFactory = $itemFactory; 
-        } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
-        }
-        
         if (is_a($fileHandler, 'TfFileHandler')) {
             $this->fileHandler = $fileHandler; 
         } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
-        $this->taglinkHandler = new TfTaglinkHandler($validator, $db, $criteriaFactory,
-                $itemFactory);
+        $this->taglinkHandler = new TfTaglinkHandler($validator, $db, $criteriaFactory);
     }
     
     /**
@@ -102,22 +91,22 @@ class TfContentHandlerFactory
         // handlers.
         if ($cleanType === 'content') {
             return new TfContentHandler($this->validator, $this->db, $this->criteriaFactory,
-                    $this->itemFactory, $this->fileHandler, $this->taglinkHandler);
+                    $this->fileHandler, $this->taglinkHandler);
         }
         
         if ($cleanType === 'block') {
             return new TfBlockHandler($this->validator, $this->db, $this->criteriaFactory,
-                    $this->itemFactory, $this->fileHandler, $this->taglinkHandler);
+                    $this->fileHandler, $this->taglinkHandler);
         }
         
         if ($cleanType === 'collection') {
             return new TfCollectionHandler($this->validator, $this->db, $this->criteriaFactory,
-                    $this->itemFactory, $this->fileHandler, $this->taglinkHandler);
+                    $this->fileHandler, $this->taglinkHandler);
         }
         
         if ($cleanType === 'tag') {
             return new TfTagHandler($this->validator, $this->db, $this->criteriaFactory,
-                    $this->itemFactory, $this->fileHandler, $this->taglinkHandler);
+                    $this->fileHandler, $this->taglinkHandler);
         }
         
         trigger_error(TFISH_ERROR_NO_SUCH_HANDLER, E_USER_ERROR);

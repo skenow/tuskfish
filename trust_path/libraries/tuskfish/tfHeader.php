@@ -56,7 +56,6 @@ $tfDatabase->connect();
 
 // CriteriaItem and Criteria factories. Used to compose database queries.
 $tfCriteriaFactory = new TfCriteriaFactory($tfValidator);
-$tfCriteriaItemFactory = new TfCriteriaItemFactory($tfValidator);
 
 // Site preferences.
 $preferenceHandler = new TfPreferenceHandler($tfDatabase);

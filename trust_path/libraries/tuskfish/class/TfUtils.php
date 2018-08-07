@@ -44,7 +44,7 @@ class TfUtils
      * @param string $password Input password.
      * @return array Array of evaluation warnings as strings.
      */
-    public function checkPasswordStrength(string $password)
+    public static function checkPasswordStrength(string $password)
     {
         $evaluation = array('strong' => true);
 
@@ -65,7 +65,7 @@ class TfUtils
      * @param int $length Length of required salt.
      * @return string $salt
      */
-    public function generateSalt(int $length = 64)
+    public static function generateSalt(int $length = 64)
     {        
         $salt = base64_encode(random_bytes($length));
         
