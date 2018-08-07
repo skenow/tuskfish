@@ -563,7 +563,7 @@ class TfContentHandler
      * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @return array Array as id => title of content objects.
      */
-    public function getListOfObjectTitles(TfCriteria $criteria = null)
+    public function getListOfTitles(TfCriteria $criteria = null)
     {
         $contentList = array();
         $columns = array('id', 'title');

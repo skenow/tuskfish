@@ -41,7 +41,7 @@ $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
 $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$contentIds = $contentHandler->getListOfObjectTitles($criteria);
+$contentIds = $contentHandler->getListOfTitles($criteria);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
 $criteria = $tfCriteriaFactory->getCriteria();
@@ -49,7 +49,7 @@ $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag'));
 $criteria->add(new TfCriteriaItem($tfValidator, 'online', 0));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
-$offlineTagIds = $contentHandler->getListOfObjectTitles($criteria);
+$offlineTagIds = $contentHandler->getListOfTitles($criteria);
 
 // Combine the list
 $contentIds = $contentIds + $offlineTagIds;

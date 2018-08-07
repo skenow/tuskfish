@@ -139,7 +139,7 @@ class TfCollectionHandler extends TfContentHandler
         $criteria->add($this->itemFactory->getItem('type', 'TfCollection'));
         $criteria->setOrder('title');
         $criteria->setOrderType('ASC');
-        $options = $options + $this->getListOfObjectTitles($criteria);
+        $options = $options + $this->getListOfTitles($criteria);
 
         $selectBox = '<select id="parent" name="parent" class="form-control">';
         
