@@ -122,7 +122,7 @@ class TfSearchContent
                 $sql .= ")";
                 
                 if ($i != ($count - 1)) {
-                    $sql .= " " . $andor . " ";
+                    $sql .= " :operator ";
                 }
             }
         }
@@ -141,6 +141,8 @@ class TfSearchContent
                 $statement->bindValue($escapedTermPlaceholders[$i], "%" . $this->escapedSearchTerms[$i] . "%",
                         PDO::PARAM_STR);
             }
+            
+            $statement->bindValue(':operator', $this->operator);
         } else {
             return false;
         }
