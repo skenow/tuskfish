@@ -72,12 +72,12 @@ class TfTaglinkHandler
     /**
      * Delete taglinks associated with a particular content object.
      * 
-     * @param TfContentObject $obj A content subclass object.
+     * @param object $obj A content object that makes use of the taglinks table.
      * @return bool True for success, false on failure.
      */
-    public function deleteTaglinks(TfContentObject $obj)
+    public function deleteTaglinks(object $obj)
     {
-        if (!is_a($obj, 'TfContentObject')) {
+        if (!$this->validator->isObject($obj)) {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
@@ -87,12 +87,19 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
+        $cleanModule = $this->validator->trimString($obj->module);
+        
+        if (!$cleanModule || !$this->validator->isAlnumUnderscore($cleanModule)) {
+            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+        }
+        
         $criteria = $this->criteriaFactory->getCriteria();
         
         if ($obj->type === 'TfTag') {
             $criteria->add($this->criteriaFactory->getItem('tagId', $cleanContentId));
         } else {
             $criteria->add($this->criteriaFactory->getItem('contentId', $cleanContentId));
+            $criteria->add($this->criteriaFactory->getItem('module', $cleanModule));
         }
         
         $result = $this->db->deleteAll('taglink', $criteria);
@@ -111,10 +118,11 @@ class TfTaglinkHandler
      * 
      * @param int $contentId ID of content object.
      * @param string $type Type of content object as whitelisted in TfTaglinkHandler::getType().
+     * @param string $module Name of the module the content object is associated with.
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function insertTaglinks(int $contentId, string $type, array $tags)
+    public function insertTaglinks(int $contentId, string $type, string $module, array $tags)
     {
         if ($this->validator->isInt($contentId, 1)) {
             $cleanContentId = (int) $contentId;
@@ -130,6 +138,12 @@ class TfTaglinkHandler
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
+        }
+        
+        $cleanModule = $this->validator->trimString($module);
+        
+        if (!$cleanModule || !$this->validator->isAlnumUnderscore($cleanModule)) {
+            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
         
         if (!is_array($tags)) {
@@ -149,6 +163,7 @@ class TfTaglinkHandler
             
             $tag['contentId'] = $cleanContentId;
             $tag['contentType'] = $cleanType;
+            $tag['module'] = $cleanModule;
             $cleanTags[] = $tag;
             unset($tag);
         }
@@ -172,10 +187,11 @@ class TfTaglinkHandler
      * 
      * @param int $id ID of target content object.
      * @param string $type Type of content object as whitelisted in TfTaglinkHandler::getType().
+     * @param string $module Name of the module the content object is associated with.
      * @param array $tags IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function updateTaglinks(int $id, string $type, array $tags = null)
+    public function updateTaglinks(int $id, string $type, string $module, array $tags = null)
     {
         if ($this->validator->isInt($id, 1)) {
             $cleanId = (int) $id;
@@ -190,6 +206,12 @@ class TfTaglinkHandler
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
             exit;
+        }
+        
+        $cleanModule = $this->validator->trimString($module);
+        
+        if (!$cleanModule || !$this->validator->isAlnumUnderscore($cleanModule)) {
+            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
         
         $cleanTagId = array();
@@ -208,6 +230,7 @@ class TfTaglinkHandler
         // Delete any existing tags.
         $criteria = $this->criteriaFactory->getCriteria();
         $criteria->add($this->criteriaFactory->getItem('contentId', $cleanId));
+        $criteria->add($this->criteriaFactory->getItem('module', $cleanModule));
         $result = $this->db->deleteAll('taglink', $criteria);
         
         if (!$result) {
@@ -236,6 +259,7 @@ class TfTaglinkHandler
             
             $tag['contentId'] = $cleanId;
             $tag['contentType'] = $cleanType;
+            $tag['module'] = $cleanModule;
             $cleanTags[] = $tag;
             unset($tag);
         }

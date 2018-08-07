@@ -73,7 +73,7 @@ class TfVideo extends TfContentObject
         // Declare the type, template and module for this this class
         $this->type = "TfVideo";
         $this->template = "video";
-        $this->module = "videos";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-video"></i>';
 
         // Object definition - unset any properties unused in this subclass.

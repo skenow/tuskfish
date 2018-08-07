@@ -73,7 +73,7 @@ class TfDownload extends TfContentObject
         // Declare the type, template and module for this this class
         $this->type = "download";
         $this->template = "download";
-        $this->module = "downloads";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-download"></i>';
 
         // Object definition - unset any properties unused in this subclass.

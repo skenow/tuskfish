@@ -73,7 +73,7 @@ class TfStatic extends TfContentObject
         // Declare the type, template and module for this this class
         $this->type = "TfStatic";
         $this->template = "static";
-        $this->module = "permalink";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-file"></i>';
 
         // Object definition - unset any properties unused in this subclass.

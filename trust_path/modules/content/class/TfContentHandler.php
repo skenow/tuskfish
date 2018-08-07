@@ -320,7 +320,8 @@ class TfContentHandler
                 exit;
             }
 
-            $result = $this->taglinkHandler->insertTaglinks($contentId, $obj->type, $obj->tags);
+            $result = $this->taglinkHandler->insertTaglinks($contentId, $obj->type, $obj->module,
+                    $obj->tags);
             if (!$result) {
                 return false;
             }
@@ -1154,7 +1155,8 @@ class TfContentHandler
         }
 
         // Update tags
-        $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->tags);
+        $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->module,
+                $obj->tags);
         
         if (!$result) {
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);

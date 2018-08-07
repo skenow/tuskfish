@@ -57,7 +57,7 @@ class TfBlock extends TfContentObject
         // Declare the type, template, module and icon for this this class
         $this->type = "TfBlock";
         $this->template = "block";
-        $this->module = "blocks";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-cube"></i>';
 
         // Object definition - unset any properties unused in this subclass.

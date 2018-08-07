@@ -84,7 +84,7 @@ class TfCollection extends TfContentObject
         // Declare the type, template and module for this this class
         $this->type = "TfCollection";
         $this->template = "collection";
-        $this->module = "collections";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-folder-open"></i>';
 
         // Object definition - unset any properties unused in this subclass.

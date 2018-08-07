@@ -68,7 +68,7 @@ class TfTag extends TfContentObject
         // Declare the type, template and module for this this class.
         $this->type = "TfTag";
         $this->template = "tag";
-        $this->module = "tags";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-tag"></i>';
 
         // Object definition - unset any properties unused in this subclass.

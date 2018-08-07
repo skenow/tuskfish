@@ -70,7 +70,7 @@ class TfArticle extends TfContentObject
         // Declare the type, template, module and icon for this this class.
         $this->type = "TfArticle";
         $this->template = "article";
-        $this->module = "articles";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-file-alt"></i>';
 
         // Object definition - unset any properties unused in this subclass.

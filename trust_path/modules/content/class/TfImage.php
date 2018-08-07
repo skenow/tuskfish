@@ -73,7 +73,7 @@ class TfImage extends TfContentObject
         // Declare the type, template and module for this this class
         $this->type = "TfImage";
         $this->template = "image";
-        $this->module = "images";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-image"></i>';
 
         // Object definition - unset any properties unused in this subclass.

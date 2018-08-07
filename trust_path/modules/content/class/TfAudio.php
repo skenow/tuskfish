@@ -73,7 +73,7 @@ class TfAudio extends TfContentObject
         // Declare the type, template and module for this this class
         $this->type = "TfAudio";
         $this->template = "audio";
-        $this->module = "soundtracks";
+        $this->module = "content";
         $this->icon = '<i class="fas fa-headphones"></i>';
 
         // Object definition - unset any properties unused in this subclass.
