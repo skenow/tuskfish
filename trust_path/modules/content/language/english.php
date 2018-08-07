@@ -66,6 +66,8 @@ define("TFISH_ONLINE_STATUS", "Status");
 define("TFISH_ONLINE", "Online");
 define("TFISH_OFFLINE", "Offline");
 define("TFISH_SUBMISSION_TIME", "Submitted");
+define("TFISH_LAST_UPDATED", "Last updated");
+define("TFISH_EXPIRES_ON", "Expires on");
 define("TFISH_COUNTER", "Counter");
 define("TFISH_VIEWS", "views"); // Alternative representation of counter (type-dependent context).
 define("TFISH_META_TITLE", "Title");

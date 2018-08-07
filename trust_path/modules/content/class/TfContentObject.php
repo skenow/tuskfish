@@ -57,6 +57,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  array $tags Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
  * @properties  int $online Toggle object on or offline.
  * @properties  int $submissionTime Timestamp representing submission time.
+ * @properties  int $lastUpdated Timestamp representing last time this object was updated.
+ * @properties  int $expiresOn Timestamp indicating the expiry date for this object.
  * @properties  int $counter Number of times this content was viewed or downloaded.
  * @properties  string $metaTitle Set a custom page title for this content.
  * @properties  string $metaDescription Set a custom page meta description for this content.
@@ -93,6 +95,8 @@ class TfContentObject
     protected $tags = '';
     protected $online = '';
     protected $submissionTime = '';
+    protected $lastUpdated = '';
+    protected $expiresOn = '';
     protected $counter = '';
     protected $metaTitle = '';
     protected $metaDescription = '';
@@ -727,6 +731,8 @@ class TfContentObject
                 break;
 
             case "submissionTime":
+            case "lastUpdated":
+            case "expiresOn":
                 $date = date('j F Y', $this->$cleanProperty);
 
                 return $date;
@@ -823,6 +829,12 @@ class TfContentObject
                     break;
                 case "submissionTime":
                     $this->setSubmissionTime((int) $value);
+                    break;
+                case "lastUpdated":
+                    $this->setLastUpdated((int) $value);
+                    break;
+                case "expiresOn":
+                    $this->setExpiresOn((int) $value);
                     break;
                 case "counter":
                     $this->setCounter((int) $value);
@@ -921,6 +933,20 @@ class TfContentObject
     {
         $description = (string) $this->validator->trimString($description);
         $this->description = $this->validator->filterHtml($description);
+    }
+    
+    /**
+     * Set the expirty time for this content object (timestamp).
+     * 
+     * @param int $expiresOn Timestamp.
+     */
+    public function setExpiresOn(int $expiresOn)
+    {
+        if ($this->validator->isInt($expiresOn, 0)) {
+            $this->expiresOn = $expiresOn;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
     }
     
     /**
@@ -1045,6 +1071,20 @@ class TfContentObject
         }
         
         $this->language = $language;
+    }
+    
+    /**
+     * Set the last updated time for this content object (timestamp).
+     * 
+     * @param int $lastUpdated Timestamp.
+     */
+    public function setLastUpdated(int $lastUpdated)
+    {
+        if ($this->validator->isInt($lastUpdated, 0)) {
+            $this->lastUpdated = $lastUpdated;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
     }
     
     /**
@@ -1292,6 +1332,14 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Reset the last updated time for this content object (timestamp).
+     */
+    public function updateLastUpdated()
+    {
+        $this->lastUpdated = time();
     }
 
 }

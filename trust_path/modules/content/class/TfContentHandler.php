@@ -269,6 +269,8 @@ class TfContentHandler
         
         $keyValues = $obj->convertObjectToArray();
         $keyValues['submissionTime'] = time(); // Automatically set submission time.
+        $keyValues['lastUpdated'] = 0; // Initiate lastUpdated at 0.
+        $keyValues['expiresOn'] = 0; // Initate expiresOn at 0;
         unset($keyValues['id']); // ID is auto-incremented by the database on insert operations.
         unset($keyValues['tags']);
         unset($keyValues['validator']);
@@ -989,6 +991,11 @@ class TfContentHandler
         }
         
         $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;
+        
+        // Reset the lastUpdated property.
+        $obj->updateLastUpdated();
+        
+        // Convert the object to array for writing to the database.
         $keyValues = $obj->convertObjectToArray();
         
         unset($keyValues['submissionTime']); // Submission time should not be overwritten.

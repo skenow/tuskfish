@@ -122,7 +122,7 @@ class TfSearchContent
                 $sql .= ")";
                 
                 if ($i != ($count - 1)) {
-                    $sql .= " :operator ";
+                    $sql .= $this->operator;
                 }
             }
         }
@@ -130,23 +130,22 @@ class TfSearchContent
         $sql .= " AND `online` = 1 AND `type` != 'TfBlock' ";
         $sql .= "ORDER BY `date` DESC, `submissionTime` DESC ";
         $sqlCount .= $sql;
-        
+
         // Bind the search term values and execute the statement.
         $statement = $this->db->preparedStatement($sqlCount);
-        
+
         if ($statement) {
+            
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($searchTermPlaceholders[$i], "%" . $this->searchTerms[$i] . "%",
                         PDO::PARAM_STR);
                 $statement->bindValue($escapedTermPlaceholders[$i], "%" . $this->escapedSearchTerms[$i] . "%",
                         PDO::PARAM_STR);
             }
-            
-            $statement->bindValue(':operator', $this->operator);
         } else {
             return false;
         }
-
+        
         // Execute the statement.
         $statement->execute();
 
@@ -167,7 +166,6 @@ class TfSearchContent
 
         $sqlSearch .= $sql;
         $statement = $this->db->preparedStatement($sqlSearch);
-        
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($searchTermPlaceholders[$i], "%" . $this->searchTerms[$i] . "%",
@@ -185,14 +183,7 @@ class TfSearchContent
         }
 
         $statement->execute();
-        
-        /**$statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE | PDO::FETCH_PROPS_LATE);
-        
-        while ($object = $statement->fetch()) {
-            $result[$object->id] = $object;
-        }*/
-        
-        // Alternative method - allows constructor arguments to be passed in.
+
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $object = new $row['type']($this->validator);
             $object->loadPropertiesFromArray($row, true);
@@ -240,8 +231,13 @@ class TfSearchContent
      */
     public function setOperator(string $operator)
     {
-        $this->operator = in_array($operator, array('AND', 'OR', 'exact'), true)
-                ? $this->validator->trimString($operator) : 'AND';
+        $cleanOperator = $this->validator->trimString($operator);
+        
+        if (in_array($cleanOperator, array('AND', 'OR', 'exact'), true)) {
+            $this->operator = $cleanOperator;
+        } else {
+            $this->operator = "AND";
+        }
     }
     
     /**
