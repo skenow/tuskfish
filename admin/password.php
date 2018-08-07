@@ -58,9 +58,8 @@ if (in_array($op, array('submit', false), true)) {
                 $error[] = TFISH_PASSWORDS_DO_NOT_MATCH;
             }
 
-            // Check that password meets minimum strength requirements.
-            $securityUtility = new TfSecurityUtility();
-            $passwordQuality = $securityUtility->checkPasswordStrength($dirtyPassword);
+            // Check that password meets minimum length requirements.
+            $passwordQuality = TfUtils::checkPasswordStrength($dirtyPassword);
             
             if ($passwordQuality['strong'] === false) {
                 unset($passwordQuality['strong']);

@@ -114,8 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $adminPassword = $tfValidator->trimString($_POST['adminPassword']);
 
     // Check password length and quality.
-    $securityUtility = new TfSecurityUtility();
-    $passwordQuality = $securityUtility->checkPasswordStrength($adminPassword);
+    $passwordQuality = TfUtils::checkPasswordStrength($adminPassword);
 
     if ($passwordQuality['strong'] === false) {
         $tfContent['output'] .= '<p>' . TFISH_INSTALLATION_WEAK_PASSWORD . '</p>';
@@ -140,9 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // All input validated, proceed to process and set up database.    
     } else {
         // Salt and iteratively hash the password 100,000 times to resist brute force attacks.
-        $securityUtility = new TfSecurityUtility();
-        $siteSalt = $securityUtility->generateSalt(64);
-        $userSalt = $securityUtility->generateSalt(64);
+        $siteSalt = TfUtils::generateSalt(64);
+        $userSalt = TfUtils::generateSalt(64);
         $passwordHash = TfSession::recursivelyHashPassword($adminPassword, 100000,
                 $siteSalt, $userSalt);
 
