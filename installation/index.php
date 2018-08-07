@@ -260,6 +260,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "publisher" => "TEXT", // The entity responsible for distributing this work.
             "online" => "INTEGER", // Toggle object on or offline
             "submissionTime" => "INTEGER", // Timestamp representing submission time.
+            "lastUpdated" => "INTEGER", // Timestamp of last update of this object.
+            "expiresOn" => "INTEGER", // Timestamp for expiry of this item.
             "counter" => "INTEGER", // Number of times this content was viewed or downloaded.
             "metaTitle" => "TEXT", // Set a custom page title for this content.
             "metaDescription" => "TEXT", // Set a custom page meta description for this content.
@@ -287,7 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "id" => "INTEGER",
             "tagId" => "INTEGER",
             "contentType" => "TEXT",
-            "contentId" => "INTEGER");
+            "contentId" => "INTEGER",
+            "module" => "TEXT");
         $tfDatabase->createTable('taglink', $taglinkColumns, 'id');
         
         // Close the database connection.
