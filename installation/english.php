@@ -41,8 +41,6 @@ define("TFISH_INSTALLATION_REMOVE_DIRECTORY", "Removal of the installation direc
 define("TFISH_INSTALLATION_ADMIN_EMAIL", "Admin email address");
 define("TFISH_INSTALLATION_SOME_EMAIL", "youremail@somedomain.com");
 define("TFISH_INSTALLATION_ADMIN_PASSWORD", "Admin password (minimum 15 characters)");
-define("TFISH_INSTALLATION_USER_SALT", "User password salt");
-define("TFISH_INSTALLATION_SITE_SALT", "Site password salt");
 define("TFISH_INSTALLATION_GRC", "Get one from: https://grc.com/passwords/");
 define("TFISH_INSTALLATION_STRONG_PASSWORD", "Password is strong.");
 define("TFISH_INSTALLATION_URL", "Domain with trailing slash");

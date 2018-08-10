@@ -3,8 +3,7 @@
 /**
  * Tuskfish configuration script.
  * 
- * Stores the site salt (used for recursive password hashing), key and database path. Included in
- * every page via mainfile.php / masterfile.php  
+ * Sets file paths and key constants. Included in every page via mainfile.php.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -86,4 +85,4 @@ function tf_autoload(string $classname) {
 }
 spl_autoload_register('tf_autoload');
 
-// Site salt, key and database name are appended here.
+// Site database name are appended here.

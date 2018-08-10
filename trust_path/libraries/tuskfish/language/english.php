@@ -61,7 +61,6 @@ define("TFISH_IMAGE_GALLERY", "Gallery");
 // admin/password.php
 define("TFISH_NEW_PASSWORD", "Enter new password");
 define("TFISH_CONFIRM_PASSWORD", "Re-enter new password to confirm");
-define("TFISH_USER_SALT_UNAVAILABLE", "User salt unavailable, cannot proceed.");
 define("TFISH_ENTER_PASSWORD_TWICE", "You must enter the new password twice for confirmation.");
 define("TFISH_PASSWORDS_DO_NOT_MATCH", "Passwords do not match, please try again.");
 define("TFISH_PASSWORD_MINIMUM_LENGTH_WEAKNESS", "Password must be at least 15 characters long to "

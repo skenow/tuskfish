@@ -43,11 +43,6 @@ if (in_array($op, array('submit', false), true)) {
             $statement->execute();
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-            // Make sure that the user salt is available otherwise the hash will be weak.
-            if (empty($user) || empty($user['userSalt'])) {
-                $error[] = TFISH_USER_SALT_UNAVAILABLE;
-            }
-
             // Check both password and confirmation submitted.
             if (empty($dirtyPassword) || empty($dirtyConfirmation)) {
                 $error[] = TFISH_ENTER_PASSWORD_TWICE;
@@ -80,8 +75,7 @@ if (in_array($op, array('submit', false), true)) {
              */
             if (empty($error)) {
                 $passwordHash = '';
-                $passwordHash = TfSession::recursivelyHashPassword($dirtyPassword, 
-                        100000, TFISH_SITE_SALT, $user['userSalt']);
+                $passwordHash = hashPassword($dirtyPassword);
                 $tfTemplate->backUrl = 'admin.php';
                     $tfTemplate->form = TFISH_FORM_PATH . "response.html";
 

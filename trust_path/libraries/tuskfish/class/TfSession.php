@@ -197,11 +197,8 @@ class TfSession
                 sleep((int) $user['loginErrors']);
             }
             
-            $passwordHash = self::recursivelyHashPassword($dirtyPassword, 100000,
-                    TFISH_SITE_SALT, $user['userSalt']);
-            
             // If login successful regenerate session due to privilege escalation.
-            if ($passwordHash === $user['passwordHash']) {
+            if (password_verify($dirtyPassword, $user['passwordHash'])) {
                 self::regenerate();
                 $_SESSION['TFISH_LOGIN'] = true;
                 $_SESSION['userId'] = (int) $user['id'];
@@ -333,11 +330,8 @@ class TfSession
             exit;
         }
         
-        // First factor authentication: Calculate password hash and compare to the one on file.
-        $passwordHash = self::recursivelyHashPassword($dirtyPassword, 100000,
-                TFISH_SITE_SALT, $user['userSalt']);
-        
-        if ($passwordHash === $user['passwordHash']) {
+        // First factor authentication: Calculate password hash and compare to the one on file.        
+        if (password_verify($dirtyPassword, $user['passwordHash'])) {
             $first_factor = true;
         }
         
@@ -400,38 +394,20 @@ class TfSession
     }
     
     /**
-     * Recursively hashes a salted password to harden it against dictionary attacks.
+     * Hashes and salts a password to harden it against dictionary attacks.
      * 
-     * Recursively hashing a password a large number of times directly increases the amount of
-     * effort that must be spent to brute force or even dictionary attack a hash, because each
-     * attempt will consume $iterations more cycles. 
+     * Uses the default password hashing algorithm, which wa bcrypt as of PHP 7.2, with a cost
+     * of 12. If logging in is too slow, you could consider reducing this to 10 (the default value).
+     * Lowering it further will weaken the security of the hash.
      * 
      * @param string $password Input password.
-     * @param int $iterations Number of iterations to run, you want this to be a large number
-     * (100,000 or more).
-     * @param string $siteSalt The Tuskfish site salt, found in the configuration file.
-     * @param string $userSalt The user-specific salt for this user, found in the user database
-     * table.
-     * @return string Password hash.
+     * @return string Password hash, incorporating algorithm and difficulty information.
      */
-    public static function recursivelyHashPassword(string $password, int $iterations,
-            string $siteSalt, string $userSalt = '')
+    public static function hashPassword(string $password)
     {
+        $options = array('cost' => 12);        
+        $password = password_hash($password, PASSWORD_DEFAULT, $options);
 
-        $iterations = (int) $iterations;
-
-        // Force a minimum number of iterations (1).
-        $iterations = $iterations > 0 ? $iterations : 1;
-
-        $password = $siteSalt . $password;
-        
-        if ($userSalt) {
-            $password .= $userSalt;
-        }
-        
-        for ($i = 0; $i < $iterations; $i++) {
-            $password = hash('sha256', $password);
-        }
         return $password;
     }
 

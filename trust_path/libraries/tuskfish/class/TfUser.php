@@ -30,8 +30,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @property    int $id ID of this user
  * @property    string $adminEmail email address of this user
  * @property    string $passwordHash
- * @property    string $userSalt Random string used to confound dictionary attacks against password
- * hashes.
  * @property    int $userGroup The privilege group this user belongs to (not implemented).
  * @property    string $yubikeyId ID of the primary Yubikey hardware authentication token
  * for this account.
@@ -49,7 +47,6 @@ class TfUser
     protected $id;
     protected $adminEmail;
     protected $passwordHash;
-    protected $userSalt;
     protected $userGroup;
     protected $yubikeyId;
     protected $yubikeyId2;
@@ -73,7 +70,7 @@ class TfUser
      * Get the value of a property.
      * 
      * Intercepts direct calls to access an object property. Disallow public access to sensitive
-     * properties (passwordHash, userSalt).
+     * properties (passwordHash).
      * 
      * @param string $property Name of property.
      * @return mixed|null $property Value of property if it is set; otherwise null.
@@ -82,7 +79,7 @@ class TfUser
     {
         $cleanProperty = $this->validator->trimString($property);
         
-        if (isset($cleanProperty) && $cleanProperty !== 'passwordHash' && $cleanProperty !== 'userSalt') {
+        if (isset($cleanProperty) && $cleanProperty !== 'passwordHash') {
             return $this->$cleanProperty;
         } else {
             return null;
@@ -164,19 +161,6 @@ class TfUser
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
-    }
-    
-    /**
-     * Set the user-specific salt for this user.
-     * 
-     * Used in password hash calculations.
-     * 
-     * @param string $salt Random string of text.
-     */
-    public function setUserSalt(string $salt)
-    {
-        $clean_salt = $this->validator->trimString($salt);
-        $this->userSalt = $clean_salt;
     }
     
     /**

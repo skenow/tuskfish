@@ -138,22 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
     // All input validated, proceed to process and set up database.    
     } else {
-        // Salt and iteratively hash the password 100,000 times to resist brute force attacks.
-        $siteSalt = TfUtils::generateSalt(64);
-        $userSalt = TfUtils::generateSalt(64);
-        $passwordHash = TfSession::recursivelyHashPassword($adminPassword, 100000,
-                $siteSalt, $userSalt);
-
-        // Append site salt to config.php.
-        $siteSaltConstant = 'if (!defined("TFISH_SITE_SALT")) define("TFISH_SITE_SALT", "'
-                . $siteSalt . '");';
+        $passwordHash = TfSession::hashPassword($adminPassword);
         $tfFileHandler = new TfFileHandler($tfValidator);
-        $result = $tfFileHandler->appendToFile(TFISH_CONFIGURATION_PATH, $siteSaltConstant);
-
-        if (!$result) {
-            trigger_error(TFISH_ERROR_FAILED_TO_APPEND_FILE, E_USER_ERROR);
-            exit;
-        }
 
         ////////////////////////////////////
         // INITIALISE THE SQLITE DATABASE //
@@ -173,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "id" => "INTEGER",
             "adminEmail" => "TEXT",
             "passwordHash" => "TEXT",
-            "userSalt" => "TEXT",
             "userGroup" => "INTEGER",
             "yubikeyId" => "TEXT",
             "yubikeyId2" => "TEXT",
@@ -181,11 +166,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
 
         $tfDatabase->createTable('user', $userColumns, 'id');
+        
         // Insert admin user's details to database.
         $userData = array(
             'adminEmail' => $adminEmail,
             'passwordHash' => $passwordHash,
-            'userSalt' => $userSalt,
             'userGroup' => '1',
             'yubikeyId' => '',
             'yubikeyId2' => '',
