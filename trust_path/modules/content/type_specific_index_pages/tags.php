@@ -88,7 +88,7 @@ if ($cleanId) {
     $tfPagination->setCount($contentHandler->getCount($criteria));
     $tfPagination->setLimit($tfPreference->userPagination);
     $tfPagination->setStart($cleanStart);
-    $tfTemplate->pagination = $tfPagination->getPaginationControl();
+    $tfTemplate->pagination = $tfPagination->renderPaginationControl();
 
     // Retrieve content objects and assign to template.
     $contentObjects = $contentHandler->getObjects($criteria);

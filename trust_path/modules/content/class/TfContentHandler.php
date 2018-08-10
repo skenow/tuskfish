@@ -840,23 +840,23 @@ class TfContentHandler
      * site will be prepended and .php plus the tagId will be appended.
      * 
      * @param array $tags Array of tag IDs.
-     * @param string $targetFilename Name of file for tag links to point at.
+     * @param string $targetFileName Name of file for tag links to point at.
      * @return array Array of HTML tag links.
      */
-    public function makeTagLinks(array $tags, string $targetFilename = '')
+    public function makeTagLinks(array $tags, string $targetFileName = '')
     {
         if (!$this->validator->isArray($tags)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
         
-        if (empty($targetFilename)) {
+        if (empty($targetFileName)) {
             $cleanFilename = TFISH_URL . '?tagId=';
         } else {
-            if (!$this->validator->isAlnumUnderscore($targetFilename)) {
+            if (!$this->validator->isAlnumUnderscore($targetFileName)) {
                 trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
             } else {
-                $targetFilename = $this->validator->trimString($targetFilename);
-                $cleanFilename = TFISH_URL . $this->validator->escapeForXss($targetFilename)
+                $targetFileName = $this->validator->trimString($targetFileName);
+                $cleanFilename = TFISH_URL . $this->validator->escapeForXss($targetFileName)
                         . '.php?tagId=';
             }
         }

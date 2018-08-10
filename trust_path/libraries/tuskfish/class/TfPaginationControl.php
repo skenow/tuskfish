@@ -90,7 +90,7 @@ class TfPaginationControl
      * 
      * @return string HTML pagination control.
      */
-    public function getPaginationControl()
+    public function renderPaginationControl()
     {
         // If the count is zero there is no need for a pagination control.
         if ($this->count === 0) {
