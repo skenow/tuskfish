@@ -107,7 +107,7 @@ function checkPasswordStrength(string $password) {
  */
 function hashPassword(string $password)
 {
-    $options = array('cost' => 12);        
+    $options = array('cost' => 11);        
     $password = password_hash($password, PASSWORD_DEFAULT, $options);
 
     return $password;

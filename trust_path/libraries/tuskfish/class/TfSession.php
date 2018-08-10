@@ -397,7 +397,7 @@ class TfSession
      * Hashes and salts a password to harden it against dictionary attacks.
      * 
      * Uses the default password hashing algorithm, which wa bcrypt as of PHP 7.2, with a cost
-     * of 12. If logging in is too slow, you could consider reducing this to 10 (the default value).
+     * of 11. If logging in is too slow, you could consider reducing this to 10 (the default value).
      * Lowering it further will weaken the security of the hash.
      * 
      * @param string $password Input password.
@@ -405,7 +405,7 @@ class TfSession
      */
     public static function hashPassword(string $password)
     {
-        $options = array('cost' => 12);        
+        $options = array('cost' => 11);        
         $password = password_hash($password, PASSWORD_DEFAULT, $options);
 
         return $password;
