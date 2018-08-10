@@ -33,9 +33,9 @@ $tfTemplate->targetFileName = $targetFileName;
 // $tfTemplate->setTheme('jumbotron');
 
 // Validate input parameters.
-$cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-$cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanId = (int) ($_GET['id'] ?? 0);
+$cleanStart = (int) ($_GET['start'] ?? 0);
+$cleanTag = (int) ($_GET['tagId'] ?? 0);
 
 // Set cache parameters.
 $basename = basename(__FILE__);

@@ -91,8 +91,8 @@ if (!empty($_POST['op'])) {
     $cleanOp = $tfValidator->isAlpha($op) ? $op : false;
 }
 
-$dirtyPassword = isset($_POST['password']) ? $_POST['password'] : false;
-$dirtyOtp = isset($_POST['yubikeyOtp']) ? $_POST['yubikeyOtp'] : false;
+$dirtyPassword = $_POST['password'] ?? '';
+$dirtyOtp = $_POST['yubikeyOtp'] ?? '';
 
 if (isset($cleanOp) && in_array($cleanOp, $allowedOptions, true)) {
     switch ($cleanOp) {

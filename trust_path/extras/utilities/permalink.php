@@ -29,8 +29,8 @@ $targetFileName = 'permalink';
 $tfTemplate->targetFileName = $targetFileName;
 
 // Validate input parameters.
-$cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+$cleanId = (int) ($_GET['id'] ?? 0);
+$cleanStart = (int) ($_GET['start'] ?? 0);
 
 // View single object description.
 if ($cleanId) {

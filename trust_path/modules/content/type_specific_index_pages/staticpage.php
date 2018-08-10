@@ -47,8 +47,8 @@ $tfTemplate->pageTitle = TFISH_TYPE_STATIC_PAGES;
 
 // Validate input parameters.
 $cleanId = (int) $id;
-$cleanStart = isset($_GET['start']) ? (int) $_GET['start'] : 0;
-$cleanTag = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanStart = (int) ($_GET['start'] ?? 0);
+$cleanTag = (int) ($_GET['tagId'] ?? 0);
 
 // Set cache parameters.
 $basename = basename(__FILE__);

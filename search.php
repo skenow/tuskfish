@@ -45,7 +45,7 @@ if (isset($_REQUEST['query'])) {
 }
 
 $searchType = isset($_REQUEST['searchType']) ? $tfValidator->trimString($_REQUEST['searchType']) : false;
-$start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
+$start = (int) ($_REQUEST['start'] ?? 0);
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($cleanOp && $cleanTerms && $searchType) {

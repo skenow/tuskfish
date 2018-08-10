@@ -28,8 +28,8 @@ $tfTemplate->setTheme('rss');
 $tfTemplate->targetFileName = '';
 
 // Check if a collection- or tag-specific feed has been requested. Collections take priority.
-$cleanId = isset($_GET['id']) ? (int) $_GET['id'] : 0; // ID of a collection object.
-$cleanTagId = isset($_GET['tagId']) ? (int) $_GET['tagId'] : 0;
+$cleanId = (int) ($_GET['id'] ?? 0); // ID of a collection object.
+$cleanTagId = (int) ($_GET['tagId'] ?? 0);
 
 if ($cleanId && $cleanTagId) {
     $cleanTagId = false;

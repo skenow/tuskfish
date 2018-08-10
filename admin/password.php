@@ -24,8 +24,8 @@ $tfTemplate->setTheme('admin');
 
 // Validate input parameters. Note that passwords are not sanitised in any way.
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-$dirtyPassword = isset($_POST['password']) ? $_POST['password'] : false;
-$dirtyConfirmation = isset($_POST['confirmPassword']) ? $_POST['confirmPassword'] : false;
+$dirtyPassword = $_POST['password'] ?? false;
+$dirtyConfirmation = $_POST['confirmPassword'] ?? false;
 $cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
 // Display a passord reset form, or the results of a submission.

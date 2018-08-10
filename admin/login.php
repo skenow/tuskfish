@@ -101,7 +101,7 @@ if (isset($_POST['email'])) {
     $cleanEmail = $tfValidator->isEmail($email) ? $email : '';
 }
 
-$dirtyPassword = isset($_POST['password']) ? $_POST['password'] : '';
+$dirtyPassword = $_POST['password'] ?? '';
 $cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
 
 if (isset($cleanOp) && in_array($cleanOp, $allowedOptions, true)) {
