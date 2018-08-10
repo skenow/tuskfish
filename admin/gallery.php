@@ -80,7 +80,7 @@ $tfPagination->setLimit($tfPreference->galleryPagination);
 $tfPagination->setStart($cleanStart);
 $tfPagination->setTag($cleanTag);
 $tfPagination->setExtraParams($extraParams);
-$tfTemplate->pagination = $tfPagination->getPaginationControl();
+$tfTemplate->pagination = $tfPagination->renderPaginationControl();
 
 // Set offset and limit.
 if ($cleanStart) $criteria->setOffset($cleanStart);

@@ -139,7 +139,7 @@ if ($cleanId) {
             $tfPagination->setStart($cleanStart);
             $tfPagination->setTag(0);
             $tfPagination->setExtraParams(array('id' => $cleanId));
-            $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
+            $tfTemplate->collectionPagination = $tfPagination->renderPaginationControl();
 
             // Retrieve content objects and assign to template.
             $firstChildren = $contentHandler->getObjects($criteria);

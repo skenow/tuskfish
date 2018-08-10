@@ -144,7 +144,7 @@ if ($cleanId) {
             $tfPagination->setStart($cleanStart);
             $tfPagination->setTag($cleanTag);
             $tfPagination->setExtraParams(array('id' => $cleanId));
-            $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
+            $tfTemplate->collectionPagination = $tfPagination->renderPaginationControl();
 
             // Retrieve content objects and assign to template.
             $firstChildren = $contentHandler->getObjects($criteria);
@@ -188,7 +188,7 @@ if ($cleanId) {
     $tfPagination->setLimit($tfPreference->userPagination);
     $tfPagination->setStart($cleanStart);
     $tfPagination->setTag($cleanTag);
-    $tfTemplate->pagination = $tfPagination->getPaginationControl();
+    $tfTemplate->pagination = $tfPagination->renderPaginationControl();
     
     // Retrieve content objects and assign to template.
     $criteria->setOrder('date');

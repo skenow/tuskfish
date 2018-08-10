@@ -71,7 +71,7 @@ if (isset($cleanType) && !empty($cleanType)) {
     $tfPagination->setExtraParams(array(['type'] => $cleanType));
 }
 
-$tfTemplate->pagination = $tfPagination->getPaginationControl();
+$tfTemplate->pagination = $tfPagination->renderPaginationControl();
 
 // Set offset and limit.
 if ($cleanStart) $criteria->setOffset($cleanStart);

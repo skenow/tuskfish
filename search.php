@@ -74,7 +74,7 @@ if ($cleanOp && $cleanTerms && $searchType) {
             'searchType' => $searchType,
             'query' => $cleanTerms);
         $tfPagination->setExtraParams($queryParameters);
-        $tfTemplate->pagination = $tfPagination->getPaginationControl();
+        $tfTemplate->pagination = $tfPagination->renderPaginationControl();
     } else {
         $tfTemplate->searchResults = false;
     }

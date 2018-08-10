@@ -440,7 +440,7 @@ if (in_array($op, $optionsWhitelist)) {
                         $tfPagination->setStart($cleanStart);
                         $tfPagination->setTag(0);
                         $tfPagination->setExtraParams(array('id' => $cleanId));
-                        $tfTemplate->collectionPagination = $tfPagination->getPaginationControl();
+                        $tfTemplate->collectionPagination = $tfPagination->renderPaginationControl();
 
                         // Retrieve content objects and assign to template.
                         $firstChildren = $contentHandler->getObjects($criteria);
@@ -515,7 +515,7 @@ if (in_array($op, $optionsWhitelist)) {
             $tfPagination->setStart($cleanStart);
             $tfPagination->setTag($cleanTag);
             $tfPagination->setExtraParams($extraParams);
-            $tfTemplate->pagination = $tfPagination->getPaginationControl();
+            $tfTemplate->pagination = $tfPagination->renderPaginationControl();
 
             // Prepare select filters.
             $tagHandler = $contentHandlerFactory->getHandler('tag');
