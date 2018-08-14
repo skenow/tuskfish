@@ -80,7 +80,7 @@ if ($cleanId) {
         $criteria->setOffset($cleanStart);
     
     $criteria->setLimit($tfPreference->userPagination);
-    $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+    $criteria->add($tfCriteriaFactory->getItem('online', 1));
 
     // Prepare pagination control.
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);

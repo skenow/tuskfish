@@ -26,7 +26,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 // Lock handler to videos.
 $contentHandler = $contentHandlerFactory->getHandler('content');
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfVideo'));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfVideo'));
 
 // Configure page.
 $tfTemplate->pageTitle = TFISH_TYPE_VIDEOS;

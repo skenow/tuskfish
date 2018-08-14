@@ -161,7 +161,7 @@ if (in_array($op, $optionsWhitelist)) {
                 
                 if ($tfValidator->isInt($cleanId, 1)) {
                     $criteria = $tfCriteriaFactory->getCriteria();
-                    $criteria->add(new TfCriteriaItem($tfValidator, 'id', $cleanId));
+                    $criteria->add($tfCriteriaFactory->getItem('id', $cleanId));
                     $statement = $tfDatabase->select('content', $criteria);
                     
                     if (!$statement) {
@@ -413,8 +413,8 @@ if (in_array($op, $optionsWhitelist)) {
                     // If object is a collection check if has child objects; if so display
                     // thumbnails and teasers / links.
                     if ($content->type === 'TfCollection') {
-                        $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
-                        $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+                        $criteria->add($tfCriteriaFactory->getItem('parent', $content->id));
+                        $criteria->add($tfCriteriaFactory->getItem('online', 1));
                         
                         if ($cleanStart) $criteria->setOffset($cleanStart);
                         
@@ -428,7 +428,7 @@ if (in_array($op, $optionsWhitelist)) {
                         
                         $criteria->setLimit($tfPreference->userPagination);
                         $criteria->setTag(array($content->id));
-                        $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+                        $criteria->add($tfCriteriaFactory->getItem('online', 1));
                     }
 
                     // Prepare pagination control.
@@ -467,12 +467,12 @@ if (in_array($op, $optionsWhitelist)) {
             if ($cleanTag) $criteria->setTag(array($cleanTag));
             
             if ($tfValidator->isInt($cleanOnline, 0, 1)) {
-                $criteria->add(new TfCriteriaItem($tfValidator, 'online', $cleanOnline));
+                $criteria->add($tfCriteriaFactory->getItem('online', $cleanOnline));
             }
             
             if ($cleanType) {
                 if (array_key_exists($cleanType, $contentHandler->getTypes())) {
-                    $criteria->add(new TfCriteriaItem($tfValidator, 'type', $cleanType));
+                    $criteria->add($tfCriteriaFactory->getItem('type', $cleanType));
                 } else {
                     trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
                 }

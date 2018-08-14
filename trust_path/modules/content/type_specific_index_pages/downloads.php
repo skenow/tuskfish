@@ -27,7 +27,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 // Lock handler to downloads.
 $contentHandler = $contentHandlerFactory->getHandler('content');
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfDownload'));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfDownload'));
 
 // Configure page.
 $tfTemplate->pageTitle = TFISH_TYPE_DOWNLOADS;
@@ -123,7 +123,7 @@ if ($cleanId) {
     if ($cleanTag)
         $criteria->setTag(array($cleanTag));
     
-    $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+    $criteria->add($tfCriteriaFactory->getItem('online', 1));
 
     // Prepare pagination control.
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);

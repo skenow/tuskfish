@@ -44,19 +44,19 @@ $cleanType = isset($_GET['type']) && !empty($_GET['type'])
 
 // Select content objects where the image field is not null or empty.
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'image', '', '<>'));
+$criteria->add($tfCriteriaFactory->getItem('image', '', '<>'));
 
 // Optional selection criteria.
 if ($cleanTag)
     $criteria->setTag(array($cleanTag));
 
 if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
-    $criteria->add(new TfCriteriaItem($tfValidator, 'online', $cleanOnline));
+    $criteria->add($tfCriteriaFactory->getItem('online', $cleanOnline));
 }
 
 if ($cleanType) {
     if (array_key_exists($cleanType, $contentHandler->getTypes())) {
-        $criteria->add(new TfCriteriaItem($tfValidator, 'type', $cleanType));
+        $criteria->add($tfCriteriaFactory->getItem('type', $cleanType));
     } else {
         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
     }

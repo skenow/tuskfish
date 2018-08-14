@@ -37,16 +37,16 @@ $sitemap = '';
 
 // Get the IDs of all online objects (and offline tags), but not blocks.
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
-$criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfBlock', '!='));
+$criteria->add($tfCriteriaFactory->getItem('online', 1));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
 $contentIds = $contentHandler->getListOfTitles($criteria);
 
 // Need to do tags marked as offline, also, as these are not actually offline.
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag'));
-$criteria->add(new TfCriteriaItem($tfValidator, 'online', 0));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfTag'));
+$criteria->add($tfCriteriaFactory->getItem('online', 0));
 $criteria->setOrder('id');
 $criteria->setOrderType('ASC');
 $offlineTagIds = $contentHandler->getListOfTitles($criteria);

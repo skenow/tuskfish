@@ -77,8 +77,8 @@ if ($cleanId) {
 
         // Check if has child objects; if so display thumbnails and teasers / links.
         $criteria = $tfCriteriaFactory->getCriteria();
-        $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
-        $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+        $criteria->add($tfCriteriaFactory->getItem('parent', $content->id));
+        $criteria->add($tfCriteriaFactory->getItem('online', 1));
         if ($cleanStart) {
             $criteria->setOffset($cleanStart);
         }

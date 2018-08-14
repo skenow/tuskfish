@@ -117,8 +117,8 @@ if ($cleanId) {
 
         // If object is a collection check if has child objects; if so display teasers / links.
         if ($content->type === 'TfCollection') {
-            $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
-            $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+            $criteria->add($tfCriteriaFactory->getItem('parent', $content->id));
+            $criteria->add($tfCriteriaFactory->getItem('online', 1));
             
             if ($cleanStart) $criteria->setOffset($cleanStart);
             
@@ -131,8 +131,8 @@ if ($cleanId) {
             
             $criteria->setLimit($tfPreference->userPagination);
             $criteria->setTag(array($content->id));
-            $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
-            $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+            $criteria->add($tfCriteriaFactory->getItem('type', 'TfBlock', '!='));
+            $criteria->add($tfCriteriaFactory->getItem('online', 1));
         }
 
         // Prepare pagination control.        
@@ -177,10 +177,10 @@ if ($cleanId) {
     
     if ($cleanTag) $criteria->setTag(array($cleanTag));
     
-    $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag', '!='));
-    $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfStatic', '!='));
-    $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
-    $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+    $criteria->add($tfCriteriaFactory->getItem('type', 'TfTag', '!='));
+    $criteria->add($tfCriteriaFactory->getItem('type', 'TfStatic', '!='));
+    $criteria->add($tfCriteriaFactory->getItem('type', 'TfBlock', '!='));
+    $criteria->add($tfCriteriaFactory->getItem('online', 1));
 
     // Prepare pagination control.
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);

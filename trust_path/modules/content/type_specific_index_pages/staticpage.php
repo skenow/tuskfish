@@ -28,7 +28,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 // Lock handler to static pages.
 $contentHandler = $contentHandlerFactory->getHandler('content');
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfStatic'));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfStatic'));
 
 ////////// CONFIGURATION //////////
 // 1. Enter the ID of the content object you want to display on this page.
@@ -112,8 +112,8 @@ if ($cleanId) {
 
         // If object is a collection check if has child objects; if so display teasers / links.
         if ($content->type === 'TfCollection') {
-            $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $content->id));
-            $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+            $criteria->add($tfCriteriaFactory->getItem('parent', $content->id));
+            $criteria->add($tfCriteriaFactory->getItem('online', 1));
             
             if ($cleanStart) $criteria->setOffset($cleanStart);
             
@@ -126,8 +126,8 @@ if ($cleanId) {
             
             $criteria->setLimit($tfPreference->userPagination);
             $criteria->setTag(array($content->id));
-            $criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
-            $criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+            $criteria->add($tfCriteriaFactory->getItem('type', 'TfBlock', '!='));
+            $criteria->add($tfCriteriaFactory->getItem('online', 1));
         }
         
         // Prepare pagination control.

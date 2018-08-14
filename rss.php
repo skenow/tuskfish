@@ -64,15 +64,15 @@ if ($cleanId) {
     
     if ($collection && $tfValidator->isObject($collection)) {
         $rss->makeFeedForCollection($collection);
-        $criteria->add(new TfCriteriaItem($tfValidator, 'parent', $cleanId));
+        $criteria->add($tfCriteriaFactory->getItem('parent', $cleanId));
     }
 }
 
 // Do not allow tags, blocks or offline content objects to show in the feed.
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfTag', '!='));
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfBlock', '!='));
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfStatic', '!='));
-$criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfTag', '!='));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfBlock', '!='));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfStatic', '!='));
+$criteria->add($tfCriteriaFactory->getItem('online', 1));
 $contentObjects = $contentHandler->getObjects($criteria);
 
 // Assign to template. Note that timestamps will be converted to UTC based on server timezone.

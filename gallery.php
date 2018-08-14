@@ -43,9 +43,9 @@ $cleanType = isset($_GET['type']) && !empty($_GET['type'])
 
 // Select image objects where the image field is not null or empty.
 $criteria = $tfCriteriaFactory->getCriteria();
-$criteria->add(new TfCriteriaItem($tfValidator, 'type', 'TfImage'));
-$criteria->add(new TfCriteriaItem($tfValidator, 'image', '', '<>'));
-$criteria->add(new TfCriteriaItem($tfValidator, 'online', 1));
+$criteria->add($tfCriteriaFactory->getItem('type', 'TfImage'));
+$criteria->add($tfCriteriaFactory->getItem('image', '', '<>'));
+$criteria->add($tfCriteriaFactory->getItem('online', 1));
 
 // Optional selection criteria.
 if ($cleanTag)
@@ -53,7 +53,7 @@ if ($cleanTag)
 
 if ($cleanType) {
     if (array_key_exists($cleanType, $contentHandler->getTypes())) {
-        $criteria->add(new TfCriteriaItem($tfValidator, 'type', $cleanType));
+        $criteria->add($tfCriteriaFactory->getItem('type', $cleanType));
     } else {
         trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
     }
