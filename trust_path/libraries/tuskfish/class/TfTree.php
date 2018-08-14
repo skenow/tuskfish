@@ -30,7 +30,7 @@
 // ------------------------------------------------------------------------- //
 
 /**
- * TfAngryTree class file.
+ * TfTree class file.
  * 
  * @copyright   XOOPS.org (https://xoops.org) 2000
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -52,8 +52,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * content objects in their own right. Pass in an array of collection objects; you can choose to
  * pass in all collection objects or you can pass in a branch, in which case the tree will just
  * consist of descendants of the root node.
- * 
- * As for the name, don't ask.
  *
  * @copyright   http://smartfactory.ca The SmartFactory
  * @license     http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License (GPL)
@@ -71,7 +69,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var object $_tree Associative array that comprises the category tree.
  * 
  */
-class TfAngryTree
+class TfTree
 {
     
     private $_objects;

@@ -88,7 +88,7 @@ if (in_array($op, $optionsWhitelist)) {
             // Make a parent tree select box options.
             $collectionHandler = $contentHandlerFactory->getHandler('collection');
             $collections = $collectionHandler->getObjects();
-            $parentTree = new TfAngryTree($collections, 'id', 'parent');
+            $parentTree = new TfTree($collections, 'id', 'parent');
             $tfTemplate->parentSelectOptions = $parentTree->makeParentSelectBox();
 
             $tfTemplate->allowedProperties = $content->getPropertyWhitelist();
@@ -173,7 +173,7 @@ if (in_array($op, $optionsWhitelist)) {
                     // Make a parent tree select box options.
                     $collectionHandler = $contentHandlerFactory->getHandler('collection');
                     $collections = $collectionHandler->getObjects();
-                    $parentTree = new TfAngryTree($collections, 'id', 'parent');
+                    $parentTree = new TfTree($collections, 'id', 'parent');
                     
                     // Build the content object.
                     $content = $contentHandler->convertRowToObject($row, false);
