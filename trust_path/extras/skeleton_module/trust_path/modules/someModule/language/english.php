@@ -10,5 +10,7 @@
  * @since       1.0
  * @package     language
  */
+declare(strict_types=1);
+
 // Divide your constants into logical sections separated by comments
 define("TFISH_MODULENAME_SOMECONSTANT", "Some word or sentence.");
