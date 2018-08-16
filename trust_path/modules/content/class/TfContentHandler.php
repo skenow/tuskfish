@@ -417,7 +417,6 @@ class TfContentHandler
             $criteria = $this->criteriaFactory->getCriteria();
         }
         
-        $criteria->setLimit(0);
         $count = $this->db->selectCount('content', $criteria);
 
         return $count;

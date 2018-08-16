@@ -217,7 +217,8 @@ class TfPaginationControl
      */
     public function setCount($count)
     {
-        $this->count = $this->validator->isInt($count, 1) ? (int) $count : 0;
+        $cleanCount = (int) $count;
+        $this->count = $this->validator->isInt($cleanCount, 0) ? $cleanCount : 0;
     }
     
     /**
@@ -228,7 +229,8 @@ class TfPaginationControl
      */
     public function setLimit(int $limit)
     {
-        $this->limit = $this->validator->isInt($limit, 1) ? (int) $limit : 0;
+        $cleanLimit = (int) $limit;
+        $this->limit = $this->validator->isInt($cleanLimit, 0) ? $cleanLimit : 0;
     }
     
     /**
@@ -250,7 +252,8 @@ class TfPaginationControl
      */
     public function setStart(int $start)
     {
-        $this->start = $this->validator->isInt($start, 0) ? (int) $start : 0;
+        $cleanStart = (int) $start;
+        $this->start = $this->validator->isInt($cleanStart, 0) ? $cleanStart : 0;
     }
     
     /**
@@ -260,7 +263,8 @@ class TfPaginationControl
      */
     public function setTag(int $tag)
     {
-        $this->tag = $this->validator->isInt($tag, 0) ? (int) $tag : 0;
+        $cleanTag = (int) $tag;
+        $this->tag = $this->validator->isInt($cleanTag, 0) ? $cleanTag : 0;
     }
     
     /**
@@ -268,7 +272,7 @@ class TfPaginationControl
      * 
      * $extraParams is a potential XSS attack vector.
      * The key => value pairs be i) rawurlencoded and ii) entity escaped. However, in order to
-     * avoid messing up the query and avoid unecessary decoding it is possible to maintain
+     * avoid messing up the query and avoid unnecessary decoding it is possible to maintain
      * manual control over the operators. (Basically, input requiring encoding or escaping is
      * absolutely not wanted here, it is just being conducted to mitigate XSS attacks). If you
      * actually *want* to use such input (check your sanity), you will need to decode it prior to
