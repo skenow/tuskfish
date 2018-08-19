@@ -1,0 +1,48 @@
+<?php declare(strict_types=1); ?>
+
+<div class="form-buttons clearfix">
+  <form method="post">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <input type="hidden" name="op" value="add">
+    <button class="btn btn-primary float-left add-content" type="submit" formaction="sensor.php"><?php echo TFISH_MACHINE_ADD; ?></button>
+  </form>
+</div>
+
+<div class="clearfix">
+<table class="table table-bordered table-striped table-hover text-left">
+  <thead>
+    <tr>
+      <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_ID; ?></th>
+      <th><?php echo TFISH_TYPE; ?></th>
+      <th><?php echo TFISH_TITLE; ?></th>
+      <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_SUBMISSION_TIME; ?></th>
+      <th class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo TFISH_COUNTER; ?></th>
+      <th class="text-center"><?php echo TFISH_ONLINE; ?></th>
+      <th colspan="2" class="text-center"><?php echo TFISH_ACTION; ?></th>
+    </tr>
+    </thead>
+  <tbody>
+  <?php if (isset($rows)):
+    foreach($rows as &$row): ?>
+    <tr>
+      <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['id']); ?></td>
+      <td><?php echo $tfValidator->escapeForXss($typelist[$row['type']]); ?></td>
+      <td><a href="<?php echo TFISH_ADMIN_URL . 'sensor.php?op=view&amp;id=' . $tfValidator->escapeForXss($row['id']); ?>"><?php echo $tfValidator->escapeForXss($row['title']); ?></a></td>
+      <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['submissionTime']); ?></td>
+      <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['counter']); ?></td>
+      <?php if ($row['online']): ?>
+      <td class="text-center"><a class="text-success" href="sensor.php?op=toggle&amp;id=<?php echo $tfValidator->escapeForXss($row['id']); ?>"><i class="fas fa-check"></i></a></td>
+      <?php else: ?>
+      <td class="text-center"><a class="text-danger" href="sensor.php?op=toggle&amp;id=<?php echo $tfValidator->escapeForXss($row['id']); ?>"><i class="fas fa-times"></i></a></td>
+      <?php endif; ?>
+      <td class="text-center"><a href="sensor.php?op=edit&amp;id=<?php echo $tfValidator->escapeForXss($row['id']); ?>"><i class="fas fa-edit"></i></a></td>
+      <td class="text-center"><a href="sensor.php?op=confirmDelete&amp;id=<?php echo $tfValidator->escapeForXss($row['id']); ?>"><i class="fas fa-trash-alt"></i></a></td>
+      <?php unset($row); ?>
+    </tr>
+  <?php
+    endforeach;
+    endif;
+  ?>
+  </tbody>
+</table>
+</div>

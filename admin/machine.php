@@ -39,7 +39,80 @@ if (!in_array($op, $optionsWhitelist, true)) {
 
 // Business logic goes here.
 switch ($op) {
-    // Various cases.
+    default:
+        $criteria = $tfCriteriaFactory->getCriteria();
+
+        if ($cleanTag) $criteria->setTag(array($cleanTag));
+
+        if ($tfValidator->isInt($cleanOnline, 0, 1)) {
+            $criteria->add($tfCriteriaFactory->getItem('online', $cleanOnline));
+        }
+
+        /*if ($cleanType) {
+            if (array_key_exists($cleanType, $contentHandler->getTypes())) {
+                $criteria->add($tfCriteriaFactory->getItem('type', $cleanType));
+            } else {
+                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+            }
+        }*/
+
+        // Other criteria.
+        $criteria->setOffset($cleanStart);
+        $criteria->setLimit($tfPreference->adminPagination);
+        $criteria->setOrder('submissionTime');
+        $criteria->setOrderType('DESC');
+        $columns = array('id', 'type', 'title', 'submissionTime', 'counter', 'online');
+        $result = $tfDatabase->select('content', $criteria, $columns);
+
+        if ($result) {
+            $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+
+        foreach ($rows as &$row) {
+            $row['submissionTime']
+                    = date($tfPreference->dateFormat, (int) $row['submissionTime']);
+        }
+
+        $typelist = $machineHandler->getTypes();
+
+        // Pagination control.
+        $extraParams = array();
+        if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
+            $extraParams['online'] = $cleanOnline;
+        }
+        if (isset($cleanType) && !empty($cleanType)) {
+            $extraParams['type'] = $cleanType;
+        }
+
+        $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $tfPagination->setUrl('machine');
+        $tfPagination->setCount($tfDatabase->selectCount('machine', $criteria));
+        $tfPagination->setLimit($tfPreference->adminPagination);
+        $tfPagination->setStart($cleanStart);
+        $tfPagination->setTag($cleanTag);
+        $tfPagination->setExtraParams($extraParams);
+        $tfTemplate->pagination = $tfPagination->renderPaginationControl();
+
+        // Prepare select filters.
+        $tagHandler = $contentHandlerFactory->getHandler('tag');
+        $tagSelectBox = $tagHandler->getTagSelectBox($cleanTag);
+        $typeSelectBox = $contentHandler->getTypeSelectBox($cleanType);
+        $onlineSelectBox = $contentHandler->getOnlineSelectBox($cleanOnline);
+        $tfTemplate->selectAction = 'admin.php';
+        $tfTemplate->tagSelect = $tagSelectBox;
+        $tfTemplate->typeSelect = $typeSelectBox;
+        $tfTemplate->onlineSelect = $onlineSelectBox;
+        $tfTemplate->selectFiltersForm = $tfTemplate->render('adminSelectFilters');
+
+        // Assign to template.
+        $tfTemplate->pageTitle = TFISH_CURRENT_CONTENT;
+        $tfTemplate->rows = $rows;
+        $tfTemplate->typelist = $contentHandler->getTypes();
+        $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . "contentTable.html";
+        $tfTemplate->tfMainContent = $tfTemplate->render('form');
+        break;
 }
 
 /**

@@ -13,9 +13,29 @@
  * @since       1.0
  * @package     language
  */
+// System wide and generic constants.
 define("TFISH_TUSKFISH", "Tuskfish");
 define("TFISH_CMS", "Tuskfish CMS");
 define("TFISH_WELCOME", "Welcome to Tuskfish CMS");
+define("TFISH_ID", "ID");
+define("TFISH_TYPE", "Type");
+define("TFISH_TITLE", "Title");
+define("TFISH_TEASER", "Teaser");
+define("TFISH_DESCRIPTION", "Description");
+define("TFISH_FILE_SIZE", "Bytes");
+define("TFISH_DATE", "Date");
+define("TFISH_ONLINE_STATUS", "Status");
+define("TFISH_ONLINE", "Online");
+define("TFISH_OFFLINE", "Offline");
+define("TFISH_TAGS", "Tags");
+define("TFISH_SUBMISSION_TIME", "Submitted");
+define("TFISH_LAST_UPDATED", "Last updated");
+define("TFISH_EXPIRES_ON", "Expires on");
+define("TFISH_COUNTER", "Counter");
+define("TFISH_VIEWS", "views"); // Alternative representation of counter (type-dependent context).
+define("TFISH_META_TITLE", "Title");
+define("TFISH_META_DESCRIPTION", "Description");
+define("TFISH_SEO", "SEO");
 
 // admin/login.php
 define("TFISH_LOGIN", "Login");

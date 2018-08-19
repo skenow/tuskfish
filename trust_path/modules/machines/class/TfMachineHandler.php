@@ -1,35 +1,30 @@
 <?php
 
 /**
- * ClassName class file.
+ * TfMachineHandler class file.
  * 
- * @copyright   Your name 2018+(https://yoursite.com)
+ * @copyright   Simon Wilkinson 2018+(https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
- * @author      Your name <you@email.com>
+ * @author      Simon Wilkinson <simon@tuskfish.biz>
  * @version     Release: 1.0
  * @since       1.0
- * @package     packageName
+ * @package     machines
  */
-
-// Enable strict type declaration.
 declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Brief class description.
- * 
- * Extended class description.
+ * Manipulates remote machine objects (TfMachine), typically Internet of Things devices.
  *
- * @copyright   Your name 2018+ (https://yoursite.com)
+ * @copyright   Simon Wilkinson 2018+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
- * @author      Your name <you@email.com>
+ * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.0
- * @package     core
+ * @package     machines
  */
-
-class someClassHandler
+class TfMachineHandler
 {
     
 }

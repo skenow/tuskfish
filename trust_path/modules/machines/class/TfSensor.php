@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TfMachine class file.
+ * TfSensor class file.
  * 
  * @copyright   Simon Wilkinson 2018+(https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -10,12 +10,14 @@
  * @since       1.0
  * @package     machines
  */
+
+// Enable strict type declaration.
 declare(strict_types=1);
 
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Represents a remote machine with one or more sensors that logs data to Tuskfish.
+ * Represents a remote sensor that collects data, typically an Internet of Things device.
  *
  * @copyright   Simon Wilkinson 2018+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -24,40 +26,38 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @since       1.0
  * @package     machines
  */
-class TfMachine
+class TfSensor
 {
     
     use TfMagicMethods;
     
     protected $validator;
     protected $id = '';
+    protected $type = '';
+    protected $protocol = '';
     protected $title = '';
     protected $teaser = '';
     protected $description = '';
-    protected $latitude = '';
-    protected $longitude = '';
     protected $parent = '';
-    protected $tags = '';
     protected $online = '';
     protected $submissionTime = '';
     protected $lastUpdated = '';
     protected $counter = '';
-    protected $key = '';
     protected $metaTitle = '';
     protected $metaDescription = '';
     protected $seo = '';
-    protected $handler = 'TfMachineHandler';
-    protected $template = 'machine';
+    protected $handler = 'TfSensorHandler';
+    protected $template = 'sensor';
     protected $module = 'machines';
     protected $icon = '';
     
     public function __construct(TfValidator $validator)
     {
-        if (!is_a($validator, 'TfValidator')) {
+        if (is_a($validator, 'TfValidator')) {
+            $this->validator = $validator;
+        } else {
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
-        
-        $this->validator = $validator;
     }
     
     /**
@@ -75,15 +75,15 @@ class TfMachine
     }
     
     /**
-     * Set the type of machine.
+     * Set the type of sensor.
      * 
-     * Type must be the name of a machine subclass.
+     * Type must be the name of a sensor subclass.
      * 
-     * @param string $type Class name for this machine.
+     * @param string $type Class name for this sensor.
      */
     public function setType(string $type)
     {
-        $cleanType = (string) $this->validator->trimString($type);
+        $cleanType = $this->validator->trimString($type);
 
         if ($this->validator->isAlpha($cleanType)) {
             $this->type = $cleanType;
@@ -93,7 +93,22 @@ class TfMachine
     }
     
     /**
-     * Set the title of this machine.
+     * Set the protocol that this sensor speaks.
+     * 
+     * @param string $protocol The data prototol the sensor responds in.
+     */
+    public function setProtocol(string $protocol)
+    {
+        $cleanProtocol = $this->validator->trimString($protocol);
+        if ($this->validator->isAlpha($cleanProtocol)) {
+            $this->protocol = $cleanProtocol;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Set the title of this sensor.
      * 
      * @param string $title Title of this object.
      */
@@ -103,7 +118,7 @@ class TfMachine
     }
     
     /**
-     * Set the teaser (short form description) for this machine.(HTML).
+     * Set the teaser (short form description) for this sensor.(HTML).
      * 
      * @param string $teaser Teaser (in HTML).
      */
@@ -125,41 +140,9 @@ class TfMachine
     }
     
     /**
-     * Set the latitude coordinate of this machine.
-     * 
-     * @param float $latitude Latitude bounded by +/- 90 degrees.
-     */
-    public function setLatitude (float $latitude)
-    {
-        $cleanLatitude = (float) $latitude;
-        
-        if ($cleanLatitude <= 90.0 && $cleanLatitude >= -90.0) {
-            $this->latitude = $cleanLatitude;
-        } else {
-            trigger_error(TFISH_ERROR_BAD_LATITUDE, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the longitudinal coordinate of this machine.
-     * 
-     * @param float $longitude Longitude bounded by +/180 degrees.
-     */
-    public function setLongitude(float $longitude)
-    {
-        $cleanLongitude = (float) $longitude;
-        
-        if ($cleanLongitude <= 180.0 && $cleanLongitude >= -180.0) {
-            $this->longitude = $cleanLongitude;
-        } else {
-            trigger_error(TFISH_ERROR_BAD_LONGITUDE, E_USER_ERROR);
-        }
-    }
-    
-    /**
      * Set the ID of the parent for this object (must be a collection).
      * 
-     * Parent ID must be different to machine ID (cannot declare self as parent).
+     * Parent ID must be different to sensor ID (cannot declare self as parent).
      * 
      * @param int $parent ID of parent object.
      */
@@ -177,34 +160,7 @@ class TfMachine
     }
     
     /**
-     * Set the tags associated with this machine.
-     * 
-     * @param array $tags IDs of associated tags.
-     */
-    public function setTags(array $tags)
-    {
-        if ($this->validator->isArray($tags)) {
-            $cleanTags = array();
-
-            foreach ($tags as $tag) {
-                $cleanTag = (int) $tag;
-
-                if ($this->validator->isInt($cleanTag, 1)) {
-                    $cleanTags[] = $cleanTag;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                }
-                unset($cleanTag);
-            }
-
-            $this->tags = $cleanTags;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set this machine as online (1) or offline (0).
+     * Set this sensor as online (1) or offline (0).
      * 
      * Offline objects are not displayed on the front end or returned in search results.
      * 
@@ -220,7 +176,7 @@ class TfMachine
     }
     
     /**
-     * Set the submission time for this machine (timestamp).
+     * Set the submission time for this sensor (timestamp).
      * 
      * @param int $submissionTime Timestamp.
      */
@@ -234,7 +190,7 @@ class TfMachine
     }
     
     /**
-     * Set the last updated time for this machine (timestamp).
+     * Set the last updated time for this sensor (timestamp).
      * 
      * @param int $lastUpdated Timestamp.
      */
@@ -247,13 +203,8 @@ class TfMachine
         }
     }
     
-    public function setKey(string $key)
-    {
-        $this->key = $this->validator->trimString($key);
-    }
-    
     /**
-     * Set the view counter for this machine.
+     * Set the view counter for this sensor.
      * 
      * @param int $counter Counter value.
      */
@@ -277,7 +228,7 @@ class TfMachine
     }
     
     /**
-     * Set the meta description for this machine.
+     * Set the meta description for this sensor.
      * 
      * @param string $metaDescription Meta description of this object.
      */
@@ -287,7 +238,7 @@ class TfMachine
     }
     
     /**
-     * Set the SEO-friendly search string for this machine.
+     * Set the SEO-friendly search string for this sensor.
      * 
      * The SEO string will be appended to the URL for this object.
      * 
@@ -301,7 +252,7 @@ class TfMachine
     }
     
     /**
-     * Set the handler class for this machine type.
+     * Set the handler class for this sensor type.
      * 
      * @param string $handler Handler name (alphabetical characters only).f
      */
@@ -317,7 +268,7 @@ class TfMachine
     }
     
     /**
-     * Set the template file for displaying this machine.
+     * Set the template file for displaying this sensor.
      * 
      * The equivalent HTML template file must be present in the active theme.
      * 
@@ -335,9 +286,9 @@ class TfMachine
     }
     
     /**
-     * Set the module for this machine.
+     * Set the module for this sensor.
      * 
-     * Usually handled by the machine's constructor.
+     * Usually handled by the sensor's constructor.
      * 
      * @param string $module Module name (alphabetical characters only).
      */
@@ -351,7 +302,7 @@ class TfMachine
     }
     
     /**
-     * Set the icon for this machine.
+     * Set the icon for this sensor.
      * 
      * This is a HTML field.
      * 
@@ -362,4 +313,5 @@ class TfMachine
         $icon = $this->validator->trimString($icon);
         $this->icon = $this->validator->filterHtml($icon);
     }
+        
 }

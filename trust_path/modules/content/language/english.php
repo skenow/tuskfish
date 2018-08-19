@@ -43,36 +43,17 @@ define("TFISH_TYPE_STATIC_PAGES", "Static pages");
 define("TFISH_TYPE_TAGS", "Tags");
 define("TFISH_TYPE_VIDEOS", "Videos");
 
-// Base content object properties.
-define("TFISH_ID", "ID");
-define("TFISH_TYPE", "Type");
-define("TFISH_TITLE", "Title");
-define("TFISH_TEASER", "Teaser");
-define("TFISH_DESCRIPTION", "Description");
+// Base content object properties. Some reusable terms are defined in the Tuskfish language file.
 define("TFISH_FORMAT", "Format");
-define("TFISH_FILE_SIZE", "Bytes");
 define("TFISH_CREATOR", "Author");
 define("TFISH_IMAGE", "Image");
 define("TFISH_CAPTION", "Caption");
 define("TFISH_MEDIA", "Media");
 define("TFISH_SELECT_FILE", "Select file for upload");
-define("TFISH_DATE", "Date");
 define("TFISH_PARENT", "Parent");
 define("TFISH_LANGUAGE", "Language");
 define("TFISH_RIGHTS", "Rights");
 define("TFISH_PUBLISHER", "Publisher");
-define("TFISH_TAGS", "Tags");
-define("TFISH_ONLINE_STATUS", "Status");
-define("TFISH_ONLINE", "Online");
-define("TFISH_OFFLINE", "Offline");
-define("TFISH_SUBMISSION_TIME", "Submitted");
-define("TFISH_LAST_UPDATED", "Last updated");
-define("TFISH_EXPIRES_ON", "Expires on");
-define("TFISH_COUNTER", "Counter");
-define("TFISH_VIEWS", "views"); // Alternative representation of counter (type-dependent context).
-define("TFISH_META_TITLE", "Title");
-define("TFISH_META_DESCRIPTION", "Description");
-define("TFISH_SEO", "SEO");
 define("TFISH_DELETE_IMAGE", "Delete");
 define("TFISH_DELETE_MEDIA", "Delete");
 

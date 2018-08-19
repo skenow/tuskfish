@@ -1,0 +1,133 @@
+<?php declare(strict_types=1); ?>
+
+<form class="form-horizontal" action="machine.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
+    
+    <div class="row">
+        
+        <!-- ID -->
+        <input type="hidden" name="id" value="<?php echo $tfValidator->escapeForXss($content->id); ?>">
+        
+        <!-- Type -->
+        <div class="col-md-6 col-lg-4 mb-3 text-left" id="typeContainer">
+          <label for="type"><strong><?php echo TFISH_MACHINE_TYPE; ?></strong></label>
+          <select class="form-control custom-select" name="type" id="type" required>
+                <?php
+                  foreach ($contentTypes as $key => $type) {
+                      if ($content->type === $key) {
+                          echo '<option value="' . $tfValidator->escapeForXss($key) . '" selected>' . $tfValidator->escapeForXss($type) . '</option>';
+                      } else {
+                          echo '<option value="' . $tfValidator->escapeForXss($key) . '">' . $tfValidator->escapeForXss($type) . '</option>';
+                      }
+                  }
+                ?>
+          </select>
+        </div>S
+
+        <!-- Tags -->
+        <div class="col-md-6 col-lg-4 mb-3 text-left" id="tagsContainer" name="tagsContainer">
+            <label for="tags"><strong><?php echo TFISH_TAGS; ?></strong></label>
+            <select multiple class="form-control custom-select" size="5" name="tags[]" id="tags">
+                <?php
+                    foreach ($tags as $tagId => $tagTitle) {
+                        if (isset($content->tags) && in_array($tagId, $content->tags, true)) {
+                            echo '<option value="' . $tfValidator->escapeForXss($tagId) . '" selected>' . $tfValidator->escapeForXss($tagTitle) . '</option>';
+                        } else {
+                            echo '<option value="' . $tfValidator->escapeForXss($tagId) . '">' . $tfValidator->escapeForXss($tagTitle) . '</option>';
+                        }
+                    }
+                ?>
+            </select>
+        </div>
+
+        <!-- Title -->
+        <div class="col-12 mb-3 text-left" id="titleContainer">
+            <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
+            <input type="text" class="form-control" name="title" id="title" <?php if (isset($content->title)) echo 'value="' . $tfValidator->escapeForXss($content->title) . '"'; ?>>
+        </div>
+
+        <!-- Teaser -->
+        <div class="col-12 mb-3 text-left" id="teaserContainer">
+            <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
+            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($content->teaser)) { echo $content->escapeForXss('teaser', true); } ?></textarea>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12 mb-3 text-left" id="descriptionContainer">
+            <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
+            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($content->description)) { echo $content->escapeForXss('description', true); } ?></textarea>
+        </div>
+        
+        <!-- Parent -->
+        <div class="col-12 mb-3 text-left" id="parentContainer">
+            <label for="publisher"><strong><?php echo TFISH_PARENT; ?></strong></label>
+            <select class="form-control custom-select" name="parent" id="parent" required>
+            <?php foreach ($parentSelectOptions as $key => $option): ?>
+                <?php if ($key === $content->id): ?>
+                    <option value="<?php echo $key; ?>" disabled><?php echo $tfValidator->escapeForXss($option); ?></option>
+                <?php elseif ($key === $content->parent): ?>
+                    <option value="<?php echo $key; ?>" selected><?php echo $tfValidator->escapeForXss($option); ?></option>
+                <?php else: ?>
+                    <option value="<?php echo $key; ?>"><?php echo $tfValidator->escapeForXss($option); ?></option>
+                <?php endif; ?> 
+            <?php endforeach; ?>
+            </select>
+        </div>
+
+        <!-- Online status -->
+        <div class="col-md-6 mb-3 text-left" id="onlineContainer">
+            <p><strong><?php echo TFISH_ONLINE_STATUS; ?></strong></p>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="online" name="online" value="1" class="custom-control-input" <?php if ($content->online) { echo 'checked="checked"'; } ?> required>
+                <label class="custom-control-label" for="online"><?php echo TFISH_ONLINE; ?></label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="offline" name="online" value="0" class="custom-control-input" <?php if (!$content->online) { echo 'checked="checked"'; } ?> required>
+                <label class="custom-control-label" for="offline"><?php echo TFISH_OFFLINE; ?></label>
+            </div>
+        </div>
+        
+        <!-- Counter -->
+        <?php if ($content->counter): ?>
+        <input type="hidden" id="counter" name="counter" value="<?php echo $tfValidator->escapeForXss($content->counter); ?>" />
+        <?php endif; ?>
+        
+        <div class="col-md-12" id="metaHeader">
+            <h2><?php echo TFISH_META_TAGS; ?><h2>
+            <hr>
+        </div>
+
+        <!-- Meta title -->
+        <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
+            <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
+            <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($content->metaTitle)) { echo 'value="' . $tfValidator->escapeForXss($content->metaTitle) . '"'; } ?>>
+        </div>
+
+        <!-- SEO -->
+        <div class="col-md-6 mb-3 text-left" id="seoContainer">
+            <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
+            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $tfValidator->escapeForXss($content->seo) . '"'; } ?>>
+        </div>
+
+        <!-- Meta description -->
+        <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
+            <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
+            <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($content->metaDescription)) { echo 'value="' . $tfValidator->escapeForXss($content->metaDescription) . '"'; } ?>>
+        </div>
+    
+    </div> <!-- /row -->
+
+    <!-- Action buttons -->
+    <div class="float-left clearfix">
+        <button class="btn btn-primary" onclick="this.form.elements.op.value = '<?php echo $tfValidator->escapeForXss($op); ?>';
+                submit()"><?php echo $tfValidator->escapeForXss($action); ?></button>
+        <button class="btn btn-primary" onclick="this.form.elements.op.value = '';
+                submit()" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+    </div>
+    
+    <!-- Note that the default $op value MUST be passed in by the controller. It can be modified onChange of the type select box -->
+    <input type="hidden" name="op" id="op" value="<?php echo $op; ?>" />
+    
+    <!-- CSRF validation token -->
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+
+    </form>
