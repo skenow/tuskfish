@@ -32,11 +32,14 @@ define("TFISH_MACHINE_COAP", "COaP");
 
 // Actions.
 define("TFISH_MACHINE_ADD", "Add");
+define("TFISH_SENSOR_EDIT", "Edit sensor");
 
 // Errors.
 define("TFISH_ERROR_BAD_LATITUDE", "Bad latitude.");
 define("TFISH_ERROR_BAD_LONGITUDE", "Bad longitude.");
+define("TFISH_ERROR_NOT_SENSOR", "Not a sensor object, or illegal type.");
 
 // Sensor types.
+define("TFISH_SENSOR_GENERIC", "Generic sensor");
 define("TFISH_SENSOR_TEMPERATURE", "Temperature sensor");
 

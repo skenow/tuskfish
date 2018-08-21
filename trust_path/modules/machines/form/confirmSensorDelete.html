@@ -1,0 +1,13 @@
+<?php declare(strict_types=1); ?>
+
+<div>
+  <div class="alert alert-danger">
+    <strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($sensor->title)) { echo $sensor->escapeForXss('title'); } ?>
+  </div>
+  <form class="form-horizontal" action="sensor.php" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <input name="id" value="<?php echo $sensor->escapeForXss('id'); ?>" type="hidden">
+    <button name="op" value="delete" type="submit" class="btn btn-primary"><?php echo TFISH_YES; ?></button>
+    <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_NO; ?></button>
+  </form>
+</div>

@@ -33,16 +33,15 @@ trait TfSensorTypes
     /**
      * Returns a whitelist of permitted sensor object types, ie. descendants of TfSensor.
      * 
-     * Use this whitelist when dynamically instantiating sensor objects. If you create additional
-     * types of sensor object (which must be descendants of the TfSensor class) you must add them to
-     * the whitelist below. Otherwise their use will be denied in many parts of the Tuskfish system.
+     * Use this whitelist when dynamically instantiating sensor objects. An equivalent class file
+     * must be present in the Machine module class directory.
      * 
      * @return array Array of whitelisted (permitted) sensor object types.
      */
     public function getSensorTypes()
     {
         return array(
-            'TfTemperature' => TFISH_SENSOR_TEMPERATURE,
+            'TfSensor' => TFISH_SENSOR_GENERIC,
         );
     }
 }
