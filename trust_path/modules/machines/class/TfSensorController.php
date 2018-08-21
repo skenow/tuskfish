@@ -111,7 +111,7 @@ class TfSensorController
 
         if ($result) {
             $this->cache->flushCache();
-            $this->pageTitle = TFISH_SUCCESS;
+            $this->template->pageTitle = TFISH_SUCCESS;
             $this->template->alertClass = 'alert-success';
             $this->template->message = TFISH_OBJECT_WAS_DELETED;
         } else {
