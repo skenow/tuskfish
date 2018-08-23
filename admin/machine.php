@@ -33,10 +33,10 @@ if (!in_array($op, $optionsWhitelist)) {
     exit;
 }
     
-// Cross-site request forgery check.
-/*if (!in_array($op, $optionsWhitelist, true)) {
+// Cross-site request forgery check for all options except toggle, view and default.
+if (!in_array($op, array('toggle', 'view', ''), true)) {
     TfSession::validateToken($cleanToken);
-}*/
+}
 
 // Specify the admin theme and the template to be used to preview machine (user side template).
 if ($op === 'view') {
