@@ -37,7 +37,6 @@ class TfMachine
     protected $latitude = '';
     protected $longitude = '';
     protected $parent = '';
-    protected $tags = '';
     protected $online = '';
     protected $submissionTime = '';
     protected $lastUpdated = '';
@@ -58,6 +57,258 @@ class TfMachine
         }
         
         $this->validator = $validator;
+        $this->id = 0;
+        $this->parent = 0;
+        $this->online = 0;
+        $this->submissionTime = 0;
+        $this->lastUpdated = 0;
+        $this->counter = 0;
+    }
+    
+    /**
+     * Converts a machine object to an array suitable for insert/update calls to the database.
+     * 
+     * @return array Array of object property/values.
+     */
+    public function convertObjectToArray()
+    {        
+        $keyValues = array();
+        
+        foreach ($this as $key => $value) {
+            $keyValues[$key] = $value;
+        }
+        
+        // Unset non-persistanet properties that are not stored in the machine table.
+        unset(
+            $keyValues['icon'],
+            $keyValues['handler'],
+            $keyValues['module'],
+            $keyValues['template']
+        );
+        
+        return $keyValues;
+    }
+    
+    /**
+     * Escapes object properties for output to browser.
+     * 
+     * Use this method to retrieve object properties when you want to send them to the browser.
+     * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
+     * attacks.
+     * 
+     * Note that the method excludes the teaser and description fields by default, which are 
+     * returned unescaped; these are dedicated HTML fields that have been input-validated
+     * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
+     * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
+     * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
+     * 
+     * @param string $property Name of property.
+     * @param bool $escapeHtml Whether to escape HTML fields (teaser, description).
+     * @return string|null Human readable value escaped for display or null if property does not
+     * exist.
+     */
+    public function escapeForXss(string $property, bool $escapeHtml = false)
+    {
+        $cleanProperty = $this->validator->trimString($property);
+        
+        // If property is not set return null.
+        if (!isset($this->$cleanProperty)) {
+            return null;
+        }
+        
+        // Format all data for display and convert TFISH_LINK to URL.
+        $humanReadableData = (string) $this->makeDataHumanReadable($cleanProperty);
+        $htmlFields = array('teaser', 'description', 'icon');
+        
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
+        if (in_array($property, $htmlFields, true) && $escapeHtml === false) {
+            return $humanReadableData;
+        }
+        
+        // Output for display in the TinyMCE editor (edit mode): HTML must be DOUBLE
+        // escaped to meet specification requirements.
+        if (in_array($property, $htmlFields, true) && $escapeHtml === true) {    
+            return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', 
+                    true);
+        }
+                
+        // All other cases: Escape data for display.        
+        return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', false);
+    }
+    
+    /**
+     * Returns a whitelist of object properties whose values are allowed be set.
+     * 
+     * This function is used to build a list of $allowedVars for a machine object. Child classes
+     * use this list to unset properties they do not use. Properties that are not resident in the
+     * database are also unset here (handler, template, module and icon).
+     * 
+     * @return array Array of object properties as keys.
+     */
+    public function getPropertyWhitelist()
+    {        
+        $properties = array();
+        
+        foreach ($this as $key => $value) {
+            $properties[$key] = '';
+        }
+        
+        unset($properties['handler'], $properties['template'], $properties['module'],
+                $properties['icon']);
+        
+        return $properties;
+    }
+    
+    /**
+     * Populates the properties of the object from external (untrusted) data source.
+     * 
+     * Note that the supplied data is internally validated by __set().
+     * 
+     * @param array $dirtyInput Usually raw form $_REQUEST data.
+     * @param bool $liveUrls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
+     */
+    public function loadPropertiesFromArray(array $dirtyInput, $liveUrls = true)
+    {
+        $propertyWhitelist = $this->getPropertyWhitelist();
+
+        foreach ($propertyWhitelist as $key => $value) {
+            if (array_key_exists($key, $dirtyInput)) {
+                $this->__set($key, $dirtyInput[$key]);
+            }
+            unset($key);
+        }
+        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
+        if (array_key_exists('teaser', $propertyWhitelist) && !empty($dirtyInput['teaser'])) {
+            
+            if ($liveUrls === true) {
+                $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['teaser']);
+            } else {
+                $teaser = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['teaser']);
+            }
+            
+            $this->setTeaser($teaser);
+        }
+
+        if (array_key_exists('description', $propertyWhitelist)
+                && !empty($dirtyInput['description'])) {
+            
+            if ($liveUrls === true) {
+                $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['description']);
+            } else {
+                $description = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['description']);
+            }
+            
+            $this->setDescription($description);
+        }
+    }
+    
+    /**
+     * Converts properties to human readable form in preparation for output.
+     * 
+     * Note that data processed by this function must be escaped for XSS before being sent to
+     * display. You can use escapeForXSS().
+     * 
+     * @param string $property Name of property.
+     * @return string Property formatted to human readable form for output.
+     */
+    protected function makeDataHumanReadable(string $cleanProperty)
+    {        
+        switch ($cleanProperty) {
+            case "description":
+            case "teaser":
+                // Do a simple string replace to allow TFISH_URL to be used as a constant,
+                // making the site portable.
+                $tfUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
+                        $this->$cleanProperty);
+
+                return $tfUrlEnabled; 
+                break;
+            
+            case "latitude":
+            case "longitude":
+                return $this->cleanProperty; // Todo: Write function to convert decimal degrees.
+                break;
+
+            case "submissionTime":
+            case "lastUpdated":
+                $date = date('j F Y', $this->$cleanProperty);
+
+                return $date;
+                break;
+                
+            // No special handling required. Return unmodified value.
+            default:
+                return $this->$cleanProperty;
+                break;
+        }
+    }
+    
+    /**
+     * Intercept direct setting of properties to permit data validation.
+     * 
+     * It is best to set properties using the relevant setter method directly, as it is more
+     * efficient, but when bulk loading from an array (database row or $_REQUEST) this is useful.
+     * Note that validation of values is handled internally by the relevant setters.
+     * 
+     * @param string $property Name of property.
+     * @param mixed $value Value of property.
+     */
+    public function __set($property, $value)
+    {
+        $cleanProperty = $this->validator->trimString($property);
+        
+        if (isset($this->$cleanProperty)) {
+        
+            switch ($cleanProperty) {
+                case "id":
+                    $this->setId((int) $value);
+                    break;
+                case "title":
+                    $this->setTitle((string) $value);
+                    break;
+                case "teaser":
+                    $this->setTeaser((string) $value);
+                    break;
+                case "description":
+                    $this->setDescription((string) $value);
+                    break;
+                case "parent":
+                    $this->setParent((int) $value);
+                    break;
+                case "latitude":
+                    $this->setLatitude((float) $value);
+                    break;
+                case "longitude":
+                    $this->setLongitude((float) $value);
+                    break;
+                case "online":
+                    $this->setOnline((int) $value);
+                    break;
+                case "submissionTime":
+                    $this->setSubmissionTime((int) $value);
+                    break;
+                case "lastUpdated":
+                    $this->setLastUpdated((int) $value);
+                    break;
+                case "counter":
+                    $this->setCounter((int) $value);
+                    break;
+                case "key":
+                    $this->setKey((string) $value);
+                    break;
+                case "metaTitle":
+                    $this->setMetaTitle((string) $value);
+                    break;
+                case "metaDescription":
+                    $this->setMetaDescription((string) $value);
+                    break;
+                case "seo":
+                    $this->setSeo((string) $value);
+                    break;
+            }
+        }  else {
+            // Not a permitted property, do not set.
+        }
     }
     
     /**
@@ -71,24 +322,6 @@ class TfMachine
             $this->id = $id;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the type of machine.
-     * 
-     * Type must be the name of a machine subclass.
-     * 
-     * @param string $type Class name for this machine.
-     */
-    public function setType(string $type)
-    {
-        $cleanType = (string) $this->validator->trimString($type);
-
-        if ($this->validator->isAlpha($cleanType)) {
-            $this->type = $cleanType;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
     }
     
@@ -173,33 +406,6 @@ class TfMachine
             trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
         } else {
             $this->parent = $parent;
-        }
-    }
-    
-    /**
-     * Set the tags associated with this machine.
-     * 
-     * @param array $tags IDs of associated tags.
-     */
-    public function setTags(array $tags)
-    {
-        if ($this->validator->isArray($tags)) {
-            $cleanTags = array();
-
-            foreach ($tags as $tag) {
-                $cleanTag = (int) $tag;
-
-                if ($this->validator->isInt($cleanTag, 1)) {
-                    $cleanTags[] = $cleanTag;
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                }
-                unset($cleanTag);
-            }
-
-            $this->tags = $cleanTags;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
         }
     }
     

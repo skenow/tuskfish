@@ -20,8 +20,11 @@ define("TFISH_MACHINES", "Machines");
 define("TFISH_SENSORS", "Sensors");
 
 // Machine properties.
+define("TFISH_MACHINE_LATITUDE", "Latitude (decimal degrees)");
+define("TFISH_MACHINE_LONGITUDE", "Longitude (decimal degrees)");
 define("TFISH_MACHINE_PROTOCOL", "Protocol");
 define("TFISH_MACHINE_PARENT", "Parent");
+define("TFISH_MACHINE_KEY", "HMAC key");
 define("TFISH_MACHINE_TEMPLATE", "Template");
 define("TFISH_MACHINE_ICON", "Icon");
 
@@ -32,12 +35,14 @@ define("TFISH_MACHINE_COAP", "COaP");
 
 // Actions.
 define("TFISH_MACHINE_ADD", "Add");
+define("TFISH_MACHINE_EDIT", "Edit machine");
 define("TFISH_SENSOR_EDIT", "Edit sensor");
 
 // Errors.
 define("TFISH_ERROR_BAD_LATITUDE", "Bad latitude.");
 define("TFISH_ERROR_BAD_LONGITUDE", "Bad longitude.");
 define("TFISH_ERROR_NOT_SENSOR", "Not a sensor object, or illegal type.");
+define("TFISH_ERROR_NOT_MACHINE", "Not a machine object, or illegal type.");
 
 // Sensor types.
 define("TFISH_SENSOR_GENERIC", "Generic sensor");

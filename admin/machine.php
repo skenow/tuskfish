@@ -17,52 +17,80 @@ require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 require_once TFISH_MODULE_PATH . "machines/tfMachinesHeader.php";
 
-// Specify the admin theme you want to use.
-$tfTemplate->setTheme('admin');
-
-/**
- * Validate input parameters here.
- **/
+// Validate input parameters.
+$cleanId = (int) ($_REQUEST['id'] ?? 0);
+$cleanStart = (int) ($_GET['start'] ?? 0);
+$cleanOnline = isset($_GET['online']) ? (int) $_GET['online'] : null;
+$cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
+$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 
 // Permitted options.
-$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-$optionsWhitelist = array();
+$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : '';
+$optionsWhitelist = array('', 'add', 'confirmDelete', 'delete', 'edit', 'submit', 'toggle',
+    'update', 'view');
 
-if (in_array($op, $optionsWhitelist, true)) {
+if (!in_array($op, $optionsWhitelist)) {
     exit;
 }
     
 // Cross-site request forgery check.
-if (!in_array($op, $optionsWhitelist, true)) {
+/*if (!in_array($op, $optionsWhitelist, true)) {
     TfSession::validateToken($cleanToken);
+}*/
+
+// Specify the admin theme and the template to be used to preview machine (user side template).
+if ($op === 'view') {
+    $tfTemplate->setTheme('default');
+} else {
+    $tfTemplate->setTheme('admin');
 }
 
-// Business logic goes here.
+$machineHandler = $machineFactory->getMachineHandler();
+$machineController = $machineFactory->getMachineController();
+
 switch ($op) {
+    case "add":
+        $machineController->addMachine();
+        break;
+    
+    case "submit":
+        $machineController->submitMachine($_REQUEST);
+        break;
+        
+    case "edit":
+        $machineController->editMachine($cleanId);
+        break;
+    
+    case "update":
+        $machineController->updateMachine($_REQUEST);
+        break;
+    
+    case "confirmDelete":
+        $machineController->confirmDelete($cleanId);
+        break;
+    
+    case "delete":        
+        $machineController->deleteMachine($cleanId);
+        break;
+    
+    case "toggle":
+        $machineController->toggleOnlineStatus($cleanId);
+        break;
+    
     default:
         $criteria = $tfCriteriaFactory->getCriteria();
-
-        if ($cleanTag) $criteria->setTag(array($cleanTag));
 
         if ($tfValidator->isInt($cleanOnline, 0, 1)) {
             $criteria->add($tfCriteriaFactory->getItem('online', $cleanOnline));
         }
-
-        /*if ($cleanType) {
-            if (array_key_exists($cleanType, $contentHandler->getTypes())) {
-                $criteria->add($tfCriteriaFactory->getItem('type', $cleanType));
-            } else {
-                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-            }
-        }*/
 
         // Other criteria.
         $criteria->setOffset($cleanStart);
         $criteria->setLimit($tfPreference->adminPagination);
         $criteria->setOrder('submissionTime');
         $criteria->setOrderType('DESC');
-        $columns = array('id', 'type', 'title', 'submissionTime', 'counter', 'online');
-        $result = $tfDatabase->select('content', $criteria, $columns);
+        $columns = array('id', 'title', 'submissionTime', 'counter', 'online');
+        $result = $tfDatabase->select('machine', $criteria, $columns);
 
         if ($result) {
             $rows = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -75,15 +103,10 @@ switch ($op) {
                     = date($tfPreference->dateFormat, (int) $row['submissionTime']);
         }
 
-        $typelist = $machineHandler->getTypes();
-
         // Pagination control.
         $extraParams = array();
         if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
             $extraParams['online'] = $cleanOnline;
-        }
-        if (isset($cleanType) && !empty($cleanType)) {
-            $extraParams['type'] = $cleanType;
         }
 
         $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
@@ -91,26 +114,15 @@ switch ($op) {
         $tfPagination->setCount($tfDatabase->selectCount('machine', $criteria));
         $tfPagination->setLimit($tfPreference->adminPagination);
         $tfPagination->setStart($cleanStart);
-        $tfPagination->setTag($cleanTag);
         $tfPagination->setExtraParams($extraParams);
         $tfTemplate->pagination = $tfPagination->renderPaginationControl();
 
         // Prepare select filters.
-        $tagHandler = $contentHandlerFactory->getHandler('tag');
-        $tagSelectBox = $tagHandler->getTagSelectBox($cleanTag);
-        $typeSelectBox = $contentHandler->getTypeSelectBox($cleanType);
-        $onlineSelectBox = $contentHandler->getOnlineSelectBox($cleanOnline);
-        $tfTemplate->selectAction = 'admin.php';
-        $tfTemplate->tagSelect = $tagSelectBox;
-        $tfTemplate->typeSelect = $typeSelectBox;
-        $tfTemplate->onlineSelect = $onlineSelectBox;
-        $tfTemplate->selectFiltersForm = $tfTemplate->render('adminSelectFilters');
 
         // Assign to template.
-        $tfTemplate->pageTitle = TFISH_CURRENT_CONTENT;
+        $tfTemplate->pageTitle = TFISH_MACHINES;
         $tfTemplate->rows = $rows;
-        $tfTemplate->typelist = $contentHandler->getTypes();
-        $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . "contentTable.html";
+        $tfTemplate->form = TFISH_MACHINES_MODULE_FORM_PATH . "machineTable.html";
         $tfTemplate->tfMainContent = $tfTemplate->render('form');
         break;
 }

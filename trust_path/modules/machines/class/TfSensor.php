@@ -61,7 +61,7 @@ class TfSensor
     }
     
     /**
-     * Converts a content object to an array suitable for insert/update calls to the database.
+     * Converts a sensor object to an array suitable for insert/update calls to the database.
      * 
      * @return array Array of object property/values.
      */
@@ -73,7 +73,7 @@ class TfSensor
             $keyValues[$key] = $value;
         }
         
-        // Unset non-persistanet properties that are not stored in the content table.
+        // Unset non-persistanet properties that are not stored in the sensor table.
         unset(
             $keyValues['icon'],
             $keyValues['handler'],
@@ -134,7 +134,7 @@ class TfSensor
     /**
      * Returns a whitelist of object properties whose values are allowed be set.
      * 
-     * This function is used to build a list of $allowedVars for a content object. Child classes
+     * This function is used to build a list of $allowedVars for a sensor object. Child classes
      * use this list to unset properties they do not use. Properties that are not resident in the
      * database are also unset here (handler, template, module and icon).
      * 
@@ -234,7 +234,7 @@ class TfSensor
         }
     }
     
-     /**
+    /**
      * Intercept direct setting of properties to permit data validation.
      * 
      * It is best to set properties using the relevant setter method directly, as it is more

@@ -23,16 +23,9 @@ $cleanStart = (int) ($_GET['start'] ?? 0);
 $cleanOnline = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $cleanType = isset($_GET['type']) && !empty($_GET['type']) ? $tfValidator->trimString($_GET['type']) : '';
 $cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
-$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-
-// Specify the admin theme and the template to be used to preview content (user side template).
-if ($op === 'view') {
-    $tfTemplate->setTheme('default');
-} else {
-    $tfTemplate->setTheme('admin');
-}
 
 // Permitted options.
+$op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : '';
 $optionsWhitelist = array('', 'add', 'confirmDelete', 'delete', 'edit', 'submit', 'toggle',
     'update', 'view');
 
@@ -44,6 +37,13 @@ if (!in_array($op, $optionsWhitelist)) {
 /*if (!in_array($op, $optionsWhitelist, true)) {
     TfSession::validateToken($cleanToken);
 }*/
+
+// Specify the admin theme and the template to be used to preview content (user side template).
+if ($op === 'view') {
+    $tfTemplate->setTheme('default');
+} else {
+    $tfTemplate->setTheme('admin');
+}
 
 $sensorHandler = new TfSensorHandler($tfValidator, $tfDatabase, $tfCriteriaFactory, $tfFileHandler);
 $sensorController = new TfSensorController($tfValidator, $tfDatabase, $tfCriteriaFactory, 

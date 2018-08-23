@@ -1,3 +1,98 @@
 <?php declare(strict_types=1); ?>
 
-<!-- Display a data entry form for someObject -->
+<form class="form-horizontal" action="machine.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
+    
+    <div class="row">
+
+      <!-- Title -->
+      <div class="col-12 mb-3 text-left" id="titleContainer">
+        <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
+        <input type="text" class="form-control" name="title" id="title">
+      </div>
+
+      <!-- Teaser -->
+      <div class="col-12 mb-3 text-left" id="teaserContainer">
+        <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
+        <textarea id="teaser" name="teaser" class="form-control text-left"></textarea>
+      </div>
+
+      <!-- Description -->
+      <div class="col-12 mb-3 text-left" id="descriptionContainer">
+        <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
+        <textarea id="description" name="description" class="form-control text-left"></textarea>
+      </div>
+
+      <!-- Latitude -->
+      <div class="col-md-6 mb-3 text-left" id="latitudeContainer">
+        <label for="latitude"><strong><?php echo TFISH_MACHINE_LATITUDE; ?></strong></label>
+        <input type="text" class="form-control" name="latitude" id="latitude">
+      </div>
+      
+      <!-- Longitude -->
+      <div class="col-md-6 mb-3 text-left" id="longitudeContainer">
+        <label for="longitude"><strong><?php echo TFISH_MACHINE_LONGITUDE; ?></strong></label>
+        <input type="text" class="form-control" name="longitude" id="longitude">
+      </div>
+      
+      <!-- Parent -->
+      <div class="col-md-6 mb-3 text-left" id="parentContainer">
+        <label for="publisher"><strong><?php echo TFISH_MACHINE_PARENT; ?></strong></label>
+        <select class="form-control custom-select" name="parent" id="parent" required>
+        <?php foreach ($parentSelectOptions as $key => $option): ?>
+            <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
+        <?php endforeach; ?>
+        </select>
+      </div>
+      
+      <!-- Online status -->
+      <div class="col-md-6 mb-3 text-left" id="onlineContainer">
+        <p><strong><?php echo TFISH_ONLINE_STATUS; ?></strong></p>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="online" name="online" value="1" checked class="custom-control-input" required>
+          <label class="custom-control-label" for="online"><?php echo TFISH_ONLINE; ?></label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="offline" name="online" value="0" class="custom-control-input" required>
+          <label class="custom-control-label" for="offline"><?php echo TFISH_OFFLINE; ?></label>
+        </div>
+      </div>
+      
+      <!-- Key -->
+      <div class="col-12 mb-3 text-left" id="keyContainer">
+        <label for="key"><strong><?php echo TFISH_MACHINE_KEY; ?></strong></label>
+        <input type="text" class="form-control" name="key" id="key">
+      </div>
+
+      <div class="col-md-12" id="metaHeader">
+        <h2><?php echo TFISH_META_TAGS; ?><h2>
+        <hr>
+      </div>
+
+      <!-- Meta title -->
+      <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
+        <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
+        <input type="text" class="form-control" name="metaTitle" id="metaTitle">
+      </div>
+
+      <!-- SEO -->
+      <div class="col-md-6 mb-3 text-left" id="seoContainer">
+        <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
+        <input type="text" class="form-control" name="seo" id="seo">
+      </div>
+
+      <!-- Meta description -->
+      <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
+        <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
+        <input type="text" class="form-control" name="metaDescription" id="metaDescription">
+      </div>
+
+    </div> <!-- /row -->
+    
+    <!-- Action buttons -->
+    <div class="float-left clearfix">
+      <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+      <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
+      <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+    </div>
+
+    </form>

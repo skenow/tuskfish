@@ -13,9 +13,25 @@ require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
 
 // Create machine table.
-//$machineColumns = array();
+$machineColumns = array(
+    "id" => "INTEGER", 
+    "title" => "TEXT", 
+    "teaser" => "TEXT", 
+    "description" => "TEXT", 
+    "latitude" => "REAL", 
+    "longitude" => "REAL", 
+    "parent" => "INTEGER", 
+    "online" => "INTEGER", 
+    "submissionTime" => "INTEGER", 
+    "lastUpdated" => "INTEGER",
+    "counter" => "INTEGER", 
+    "key" => "TEXT", 
+    "metaTitle" => "TEXT", 
+    "metaDescription" => "TEXT", 
+    "seo" => "TEXT",
+    );
 
-// $tfDatabase->createTable('machine', $machineColumns, 'id');
+$tfDatabase->createTable('machine', $machineColumns, 'id');
 
 // Create sensor table.
 $sensorColumns = array(

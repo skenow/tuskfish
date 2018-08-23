@@ -30,3 +30,6 @@ function tfMachinesModuleAutoload(string $classname) {
     }
 }
 spl_autoload_register('tfMachinesModuleAutoload');
+
+$machineFactory = new TfMachineFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
+        $tfFileHandler, $tfCache, $tfTemplate);
