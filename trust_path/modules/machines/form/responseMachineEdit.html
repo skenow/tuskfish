@@ -4,7 +4,7 @@
   <div class="alert <?php echo $tfValidator->escapeForXss($alertClass); ?>">
       <strong><?php echo $tfValidator->escapeForXss($message); ?></strong>
   </div>
-  <form class="form-horizontal" action="sensor.php" method="post" accept-charset="UTF-8">
+  <form class="form-horizontal" action="machine.php" method="post" accept-charset="UTF-8">
     <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
     <input name="id" value="<?php echo $tfValidator->escapeForXss($id); ?>" type="hidden">
     <button name="op" value="view" type="submit" class="btn btn-primary"><?php echo TFISH_VIEW; ?></button>

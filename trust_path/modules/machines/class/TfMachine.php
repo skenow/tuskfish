@@ -568,4 +568,12 @@ class TfMachine
         $icon = $this->validator->trimString($icon);
         $this->icon = $this->validator->filterHtml($icon);
     }
+    
+    /**
+     * Reset the last updated time for this sensor object (timestamp).
+     */
+    public function updateLastUpdated()
+    {
+        $this->lastUpdated = time();
+    }
 }
