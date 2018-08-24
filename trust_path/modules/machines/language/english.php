@@ -23,7 +23,7 @@ define("TFISH_SENSORS", "Sensors");
 define("TFISH_MACHINE_LATITUDE", "Latitude (decimal degrees)");
 define("TFISH_MACHINE_LONGITUDE", "Longitude (decimal degrees)");
 define("TFISH_MACHINE_PROTOCOL", "Protocol");
-define("TFISH_MACHINE_PARENT", "Parent");
+define("TFISH_MACHINE_PARENT", "Parent machine");
 define("TFISH_MACHINE_KEY", "HMAC key");
 define("TFISH_MACHINE_TEMPLATE", "Template");
 define("TFISH_MACHINE_ICON", "Icon");

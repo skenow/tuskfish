@@ -79,11 +79,29 @@ class TfSensorController
         }
     }
     
-    public function addSensor()
+    public function getParentSelectOptions(TfMachineHandler $machineHandler)
     {
+        if (!is_a($machineHandler, 'TfMachineHandler')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->setOrder('title');
+        $criteria->setOrderType('ASC');
+        $criteria->setSecondaryOrder('submissionTime');
+        $criteria->setSecondaryOrderType('DESC');
+        $machineList = $machineHandler->getListOfTitles($criteria);
+        
+        return array(0 => TFISH_ZERO_OPTION) + $machineList;
+    }
+    
+    public function addSensor(TfMachineHandler $machineHandler)
+    {
+        $parentSelectOptions = $this->getParentSelectOptions($machineHandler);
+        
         $this->template->sensorTypes = $this->sensorHandler->getSensorTypes();
         $this->template->protocols = $this->sensorHandler->getDataProtocols();
-        $this->template->parentSelectOptions = array(0 => '---');
+        $this->template->parentSelectOptions = $parentSelectOptions;
         $this->template->pageTitle = TFISH_SENSORS;
         $this->template->form = TFISH_MACHINES_MODULE_FORM_PATH . "sensorEntry.html";
         $this->template->tfMainContent = $this->template->render('form');
@@ -125,7 +143,7 @@ class TfSensorController
         $this->template->tfMainContent = $this->template->render('form');        
     }
     
-    public function editSensor(int $id)
+    public function editSensor(int $id, TfMachineHandler $machineHandler)
     {        
         $cleanId = (int) $id;
         
@@ -146,9 +164,7 @@ class TfSensorController
         $sensor = $this->sensorHandler->convertRowToObject($row, false);
         
         // Prepare parent select box.
-        $machineHandler = $machineFactory->getMachineHandler();
-        $machines = $machineHandler->getObjects();
-        $parentTree = new TfTree($machines, 'id', 'parent');
+        $parentSelectOptions = $this->getParentSelectOptions($machineHandler);
 
         // Assign to template.
         $this->template->pageTitle = TFISH_SENSOR_EDIT;
@@ -157,8 +173,7 @@ class TfSensorController
         $this->template->sensor = $sensor;
         $this->template->sensorTypes = $this->sensorHandler->getsensorTypes();
         $this->template->protocols = $this->sensorHandler->getDataProtocols();
-        $this->template->parentSelectOptions = $parentTree->makeParentSelectBox((int) $row['parent']);
-        $this->template->parentSelectOptions = array(0 => '---');
+        $this->template->parentSelectOptions = $parentSelectOptions;
         $this->template->form = TFISH_MACHINES_MODULE_FORM_PATH . "sensorEdit.html";
         $this->template->tfMainContent = $this->template->render('form');
     }

@@ -51,7 +51,8 @@ $sensorController = new TfSensorController($tfValidator, $tfDatabase, $tfCriteri
 
 switch ($op) {
     case "add":
-        $sensorController->addSensor();
+        $machineHandler = $machineFactory->getMachineHandler();
+        $sensorController->addSensor($machineHandler);
         break;
     
     case "submit":
@@ -59,7 +60,8 @@ switch ($op) {
         break;
         
     case "edit":
-        $sensorController->editSensor($cleanId);
+        $machineHandler = $machineFactory->getMachineHandler();
+        $sensorController->editSensor($cleanId, $machineHandler);
         break;
     
     case "update":
