@@ -34,14 +34,10 @@
         <input type="text" class="form-control" name="longitude" id="longitude">
       </div>
       
-      <!-- Parent -->
-      <div class="col-md-6 mb-3 text-left" id="parentContainer">
-        <label for="publisher"><strong><?php echo TFISH_MACHINE_PARENT; ?></strong></label>
-        <select class="form-control custom-select" name="parent" id="parent" required>
-        <?php foreach ($parentSelectOptions as $key => $option): ?>
-            <option value="<?php echo $key; ?>"><?php echo $option; ?></option>
-        <?php endforeach; ?>
-        </select>
+      <!-- Key -->
+      <div class="col-md-6 mb-3 text-left" id="keyContainer">
+        <label for="key"><strong><?php echo TFISH_MACHINE_KEY; ?></strong></label>
+        <input type="text" class="form-control" name="key" id="key">
       </div>
       
       <!-- Online status -->
@@ -55,12 +51,6 @@
           <input type="radio" id="offline" name="online" value="0" class="custom-control-input" required>
           <label class="custom-control-label" for="offline"><?php echo TFISH_OFFLINE; ?></label>
         </div>
-      </div>
-      
-      <!-- Key -->
-      <div class="col-12 mb-3 text-left" id="keyContainer">
-        <label for="key"><strong><?php echo TFISH_MACHINE_KEY; ?></strong></label>
-        <input type="text" class="form-control" name="key" id="key">
       </div>
 
       <div class="col-md-12" id="metaHeader">

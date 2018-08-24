@@ -77,7 +77,6 @@ class TfMachineController
     
     public function addMachine()
     {
-        $this->template->parentSelectOptions = array(0 => '---');
         $this->template->pageTitle = TFISH_MACHINES;
         $this->template->form = TFISH_MACHINES_MODULE_FORM_PATH . "machineEntry.html";
         $this->template->tfMainContent = $this->template->render('form');
@@ -144,8 +143,6 @@ class TfMachineController
         $this->template->op = 'update'; // Critical to launch correct submission action.
         $this->template->action = TFISH_UPDATE;
         $this->template->machine = $machine;
-        //$this->template->parentSelectOptions = $parentTree->makeParentSelectBox((int) $row['parent']);
-        $this->template->parentSelectOptions = array(0 => '---');
         $this->template->form = TFISH_MACHINES_MODULE_FORM_PATH . "machineEdit.html";
         $this->template->tfMainContent = $this->template->render('form');
     }

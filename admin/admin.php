@@ -63,7 +63,7 @@ $optionsWhitelist = array(
 if (in_array($op, $optionsWhitelist)) {
     
     // Cross-site request forgery check for sensitive options.
-    if (!in_array($op, array('confirmDelete', 'confirmFlush', 'edit', 'toggle', 'view', false, ''), true)) {
+    if (!in_array($op, array('confirmDelete', 'confirmFlush', 'edit', 'toggle', 'view', false, ''))) {
         TfSession::validateToken($cleanToken);
     }
     

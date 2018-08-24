@@ -108,6 +108,45 @@ class TfMachineHandler
     }
     
     /**
+     * Returns a list of machine object titles with ID as key.
+     * 
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
+     * @return array Array as id => title of machine objects.
+     */
+    public function getListOfTitles(TfCriteria $criteria = null)
+    {
+        $machineList = array();
+        $columns = array('id', 'title');
+
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (!isset($criteria)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+        }
+        
+        // Set default sorting order by submission time descending.
+        if (!$criteria->order) {
+            $criteria->setOrder('submissionTime');
+            $criteria->setOrderType('DESC');
+        }
+
+        $statement = $this->db->select('machine', $criteria, $columns);
+        
+        if ($statement) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $machineList[$row['id']] = $row['title'];
+            }
+            unset($statement);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+
+        return $machineList;
+    }
+    
+    /**
      * Retrieves a single machine based on its ID.
      * 
      * @param int $id ID of machine object.
@@ -136,9 +175,45 @@ class TfMachineHandler
         return false;
     }
     
-    public function getObjects()
+    /**
+     * Get machine objects, optionally matching conditions specified with a TfCriteria object.
+     * 
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
+     * @return array Array of machine objects.
+     */
+    public function getObjects(TfCriteria $criteria = null)
     {
+        $objects = array();
         
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (!isset($criteria)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+        }
+
+        // Set default sorting order by submission time descending.        
+        if (!$criteria->order) {
+            $criteria->setOrder('submissionTime');
+            $criteria->setOrderType('DESC');
+        }
+
+        $statement = $this->db->select('machine', $criteria);
+        if ($statement) {
+
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $object->loadPropertiesFromArray($row, true);
+                $objects[$object->id] = $object;
+                unset($object);
+            }            
+
+            unset($statement);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+
+        return $objects;
     }
     
     /**

@@ -73,7 +73,7 @@ class TfSensorHandler
     }
     
     /**
-     * Convert a database content row to a corresponding sensor object.
+     * Convert a database row to a corresponding sensor object.
      * 
      * @param array $row Array of result set from database.
      * @return object|bool Sensor object on success, false on failure.
@@ -84,14 +84,7 @@ class TfSensorHandler
             return false;
         }
 
-        // Check the content type is whitelisted.
-        $typeWhitelist = $this->getSensorTypes();
-        
-        if (!empty($row['type']) && array_key_exists($row['type'], $typeWhitelist)) {
-            $sensor = new $row['type']($this->validator);
-        } else {
-            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-        }
+        $sensor = $this->create($row['type']);        
         
         if ($sensor) {
             $sensor->loadPropertiesFromArray($row, true);
@@ -100,6 +93,23 @@ class TfSensorHandler
         }
 
         return false;
+    }
+    
+    /**
+     * Create a new sensor object.
+     * 
+     * @return \TfSensor A new sensor object.
+     */
+    public function create(string $type)
+    {
+        $cleanType = $this->validator->trimString($type);
+        $typeWhitelist = $this->getSensorTypes();
+        
+        if (empty($cleanType) || !array_key_exists($cleanType, $typeWhitelist)) {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+        
+        return new $cleanType($this->validator);
     }
     
     /**
@@ -124,6 +134,45 @@ class TfSensorHandler
         }
 
         return true;
+    }
+    
+    /**
+     * Returns a list of machine object titles with ID as key.
+     * 
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
+     * @return array Array as id => title of machine objects.
+     */
+    public function getListOfTitles(TfCriteria $criteria = null)
+    {
+        $sensorList = array();
+        $columns = array('id', 'title');
+
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (!isset($criteria)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+        }
+        
+        // Set default sorting order by submission time descending.
+        if (!$criteria->order) {
+            $criteria->setOrder('submissionTime');
+            $criteria->setOrderType('DESC');
+        }
+
+        $statement = $this->db->select('sensor', $criteria, $columns);
+        
+        if ($statement) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $sensorList[$row['id']] = $row['title'];
+            }
+            unset($statement);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+
+        return $sensorList;
     }
     
     /**
@@ -155,15 +204,53 @@ class TfSensorHandler
         return false;
     }
     
-    public function getObjects()
+    /**
+     * Get sensor objects, optionally matching conditions specified with a TfCriteria object.
+     * 
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
+     * @return array Array of sensor objects.
+     */
+    public function getObjects(TfCriteria $criteria = null)
     {
+        $objects = array();
         
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (!isset($criteria)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+        }
+
+        // Set default sorting order by submission time descending.        
+        if (!$criteria->order) {
+            $criteria->setOrder('submissionTime');
+            $criteria->setOrderType('DESC');
+        }
+
+        $statement = $this->db->select('sensor', $criteria);
+        
+        if ($statement) {
+
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $object = $this->create();
+                $object->loadPropertiesFromArray($row, true);
+                $objects[$object->id] = $object;
+                unset($object);
+            }            
+
+            unset($statement);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+        
+        return $objects;
     }
     
     /**
      * Inserts a sensor object into the database.
      * 
-     * @param TfSensor $obj A content object subclass.
+     * @param TfSensor $obj A sensor object subclass.
      * @return bool True on success, false on failure.
      */
     public function insert(TfSensor $obj)
@@ -186,7 +273,7 @@ class TfSensorHandler
             trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
             return false;
         } else {
-            $contentId = $this->db->lastInsertId();
+            $sensorId = $this->db->lastInsertId();
         }
         
         unset($keyValues, $result);

@@ -36,7 +36,6 @@ class TfMachine
     protected $description = '';
     protected $latitude = '';
     protected $longitude = '';
-    protected $parent = '';
     protected $online = '';
     protected $submissionTime = '';
     protected $lastUpdated = '';
@@ -58,7 +57,6 @@ class TfMachine
         
         $this->validator = $validator;
         $this->id = 0;
-        $this->parent = 0;
         $this->online = 0;
         $this->submissionTime = 0;
         $this->lastUpdated = 0;
@@ -272,9 +270,6 @@ class TfMachine
                 case "description":
                     $this->setDescription((string) $value);
                     break;
-                case "parent":
-                    $this->setParent((int) $value);
-                    break;
                 case "latitude":
                     $this->setLatitude((float) $value);
                     break;
@@ -386,26 +381,6 @@ class TfMachine
             $this->longitude = $cleanLongitude;
         } else {
             trigger_error(TFISH_ERROR_BAD_LONGITUDE, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the ID of the parent for this object (must be a collection).
-     * 
-     * Parent ID must be different to machine ID (cannot declare self as parent).
-     * 
-     * @param int $parent ID of parent object.
-     */
-    public function setParent (int $parent)
-    {
-        if (!$this->validator->isInt($parent, 0)) {
-                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-
-        if ($parent === $this->id && $parent > 0) {
-            trigger_error(TFISH_ERROR_CIRCULAR_PARENT_REFERENCE);
-        } else {
-            $this->parent = $parent;
         }
     }
     

@@ -34,7 +34,7 @@ if (!in_array($op, $optionsWhitelist)) {
 }
     
 // Cross-site request forgery check for all options except toggle, view and default.
-if (!in_array($op, array('toggle', 'view', ''), true)) {
+if (!in_array($op, array('confirmDelete', 'confirmFlush', 'edit', 'toggle', 'view', ''))) {
     TfSession::validateToken($cleanToken);
 }
 

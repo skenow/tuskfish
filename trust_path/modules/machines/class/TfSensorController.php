@@ -144,6 +144,11 @@ class TfSensorController
         
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $sensor = $this->sensorHandler->convertRowToObject($row, false);
+        
+        // Prepare parent select box.
+        $machineHandler = $machineFactory->getMachineHandler();
+        $machines = $machineHandler->getObjects();
+        $parentTree = new TfTree($machines, 'id', 'parent');
 
         // Assign to template.
         $this->template->pageTitle = TFISH_SENSOR_EDIT;
@@ -152,7 +157,7 @@ class TfSensorController
         $this->template->sensor = $sensor;
         $this->template->sensorTypes = $this->sensorHandler->getsensorTypes();
         $this->template->protocols = $this->sensorHandler->getDataProtocols();
-        //$this->template->parentSelectOptions = $parentTree->makeParentSelectBox((int) $row['parent']);
+        $this->template->parentSelectOptions = $parentTree->makeParentSelectBox((int) $row['parent']);
         $this->template->parentSelectOptions = array(0 => '---');
         $this->template->form = TFISH_MACHINES_MODULE_FORM_PATH . "sensorEdit.html";
         $this->template->tfMainContent = $this->template->render('form');
