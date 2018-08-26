@@ -77,6 +77,44 @@ switch ($op) {
         $machineController->toggleOnlineStatus($cleanId);
         break;
     
+    case "view":
+        if (!$cleanId) {
+            $tfTemplate->tfMainContent = TFISH_ERROR_NO_SUCH_CONTENT;
+        }
+            
+        $machine = $machineHandler->getObject($cleanId);
+
+        if (!is_object($machine)) {
+            trigger_error(TFISH_ERROR_NOT_SENSOR, E_USER_ERROR);
+        }
+        $tfTemplate->machine = $machine;
+
+        // Prepare meta information for display.
+        $machineInfo = array();
+
+        if ($machine->counter) {
+            $machineInfo[] = $machine->escapeForXss('counter') . ' ' . TFISH_VIEWS;
+        }
+
+        $tfTemplate->machineInfo = implode(' | ', $machineInfo);
+
+        if ($machine->metaTitle) $tfMetadata->setTitle($machine->metaTitle);
+
+        if ($machine->metaDescription) $tfMetadata->setDescription($machine->metaDescription);
+
+        // Check if has a parental object; if so display a thumbnail and teaser / link.
+        if (!empty($machine->parent)) {
+            $parent = $machineHandler->getObject($machine->parent);
+
+            if (is_object($parent) && $parent->online) {
+                $tfTemplate->parent = $parent;
+            }
+        }
+
+        // Render template.
+        $tfTemplate->tfMainContent = $tfTemplate->render($machine->template);
+        break;
+    
     default:
         $criteria = $tfCriteriaFactory->getCriteria();
 
