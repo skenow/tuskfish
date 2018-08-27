@@ -33,3 +33,5 @@ spl_autoload_register('tfMachinesModuleAutoload');
 
 $machineFactory = new TfMachineFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
         $tfFileHandler, $tfCache, $tfTemplate);
+$sensorFactory = new TfSensorFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
+        $tfFileHandler, $tfCache, $tfTemplate);

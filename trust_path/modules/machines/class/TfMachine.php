@@ -47,7 +47,7 @@ class TfMachine
     protected $handler = 'TfMachineHandler';
     protected $template = 'machine';
     protected $module = 'machines';
-    protected $icon = '';
+    protected $icon = '<i class="fas fa-hdd"></i>';
     
     public function __construct(TfValidator $validator)
     {

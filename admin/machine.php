@@ -29,13 +29,22 @@ $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : '';
 $optionsWhitelist = array('', 'add', 'confirmDelete', 'delete', 'edit', 'submit', 'toggle',
     'update', 'view');
 
+// Target filename.
+$targetFileName = 'machine';
+$tfTemplate->sensorFileName = 'sensor';
+
 if (!in_array($op, $optionsWhitelist)) {
     exit;
 }
     
-// Cross-site request forgery check for all options except toggle, view and default.
+// Cross-site request forgery check for sensitive operations.
 if (!in_array($op, array('confirmDelete', 'confirmFlush', 'edit', 'toggle', 'view', ''))) {
     TfSession::validateToken($cleanToken);
+}
+
+// If an ID is set, this implies that an object should be viewed.
+if ($cleanId) {
+    $op = 'view';
 }
 
 // Specify the admin theme and the template to be used to preview machine (user side template).
@@ -101,14 +110,33 @@ switch ($op) {
         if ($machine->metaTitle) $tfMetadata->setTitle($machine->metaTitle);
 
         if ($machine->metaDescription) $tfMetadata->setDescription($machine->metaDescription);
+        
+        // Check for child objects.
+        $sensorHandler = $sensorFactory->getSensorHandler();
+        
+        $criteria = $tfCriteriaFactory->getCriteria();
+        $criteria->setOrder('title');
+        $criteria->setOrderType('ASC');
+        $criteria->add($tfCriteriaFactory->getItem('parent', $machine->id));
+        $criteria->add($tfCriteriaFactory->getItem('online', $machine->online));
+        $criteria->setLimit($tfPreference->userPagination);
+        if ($cleanStart) $criteria->setOffset($cleanStart);
 
-        // Check if has a parental object; if so display a thumbnail and teaser / link.
-        if (!empty($machine->parent)) {
-            $parent = $machineHandler->getObject($machine->parent);
+        // Prepare pagination control.
+        $machinePagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $machinePagination->setUrl($targetFileName);
+        $machinePagination->setCount($sensorHandler->getCount($criteria));
+        $machinePagination->setLimit($tfPreference->userPagination);
+        $machinePagination->setStart($cleanStart);
+        $machinePagination->setTag(0);
+        $machinePagination->setExtraParams(array('id' => $cleanId));
+        $tfTemplate->machinePagination = $machinePagination->renderPaginationControl();
 
-            if (is_object($parent) && $parent->online) {
-                $tfTemplate->parent = $parent;
-            }
+        // Retrieve sensor objects and assign to template.
+        $childSensors = $sensorHandler->getObjects($criteria);
+
+        if (!empty($childSensors)) {
+            $tfTemplate->childSensors = $childSensors;
         }
 
         // Render template.

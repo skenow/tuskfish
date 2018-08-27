@@ -45,9 +45,8 @@ if ($op === 'view') {
     $tfTemplate->setTheme('admin');
 }
 
-$sensorHandler = new TfSensorHandler($tfValidator, $tfDatabase, $tfCriteriaFactory, $tfFileHandler);
-$sensorController = new TfSensorController($tfValidator, $tfDatabase, $tfCriteriaFactory, 
-        $sensorHandler, $tfCache, $tfTemplate);
+$sensorHandler = $sensorFactory->getSensorHandler();
+$sensorController = $sensorFactory->getSensorController();
 
 switch ($op) {
     case "add":
@@ -126,7 +125,7 @@ switch ($op) {
         }
 
         $typelist = $sensorHandler->getSensorTypes();
-        
+
         if ($cleanType) {
             if (array_key_exists($cleanType, $typelist)) {
                 $criteria->add($tfCriteriaFactory->getItem('type', $cleanType));

@@ -137,6 +137,27 @@ class TfSensorHandler
     }
     
     /**
+     * Count sensor objects optionally matching conditions specified with a TfCriteria object.
+     * 
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
+     * @return int $count Number of objects matching conditions.
+     */
+    public function getCount(TfCriteria $criteria = null)
+    {
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+        }
+        
+        if (!isset($criteria)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+        }
+        
+        $count = $this->db->selectCount('sensor', $criteria);
+
+        return $count;
+    }
+    
+    /**
      * Returns a list of machine object titles with ID as key.
      * 
      * @param TfCriteria $criteria Query composer object used to build conditional database query.
@@ -233,7 +254,7 @@ class TfSensorHandler
         if ($statement) {
 
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                $object = $this->create();
+                $object = $this->create('TfSensor');
                 $object->loadPropertiesFromArray($row, true);
                 $objects[$object->id] = $object;
                 unset($object);

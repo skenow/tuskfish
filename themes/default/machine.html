@@ -23,28 +23,36 @@
   <?php if ($machine->description) echo $machine->escapeForXss('description'); ?>
 </div>
 
-<!-- Display parent work -->
-<?php if (!empty($parent)): ?>
-<div>
-  <h3><?php echo TFISH_RELATED; ?></h3>
-  <h4 class="parent"><a href="<?php echo $parent->getUrl($targetFileName); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escapeForXss('title'); ?></a></h4>
-  <?php if ($parent->image): ?>
-  <div class="float-left">
-    <figure class="figure-left">
-    <a href="<?php echo $parent->getUrl($targetFileName); ?>">
-    <img class="image img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
-    <?php if ($parent->caption): ?>
-        title="<?php echo $parent->escapeForXss('caption'); ?>" alt="<?php echo $parent->escapeForXss('caption'); ?>"
-    <?php else: ?>
-        alt=""
-    <?php endif; ?>
-    /></a>
-    </figure>
-  </div>
-  <?php endif; ?>
-  <div class="teaser">
-    <?php echo $parent->escapeForXss('teaser'); ?>
-  </div>
+<!-- Display child works -->    
+<?php if (!empty($childSensors)): ?>
+
+<!-- Intra-machine pagination -->
+<?php if (isset($machinePagination)): ?>
+<div class="d-flex justify-content-end collection-pagination-top clearfix">
+  <?php echo $machinePagination; ?>
 </div>
 <?php endif; ?>
+
+<div>
+  <h3 class="mb-3"><?php echo TFISH_MACHINE_ONBOARD_SENSORS; ?></h3>
+</div>
+<div class="mb-3">
+  <?php foreach ($childSensors as $sensor): ?>
+  <div class="clearfix">
+    <h4 class="child-title"><a href="<?php echo TFISH_ADMIN_URL . 'sensor.php?op=view&amp;id=' . $sensor->escapeForXss('id'); ?>"><?php echo $sensor->icon; ?> <?php echo $sensor->escapeForXss('title'); ?></a></h4>
+    <div class="child-teaser">
+      <?php echo $sensor->escapeForXss('teaser'); ?>
+    </div>
+  </div>
+  <?php endforeach; ?>    
+</div>
+
+<!-- Intra-machine pagination -->
+<?php if (isset($machinePagination)): ?>
+<div class="d-flex justify-content-end collection-pagination-bottom clearfix">
+  <?php echo $machinePagination; ?>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+
 <?php endif; ?>
