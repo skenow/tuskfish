@@ -161,7 +161,6 @@ if ($cleanId) {
     }
 // Otherwise retrieve an index page list of teasers.
 } else {
-
     // Check if cached page is available.
     $tfCache->getCachedPage($basename, $cacheParameters);
 
@@ -184,6 +183,7 @@ if ($cleanId) {
 
     // Prepare pagination control.
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+    $tfPagination->setUrl('index');
     $tfPagination->setCount($contentHandler->getCount($criteria));
     $tfPagination->setLimit($tfPreference->userPagination);
     $tfPagination->setStart($cleanStart);

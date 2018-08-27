@@ -236,7 +236,7 @@ class TfPaginationControl
     /**
      * Set the base URL for pagination control links.
      * 
-     * @param string $url Base file name for constructing URLs, without the extention.
+     * @param string $url Base file name for constructing URLs, without the extension.
      */
     public function setUrl(string $url)
     {
