@@ -28,8 +28,9 @@ define("TFISH_MACHINE_KEY", "HMAC key");
 define("TFISH_MACHINE_TEMPLATE", "Template");
 define("TFISH_MACHINE_ICON", "Icon");
 
-// Child objects.
+// Child and parent objects.
 define("TFISH_MACHINE_ONBOARD_SENSORS", "Onboard sensors");
+define("TFISH_MACHINE_HOST_MACHINE", "Host machine");
 
 // Data protocols.
 define("TFISH_MACHINE_MQTT", "MQTT");

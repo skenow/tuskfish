@@ -106,7 +106,8 @@ switch ($op) {
 
         // Check if has a parental object; if so display a thumbnail and teaser / link.
         if (!empty($sensor->parent)) {
-            $parent = $sensorHandler->getObject($sensor->parent);
+            $machineHandler = $machineFactory->getMachineHandler();
+            $parent = $machineHandler->getObject($sensor->parent);
 
             if (is_object($parent) && $parent->online) {
                 $tfTemplate->parent = $parent;
