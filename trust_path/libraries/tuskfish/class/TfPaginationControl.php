@@ -71,7 +71,7 @@ class TfPaginationControl
         
         $this->count = 0;
         $this->limit = 0;
-        $this->url = '';
+        $this->url = TFISH_URL;
         $this->start = 0;
         $this->tag = 0;
         $this->extraParams = array();

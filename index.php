@@ -183,7 +183,6 @@ if ($cleanId) {
 
     // Prepare pagination control.
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
-    $tfPagination->setUrl('index');
     $tfPagination->setCount($contentHandler->getCount($criteria));
     $tfPagination->setLimit($tfPreference->userPagination);
     $tfPagination->setStart($cleanStart);
