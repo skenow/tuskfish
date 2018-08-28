@@ -87,22 +87,24 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
+        $cleanType = $this->validator->trimString($obj->type);
+        
         $cleanModule = $this->validator->trimString($obj->module);
         
         if (!$cleanModule || !$this->validator->isAlnumUnderscore($cleanModule)) {
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
         
-        return $this->_deleteTaglinks($cleanContentId, $cleanModule);
+        return $this->_deleteTaglinks($cleanContentId, $cleanType, $cleanModule);
         
     }
     
     /** @internal */
-    private function _deleteTaglinks(int $id, string $module)
+    private function _deleteTaglinks(int $id, string $type, string $module)
     {
         $criteria = $this->criteriaFactory->getCriteria();
         
-        if ($obj->type === 'TfTag') {
+        if ($type === 'TfTag') {
             $criteria->add($this->criteriaFactory->getItem('tagId', $id));
         } else {
             $criteria->add($this->criteriaFactory->getItem('contentId', $id));
@@ -126,10 +128,10 @@ class TfTaglinkHandler
      * @param int $contentId ID of content object.
      * @param string $type Type of content object as whitelisted in TfTaglinkHandler::getType().
      * @param string $module Name of the module the content object is associated with.
-     * @param array $tags IDs of tags as integers.
+     * @param array $tagIds IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function insertTaglinks(int $contentId, string $type, string $module, array $tags)
+    public function insertTaglinks(int $contentId, string $type, string $module, array $tagIds)
     {
         if ($this->validator->isInt($contentId, 1)) {
             $cleanContentId = (int) $contentId;
@@ -153,13 +155,21 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
         
-        if (!is_array($tags)) {
+        if (!is_array($tagIds)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY_OR_EMPTY, E_USER_ERROR);
         }
-
+        
+        $cleanTags = $this->_validateTagIds($tagIds);
+        
+        return $this->_insertTaglinks($cleanContentId, $cleanType, $cleanModule, $cleanTags);
+    }
+    
+    /** @internal */
+    private function _validateTagIds(array $tagIds)
+    {
         $cleanTags = array();
         
-        foreach ($tags as $tagId) {
+        foreach ($tagIds as $tagId) {
             $tag = array();
             
             if ($this->validator->isInt($tagId, 1)) {
@@ -168,9 +178,22 @@ class TfTaglinkHandler
                 trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             }
             
-            $tag['contentId'] = $cleanContentId;
-            $tag['contentType'] = $cleanType;
-            $tag['module'] = $cleanModule;
+            $cleanTags[] = $tag;
+            unset($tag);
+        }
+        
+        return $cleanTags;
+    }
+    
+    /** @internal */
+    private function _insertTaglinks(int $contentId, string $type, string $module, array $tags)
+    {
+        $cleanTags = array();
+        
+        foreach ($tags as $tag) {
+            $tag['contentId'] = $contentId;
+            $tag['contentType'] = $type;
+            $tag['module'] = $module;
             $cleanTags[] = $tag;
             unset($tag);
         }
@@ -195,10 +218,10 @@ class TfTaglinkHandler
      * @param int $id ID of target content object.
      * @param string $type Type of content object as whitelisted in TfTaglinkHandler::getType().
      * @param string $module Name of the module the content object is associated with.
-     * @param array $tags IDs of tags as integers.
+     * @param array $tagIds IDs of tags as integers.
      * @return bool True on success false on failure.
      */
-    public function updateTaglinks(int $id, string $type, string $module, array $tags = null)
+    public function updateTaglinks(int $id, string $type, string $module, array $tagIds = null)
     {
         if ($this->validator->isInt($id, 1)) {
             $cleanId = (int) $id;
@@ -223,8 +246,8 @@ class TfTaglinkHandler
         
         $cleanTagId = array();
         
-        if ($this->validator->isArray($tags)) {
-            foreach ($tags as $tag) {
+        if ($this->validator->isArray($tagIds)) {
+            foreach ($tagIds as $tag) {
                 if ($this->validator->isInt($tag, 1)) {
                     $cleanTagId[] = (int) $tag;
                 } else {
@@ -235,7 +258,7 @@ class TfTaglinkHandler
         }
 
         // Delete existing taglinks.
-        $result = $this->_deleteTaglinks($cleanId, $cleanModule);
+        $result = $this->_deleteTaglinks($cleanId, $cleanType, $cleanModule);
  
         if (!$result) {
             return false;
@@ -243,41 +266,15 @@ class TfTaglinkHandler
         
         unset($result);
 
-        // If the content object is a tag, it is not allowed to have taglinks, so there is no need
-        // to proceed to insert new ones.
+        // Tags are not allowed to have taglinks, so do not need to proceed if this is the case.
         if ($cleanType === 'TfTag') {
             return true;
         }
         
-        // Insert new taglinks, if any.
-        $cleanTags = array();
+        // Insert new taglinks.
+        $cleanTags = $this->_validateTagIds($tagIds);
         
-        foreach ($cleanTagId as $tagId) {
-            $tag = array();
-            
-            if ($this->validator->isInt($tagId, 1)) {
-                $tag['tagId'] = (int) $tagId;
-            } else {
-                trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-            }
-            
-            $tag['contentId'] = $cleanId;
-            $tag['contentType'] = $cleanType;
-            $tag['module'] = $cleanModule;
-            $cleanTags[] = $tag;
-            unset($tag);
-        }
-
-        // Insert the new taglinks.
-        foreach ($cleanTags as $cleanTag) {
-            $result = $this->db->insert('taglink', $cleanTag);
-            
-            if (!$result) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->_insertTaglinks($cleanId, $cleanType, $cleanModule, $cleanTags);
     }
 
 }
