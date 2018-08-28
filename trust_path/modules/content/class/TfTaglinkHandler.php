@@ -93,13 +93,20 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
         
+        return $this->_deleteTaglinks($cleanContentId, $cleanModule);
+        
+    }
+    
+    /** @internal */
+    private function _deleteTaglinks(int $id, string $module)
+    {
         $criteria = $this->criteriaFactory->getCriteria();
         
         if ($obj->type === 'TfTag') {
-            $criteria->add($this->criteriaFactory->getItem('tagId', $cleanContentId));
+            $criteria->add($this->criteriaFactory->getItem('tagId', $id));
         } else {
-            $criteria->add($this->criteriaFactory->getItem('contentId', $cleanContentId));
-            $criteria->add($this->criteriaFactory->getItem('module', $cleanModule));
+            $criteria->add($this->criteriaFactory->getItem('contentId', $id));
+            $criteria->add($this->criteriaFactory->getItem('module', $module));
         }
         
         $result = $this->db->deleteAll('taglink', $criteria);
@@ -227,12 +234,9 @@ class TfTaglinkHandler
             }
         }
 
-        // Delete any existing tags.
-        $criteria = $this->criteriaFactory->getCriteria();
-        $criteria->add($this->criteriaFactory->getItem('contentId', $cleanId));
-        $criteria->add($this->criteriaFactory->getItem('module', $cleanModule));
-        $result = $this->db->deleteAll('taglink', $criteria);
-        
+        // Delete existing taglinks.
+        $result = $this->_deleteTaglinks($cleanId, $cleanModule);
+ 
         if (!$result) {
             return false;
         }
