@@ -125,25 +125,39 @@ class TfContentHandler
 
             // Populate the tag property.
             if (isset($contentObject->tags) && !empty($contentObject->id)) {
-                $tags = array();
-                $criteria = $this->criteriaFactory->getCriteria();
-                $criteria->add($this->criteriaFactory->getItem('contentId', (int) $contentObject->id));
-                $statement = $this->db->select('taglink', $criteria, array('tagId'));
-                
-                if ($statement) {
-                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                        $tags[] = $row['tagId'];
-                    }
-                    $contentObject->setTags($tags);
-                } else {
-                    trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
-                }
+                $contentObject->setTags($this->loadTagsForObject($contentObject->id));
             }
 
             return $contentObject;
         }
 
         return false;
+    }
+    
+    /**
+     * Returns an array of tag IDs for a given content object.
+     * 
+     * @param int $id ID of content object.
+     * @return array Array of tag IDs.
+     */
+    protected function loadTagsForObject(int $id)
+    {
+        $cleanId = (int) $id;      
+        $tags = array();
+        
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->criteriaFactory->getItem('contentId', $cleanId));
+        $statement = $this->db->select('taglink', $criteria, array('tagId'));
+
+        if ($statement) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $tags[] = $row['tagId'];
+            }
+            
+            return $tags;
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
     }
     
     /**
@@ -267,6 +281,7 @@ class TfContentHandler
             trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
         }
         
+        // Convert object to array for insertion in database.
         $keyValues = $obj->convertObjectToArray();
         $keyValues['submissionTime'] = time(); // Automatically set submission time.
         $keyValues['lastUpdated'] = 0; // Initiate lastUpdated at 0.
@@ -275,30 +290,15 @@ class TfContentHandler
         unset($keyValues['tags']);
         unset($keyValues['validator']);
 
-        // Process image and media files before inserting the object, as related fields must be set.
+        // Process image and media files before inserting the object, as properties must be determined.
         $propertyWhitelist = $obj->getPropertyWhitelist();
+        $keyValues['image'] = $this->uploadImage($propertyWhitelist);
         
-        if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
-            $filename = $this->validator->trimString($_FILES['image']['name']);
-            $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
-            
-            if ($cleanFilename) {
-                $keyValues['image'] = $cleanFilename;
-            }
-        }
-
-        if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
-            $filename = $this->validator->trimString($_FILES['media']['name']);
-            $cleanFilename = $this->fileHandler->uploadFile($filename, 'media');
-            
-            if ($cleanFilename) {
-                $keyValues['media'] = $cleanFilename;
-                $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
-                $extension = pathinfo($cleanFilename, PATHINFO_EXTENSION);
-                $keyValues['format'] = $mimetypeWhitelist[$extension];
-                $keyValues['fileSize'] = $_FILES['media']['size'];
-            }
-        }
+        $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
+        $mediaProperties = $this->uploadMedia($propertyWhitelist, $mimetypeWhitelist);
+        $keyValues['media'] = $mediaProperties['media'];
+        $keyValues['format'] = $mediaProperties['format'];
+        $keyValues['fileSize'] = $mediaProperties['fileSize'];
 
         // Insert the object into the database.
         $result = $this->db->insert('content', $keyValues);
@@ -311,12 +311,59 @@ class TfContentHandler
         }
         
         unset($keyValues, $result);
+        
+        // Insert the tags associated with this object.
+        $this->insertTagsForObject($contentId, $obj);
+        
+        return true;
+    }
+    
+    protected function uploadImage(array $propertyWhitelist)
+    {
+        if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
+            $filename = $this->validator->trimString($_FILES['image']['name']);
+            $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
+            
+            if ($cleanFilename) {
+                return $cleanFilename;
+            }
+        }
+        
+        return '';
+    }
+    
+    protected function uploadMedia(array $propertyWhitelist, array $mimetypeWhitelist)
+    {
+        $keyValues = array('media' => '', 'format' => '', 'fileSize' => '');
+        
+        if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
+            $filename = $this->validator->trimString($_FILES['media']['name']);
+            $cleanFilename = $this->fileHandler->uploadFile($filename, 'media');
 
-        // Tags are stored separately in the taglinks table. Tags are assembled in one batch before
-        // proceeding to insertion; so if one fails a range check all should fail.
+            if ($cleanFilename) {
+                $keyValues['media'] = $cleanFilename;
+                $extension = pathinfo($cleanFilename, PATHINFO_EXTENSION);
+                $keyValues['format'] = $mimetypeWhitelist[$extension];
+                $keyValues['fileSize'] = $_FILES['media']['size'];
+            }
+        }
+        
+        return $keyValues;
+    }
+    
+    /**
+     * Insert the tags associated with a content object.
+     * 
+     * Tags are stored separately in the taglinks table. Tags are assembled in one batch before
+     * proceeding to insertion; so if one fails a range check all should fail. If the
+     * lastInsertId could not be retrieved, then halt execution because this data
+     * is necessary in order to correctly assign taglinks to content objects.
+     * 
+     * @return boolean
+     */
+    protected function insertTagsForObject(int $contentId, TfContentObject $obj)
+    {
         if (isset($obj->tags) and $this->validator->isArray($obj->tags)) {
-            // If the lastInsertId could not be retrieved, then halt execution becuase this data
-            // is necessary in order to correctly assign taglinks to content objects.
             if (!$contentId) {
                 trigger_error(TFISH_ERROR_NO_LAST_INSERT_ID, E_USER_ERROR);
                 exit;
@@ -328,8 +375,6 @@ class TfContentHandler
                 return false;
             }
         }
-
-        return true;
     }
 
     /**
