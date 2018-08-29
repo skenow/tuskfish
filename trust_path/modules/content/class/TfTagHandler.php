@@ -77,7 +77,6 @@ class TfTagHandler extends TfContentHandler
         $cleanTagList = array();
 
         // Validate input.
-        // ID of a previously selected tag, if any.
         $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
         
@@ -92,23 +91,28 @@ class TfTagHandler extends TfContentHandler
             }
         }
         
-        // The text to display in the zero option of the select box.
+        // The text to display as the zero option of the select box.
         $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
         $cleanKeyName = isset($keyName)
                 ? $this->validator->escapeForXss($this->validator->trimString($keyName)) : 'tagId';
 
-        // Build the select box.
+        return $this->_buildSelectBox($cleanKeyName, $cleanTagList, $cleanSelected, $cleanZeroOption);
+    }
+    
+    /** @internal */
+    private function _buildSelectBox($cleanKeyName, array $cleanTagList, $cleanSelected, $cleanZeroOption)
+    {
         $cleanTagList = array(0 => $cleanZeroOption) + $cleanTagList;
         $selectBox = '<select class="form-control custom-select" name="' . $cleanKeyName . '" id="'
                 . $cleanKeyName . '" onchange="this.form.submit()">';
         
         foreach ($cleanTagList as $key => $value) {
-            $selectBox .= ($key === $selected) ? '<option value="' . $key . '" selected>' . $value
+            $selectBox .= ($key === $cleanSelected) ? '<option value="' . $key . '" selected>' . $value
                     . '</option>' : '<option value="' . $key . '">' . $value . '</option>';
         }
         
         $selectBox .= '</select>';
-
+        
         return $selectBox;
     }
 
