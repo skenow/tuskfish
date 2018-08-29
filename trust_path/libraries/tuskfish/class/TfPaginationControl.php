@@ -8,7 +8,7 @@
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.1
- * @package     content
+ * @package     core
  */
 
 // Enable strict type declaration.
@@ -27,13 +27,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.1
- * @package     content
+ * @package     core
  * @var         TfValidator $validator Instance of the Tuskfish data valiator class.
  * @var         TfPreference $preference Instance of the Tuskfish site preference class.
- * @var         int $count Number of content objects (pages) matching these parameters.
- * @var         int $limit Number of content objects to retrieve in current view.
+ * @var         int $count Number of objects (pages) matching these parameters.
+ * @var         int $limit Number of objects to retrieve in current view.
  * @var         string $url Target base URL for pagination control links.
- * @var         int $start Position in result set to retrieve content objects from.
+ * @var         int $start Position in result set to retrieve objects from.
  * @var         int $tag ID of tag used to filter content.
  * @var         array $extraParams Query string to be appended to the URLs (control script params).
  */

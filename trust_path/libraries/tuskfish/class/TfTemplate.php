@@ -8,7 +8,7 @@
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.0
- * @package     content
+ * @package     core
  */
 
 // Enable strict type declaration.
@@ -26,7 +26,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.0
- * @package     content
+ * @package     core
  * @var         TfValidator $tfValidator Instance of the Tuskfish data validator class.
  * @var         string $theme The theme (template set) in use on this page.
  */
