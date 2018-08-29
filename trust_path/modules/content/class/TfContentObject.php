@@ -74,6 +74,7 @@ class TfContentObject
     use TfLanguage;
     use TfMagicMethods;
     use TfMimetypes;
+    use TfRights;
 
     protected $validator;
     protected $id = '';
@@ -456,31 +457,6 @@ class TfContentObject
     }
     
     /**
-     * Returns a list of intellectual property rights licenses for the content submission form.
-     * 
-     * In the interests of brevity and sanity, a comprehensive list is not provided. Add entries
-     * that you want to use to the array below. Be aware that deleting entries that are in use by
-     * your content objects will cause errors.
-     * 
-     * @return array Array of copyright licenses.
-     */
-    public function getListOfRights()
-    {
-        return array(
-            '1' => TFISH_RIGHTS_COPYRIGHT,
-            '2' => TFISH_RIGHTS_ATTRIBUTION,
-            '3' => TFISH_RIGHTS_ATTRIBUTION_SHARE_ALIKE,
-            '4' => TFISH_RIGHTS_ATTRIBUTION_NO_DERIVS,
-            '5' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL,
-            '6' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE,
-            '7' => TFISH_RIGHTS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS,
-            '8' => TFISH_RIGHTS_GPL2,
-            '9' => TFISH_RIGHTS_GPL3,
-            '10' => TFISH_RIGHTS_PUBLIC_DOMAIN,
-        );
-    }
-    
-    /**
      * Returns an array of base object properties that are not used by this subclass.
      * 
      * This list is also used in update calls to the database to ensure that unused columns are
@@ -683,26 +659,7 @@ class TfContentObject
                 break;
 
             case "fileSize": // Convert to human readable.
-                $bytes = (int) $this->$cleanProperty;
-                $unit = $val = '';
-
-                if ($bytes === 0 || $bytes < ONE_KILOBYTE) {
-                    $unit = ' bytes';
-                    $val = $bytes;
-                } elseif ($bytes >= ONE_KILOBYTE && $bytes < ONE_MEGABYTE) {
-                    $unit = ' KB';
-                    $val = ($bytes / ONE_KILOBYTE);
-                } elseif ($bytes >= ONE_MEGABYTE && $bytes < ONE_GIGABYTE) {
-                    $unit = ' MB';
-                    $val = ($bytes / ONE_MEGABYTE);
-                } else {
-                    $unit = ' GB';
-                    $val = ($bytes / ONE_GIGABYTE);
-                }
-
-                $val = round($val, 2);
-
-                return $val . ' ' . $unit;
+                return $this->convertBytesToHumanReadable((int) $this->$cleanProperty);
                 break;
 
             case "format": // Output the file extension as user-friendly "mimetype".
@@ -754,6 +711,36 @@ class TfContentObject
                 return $this->$cleanProperty;
                 break;
         }
+    }
+    
+    /**
+     * Converts bytes to a human readable units (KB, MB, GB etc).
+     * 
+     * @param int $bytes File size in bytes.
+     * @return string Bytes expressed as convenient human readable units.
+     */
+    public function convertBytesToHumanReadable(int $bytes)
+    {
+        $cleanBytes = (int) $bytes;
+        $unit = $val = '';
+
+        if ($cleanBytes === 0 || $cleanBytes < ONE_KILOBYTE) {
+            $unit = ' bytes';
+            $val = $cleanBytes;
+        } elseif ($cleanBytes >= ONE_KILOBYTE && $cleanBytes < ONE_MEGABYTE) {
+            $unit = ' KB';
+            $val = ($cleanBytes / ONE_KILOBYTE);
+        } elseif ($cleanBytes >= ONE_MEGABYTE && $cleanBytes < ONE_GIGABYTE) {
+            $unit = ' MB';
+            $val = ($cleanBytes / ONE_MEGABYTE);
+        } else {
+            $unit = ' GB';
+            $val = ($cleanBytes / ONE_GIGABYTE);
+        }
+
+        $val = round($val, 2);
+
+        return $val . ' ' . $unit;
     }
     
     /**
