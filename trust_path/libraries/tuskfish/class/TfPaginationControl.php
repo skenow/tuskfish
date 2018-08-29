@@ -98,90 +98,95 @@ class TfPaginationControl
         }
         
         // 1. Calculate number of pages, page number of start object and adjust for remainders.
-        $page_slots = array();
-        $page_count = (int) (($this->count / $this->limit));
+        $pageSlots = array();
+        $pageCount = (int) (($this->count / $this->limit));
         $remainder = $this->count % $this->limit;
         
         if ($remainder) {
-            $page_count += 1;
+            $pageCount += 1;
         }
         
-        $page_range = range(1, $page_count);
+        $pageRange = range(1, $pageCount);
 
         // No need for pagination control if only one page.
-        if ($page_count === 1) {
+        if ($pageCount === 1) {
             return false;
         }
 
         // 2. Calculate current page.
-        $current_page = (int) (($this->start / $this->limit) + 1);
+        $currentPage = (int) (($this->start / $this->limit) + 1);
 
         // 3. Calculate length of pagination control (number of slots).
-        $elements = ((int) $this->preference->paginationElements > $page_count)
-                ? $page_count : (int) $this->preference->paginationElements;
+        $elements = ((int) $this->preference->paginationElements > $pageCount)
+                ? $pageCount : (int) $this->preference->paginationElements;
 
         // 4. Calculate the fore offset and initial (pre-adjustment) starting position.
-        $offset_int = (int) (($elements - 1) / 2);
-        $offset_float = ($elements - 1) / 2;
-        $page_start = $current_page - $offset_int;
+        $offsetInt = (int) (($elements - 1) / 2);
+        $offsetFloat = ($elements - 1) / 2;
+        $pageStart = $currentPage - $offsetInt;
 
         // 5. Check if fore exceeds bounds. If so, set start = 1 and extract the range.
-        $fore_boundcheck = $current_page - $offset_int;
+        $foreBoundcheck = $currentPage - $offsetInt;
          
-        // 6. Check if aft exceeds bounds. If so set start = $page_count - length.
-        $aft_boundcheck = ($current_page + $offset_float);
+        // 6. Check if aft exceeds bounds. If so set start = $pageCount - length.
+        $aftBoundcheck = ($currentPage + $offsetFloat);
 
         // This is the tricky bit - slicing a variable region out of the range.
-        if ($page_count === $elements) {
-            $page_slots = $page_range;
-        } elseif ($fore_boundcheck < 1) {
-            $page_slots = array_slice($page_range, 0, $elements, true);
-        } elseif ($aft_boundcheck >= $page_count) {
-            $page_start = $page_count - $elements;
-            $page_slots = array_slice($page_range, $page_start, $elements, true);
+        if ($pageCount === $elements) {
+            $pageSlots = $pageRange;
+        } elseif ($foreBoundcheck < 1) {
+            $pageSlots = array_slice($pageRange, 0, $elements, true);
+        } elseif ($aftBoundcheck >= $pageCount) {
+            $pageStart = $pageCount - $elements;
+            $pageSlots = array_slice($pageRange, $pageStart, $elements, true);
         } else {
-            $page_slots = array_slice($page_range, ($page_start - 1), $elements, true);
+            $pageSlots = array_slice($pageRange, ($pageStart - 1), $elements, true);
         }
 
         // 7. Substitute in the 'first' and 'last' page elements and sort the array back into
         // numerical order.
-        end($page_slots);
-        unset($page_slots[key($page_slots)]);
-        $page_slots[($page_count - 1)] = TFISH_PAGINATION_LAST;
-        reset($page_slots);
-        unset($page_slots[key($page_slots)]);
-        $page_slots[0] = TFISH_PAGINATION_FIRST;
-        ksort($page_slots);
-
-        // Construct a HTML pagination control.
+        end($pageSlots);
+        unset($pageSlots[key($pageSlots)]);
+        $pageSlots[($pageCount - 1)] = TFISH_PAGINATION_LAST;
+        reset($pageSlots);
+        unset($pageSlots[key($pageSlots)]);
+        $pageSlots[0] = TFISH_PAGINATION_FIRST;
+        ksort($pageSlots);
+        
+        return $this->_renderPaginationControl($pageSlots, $currentPage);
+    }
+    
+    /** @internal */
+    private function _renderPaginationControl(array $pageSlots, int $currentPage)
+    {
         $control = '<nav aria-label="Page navigation"><ul class="pagination">';
 
         // Prepare the query string.
-        $query = $start_arg = $tag_arg = '';
+        $query = '';
         
-        foreach ($page_slots as $key => $slot) {
+        foreach ($pageSlots as $key => $slot) {
             $this->start = (int) ($key * $this->limit);
 
             // Set the arguments.
             if ($this->start || $this->tag || $this->extraParams) {
-                $arg_array = array();
+                $args = array();
                 
                 if (!empty($this->start)) {
-                    $arg_array[] = 'start=' . $this->start;
+                    $args[] = 'start=' . $this->start;
                 }
                 
                 if (!empty($this->tag)) {
-                    $arg_array[] = 'tagId=' . $this->tag;
+                    $args[] = 'tagId=' . $this->tag;
                 }
                 
                 if (!empty($this->extraParams)) {
-                    $arg_array[] = $this->extraParams;
+                    $args[] = $this->extraParams;
                 }
                 
-                $query = '?' . implode('&amp;', $arg_array);
+                $query = '?' . implode('&amp;', $args);
             }
 
-            if (($key + 1) === $current_page) {
+            if (($key + 1) === $currentPage) {
                 $control .= '<li class="page-item active"><a class="page-link" href="' . $this->url 
                         . $query . '">' . $slot . '</a></li>';
             } else {
