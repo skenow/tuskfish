@@ -318,6 +318,14 @@ class TfContentHandler
         return true;
     }
     
+    /**
+     * Moves an uploaded image to the /uploads/image directory and returns the filename.
+     * 
+     * This is a helper function for insert().
+     * 
+     * @param array $propertyWhitelist List of permitted object properties.
+     * @return string Filename.
+     */
     protected function uploadImage(array $propertyWhitelist)
     {
         if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
@@ -332,6 +340,15 @@ class TfContentHandler
         return '';
     }
     
+    /**
+     * Moves an uploaded media file to the /uploads/media directory and returns its properties.
+     * 
+     * This is a helper function for insert().
+     * 
+     * @param array $propertyWhitelist List of permitted properties for the content object.
+     * @param array $mimetypeWhitelist List of permitted mimetypes.
+     * @return array Array containing the filename, format and file size of the uploaded media file.
+     */
     protected function uploadMedia(array $propertyWhitelist, array $mimetypeWhitelist)
     {
         $keyValues = array('media' => '', 'format' => '', 'fileSize' => '');
@@ -353,6 +370,8 @@ class TfContentHandler
     
     /**
      * Insert the tags associated with a content object.
+     * 
+     * This is a helper function for insert().
      * 
      * Tags are stored separately in the taglinks table. Tags are assembled in one batch before
      * proceeding to insertion; so if one fails a range check all should fail. If the
@@ -682,21 +701,38 @@ class TfContentHandler
         }
 
         $statement = $this->db->select('content', $criteria);
+        
         if ($statement) {
-
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $object = new $row['type']($this->validator);
                 $object->loadPropertiesFromArray($row, true);
                 $objects[$object->id] = $object;
                 unset($object);
-            }            
-
+            }
             unset($statement);
         } else {
             trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
         }
 
         // Get the tags for these objects.
+        $this->getTagsForObjects($objects);
+
+        return $objects;
+    }
+    
+    /**
+     * Looks up and assigns tag IDs for an array of content objects in a query-efficient manner.
+     * 
+     * This is a helper function for getObjects().
+     * 
+     * @param array $objects Array of content objects.
+     */
+    protected function getTagsForObjects(array $objects)
+    {
+        if (!$this->validator->isArray($objects)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+        
         if (!empty($objects)) {
             $taglinks = array();
             $objectIds = array_keys($objects);
@@ -725,8 +761,6 @@ class TfContentHandler
                 trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
             }
         }
-
-        return $objects;
     }
 
     /**
@@ -1035,13 +1069,9 @@ class TfContentHandler
         }
         
         $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;
-        
-        // Reset the lastUpdated property.
+
         $obj->updateLastUpdated();
-        
-        // Convert the object to array for writing to the database.
         $keyValues = $obj->convertObjectToArray();
-        
         unset($keyValues['submissionTime']); // Submission time should not be overwritten.
         $zeroedProperties = $obj->getListOfZeroedProperties();
 
@@ -1051,161 +1081,22 @@ class TfContentHandler
 
         $propertyWhitelist = $obj->getPropertyWhitelist();
 
-        // Tags are stored in a separate table and must be handled in a separate query.
+        // Unset properties that are not resident in the content table.
         unset($keyValues['tags']);
-        
-        // Validator is non-persistent and not stored in the database.
         unset($keyValues['validator']);
 
         // Load the saved object from the database. This will be used to make comparisons with the
         // current object state and facilitate clean up of redundant tags, parent references, and
         // image/media files.
-        
         $savedObject = $this->getObject($cleanId);
         
-        /**
-         * Handle image / media files for existing objects.
-         */
+        // Update image / media files for existing objects.
         if (!empty($savedObject)) {
-
-            /**
-             * Image property.
-             */
-            
-            // 1. Check if there is an existing image file associated with this content object.
-            $existingImage = $this->_checkImage($savedObject);
-
-            // 2. Is this content type allowed to have an image property?
-            if (!array_key_exists('image', $propertyWhitelist)) {
-                $keyValues['image'] = '';
-                if ($existingImage) {
-                    $this->_deleteImage($existingImage);
-                    $existingImage = '';
-                }
-            }
-            
-            // 3. Has an existing image file been flagged for deletion?
-            if ($existingImage) {
-                if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
-                    $keyValues['image'] = '';
-                    $this->_deleteImage($existingImage);
-                    $existingImage = '';
-                }
-            }
-            
-            // 4. Check if a new image file has been uploaded by looking in $_FILES.
-            if (array_key_exists('image', $propertyWhitelist)) {
-
-                if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
-                    $filename = $this->validator->trimString($_FILES['image']['name']);
-                    $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
-                    
-                    if ($cleanFilename) {
-                        $keyValues['image'] = $cleanFilename;
-                        
-                        // Delete old image file, if any.
-                        if ($existingImage) {
-                            $this->_deleteImage($existingImage);
-                        }
-                    } else {
-                        $keyValues['image'] = '';
-                    }
-                    
-                } else { // No new image, use the existing file name.
-                    $keyValues['image'] = $existingImage;
-                }
-            }
-
-            // If the updated object has no image attached, or has been instructed to delete
-            // attached image, delete any old image files.
-            if ($existingImage &&
-                    ((!isset($keyValues['image']) || empty($keyValues['image']))
-                    || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
-                $this->_deleteImage($existingImage);
-            }
-
-            /**
-             * Media property.
-             */
-            
-            // 1. Check if there is an existing media file associated with this content object.
-            $existingMedia = $this->_checkMedia($savedObject);
-            
-            // 2. Is this content type allowed to have a media property?
-            if (!array_key_exists('media', $propertyWhitelist)) {
-                $keyValues['media'] = '';
-                $keyValues['format'] = '';
-                $keyValues['fileSize'] = '';
-                if ($existingMedia) {
-                    $this->_deleteMedia($existingMedia);
-                    $existingMedia = '';
-                }
-            }
-            
-            // 3. Has existing media been flagged for deletion?
-            if ($existingMedia) {
-                if (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])) {
-                    $keyValues['media'] = '';
-                    $keyValues['format'] = '';
-                    $keyValues['fileSize'] = '';
-                    $this->_deleteMedia($existingMedia);
-                    $existingMedia = '';
-                }
-            }
-            
-            // 4. Process media file.
-            if (array_key_exists('media', $propertyWhitelist)) {
-                $cleanFilename = '';
-                
-                // Get a whitelist of permitted mimetypes.
-                $mimetypeWhitelist = $obj->getListOfPermittedUploadMimetypes();
-                
-                // Get name of newly uploaded file (overwrites old one).
-                if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
-                    $filename = $this->validator->trimString($_FILES['media']['name']);
-                    $cleanFilename = $this->fileHandler->uploadFile($filename, 'media'); 
-                } else {
-                    $cleanFilename = $existingMedia;
-                }
-
-                if ($cleanFilename) {
-                    if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
-                        $extension = mb_strtolower(pathinfo($cleanFilename, PATHINFO_EXTENSION), 'UTF-8');
-
-                        // Set values of new media file.
-                        $keyValues['media'] = $cleanFilename;
-                        $keyValues['format'] = $mimetypeWhitelist[$extension];
-                        $keyValues['fileSize'] = $_FILES['media']['size'];
-
-                        // Delete any old media file.
-                        if ($existingMedia) {
-                            $this->_deleteMedia($existingMedia);
-                            $existingMedia = '';
-                        }
-                    // No new media, use the existing file name. Still need to validate it as the
-                    // content type may have changed.
-                    } else {
-                        if ($existingMedia) {
-                            $keyValues['media'] = $existingMedia;
-                            $keyValues['format'] = $obj->format;
-                            $keyValues['fileSize'] = $obj->fileSize;
-                        }
-                    }           
-                } else {
-                    $keyValues['media'] = '';
-                    $keyValues['format'] = '';
-                    $keyValues['fileSize'] = '';
-
-                    // Delete any old media file.
-                    if ($existingMedia) {
-                        $this->_deleteMedia($existingMedia);
-                        $existingMedia = '';
-                    }
-                }
-            }
+            $keyValues = $this->updateImage($propertyWhitelist, $keyValues, $savedObject);
+            $keyValues = $this->updateMedia($propertyWhitelist, $keyValues, $savedObject);
         }
 
-        // Update tags
+        // Update tags.
         $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->module,
                 $obj->tags);
         
@@ -1214,20 +1105,8 @@ class TfContentHandler
             return false;
         }
         
-        // Check if this object used to be a collection. If it has been changed to something else
-        // clean up any parental references to it.
-        if ($keyValues['type'] !== 'TfCollection' && !empty($savedObject)) {
-            $exCollection = $this->_checkExCollection($savedObject);
-            
-            if ($exCollection === true) {
-                $result = $this->deleteParentalReferences($cleanId);
-                
-                if (!$result) {
-                    trigger_error(TFISH_ERROR_PARENT_UPDATE_FAILED, E_USER_NOTICE);
-                    return false;
-                }
-            }
-        }
+        // Check if this object used to be a collection and clean up parental references.
+        $this->checkExCollection($keyValues, $savedObject);
 
         // Update the content object.
         $result = $this->db->update('content', $cleanId, $keyValues);
@@ -1241,25 +1120,166 @@ class TfContentHandler
         return true;
     }
     
+    protected function updateImage(array $propertyWhitelist, array $keyValues,
+            TfContentObject $savedObject)
+    {
+        // 1. Check if there is an existing image file associated with this content object.
+        $existingImage = $this->checkImage($savedObject);
+
+        // 2. Is this content type allowed to have an image property?
+        if (!array_key_exists('image', $propertyWhitelist)) {
+            $keyValues['image'] = '';
+            if ($existingImage) {
+                $this->_deleteImage($existingImage);
+                $existingImage = '';
+            }
+        }
+
+        // 3. Has an existing image file been flagged for deletion?
+        if ($existingImage) {
+            if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
+                $keyValues['image'] = '';
+                $this->_deleteImage($existingImage);
+                $existingImage = '';
+            }
+        }
+
+        // 4. Check if a new image file has been uploaded by looking in $_FILES.
+        if (array_key_exists('image', $propertyWhitelist)) {
+
+            if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
+                $filename = $this->validator->trimString($_FILES['image']['name']);
+                $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
+
+                if ($cleanFilename) {
+                    $keyValues['image'] = $cleanFilename;
+
+                    // Delete old image file, if any.
+                    if ($existingImage) {
+                        $this->_deleteImage($existingImage);
+                    }
+                } else {
+                    $keyValues['image'] = '';
+                }
+
+            } else { // No new image, use the existing file name.
+                $keyValues['image'] = $existingImage;
+            }
+        }
+        
+        // If the updated object has no image attached, or has been instructed to delete
+        // attached image, delete any old image files.
+        if ($existingImage &&
+                ((!isset($keyValues['image']) || empty($keyValues['image']))
+                || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
+            $this->_deleteImage($existingImage);
+        }
+        
+        return $keyValues;
+    }
+    
+    protected function updateMedia(array $propertyWhitelist, array $keyValues,
+            TfContentObject $savedObject)
+    {
+        // 1. Check if there is an existing media file associated with this content object.
+        $existingMedia = $this->checkMedia($savedObject);
+
+        // 2. Is this content type allowed to have a media property?
+        if (!array_key_exists('media', $propertyWhitelist)) {
+            $keyValues['media'] = '';
+            $keyValues['format'] = '';
+            $keyValues['fileSize'] = '';
+            if ($existingMedia) {
+                $this->_deleteMedia($existingMedia);
+                $existingMedia = '';
+            }
+        }
+
+        // 3. Has existing media been flagged for deletion?
+        if ($existingMedia) {
+            if (isset($_POST['deleteMedia']) && !empty($_POST['deleteMedia'])) {
+                $keyValues['media'] = '';
+                $keyValues['format'] = '';
+                $keyValues['fileSize'] = '';
+                $this->_deleteMedia($existingMedia);
+                $existingMedia = '';
+            }
+        }
+
+        // 4. Process media file.
+        if (array_key_exists('media', $propertyWhitelist)) {
+            $cleanFilename = '';
+
+            // Get a whitelist of permitted mimetypes.
+            $mimetypeWhitelist = $savedObject->getListOfPermittedUploadMimetypes();
+
+            // Get name of newly uploaded file (overwrites old one).
+            if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
+                $filename = $this->validator->trimString($_FILES['media']['name']);
+                $cleanFilename = $this->fileHandler->uploadFile($filename, 'media'); 
+            } else {
+                $cleanFilename = $existingMedia;
+            }
+
+            if ($cleanFilename) {
+                if (isset($_FILES['media']['name']) && !empty($_FILES['media']['name'])) {
+                    $extension = mb_strtolower(pathinfo($cleanFilename, PATHINFO_EXTENSION), 'UTF-8');
+
+                    // Set values of new media file.
+                    $keyValues['media'] = $cleanFilename;
+                    $keyValues['format'] = $mimetypeWhitelist[$extension];
+                    $keyValues['fileSize'] = $_FILES['media']['size'];
+
+                    // Delete any old media file.
+                    if ($existingMedia) {
+                        $this->_deleteMedia($existingMedia);
+                        $existingMedia = '';
+                    }
+                // No new media, use the existing file name. Still need to validate it as the
+                // content type may have changed.
+                } else {
+                    if ($existingMedia) {
+                        $keyValues['media'] = $existingMedia;
+                        $keyValues['format'] = $obj->format;
+                        $keyValues['fileSize'] = $obj->fileSize;
+                    }
+                }           
+            } else {
+                $keyValues['media'] = '';
+                $keyValues['format'] = '';
+                $keyValues['fileSize'] = '';
+
+                // Delete any old media file.
+                if ($existingMedia) {
+                    $this->_deleteMedia($existingMedia);
+                    $existingMedia = '';
+                }
+            }
+        }
+        
+        return $keyValues;
+    }
+    
     /**
-     * Check if a content object is currently registered as a TfCollection in the database.
+     * Check if the object used to be a TfCollection and delete parental references if necessary.
      * 
      * When updating an object, this method is used to check if it used to be a collection. If so,
      * other content objects referring to it as parent will need to be updated. Note that you must
      * pass in the SAVED copy of the object from the database, rather than the 'current' version, 
      * as the purpose of the method is to determine if the object *used to be* a collection.
      * 
-     * @param TfContentObject $obj The content object to be tested.
-     * @return boolean True if content object is registered as a TfCollection in database,
-     * otherwise false.
+     * @param array $keyValues An array of the updated content object data as key value pairs.
+     * @param TfContentObject $obj The old version of the object as currently stored in the database.
      */
-    private function _checkExCollection(TfContentObject $obj)
-    {      
-        if (!empty($obj->type) && $obj->type === 'TfCollection') {
-           return true; 
+    protected function checkExCollection(array $keyValues, TfContentObject $obj)
+    {
+        if ($obj->type === 'TfCollection' && $keyValues['type'] !== 'TfCollection') {
+           $result = $this->deleteParentalReferences((int) $keyValues['id']);
+                
+            if (!$result) {
+                trigger_error(TFISH_ERROR_PARENT_UPDATE_FAILED, E_USER_NOTICE);
+            }
         }
-        
-        return false;
     }
 
     /**
@@ -1268,7 +1288,7 @@ class TfContentHandler
      * @param TfContentObject $obj The content object to be tested.
      * @return string Filename of associated image property.
      */
-    private function _checkImage(TfContentObject $obj)
+    private function checkImage(TfContentObject $obj)
     {        
         if (!empty($obj->image)) {
             return $obj->image;
@@ -1283,7 +1303,7 @@ class TfContentHandler
      * @param TfContentObject $obj The content object to be tested.
      * @return string Filename of associated media property.
      */
-    private function _checkMedia(TfContentObject $obj)
+    private function checkMedia(TfContentObject $obj)
     {
         if (!empty($obj->media)) {
             return $obj->media;
