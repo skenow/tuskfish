@@ -1235,13 +1235,10 @@ class TfContentHandler
                         $this->_deleteMedia($existingMedia);
                         $existingMedia = '';
                     }
-                // No new media, use the existing file name. Still need to validate it as the
-                // content type may have changed.
+                // No new media, use the existing file name.
                 } else {
                     if ($existingMedia) {
                         $keyValues['media'] = $existingMedia;
-                        $keyValues['format'] = $obj->format;
-                        $keyValues['fileSize'] = $obj->fileSize;
                     }
                 }           
             } else {
