@@ -622,7 +622,8 @@ class TfContentObject
     /**
      * Assign form data to content object.
      * 
-     * Note that data validation is carried out internally via the setters.
+     * Note that data validation is carried out internally via the setters. This is a helper method
+     * for loadPropertiesFromArray().
      * 
      * @param array $dirtyInput Array of untrusted form input.
      */
