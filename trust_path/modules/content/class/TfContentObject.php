@@ -593,30 +593,48 @@ class TfContentObject
             $this->setDate(date(DATE_RSS, time()));
         }
 
-        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
+        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.        
         if (array_key_exists('teaser', $propertyWhitelist) && !empty($dirtyInput['teaser'])) {
-            
-            if ($liveUrls === true) {
-                $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['teaser']);
-            } else {
-                $teaser = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['teaser']);
-            }
-            
+            $teaser = $this->convertBaseUrlToConstant($dirtyInput['teaser'], $liveUrls);            
             $this->setTeaser($teaser);
         }
 
-        if (array_key_exists('description', $propertyWhitelist)
-                && !empty($dirtyInput['description'])) {
-            
-            if ($liveUrls === true) {
-                $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['description']);
-            } else {
-                $description = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['description']);
-            }
-            
+        if (array_key_exists('description', $propertyWhitelist) && !empty($dirtyInput['description'])) {
+            $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $liveUrls);            
             $this->setDescription($description);
         }
 
+        $this->loadImage($propertyWhitelist);        
+        $this->loadMedia($propertyWhitelist);
+    }
+    
+    /**
+     * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
+     * 
+     * Only useful on HTML fields.
+     * 
+     * @param string $html A HTML field that makes use of the TFISH_LINK constant.
+     * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
+     * @return string HTML field with converted URLs.
+     */
+    protected function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
+    {
+        if ($liveUrls === true) {
+            $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
+        } else {
+                $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
+        }
+        
+        return $html;
+    }
+    
+    /**
+     * Sets the image property from untrusted form data.
+     * 
+     * @param array $propertyWhitelist List of permitted object properties.
+     */
+    protected function loadImage(array $propertyWhitelist)
+    {
         if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
             $cleanImageFilename = $this->validator->trimString($_FILES['image']['name']);
             
@@ -624,7 +642,15 @@ class TfContentObject
                 $this->setImage($cleanImageFilename);
             }
         }
-      
+    }
+    
+    /**
+     * Sets the media property from untrusted form data.
+     * 
+     * @param array $propertyWhitelist List of permitted object properties.
+     */
+    protected function loadMedia(array $propertyWhitelist)
+    {
         if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
             $cleanMediaFilename = $this->validator->trimString($_FILES['media']['name']);
             
