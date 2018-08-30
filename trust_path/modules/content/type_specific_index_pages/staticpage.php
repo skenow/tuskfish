@@ -60,7 +60,7 @@ if ($cleanId) {
     
     if (is_object($content) && $content->online) {
         // Update view counter and assign object to template.
-        $content->counter += 1;
+        $content->setCounter($content->counter + 1);
         $contentHandler->updateCounter($cleanId);
         
         // Check if cached page is available.
