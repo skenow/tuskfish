@@ -595,34 +595,89 @@ class TfContentObject
                 ? true : false;
         $deleteMedia = (isset($dirtyInput['deleteMedia']) && !empty($dirtyInput['deleteMedia']))
                 ? true : false;
-
-        // Note that handler, template and module are not accessible through this method.
-        $propertyWhitelist = $this->getPropertyWhitelist();
-
-        foreach ($propertyWhitelist as $key => $type) {
-            if (array_key_exists($key, $dirtyInput)) {
-                $this->__set($key, $dirtyInput[$key]);
-            }
-            unset($key, $type);
-        }
-
-        if (array_key_exists('date', $propertyWhitelist) && empty($dirtyInput['date'])) {
+        
+        $this->loadProperties($dirtyInput);
+                       
+        // If date is empty default to today.
+        if (isset($this->date) && empty($dirtyInput['date'])) {
             $this->setDate(date(DATE_RSS, time()));
         }
 
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.        
-        if (array_key_exists('teaser', $propertyWhitelist) && !empty($dirtyInput['teaser'])) {
+        if (isset($this->teaser) && !empty($dirtyInput['teaser'])) {
             $teaser = $this->convertBaseUrlToConstant($dirtyInput['teaser'], $liveUrls);            
             $this->setTeaser($teaser);
         }
 
-        if (array_key_exists('description', $propertyWhitelist) && !empty($dirtyInput['description'])) {
+        if (isset($this->description) && !empty($dirtyInput['description'])) {
             $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $liveUrls);            
             $this->setDescription($description);
         }
 
+        $propertyWhitelist = $this->getPropertyWhitelist();
         $this->loadImage($propertyWhitelist);        
         $this->loadMedia($propertyWhitelist);
+    }
+    
+    /**
+     * Assign form data to content object.
+     * 
+     * Note that data validation is carried out internally via the setters.
+     * 
+     * @param array $dirtyInput Array of untrusted form input.
+     */
+    private function loadProperties(array $dirtyInput)
+    {
+        if (isset($this->id) && isset($dirtyInput['id']))
+            $this->setId((int) $dirtyInput['id']);
+        if (isset($this->type) && isset($dirtyInput['type']))
+            $this->setType((string) $dirtyInput['type']);
+        if (isset($this->title) && isset($dirtyInput['title']))
+            $this->setTitle((string) $dirtyInput['title']);
+        if (isset($this->teaser) && isset($dirtyInput['teaser']))
+            $this->setTeaser((string) $dirtyInput['teaser']);
+        if (isset($this->description) && isset($dirtyInput['description']))
+            $this->setDescription((string) $dirtyInput['description']);
+        if (isset($this->media) && isset($dirtyInput['media']))
+            $this->setMedia((string) $dirtyInput['media']);
+        if (isset($this->format) && isset($dirtyInput['format']))
+            $this->setFormat((string) $dirtyInput['format']);
+        if (isset($this->fileSize) && isset($dirtyInput['fileSize']))
+            $this->setFileSize((int) $dirtyInput['fileSize']);
+        if (isset($this->creator) && isset($dirtyInput['creator']))
+            $this->setCreator((string) $dirtyInput['creator']);
+        if (isset($this->image) && isset($dirtyInput['image']))
+            $this->setImage((string) $dirtyInput['image']);
+        if (isset($this->caption) && isset($dirtyInput['caption']))
+            $this->setCaption((string) $dirtyInput['caption']);
+        if (isset($this->date) && isset($dirtyInput['date']))
+            $this->setDate((string) $dirtyInput['date']);
+        if (isset($this->parent) && isset($dirtyInput['parent']))
+            $this->setParent((int)$dirtyInput['parent']);
+        if (isset($this->language) && isset($dirtyInput['language']))
+            $this->setLanguage((string) $dirtyInput['language']);
+        if (isset($this->rights) && isset($dirtyInput['rights']))
+            $this->setRights((int) $dirtyInput['rights']);
+        if (isset($this->publisher) && isset($dirtyInput['publisher']))
+            $this->setPublisher((string) $dirtyInput['publisher']);
+        if (isset($this->tags) && isset($dirtyInput['tags']))
+            $this->setTags((array) $dirtyInput['tags']);
+        if (isset($this->online) && isset($dirtyInput['online']))
+            $this->setOnline((int) $dirtyInput['online']);
+        if (isset($this->submissionTime) && isset($dirtyInput['submissionTime']))
+            $this->setSubmissionTime((int) $dirtyInput['submissionTime']);
+        if (isset($this->lastUpdated) && isset($dirtyInput['lastUpdated']))
+            $this->setLastUpdated((int) $dirtyInput['lastUpdated']);
+        if (isset($this->expiresOn) && isset($dirtyInput['expiresOn']))
+            $this->setExpiresOn((int) $dirtyInput['expiresOn']);
+        if (isset($this->counter) && isset($dirtyInput['counter']))
+            $this->setCounter((int) $dirtyInput['counter']);
+        if (isset($this->metaTitle) && isset($dirtyInput['metaTitle']))
+            $this->setMetaTitle((string) $dirtyInput['metaTitle']);
+        if (isset($this->metaDescription) && isset($dirtyInput['metaDescription']))
+            $this->setMetaDescription((string) $dirtyInput['metaDescription']);
+        if (isset($this->seo) && isset($dirtyInput['seo']))
+            $this->setSeo((string) $dirtyInput['seo']);
     }
     
     /**
@@ -791,116 +846,6 @@ class TfContentObject
         $val = round($val, 2);
 
         return $val . ' ' . $unit;
-    }
-    
-    /**
-     * Intercept direct setting of properties to permit data validation.
-     * 
-     * It is best to set properties using the relevant setter method directly, as it is more
-     * efficient. However, due to use of PDO::FETCH_CLASS to automate instantiation of objects
-     * directly from the database, it is also necessary to allow them to be set via a magic method
-     * call.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
-     */
-    public function __set(string $property, $value)
-    {
-        $cleanProperty = $this->validator->trimString($property);
-        
-        if (isset($this->$cleanProperty)) {
-            switch ($cleanProperty) {
-                case "id":
-                    $this->setId((int) $value);
-                    break;
-                case "type":
-                    $this->setType((string) $value);
-                    break;
-                case "title":
-                    $this->setTitle((string) $value);
-                    break;
-                case "teaser":
-                    $this->setTeaser((string) $value);
-                    break;
-                case "description":
-                    $this->setDescription((string) $value);
-                    break;
-                case "media":
-                    $this->setMedia((string) $value);
-                    break;
-                case "format":
-                    $this->setFormat((string) $value);
-                    break;
-                case "fileSize":
-                    $this->setFileSize((int) $value);
-                    break;
-                case "creator":
-                    $this->setCreator((string) $value);
-                    break;
-                case "image":
-                    $this->setImage((string) $value);
-                    break;
-                case "caption":
-                    $this->setCaption((string) $value);
-                    break;
-                case "date":
-                    $this->setDate((string) $value);
-                    break;
-                case "parent":
-                    $this->setParent((int) $value);
-                    break;
-                case "language":
-                    $this->setLanguage((string) $value);
-                    break;
-                case "rights":
-                    $this->setRights((int) $value);
-                    break;
-                case "publisher":
-                    $this->setPublisher((string) $value);
-                    break;
-                case "tags":
-                    $this->setTags((array) $value);
-                    break;
-                case "online":
-                    $this->setOnline((int) $value);
-                    break;
-                case "submissionTime":
-                    $this->setSubmissionTime((int) $value);
-                    break;
-                case "lastUpdated":
-                    $this->setLastUpdated((int) $value);
-                    break;
-                case "expiresOn":
-                    $this->setExpiresOn((int) $value);
-                    break;
-                case "counter":
-                    $this->setCounter((int) $value);
-                    break;
-                case "metaTitle":
-                    $this->setMetaTitle((string) $value);
-                    break;
-                case "metaDescription":
-                    $this->setMetaDescription((string) $value);
-                    break;
-                case "seo":
-                    $this->setSeo((string) $value);
-                    break;
-                case "handler":
-                    $this->setHandler((string) $value);
-                    break;
-                case "template":
-                    $this->setTemplate((string) $value);
-                    break;
-                case "module":
-                    $this->setModule((string) $value);
-                    break;
-                case "icon":
-                    $this->setIcon((string) $value);
-                    break;
-            }
-        } else {
-            // Not a permitted property, do not set.
-        }
     }
     
     /**

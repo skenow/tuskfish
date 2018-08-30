@@ -55,7 +55,7 @@ if ($cleanId) {
         // non-downloadable objects.
         if ($content->type != 'TfDownload' && !($content->type === 'TfCollection' 
                 && $content->media)) {
-            $content->counter += 1;
+            $content->setCounter($content->counter + 1);
             $contentHandler->updateCounter($cleanId);
         }
 
