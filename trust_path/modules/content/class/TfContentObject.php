@@ -611,7 +611,7 @@ class TfContentObject
     /**
      * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
      * 
-     * Only useful on HTML fields.
+     * This is a helper method for loadPropertiesFromArray(). Only useful on HTML fields.
      * 
      * @param string $html A HTML field that makes use of the TFISH_LINK constant.
      * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
@@ -631,6 +631,8 @@ class TfContentObject
     /**
      * Sets the image property from untrusted form data.
      * 
+     * This is a helper method for loadPropertiesFromArray(). 
+     * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
     protected function loadImage(array $propertyWhitelist)
@@ -646,6 +648,8 @@ class TfContentObject
     
     /**
      * Sets the media property from untrusted form data.
+     * 
+     * This is a helper method for loadPropertiesFromArray(). 
      * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
