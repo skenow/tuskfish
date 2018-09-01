@@ -410,10 +410,10 @@ class TfDatabase
      * Note that statement execution is within a transaction and rollback will occur if it fails.
      * This method should be used with database write operations (INSERT, UPDATE, DELETE).
      * 
-     * @param object $statement Prepared statement.
+     * @param PDOStatement $statement Prepared statement.
      * @return bool True on success, false on failure.
      */
-    public function executeTransaction(object $statement)
+    public function executeTransaction(PDOStatement $statement)
     {
         try {
             $this->_db->beginTransaction();
@@ -495,7 +495,7 @@ class TfDatabase
      * mitigating direct SQL injection attacks.
      * 
      * @param string $sql SQL statement.
-     * @return object PDOStatement object on success PDOException object on failure.
+     * @return PDOStatement PDOStatement object on success PDOException object on failure.
      */
     public function preparedStatement(string $sql)
     {
@@ -569,10 +569,10 @@ class TfDatabase
     /**
      * Bind values to PDO placeholders based on criteria items.
      * 
-     * @param object $statement PDO statement object.
+     * @param PDOStatement $statement PDO statement object.
      * @param array $placeholders Array of PDO placeholders for columns.
      */
-    private function bindPdo($statement, array $pdoPlaceholders)
+    private function bindPdo(PDOStatement $statement, array $pdoPlaceholders)
     {
         if (!empty($pdoPlaceholders)) {
             foreach ($pdoPlaceholders as $placeholder => $value) {
@@ -645,10 +645,10 @@ class TfDatabase
     /**
      * Binds values of limit and offset to PDO placeholders.
      * 
-     * @param type $statement PDO statement object.
+     * @param PDOStatement $statement PDO statement object.
      * @param TfCriteria $criteria Query composer object.
      */
-    private function bindLimitAndOffset($statement, TfCriteria $criteria)
+    private function bindLimitAndOffset(PDOStatement $statement, TfCriteria $criteria)
     {
         if ($criteria->limit && $criteria->offset) {
             $statement->bindValue(':limit', $criteria->limit, PDO::PARAM_INT);
@@ -750,10 +750,10 @@ class TfDatabase
     /**
      * Bind values to PDO placeholders for tags.
      * 
-     * @param object $statement PDO statement object.
+     * @param PDOStatement $statement PDO statement object.
      * @param array $tagPlaceholders Array of PDO placeholders for tags.
      */
-    private function bindTagPdo($statement, array $tagPlaceholders)
+    private function bindTagPdo(PDOStatement $statement, array $tagPlaceholders)
     {
         foreach ($tagPlaceholders as $tag_placeholder => $value) {
             $statement->bindValue($tag_placeholder, $value, PDO::PARAM_INT);
@@ -769,7 +769,7 @@ class TfDatabase
      * @param string $table Name of table.
      * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @param array $columns Names of database columns to be selected.
-     * @return object PDOStatement object on success PDOException on failure.
+     * @return PDOStatement PDOStatement object on success PDOException on failure.
      */
     public function select(string $table, TfCriteria $criteria = null, array $columns = null)
     {
@@ -959,7 +959,7 @@ class TfDatabase
      * @param string $table Name of table.
      * @param TfCriteria $criteria Query composer object used to build conditional database query.
      * @param array $columns Name of columns to filter results by.
-     * @return object PDOStatement on success, PDOException on failure.
+     * @return PDOStatement PDOStatement on success, PDOException on failure.
      */
     public function selectDistinct(string $table, TfCriteria $criteria = null, array $columns)
     {
