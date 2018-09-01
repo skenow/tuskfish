@@ -241,6 +241,15 @@ define("TFISH_ERROR_NOT_UTF8", "Not UTF-8, illegal character set.");
 define("TFISH_ERROR_DIRECT_PROPERTY_SETTING_DISALLOWED", "Object properties are not permitted to be"
         . " set directly. Use the relevant setter method.");
 
+// Dependency errors.
+define("TFISH_ERROR_NOT_VALIDATOR", "Not a validator object.");
+define("TFISH_ERROR_NOT_DATABASE", "Not a database object.");
+define("TFISH_ERROR_NOT_CRITERIA_FACTORY", "Not a criteria factory object.");
+define("TFISH_ERROR_NOT_FILE_HANDLER", "Not a file handler object");
+define("TFISH_ERROR_NOT_LOGGER", "Not a logger object.");
+define("TFISH_ERROR_NOT_PREFERENCE", "Not a preference object.");
+define("TFISH_ERROR_NOT_PURIFIER", "Not a HTMLPurifier object");
+
 // Token errors.
 define("TFISH_INVALID_TOKEN", "Invalid token error");
 define("TFISH_SORRY_INVALID_TOKEN", "Sorry, the token accompanying your request was invalid. This 

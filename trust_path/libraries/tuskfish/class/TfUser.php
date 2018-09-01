@@ -62,7 +62,7 @@ class TfUser
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
         }
     }
     

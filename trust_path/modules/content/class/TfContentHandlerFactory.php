@@ -53,25 +53,25 @@ class TfContentHandlerFactory
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
         }
         
         if (is_a($db, 'TfDatabase')) {
             $this->db = $db; 
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_DATABASE, E_USER_ERROR);
         }
         
         if (is_a($criteriaFactory, 'TfCriteriaFactory')) {
             $this->criteriaFactory = $criteriaFactory; 
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_FACTORY, E_USER_ERROR);
         }
         
         if (is_a($fileHandler, 'TfFileHandler')) {
             $this->fileHandler = $fileHandler; 
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_FILE_HANDLER, E_USER_ERROR);
         }
         
         $this->taglinkHandler = new TfTaglinkHandler($validator, $db, $criteriaFactory);

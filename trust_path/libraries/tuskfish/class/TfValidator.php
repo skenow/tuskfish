@@ -55,6 +55,8 @@ class TfValidator
     {
         if (is_a($htmlPurifier, 'HTMLPurifier')) {
             $this->htmlPurifier = $htmlPurifier;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_PURIFIER, E_USER_ERROR);
         }
     }
     
