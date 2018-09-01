@@ -52,7 +52,7 @@ class TfMachine
     public function __construct(TfValidator $validator)
     {
         if (!is_a($validator, 'TfValidator')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
         }
         
         $this->validator = $validator;

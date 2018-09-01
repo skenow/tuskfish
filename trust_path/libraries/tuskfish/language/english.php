@@ -249,6 +249,7 @@ define("TFISH_ERROR_NOT_FILE_HANDLER", "Not a file handler object");
 define("TFISH_ERROR_NOT_LOGGER", "Not a logger object.");
 define("TFISH_ERROR_NOT_PREFERENCE", "Not a preference object.");
 define("TFISH_ERROR_NOT_PURIFIER", "Not a HTMLPurifier object");
+define("TFISH_ERROR_NOT_CACHE", "Not a cache object.");
 
 // Token errors.
 define("TFISH_INVALID_TOKEN", "Invalid token error");

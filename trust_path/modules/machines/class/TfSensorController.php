@@ -45,44 +45,44 @@ class TfSensorController
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
         }
         
         if (is_a($db, 'TfDatabase')) {
             $this->db = $db;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_DATABASE, E_USER_ERROR);
         }
         
         if (is_a($criteriaFactory, 'TfCriteriaFactory')) {
             $this->criteriaFactory = $criteriaFactory;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_FACTORY, E_USER_ERROR);
         }
         
         if (is_a($sensorHandler, 'TfSensorHandler')) {
             $this->sensorHandler = $sensorHandler;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_SENSOR_HANDLER, E_USER_ERROR);
         }
         
         if (is_a($cache, 'TfCache')) {
             $this->cache = $cache;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CACHE, E_USER_ERROR);
         }
         
         if (is_a($template, 'TfTemplate')) {
             $this->template = $template;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_TEMPLATE_OBJECT, E_USER_ERROR);
         }
     }
     
     public function getParentSelectOptions(TfMachineHandler $machineHandler)
     {
         if (!is_a($machineHandler, 'TfMachineHandler')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_MACHINE_HANDLER, E_USER_ERROR);
         }
         
         $criteria = $this->criteriaFactory->getCriteria();
