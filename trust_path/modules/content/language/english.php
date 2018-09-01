@@ -80,3 +80,6 @@ define("TFISH_ERROR_TAGLINK_UPDATE_FAILED", "Attempt to update references to a n
 define("TFISH_ERROR_PARENT_UPDATE_FAILED", "Attempt to update references to a non-extant collection"
         . " failed.");
 define("TFISH_ERROR_NO_SUCH_HANDLER", "No such content handler.");
+
+// Dependency errors.
+define("TFISH_ERROR_NOT_TAGLINK_HANDLER", "Not a taglink handler object.");
