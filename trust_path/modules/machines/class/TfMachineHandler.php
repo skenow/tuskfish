@@ -116,7 +116,7 @@ class TfMachineHandler
     public function getCount(TfCriteria $criteria = null)
     {
         if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         if (!isset($criteria)) {
@@ -140,7 +140,7 @@ class TfMachineHandler
         $columns = array('id', 'title');
 
         if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         if (!isset($criteria)) {
@@ -207,7 +207,7 @@ class TfMachineHandler
         $objects = array();
         
         if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         if (!isset($criteria)) {
@@ -290,7 +290,7 @@ class TfMachineHandler
     public function update(TfMachine $obj)
     {
         if (!is_a($obj, 'TfMachine')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_MACHINE, E_USER_ERROR);
         }
         
         $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;

@@ -278,7 +278,7 @@ class TfContentHandler
     public function insert(TfContentObject $obj)
     {
         if (!is_a($obj, 'TfContentObject')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CONTENT_OBJECT, E_USER_ERROR);
         }
         
         // Convert object to array for insertion in database.
@@ -474,7 +474,7 @@ class TfContentHandler
     public function getCount(TfCriteria $criteria = null)
     {
         if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         if (!isset($criteria)) {
@@ -618,7 +618,7 @@ class TfContentHandler
         $columns = array('id', 'title');
 
         if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         if (!isset($criteria)) {
@@ -686,7 +686,7 @@ class TfContentHandler
         $objects = array();
         
         if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
         }
         
         if (!isset($criteria)) {
@@ -1065,7 +1065,7 @@ class TfContentHandler
     public function update(TfContentObject $obj)
     {
         if (!is_a($obj, 'TfContentObject')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CONTENT_OBJECT, E_USER_ERROR);
         }
         
         $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;

@@ -484,21 +484,21 @@ class TfSession
         if (is_a($validator, 'TfValidator')) {
             self::$validator = $validator;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
         if (is_a($db, 'TfDatabase')) {
             self::$db = $db;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_DATABASE, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         
         if (is_a($preference, 'TfPreference')) {
             self::$preference = $preference;
         } else {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_PREFERENCE, E_USER_ERROR);
             self::logout(TFISH_ADMIN_URL . "login.php");
         }
         

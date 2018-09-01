@@ -94,7 +94,7 @@ class TfRss
     public function makeFeedForCollection(TfCollection $obj)
     {
         if (!is_a($obj, 'TfCollection')) {
-            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_COLLECTION_OBJECT, E_USER_ERROR);
         }
         
         $this->setTitle($obj->title);

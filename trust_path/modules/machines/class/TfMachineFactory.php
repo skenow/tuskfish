@@ -67,7 +67,7 @@ class TfMachineFactory
         if (is_a($cache, 'TfCache')) {
             $this->cache = $cache;
         } else {
-            trigger_error(TFISH_ERROR_NOT_MACHINE_HANDLER, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CACHE, E_USER_ERROR);
         }
         
         if (is_a($template, 'TfTemplate')) {
