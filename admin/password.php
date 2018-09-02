@@ -75,7 +75,7 @@ if (in_array($op, array('submit', false), true)) {
              */
             if (empty($error)) {
                 $passwordHash = '';
-                $passwordHash = hashPassword($dirtyPassword);
+                $passwordHash = TfSession::hashPassword($dirtyPassword);
                 $tfTemplate->backUrl = 'admin.php';
                     $tfTemplate->form = TFISH_FORM_PATH . "response.html";
 
