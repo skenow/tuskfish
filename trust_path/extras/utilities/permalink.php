@@ -35,11 +35,11 @@ $cleanStart = (int) ($_GET['start'] ?? 0);
 // View single object description.
 if ($cleanId) {
     $content = $contentHandler->getObject($cleanId);
-    if (is_object($content) && $content->online) {
+    if (is_object($content) && $content->online && $content->type != 'TfBlock') {
 
         // Update view counter and assign object to template. Only increment counter for non-downloadable objects.
         if ($content->type != 'TfDownload') {
-            $content->counter += 1;
+            $content->setCounter($content->counter + 1);
             $contentHandler->updateCounter($cleanId);
         }
         $tfTemplate->content = $content;
