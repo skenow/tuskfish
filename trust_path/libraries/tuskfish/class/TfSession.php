@@ -344,6 +344,11 @@ class TfSession
             exit;
         }
         
+        // If the user has previous failed login attempts sleep to frustrate brute force attacks.
+        if ($user['loginErrors']) {
+            sleep((int) $user['loginErrors']);
+        }
+        
         // First factor authentication: Calculate password hash and compare to the one on file.        
         if (password_verify($dirtyPassword, $user['passwordHash'])) {
             $first_factor = true;
@@ -356,13 +361,19 @@ class TfSession
         if ($first_factor === true && $second_factor === true) {
             self::regenerate();
             $_SESSION['TFISH_LOGIN'] = true;
+            
             // Added as a handle for the password change script.
             $_SESSION['userId'] = (int) $user['id'];
+            
+            // Reset failed login counter to zero.
+            self::$db->update('user', (int) $user['id'], array('loginErrors' => 0));
+            
             header('location: ' . TFISH_ADMIN_URL . "admin.php");
             exit;
         }
         
-        // Otherwise force logout.
+        // Fail: Increment failed login counter, destroy session and redirect to the login page.
+        self::$db->updateCounter((int) $user['id'], 'user', 'loginErrors');
         self::logout(TFISH_ADMIN_URL . "login.php");
         exit;
     }
