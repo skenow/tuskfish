@@ -326,7 +326,7 @@ class TfContentHandler
      * @param array $propertyWhitelist List of permitted object properties.
      * @return string Filename.
      */
-    protected function uploadImage(array $propertyWhitelist)
+    private function uploadImage(array $propertyWhitelist)
     {
         if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
             $filename = $this->validator->trimString($_FILES['image']['name']);
@@ -349,7 +349,7 @@ class TfContentHandler
      * @param array $mimetypeWhitelist List of permitted mimetypes.
      * @return array Array containing the filename, format and file size of the uploaded media file.
      */
-    protected function uploadMedia(array $propertyWhitelist, array $mimetypeWhitelist)
+    private function uploadMedia(array $propertyWhitelist, array $mimetypeWhitelist)
     {
         $keyValues = array('media' => '', 'format' => '', 'fileSize' => '');
         
@@ -380,7 +380,7 @@ class TfContentHandler
      * 
      * @return boolean
      */
-    protected function insertTagsForObject(int $contentId, TfContentObject $obj)
+    private function insertTagsForObject(int $contentId, TfContentObject $obj)
     {
         if (isset($obj->tags) and $this->validator->isArray($obj->tags)) {
             if (!$contentId) {
@@ -727,7 +727,7 @@ class TfContentHandler
      * 
      * @param array $objects Array of content objects.
      */
-    protected function getTagsForObjects(array $objects)
+    private function getTagsForObjects(array $objects)
     {
         if (!$this->validator->isArray($objects)) {
             trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
@@ -1120,7 +1120,18 @@ class TfContentHandler
         return true;
     }
     
-    protected function updateImage(array $propertyWhitelist, array $keyValues,
+    /**
+     * Update the image property for an existing content object.
+     * 
+     * This is a helper method for update().
+     * 
+     * @param array $propertyWhitelist Whitelist of permitted object properties.
+     * @param array $keyValues Updated values of object properties from form data.
+     * @param TfContentObject $savedObject The existing (not updated) object as presently saved in
+     * the database.
+     * @return array $keyValues Object properties with updated image property.
+     */
+    private function updateImage(array $propertyWhitelist, array $keyValues,
             TfContentObject $savedObject)
     {
         // 1. Check if there is an existing image file associated with this content object.
@@ -1178,7 +1189,17 @@ class TfContentHandler
         return $keyValues;
     }
     
-    protected function updateMedia(array $propertyWhitelist, array $keyValues,
+    /**
+     * Update the media property for an existing content object.
+     * 
+     * This is a helper method for update().
+     * 
+     * @param array $propertyWhitelist
+     * @param array $keyValues
+     * @param TfContentObject $savedObject
+     * @return array $keyValues Object properties with updated media/format/file size properties.
+     */
+    private function updateMedia(array $propertyWhitelist, array $keyValues,
             TfContentObject $savedObject)
     {
         // 1. Check if there is an existing media file associated with this content object.
@@ -1268,7 +1289,7 @@ class TfContentHandler
      * @param array $keyValues An array of the updated content object data as key value pairs.
      * @param TfContentObject $obj The old version of the object as currently stored in the database.
      */
-    protected function checkExCollection(array $keyValues, TfContentObject $obj)
+    private function checkExCollection(array $keyValues, TfContentObject $obj)
     {
         if ($obj->type === 'TfCollection' && $keyValues['type'] !== 'TfCollection') {
            $result = $this->deleteParentalReferences((int) $keyValues['id']);

@@ -303,7 +303,7 @@ class TfContentObject
      * @param int $destinationHeight Height to scale image to.
      * @return boolean True on success, false on failure.
      */
-    protected function scaleAndCacheImage(array $properties, string $originalPath,
+    private function scaleAndCacheImage(array $properties, string $originalPath,
             string $cachedPath, int $destinationWidth, int $destinationHeight)
     {
         // Create a blank (black) image RESOURCE of the specified size.
@@ -693,7 +693,7 @@ class TfContentObject
      * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
      * @return string HTML field with converted URLs.
      */
-    protected function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
+    private function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
     {
         if ($liveUrls === true) {
             $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
@@ -711,7 +711,7 @@ class TfContentObject
      * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
-    protected function loadImage(array $propertyWhitelist)
+    private function loadImage(array $propertyWhitelist)
     {
         if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
             $cleanImageFilename = $this->validator->trimString($_FILES['image']['name']);
@@ -729,7 +729,7 @@ class TfContentObject
      * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
-    protected function loadMedia(array $propertyWhitelist)
+    private function loadMedia(array $propertyWhitelist)
     {
         if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
             $cleanMediaFilename = $this->validator->trimString($_FILES['media']['name']);
