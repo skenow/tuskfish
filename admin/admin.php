@@ -68,52 +68,32 @@ if (in_array($op, $optionsWhitelist)) {
     }
     
     $contentHandler = $contentHandlerFactory->getHandler('content');
+    $controllerFactory = new TfContentControllerFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
+            $contentHandlerFactory, $tfTemplate, $tfPreference, $tfCache);
     
+    // Process actions.
     switch ($op) {
         // Add: Display an empty content object submission form.
         case "add":
-            $content = new TfContentObject($tfValidator);
-            
-            $tfTemplate->pageTitle = TFISH_ADD_CONTENT;
-            $tfTemplate->op = 'submit'; // Critical to launch correct form submission action.
-            $tfTemplate->contentTypes = $contentHandler->getTypes();
-            $tfTemplate->rights = $content->getListOfRights();
-            $tfTemplate->languages = $tfPreference->getListOfLanguages();
-            $tfTemplate->tags = $contentHandler->getTagList(false);
-
-            // Make a parent tree select box options.
-            $collectionHandler = $contentHandlerFactory->getHandler('collection');
-            $collections = $collectionHandler->getObjects();
-            $parentTree = new TfTree($collections, 'id', 'parent');
-            $tfTemplate->parentSelectOptions = $parentTree->makeParentSelectBox();
-
-            $tfTemplate->allowedProperties = $content->getPropertyWhitelist();
-            $tfTemplate->zeroedProperties = array(
-                'image' => array('image'),
-                'tags' => array(
-                    'creator',
-                    'language',
-                    'rights',
-                    'publisher',
-                    'tags')
-            );
-            $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . "dataEntry.html";
-            $tfTemplate->tfMainContent = $tfTemplate->render('form');
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->addContent();
             break;
 
-        // Confirm: Confirm deletion of a content object.
+        // Confirm deletion of a content object.
         case "confirmDelete":
             if (isset($_REQUEST['id'])) {
-                $cleanId = (int) $_REQUEST['id'];
-                
-                if ($tfValidator->isInt($cleanId, 1)) {
-                    $tfTemplate->pageTitle = TFISH_CONFIRM_DELETE;
-                    $tfTemplate->content = $contentHandler->getObject($cleanId);
-                    $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . "confirmDelete.html";
-                    $tfTemplate->tfMainContent = $tfTemplate->render('form');
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                }
+                $contentController = $controllerFactory->getController('admin');
+                $contentController->confirmDelete((int) $_REQUEST['id']);
+            } else {
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
+            }
+            break;
+            
+        // Delete a content object. ID must be an integer and > 1.
+        case "delete":
+            if (isset($_REQUEST['id'])) {
+                $contentController = $controllerFactory->getController('admin');
+                $contentController->deleteContent((int) $_REQUEST['id']);
             } else {
                 trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
@@ -123,76 +103,6 @@ if (in_array($op, $optionsWhitelist)) {
             $tfTemplate->pageTitle = TFISH_CONFIRM_FLUSH;
             $tfTemplate->form = TFISH_FORM_PATH . "confirmFlush.html";
             $tfTemplate->tfMainContent = $tfTemplate->render('form');
-            break;
-
-        // Delete: Delete a content object. ID must be an integer and > 1.
-        case "delete":
-            if (isset($_REQUEST['id'])) {
-                $cleanId = (int) $_REQUEST['id'];
-                $result = $contentHandler->delete($cleanId);
-                
-                if ($result) {
-                    $tfCache->flushCache();
-                    $tfTemplate->pageTitle = TFISH_SUCCESS;
-                    $tfTemplate->alertClass = 'alert-success';
-                    $tfTemplate->message = TFISH_OBJECT_WAS_DELETED;
-                } else {
-                    $tfTemplate->pageTitle = TFISH_FAILED;
-                    $tfTemplate->alertClass = 'alert-danger';
-                    $tfTemplate->message = TFISH_OBJECT_DELETION_FAILED;
-                }
-                
-                $tfTemplate->backUrl = 'admin.php';
-                $tfTemplate->form = TFISH_FORM_PATH . "response.html";
-                $tfTemplate->tfMainContent = $tfTemplate->render('form');
-            } else {
-                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-            }
-            break;
-
-        // Edit: Display a data entry form containing the object's current properties.
-        case "edit":
-            if (isset($_REQUEST['id'])) {
-                $cleanId = (int) $_REQUEST['id'];
-                
-                if ($tfValidator->isInt($cleanId, 1)) {
-                    $criteria = $tfCriteriaFactory->getCriteria();
-                    $criteria->add($tfCriteriaFactory->getItem('id', $cleanId));
-                    $statement = $tfDatabase->select('content', $criteria);
-                    
-                    if (!$statement) {
-                        trigger_error(TFISH_ERROR_NO_SUCH_OBJECT, E_USER_NOTICE);
-                        header("Location: admin.php");
-                    }
-                    $row = $statement->fetch(PDO::FETCH_ASSOC);
-
-                    // Make a parent tree select box options.
-                    $collectionHandler = $contentHandlerFactory->getHandler('collection');
-                    $collections = $collectionHandler->getObjects();
-                    $parentTree = new TfTree($collections, 'id', 'parent');
-                    
-                    // Build the content object.
-                    $content = $contentHandler->convertRowToObject($row, false);
-                    
-                    // Assign to template.
-                    $tfTemplate->pageTitle = TFISH_EDIT_CONTENT;
-                    $tfTemplate->op = 'update'; // Critical to launch correct submission action.
-                    $tfTemplate->action = TFISH_UPDATE;
-                    $tfTemplate->content = $content;
-                    $tfTemplate->contentTypes = $contentHandler->getTypes();
-                    $tfTemplate->rights = $content->getListOfRights();
-                    $tfTemplate->languages = $tfPreference->getListOfLanguages();
-                    $tfTemplate->tags = $contentHandler->getTagList(false);
-                    $tfTemplate->parentSelectOptions = 
-                            $parentTree->makeParentSelectBox((int) $row['parent']);
-                    $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . "dataEdit.html";
-                    $tfTemplate->tfMainContent = $tfTemplate->render('form');
-                } else {
-                    trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-                }
-            } else {
-                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-            }
             break;
 
         // Flush the cache.
@@ -214,124 +124,36 @@ if (in_array($op, $optionsWhitelist)) {
             $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
 
-        // Submit: Determine object type, instantiate, validate input, populate properties  and
-        // insert a new content object.
+        // Insert a new content object to the database.
         case "submit":
-            if (empty($_REQUEST['type'])) {
-                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                exit;
-            }
-            
-            $cleanType = $tfValidator->trimString($_REQUEST['type']);
-            
-            $typeWhitelist = $contentHandler->getTypes();
-            
-            if (!array_key_exists($cleanType, $typeWhitelist)) {
-                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                exit;
-            }
-            
-            $contentObject = new $cleanType($tfValidator);
-            $contentObject->loadPropertiesFromArray($_REQUEST);
-
-            // Insert the object
-            $result = $contentHandler->insert($contentObject);
-
-            if ($result) {
-                $tfCache->flushCache();
-                $tfTemplate->pageTitle = TFISH_SUCCESS;
-                $tfTemplate->alertClass = 'alert-success';
-                $tfTemplate->message = TFISH_OBJECT_WAS_INSERTED;
-            } else {
-                $tfTemplate->title = TFISH_FAILED;
-                $tfTemplate->alertClass = 'alert-danger';
-                $tfTemplate->message = TFISH_OBJECT_INSERTION_FAILED;
-            }
-            
-            $tfTemplate->backUrl = 'admin.php';
-            $tfTemplate->form = TFISH_FORM_PATH . "response.html";
-            $tfTemplate->tfMainContent = $tfTemplate->render('form');
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->submitContent($_REQUEST);
             break;
-
-        // Toggle the online status of a particular object.
-        case "toggle":
-            $id = (int) $_REQUEST['id'];
-            $cleanId = $tfValidator->isInt($id, 1) ? $id : 0;
-            $result = $contentHandler->toggleOnlineStatus($cleanId);
-            
-            if ($result) {
-                $tfCache->flushCache();
-                $tfTemplate->pageTitle = TFISH_SUCCESS;
-                $tfTemplate->alertClass = 'alert-success';
-                $tfTemplate->message = TFISH_OBJECT_WAS_UPDATED;
+        
+        // Display a data entry form containing the object's current properties.
+        case "edit":            
+            if (isset($_REQUEST['id'])) {
+                $contentController = $controllerFactory->getController('admin');
+                $contentController->editContent((int) $_REQUEST['id']);
             } else {
-                $tfTemplate->pageTitle = TFISH_FAILED;
-                $tfTemplate->alertClass = 'alert-danger';
-                $tfTemplate->message = TFISH_OBJECT_UPDATE_FAILED;
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
-            
-            $tfTemplate->backUrl = 'admin.php';
-            $tfTemplate->form = TFISH_FORM_PATH . "response.html";
-            $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
 
         // Update: Submit the modified object and update the corresponding database row.
         case "update":
-            if (empty($_REQUEST['type'])) {
-                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                exit;
-            }
-
-            $type = $tfValidator->trimString($_REQUEST['type']);
-            $typeWhitelist = $contentHandler->getTypes();
-            
-            if (!array_key_exists($type, $typeWhitelist)) {
-                trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
-                exit;
-            }
-
-            $contentObject = new $type($tfValidator);
-            $contentObject->loadPropertiesFromArray($_REQUEST);
-
-            // As this object is being sent to storage, need to decode some entities that got
-            // encoded for display.
-            $fieldsToDecode = array('title', 'creator', 'publisher', 'caption');
-
-            foreach ($fieldsToDecode as $field) {
-                if (isset($contentObject->field)) {
-                    $contentObject->$field = htmlspecialchars_decode($contentObject->field,
-                            ENT_NOQUOTES);
-                }
-            }
-
-            // Properties that are used within attributes must have quotes encoded.
-            $fieldsToDecode = array('metaTitle', 'seo', 'metaDescription');
-            
-            foreach ($fieldsToDecode as $field) {
-                if (isset($contentObject->field)) {
-                    $contentObject->$field = htmlspecialchars_decode($contentObject->field,
-                            ENT_QUOTES);
-                }
-            }
-
-            // Update the database row and display a response.
-            $result = $contentHandler->update($contentObject);
-
-            if ($result) {
-                $tfCache->flushCache();
-                $tfTemplate->pageTitle = TFISH_SUCCESS;
-                $tfTemplate->alertClass = 'alert-success';
-                $tfTemplate->message = TFISH_OBJECT_WAS_UPDATED;
-                $tfTemplate->id = $contentObject->id;
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->updateContent($_REQUEST);
+            break;
+        
+        // Toggle the online status of a particular object.
+        case "toggle":            
+            if (isset($_REQUEST['id'])) {
+                $contentController = $controllerFactory->getController('admin');
+                $contentController->toggleOnlineStatus((int) $_REQUEST['id']);
             } else {
-                $tfTemplate->pageTitle = TFISH_FAILED;
-                $tfTemplate->alertClass = 'alert-danger';
-                $tfTemplate->message = TFISH_OBJECT_UPDATE_FAILED;
+                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
-
-            $tfTemplate->backUrl = 'admin.php';
-            $tfTemplate->form = TFISH_CONTENT_MODULE_FORM_PATH . "responseEdit.html";
-            $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;
 
         // View: See the user-side display of a single object, including offline objects.
