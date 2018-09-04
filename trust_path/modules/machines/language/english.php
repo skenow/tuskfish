@@ -55,4 +55,3 @@ define("TFISH_ERROR_NOT_SENSOR_HANDLER", "Not a sensor handler object.");
 // Sensor types.
 define("TFISH_SENSOR_GENERIC", "Generic sensor");
 define("TFISH_SENSOR_TEMPERATURE", "Temperature sensor");
-

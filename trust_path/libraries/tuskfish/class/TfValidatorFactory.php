@@ -72,6 +72,11 @@ class TfValidatorFactory
         return $config;
     }
     
+    /**
+     * Factory method that instantiates and returns a TfValidator Object.
+     * 
+     * @return \TfValidator Tuskfish data validator object.
+     */
     public function getValidator()
     {
          return new TfValidator($this->htmlPurifier);
