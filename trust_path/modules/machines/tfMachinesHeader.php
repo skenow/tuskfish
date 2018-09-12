@@ -17,6 +17,7 @@ declare(strict_types=1);
 define("TFISH_MACHINES_MODULE_PATH", TFISH_TRUST_PATH . 'modules/machines/');
 define("TFISH_MACHINES_MODULE_FORM_PATH", TFISH_MACHINES_MODULE_PATH . 'form/');
 define("TFISH_MACHINES_MODULE_LANGUAGE_PATH", TFISH_MACHINES_MODULE_PATH . 'language/');
+define("TFISH_MACHINES_ONE_TIME_PAD_PATH", TFISH_TRUST_PATH . 'pads/');
 
 // Make module language files available.
 include TFISH_MACHINES_MODULE_LANGUAGE_PATH . 'english.php';

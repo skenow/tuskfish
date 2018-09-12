@@ -47,6 +47,7 @@ define("TFISH_ERROR_BAD_LATITUDE", "Bad latitude.");
 define("TFISH_ERROR_BAD_LONGITUDE", "Bad longitude.");
 define("TFISH_ERROR_NOT_SENSOR", "Not a sensor object, or illegal type.");
 define("TFISH_ERROR_NOT_MACHINE", "Not a machine object, or illegal type.");
+define("TFISH_ERROR_PAD_TOO_SHORT", "Not enough pad left to en/decode message, exiting.");
 
 // Dependency errors.
 define("TFISH_ERROR_NOT_MACHINE_HANDLER", "Not a machine handler object");

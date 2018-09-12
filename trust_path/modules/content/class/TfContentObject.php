@@ -37,6 +37,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @uses        trait TfLanguage to obtain a list of available translations.
  * @uses        trait TfMagicMethods Prevents direct setting of properties / unlisted properties.
  * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
+ * @uses        trait TfRights A list of known / acceptable IP licenses.
  * @properties  TfValidator $validator Instance of the Tuskfish data validator class.
  * @properties  int $id Auto-increment, set by database.
  * @properties  string $type Content object type eg. TfArticle etc. [ALPHA]
