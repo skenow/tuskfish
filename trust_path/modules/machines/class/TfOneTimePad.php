@@ -44,12 +44,26 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * one time pad consisting of random code points from the full ASCII range (0 - 127). The second,
  * encryptText(), uses printable ASCII characters only (code points 32 - 127) and performs mod 96
  * addition. The ciphertext output is also printable ASCII, so it is more convenient if you want 
- * all aspects of the system to be human readable. You may find one or the other more convenient, depending on how you are generating random numbers
- * and on the capabilities of your remote (encrypting) devices.
+ * all aspects of the system to be human readable. 
  * 
  * Both are equally effective in hardening communications over the air. So long as i) the pad is
  * truly random, ii) the pad is never re-used and iii) the pad is not captured by busybodies the
- * encryption cannot be cracked. 
+ * encryption cannot be cracked. You may find one or the other more convenient, depending on how
+ * you are generating random numbers and on the capabilities of your remote (encrypting) devices. 
+ * 
+ * Generally speaking, the XOR functions are easier to generate pads for, as they use a power of 
+ * two key space (128 characters), which is convenient for a hardware RNG spitting out bits.
+ * The downside is that they need to hex encode the pad and ciphertext, in order to represent
+ * non-printing ASCII values and to prevent the null byte being interpreted and causing problems, eg
+ * because it is the string terminator in C. The hex encoding scheme used here takes 2 characters to
+ * represent every ASCII value; since this doubles the message size if you are sending ASCII data
+ * over a severely bandwidth limited protocol it can be an issue (although this problem goes away
+ * with binary).
+ * 
+ * The encryptText() methods are harder to produce random pads for, since hardware RNGs are not
+ * going to spit out random values in the 32-127 range without some messing around. However, using
+ * the printable ASCII character set avoids the need for hexadecimal encoding so each character
+ * can be encrypted with a single byte. 
  * 
  * If you seriously want your data to remain private then I suggest that you use a hardware random
  * number generator to prepare your one-time pads. Your computer cannot generate truly random
@@ -281,74 +295,96 @@ trait TfOneTimePad
      * 
      * Conventions:
      * i) One pad per machine with machine ID as file name.
-     * ii) Pads are stored in the /trust_path/uploads/pad/ directory.
-     * iii) Working substrings are read from the back end of the file.
+     * ii) Pads MUST be stored in the /trust_path/pads/ directory.
+     * iii) Pads are encoded as fixed-length (2 character) hexadecimal ASCII codes.
+     * iii) Working substrings are extracted from the back end of the pad file, which MUST be
+     * truncated to prevent re-use.
      * 
-     * @param int $start The starting point to read from.
+     * @param int $start The starting point (offset) to read from.
      * @param int $length The number of characters to read.
-     * @return string A one-time pad sequence read from file.
+     * @return string|bool A one-time pad sequence read from file, or false on failure.
      */
-    private function readPad(int $start, int $length)
+    public function readPad(int $start, int $length)
     {
-        $pad = '';
+        $path = TFISH_ONE_TIME_PAD_PATH . (int) $this->id;
         
-        // Read the pad from file.
+        $cleanStart = (int) $start;
+        $cleanLength = (int) $length;
         
-        /** For testing only **/
-        $pad = '3S&esW}TQ=)DkfJXv{Q?{|6&[1quyj#cFCHP6%>!zOwk>:C1c[$rM&^2]!0/KuB';
-        $pad .= '-(_Rtu_*XmSKJ2IQ?Ea8!T?^"5$^Wrk5g2b(5Y\'ndp}7=P"k!^kks}]F)JT5Z[P';
-        $pad .= '|Z]4d08v3>I9<)_$?]]DVQ)/,=Bl=!.l39;KGiqf1\'%\'phfr+Q`=;.c~FWDjEFt';
-        $pad .= '';
-        $pad .= '';
+        $pad = file_get_contents($path, false, null, $cleanStart, $cleanLength);
         
-        /** End for testing only **/
-        
-        return $pad();
-    }
-    
-    /**
-     * Check that the one time pad exists and is long enough to encrypt/decrypt the message.
-     * 
-     * If there isn't enough pad left, delete the message, log an error and hard exit.
-     * 
-     * @param string $plainText
-     * @return bool True on success, false on failure.
-     */
-    private function checkPadLengthOk(string $message, string $oneTimePad)
-    {
-        // Get length of message.
-        // Get length of pad.
-    }
-    
-    /**
-     * Truncates the one time pad from the starting point used in the last encrypt/decrypt operation.
-     * 
-     * One time pad characters used in encryption/decryption operations MUST BE DELETED to ensure
-     * they cannot be re-used. The pad will be truncated (all content discarded) from the starting
-     * point of the last message operation.
-     * 
-     * @param int $padCursor The starting position the pad was read from.
-     */
-    private function deleteUsedSectionOfPad(int $padCursor)
-    {
-        if (!$this->validator->isInt($padCursor, 0)) {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        if ($pad === false) {
+            trigger_error(TFISH_ERROR_COULD_NOT_OPEN_PAD, E_USER_ERROR);
         }
         
-        // Truncate the pad from $padCursor onwards.
+        return $pad;
     }
     
     /**
-     * Destroy entire one time pad.
+     * Truncates a one time pad file to prevent re-use.
+     * 
+     * Pass in the starting point the pad was read from; the pad will be truncated from that point,
+     * destroying the used section of pad (and anything after it).
+     * 
+     * @param int $offset The point at which the file should be truncated (a length, in bytes).
+     * @return boolean True on success, false on failure.
+     */
+    public function truncatePad(int $offset)
+    {
+        $cleanOffset = (int) $offset;
+        $path = TFISH_ONE_TIME_PAD_PATH . (int) $this->id;
+        
+        // Open pad file.
+        $filePointer = fopen($path, "c");
+        
+        if ($filePointer === false) {
+            trigger_error(TFISH_ERROR_COULD_NOT_OPEN_PAD, E_USER_ERROR);
+        }
+        
+        // Lock pad.
+        if (flock($filePointer, LOCK_EX) === false) {
+            fclose($filePointer);
+            trigger_error(TFISH_ERROR_COULD_NOT_LOCK_PAD, E_USER_ERROR);
+        }
+        
+        // Truncate pad to removed used section.
+        if (ftruncate($filePointer, $cleanOffset) === false) {
+            trigger_error(TFISH_ERROR_COULD_NOT_TRUNCATE_PAD, E_USER_ERROR);
+        }
+        
+        // Unlock and close pad file.
+        flock($filePointer, LOCK_UN);
+        fclose($filePointer);
+        
+        return true;
+    }    
+    
+    /**
+     * Destroy entire one time pad associated with this machine.
      * 
      * An authorised remote machine may order destruction of the webserver's copy of the one time
-     * pad. This is a contingency that can be called if (say) the remote machine detects tampering.
+     * pad. This is a contingency that can be called if (say) the remote machine detects tampering,
+     * or some unhelpful government officials decide to interfere with your stuff.
+     * 
+     * TODO: Replace simple removal of file contents with active pattern scrubbing.
      * 
      * If this method is called the remote machine should also destroy its own copy of the pad.
      */
-    private function burnPad()
+    public function burnPad()
     {
-        // Destroy pad completely.
+        $path = TFISH_ONE_TIME_PAD_PATH . (int) $this->id;
+        
+        // Truncate the contents of the file, but this does not exclude forensic data recovery.
+        $this->truncatePad(0);
+        
+        // Unlink the file, but it will only be deleted if there are no remaining links left.       
+        if (unlink($path) === false) {
+            trigger_error(TFISH_ERROR_BURN_PAD_FAILED, E_USER_NOTICE);
+            
+            return false;
+        }
+        
+        return true;
     }
     
 }

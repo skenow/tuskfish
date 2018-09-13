@@ -32,9 +32,13 @@ $pad = "9jfMkjzFzkJNZqeGAdR3iuOZzABncf9dDXn0QJuBhaXda0Csu3fNZuHXkAR9Ef6FP>kX}zlB
 
 // Get a machine.
 $machine = $machineFactory->getMachine();
+$machine->setId(2);
+$hexidecimalPad = $machine->readPad(0, 80);
+echo "Testing read from pad" . '<br />';
+echo $hexidecimalPad . '<br /><br />';
 
 // Convert pad to hex.
-$hexidecimalPad = $machine->convertTextToHexCodePoints($pad);
+//$hexidecimalPad = $machine->convertTextToHexCodePoints($pad);
 
 echo "Test message...<br />";
 echo $plainText . '<br /><br />';

@@ -278,3 +278,11 @@ define("TFISH_BROWSER_DOES_NOT_SUPPORT_AUDIO", "Your browser does not support th
 
 // V1.1.2
 define("TFISH_ZERO_OPTION", "---");
+
+// V1.1.3
+
+// One time pad errors.
+define("TFISH_ERROR_COULD_NOT_OPEN_PAD", "Could not open pad.");
+define("TFISH_ERROR_COULD_NOT_LOCK_PAD", "Could not lock pad.");
+define("TFISH_ERROR_COULD_NOT_TRUNCATE_PAD", "Could not truncate pad.");
+define("TFISH_ERROR_BURN_PAD_FAILED", "Burn pad failed.");
