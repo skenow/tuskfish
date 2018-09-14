@@ -294,11 +294,12 @@ trait TfOneTimePad
      * Reads an arbitrary length substring from a one time pad file.
      * 
      * Conventions:
-     * i) One pad per machine with machine ID as file name.
+     * i) One pad per machine with ID as file name.
      * ii) Pads MUST be stored in the /trust_path/pads/ directory.
-     * iii) Pads are encoded as fixed-length (2 character) hexadecimal ASCII codes.
+     * iii) Pads are encoded as fixed-length (2 character) hexadecimal ASCII codes from 0 - 127.
      * iii) Working substrings are extracted from the back end of the pad file, which MUST be
-     * truncated to prevent re-use.
+     * truncated after each encryption/decryption operation to prevent re-use and maintain pad
+     * syncronisation between devices.
      * 
      * @param int $start The starting point (offset) to read from.
      * @param int $length The number of characters to read.
@@ -357,7 +358,7 @@ trait TfOneTimePad
         fclose($filePointer);
         
         return true;
-    }    
+    }
     
     /**
      * Destroy entire one time pad associated with this machine.
