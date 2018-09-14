@@ -69,6 +69,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * number generator to prepare your one-time pads. Your computer cannot generate truly random
  * numbers; it can only provide you with psuedo-random numbers, which are not bulletproof.
  * 
+ * For serious privacy, you should NOT decrypt incoming data on the server. Use Tuskfish as a dumb
+ * capture point for incoming data, export it to your local machine and decode it there. As I said,
+ * this trait is for casual over-the-air privacy, it provides zero end point security.
+ * 
  * WARNING: You must never re-use a one-time pad. Doing so *completely* breaks the security.
  *
  * @copyright   Simon Wilkinson 2018+ (https://tuskfish.biz)
