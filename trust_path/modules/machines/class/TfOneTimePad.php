@@ -18,27 +18,29 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * Implement encryption and decryption of messages against a one time pad.
  * 
  * This class was written to provide casual security for internet of things (IOT) devices
- * transmitting data over the air. I needed a way to encrypt low bandwidth LoRaWAN transmissions
- * originating from remote monitoring stations (microcontrollers) to a collection point on the
- * internet (Tuskfish).
+ * transmitting data over the air. I needed a way to encrypt restricted length LoRaWAN transmissions
+ * from remote monitoring stations (microcontrollers) to a collection point on the internet
+ * (Tuskfish).
  * 
- * One time pads are often considered too cumbersome for use in the era of public key cryptography
- * due to the problem of pad distribution. However, they have some characteristics that are of use
- * in the Internet of Things: They are ultra light weight in terms of computational requirements,
- * and they are highly efficient in terms of bandwidth, which makes them suitable for protocols
- * that severely restrict message length and transmission frequency, such as LoRaWAN.
+ * One time pads are considered too cumbersome for use in the era of public key cryptography
+ * due to the problem of pad distribution. However, they do have some characteristics that may be of
+ * interest to a private Internet of Things network, with a limited number of nodes. Namely, i) they
+ * are ultra light weight in terms of computational and storage requirements, and ii) they are
+ * highly efficient in terms of bandwidth, which makes them suitable for protocols that severely
+ * restrict message length and transmission frequency, such as LoRaWAN.
  * 
  * The remote machine needs to have enough storage to hold a good sized pad, for example a micro SD
  * card slot will allow you to fit several gigs, which should be enough to handle years of
- * transmissions over a restricted bandwidth protocol like LoRaWAN. You will need to load the pad
- * onto the remote machine before you install it in the field.
+ * transmissions over a restricted bandwidth protocol. You will need to load the pad onto the remote
+ * machine before you install it in the field.
  * 
  * Sections of the pad used in encryption / decryption operations are deleted to prevent accidental
  * re-use. The remote machine should also implement this behaviour.
  * 
  * To keep the pad synchronised between Tuskfish and the remote device, utilise the pad from the
  * end rather than the start; this allows the current pad length on the remote machine to be used
- * as a common reference point if a message is lost, or in the event that a machine is restarted.
+ * as a common reference point to resynchronise the pads if a message is lost, or in the event that
+ * a device is restarted.
  * 
  * Two encryption/decryption modes are offered. The first, encryptXor(), XORs plaintext against a
  * one time pad consisting of random code points from the full ASCII range (0 - 127). The second,
@@ -46,10 +48,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * addition. The ciphertext output is also printable ASCII, so it is more convenient if you want 
  * all aspects of the system to be human readable. 
  * 
- * Both are equally effective in hardening communications over the air. So long as i) the pad is
+ * Both are equally effective in obscuring communications over the air. So long as i) the pad is
  * truly random, ii) the pad is never re-used and iii) the pad is not captured by busybodies the
- * encryption cannot be cracked. You may find one or the other more convenient, depending on how
- * you are generating random numbers and on the capabilities of your remote (encrypting) devices. 
+ * encryption cannot be cracked, although other types of attack are possible. You may find one or
+ * the other more convenient, depending on how you are generating random numbers and on the
+ * capabilities of your remote (encrypting) devices. 
  * 
  * Generally speaking, the XOR functions are easier to generate pads for, as they use a power of 
  * two key space (128 characters), which is convenient for a hardware RNG spitting out bits.
@@ -67,7 +70,9 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * 
  * If you seriously want your data to remain private then I suggest that you use a hardware random
  * number generator to prepare your one-time pads. Your computer cannot generate truly random
- * numbers; it can only provide you with psuedo-random numbers, which are not bulletproof.
+ * numbers; it can only provide you with psuedo-random numbers, which are not bulletproof. I got
+ * myself a BitBabbler Black from http://www.bitbabbler but there are a reasonable number of
+ * alternative options if you Google about.
  * 
  * For serious privacy, you should NOT decrypt incoming data on the server. Use Tuskfish as a dumb
  * capture point for incoming data, export it to your local machine and decode it there. As I said,
