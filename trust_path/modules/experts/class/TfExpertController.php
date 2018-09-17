@@ -82,6 +82,9 @@ class tfExpertController
     public function addExpert()
     {
         $this->template->pageTitle = TFISH_EXPERTS;
+        $this->template->salutationList = $this->expertHandler->getSalutationList();
+        $this->template->tagList = $this->expertHandler->gettagList();
+        $this->template->countryList = $this->expertHandler->getCountryList();
         $this->template->form = TFISH_EXPERTS_MODULE_FORM_PATH . "expertEntry.html";
         $this->template->tfMainContent = $this->template->render('form');
     }

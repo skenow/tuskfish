@@ -34,8 +34,10 @@ define("TFISH_EXPERTS_FAX", "Fax");
 define("TFISH_EXPERTS_IMAGE", "Image");
 define("TFISH_EXPERTS_PROFILE_LINK", "Profile URL");
 
-// Miscellaneous.
+// Attributes and composites.
 define("TFISH_EXPERTS_NAME", "Name");
+define("TFISH_EXPERTS_MALE", "Male");
+define("TFISH_EXPERTS_FEMALE", "Female");
 
 // Actions.
 define("TFISH_EXPERTS_ADD", "Add");

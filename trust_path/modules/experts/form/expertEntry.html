@@ -4,10 +4,17 @@
     
   <div class="row">
     
-    <!-- Title -->
+    <!-- Salutation -->
     <div class="col-md-2 mb-3 text-left" id="salutationContainer">
       <label for="salutation"><strong><?php echo TFISH_EXPERTS_SALUTATION; ?></strong></label>
-      <input type="text" class="form-control" name="salutation" id="salutation">
+      <select class="form-control custom-select" name="salutation" id="salutation" required>
+        <?php
+            foreach ($salutationList as $key => $salutation) {
+                echo '<option value="' . $tfValidator->escapeForXss($key) . '">'
+                    . $tfValidator->escapeForXss($salutation) . '</option>';
+            }
+        ?>
+        </select>
     </div>
 
     <!-- First name -->
@@ -47,21 +54,41 @@
     </div>
 
     <!-- Email -->
-    <div class="col-md-4 mb-3 text-left" id="emailContainer">
+    <div class="col-md-3 mb-3 text-left" id="emailContainer">
       <label for="email"><strong><?php echo TFISH_EXPERTS_EMAIL; ?></strong></label>
       <input type="text" class="form-control" name="email" id="email">
     </div>
-
-    <!-- Gender -->
-    <div class="col-md-4 mb-3 text-left" id="genderContainer">
-      <label for="gender"><strong><?php echo TFISH_EXPERTS_GENDER; ?></strong></label>
-      <input type="text" class="form-control" name="gender" id="gender">
+    
+    <!-- Profile link -->
+    <div class="col-md-3 mb-3 text-left" id="profileLinkContainer">
+      <label for="profileLink"><strong><?php echo TFISH_EXPERTS_PROFILE_LINK; ?></strong></label>
+      <input type="text" class="form-control" name="profileLink" id="profileLink">
     </div>
 
-    <!-- Tags -->
-    <div class="col-md-4 mb-3 text-left" id="tagsContainer">
-      <label for="tags"><strong><?php echo TFISH_EXPERTS_TAGS; ?></strong></label>
-      <input type="text" class="form-control" name="tags" id="tags">
+    <!-- Gender -->
+    <div class="col-md-3 mb-3 text-left" id="genderContainer">
+      <p><strong><?php echo TFISH_EXPERTS_GENDER; ?></strong></p>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="online" name="gender" value="1" checked class="custom-control-input" required>
+        <label class="custom-control-label" for="male"><?php echo TFISH_EXPERTS_MALE; ?></label>
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="offline" name="gender" value="0" class="custom-control-input" required>
+        <label class="custom-control-label" for="female"><?php echo TFISH_EXPERTS_FEMALE; ?></label>
+      </div>
+    </div>
+    
+    <!-- Online status -->
+    <div class="col-md-3 mb-3 text-left" id="onlineContainer">
+      <p><strong><?php echo TFISH_ONLINE_STATUS; ?></strong></p>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="online" name="online" value="1" checked class="custom-control-input" required>
+        <label class="custom-control-label" for="online"><?php echo TFISH_ONLINE; ?></label>
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" id="offline" name="online" value="0" class="custom-control-input" required>
+        <label class="custom-control-label" for="offline"><?php echo TFISH_OFFLINE; ?></label>
+      </div>
     </div>
 
     <!-- Experience -->
@@ -79,19 +106,26 @@
     <!-- Publications -->
     <div class="col-12 mb-3 text-left" id="publicationsContainer">
       <label for="publications"><strong><?php echo TFISH_EXPERTS_PUBLICATIONS; ?></strong></label>
-      <textarea id="teaser" name="publications" class="form-control text-left"></textarea>
+      <textarea id="publications" name="publications" class="form-control text-left"></textarea>
     </div>
 
     <!-- Address -->
     <div class="col-12 mb-3 text-left" id="addressContainer">
       <label for="address"><strong><?php echo TFISH_EXPERTS_ADDRESS; ?></strong></label>
-      <textarea id="address" name="address" class="form-control text-left"></textarea>
+      <textarea id="address" name="address" rows="5" class="form-control text-left"></textarea>
     </div>
 
     <!-- Country -->
     <div class="col-md-4 mb-3 text-left" id="countryContainer">
       <label for="country"><strong><?php echo TFISH_EXPERTS_COUNTRY; ?></strong></label>
-      <input type="text" class="form-control" name="country" id="country">
+      <select class="form-control custom-select" name="salutation" id="salutation" required>
+        <?php
+            foreach ($countryList as $key => $country) {
+                echo '<option value="' . $tfValidator->escapeForXss($key) . '">'
+                    . $tfValidator->escapeForXss($country) . '</option>';
+            }
+        ?>
+        </select>
     </div>
 
     <!-- Mobile -->
@@ -105,23 +139,40 @@
       <label for="fax"><strong><?php echo TFISH_EXPERTS_FAX; ?></strong></label>
       <input type="text" class="form-control" name="fax" id="fax">
     </div>
-
+    
+    <!-- Tags -->
+    <div class="col-md-6 mb-3 text-left" id="tagsContainer">
+      <label for="tags"><strong><?php echo TFISH_EXPERTS_TAGS; ?></strong></label>
+      <select multiple class="form-control custom-select" size="7"  name="tags[]" id="tags">
+          <?php
+              foreach ($tagList as $tagId => $tagTitle) {
+                  echo '<option value="' . $tfValidator->escapeForXss($tagId) . '">' . $tfValidator->escapeForXss($tagTitle) . '</option>';
+              }
+          ?>
+      </select>
+    </div>
+    
     <!-- Image -->
     <div class="col-md-6 mb-3 text-left" id="imageContainer">
       <label for="image"><strong><?php echo TFISH_EXPERTS_IMAGE; ?></strong></label>
-      <input type="text" class="form-control" name="image" id="image">
+      <input id="image" name="image" type="file" data-preview-file-type="text">
     </div>
-
-    <!-- Profile link -->
-    <div class="col-md-3 mb-3 text-left" id="profileLinkContainer">
-      <label for="profileLink"><strong><?php echo TFISH_EXPERTS_PROFILE_LINK; ?></strong></label>
-      <input type="text" class="form-control" name="profileLink" id="profileLink">
-    </div>
-
-    <!-- Online -->
-    <div class="col-md-3 mb-3 text-left" id="onlineContainer">
-      <label for="online"><strong><?php echo TFISH_ONLINE; ?></strong></label>
-      <input type="text" class="form-control" name="online" id="online">
+    <script>
+      $(document).ready(function() {    
+        $("#image").fileinput({
+        'showUpload': false,
+        'showRemove': true,
+        'allowedFileExtensions': ["gif", "jpg", "png"],
+        'previewFileType': ["image"],
+        'fileActionSettings': {
+            'showDrag': false},
+            'theme': "fa"});
+      });
+    </script>
+    
+    <div class="col-md-12" id="metaHeader">
+      <h2><?php echo TFISH_META_TAGS; ?><h2>
+      <hr>
     </div>
     
     <!-- Meta title -->

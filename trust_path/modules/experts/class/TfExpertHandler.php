@@ -30,4 +30,29 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 class tfExpertHandler
 {
     
+    public function getCountryList()
+    {
+        return array(0 => TFISH_ZERO_OPTION);
+    }
+    
+    public function getTagList()
+    {
+        return array(0 => TFISH_ZERO_OPTION);
+    }
+    
+    /**
+     * Returns an array of known / permitted salutations.
+     * 
+     * @return array List of salutations as key => value pairs.
+     */
+    public function getSalutationList()
+    {
+        return array(
+            0 => "Dr",
+            1 => "Prof.",
+            2 => "Mr",
+            3 => "Mrs",
+            4 => "Ms"
+        );
+    }
 }

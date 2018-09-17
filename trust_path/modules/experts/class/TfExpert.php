@@ -288,11 +288,27 @@ class tfExpert
     }
     
     /**
+     * Set the email address of this expert.
+     * 
+     * @param string $email Valid email address.
+     */
+    public function setEmail(string $email)
+    {
+        $cleanEmail = $this->validator->trimString($email);
+        
+        if ($this->validator->isEmail($cleanEmail)) {
+            $this->email = $cleanEmail;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    /**
      * Set the mobile phone number for this expert.
      * 
      * @param string $mobile Mobile phone number.
      */
-    public function setMobile (string $mobile)
+    public function setMobile(string $mobile)
     {
         $this->mobile = $this->validator->trimString($mobile);
     }
@@ -302,7 +318,7 @@ class tfExpert
      * 
      * @param string $fax Fax number.
      */
-    public function setFax (string $fax)
+    public function setFax(string $fax)
     {
         $this->fax = $this->validator->trimString($fax);
     }
