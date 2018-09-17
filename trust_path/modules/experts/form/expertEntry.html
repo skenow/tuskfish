@@ -1,1 +1,154 @@
-<!-- Display a data entry form for someObject -->
+<?php declare(strict_types=1); ?>
+
+<form class="form-horizontal" action="experts.php" method="post" enctype="multipart/form-data" role="form" accept-charset="UTF-8">
+    
+  <div class="row">
+    
+    <!-- Title -->
+    <div class="col-md-2 mb-3 text-left" id="salutationContainer">
+      <label for="salutation"><strong><?php echo TFISH_EXPERTS_SALUTATION; ?></strong></label>
+      <input type="text" class="form-control" name="salutation" id="salutation">
+    </div>
+
+    <!-- First name -->
+    <div class="col-md-3 mb-3 text-left" id="firstNameContainer">
+      <label for="firstName"><strong><?php echo TFISH_EXPERTS_FIRST_NAME; ?></strong></label>
+      <input type="text" class="form-control" name="firstName" id="firstName">
+    </div>
+
+    <!-- Mid name -->
+    <div class="col-md-3 mb-3 text-left" id="midNameContainer">
+      <label for="midName"><strong><?php echo TFISH_EXPERTS_MID_NAME; ?></strong></label>
+      <input type="text" class="form-control" name="midName" id="midName">
+    </div>
+
+    <!-- Last name -->
+    <div class="col-md-4 mb-3 text-left" id="lastNameContainer">
+      <label for="lastName"><strong><?php echo TFISH_EXPERTS_LAST_NAME; ?></strong></label>
+      <input type="text" class="form-control" name="lastName" id="lastName">
+    </div>
+
+    <!-- Job -->
+    <div class="col-md-4 mb-3 text-left" id="jobContainer">
+      <label for="job"><strong><?php echo TFISH_EXPERTS_JOB; ?></strong></label>
+      <input type="text" class="form-control" name="job" id="job">
+    </div>
+    
+    <!-- Business unit -->
+    <div class="col-md-4 mb-3 text-left" id="businessUnitContainer">
+      <label for="businessUnit"><strong><?php echo TFISH_EXPERTS_BUSINESS_UNIT; ?></strong></label>
+      <input type="text" class="form-control" name="businessUnit" id="businessUnit">
+    </div>
+
+    <!-- Organisation -->
+    <div class="col-md-4 mb-3 text-left" id="organisationContainer">
+      <label for="organisation"><strong><?php echo TFISH_EXPERTS_ORGANISATION; ?></strong></label>
+      <input type="text" class="form-control" name="organisation" id="organisation">
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-4 mb-3 text-left" id="emailContainer">
+      <label for="email"><strong><?php echo TFISH_EXPERTS_EMAIL; ?></strong></label>
+      <input type="text" class="form-control" name="email" id="email">
+    </div>
+
+    <!-- Gender -->
+    <div class="col-md-4 mb-3 text-left" id="genderContainer">
+      <label for="gender"><strong><?php echo TFISH_EXPERTS_GENDER; ?></strong></label>
+      <input type="text" class="form-control" name="gender" id="gender">
+    </div>
+
+    <!-- Tags -->
+    <div class="col-md-4 mb-3 text-left" id="tagsContainer">
+      <label for="tags"><strong><?php echo TFISH_EXPERTS_TAGS; ?></strong></label>
+      <input type="text" class="form-control" name="tags" id="tags">
+    </div>
+
+    <!-- Experience -->
+    <div class="col-12 mb-3 text-left" id="experienceContainer">
+      <label for="experience"><strong><?php echo TFISH_EXPERTS_EXPERIENCE; ?></strong></label>
+      <textarea id="experience" name="experience" class="form-control text-left"></textarea>
+    </div>
+
+    <!-- Projects -->
+    <div class="col-12 mb-3 text-left" id="projectsContainer">
+      <label for="projects"><strong><?php echo TFISH_EXPERTS_PROJECTS; ?></strong></label>
+      <textarea id="projects" name="projects" class="form-control text-left"></textarea>
+    </div>
+
+    <!-- Publications -->
+    <div class="col-12 mb-3 text-left" id="publicationsContainer">
+      <label for="publications"><strong><?php echo TFISH_EXPERTS_PUBLICATIONS; ?></strong></label>
+      <textarea id="teaser" name="publications" class="form-control text-left"></textarea>
+    </div>
+
+    <!-- Address -->
+    <div class="col-12 mb-3 text-left" id="addressContainer">
+      <label for="address"><strong><?php echo TFISH_EXPERTS_ADDRESS; ?></strong></label>
+      <textarea id="address" name="address" class="form-control text-left"></textarea>
+    </div>
+
+    <!-- Country -->
+    <div class="col-md-4 mb-3 text-left" id="countryContainer">
+      <label for="country"><strong><?php echo TFISH_EXPERTS_COUNTRY; ?></strong></label>
+      <input type="text" class="form-control" name="country" id="country">
+    </div>
+
+    <!-- Mobile -->
+    <div class="col-md-4 mb-3 text-left" id="mobileContainer">
+      <label for="mobile"><strong><?php echo TFISH_EXPERTS_MOBILE; ?></strong></label>
+      <input type="text" class="form-control" name="mobile" id="mobile">
+    </div>
+
+    <!-- Fax -->
+    <div class="col-md-4 mb-3 text-left" id="faxContainer">
+      <label for="fax"><strong><?php echo TFISH_EXPERTS_FAX; ?></strong></label>
+      <input type="text" class="form-control" name="fax" id="fax">
+    </div>
+
+    <!-- Image -->
+    <div class="col-md-6 mb-3 text-left" id="imageContainer">
+      <label for="image"><strong><?php echo TFISH_EXPERTS_IMAGE; ?></strong></label>
+      <input type="text" class="form-control" name="image" id="image">
+    </div>
+
+    <!-- Profile link -->
+    <div class="col-md-3 mb-3 text-left" id="profileLinkContainer">
+      <label for="profileLink"><strong><?php echo TFISH_EXPERTS_PROFILE_LINK; ?></strong></label>
+      <input type="text" class="form-control" name="profileLink" id="profileLink">
+    </div>
+
+    <!-- Online -->
+    <div class="col-md-3 mb-3 text-left" id="onlineContainer">
+      <label for="online"><strong><?php echo TFISH_ONLINE; ?></strong></label>
+      <input type="text" class="form-control" name="online" id="online">
+    </div>
+    
+    <!-- Meta title -->
+    <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
+      <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
+      <input type="text" class="form-control" name="metaTitle" id="metaTitle">
+    </div>
+
+    <!-- SEO -->
+    <div class="col-md-6 mb-3 text-left" id="seoContainer">
+      <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
+      <input type="text" class="form-control" name="seo" id="seo">
+    </div>
+
+    <!-- Meta description -->
+    <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
+      <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
+      <input type="text" class="form-control" name="metaDescription" id="metaDescription">
+    </div>
+
+  </div> <!-- /row -->
+    
+  <!-- Action buttons -->
+  <div class="float-left clearfix">
+    <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
+    <button name="op" value="submit" type="submit" class="btn btn-primary"><?php echo TFISH_SUBMIT; ?></button>
+    <button name="op" value="" type="submit" class="btn btn-primary" formnovalidate><?php echo TFISH_CANCEL; ?></button>
+  </div>
+
+</form>

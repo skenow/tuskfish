@@ -30,7 +30,7 @@ $tfTemplate->setTheme('default');
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
 $optionsWhitelist = array();
 
-if (in_array($op, $optionsWhitelist, true)) {
+if (!in_array($op, $optionsWhitelist, true)) {
     exit;
 }
     

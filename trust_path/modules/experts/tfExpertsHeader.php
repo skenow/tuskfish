@@ -30,3 +30,6 @@ function tfExpertsModuleAutoload(string $classname) {
     }
 }
 spl_autoload_register('tfExpertsModuleAutoload');
+
+$expertFactory = new TfExpertFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
+        $tfFileHandler, $tfCache, $tfTemplate);
