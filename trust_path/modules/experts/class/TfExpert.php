@@ -33,36 +33,40 @@ class tfExpert
     use TfMagicMethods;
     use TfMimetypes;
     
-    protected $validator;
-    protected $id;
-    protected $type;
-    protected $salutation;
-    protected $firstName;
-    protected $midName;
-    protected $lastName;
-    protected $gender;
-    protected $tags;
-    protected $job;
-    protected $experience;
-    protected $projects;
-    protected $publications;
-    protected $businessUnit;
-    protected $organisation;
-    protected $address;
-    protected $country;
-    protected $email;
-    protected $mobile;
-    protected $fax;
-    protected $profileLink;
-    protected $submissionTime;
-    protected $lastUpdated;
-    protected $expiresOn;
-    protected $image;
-    protected $online;
-    protected $counter;
-    protected $metaTitle;
-    protected $metaDescription;
-    protected $seo;
+    protected $validator = 0;
+    protected $id = '';
+    protected $type = '';
+    protected $salutation = '';
+    protected $firstName = '';
+    protected $midName = '';
+    protected $lastName = '';
+    protected $gender = '';
+    protected $tags = array();
+    protected $job = '';
+    protected $experience = '';
+    protected $projects = '';
+    protected $publications = '';
+    protected $businessUnit = '';
+    protected $organisation = '';
+    protected $address = '';
+    protected $country = '';
+    protected $email = '';
+    protected $mobile = '';
+    protected $fax = '';
+    protected $profileLink = '';
+    protected $submissionTime = '';
+    protected $lastUpdated = '';
+    protected $expiresOn = '';
+    protected $image = '';
+    protected $online = 1;
+    protected $counter = 0;
+    protected $metaTitle = '';
+    protected $metaDescription = '';
+    protected $seo = '';
+    protected $handler = '';
+    protected $template = 'expert';
+    protected $module = 'experts';
+    protected $icon = '';
     
     /**
      * Constructor.
@@ -77,12 +81,220 @@ class tfExpert
             trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
         }
         
-        $this->setId(0);
         $this->setType(get_class($this));
         $this->setHandler($this->type . 'Handler');
-        $this->setOnline(1);
-        $this->setCounter(0);
-        $this->setTags(array());
+    }
+    
+    /**
+     * Converts an expert object to an array suitable for insert/update calls to the database.
+     * 
+     * @return array Array of object property/values.
+     */
+    public function convertObjectToArray()
+    {        
+        $keyValues = array();
+        
+        foreach ($this as $key => $value) {
+            $keyValues[$key] = $value;
+        }
+        
+        // Unset non-persistant properties that are not stored in the machine table.
+        unset(
+            $keyValues['validator'],
+            $keyValues['icon'],
+            $keyValues['handler'],
+            $keyValues['module'],
+            $keyValues['template']
+        );
+        
+        return $keyValues;
+    }
+    
+    /**
+     * Returns an array of image mimetypes that are permitted for content objects.
+     * 
+     * @return array Array of permitted image mimetypes in file extension => mimetype format.
+     */
+    public function getListOfAllowedImageMimetypes()
+    {
+        return array(
+            "gif" => "image/gif",
+            "jpg" => "image/jpeg",
+            "png" => "image/png"
+        );
+    }
+    
+    /**
+     * Returns a whitelist of object properties whose values are allowed be set.
+     * 
+     * This function is used to build a list of $allowedVars for a content object. Child classes
+     * use this list to unset properties they do not use. Properties that are not resident in the
+     * database are also unset here (handler, template, module and icon).
+     * 
+     * @return array Array of object properties as keys.
+     */
+    public function getPropertyWhitelist()
+    {        
+        $properties = array();
+        
+        foreach ($this as $key => $value) {
+            $properties[$key] = '';
+        }
+        
+        unset($properties['validator'], $properties['handler'], $properties['template'],
+                $properties['module'], $properties['icon']);
+        
+        return $properties;
+    }
+    
+    /**
+     * Populates the properties of the object from external (untrusted) data source.
+     * 
+     * Note that the supplied data is internally validated by __set().
+     * 
+     * @param array $dirtyInput Usually raw form $_REQUEST data.
+     * @param bool $liveUrls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
+     */
+    public function loadPropertiesFromArray(array $dirtyInput, $liveUrls = true)
+    {
+        $deleteImage = (isset($dirtyInput['deleteImage']) && !empty($dirtyInput['deleteImage']))
+                ? true : false;
+        $deleteMedia = (isset($dirtyInput['deleteMedia']) && !empty($dirtyInput['deleteMedia']))
+                ? true : false;
+        
+        $this->loadProperties($dirtyInput);
+
+        // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.        
+        if (isset($this->experience) && !empty($dirtyInput['experience'])) {
+            $experience = $this->convertBaseUrlToConstant($dirtyInput['experience'], $liveUrls);            
+            $this->setExperience($experience);
+        }
+        
+        if (isset($this->projects) && !empty($dirtyInput['projects'])) {
+            $projects = $this->convertBaseUrlToConstant($dirtyInput['projects'], $liveUrls);            
+            $this->setProjects($projects);
+        }
+
+        if (isset($this->publications) && !empty($dirtyInput['publications'])) {
+            $publications = $this->convertBaseUrlToConstant($dirtyInput['publications'], $liveUrls);            
+            $this->setPublications($publications);
+        }
+
+        $propertyWhitelist = $this->getPropertyWhitelist();
+        $this->loadImage($propertyWhitelist);
+    }
+    
+    /**
+     * Assign form data to expert object.
+     * 
+     * Note that data validation is carried out internally via the setters. This is a helper method
+     * for loadPropertiesFromArray().
+     * 
+     * @param array $dirtyInput Array of untrusted form input.
+     */
+    private function loadProperties(array $dirtyInput)
+    {
+        if (isset($this->id) && isset($dirtyInput['id']))
+            $this->setId((int) $dirtyInput['id']);
+        if (isset($this->type) && isset($dirtyInput['type']))
+            $this->setType((string) $dirtyInput['type']);
+        if (isset($this->salutation) && isset($dirtyInput['salutation']))
+            $this->setSalutation((int) $dirtyInput['salutation']);
+        if (isset($this->firstName) && isset($dirtyInput['firstName']))
+            $this->setFirstName((string) $dirtyInput['firstName']);
+        if (isset($this->midName) && isset($dirtyInput['midName']))
+            $this->setMidName((string) $dirtyInput['midName']);
+        if (isset($this->lastName) && isset($dirtyInput['lastName']))
+            $this->setLastName((string) $dirtyInput['lastName']);
+        if (isset($this->gender) && isset($dirtyInput['gender']))
+            $this->setGender((int) $dirtyInput['gender']);
+        if (isset($this->job) && isset($dirtyInput['job']))
+            $this->setJob((string) $dirtyInput['job']);
+        if (isset($this->experience) && isset($dirtyInput['experience']))
+            $this->setExperience((string) $dirtyInput['experience']);
+        if (isset($this->projects) && isset($dirtyInput['projects']))
+            $this->setProjects((string) $dirtyInput['projects']);
+        if (isset($this->publications) && isset($dirtyInput['publications']))
+            $this->setPublications((string) $dirtyInput['publications']);
+        if (isset($this->businessUnit) && isset($dirtyInput['businessUnit']))
+            $this->setbusinessUnit((string) $dirtyInput['businessUnit']);
+        if (isset($this->organisation) && isset($dirtyInput['organisation']))
+            $this->setOrganisation((string) $dirtyInput['organisation']);
+        if (isset($this->address) && isset($dirtyInput['address']))
+            $this->setAddress((string) $dirtyInput['address']);
+        if (isset($this->country) && isset($dirtyInput['country']))
+            $this->setCountry((int) $dirtyInput['country']);
+        if (isset($this->email) && isset($dirtyInput['email']))
+            $this->setEmail((string) $dirtyInput['email']);
+        if (isset($this->mobile) && isset($dirtyInput['mobile']))
+            $this->setMobile((string) $dirtyInput['mobile']);
+        if (isset($this->fax) && isset($dirtyInput['fax']))
+            $this->setFax((string) $dirtyInput['fax']);
+        if (isset($this->profileLink) && isset($dirtyInput['profileLink']))
+            $this->setProfileLink((string) $dirtyInput['profileLink']);
+        if (isset($this->image) && isset($dirtyInput['image']))
+            $this->setImage((string) $dirtyInput['image']);
+        if (isset($this->tags) && isset($dirtyInput['tags']))
+            $this->setTags((array) $dirtyInput['tags']);
+        if (isset($this->online) && isset($dirtyInput['online']))
+            $this->setOnline((int) $dirtyInput['online']);
+        if (isset($this->submissionTime) && isset($dirtyInput['submissionTime']))
+            $this->setSubmissionTime((int) $dirtyInput['submissionTime']);
+        if (isset($this->lastUpdated) && isset($dirtyInput['lastUpdated']))
+            $this->setLastUpdated((int) $dirtyInput['lastUpdated']);
+        if (isset($this->expiresOn) && isset($dirtyInput['expiresOn']))
+            $this->setExpiresOn((int) $dirtyInput['expiresOn']);
+        if (isset($this->counter) && isset($dirtyInput['counter']))
+            $this->setCounter((int) $dirtyInput['counter']);
+        if (isset($this->online) && isset($dirtyInput['online']))
+            $this->setOnline((int) $dirtyInput['online']);
+        if (isset($this->metaTitle) && isset($dirtyInput['metaTitle']))
+            $this->setMetaTitle((string) $dirtyInput['metaTitle']);
+        if (isset($this->metaDescription) && isset($dirtyInput['metaDescription']))
+            $this->setMetaDescription((string) $dirtyInput['metaDescription']);
+        if (isset($this->seo) && isset($dirtyInput['seo']))
+            $this->setSeo((string) $dirtyInput['seo']);
+    }
+    
+    /**
+     * Sets the image property from untrusted form data.
+     * 
+     * This is a helper method for loadPropertiesFromArray(). 
+     * 
+     * @param array $propertyWhitelist List of permitted object properties.
+     */
+    private function loadImage(array $propertyWhitelist)
+    {
+        if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
+            $cleanImageFilename = $this->validator->trimString($_FILES['image']['name']);
+            
+            if ($cleanImageFilename) {
+                $this->setImage($cleanImageFilename);
+            }
+        }
+    }
+    
+    /**
+     * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
+     * 
+     * This is a helper method for loadPropertiesFromArray(). Only useful on HTML fields. Basically
+     * it converts the base URL of your site to the TFISH_LINK constant for storage or vice versa
+     * for display. If you change the base URL of your site (eg. domain) all your internal links
+     * will automatically update when they are displayed.
+     * 
+     * @param string $html A HTML field that makes use of the TFISH_LINK constant.
+     * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
+     * @return string HTML field with converted URLs.
+     */
+    private function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
+    {
+        if ($liveUrls === true) {
+            $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
+        } else {
+                $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
+        }
+        
+        return $html;
     }
     
     /**
@@ -280,7 +492,7 @@ class tfExpert
      */
     public function setCountry (int $country)
     {
-        if ($this->validator->isInt($country, 0, 1)) {
+        if ($this->validator->isInt($country, 0)) {
             $this->country = $country;
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
@@ -296,7 +508,7 @@ class tfExpert
     {
         $cleanEmail = $this->validator->trimString($email);
         
-        if ($this->validator->isEmail($cleanEmail)) {
+        if ($cleanEmail === '' || $this->validator->isEmail($cleanEmail)) {
             $this->email = $cleanEmail;
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
@@ -332,7 +544,7 @@ class tfExpert
     {
         $cleanUrl = $this->validator->trimString($url);
         
-        if ($this->validator->isUrl($cleanUrl)) {
+        if ($cleanUrl === '' || $this->validator->isUrl($cleanUrl)) {
             $this->profileLink = $cleanUrl;
         } else {
             trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
@@ -436,6 +648,17 @@ class tfExpert
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Set the handler for this expert object or subclass.
+     *  
+     * @param string $handler Name of the handler for this Expert or subclass.
+     */
+    public function setHandler(string $handler)
+    {
+        $cleanHandler = $this->validator->trimString($handler);
+        $this->handler = $cleanHandler;
     }
     
     /**

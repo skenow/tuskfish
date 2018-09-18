@@ -44,4 +44,5 @@ define("TFISH_EXPERTS_ADD", "Add");
 define("TFISH_EXPERTS_EDIT", "Edit");
 
 // Errors.
+define("TFISH_ERROR_NOT_EXPERT", "Not an expert");
 define("TFISH_ERROR_NOT_EXPERT_HANDLER", "Not an expert handler.");

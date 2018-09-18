@@ -15,6 +15,7 @@ declare(strict_types=1);
 // Boot! Set file paths, preferences and connect to database.
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
+require_once TFISH_MODULE_PATH . "content/tfContentHeader.php"; // Required for tags.
 require_once TFISH_MODULE_PATH . "experts/tfexpertsHeader.php";
 
 // Specify the admin theme you want to use.
@@ -34,7 +35,7 @@ $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false
 
 // Permitted options.
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-$optionsWhitelist = array("add", "");
+$optionsWhitelist = array("add", "submit", "");
 
 if (!in_array($op, $optionsWhitelist)) {
     exit;
@@ -45,13 +46,18 @@ if (!in_array($op, $optionsWhitelist)) {
     TfSession::validateToken($cleanToken);
 }*/
 
+$contentHandler = $contentHandlerFactory->getHandler('tag');
 $expertHandler = $expertFactory->getExpertHandler();
 $expertController = $expertFactory->getExpertController();
 
 // Business logic goes here.
 switch ($op) {
     case "add":
-        $expertController->addExpert();
+        $expertController->addExpert($contentHandler);
+        break;
+    
+    case "submit":
+        $expertController->submitExpert($_REQUEST);
         break;
     
     default:
@@ -75,13 +81,20 @@ switch ($op) {
         }
 
         foreach ($rows as &$row) {
-            $row['name'] = $row['lastName'] . ', ' . $row['firstName'];
+            if ($row['lastName'] && $row['firstName']) {
+                $row['name'] = $row['lastName'] . ', ' . $row['firstName'];
+            } else {
+                $row['name'] = $row['firstName']; // Some people only have one name.
+            }
+            
             $row['lastUpdated']
                     = date($tfPreference->dateFormat, (int) $row['lastUpdated']);
             $row['submissionTime']
                     = date($tfPreference->dateFormat, (int) $row['submissionTime']);
         }
-
+        
+        $tfTemplate->salutationList = $expertHandler->getSalutationList();
+        
         // Pagination control.
         $extraParams = array();
         if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {

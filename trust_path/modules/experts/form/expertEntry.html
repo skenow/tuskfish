@@ -7,7 +7,7 @@
     <!-- Salutation -->
     <div class="col-md-2 mb-3 text-left" id="salutationContainer">
       <label for="salutation"><strong><?php echo TFISH_EXPERTS_SALUTATION; ?></strong></label>
-      <select class="form-control custom-select" name="salutation" id="salutation" required>
+      <select class="form-control custom-select" name="salutation" id="salutation">
         <?php
             foreach ($salutationList as $key => $salutation) {
                 echo '<option value="' . $tfValidator->escapeForXss($key) . '">'
@@ -69,11 +69,11 @@
     <div class="col-md-3 mb-3 text-left" id="genderContainer">
       <p><strong><?php echo TFISH_EXPERTS_GENDER; ?></strong></p>
       <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="online" name="gender" value="1" checked class="custom-control-input" required>
+        <input type="radio" id="male" name="gender" value="1" checked class="custom-control-input" required>
         <label class="custom-control-label" for="male"><?php echo TFISH_EXPERTS_MALE; ?></label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="offline" name="gender" value="0" class="custom-control-input" required>
+        <input type="radio" id="female" name="gender" value="0" class="custom-control-input" required>
         <label class="custom-control-label" for="female"><?php echo TFISH_EXPERTS_FEMALE; ?></label>
       </div>
     </div>
@@ -118,7 +118,7 @@
     <!-- Country -->
     <div class="col-md-4 mb-3 text-left" id="countryContainer">
       <label for="country"><strong><?php echo TFISH_EXPERTS_COUNTRY; ?></strong></label>
-      <select class="form-control custom-select" name="salutation" id="salutation" required>
+      <select class="form-control custom-select" name="country" id="country" required>
         <?php
             foreach ($countryList as $key => $country) {
                 echo '<option value="' . $tfValidator->escapeForXss($key) . '">'

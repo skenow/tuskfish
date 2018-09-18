@@ -125,9 +125,9 @@ class TfTaglinkHandler
      * 
      * Taglinks represent relationships between tags and content objects.
      * 
-     * @param int $contentId ID of content object.
-     * @param string $type Type of content object as whitelisted in TfTaglinkHandler::getType().
-     * @param string $module Name of the module the content object is associated with.
+     * @param int $contentId ID of object.
+     * @param string $type Type of object.
+     * @param string $module Name of the module the object is associated with.
      * @param array $tagIds IDs of tags as integers.
      * @return bool True on success false on failure.
      */
@@ -139,10 +139,8 @@ class TfTaglinkHandler
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
             exit;
         }
-
-        $typeList = $this->getTypes();
         
-        if ($this->validator->isAlpha($type) && array_key_exists($type, $typeList)) {
+        if ($this->validator->isAlpha($type)) {
             $cleanType = $this->validator->trimString($type);
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);

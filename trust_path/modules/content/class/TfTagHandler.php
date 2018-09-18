@@ -184,7 +184,7 @@ class TfTagHandler extends TfContentHandler
     }
 
     /**
-     * Generates a tag select box control.
+     * Generates a tag select box control for the content module.
      * 
      * Use the $onlineOnly parameter to control whether you retrieve all tags, or just those marked
      * as online. Essentially this provides a way to keep your select box uncluttered; mark tags
@@ -210,7 +210,7 @@ class TfTagHandler extends TfContentHandler
         $cleanType = $this->isSanctionedType($type)
                 ? $this->validator->trimString($type) : null;
         $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
-        $tagList = $this->getActiveTagList($cleanType, $cleanOnlineOnly);
+        $tagList = $this->getActiveTagList('content', $cleanType, $cleanOnlineOnly);
         
         if ($tagList) {
             $selectBox = $this->getArbitraryTagSelectBox($cleanSelected, $tagList, 'tagId', $cleanZeroOption);

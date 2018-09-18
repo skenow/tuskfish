@@ -417,16 +417,19 @@ class TfContentHandler
     }
 
     /**
-     * Get a list of tags actually in use by other content objects, optionally filtered by type.
+     * Get a list of tags actually in use by other content objects, optionally filtered by module
+     * and / or type.
      * 
      * Used primarily to build select box controls. Use $onlineOnly to select only those tags that
      * are marked as online (true), or all tags (false).
      * 
+     * @param string $module Restrict to tags from a certain module.
      * @param string $type Type of content object (subclass name).
      * @param bool $onlineOnly True if marked as online, false if marked as offline.
      * @return array|bool List of tags if available, false if empty.
      */
-    public function getActiveTagList(string $type = null, bool $onlineOnly = true)
+    public function getActiveTagList(string $module = null, string $type = null, 
+            bool $onlineOnly = true)
     {
         $tags = $distinctTags = array();
 
@@ -442,6 +445,12 @@ class TfContentHandler
                 ? $this->validator->trimString($type) : null;
 
         $criteria = $this->criteriaFactory->getCriteria();
+        
+        // Filter tags by module.
+        if (isset($module)) {
+            $cleanModule = $this->validator->trimString($module);
+            $criteria->add($this->criteriaFactory->getItem('module', $cleanModule));
+        }
 
         // Filter tags by type.
         if (isset($cleanType)) {

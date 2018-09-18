@@ -30,13 +30,14 @@ class TfExpertFactory
     protected $db;
     protected $criteriaFactory;
     protected $fileHandler;
+    protected $taglinkHandler;
     protected $expertHandler;
     protected $cache;
     protected $template;
     
-    public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfFileHandler $fileHandler, TfCache $cache,
-            TfTemplate $template)
+    public function __construct(TfValidator $validator, TfDatabase $db, TfCriteriaFactory
+            $criteriaFactory, TfFileHandler $fileHandler, TfTaglinkHandler $taglinkHandler, 
+            TfCache $cache, TfTemplate $template)
     {
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator;
@@ -62,6 +63,12 @@ class TfExpertFactory
             trigger_error(TFISH_ERROR_NOT_FILE_HANDLER, E_USER_ERROR);
         }
         
+        if (is_a($taglinkHandler, 'TfTaglinkHandler')) {
+            $this->taglinkHandler = $taglinkHandler;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_TAGLINK_HANDLER, E_USER_ERROR);
+        }
+        
         $this->expertHandler = $this->getExpertHandler();
         
         if (is_a($cache, 'TfCache')) {
@@ -85,7 +92,7 @@ class TfExpertFactory
     public function getExpertHandler()
     {
         return new TfExpertHandler($this->validator, $this->db, $this->criteriaFactory, 
-                $this->fileHandler);
+                $this->fileHandler, $this->taglinkHandler);
     }
     
     public function getExpertController()

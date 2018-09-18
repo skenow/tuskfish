@@ -31,5 +31,6 @@ function tfExpertsModuleAutoload(string $classname) {
 }
 spl_autoload_register('tfExpertsModuleAutoload');
 
+$taglinkHandler = new TfTaglinkHandler($tfValidator, $tfDatabase, $tfCriteriaFactory);
 $expertFactory = new TfExpertFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
-        $tfFileHandler, $tfCache, $tfTemplate);
+        $tfFileHandler, $taglinkHandler, $tfCache, $tfTemplate);
