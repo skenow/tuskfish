@@ -104,14 +104,14 @@ class TfContentControllerFactory
      * 
      * @param string $type Type of controller. At present the only option is 'admin'.
      * 
-     * @return \TfContentObjectController|boolean Content object controller on success, false on failure.
+     * @return \TfContentController|boolean Content object controller on success, false on failure.
      */
     public function getController(string $type)
     {
         $cleanType = $this->validator->trimString($type);
         
         if ($cleanType === 'admin') {
-            return new TfContentObjectController($this->validator, $this->db, $this->criteriaFactory,
+            return new TfContentController($this->validator, $this->db, $this->criteriaFactory,
                     $this->contentHandlerFactory, $this->template, $this->preference,
                     $this->cache);
         }

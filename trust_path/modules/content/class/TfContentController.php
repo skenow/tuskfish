@@ -1,6 +1,6 @@
 <?php
 /**
- * TfContentObjectController class file.
+ * TfContentController class file.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
@@ -31,7 +31,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfPreference $preference Instance of the Tuskfish site preferences class.
  * @var         TfCache $cache Instance of the Tuskfish site cache class.
  */
-class TfContentObjectController
+class TfContentController
 {
     protected $validator;
     protected $db;
