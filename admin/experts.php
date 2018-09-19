@@ -35,7 +35,7 @@ $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false
 
 // Permitted options.
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-$optionsWhitelist = array("add", "submit", "confirmDelete", "delete", "");
+$optionsWhitelist = array("add", "submit", "confirmDelete", "delete", "edit", "update", "view", "");
 
 if (!in_array($op, $optionsWhitelist)) {
     exit;
@@ -61,20 +61,23 @@ switch ($op) {
         break;
     
     case "confirmDelete":
-        if (isset($_REQUEST['id'])) {
-            $expertController->confirmDelete((int) $_REQUEST['id']);
-        } else {
-            trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-        }
+        $expertController->confirmDelete($cleanId);
         break;
 
     // Delete a content object. ID must be an integer and > 1.
     case "delete":
-        if (isset($_REQUEST['id'])) {
-            $expertController->deleteExpert((int) $_REQUEST['id']);
-        } else {
-            trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-        }
+        $expertController->deleteExpert($cleanId);
+        break;
+        
+    case "edit":
+        $expertController->editExpert($cleanId, $contentHandler);
+        break;
+    
+    case "update":
+        $expertController->updateExpert($_REQUEST);
+        break;
+    
+    case "view":
         break;
     
     default:

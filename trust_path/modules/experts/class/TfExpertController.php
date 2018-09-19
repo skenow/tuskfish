@@ -125,7 +125,7 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');        
     }
     
-    public function editExpert(int $id)
+    public function editExpert(int $id, TfContentHandler $contentHandler)
     {        
         $cleanId = (int) $id;
         
@@ -144,9 +144,12 @@ class TfExpertController
         
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $expert = $this->expertHandler->convertRowToObject($row, false);
-
+        
         // Assign to template.
         $this->template->pageTitle = TFISH_EXPERTS_EDIT;
+        $this->template->salutationList = $this->expertHandler->getSalutationList();
+        $this->template->tagList = $contentHandler->getTagList(false);
+        $this->template->countryList = $this->expertHandler->getCountryList();
         $this->template->op = 'update'; // Critical to launch correct submission action.
         $this->template->action = TFISH_UPDATE;
         $this->template->expert = $expert;

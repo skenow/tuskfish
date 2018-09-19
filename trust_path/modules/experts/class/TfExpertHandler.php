@@ -242,6 +242,10 @@ class TfExpertHandler
         $keyValues['submissionTime'] = time(); // Automatically set submission time.
         $keyValues['lastUpdated'] = time();
         $keyValues['expiresOn'] = 0; // Not in use.
+        
+        // Process associated image.
+        $propertyWhitelist = $obj->getPropertyWhitelist();
+        $keyValues['image'] = $this->uploadImage($propertyWhitelist);
 
         // Insert the object into the database.
         $result = $this->db->insert('expert', $keyValues);
@@ -252,10 +256,6 @@ class TfExpertHandler
         } else {
             $expertId = $this->db->lastInsertId();
         }
-        
-        // Process associated image.
-        $propertyWhitelist = $obj->getPropertyWhitelist();
-        $keyValues['image'] = $this->uploadImage($propertyWhitelist);
         
         unset($keyValues, $result);
         
