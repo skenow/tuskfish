@@ -237,17 +237,9 @@ class TfExpert
     {
         $name = '';
         
-        if ($this->firstName) {
-            $name .= $this->firstName . ' ';
-        }
-        
-        if ($this->midName) {
-            $name .= $this->midName . ' ';
-        }
-        
-        if ($this->lastName) {
-            $name .= $this->lastName;
-        }
+        if ($this->firstName) $name .= $this->firstName . ' ';
+        if ($this->midName) $name .= $this->midName . ' ';
+        if ($this->lastName) $name .= $this->lastName;
         
         $cleanName = trim($name);
         

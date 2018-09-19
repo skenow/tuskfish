@@ -112,6 +112,63 @@ class TfExpertHandler
     }
     
     /**
+     * Delete a single object from the expert table.
+     * 
+     * @param int $id ID of expert object to delete.
+     * @return bool True on success, false on failure.
+     */
+    public function delete(int $id)
+    {
+        $cleanId = (int) $id;
+        
+        if (!$this->validator->isInt($cleanId, 1)) {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+            return false;
+        }
+
+        // Delete files associated with the image and media properties.
+        $obj = $this->getObject($cleanId);
+        
+        if (!is_object($obj)) {
+            trigger_error(TFISH_ERROR_NOT_OBJECT, E_USER_ERROR);
+            return false;
+        }
+        
+        if (!empty($obj->image)) {
+            $this->_deleteImage($obj->image);
+        }
+
+        // Delete associated taglinks. If this object is a tag, delete taglinks referring to it.
+        $result = $this->taglinkHandler->deleteTaglinks($obj);
+        
+        if (!$result) {
+            return false;
+        }
+
+        // Finally, delete the object.
+        $result = $this->db->delete('expert', $cleanId);
+        
+        if (!$result) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    /**
+     * Deletes an uploaded image file associated with a content object.
+     * 
+     * @param string $filename Name of file.
+     * @return bool True on success, false on failure.
+     */
+    private function _deleteImage(string $filename)
+    {
+        if ($filename) {
+            return $this->fileHandler->deleteFile('image/' . $filename);
+        }
+    }
+    
+    /**
      * Returns an array of tag IDs for a given expert object.
      * 
      * @param int $id ID of expert object.
