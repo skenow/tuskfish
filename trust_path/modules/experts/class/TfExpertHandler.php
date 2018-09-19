@@ -156,19 +156,6 @@ class TfExpertHandler
     }
     
     /**
-     * Deletes an uploaded image file associated with a content object.
-     * 
-     * @param string $filename Name of file.
-     * @return bool True on success, false on failure.
-     */
-    private function _deleteImage(string $filename)
-    {
-        if ($filename) {
-            return $this->fileHandler->deleteFile('image/' . $filename);
-        }
-    }
-    
-    /**
      * Returns an array of tag IDs for a given expert object.
      * 
      * @param int $id ID of expert object.
@@ -312,6 +299,168 @@ class TfExpertHandler
                 return false;
             }
         }
+    }
+    
+    /**
+     * Updates an expert object in the database.
+     * 
+     * @param TfExpert $obj An expert object or subclass.
+     * @return bool True on success, false on failure.
+     */
+    public function update(TfExpert $obj)
+    {
+        if (!is_a($obj, 'TfExpert')) {
+            trigger_error(TFISH_ERROR_NOT_CONTENT_OBJECT, E_USER_ERROR);
+        }
+        
+        $cleanId = $this->validator->isInt($obj->id, 1) ? (int) $obj->id : 0;
+
+        $obj->updateLastUpdated();
+        $keyValues = $obj->convertObjectToArray();
+        unset($keyValues['submissionTime']); // Submission time should not be overwritten.
+
+        $propertyWhitelist = $obj->getPropertyWhitelist();
+
+        // Unset properties that are not resident in the expert table.
+        unset($keyValues['tags']);
+        unset($keyValues['validator']);
+
+        // Load the saved object from the database. This will be used to make comparisons with the
+        // current object state and facilitate clean up of redundant tags, and image files.
+        $savedObject = $this->getObject($cleanId);
+        
+        // Update image file for existing objects.
+        if (!empty($savedObject)) {
+            $keyValues = $this->updateImage($propertyWhitelist, $keyValues, $savedObject);
+        }
+
+        // Update tags.
+        $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->module,
+                $obj->tags);
+        
+        if (!$result) {
+            trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
+            return false;
+        }
+
+        // Update the expert object.
+        $result = $this->db->update('expert', $cleanId, $keyValues);
+        
+        if (!$result) {
+            trigger_error(TFISH_ERROR_INSERTION_FAILED, E_USER_ERROR);
+        }
+        
+        unset($result);
+
+        return true;
+    }
+    
+    /**
+     * Update the image property for an existing expert object.
+     * 
+     * This is a helper method for update().
+     * 
+     * @param array $propertyWhitelist Whitelist of permitted object properties.
+     * @param array $keyValues Updated values of object properties from form data.
+     * @param TfExpert $savedObject The existing (not updated) object as presently saved in
+     * the database.
+     * @return array $keyValues Object properties with updated image property.
+     */
+    private function updateImage(array $propertyWhitelist, array $keyValues,
+            TfExpert $savedObject)
+    {
+        // 1. Check if there is an existing image file associated with this expert object.
+        $existingImage = $this->checkImage($savedObject);
+
+        // 2. Is this expert type allowed to have an image property?
+        if (!array_key_exists('image', $propertyWhitelist)) {
+            $keyValues['image'] = '';
+            if ($existingImage) {
+                $this->_deleteImage($existingImage);
+                $existingImage = '';
+            }
+        }
+
+        // 3. Has an existing image file been flagged for deletion?
+        if ($existingImage) {
+            if (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])) {
+                $keyValues['image'] = '';
+                $this->_deleteImage($existingImage);
+                $existingImage = '';
+            }
+        }
+
+        // 4. Check if a new image file has been uploaded by looking in $_FILES.
+        if (array_key_exists('image', $propertyWhitelist)) {
+
+            if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
+                $filename = $this->validator->trimString($_FILES['image']['name']);
+                $cleanFilename = $this->fileHandler->uploadFile($filename, 'image');
+
+                if ($cleanFilename) {
+                    $keyValues['image'] = $cleanFilename;
+
+                    // Delete old image file, if any.
+                    if ($existingImage) {
+                        $this->_deleteImage($existingImage);
+                    }
+                } else {
+                    $keyValues['image'] = '';
+                }
+
+            } else { // No new image, use the existing file name.
+                $keyValues['image'] = $existingImage;
+            }
+        }
+        
+        // If the updated object has no image attached, or has been instructed to delete
+        // attached image, delete any old image files.
+        if ($existingImage &&
+                ((!isset($keyValues['image']) || empty($keyValues['image']))
+                || (isset($_POST['deleteImage']) && !empty($_POST['deleteImage'])))) {
+            $this->_deleteImage($existingImage);
+        }
+        
+        return $keyValues;
+    }
+
+    /**
+     * Check if an existing object has an associated image file upload.
+     * 
+     * @param TfExpert $obj The expert object to be tested.
+     * @return string Filename of associated image property.
+     */
+    private function checkImage(TfExpert $obj)
+    {        
+        if (!empty($obj->image)) {
+            return $obj->image;
+        }
+
+        return '';
+    }
+    
+    /**
+     * Deletes an uploaded image file associated with an object.
+     * 
+     * @param string $filename Name of file.
+     * @return bool True on success, false on failure.
+     */
+    private function _deleteImage(string $filename)
+    {
+        if ($filename) {
+            return $this->fileHandler->deleteFile('image/' . $filename);
+        }
+    }
+
+    /**
+     * Increment a given expert object counter field by one.
+     * 
+     * @param int $id ID of expert object.
+     */
+    public function updateCounter(int $id)
+    {
+        $cleanId = (int) $id;
+        return $this->db->updateCounter($cleanId, 'expert', 'counter');
     }
     
 }

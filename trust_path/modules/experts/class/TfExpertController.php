@@ -89,6 +89,30 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');
     }
     
+    public function submitExpert(array $formData)
+    {
+        $expert = new TfExpert($this->validator);
+        $expert->loadPropertiesFromArray($formData);
+        
+        // Insert the object
+        $result = $this->expertHandler->insert($expert);
+
+        if ($result) {
+            $this->cache->flushCache();
+            $this->template->pageTitle = TFISH_SUCCESS;
+            $this->template->alertClass = 'alert-success';
+            $this->template->message = TFISH_OBJECT_WAS_INSERTED;
+        } else {
+            $this->template->title = TFISH_FAILED;
+            $this->template->alertClass = 'alert-danger';
+            $this->template->message = TFISH_OBJECT_INSERTION_FAILED;
+        }
+
+        $this->template->backUrl = 'experts.php';
+        $this->template->form = TFISH_FORM_PATH . "response.html";
+        $this->template->tfMainContent = $this->template->render('form');
+    }
+    
     public function confirmDelete(int $id)
     {
         $cleanId = (int) $id;
@@ -157,56 +181,6 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');
     }
     
-    public function submitExpert(array $formData)
-    {
-        $expert = new TfExpert($this->validator);
-        $expert->loadPropertiesFromArray($formData);
-        
-        // Insert the object
-        $result = $this->expertHandler->insert($expert);
-
-        if ($result) {
-            $this->cache->flushCache();
-            $this->template->pageTitle = TFISH_SUCCESS;
-            $this->template->alertClass = 'alert-success';
-            $this->template->message = TFISH_OBJECT_WAS_INSERTED;
-        } else {
-            $this->template->title = TFISH_FAILED;
-            $this->template->alertClass = 'alert-danger';
-            $this->template->message = TFISH_OBJECT_INSERTION_FAILED;
-        }
-
-        $this->template->backUrl = 'experts.php';
-        $this->template->form = TFISH_FORM_PATH . "response.html";
-        $this->template->tfMainContent = $this->template->render('form');
-    }
-    
-    public function toggleOnlineStatus(int $id)
-    {
-        $cleanId = (int) $id;
-        
-        if (!$this->validator->isInt($id, 1)) {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-        
-        $result = $this->expertHandler->toggleOnlineStatus($cleanId);
-
-        if ($result) {
-            $this->cache->flushCache();
-            $this->template->pageTitle = TFISH_SUCCESS;
-            $this->template->alertClass = 'alert-success';
-            $this->template->message = TFISH_OBJECT_WAS_UPDATED;
-        } else {
-            $this->template->pageTitle = TFISH_FAILED;
-            $this->template->alertClass = 'alert-danger';
-            $this->template->message = TFISH_OBJECT_UPDATE_FAILED;
-        }
-
-        $this->template->backUrl = 'experts.php';
-        $this->template->form = TFISH_FORM_PATH . "response.html";
-        $this->template->tfMainContent = $this->template->render('form');
-    }
-    
     public function updateExpert(array $formData)
     {
         $expert = new TfExpert($this->validator);
@@ -243,7 +217,33 @@ class TfExpertController
         }
 
         $this->template->backUrl = 'experts.php';
-        $this->template->form = TFISH_EXPERTS_MODULE_FORM_PATH . "responseExpertEdit.html";
+        $this->template->form = TFISH_EXPERTS_MODULE_FORM_PATH . "responseEdit.html";
+        $this->template->tfMainContent = $this->template->render('form');
+    }
+    
+    public function toggleOnlineStatus(int $id)
+    {
+        $cleanId = (int) $id;
+        
+        if (!$this->validator->isInt($id, 1)) {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+        
+        $result = $this->expertHandler->toggleOnlineStatus($cleanId);
+
+        if ($result) {
+            $this->cache->flushCache();
+            $this->template->pageTitle = TFISH_SUCCESS;
+            $this->template->alertClass = 'alert-success';
+            $this->template->message = TFISH_OBJECT_WAS_UPDATED;
+        } else {
+            $this->template->pageTitle = TFISH_FAILED;
+            $this->template->alertClass = 'alert-danger';
+            $this->template->message = TFISH_OBJECT_UPDATE_FAILED;
+        }
+
+        $this->template->backUrl = 'experts.php';
+        $this->template->form = TFISH_FORM_PATH . "response.html";
         $this->template->tfMainContent = $this->template->render('form');
     }
     

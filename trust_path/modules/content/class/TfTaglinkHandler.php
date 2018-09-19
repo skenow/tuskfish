@@ -226,10 +226,8 @@ class TfTaglinkHandler
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
-
-        $typeList = $this->getTypes();
         
-        if ($this->validator->isAlpha($type) && array_key_exists($type, $typeList)) {
+        if ($this->validator->isAlpha($type)) {
             $cleanType = $this->validator->trimString($type);
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);

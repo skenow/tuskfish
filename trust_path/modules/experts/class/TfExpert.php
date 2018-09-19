@@ -815,4 +815,12 @@ class TfExpert
         $this->seo = $this->validator->trimString($seo);
     }
     
+    /**
+     * Reset the last updated time for this content object (timestamp).
+     */
+    public function updateLastUpdated()
+    {
+        $this->lastUpdated = time();
+    }
+    
 }
