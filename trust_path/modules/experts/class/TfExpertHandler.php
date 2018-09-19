@@ -27,8 +27,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @package     experts
  */
 
-class tfExpertHandler
+class TfExpertHandler
 {
+    
+    use TfExpertTrait;
     
     protected $validator;
     protected $db;
@@ -70,46 +72,98 @@ class tfExpertHandler
         }
     }
     
-    public function getCountryList()
+    /**
+     * Convert a database content row to a corresponding content object.
+     * 
+     * Only use this function to convert single objects, as it does a separate query to look up
+     * the associated taglinks. Running it through a loop will therefore consume a lot of resources.
+     * To convert multiple objects, load them directly into the relevant class files, prepare a
+     * buffer of tags using getTags() and loop through the objects referring to the buffer rather
+     * than hitting the database every time.
+     * 
+     * @param array $row Array of result set from database.
+     * @return object|bool Content object on success, false on failure.
+     */
+    public function convertRowToObject(array $row)
     {
-        return array(
-            0 => TFISH_ZERO_OPTION,
-            1 => "Australia",
-            2 => "Bangladesh",
-            3 => "Cambodia",
-            4 => "China",
-            5 => "Hong Kong SAR (China)",
-            6 => "India",
-            7 => "Indonesia",
-            8 => "I.R. Iran",
-            9 => "Lao PDR",
-            10 => "Malaysia",
-            11 => "Maldives",
-            12 => "Myanmar",
-            13 => "Nepal",
-            14 => "Pakistan",
-            15 => "Philippines",
-            16 => "Sri Lanka",
-            17 => "Thailand",
-            18 => "Vietnam"
-        );
+        if (empty($row) || !$this->validator->isArray($row)) {
+            return false;
+        }
+        
+        if (isset($row['type']) && $row['type'] === 'TfExpert') {
+            $expertObject = new $row['type']($this->validator);
+        } else {
+            trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
+        }
+        
+        // Populate the object from the $row using whitelisted properties.
+        if ($expertObject) {
+            $expertObject->loadPropertiesFromArray($row, true);
+
+            // Populate the tag property.
+            if (isset($expertObject->tags) && !empty($expertObject->id)) {
+                $expertObject->setTags($this->loadTagsForObject($expertObject->id));
+            }
+
+            return $expertObject;
+        }
+
+        return false;
     }
     
     /**
-     * Returns an array of known / permitted salutations.
+     * Returns an array of tag IDs for a given expert object.
      * 
-     * @return array List of salutations as key => value pairs.
+     * @param int $id ID of expert object.
+     * @return array Array of tag IDs.
      */
-    public function getSalutationList()
+    protected function loadTagsForObject(int $id)
     {
-        return array(
-            0 => TFISH_ZERO_OPTION,
-            1 => "Dr",
-            2 => "Prof.",
-            3 => "Mr",
-            4 => "Mrs",
-            5 => "Ms"
-        );
+        $cleanId = (int) $id;      
+        $tags = array();
+        
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->criteriaFactory->getItem('contentId', $cleanId));
+        $statement = $this->db->select('taglink', $criteria, array('tagId'));
+
+        if ($statement) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $tags[] = $row['tagId'];
+            }
+            
+            return $tags;
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Retrieves a single object based on its ID.
+     * 
+     * @param int $id ID of expert object.
+     * @return TfExpert|bool $object Expert object on success, false on failure.
+     */
+    public function getObject(int $id)
+    {
+        $cleanId = (int) $id;
+        $row = $object = '';
+        
+        if ($this->validator->isInt($cleanId, 1)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+            $criteria->add($this->criteriaFactory->getItem('id', $cleanId));
+            $statement = $this->db->select('expert', $criteria);
+            
+            if ($statement) {
+                $row = $statement->fetch(PDO::FETCH_ASSOC);
+            }
+            
+            if ($row) {
+                $object = $this->convertRowToObject($row);
+                return $object;
+            }
+        }
+        
+        return false;
     }
     
     /**

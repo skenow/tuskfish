@@ -41,7 +41,6 @@ class TfContentObjectController
     protected $preference;
     protected $cache;
     
-        
     /**
      * Constructor.
      * 

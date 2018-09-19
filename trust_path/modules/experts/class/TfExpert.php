@@ -27,8 +27,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @package     experts
  */
 
-class tfExpert
+class TfExpert
 {
+    
+    use TfExpertTrait;
     use TfLanguage;
     use TfMagicMethods;
     use TfMimetypes;
@@ -86,6 +88,108 @@ class tfExpert
     }
     
     /**
+     * Escapes object properties for output to browser.
+     * 
+     * Use this method to retrieve object properties when you want to send them to the browser.
+     * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
+     * attacks.
+     * 
+     * Note that the method excludes the experience/project/publication/icon fields by default,
+     * which are  returned unescaped; these are dedicated HTML fields that have been input-validated
+     * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
+     * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
+     * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
+     * 
+     * @param string $property Name of property.
+     * @param bool $escapeHtml Whether to escape HTML fields (teaser, description).
+     * @return string|null Human readable value escaped for display or null if property does not
+     * exist.
+     */
+    public function escapeForXss(string $property, bool $escapeHtml = false)
+    {
+        $cleanProperty = $this->validator->trimString($property);
+        
+        // If property is not set return null.
+        if (!isset($this->$cleanProperty)) {
+            return null;
+        }
+        
+        // Format all data for display and convert TFISH_LINK to URL.
+        $humanReadableData = (string) $this->makeDataHumanReadable($cleanProperty);
+        
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
+        $htmlFields = array('experience', 'projects', 'publications', 'icon');
+        
+        if (in_array($property, $htmlFields, true) && $escapeHtml === false) {
+            return $humanReadableData;
+        }
+        
+        // Output for display in the TinyMCE editor (edit mode): HTML must be DOUBLE
+        // escaped to meet specification requirements.
+        if (in_array($property, $htmlFields, true) && $escapeHtml === true) {    
+            return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', 
+                    true);
+        }
+                
+        // All other cases: Escape data for display.        
+        return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', false);
+    }
+    
+    /**
+     * Converts properties to human readable form in preparation for output.
+     * 
+     * Note that data processed by this function must be escaped for XSS before being sent to
+     * display. You can use escapeForXSS().
+     * 
+     * @param string $property Name of property.
+     * @return string Property formatted to human readable form for output.
+     */
+    protected function makeDataHumanReadable(string $cleanProperty)
+    {        
+        switch ($cleanProperty) {
+            case "experience":
+            case "projects":
+            case "publications":
+                // Do a simple string replace to allow TFISH_URL to be used as a constant.
+                $tfUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK, $this->$cleanProperty);
+                return $tfUrlEnabled; 
+                break;
+
+            case "submissionTime":
+            case "lastUpdated":
+            case "expiresOn":
+                $date = date('j F Y', $this->$cleanProperty);
+                return $date;
+                break;
+            
+            case "gender":
+                $genderList = $this->getGenderList();
+                return $genderList($this->$cleanProperty);
+                break;
+            
+            case "salutation":
+                $saluationList = $this->getSalutationList();
+                return $salutationList[$this->$cleanProperty];
+                break;
+            /**case "tags":
+                $tags = array();
+
+                foreach ($this->$cleanProperty as $value) {
+                    $tags[] = (int) $value;
+                    unset($value);
+                }
+
+                return $tags;
+                break;*/
+                
+            // No special handling required. Return unmodified value.
+            default:
+                return $this->$cleanProperty;
+                break;
+        }
+    }
+    
+    /**
      * Converts an expert object to an array suitable for insert/update calls to the database.
      * 
      * @return array Array of object property/values.
@@ -122,6 +226,32 @@ class tfExpert
             "jpg" => "image/jpeg",
             "png" => "image/png"
         );
+    }
+    
+    /**
+     * Returns the full name of an expert.
+     * 
+     * @return string Full name of expert.
+     */
+    public function getName()
+    {
+        $name = '';
+        
+        if ($this->firstName) {
+            $name .= $this->firstName . ' ';
+        }
+        
+        if ($this->midName) {
+            $name .= $this->midName . ' ';
+        }
+        
+        if ($this->lastName) {
+            $name .= $this->lastName;
+        }
+        
+        $cleanName = trim($name);
+        
+        return $cleanName;
     }
     
     /**

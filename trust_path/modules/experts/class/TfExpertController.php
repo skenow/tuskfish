@@ -28,7 +28,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @package     experts
  */
 
-class tfExpertController
+class TfExpertController
 {
     
     protected $validator;
@@ -96,7 +96,7 @@ class tfExpertController
         if ($this->validator->isInt($cleanId, 1)) {
             $this->template->pageTitle = TFISH_CONFIRM_DELETE;
             $this->template->expert = $this->expertHandler->getObject($cleanId);
-            $this->template->form = TFISH_EXPERTS_MODULE_FORM_PATH . "confirmExpertDelete.html";
+            $this->template->form = TFISH_EXPERTS_MODULE_FORM_PATH . "confirmDelete.html";
             $this->template->tfMainContent = $this->template->render('form');
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
