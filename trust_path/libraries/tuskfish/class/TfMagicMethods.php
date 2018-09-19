@@ -72,7 +72,6 @@ trait TfMagicMethods
         if (isset($this->$cleanProperty)) {
             return true;
         } else {
-            echo $this->type . ' ' . $property . '<br />';
             return false;
         }
     }

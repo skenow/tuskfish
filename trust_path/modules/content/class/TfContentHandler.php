@@ -147,6 +147,7 @@ class TfContentHandler
         
         $criteria = $this->criteriaFactory->getCriteria();
         $criteria->add($this->criteriaFactory->getItem('contentId', $cleanId));
+        $criteria->add($this->criteriaFactory->getItem('module', 'content'));
         $statement = $this->db->select('taglink', $criteria, array('tagId'));
 
         if ($statement) {
@@ -756,9 +757,11 @@ class TfContentHandler
             $statement = $this->db->select('taglink', $criteria);
 
             if ($statement) {
-                // Sort tag into multi-dimensional array indexed by contentId.
+                // Sort tag into multi-dimensional array indexed by contentId, filtering by content module.
                 while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                    $taglinks[$row['contentId']][] = $row['tagId'];
+                    if ($row['contentId'] === 'content') {
+                        $taglinks[$row['contentId']][] = $row['tagId'];
+                    }
                 }
 
                 // Assign the sorted tags to correct content objects.

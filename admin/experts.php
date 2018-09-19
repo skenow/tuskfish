@@ -16,7 +16,7 @@ declare(strict_types=1);
 require_once "../mainfile.php";
 require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php"; // Required for tags.
-require_once TFISH_MODULE_PATH . "experts/tfexpertsHeader.php";
+require_once TFISH_MODULE_PATH . "experts/tfExpertsHeader.php";
 
 // Specify the admin theme you want to use.
 $tfTemplate->setTheme('admin');
@@ -47,7 +47,7 @@ $optionsWhitelist = array(
     "");
    
 // Cross-site request forgery check.
-if (!in_array($op, $optionsWhitelist, true)) {
+if (!in_array($op, $optionsWhitelist)) {
     TfSession::validateToken($cleanToken);
 }
 
