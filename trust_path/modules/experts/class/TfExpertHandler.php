@@ -451,6 +451,18 @@ class TfExpertHandler
             return $this->fileHandler->deleteFile('image/' . $filename);
         }
     }
+    
+    /**
+     * Toggle the online status of an expert object.
+     * 
+     * @param int $id ID of expert object.
+     * @return boolean True on success, false on failure.
+     */
+    public function toggleOnlineStatus(int $id)
+    {
+        $cleanId = (int) $id;
+        return $this->db->toggleBoolean($cleanId, 'expert', 'online');
+    }
 
     /**
      * Increment a given expert object counter field by one.

@@ -35,16 +35,21 @@ $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false
 
 // Permitted options.
 $op = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
-$optionsWhitelist = array("add", "submit", "confirmDelete", "delete", "edit", "update", "view", "");
-
-if (!in_array($op, $optionsWhitelist)) {
-    exit;
-}
+$optionsWhitelist = array(
+    "add",
+    "submit",
+    "confirmDelete",
+    "delete",
+    "edit",
+    "update",
+    "toggle",
+    "view",
+    "");
    
 // Cross-site request forgery check.
-/*if (!in_array($op, $optionsWhitelist, true)) {
+if (!in_array($op, $optionsWhitelist, true)) {
     TfSession::validateToken($cleanToken);
-}*/
+}
 
 $contentHandler = $contentHandlerFactory->getHandler('tag');
 $expertHandler = $expertFactory->getExpertHandler();
@@ -75,6 +80,10 @@ switch ($op) {
     
     case "update":
         $expertController->updateExpert($_REQUEST);
+        break;
+    
+    case "toggle":
+        $expertController->toggleOnlineStatus($cleanId);
         break;
     
     case "view":
