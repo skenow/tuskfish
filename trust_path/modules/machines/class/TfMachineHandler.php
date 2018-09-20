@@ -224,6 +224,7 @@ class TfMachineHandler
         if ($statement) {
 
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $object = new $row['type']($this->validator);
                 $object->loadPropertiesFromArray($row, true);
                 $objects[$object->id] = $object;
                 unset($object);

@@ -211,6 +211,49 @@ class TfExpertHandler
     }
     
     /**
+     * Get expert objects, optionally matching conditions specified with a TfCriteria object.
+     * 
+     * @param TfCriteria $criteria Query composer object used to build conditional database query.
+     * @return array Array of expert objects.
+     */
+    public function getObjects(TfCriteria $criteria = null)
+    {
+        $objects = array();
+        
+        if (isset($criteria) && !is_a($criteria, 'TfCriteria')) {
+            trigger_error(TFISH_ERROR_NOT_CRITERIA_OBJECT, E_USER_ERROR);
+        }
+        
+        if (!isset($criteria)) {
+            $criteria = $this->criteriaFactory->getCriteria();
+        }
+
+        // Set default sorting order by submission time descending.        
+        if (!$criteria->order) {
+            $criteria->setOrder('lastName');
+            $criteria->setOrderType('ASC');
+        }
+
+        $statement = $this->db->select('expert', $criteria);
+        
+        if ($statement) {
+
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $object = new $row['type']($this->validator);
+                $object->loadPropertiesFromArray($row, true);
+                $objects[$object->id] = $object;
+                unset($object);
+            }            
+
+            unset($statement);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+
+        return $objects;
+    }
+    
+    /**
      * Converts an array of tagIds into an array of tag links with an arbitrary local target file.
      * 
      * Note that the filename may only consist of alphanumeric characters and underscores. Do not

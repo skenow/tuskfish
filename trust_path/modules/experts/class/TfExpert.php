@@ -752,6 +752,36 @@ class TfExpert
     }
     
     /**
+     * Generates a URL to access this object in single view mode.
+     * 
+     * URL can point relative to either the home page (index.php, or other custom content stream
+     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
+     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
+     * for a landing page (this requires you to append the name of the new page to the 
+     * TFISH_PERMALINK_URL constant).
+     * 
+     * @param string $customPage Use an arbitrary target page or the home page (index.php).
+     * @return string URL to view this object.
+     */
+    public function getUrl(string $customPage = '')
+    {
+        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
+        
+        if ($customPage) {
+            $url .= $this->validator->isAlnumUnderscore($customPage)
+                    ? $this->validator->trimString($customPage) . '.php' : '';
+        }
+        
+        $url .= '?id=' . (int) $this->id;
+        
+        if ($this->seo) {
+            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
+        }
+
+        return $url;
+    }
+    
+    /**
      * Set the ID of this expert.
      * 
      * @param int $id ID of this expert.
