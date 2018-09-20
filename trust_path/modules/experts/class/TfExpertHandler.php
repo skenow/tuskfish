@@ -211,6 +211,85 @@ class TfExpertHandler
     }
     
     /**
+     * Converts an array of tagIds into an array of tag links with an arbitrary local target file.
+     * 
+     * Note that the filename may only consist of alphanumeric characters and underscores. Do not
+     * include the file extension (eg. use 'experts' instead of 'experts.php'. The base URL of the
+     * site will be prepended and .php plus the tagId will be appended.
+     * 
+     * @param array $tags Array of tag IDs.
+     * @param string $targetFilename Name of file for tag links to point at.
+     * @return array Array of HTML tag links.
+     */
+    public function makeTagLinks(array $tags, string $targetFilename = '')
+    {
+        if (!$this->validator->isArray($tags)) {
+            trigger_error(TFISH_ERROR_NOT_ARRAY, E_USER_ERROR);
+        }
+        
+        if (empty($targetFilename)) {
+            $cleanFilename = TFISH_URL . '?tagId=';
+        } else {
+            if (!$this->validator->isAlnumUnderscore($targetFilename)) {
+                trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
+            } else {
+                $targetFilename = $this->validator->trimString($targetFilename);
+                $cleanFilename = TFISH_URL . $this->validator->escapeForXss($targetFilename)
+                        . '.php?tagId=';
+            }
+        }
+
+        $tagList = $this->getTagList(false);
+        $tagLinks = array();
+        
+        foreach ($tags as $tag) {
+            if ($this->validator->isInt($tag, 1) && array_key_exists($tag, $tagList)) {
+                $tagLinks[$tag] = '<a href="' . $this->validator->escapeForXss($cleanFilename . $tag) . '">'
+                        . $this->validator->escapeForXss($tagList[$tag]) . '</a>';
+            }
+            
+            unset($tag);
+        }
+
+        return $tagLinks;
+    }
+    
+    /**
+     * Get an array of all tag objects in $id => $title format.
+     * 
+     * @param bool Get tags marked online only.
+     * @return array Array of tag IDs and titles.
+     */
+    public function getTagList(bool $onlineOnly = true)
+    {
+        $tags = array();
+        $statement = false;
+        $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
+        $columns = array('id', 'title');
+        $criteria = $this->criteriaFactory->getCriteria();
+        $criteria->add($this->criteriaFactory->getItem('type', 'TfTag'));
+        
+        if ($cleanOnlineOnly) {
+            $criteria->add($this->criteriaFactory->getItem('online', true));
+        }
+
+        $statement = $this->db->select('content', $criteria, $columns);
+        
+        if ($statement) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $tags[$row['id']] = $row['title'];
+            }
+            unset($statement);
+        } else {
+            trigger_error(TFISH_ERROR_NO_RESULT, E_USER_ERROR);
+        }
+        
+        asort($tags);
+
+        return $tags;
+    }
+    
+    /**
      * Inserts an expert object into the database.
      * 
      * @param TfExpert $obj An expert object or subclass.

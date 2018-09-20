@@ -38,6 +38,7 @@ define("TFISH_EXPERTS_PROFILE_LINK", "Profile URL");
 define("TFISH_EXPERTS_NAME", "Name");
 define("TFISH_EXPERTS_MALE", "Male");
 define("TFISH_EXPERTS_FEMALE", "Female");
+define("TFISH_EXPERTS_CONTACT_DETAILS", "Contact details");
 
 // Actions.
 define("TFISH_EXPERTS_ADD", "Add");

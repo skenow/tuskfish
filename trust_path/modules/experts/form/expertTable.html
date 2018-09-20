@@ -27,7 +27,7 @@
     <tr>
       <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['id']); ?></td>
       <td><?php echo $salutationList[$row['salutation']]; ?></td>
-      <td><?php echo $row['name']; ?></td>
+      <td><a href="<?php echo TFISH_ADMIN_URL . 'experts.php?op=view&amp;id=' . $tfValidator->escapeForXss($row['id']); ?>"><?php echo $row['name']; ?></a></td>
       <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['lastUpdated']); ?></td>
       <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['submissionTime']); ?></td>
       <td class="d-none d-md-table-cell d-lg-table-cell d-xl-table-cell"><?php echo $tfValidator->escapeForXss($row['counter']); ?></td>

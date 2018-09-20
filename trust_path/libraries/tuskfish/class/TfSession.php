@@ -527,7 +527,7 @@ class TfSession
                 ? self::$preference->sessionName : 'tf';
 
         // Session life time, in seconds. '0' means until the browser is closed.
-        $lifetime = self::$preference->sessionLife;
+        $lifetime = self::$preference->sessionLife * 60;
 
         // Path on the domain where the cookie will work. Use a single slash for all paths (default,
         // as there are admin checks in some templates).

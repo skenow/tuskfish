@@ -18,9 +18,6 @@ require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php"; // Required for tags.
 require_once TFISH_MODULE_PATH . "experts/tfExpertsHeader.php";
 
-// Specify the admin theme you want to use.
-$tfTemplate->setTheme('admin');
-
 // Set target file for intra-collection pagination controls when viewing objects.
 $targetFileName = 'experts';
 $tfTemplate->targetFileName = $targetFileName;
@@ -51,6 +48,14 @@ if (!in_array($op, $optionsWhitelist)) {
     TfSession::validateToken($cleanToken);
 }
 
+// Specify the admin theme and the template to be used to preview content (user side template).
+if ($op === 'view') {
+    $tfTemplate->setTheme('default');
+} else {
+    $tfTemplate->setTheme('admin');
+}
+
+// Get handlers and controllers.
 $contentHandler = $contentHandlerFactory->getHandler('tag');
 $expertHandler = $expertFactory->getExpertHandler();
 $expertController = $expertFactory->getExpertController();
@@ -87,6 +92,31 @@ switch ($op) {
         break;
     
     case "view":
+        if ($cleanId) {
+            $expert = $expertHandler->getObject($cleanId);
+            
+            if (!is_object($expert)) {
+                $tfTemplate->tfMainContent = TFISH_ERROR_NO_SUCH_CONTENT;
+                break;
+            }
+
+            $tfTemplate->expert = $expert;
+
+            $expertInfo = array();
+
+            if ($expert->tags) {
+                $tags = $expertHandler->makeTagLinks($expert->tags);
+                $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+                $expertInfo[] = $tags;
+            }
+
+            $tfTemplate->expertInfo = implode(' | ', $expertInfo);
+            
+            if ($expert->metaTitle) $tfMetadata->setTitle($expert->metaTitle);
+            if ($expert->metaDescription) $tfMetadata->setDescription($expert->metaDescription);
+            
+            $tfTemplate->tfMainContent = $tfTemplate->render($expert->template);
+        }
         break;
     
     default:
