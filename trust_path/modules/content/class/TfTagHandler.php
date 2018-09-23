@@ -198,7 +198,7 @@ class TfTagHandler extends TfContentHandler
      * @param bool $onlineOnly Get all tags or just those marked online.
      * @return bool|string False if no tags or a HTML select box if there are.
      */
-    public function getTagSelectBox(int $selected = null, string $type = '',
+    public function getTagSelectBox(int $selected = null, string $module = '', string $type = '',
             string $zeroOption = TFISH_SELECT_TAGS, bool $onlineOnly = true)
     {
         $selectBox = '';
@@ -206,11 +206,11 @@ class TfTagHandler extends TfContentHandler
 
         $cleanSelected = (isset($selected) && $this->validator->isInt($selected, 1))
                 ? (int) $selected : null;
+        $cleanModule = isset($module) ? $this->validator->trimString($module) : null;
+        $cleanType = $this->isSanctionedType($type) ? $this->validator->trimString($type) : null;
         $cleanZeroOption = $this->validator->escapeForXss($this->validator->trimString($zeroOption));
-        $cleanType = $this->isSanctionedType($type)
-                ? $this->validator->trimString($type) : null;
         $cleanOnlineOnly = $this->validator->isBool($onlineOnly) ? (bool) $onlineOnly : true;
-        $tagList = $this->getActiveTagList('content', $cleanType, $cleanOnlineOnly);
+        $tagList = $this->getActiveTagList($cleanModule, $cleanType, $cleanOnlineOnly);
         
         if ($tagList) {
             $selectBox = $this->getArbitraryTagSelectBox($cleanSelected, $tagList, 'tagId', $cleanZeroOption);

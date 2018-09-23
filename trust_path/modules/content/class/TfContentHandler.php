@@ -448,7 +448,7 @@ class TfContentHandler
         $criteria = $this->criteriaFactory->getCriteria();
         
         // Filter tags by module.
-        if (isset($module)) {
+        if (isset($module) && !empty($module)) {
             $cleanModule = $this->validator->trimString($module);
             $criteria->add($this->criteriaFactory->getItem('module', $cleanModule));
         }

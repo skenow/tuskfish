@@ -156,6 +156,43 @@ class TfExpertHandler
     }
     
     /**
+     * Generates a country select box.
+     * 
+     * @param int $selected The currently option.
+     * @param string $zeroOption The text to display in the zero option of the select box.
+     * @return string HTML select box.
+     */
+    public function getCountrySelectBox(int $selected = 0, string $zeroOption = TFISH_EXPERTS_SELECT_STATE)
+    {
+        $cleanSelected = (int) $selected;
+        $cleanZeroOption = $this->validator->trimString($zeroOption);
+        $options = $this->getCountryList();
+        
+        if (!$this->validator->isInt($cleanSelected, 0)) {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+        
+        if ($cleanZeroOption) {
+            $options[0] = $cleanZeroOption;
+        }
+        
+        $selectBox = '<select class="form-control custom-select" name="state" id="state" '
+                . 'onchange="this.form.submit()">';
+        
+        foreach ($options as $key => $value) {
+            if ($key === $cleanSelected) {
+                $selectBox .= '<option value="' . $key . '" selected>' . $value . '</option>';
+            } else {
+                $selectBox .= '<option value="' . $key . '">' . $value . '</option>';
+            }
+        }
+
+        $selectBox .= '</select>';
+
+        return $selectBox;
+    }
+    
+    /**
      * Returns an array of tag IDs for a given expert object.
      * 
      * @param int $id ID of expert object.

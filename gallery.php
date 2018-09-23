@@ -79,7 +79,7 @@ $criteria->setLimit($tfPreference->galleryPagination);
 
 // Prepare select filters.
 $tagHandler = $contentHandlerFactory->getHandler('tag');
-$tagSelectBox = $tagHandler->getTagSelectBox($cleanTag, 'TfImage');
+$tagSelectBox = $tagHandler->getTagSelectBox($cleanTag, 'content', 'TfImage');
 $tfTemplate->selectAction = 'gallery.php';
 $tfTemplate->tagSelect = $tagSelectBox;
 $tfTemplate->selectFiltersForm = $tfTemplate->render('galleryFilters');

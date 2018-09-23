@@ -25,6 +25,7 @@ $tfTemplate->targetFileName = $targetFileName;
 // Validate input parameters.
 $cleanId = (int) ($_REQUEST['id'] ?? 0);
 $cleanStart = (int) ($_GET['start'] ?? 0);
+$cleanState = (int) ($_GET['state'] ?? 0);
 $cleanTag = (int) ($_GET['tagId'] ?? 0);
 $cleanOnline = isset($_GET['online']) ? (int) $_GET['online'] : null;
 $cleanToken = isset($_POST['token']) ? $tfValidator->trimString($_POST['token']) : '';
@@ -123,6 +124,15 @@ switch ($op) {
         $criteria = $tfCriteriaFactory->getCriteria();
 
         // Select box filter input.
+        if ($cleanTag) $criteria->setTag(array($cleanTag));
+        
+        if ($cleanState) {
+            $criteria->add($tfCriteriaFactory->getItem('country', $cleanState));
+        }
+        
+        if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
+            $criteria->add($tfCriteriaFactory->getItem('online', $cleanOnline));
+        }
 
         // Other criteria.
         $criteria->setOffset($cleanStart);
@@ -156,24 +166,34 @@ switch ($op) {
         
         // Pagination control.
         $extraParams = array();
+        
         if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
             $extraParams['online'] = $cleanOnline;
         }
-        if (isset($cleanType) && !empty($cleanType)) {
-            $extraParams['type'] = $cleanType;
-        }
 
         $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
-        $tfPagination->setUrl('admin');
+        $tfPagination->setUrl('experts');
         $tfPagination->setCount($tfDatabase->selectCount('expert', $criteria));
         $tfPagination->setLimit($tfPreference->adminPagination);
         $tfPagination->setStart($cleanStart);
         $tfPagination->setTag($cleanTag);
         $tfPagination->setExtraParams($extraParams);
         $tfTemplate->pagination = $tfPagination->renderPaginationControl();
-
-        // Prepare select filters.
         
+        // Tag select filter.
+        $tagHandler = $contentHandlerFactory->getHandler('tag');
+        $tfTemplate->tagSelect = $tagHandler->getTagSelectBox($cleanTag, 'experts');
+        
+        // Country select filter.
+        $tfTemplate->countrySelect = $expertHandler->getCountrySelectBox($cleanState, TFISH_EXPERTS_SELECT_STATE);
+        
+        // Online select filter.
+        $tfTemplate->onlineSelect = $contentHandler->getOnlineSelectBox($cleanOnline);
+
+        $tfTemplate->selectAction = 'experts.php';
+        $tfTemplate->selectFiltersForm = $tfTemplate->render('expertSelectFilters');
+        
+        // Render template;
         $tfTemplate->pageTitle = TFISH_EXPERTS;
         $tfTemplate->rows = $rows;
         $tfTemplate->form = TFISH_EXPERTS_MODULE_FORM_PATH . "expertTable.html";

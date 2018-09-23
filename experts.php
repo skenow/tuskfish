@@ -30,19 +30,75 @@ $tfTemplate->targetFileName = $targetFileName;
 $cleanId = (int) ($_REQUEST['id'] ?? 0);
 $cleanStart = (int) ($_GET['start'] ?? 0);
 $cleanTag = (int) ($_GET['tagId'] ?? 0);
+$cleanState = (int) ($_GET['state'] ?? 0);
+
+// Set cache parameters.
+$basename = basename(__FILE__);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
 
 $expertHandler = $expertFactory->getExpertHandler();
 
-switch ($op) {
-    default:
-        
-        $expertList = $expertHandler->getObjects();
-        $tfTemplate->pageTitle = TFISH_EXPERTS;
-        $tfTemplate->expertList = $expertList;
-        break;
-}
+// Get single expert.
+if ($cleanId) {
+    $expert = $expertHandler->getObject($cleanId);
 
-$tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);
+    if (isset($expert) && is_a($expert, 'TfExpert') && $expert->online) {
+        $expertHandler->updateCounter($cleanId);
+        $tfCache->getCachedPage($basename, $cacheParameters);
+        $tfTemplate->expert = $expert;
+        
+        $expertInfo = array();
+
+        if ($expert->tags) {
+            $tags = $expertHandler->makeTagLinks($expert->tags);
+            $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
+            $expertInfo[] = $tags;
+        }
+
+        $tfTemplate->expertInfo = implode(' | ', $expertInfo);
+        if ($expert->metaTitle) $tfMetadata->setTitle($expert->metaTitle);
+        if ($expert->metaDescription) $tfMetadata->setDescription($expert->metaDescription);
+        $tfTemplate->tfMainContent = $tfTemplate->render($expert->template);
+    }
+} else {
+    // Get list of experts.
+    $criteria = $tfCriteriaFactory->getCriteria();
+    if ($cleanStart) $criteria->setOffset($cleanStart);
+    if ($cleanState) $criteria->add($tfCriteriaFactory->getItem('country', $cleanState));
+    if ($cleanTag) $criteria->setTag(array($cleanTag));
+    if ($cleanOnline) $criteria->add($tfCriteriaFactory->getItem('online', 1));
+    $criteria->setLimit($tfPreference->userPagination);
+    $criteria->setOrder('lastName');
+    $criteria->setOrderType('ASC');
+    
+    $expertList = $expertHandler->getObjects($criteria);
+    
+    // Select filters.
+    
+    // Pagination control.
+    $extraParams = array();
+    if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {
+        $extraParams['online'] = $cleanOnline;
+    }
+    
+    if (isset($cleanState) && !empty($cleanState)) {
+        $extraParams['country'] = $cleanState;
+    }
+    
+    $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+    $tfPagination->setUrl('experts');
+    $tfPagination->setCount($tfDatabase->selectCount('expert', $criteria));
+    $tfPagination->setLimit($tfPreference->userPagination);
+    $tfPagination->setStart($cleanStart);
+    $tfPagination->setTag($cleanTag);
+    $tfPagination->setExtraParams($extraParams);
+    $tfTemplate->pagination = $tfPagination->renderPaginationControl();
+    
+    // Render index template.
+    $tfTemplate->pageTitle = TFISH_EXPERTS;
+    $tfTemplate->expertList = $expertList;
+    $tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);
+}
 
 /**
  * Override page template here (otherwise default site metadata will display).

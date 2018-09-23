@@ -43,6 +43,7 @@ define("TFISH_EXPERTS_CONTACT_DETAILS", "Contact details");
 // Actions.
 define("TFISH_EXPERTS_ADD", "Add");
 define("TFISH_EXPERTS_EDIT", "Edit");
+define("TFISH_EXPERTS_SELECT_STATE", "- Select state -");
 
 // Errors.
 define("TFISH_ERROR_NOT_EXPERT", "Not an expert");
