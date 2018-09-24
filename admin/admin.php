@@ -81,22 +81,14 @@ if (in_array($op, $optionsWhitelist)) {
 
         // Confirm deletion of a content object.
         case "confirmDelete":
-            if ($cleanId) {
-                $contentController = $controllerFactory->getController('admin');
-                $contentController->confirmDelete($cleanId);
-            } else {
-                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-            }
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->confirmDelete($cleanId);
             break;
             
         // Delete a content object. ID must be an integer and > 1.
         case "delete":
-            if ($cleanId) {
-                $contentController = $controllerFactory->getController('admin');
-                $contentController->deleteContent($cleadId);
-            } else {
-                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-            }
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->deleteContent($cleadId);
             break;
             
         case "confirmFlush":
@@ -131,13 +123,9 @@ if (in_array($op, $optionsWhitelist)) {
             break;
         
         // Display a data entry form containing the object's current properties.
-        case "edit":            
-            if (isset($_REQUEST['id'])) {
-                $contentController = $controllerFactory->getController('admin');
-                $contentController->editContent($cleanId);
-            } else {
-                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-            }
+        case "edit":
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->editContent($cleanId);
             break;
 
         // Update: Submit the modified object and update the corresponding database row.
@@ -147,13 +135,9 @@ if (in_array($op, $optionsWhitelist)) {
             break;
         
         // Toggle the online status of a particular object.
-        case "toggle":            
-            if (isset($_REQUEST['id'])) {
-                $contentController = $controllerFactory->getController('admin');
-                $contentController->toggleOnlineStatus((int) $_REQUEST['id']);
-            } else {
-                trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
-            }
+        case "toggle":
+            $contentController = $controllerFactory->getController('admin');
+            $contentController->toggleOnlineStatus((int) $_REQUEST['id']);
             break;
 
         // View: See the user-side display of a single object, including offline objects.
