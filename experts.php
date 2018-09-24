@@ -66,7 +66,7 @@ if ($cleanId) {
     if ($cleanStart) $criteria->setOffset($cleanStart);
     if ($cleanState) $criteria->add($tfCriteriaFactory->getItem('country', $cleanState));
     if ($cleanTag) $criteria->setTag(array($cleanTag));
-    if ($cleanOnline) $criteria->add($tfCriteriaFactory->getItem('online', 1));
+    $criteria->add($tfCriteriaFactory->getItem('online', 1));
     $criteria->setLimit($tfPreference->userPagination);
     $criteria->setOrder('lastName');
     $criteria->setOrderType('ASC');
@@ -74,7 +74,15 @@ if ($cleanId) {
     $expertList = $expertHandler->getObjects($criteria);
     
     // Select filters.
-    
+    $tagHandler = $contentHandlerFactory->getHandler('tag');
+    $tfTemplate->tagSelect = $tagHandler->getTagSelectBox($cleanTag, 'experts');
+
+    // Country select filter.
+    $tfTemplate->countrySelect = $expertHandler->getCountrySelectBox($cleanState, TFISH_EXPERTS_SELECT_STATE);
+
+    $tfTemplate->selectAction = 'experts.php';
+    $tfTemplate->selectFiltersForm = $tfTemplate->render('expertFilters');
+
     // Pagination control.
     $extraParams = array();
     if (isset($cleanOnline) && $tfValidator->isInt($cleanOnline, 0, 1)) {

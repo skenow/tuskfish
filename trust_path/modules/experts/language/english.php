@@ -45,6 +45,9 @@ define("TFISH_EXPERTS_ADD", "Add");
 define("TFISH_EXPERTS_EDIT", "Edit");
 define("TFISH_EXPERTS_SELECT_STATE", "- Select state -");
 
+// Information.
+define("TFISH_EXPERTS_NO_EXPERTS_MATCH_YOUR_CRITERIA", "No experts matched these criteria.");
+
 // Errors.
 define("TFISH_ERROR_NOT_EXPERT", "Not an expert");
 define("TFISH_ERROR_NOT_EXPERT_HANDLER", "Not an expert handler.");
