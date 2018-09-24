@@ -137,7 +137,7 @@ if (in_array($op, $optionsWhitelist)) {
         // Toggle the online status of a particular object.
         case "toggle":
             $contentController = $controllerFactory->getController('admin');
-            $contentController->toggleOnlineStatus((int) $_REQUEST['id']);
+            $contentController->toggleOnlineStatus($cleanId);
             break;
 
         // View: See the user-side display of a single object, including offline objects.
