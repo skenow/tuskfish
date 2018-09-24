@@ -817,7 +817,7 @@ class TfExpert
     /**
      * Populates the properties of the object from external (untrusted) data source.
      * 
-     * Note that the supplied data is internally validated by __set().
+     * Note that the supplied data is internally validated by the relevant setters.
      * 
      * @param array $dirtyInput Usually raw form $_REQUEST data.
      * @param bool $liveUrls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
@@ -958,7 +958,7 @@ class TfExpert
         if ($liveUrls === true) {
             $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
         } else {
-                $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
+            $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
         }
         
         return $html;

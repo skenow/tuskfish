@@ -205,17 +205,13 @@ class TfMachineController
         // As this object is being sent to storage, need to decode entities that got encoded for
         // display.
         if (isset($machine->title)) {
-            $machine->title = htmlspecialchars_decode($machine->title, ENT_NOQUOTES);
+            $machine->setTitle(htmlspecialchars_decode($machine->title, ENT_NOQUOTES));
         }
 
         // Properties that are used within attributes must have quotes encoded.
-        $fieldsToDecode = array('metaTitle', 'seo', 'metaDescription');
-
-        foreach ($fieldsToDecode as $field) {
-            if (isset($machine->field)) {
-                $machine->$field = htmlspecialchars_decode($machine->field, ENT_QUOTES);
-            }
-        }
+        $machine->setMetaTitle(htmlspecialchars_decode($machine->metaTitle, ENT_QUOTES));
+        $machine->setMetaDescription(htmlspecialchars_decode($machine->metaDescription, ENT_QUOTES));
+        $machine->setSeo(htmlspecialchars_decode($machine->seo, ENT_QUOTES));
 
         // Update the database row and display a response.
         $result = $this->machineHandler->update($machine);

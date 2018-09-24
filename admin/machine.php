@@ -42,11 +42,6 @@ if (!in_array($op, array('confirmDelete', 'confirmFlush', 'edit', 'toggle', 'vie
     TfSession::validateToken($cleanToken);
 }
 
-// If an ID is set, this implies that an object should be viewed.
-if ($cleanId) {
-    $op = 'view';
-}
-
 // Specify the admin theme and the template to be used to preview machine (user side template).
 if ($op === 'view') {
     $tfTemplate->setTheme('default');

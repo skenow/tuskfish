@@ -5,47 +5,47 @@
     <div class="row">
         
       <!-- ID -->
-      <input type="hidden" name="id" value="<?php echo $tfValidator->escapeForXss($machine->id); ?>">
+      <input type="hidden" name="id" value="<?php echo $machine->getId(); ?>">
 
       <!-- Title -->
       <div class="col-12 mb-3 text-left" id="titleContainer">
         <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
-        <input type="text" class="form-control" name="title" id="title" <?php if (isset($machine->title)) echo 'value="' . $tfValidator->escapeForXss($machine->title) . '"'; ?>>
+        <input type="text" class="form-control" name="title" id="title" <?php if (isset($machine->title)) echo 'value="' . $machine->getTitle() . '"'; ?>>
       </div>
 
       <!-- Teaser -->
       <div class="col-12 mb-3 text-left" id="teaserContainer">
         <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
-        <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($machine->teaser)) { echo $machine->escapeForXss('teaser', true); } ?></textarea>
+        <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($machine->teaser)) { echo $machine->getTeaser(true); } ?></textarea>
       </div>
 
       <!-- Description -->
       <div class="col-12 mb-3 text-left" id="descriptionContainer">
         <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
-        <textarea id="description" name="description" class="form-control text-left"><?php if (isset($machine->description)) { echo $machine->escapeForXss('description', true); } ?></textarea>
+        <textarea id="description" name="description" class="form-control text-left"><?php if (isset($machine->description)) { echo $machine->getDescription(true); } ?></textarea>
       </div>
 
       <!-- Latitude -->
       <div class="col-md-6 mb-3 text-left" id="latitudeContainer">
         <label for="latitude"><strong><?php echo TFISH_MACHINE_LATITUDE; ?></strong></label>
-        <input type="text" class="form-control" name="latitude" id="latitude" <?php if (isset($machine->latitude)) echo 'value="' . $tfValidator->escapeForXss($machine->latitude) . '"'; ?>>
+        <input type="text" class="form-control" name="latitude" id="latitude" <?php if (isset($machine->latitude)) echo 'value="' . $machine->getLatitude() . '"'; ?>>
       </div>
       
       <!-- Longitude -->
       <div class="col-md-6 mb-3 text-left" id="longitudeContainer">
         <label for="longitude"><strong><?php echo TFISH_MACHINE_LONGITUDE; ?></strong></label>
-        <input type="text" class="form-control" name="longitude" id="longitude" <?php if (isset($machine->longitude)) echo 'value="' . $tfValidator->escapeForXss($machine->longitude) . '"'; ?>>
+        <input type="text" class="form-control" name="longitude" id="longitude" <?php if (isset($machine->longitude)) echo 'value="' . $machine->getLongitude() . '"'; ?>>
       </div>
       
       <!-- Counter -->
       <?php if ($machine->counter): ?>
-        <input type="hidden" id="counter" name="counter" value="<?php echo $tfValidator->escapeForXss($machine->counter); ?>" />
+        <input type="hidden" id="counter" name="counter" value="<?php echo $machine->getCounter(); ?>" />
       <?php endif; ?>
       
       <!-- Key -->
       <div class="col-md-6 mb-3 text-left" id="keyContainer">
         <label for="key"><strong><?php echo TFISH_MACHINE_KEY; ?></strong></label>
-        <input type="text" class="form-control" name="key" id="key" <?php if (isset($machine->key)) echo 'value="' . $tfValidator->escapeForXss($machine->key) . '"'; ?>>
+        <input type="text" class="form-control" name="key" id="key" <?php if (isset($machine->key)) echo 'value="' . $machine->getKey() . '"'; ?>>
       </div>
       
       <!-- Online status -->
@@ -69,19 +69,19 @@
       <!-- Meta title -->
       <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
           <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
-          <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($machine->metaTitle)) { echo 'value="' . $tfValidator->escapeForXss($machine->metaTitle) . '"'; } ?>>
+          <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($machine->metaTitle)) { echo 'value="' . $machine->getMetaTitle() . '"'; } ?>>
       </div>
 
       <!-- SEO -->
       <div class="col-md-6 mb-3 text-left" id="seoContainer">
         <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
-        <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($machine->seo)) { echo 'value="' . $tfValidator->escapeForXss($machine->seo) . '"'; } ?>>
+        <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($machine->seo)) { echo 'value="' . $machine->getSeo() . '"'; } ?>>
       </div>
 
       <!-- Meta description -->
       <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
         <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
-        <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($machine->metaDescription)) { echo 'value="' . $tfValidator->escapeForXss($machine->metaDescription) . '"'; } ?>>
+        <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($machine->metaDescription)) { echo 'value="' . $machine->getMetaDescription() . '"'; } ?>>
       </div>
 
     </div> <!-- /row -->

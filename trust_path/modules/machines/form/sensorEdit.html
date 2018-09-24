@@ -5,7 +5,7 @@
     <div class="row">
         
         <!-- ID -->
-        <input type="hidden" name="id" value="<?php echo $tfValidator->escapeForXss($sensor->id); ?>">
+        <input type="hidden" name="id" value="<?php echo $sensor->getId(); ?>">
         
         <!-- Type -->
         <div class="col-md-6 col-lg-4 mb-3 text-left" id="typeContainer">
@@ -55,19 +55,19 @@
         <!-- Title -->
         <div class="col-12 mb-3 text-left" id="titleContainer">
             <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="title" id="title" <?php if (isset($sensor->title)) echo 'value="' . $tfValidator->escapeForXss($sensor->title) . '"'; ?>>
+            <input type="text" class="form-control" name="title" id="title" <?php if (isset($sensor->title)) echo 'value="' . $sensor->getTitle() . '"'; ?>>
         </div>
 
         <!-- Teaser -->
         <div class="col-12 mb-3 text-left" id="teaserContainer">
             <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
-            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($sensor->teaser)) { echo $sensor->escapeForXss('teaser', true); } ?></textarea>
+            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($sensor->teaser)) { echo $sensor->getTeaser(true); } ?></textarea>
         </div>
 
         <!-- Description -->
         <div class="col-12 mb-3 text-left" id="descriptionContainer">
             <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
-            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($sensor->description)) { echo $sensor->escapeForXss('description', true); } ?></textarea>
+            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($sensor->description)) { echo $sensor->getDescription(true); } ?></textarea>
         </div>
         
         <!-- Parent -->
@@ -88,7 +88,7 @@
         
         <!-- Counter -->
         <?php if ($sensor->counter): ?>
-        <input type="hidden" id="counter" name="counter" value="<?php echo $tfValidator->escapeForXss($sensor->counter); ?>" />
+        <input type="hidden" id="counter" name="counter" value="<?php echo $sensor->getCounter(); ?>" />
         <?php endif; ?>
         
         <div class="col-md-12" id="metaHeader">
@@ -99,19 +99,19 @@
         <!-- Meta title -->
         <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
             <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($sensor->metaTitle)) { echo 'value="' . $tfValidator->escapeForXss($sensor->metaTitle) . '"'; } ?>>
+            <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($sensor->metaTitle)) { echo 'value="' . $sensor->getMetaTitle() . '"'; } ?>>
         </div>
 
         <!-- SEO -->
         <div class="col-md-6 mb-3 text-left" id="seoContainer">
             <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
-            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($sensor->seo)) { echo 'value="' . $tfValidator->escapeForXss($sensor->seo) . '"'; } ?>>
+            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($sensor->seo)) { echo 'value="' . $sensor->getSeo() . '"'; } ?>>
         </div>
 
         <!-- Meta description -->
         <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
             <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
-            <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($sensor->metaDescription)) { echo 'value="' . $tfValidator->escapeForXss($sensor->metaDescription) . '"'; } ?>>
+            <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($sensor->metaDescription)) { echo 'value="' . $sensor->getMetaDescription() . '"'; } ?>>
         </div>
     
     </div> <!-- /row -->

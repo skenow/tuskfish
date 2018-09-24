@@ -75,6 +75,8 @@ class TfSensor
         
         // Unset non-persistanet properties that are not stored in the sensor table.
         unset(
+            $keyValues['modulo'],
+            $keyValues['ascii_offset'],
             $keyValues['icon'],
             $keyValues['handler'],
             $keyValues['module'],
@@ -82,53 +84,6 @@ class TfSensor
         );
         
         return $keyValues;
-    }
-    
-    /**
-     * Escapes object properties for output to browser.
-     * 
-     * Use this method to retrieve object properties when you want to send them to the browser.
-     * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
-     * attacks.
-     * 
-     * Note that the method excludes the teaser and description fields by default, which are 
-     * returned unescaped; these are dedicated HTML fields that have been input-validated
-     * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
-     * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
-     * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
-     * 
-     * @param string $property Name of property.
-     * @param bool $escapeHtml Whether to escape HTML fields (teaser, description).
-     * @return string|null Human readable value escaped for display or null if property does not
-     * exist.
-     */
-    public function escapeForXss(string $property, bool $escapeHtml = false)
-    {
-        $cleanProperty = $this->validator->trimString($property);
-        
-        // If property is not set return null.
-        if (!isset($this->$cleanProperty)) {
-            return null;
-        }
-        
-        // Format all data for display and convert TFISH_LINK to URL.
-        $humanReadableData = (string) $this->makeDataHumanReadable($cleanProperty);
-        $htmlFields = array('teaser', 'description', 'icon');
-        
-        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
-        if (in_array($property, $htmlFields, true) && $escapeHtml === false) {
-            return $humanReadableData;
-        }
-        
-        // Output for display in the TinyMCE editor (edit mode): HTML must be DOUBLE
-        // escaped to meet specification requirements.
-        if (in_array($property, $htmlFields, true) && $escapeHtml === true) {    
-            return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', 
-                    true);
-        }
-                
-        // All other cases: Escape data for display.        
-        return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', false);
     }
     
     /**
@@ -194,139 +149,81 @@ class TfSensor
      */
     public function loadPropertiesFromArray(array $dirtyInput, $liveUrls = true)
     {
-        $propertyWhitelist = $this->getPropertyWhitelist();
-
-        foreach ($propertyWhitelist as $key => $value) {
-            if (array_key_exists($key, $dirtyInput)) {
-                $this->__set($key, $dirtyInput[$key]);
-            }
-            unset($key);
-        }
+        $this->loadProperties($dirtyInput);
+        
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
-        if (array_key_exists('teaser', $propertyWhitelist) && !empty($dirtyInput['teaser'])) {
-            
-            if ($liveUrls === true) {
-                $teaser = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['teaser']);
-            } else {
-                $teaser = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['teaser']);
-            }
-            
+        if (isset($this->teaser) && !empty($dirtyInput['teaser'])) {
+            $teaser = $this->convertBaseUrlToConstant($dirtyInput['teaser'], $liveUrls);            
             $this->setTeaser($teaser);
         }
-
-        if (array_key_exists('description', $propertyWhitelist)
-                && !empty($dirtyInput['description'])) {
-            
-            if ($liveUrls === true) {
-                $description = str_replace(TFISH_LINK, 'TFISH_LINK', $dirtyInput['description']);
-            } else {
-                $description = str_replace('TFISH_LINK', TFISH_LINK, $dirtyInput['description']);
-            }
-            
+        
+        if (isset($this->description) && !empty($dirtyInput['description'])) {
+            $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $liveUrls);            
             $this->setDescription($description);
         }
     }
     
     /**
-     * Converts properties to human readable form in preparation for output.
+     * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
      * 
-     * Note that data processed by this function must be escaped for XSS before being sent to
-     * display. You can use escapeForXSS().
+     * This is a helper method for loadPropertiesFromArray(). Only useful on HTML fields. Basically
+     * it converts the base URL of your site to the TFISH_LINK constant for storage or vice versa
+     * for display. If you change the base URL of your site (eg. domain) all your internal links
+     * will automatically update when they are displayed.
      * 
-     * @param string $property Name of property.
-     * @return string Property formatted to human readable form for output.
+     * @param string $html A HTML field that makes use of the TFISH_LINK constant.
+     * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
+     * @return string HTML field with converted URLs.
      */
-    protected function makeDataHumanReadable(string $cleanProperty)
-    {        
-        switch ($cleanProperty) {
-            case "description":
-            case "teaser":
-                // Do a simple string replace to allow TFISH_URL to be used as a constant,
-                // making the site portable.
-                $tfUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
-                        $this->$cleanProperty);
-
-                return $tfUrlEnabled; 
-                break;
-
-            case "submissionTime":
-            case "lastUpdated":
-            case "expiresOn":
-                $date = date('j F Y', $this->$cleanProperty);
-
-                return $date;
-                break;
-                
-            // No special handling required. Return unmodified value.
-            default:
-                return $this->$cleanProperty;
-                break;
+    private function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
+    {
+        if ($liveUrls === true) {
+            $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
+        } else {
+                $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
         }
+        
+        return $html;
     }
     
     /**
-     * Intercept direct setting of properties to permit data validation.
+     * Assign form data to sensor object.
      * 
-     * It is best to set properties using the relevant setter method directly, as it is more
-     * efficient, but when bulk loading from an array (database row or $_REQUEST) this is useful.
-     * Note that validation of values is handled internally by the relevant setters.
+     * Note that data validation is carried out internally via the setters. This is a helper method
+     * for loadPropertiesFromArray().
      * 
-     * @param string $property Name of property.
-     * @param mixed $value Value of property.
+     * @param array $dirtyInput Array of untrusted form input.
      */
-    public function __set($property, $value)
+    private function loadProperties(array $dirtyInput)
     {
-        $cleanProperty = $this->validator->trimString($property);
-        
-        if (isset($this->$cleanProperty)) {
-        
-            switch ($cleanProperty) {
-                case "id":
-                    $this->setId((int) $value);
-                    break;
-                case "type":
-                    $this->setType((string) $value);
-                    break;
-                case "protocol":
-                    $this->setProtocol((string) $value);
-                    break;
-                case "title":
-                    $this->setTitle((string) $value);
-                    break;
-                case "teaser":
-                    $this->setTeaser((string) $value);
-                    break;
-                case "description":
-                    $this->setDescription((string) $value);
-                    break;
-                case "parent":
-                    $this->setParent((int) $value);
-                    break;
-                case "online":
-                    $this->setOnline((int) $value);
-                    break;
-                case "submissionTime":
-                    $this->setSubmissionTime((int) $value);
-                    break;
-                case "lastUpdated":
-                    $this->setLastUpdated((int) $value);
-                    break;
-                case "counter":
-                    $this->setCounter((int) $value);
-                    break;
-                case "metaTitle":
-                    $this->setMetaTitle((string) $value);
-                    break;
-                case "metaDescription":
-                    $this->setMetaDescription((string) $value);
-                    break;
-                case "seo":
-                    $this->setSeo((string) $value);
-                    break;
-            }
-        }  else {
-            // Not a permitted property, do not set.
-        }
+        if (isset($this->id) && isset($dirtyInput['id']))
+            $this->setId((int) $dirtyInput['id']);
+        if (isset($this->type) && isset($dirtyInput['type']))
+            $this->setType((string) $dirtyInput['type']);
+        if (isset($this->protocol) && $dirtyInput['protocol'])
+            $this->setProtocol((string) $dirtyInput['protocol']);
+        if (isset($this->title) && $dirtyInput['title'])
+            $this->setTitle((string) $dirtyInput['title']);
+        if (isset($this->teaser) && $dirtyInput['teaser'])
+            $this->setTeaser((string) $dirtyInput['teaser']);
+        if (isset($this->description) && $dirtyInput['description'])
+            $this->setDescription((string) $dirtyInput['description']);
+        if (isset($this->parent) && $dirtyInput['parent'])
+            $this->setParent((int) $dirtyInput['parent']);
+        if (isset($this->submissionTime) && isset($dirtyInput['submissionTime']))
+            $this->setSubmissionTime((int) $dirtyInput['submissionTime']);
+        if (isset($this->lastUpdated) && isset($dirtyInput['lastUpdated']))
+            $this->setLastUpdated((int) $dirtyInput['lastUpdated']);
+        if (isset($this->counter) && isset($dirtyInput['counter']))
+            $this->setCounter((int) $dirtyInput['counter']);
+        if (isset($this->online) && isset($dirtyInput['online']))
+            $this->setOnline((int) $dirtyInput['online']);
+        if (isset($this->metaTitle) && isset($dirtyInput['metaTitle']))
+            $this->setMetaTitle((string) $dirtyInput['metaTitle']);
+        if (isset($this->metaDescription) && isset($dirtyInput['metaDescription']))
+            $this->setMetaDescription((string) $dirtyInput['metaDescription']);
+        if (isset($this->seo) && isset($dirtyInput['seo']))
+            $this->setSeo((string) $dirtyInput['seo']);
     }
     
     /**
@@ -341,6 +238,16 @@ class TfSensor
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the ID of this sensor, XSS safe.
+     * 
+     * @return int ID of this sensor.
+     */
+    public function getId()
+    {
+        return (int) $this->id;
     }
     
     /**
@@ -362,6 +269,16 @@ class TfSensor
     }
     
     /**
+     * Return the type of sensor, XSS escaped for display.
+     * 
+     * @return string Type of sensor (class name).
+     */
+    public function getType()
+    {
+        return $this->validator->escapeForXss($this->type);
+    }
+    
+    /**
      * Set the protocol that this sensor speaks.
      * 
      * @param string $protocol The data prototol the sensor responds in.
@@ -377,6 +294,16 @@ class TfSensor
     }
     
     /**
+     * Returns the communications protocol spoken by this machine XSS escaped for display.
+     * 
+     * @return string Communications protocol spoken by this machine.
+     */
+    public function getProtocol()
+    {
+        return $this->validator->escapeForXss($this->protocol);
+    }
+    
+    /**
      * Set the title of this sensor.
      * 
      * @param string $title Title of this object.
@@ -384,6 +311,16 @@ class TfSensor
     public function setTitle(string $title)
     {
         $this->title = $this->validator->trimString($title);
+    }
+    
+    /**
+     * Returns the title of this sensor XSS escaped for display.
+     * 
+     * @return string Title
+     */
+    public function getTitle()
+    {
+        return $this->validator->escapeForXSS($this->title);
     }
     
     /**
@@ -398,6 +335,30 @@ class TfSensor
     }
     
     /**
+     * Return the teaser (short form description) of this machine (prevalidated HTML, XSS safe).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing a sensor; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Short form description of sensor as HTML.
+     */
+    public function getTeaser($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->teaser;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->teaser, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
      * Set the description of this object (HTML field).
      * 
      * @param string $description Description in HTML.
@@ -406,6 +367,30 @@ class TfSensor
     {
         $description = $this->validator->trimString($description);
         $this->description = $this->validator->filterHtml($description);
+    }
+    
+    /**
+     * Return the description of this sensor (prevalidated HTML, XSS safe).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing a sensor; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Description of sensor as HTML.
+     */
+    public function getDescription($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->description;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->description, ENT_NOQUOTES, 'UTF-8', true);
+        }
     }
     
     /**
@@ -425,6 +410,16 @@ class TfSensor
     }
     
     /**
+     * Return the ID of the parent object, XSS safe.
+     * 
+     * @return int ID of parent.
+     */
+    public function getParent()
+    {
+        return (int) $this->parent;
+    }
+    
+    /**
      * Set this sensor as online (1) or offline (0).
      * 
      * Offline objects are not displayed on the front end or returned in search results.
@@ -438,6 +433,20 @@ class TfSensor
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the online status of a sensor as a boolean value, XSS safe.
+     * 
+     * @return boolean True if online, false if offline.
+     */
+    public function getOnline()
+    {
+        if ($this->online === 1) {
+            return true;
+        }
+        
+        return false;
     }
     
     /**
@@ -455,6 +464,17 @@ class TfSensor
     }
     
     /**
+     * Return formatted date that this sensor was submitted.
+     * 
+     * @return string Date/time of submission.
+     */
+    public function getSubmissionTime()
+    {
+        $date = date('j F Y', $this->$submissionTime);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    /**
      * Set the last updated time for this sensor (timestamp).
      * 
      * @param int $lastUpdated Timestamp.
@@ -466,6 +486,17 @@ class TfSensor
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Return formatted date/time this sensor was last updated, escaped for display.
+     * 
+     * @return string Date/time last updated.
+     */
+    public function getlastUpdated()
+    {
+        $date = date('j F Y', $this->$lastUpdated);
+        return $this->validator->escapeForXss($date);
     }
     
     /**
@@ -483,6 +514,16 @@ class TfSensor
     }
     
     /**
+     * Returns the number of times this sensor was viewed, XSS safe.
+     * 
+     * @return int View counter.
+     */
+    public function getCounter()
+    {
+        return (int) $this->counter;
+    }
+    
+    /**
      * Set the meta title for this object.
      * 
      * @param string $metaTitle Meta title for this object.
@@ -493,6 +534,16 @@ class TfSensor
     }
     
     /**
+     * Returns the meta title for this sensor XSS escaped for display.
+     * 
+     * @return string Meta title.
+     */
+    public function getMetaTitle()
+    {
+        return $this->validator->escapeForXss($this->metaTitle);
+    }
+    
+    /**
      * Set the meta description for this sensor.
      * 
      * @param string $metaDescription Meta description of this object.
@@ -500,6 +551,16 @@ class TfSensor
     public function setMetaDescription(string $metaDescription)
     {
         $this->metaDescription = $this->validator->trimString($metaDescription);
+    }
+    
+    /**
+     * Return the meta description of this sensor XSS escaped for display.
+     * 
+     * @return string Meta description.
+     */
+    public function getMetaDescription()
+    {
+        return $this->validator->escapeForXss($this->metaDescription);
     }
     
     /**
@@ -514,6 +575,16 @@ class TfSensor
         $cleanSeo = $this->validator->trimString($seo);
         $cleanSeo = str_replace(' ', '-', $cleanSeo);        
         $this->seo = $cleanSeo;
+    }
+    
+    /**
+     * Return the SEO string for this sensor XSS for display.
+     * 
+     * @return string SEO-friendly URL string.
+     */
+    public function getSeo()
+    {
+        return $this->validator->escapeForXss($this->seo);
     }
     
     /**
@@ -577,6 +648,16 @@ class TfSensor
     {
         $icon = $this->validator->trimString($icon);
         $this->icon = $this->validator->filterHtml($icon);
+    }
+    
+    /**
+     * Returns the Font Awesome icon for this sensor, XSS safe (prevalidated with HTMLPurifier).
+     * 
+     * @return string FontAwesome icon for this expert (HTML).
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
     
     /**

@@ -5,12 +5,12 @@
 
 <!-- Title and meta information -->
 <div>
-  <h2 class="title"><?php echo $machine->icon . ' ' . $machine->escapeForXss('title'); ?></h2>
+  <h2 class="title"><?php echo $machine->getIcon() . ' ' . $machine->getTitle(); ?></h2>
   <?php if ($machineInfo): ?>
   <p class="content-info">
     <span class="small">
     <?php if (TfSession::isAdmin()): ?>
-    <a href="<?php echo TFISH_ADMIN_URL . 'machine.php?op=edit&amp;id=' . $machine->escapeForXss('id'); ?>"><i title="<?php echo TFISH_SENSOR_EDIT; ?>" class="fas fa-edit"></i></a>
+    <a href="<?php echo TFISH_ADMIN_URL . 'machine.php?op=edit&amp;id=' . $machine->getId(); ?>"><i title="<?php echo TFISH_SENSOR_EDIT; ?>" class="fas fa-edit"></i></a>
     <?php endif; ?>
     <?php echo $machineInfo; ?>
     </span>
@@ -20,7 +20,7 @@
 
 <!-- Description -->
 <div class="description">
-  <?php if ($machine->description) echo $machine->escapeForXss('description'); ?>
+  <?php if ($machine->description) echo $machine->getDescription(); ?>
 </div>
 
 <!-- Display child works -->    
@@ -39,9 +39,9 @@
 <div class="mb-3">
   <?php foreach ($childSensors as $sensor): ?>
   <div class="clearfix">
-    <h4 class="child-title"><a href="<?php echo TFISH_ADMIN_URL . 'sensor.php?op=view&amp;id=' . $sensor->escapeForXss('id'); ?>"><?php echo $sensor->icon; ?> <?php echo $sensor->escapeForXss('title'); ?></a></h4>
+    <h4 class="child-title"><a href="<?php echo TFISH_ADMIN_URL . 'sensor.php?op=view&amp;id=' . $sensor->getId(); ?>"><?php echo $sensor->getIcon(); ?> <?php echo $sensor->getTitle(); ?></a></h4>
     <div class="child-teaser">
-      <?php echo $sensor->escapeForXss('teaser'); ?>
+      <?php echo $sensor->getTeaser(); ?>
     </div>
   </div>
   <?php endforeach; ?>    

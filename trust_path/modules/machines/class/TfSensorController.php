@@ -262,17 +262,21 @@ class TfSensorController
         // As this object is being sent to storage, need to decode entities that got encoded for
         // display.
         if (isset($sensor->title)) {
-            $sensor->title = htmlspecialchars_decode($sensor->title, ENT_NOQUOTES);
+            $sensor->setTitle(htmlspecialchars_decode($sensor->title, ENT_NOQUOTES));
         }
-
-        // Properties that are used within attributes must have quotes encoded.
-        $fieldsToDecode = array('metaTitle', 'seo', 'metaDescription');
-
-        foreach ($fieldsToDecode as $field) {
-            if (isset($sensor->field)) {
-                $sensor->$field = htmlspecialchars_decode($sensor->field, ENT_QUOTES);
-            }
+        
+        // Properties that are used within attributes must have quotes encoded.        
+        if (isset($sensor->metaTitle)) {
+            $sensor->setMetaTitle(htmlspecialchars_decode($sensor->metaTitle, ENT_QUOTES));
         }
+        
+        if (isset($sensor->metaDescription)) {
+            $sensor->setMetaDescription(htmlspecialchars_decode($sensor->metaDescription, ENT_QUOTES));
+        }
+        
+        if (isset($sensor->seo)) {
+            $sensor->setSeo(htmlspecialchars_decode($sensor->seo, ENT_QUOTES));
+        }        
 
         // Update the database row and display a response.
         $result = $this->sensorHandler->update($sensor);
