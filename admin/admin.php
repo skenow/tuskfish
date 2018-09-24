@@ -81,9 +81,9 @@ if (in_array($op, $optionsWhitelist)) {
 
         // Confirm deletion of a content object.
         case "confirmDelete":
-            if (isset($_REQUEST['id'])) {
+            if ($cleanId) {
                 $contentController = $controllerFactory->getController('admin');
-                $contentController->confirmDelete((int) $_REQUEST['id']);
+                $contentController->confirmDelete($cleanId);
             } else {
                 trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
@@ -91,9 +91,9 @@ if (in_array($op, $optionsWhitelist)) {
             
         // Delete a content object. ID must be an integer and > 1.
         case "delete":
-            if (isset($_REQUEST['id'])) {
+            if ($cleanId) {
                 $contentController = $controllerFactory->getController('admin');
-                $contentController->deleteContent((int) $_REQUEST['id']);
+                $contentController->deleteContent($cleadId);
             } else {
                 trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
@@ -134,7 +134,7 @@ if (in_array($op, $optionsWhitelist)) {
         case "edit":            
             if (isset($_REQUEST['id'])) {
                 $contentController = $controllerFactory->getController('admin');
-                $contentController->editContent((int) $_REQUEST['id']);
+                $contentController->editContent($cleanId);
             } else {
                 trigger_error(TFISH_ERROR_REQUIRED_PARAMETER_NOT_SET, E_USER_ERROR);
             }
