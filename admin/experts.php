@@ -106,7 +106,7 @@ switch ($op) {
             $expertInfo = array();
 
             if ($expert->tags) {
-                $tags = $expertHandler->makeTagLinks($expert->tags);
+                $tags = $expertHandler->makeTagLinks($expert->tags, 'experts');
                 $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
                 $expertInfo[] = $tags;
             }

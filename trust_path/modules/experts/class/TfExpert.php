@@ -443,6 +443,323 @@ class TfExpert
     }
     
     /**
+     * Return the ID of the expert escaped for display.
+     * 
+     * @return int ID of expert.
+     */
+    public function getId()
+    {
+        return (int) $this->id;
+    }
+    
+    /**
+     * Return the type of expert (class name) XSS escaped for display.
+     * 
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->validator->escapeForXss($this->type);
+    }
+    
+    /**
+     * Return the salutation of the expert escaped for display.
+     * 
+     * @return string Salutation
+     */
+    public function getSalutation()
+    {
+        $salutationList = $this->getSalutationList();
+        return $this->validator->escapeForXss($salutationList[$this->salutation]);
+    }
+    
+    /**
+     * Return the first name of the expert escaped for display.
+     * 
+     * @return string First name.
+     */
+    public function getFirstName()
+    {
+        return $this->validator->escapeForXss($this->firstName);
+    }
+    
+    /**
+     * Return the middle name(s) of the expert escaped for display.
+     * 
+     * @return string Middle name(s).
+     */
+    public function getMidName()
+    {
+        return $this->validator->escapeForXss($this->midName);
+    }
+    
+    /**
+     * Return the Last name of the expert escaped for display.
+     * 
+     * @return string Last name.
+     */
+    public function getLastName()
+    {
+        return $this->validator->escapeForXss($this->lastName);
+    }
+    
+    /**
+     * Return the gender of the expert escaped for display.
+     * 
+     * @return string Male or female.
+     */
+    public function getGender()
+    {
+        $genderList = $this->getGenderList();
+        return $this->validator->escapeForXss($genderList[$this->gender]);
+    }
+    
+    // getTags() ??
+    
+    /**
+     * Return the experience of this expert (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Experience of expert as HTML.
+     */
+    public function getExperience($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->experience;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->experience, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Return the projects of this expert (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Projects of expert as HTML.
+     */
+    public function getProjects($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->projects;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->projects, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Return the publications of this expert (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Publications of expert as HTML.
+     */
+    public function getPublications($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->publications;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->publications, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Return the address XSS escaped for display.
+     * 
+     * @return string Address with linebreaks converted to HTML break tags.
+     */
+    public function getAddress()
+    {
+        $address = '';
+        
+        if ($this->address) {
+            $address = nl2br($this->address);
+        }
+        
+        return $this->validator->escapeForXss($address);
+    }
+    
+    /**
+     * Return the country of residence escaped for display.
+     * 
+     * @return string Country of residence.
+     */
+    public function getCountry()
+    {
+        $countryList = $this->getCountryList();
+        
+        return $this->validator->escapeForXss($countryList[$this->country]);
+    }
+    
+    /**
+     * Return the email address XSS escaped for display.
+     * 
+     * @return string Email address.
+     */
+    public function getEmail()
+    {
+        return $this->validator->escapeForXss($this->email);
+    }
+
+    /**
+     * Return the mobile phone number escaped for display.
+     * 
+     * @return string Mobile phone number.
+     */
+    public function getMobile()
+    {
+        return $this->validator->escapeForXss($this->mobile);
+    }
+    
+    /**
+     * Return fax number escaped for display.
+     * 
+     * @return string Fax number.
+     */
+    public function getFax()
+    {
+        return $this->validator->escapeForXss($this->fax);
+    }
+    
+    /**
+     * Return url to personal website escaped for display.
+     * 
+     * @return string URL to expert's personal website / profile.
+     */
+    public function getProfileLink()
+    {
+        return $this->validator->escapeForXss($this->url);
+    }
+    
+    /**
+     * Return formatted date that this expert was submitted.
+     * 
+     * @return string Date/time of submission.
+     */
+    public function getSubmissionTime()
+    {
+        $date = date('j F Y', $this->$submissionTime);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    /**
+     * Return formatted date/time this expert was last updated, escaped for display.
+     * 
+     * @return string Date/time last updated.
+     */
+    public function getlastUpdated()
+    {
+        $date = date('j F Y', $this->$lastUpdated);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    /**
+     * Return formatted date/time this expert expires on.
+     * 
+     * The expert will not be displayed on the public side after the expiry date has passed.
+     * 
+     * @return string Date/time of expiry.
+     */
+    public function getExpiresOn()
+    {
+        $date = date('j F Y', $this->$expiresOn);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    // Image??
+    
+    /**
+     * Returns the XSS-safe online status of this record.
+     * 
+     * @return boolean True if online, false otherwise.
+     */
+    public function getOnline()
+    {
+        if ($this->online === 1) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Returns the number of times this expert was viewed, XSS safe.
+     * 
+     * @return int View counter.
+     */
+    public function getCounter()
+    {
+        return (int) $this->counter;
+    }
+    
+    /**
+     * Returns the meta title for this expert XSS escaped for display.
+     * 
+     * @return string Meta title.
+     */
+    public function getMetaTitle()
+    {
+        return $this->validator->escapeForXss($this->metaTitle);
+    }
+    
+    /**
+     * Return the meta description of this expert XSS escaped for display.
+     * 
+     * @return string Meta description.
+     */
+    public function getMetaDescription()
+    {
+        return $this->validator->escapeForXss($this->metaDescription);
+    }
+    
+    /**
+     * Return the SEO string for this expert XSS for display.
+     * 
+     * @return string SEO-friendly URL string.
+     */
+    public function getSeo()
+    {
+        return $this->validator->escapeForXss($seo);
+    }
+    
+    // No need for getHandler, getTemplate or getModule as not publicly displayed.
+
+    /**
+     * Returns the Font Awesome icon for this expert, XSS safe (prevalidated with HTMLPurifier).
+     * 
+     * @return string FontAwesome icon for this expert (HTML).
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+    
+    /**
      * Returns the full name of an expert XSS escaped for display.
      * 
      * @return string Full name of expert.
@@ -458,9 +775,7 @@ class TfExpert
         if ($this->midName) $name .= $this->midName . ' ';
         if ($this->lastName) $name .= $this->lastName;
         
-        $cleanName = $this->validator->escapeForXss($name);
-        
-        return $cleanName;
+        return $this->validator->escapeForXss($name);
     }
     
     /**
@@ -469,12 +784,8 @@ class TfExpert
      * @return string Job title
      */
     public function getJob()
-    {
-        $job = '';
-        
-        if ($this->job) $job = $this->validator->escapeforXss($this->job);
-        
-        return $job;
+    {        
+        return $this->validator->escapeForXss($this->job);
     }
     
     /**
@@ -483,12 +794,8 @@ class TfExpert
      * @return string
      */
     public function getBusinessUnit()
-    {
-        $businessUnit = '';
-        
-        if ($this->businessUnit) $businessUnit = $this->validator->escapeForXss($this->businessUnit);
-        
-        return $businessUnit;
+    {        
+        return $this->validator->escapeForXSS($this->businessUnit);
     }
     
     /**
@@ -497,18 +804,14 @@ class TfExpert
      * @return string
      */
     public function getOrganisation()
-    {
-        $organisation = '';
-        
-        if ($this->organisation) $organisation = $this->validator->escapeForXss($this->organisation);
-        
-        return $organisation;
+    {        
+        return $this->validator->escapeForXss($this->organisation);
     }
     
     /**
-     * Returns full name and job title, comma seperated.
+     * Returns full name and job title, comma seperated, XSS escaped for display.
      * 
-     * @return string Name and job title
+     * @return string Name and job title.
      */
     public function getNameAndJob()
     {
@@ -525,9 +828,14 @@ class TfExpert
         
         $nameAndJob .= $job;
         
-        return $nameAndJob;
+        return $this->validator->escapeForXss($nameAndJob);
     }
     
+    /**
+     * Returns the affiliation of this expert (business unit and organisation) XSS escaped for display.
+     * 
+     * @return string Affiliation.
+     */
     public function getAffiliation()
     {
         $affiliation = '';
@@ -543,9 +851,16 @@ class TfExpert
         
         $affiliation .= $organisation;
         
-        return $affiliation;
+        return $this->validator->escapeForXSS($affiliation);
     }
     
+    /**
+     * Return the full contact details for this expert XSS escaped for display.
+     * 
+     * Includes address, phone, fax and email.
+     * 
+     * @return string Contact details.
+     */
     public function getContactDetails()
     {
         $contactDetails = array();

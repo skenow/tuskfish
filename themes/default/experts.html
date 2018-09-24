@@ -5,7 +5,7 @@
   <?php foreach ($expertList as $expert): ?>
   <div class="stream-item clearfix">
     <div>
-      <h3 class="title"><a href="<?php echo $expert->getUrl($targetFileName); ?>"><?php echo $expert->icon; ?> <?php echo $expert->getName(); ?></a></h3>
+      <h3 class="title"><a href="<?php echo $expert->getUrl($targetFileName); ?>"><?php echo $expert->getIcon(); ?> <?php echo $expert->getName(); ?></a></h3>
     </div>
     <?php if ($expert->image): ?>
     <div class="float-left">
@@ -16,7 +16,7 @@
     </div>
     <?php endif; ?>
     <?php if ($expert->experience): ?>
-      <div class="teaser"><?php echo $expert->escapeForXss('experience'); ?></div>
+      <div class="teaser"><?php echo $expert->getExperience(); ?></div>
     <?php endif; ?>
   </div>
   <?php endforeach; ?>

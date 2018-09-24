@@ -5,7 +5,7 @@
 
 <!-- Title and meta information -->
 <div>
-  <h2 class="name"><?php echo $expert->icon . ' ' . $expert->getNameAndJob(); ?></h2>
+  <h2 class="name"><?php echo $expert->getIcon() . ' ' . $expert->getNameAndJob(); ?></h2>
   <?php if ($expert->businessUnit || $expert->organisation): ?>
   <p><b><?php echo $expert->getAffiliation(); ?></b></p>
   <?php endif; ?>
@@ -13,7 +13,7 @@
   <p class="expert-info">
     <span class="small">
     <?php if (TfSession::isAdmin()): ?>
-    <a href="<?php echo TFISH_ADMIN_URL . 'experts.php?op=edit&amp;id=' . $expert->escapeForXss('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+    <a href="<?php echo TFISH_ADMIN_URL . 'experts.php?op=edit&amp;id=' . $expert->getId(); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
     <?php endif; ?>
     <?php echo $expertInfo; ?>
     </span>
@@ -25,13 +25,7 @@
 <?php if ($expert->image): ?>
 <div class="float-right figure-right">
   <figure>
-    <img class="image img-fluid" src="<?php echo $expert->getCachedImage(200); ?>" 
-    <?php if ($expert->caption): ?>
-        title="<?php echo $expert->escapeForXss('caption'); ?>" alt="<?php echo $expert->escapeForXss('caption'); ?>"/>
-    <figcaption><em><?php echo $expert->escapeForXss('caption'); ?></em></figcaption>
-    <?php else: ?>
-        alt="" />
-    <?php endif; ?>              
+      <img class="image img-fluid" src="<?php echo $expert->getCachedImage(200); ?>" alt="<?php echo $expert->getNameAndJob(); ?>" />           
   </figure>
 </div>
 <?php endif; ?>
@@ -40,7 +34,7 @@
 <?php if ($expert->experience): ?>
 <div class="experience">
   <h3><?php echo TFISH_EXPERTS_EXPERIENCE; ?></h3>
-  <?php echo $expert->escapeForXss('experience'); ?>  
+  <?php echo $expert->getExperience(); ?>  
 </div>
 <?php endif; ?>
 
@@ -48,7 +42,7 @@
 <?php if ($expert->projects): ?>
 <div class="projects">
   <h3><?php echo TFISH_EXPERTS_PROJECTS; ?></h3>
-  <?php echo $expert->escapeForXss('projects'); ?>
+  <?php echo $expert->getProjects(); ?>
 </div>
 <?php endif; ?>
 
@@ -56,7 +50,7 @@
 <?php if ($expert->publications): ?>
 <div class="publications">
   <h3><?php echo TFISH_EXPERTS_PUBLICATIONS; ?></h3>
-  <?php echo $expert->escapeForXss('publications'); ?>  
+  <?php echo $expert->getPublications(); ?>  
 </div>
 <?php endif; ?>
 
@@ -72,7 +66,7 @@
 <?php if ($expert->profileLink): ?>
 <div class="profileLink">
   <h3><?php echo TFISH_EXPERTS_PROFILE_LINK; ?></h3>
-  <p><?php echo $expert->escapeForXss('profileLink'); ?></p>
+  <p><?php echo $expert->getProfileLink(); ?></p>
 </div>
 <?php endif; ?>
 
