@@ -1,31 +1,31 @@
 <?php declare(strict_types=1); ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title><?php echo $tfValidator->escapeForXss($rssFeed->title); ?></title>
-    <link><?php echo $tfValidator->escapeForXss($rssFeed->link); ?></link>
-    <description><?php echo $tfValidator->escapeForXss(strip_tags($rssFeed->description)); ?></description>
-    <managingEditor><?php echo $tfValidator->escapeForXss($rssFeed->managingEditor); ?></managingEditor>
-    <webMaster><?php echo $tfValidator->escapeForXss($rssFeed->webmaster); ?></webMaster>
-    <atom:link href="<?php echo $rssFeed->link; ?>" rel="self" type="application/rss+xml" />
+    <title><?php echo $rssFeed->getTitle(); ?></title>
+    <link><?php echo $rssFeed->getLink(); ?></link>
+    <description><?php echo $rssFeed->getDescription(); ?></description>
+    <managingEditor><?php echo $rssFeed->getManagingEditor(); ?></managingEditor>
+    <webMaster><?php echo $rssFeed->getWebMaster(); ?></webMaster>
+    <atom:link href="<?php echo $rssFeed->getLink(); ?>" rel="self" type="application/rss+xml" />
     <?php if (isset($items) && !empty($items)): ?>
     <?php foreach ($items as $item): ?>
     <item>
       <?php if ($item->title): ?>
-      <title><?php echo $item->escapeForXss('title'); ?></title>
+      <title><?php echo $item->getTitle(); ?></title>
       <?php endif; ?>
       <link><?php echo $item->getUrl($targetFileName); ?></link>
       <?php if ($item->teaser): ?>
-      <description><![CDATA[<?php echo $item->escapeForXss('teaser'); ?>]]></description>
+      <description><![CDATA[<?php echo $item->getTeaser(); ?>]]></description>
       <?php endif; ?>
       <?php if (($item->media) && is_readable(TFISH_MEDIA_PATH . $item->media)):
-      $length = filesize(TFISH_MEDIA_PATH . $item->escapeForXss('media'));
+      $length = filesize(TFISH_MEDIA_PATH . $item->getMedia());
       $mimetype = $mimetypeList[pathinfo($item->media, PATHINFO_EXTENSION)]; ?>
-      <enclosure url="<?php echo TFISH_ENCLOSURE_URL . $tfValidator->escapeForXss($item->id); ?>" length="<?php echo $tfValidator->escapeForXss($length); ?>" type="<?php echo $tfValidator->escapeForXss($mimetype); ?>" />
+      <enclosure url="<?php echo TFISH_ENCLOSURE_URL . $item->getId(); ?>" length="<?php echo $tfValidator->escapeForXss($length); ?>" type="<?php echo $tfValidator->escapeForXss($mimetype); ?>" />
       <?php unset($length, $mimetype); endif; ?>
       <?php if ($item->submissionTime): ?>
       <pubDate><?php echo $tfValidator->escapeForXss(gmdate(DATE_RSS, (int) $item->submissionTime)); ?></pubDate>
       <?php endif; ?>
-      <guid isPermaLink="true"><?php echo $tfValidator->escapeForXss(TFISH_PERMALINK_URL . '?id=' . $item->escapeForXss('id')); ?></guid>
+      <guid isPermaLink="true"><?php echo $tfValidator->escapeForXss(TFISH_PERMALINK_URL . '?id=' . $item->getId()); ?></guid>
     </item>
     <?php endforeach; ?>
     <?php endif; ?>
