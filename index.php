@@ -68,23 +68,23 @@ if ($cleanId) {
         // Prepare meta information for display.
         $contentInfo = array();
         
-        if ($content->creator) $contentInfo[] = $content->escapeForXss('creator');
+        if ($content->creator) $contentInfo[] = $content->getCreator();
         
-        if ($content->date) $contentInfo[] = $content->escapeForXss('date');
+        if ($content->date) $contentInfo[] = $content->getDate();
         
         if ($content->counter) {
             switch ($content->type) {
                 case "TfDownload":
-                    $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_DOWNLOADS;
+                    $contentInfo[] = $content->getCounter() . ' ' . TFISH_DOWNLOADS;
                     break;
                 default:
-                    $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
+                    $contentInfo[] = $content->getCounter() . ' ' . TFISH_VIEWS;
             }
         }
         
-        if ($content->format) $contentInfo[] = '.' . $content->escapeForXss('format');
+        if ($content->format) $contentInfo[] = '.' . $content->getFormat();
         
-        if ($content->fileSize) $contentInfo[] = $content->escapeForXss('fileSize');
+        if ($content->fileSize) $contentInfo[] = $content->getFileSize();
         
         // For a content type-specific page use $content->tags, $content->template
         if ($content->tags) {

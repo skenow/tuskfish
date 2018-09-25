@@ -8,7 +8,7 @@
     <div class="row">
         
         <!-- ID -->
-        <input type="hidden" name="id" value="<?php echo $tfValidator->escapeForXss($content->id); ?>">
+        <input type="hidden" name="id" value="<?php echo $content->getId(); ?>">
         
         <!-- Media file type compatibility alert -->
         <div class="col-12">
@@ -39,7 +39,7 @@
         <!-- Date (bootstrap-datepicker) -->
         <div class="col-md-6 col-lg-4 mb-3 text-left" id="dateContainer">
             <label for="date"><strong><?php echo TFISH_DATE; ?></strong></label>
-            <input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $tfValidator->escapeForXss($content->date) . '"'; } ?>>
+            <input type="text" class="form-control" name="date" id="date" <?php if (isset($content->date)) { echo 'value="' . $content->getDate() . '"'; } ?>>
         </div>
         <script>
         $(document).ready(function() {
@@ -49,7 +49,7 @@
               todayBtn: 'linked',
               startView: 'years'
           });
-          $('#date').datepicker('setDate', new Date('<?php echo $tfValidator->escapeForXss($content->date); ?>'));
+          $('#date').datepicker('setDate', new Date('<?php echo $content->getDate(); ?>'));
           $('#date').datepicker('update');
         });
         </script>
@@ -73,31 +73,31 @@
         <!-- Title -->
         <div class="col-12 mb-3 text-left" id="titleContainer">
             <label for="title"><strong><?php echo TFISH_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="title" id="title" <?php if (isset($content->title)) echo 'value="' . $tfValidator->escapeForXss($content->title) . '"'; ?>>
+            <input type="text" class="form-control" name="title" id="title" <?php if (isset($content->title)) echo 'value="' . $content->getTitle() . '"'; ?>>
         </div>
 
         <!-- Teaser -->
         <div class="col-12 mb-3 text-left" id="teaserContainer">
             <label for="teaser"><strong><?php echo TFISH_TEASER; ?></strong></label>
-            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($content->teaser)) { echo $content->escapeForXss('teaser', true); } ?></textarea>
+            <textarea id="teaser" name="teaser" class="form-control text-left"><?php if (isset($content->teaser)) { echo $content->getTeaser(true); } ?></textarea>
         </div>
 
         <!-- Description -->
         <div class="col-12 mb-3 text-left" id="descriptionContainer">
             <label for="description"><strong><?php echo TFISH_DESCRIPTION; ?></strong></label>
-            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($content->description)) { echo $content->escapeForXss('description', true); } ?></textarea>
+            <textarea id="description" name="description" class="form-control text-left"><?php if (isset($content->description)) { echo $content->getDescription(true); } ?></textarea>
         </div>
 
         <!-- Creator (author) -->
         <div class="col-md-6 mb-3 text-left" id="creatorContainer">
             <label for="creator"><strong><?php echo TFISH_CREATOR; ?></strong></label>
-            <input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $tfValidator->escapeForXss($content->creator) . '"'; ?>>
+            <input type="text" class="form-control" name="creator" id="creator" <?php if (isset($content->creator)) echo 'value="' . $content->getCreator() . '"'; ?>>
         </div>
 
         <!-- Publisher -->
         <div class="col-md-6 mb-3 text-left" id="publisherContainer">
             <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
-            <input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . $tfValidator->escapeForXss($content->publisher) . '"'; ?>>
+            <input type="text" class="form-control" name="publisher" id="publisher" <?php if (isset($content->publisher)) echo 'value="' . $content->getPublisher() . '"'; ?>>
         </div>
         
         <!-- Parent -->
@@ -120,7 +120,7 @@
         <?php if (isset($content->image) && !empty($content->image)): ?>
         <div class="col-md-6 mb-4 text-left" id="imageContainer">
             <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-            <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo $tfValidator->escapeForXss($content->image); ?>">
+            <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo $content->getImage(); ?>">
         </div>
         <?php else: ?>
             <div class="col-md-6 mb-3 text-left" id="imageContainer">
@@ -134,11 +134,11 @@
             'showUpload': false,
             'allowedFileExtensions': ["gif", "jpg", "png"],
             'previewFileType': ["image"],
-            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . $tfValidator->escapeForXss($content->image); ?>',
+            'initialPreview': '<?php if ($content->image) echo TFISH_IMAGE_URL . $content->getImage(); ?>',
             'initialPreviewAsData': true,
             'initialPreviewShowDelete': false,
-            'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_IMAGE_URL . $tfValidator->escapeForXss($content->image); ?>',
-            'initialCaption': '<?php if (isset($content->image)) echo $tfValidator->escapeForXss($content->image); ?>',
+            'initialPreviewDownloadUrl': '<?php if ($content->image) echo TFISH_IMAGE_URL . $content->getImage(); ?>',
+            'initialCaption': '<?php if (isset($content->image)) echo $content->getImage(); ?>',
             'fileActionSettings': {
                 'showDrag': false,
                 'showRemove': false},
@@ -157,7 +157,7 @@
         <?php if (isset($content->media) && !empty($content->media)): ?>
         <div class="col-md-6 mb-4 text-left" id="mediaContainer">
             <label for="media"><strong><span class="alert2 text-danger d-none hide"><i class="fas fa-exclamation-triangle" title="<?php echo TFISH_MEDIA_NOT_COMPATIBLE; ?>"></i> </span><?php echo TFISH_MEDIA; ?></strong></label>
-            <input id="media" name="media" type="file" data-preview-file-type="text" value="<?php echo $tfValidator->escapeForXss($content->media); ?>">
+            <input id="media" name="media" type="file" data-preview-file-type="text" value="<?php echo $content->getMedia(); ?>">
         </div>
         <?php else: ?>
             <div class="col-md-6 mb-4 text-left" id="mediaContainer">
@@ -170,11 +170,11 @@
             $("#media").fileinput({
                 'showUpload': false,
                 'previewFileType': ["any"],
-                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $tfValidator->escapeForXss($content->media); ?>',
+                'initialPreview': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->getMedia(); ?>',
                 'initialPreviewAsData': true,
                 'initialPreviewShowDelete': false,
-                'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $tfValidator->escapeForXss($content->media); ?>',
-                'initialCaption': '<?php echo $tfValidator->escapeForXss($content->media); ?>',
+                'initialPreviewDownloadUrl': '<?php if ($content->media) echo TFISH_MEDIA_URL . $content->getMedia(); ?>',
+                'initialCaption': '<?php echo $content->getMedia(); ?>',
                 'allowedFileExtensions': ["doc","docx","gif","gz","jpg","mp3","mp4","odt",
                     "ods","odp","oga","ogg","ogv","pdf","png","ppt", "pptx", "tar","wav","webm",
                     "xls","xlsx","zip"],
@@ -195,7 +195,7 @@
         <!-- Caption -->
         <div class="col-md-6 mb-3 text-left" id="captionContainer">
             <label for="caption"><strong><?php echo TFISH_CAPTION; ?></strong></label>
-            <input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) echo 'value="' . $tfValidator->escapeForXss($content->caption) . '"'; ?>>
+            <input type="text" class="form-control" name="caption" id="caption" <?php if (isset($content->caption)) echo 'value="' . $content->getCaption() . '"'; ?>>
         </div>
 
         <!-- Rights -->
@@ -245,7 +245,7 @@
         
         <!-- Counter -->
         <?php if ($content->counter): ?>
-        <input type="hidden" id="counter" name="counter" value="<?php echo $tfValidator->escapeForXss($content->counter); ?>" />
+        <input type="hidden" id="counter" name="counter" value="<?php echo $content->getCounter(); ?>" />
         <?php endif; ?>
 
         <!-- Format -->
@@ -257,7 +257,7 @@
 
         <!-- File size -->
         <?php if ($content->fileSize): ?>
-        <input type="hidden" id="fileSize" name="fileSize" value="<?php echo $tfValidator->escapeForXss($content->fileSize); ?>" />
+        <input type="hidden" id="fileSize" name="fileSize" value="<?php echo $content->getFileSize(); ?>" />
         <?php endif; ?>
         
         <div class="col-md-12" id="metaHeader">
@@ -268,19 +268,19 @@
         <!-- Meta title -->
         <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
             <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
-            <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($content->metaTitle)) { echo 'value="' . $tfValidator->escapeForXss($content->metaTitle) . '"'; } ?>>
+            <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($content->metaTitle)) { echo 'value="' . $content->getMetaTitle() . '"'; } ?>>
         </div>
 
         <!-- SEO -->
         <div class="col-md-6 mb-3 text-left" id="seoContainer">
             <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
-            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $tfValidator->escapeForXss($content->seo) . '"'; } ?>>
+            <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($content->seo)) { echo 'value="' . $content->getSeo() . '"'; } ?>>
         </div>
 
         <!-- Meta description -->
         <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
             <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
-            <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($content->metaDescription)) { echo 'value="' . $tfValidator->escapeForXss($content->metaDescription) . '"'; } ?>>
+            <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($content->metaDescription)) { echo 'value="' . $content->getMetaDescription() . '"'; } ?>>
         </div>
     
     </div> <!-- /row -->

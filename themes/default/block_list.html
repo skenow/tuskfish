@@ -5,7 +5,7 @@
 <?php if ($items): ?>
 <ul>
     <?php foreach ($items as $item): ?>
-    <li><a href="<?php echo $item->getUrl($targetFileName); ?>"><?php echo $tfValidator->escapeForXss($item->title); ?></a></li>
+    <li><a href="<?php echo $item->getUrl($targetFileName); ?>"><?php echo $item->getTitle(); ?></a></li>
     <?php endforeach; ?>
 </ul>
 <?php endif; ?>

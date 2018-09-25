@@ -10,10 +10,10 @@
             <a href="<?php echo $content->getUrl($singleViewTargetFileName); ?>">
                 <img class="img-thumbnail img-responsive mb-3" src="<?php echo $content->getCachedImage(400); ?>"
                 <?php if ($content->caption): ?>
-                    alt="<?php echo $content->escapeForXss('caption'); ?>" 
-                    title="<?php echo $content->escapeForXss('caption'); ?>" />
+                    alt="<?php echo $content->getCaption(); ?>" 
+                    title="<?php echo $content->getCaption(); ?>" />
                 <?php else: ?>
-                    alt="<?php echo $content->escapeForXss('title'); ?>" />
+                    alt="<?php echo $content->getTitle(); ?>" />
                 <?php endif; ?>
             </a>
         </div>

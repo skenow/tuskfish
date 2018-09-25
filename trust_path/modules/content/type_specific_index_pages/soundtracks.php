@@ -64,19 +64,19 @@ if ($cleanId) {
         $contentInfo = array();
         
         if ($content->creator)
-            $contentInfo[] = $content->escapeForXss('creator');
+            $contentInfo[] = $content->getCreator();
         
         if ($content->date)
-            $contentInfo[] = $content->escapeForXss('date');
+            $contentInfo[] = $content->getDate();
         
         if ($content->counter)
-            $contentInfo[] = $content->escapeForXss('counter') . ' ' . TFISH_VIEWS;
+            $contentInfo[] = $content->getCounter() . ' ' . TFISH_VIEWS;
         
         if ($content->format)
-            $contentInfo[] = '.' . $content->escapeForXss('format');
+            $contentInfo[] = '.' . $content->getFormat();
         
         if ($content->fileSize)
-            $contentInfo[] = $content->escapeForXss('fileSize');
+            $contentInfo[] = $content->getFileSize();
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {

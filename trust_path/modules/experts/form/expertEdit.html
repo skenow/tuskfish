@@ -5,7 +5,7 @@
   <div class="row">
       
     <!-- ID -->
-    <input type="hidden" name="id" value="<?php echo $tfValidator->escapeForXss($expert->id); ?>">
+    <input type="hidden" name="id" value="<?php echo $expert->getId(); ?>">
     
     <!-- Salutation -->
     <div class="col-md-2 mb-3 text-left" id="salutationContainer">
@@ -26,49 +26,49 @@
     <!-- First name -->
     <div class="col-md-3 mb-3 text-left" id="firstNameContainer">
       <label for="firstName"><strong><?php echo TFISH_EXPERTS_FIRST_NAME; ?></strong></label>
-      <input type="text" class="form-control" name="firstName" id="firstName" <?php if (isset($expert->firstName)) echo 'value="' . $tfValidator->escapeForXss($expert->firstName) . '"'; ?>>
+      <input type="text" class="form-control" name="firstName" id="firstName" <?php if (isset($expert->firstName)) echo 'value="' . $expert->getFirstName() . '"'; ?>>
     </div>
 
     <!-- Mid name -->
     <div class="col-md-3 mb-3 text-left" id="midNameContainer">
       <label for="midName"><strong><?php echo TFISH_EXPERTS_MID_NAME; ?></strong></label>
-      <input type="text" class="form-control" name="midName" id="midName" <?php if (isset($expert->midName)) echo 'value="' . $tfValidator->escapeForXss($expert->midName) . '"'; ?>>
+      <input type="text" class="form-control" name="midName" id="midName" <?php if (isset($expert->midName)) echo 'value="' . $expert->getMidName() . '"'; ?>>
     </div>
 
     <!-- Last name -->
     <div class="col-md-4 mb-3 text-left" id="lastNameContainer">
       <label for="lastName"><strong><?php echo TFISH_EXPERTS_LAST_NAME; ?></strong></label>
-      <input type="text" class="form-control" name="lastName" id="lastName" <?php if (isset($expert->lastName)) echo 'value="' . $tfValidator->escapeForXss($expert->lastName) . '"'; ?>>
+      <input type="text" class="form-control" name="lastName" id="lastName" <?php if (isset($expert->lastName)) echo 'value="' . $expert->getLastName() . '"'; ?>>
     </div>
 
     <!-- Job -->
     <div class="col-md-4 mb-3 text-left" id="jobContainer">
       <label for="job"><strong><?php echo TFISH_EXPERTS_JOB; ?></strong></label>
-      <input type="text" class="form-control" name="job" id="job" <?php if (isset($expert->job)) echo 'value="' . $tfValidator->escapeForXss($expert->job) . '"'; ?>>
+      <input type="text" class="form-control" name="job" id="job" <?php if (isset($expert->job)) echo 'value="' . $expert->getJob() . '"'; ?>>
     </div>
     
     <!-- Business unit -->
     <div class="col-md-4 mb-3 text-left" id="businessUnitContainer">
       <label for="businessUnit"><strong><?php echo TFISH_EXPERTS_BUSINESS_UNIT; ?></strong></label>
-      <input type="text" class="form-control" name="businessUnit" id="businessUnit" <?php if (isset($expert->businessUnit)) echo 'value="' . $tfValidator->escapeForXss($expert->businessUnit) . '"'; ?>>
+      <input type="text" class="form-control" name="businessUnit" id="businessUnit" <?php if (isset($expert->businessUnit)) echo 'value="' . $expert->getBusinessUnit() . '"'; ?>>
     </div>
 
     <!-- Organisation -->
     <div class="col-md-4 mb-3 text-left" id="organisationContainer">
       <label for="organisation"><strong><?php echo TFISH_EXPERTS_ORGANISATION; ?></strong></label>
-      <input type="text" class="form-control" name="organisation" id="organisation" <?php if (isset($expert->organisation)) echo 'value="' . $tfValidator->escapeForXss($expert->organisation) . '"'; ?>>
+      <input type="text" class="form-control" name="organisation" id="organisation" <?php if (isset($expert->organisation)) echo 'value="' . $expert->getOrganisation() . '"'; ?>>
     </div>
 
     <!-- Email -->
     <div class="col-md-3 mb-3 text-left" id="emailContainer">
       <label for="email"><strong><?php echo TFISH_EXPERTS_EMAIL; ?></strong></label>
-      <input type="text" class="form-control" name="email" id="email" <?php if (isset($expert->email)) echo 'value="' . $tfValidator->escapeForXss($expert->email) . '"'; ?>>
+      <input type="text" class="form-control" name="email" id="email" <?php if (isset($expert->email)) echo 'value="' . $expert->getEmail() . '"'; ?>>
     </div>
     
     <!-- Profile link -->
     <div class="col-md-3 mb-3 text-left" id="profileLinkContainer">
       <label for="profileLink"><strong><?php echo TFISH_EXPERTS_PROFILE_LINK; ?></strong></label>
-      <input type="text" class="form-control" name="profileLink" id="profileLink" <?php if (isset($expert->profileLink)) echo 'value="' . $tfValidator->escapeForXss($expert->profileLink) . '"'; ?>>
+      <input type="text" class="form-control" name="profileLink" id="profileLink" <?php if (isset($expert->profileLink)) echo 'value="' . $expert->getProfileLink() . '"'; ?>>
     </div>
 
     <!-- Gender -->
@@ -100,19 +100,19 @@
     <!-- Experience -->
     <div class="col-12 mb-3 text-left" id="experienceContainer">
       <label for="experience"><strong><?php echo TFISH_EXPERTS_EXPERIENCE; ?></strong></label>
-      <textarea id="experience" name="experience" class="form-control text-left"><?php if (isset($expert->experience)) { echo $expert->escapeForXss('experience', true); } ?></textarea>
+      <textarea id="experience" name="experience" class="form-control text-left"><?php if (isset($expert->experience)) { echo $expert->getExperience(true); } ?></textarea>
     </div>
 
     <!-- Projects -->
     <div class="col-12 mb-3 text-left" id="projectsContainer">
       <label for="projects"><strong><?php echo TFISH_EXPERTS_PROJECTS; ?></strong></label>
-      <textarea id="projects" name="projects" class="form-control text-left"><?php if (isset($expert->projects)) { echo $expert->escapeForXss('projects', true); } ?></textarea>
+      <textarea id="projects" name="projects" class="form-control text-left"><?php if (isset($expert->projects)) { echo $expert->getProjects(true); } ?></textarea>
     </div>
 
     <!-- Publications -->
     <div class="col-12 mb-3 text-left" id="publicationsContainer">
       <label for="publications"><strong><?php echo TFISH_EXPERTS_PUBLICATIONS; ?></strong></label>
-      <textarea id="publications" name="publications" class="form-control text-left"><?php if (isset($expert->publications)) { echo $expert->escapeForXss('publications', true); } ?></textarea>
+      <textarea id="publications" name="publications" class="form-control text-left"><?php if (isset($expert->publications)) { echo $expert->getPublications(true); } ?></textarea>
     </div>
 
     <!-- Address -->
@@ -140,13 +140,13 @@
     <!-- Mobile -->
     <div class="col-md-4 mb-3 text-left" id="mobileContainer">
       <label for="mobile"><strong><?php echo TFISH_EXPERTS_MOBILE; ?></strong></label>
-      <input type="text" class="form-control" name="mobile" id="mobile" <?php if (isset($expert->mobile)) echo 'value="' . $tfValidator->escapeForXss($expert->mobile) . '"'; ?>>
+      <input type="text" class="form-control" name="mobile" id="mobile" <?php if (isset($expert->mobile)) echo 'value="' . $expert->getMobile() . '"'; ?>>
     </div>
 
     <!-- Fax -->
     <div class="col-md-4 mb-3 text-left" id="faxContainer">
       <label for="fax"><strong><?php echo TFISH_EXPERTS_FAX; ?></strong></label>
-      <input type="text" class="form-control" name="fax" id="fax" <?php if (isset($expert->fax)) echo 'value="' . $tfValidator->escapeForXss($expert->fax) . '"'; ?>>
+      <input type="text" class="form-control" name="fax" id="fax" <?php if (isset($expert->fax)) echo 'value="' . $expert->getFax() . '"'; ?>>
     </div>
     
     <!-- Tags -->
@@ -169,7 +169,7 @@
     <?php if (isset($expert->image) && !empty($expert->image)): ?>
     <div class="col-md-6 mb-4 text-left" id="imageContainer">
         <label for="image"><strong><?php echo TFISH_IMAGE; ?></strong></label>
-        <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo $tfValidator->escapeForXss($expert->image); ?>">
+        <input id="image" name="image" type="file" data-preview-file-type="image" value="<?php echo $expert->getImage(); ?>">
     </div>
     <?php else: ?>
         <div class="col-md-6 mb-3 text-left" id="imageContainer">
@@ -183,11 +183,11 @@
         'showUpload': false,
         'allowedFileExtensions': ["gif", "jpg", "png"],
         'previewFileType': ["image"],
-        'initialPreview': '<?php if ($expert->image) echo TFISH_IMAGE_URL . $tfValidator->escapeForXss($expert->image); ?>',
+        'initialPreview': '<?php if ($expert->image) echo TFISH_IMAGE_URL . $expert->getImage(); ?>',
         'initialPreviewAsData': true,
         'initialPreviewShowDelete': false,
-        'initialPreviewDownloadUrl': '<?php if ($expert->image) echo TFISH_IMAGE_URL . $tfValidator->escapeForXss($expert->image); ?>',
-        'initialCaption': '<?php if (isset($expert->image)) echo $tfValidator->escapeForXss($expert->image); ?>',
+        'initialPreviewDownloadUrl': '<?php if ($expert->image) echo TFISH_IMAGE_URL . $expert->getImage(); ?>',
+        'initialCaption': '<?php if (isset($expert->image)) echo $expert->getImage(); ?>',
         'fileActionSettings': {
             'showDrag': false,
             'showRemove': false},
@@ -210,19 +210,19 @@
     <!-- Meta title -->
     <div class="col-md-6 mb-3 text-left" id="metaTitleContainer">
       <label for="metaTitle"><strong><?php echo TFISH_META_TITLE; ?></strong></label>
-      <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($expert->metaTitle)) echo 'value="' . $tfValidator->escapeForXss($expert->metaTitle) . '"'; ?>>
+      <input type="text" class="form-control" name="metaTitle" id="metaTitle" <?php if (isset($expert->metaTitle)) echo 'value="' . $expert->getMetaTitle() . '"'; ?>>
     </div>
 
     <!-- SEO -->
     <div class="col-md-6 mb-3 text-left" id="seoContainer">
       <label for="seo"><strong><?php echo TFISH_SEO; ?></strong></label>
-      <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($expert->seo)) echo 'value="' . $tfValidator->escapeForXss($expert->seo) . '"'; ?>>
+      <input type="text" class="form-control" name="seo" id="seo" <?php if (isset($expert->seo)) echo 'value="' . $expert->getSeo() . '"'; ?>>
     </div>
 
     <!-- Meta description -->
     <div class="col-12 mb-3 text-left" id="metaDescriptionContainer">
       <label for="metaDescription"><strong><?php echo TFISH_META_DESCRIPTION; ?></strong></label>
-      <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($expert->metaDescription)) echo 'value="' . $tfValidator->escapeForXss($expert->metaDescription) . '"'; ?>>
+      <input type="text" class="form-control" name="metaDescription" id="metaDescription" <?php if (isset($expert->metaDescription)) echo 'value="' . $expert->getMetaDescription() . '"'; ?>>
     </div>
 
   </div> <!-- /row -->

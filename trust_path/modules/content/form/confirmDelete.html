@@ -2,11 +2,11 @@
 
 <div>
   <div class="alert alert-danger">
-    <strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($content->title)) { echo $content->escapeForXss('title'); } ?>
+    <strong><?php echo TFISH_DO_YOU_WANT_TO_DELETE . ': '; ?></strong><?php if (isset($content->title)) { echo $content->getTitle(); } ?>
   </div>
   <form class="form-horizontal" action="admin.php" method="post" accept-charset="UTF-8">
     <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>" />
-    <input name="id" value="<?php echo $content->escapeForXss('id'); ?>" type="hidden">
+    <input name="id" value="<?php echo $content->getId(); ?>" type="hidden">
     <button name="op" value="delete" type="submit" class="btn btn-primary"><?php echo TFISH_YES; ?></button>
     <button name="op" value="" type="submit" class="btn btn-primary"><?php echo TFISH_NO; ?></button>
   </form>

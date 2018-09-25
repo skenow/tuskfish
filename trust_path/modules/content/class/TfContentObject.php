@@ -161,54 +161,6 @@ class TfContentObject
         
         return $keyValues;
     }
-    
-    /**
-     * Escapes object properties for output to browser.
-     * 
-     * Use this method to retrieve object properties when you want to send them to the browser.
-     * They will be automatically escaped with htmlspecialchars() to mitigate cross-site scripting
-     * attacks.
-     * 
-     * Note that the method excludes the teaser and description fields by default, which are 
-     * returned unescaped; these are dedicated HTML fields that have been input-validated
-     * with the HTMLPurifier library, and so *should* be safe. However, when editing these fields
-     * it is necessary to escape them in order to prevent TinyMCE deleting them, as the '&' part of
-     * entity encoding also needs to be escaped when in a textarea for some highly annoying reason.
-     * 
-     * @param string $property Name of property.
-     * @param bool $escapeHtml Whether to escape HTML fields (teaser, description).
-     * @return string|null Human readable value escaped for display or null if property does not
-     * exist.
-     */
-    public function escapeForXss(string $property, bool $escapeHtml = false)
-    {
-        $cleanProperty = $this->validator->trimString($property);
-        
-        // If property is not set return null.
-        if (!isset($this->$cleanProperty)) {
-            return null;
-        }
-        
-        // Format all data for display and convert TFISH_LINK to URL.
-        $humanReadableData = (string) $this->makeDataHumanReadable($cleanProperty);
-        
-                $htmlFields = array('teaser', 'description', 'icon');
-        
-        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.
-        if (in_array($property, $htmlFields, true) && $escapeHtml === false) {
-            return $humanReadableData;
-        }
-        
-        // Output for display in the TinyMCE editor (edit mode): HTML must be DOUBLE
-        // escaped to meet specification requirements.
-        if (in_array($property, $htmlFields, true) && $escapeHtml === true) {    
-            return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', 
-                    true);
-        }
-                
-        // All other cases: Escape data for display.        
-        return htmlspecialchars($humanReadableData, ENT_NOQUOTES, 'UTF-8', false);
-    }
 
     /**
      * Resizes and caches an associated image and returns a URL to the cached copy.
@@ -1161,6 +1113,16 @@ class TfContentObject
     }
     
     /**
+     * Return the image file name XSS escaped for display.
+     * 
+     * @return string Image file name.
+     */
+    public function getImage()
+    {
+        return $this->validator->escapeForXss($this->image);
+    }
+    
+    /**
      * Set the language of this content object.
      * 
      * @param string $language ISO_639-1 two-letter language code.
@@ -1413,7 +1375,7 @@ class TfContentObject
      */
     public function getRights()
     {
-        $rightsList = $this->getRights();
+        $rightsList = $this->getListOfRights();
         
         return $this->validator->escapeForXss($rightsList[$this->rights]);
     }

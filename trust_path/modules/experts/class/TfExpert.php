@@ -551,7 +551,7 @@ class TfExpert
      */
     public function getProfileLink()
     {
-        return $this->validator->escapeForXss($this->url);
+        return $this->validator->escapeForXss($this->profileLink);
     }
     
     /**
@@ -642,7 +642,7 @@ class TfExpert
      */
     public function getSeo()
     {
-        return $this->validator->escapeForXss($seo);
+        return $this->validator->escapeForXss($this->seo);
     }
     
     // No need for getHandler, getTemplate or getModule as not publicly displayed.
@@ -1315,6 +1315,11 @@ class TfExpert
         } else {
             $this->image = $image;
         }
+    }
+    
+    public function getImage()
+    {
+        return $this->validator->escapeForXss($this->image);
     }
     
     /**

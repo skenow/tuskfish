@@ -39,19 +39,19 @@
     <h2><?php echo $tfValidator->escapeForXss($resultsCount) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
     <?php foreach ($searchResults as $key => $object): ?>
     <div class="clearfix">
-        <h3><a href="<?php echo $object->getUrl($targetFileName); ?>"><?php echo $object->icon; ?> <?php echo $object->escapeForXss('title'); ?></a></h3>
+        <h3><a href="<?php echo $object->getUrl($targetFileName); ?>"><?php echo $object->getIcon(); ?> <?php echo $object->getTitle(); ?></a></h3>
         <?php if ($object->image): ?>
         <div class="float-left">
             <figure class="figure-left">
                 <a href="<?php echo $object->getUrl($targetFileName); ?>">
                     <img class="img-responsive" src="<?php echo $object->getCachedImage(100); ?>" 
-                         <?php if ($object->caption): ?>title="<?php echo $object->escapeForXss('caption'); ?>" 
-                         alt="<?php echo $object->escapeForXss('caption'); ?>"<?php endif; ?> />
+                         <?php if ($object->caption): ?>title="<?php echo $object->getCaption(); ?>" 
+                         alt="<?php echo $object->getCaption(); ?>"<?php endif; ?> />
                 </a>
             </figure>
         </div>
         <?php endif; ?>
-        <?php echo $object->escapeForXss('teaser'); ?>
+        <?php echo $object->getTeaser(); ?>
     </div>
     <?php endforeach; ?>
     <?php else: ?>

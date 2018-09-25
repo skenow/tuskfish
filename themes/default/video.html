@@ -7,16 +7,16 @@
 <div>
   <h2 class="title">
     <?php if ($content->isValidMedia()): ?>
-    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escapeForXss('id'); ?>"><?php echo $content->icon; ?> <?php echo $content->escapeForXss('title'); ?></a>
+    <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->getId(); ?>"><?php echo $content->getIcon(); ?> <?php echo $content->getTitle(); ?></a>
     <?php else: ?>
-    <?php echo $content->icon . ' ' . $content->escapeForXss('title'); ?>
+    <?php echo $content->getIcon() . ' ' . $content->getTitle(); ?>
     <?php endif; ?>
   </h2>
   <?php if ($contentInfo): ?>
   <p class="contentInfo">
     <span class="small">
     <?php if (TfSession::isAdmin()): ?>
-    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->escapeForXss('id'); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
+    <a href="<?php echo TFISH_ADMIN_URL . 'admin.php?op=edit&amp;id=' . $content->getId(); ?>"><i title="<?php echo TFISH_EDIT_CONTENT; ?>" class="fas fa-edit"></i></a>
     <?php endif; ?>
     <?php echo $contentInfo; ?>
     </span>
@@ -27,7 +27,7 @@
 <?php if ($content->isValidMedia()): ?>
 <div class="video-player">
   <video controls>
-    <source src="<?php echo TFISH_MEDIA_URL . $content->escapeForXss('media'); ?>" type="<?php echo $tfValidator->escapeForXss($content->format); ?>">
+    <source src="<?php echo TFISH_MEDIA_URL . $content->getMedia(); ?>" type="<?php echo $tfValidator->escapeForXss($content->format); ?>">
     <?php echo TFISH_BROWSER_DOES_NOT_SUPPORT_VIDEO; ?>
   </video>
 </div>
@@ -38,22 +38,22 @@
 <div class="float-right figure-right">
   <figure>
     <?php if ($content->media): ?>
-      <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->escapeForXss('id'); ?>">
+      <a href="<?php echo TFISH_URL . 'enclosure.php?id=' . $content->getId(); ?>">
         <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
         <?php if ($content->caption): ?>
-            title="<?php echo $content->escapeForXss('caption'); ?>" alt="<?php echo $content->escapeForXss('caption'); ?>"/>
+            title="<?php echo $content->getCaption(); ?>" alt="<?php echo $content->getCaption(); ?>"/>
         <?php else: ?>
             alt="" />
         <?php endif; ?>
       </a>
       <?php if ($content->caption): ?>
-      <figcaption class="text-left"><em><?php echo $content->escapeForXss('caption'); ?></em></figcaption>
+      <figcaption class="text-left"><em><?php echo $content->getCaption(); ?></em></figcaption>
       <?php endif; ?>
       <?php else: ?>
       <img class="image img-fluid" src="<?php echo $content->getCachedImage(400); ?>" 
         <?php if ($content->caption): ?>
-          title="<?php echo $content->escapeForXss('caption'); ?>" alt="<?php echo $content->escapeForXss('caption'); ?>"/>
-        <figcaption class="text-left"><em><?php echo $content->escapeForXss('caption'); ?></em></figcaption>
+          title="<?php echo $content->getCaption(); ?>" alt="<?php echo $content->getCaption(); ?>"/>
+        <figcaption class="text-left"><em><?php echo $content->getCaption(); ?></em></figcaption>
         <?php else: ?>
           alt="" />
         <?php endif; ?>
@@ -64,13 +64,13 @@
 
 <!-- Description -->
 <div class="description">
-  <?php if ($content->description) echo $content->escapeForXss('description'); ?>
+  <?php if ($content->description) echo $content->getDescription(); ?>
 </div>
 
 <!-- Rights -->
 <?php if ($content->rights): ?>
 <div>
-  <p class="rights"><?php echo $content->escapeForXss('rights'); ?></p>
+  <p class="rights"><?php echo $content->getRights(); ?></p>
 </div>
 <?php endif; ?>
 
@@ -78,14 +78,14 @@
 <?php if (!empty($parent)): ?>
 <div>
   <h3><?php echo TFISH_RELATED; ?></h3>
-  <h4 class="parent"><a href="<?php echo $parent->getUrl($targetFileName); ?>"><?php echo $parent->icon; ?> <?php echo $parent->escapeForXss('title'); ?></a></h4>
+  <h4 class="parent"><a href="<?php echo $parent->getUrl($targetFileName); ?>"><?php echo $parent->getIcon(); ?> <?php echo $parent->getTitle(); ?></a></h4>
   <?php if ($parent->image): ?>
   <div class="float-left">
     <figure class="figure-left">
       <a href="<?php echo $parent->getUrl($targetFileName); ?>">
       <img class="image img-fluid" src="<?php echo $parent->getCachedImage(150); ?>" 
       <?php if ($parent->caption): ?>
-        title="<?php echo $parent->escapeForXss('caption'); ?>" alt="<?php echo $parent->escapeForXss('caption'); ?>"
+        title="<?php echo $parent->getCaption(); ?>" alt="<?php echo $parent->getCaption(); ?>"
       <?php else: ?>
         alt=""
       <?php endif; ?>
@@ -94,7 +94,7 @@
   </div>
   <?php endif; ?>
   <div class="teaser">
-    <?php echo $parent->escapeForXss('teaser'); ?>
+    <?php echo $parent->getTeaser(); ?>
   </div>
 </div>
 <?php endif; ?>
