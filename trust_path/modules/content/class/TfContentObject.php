@@ -862,6 +862,16 @@ class TfContentObject
     }
     
     /**
+     * Return the caption XSS escaped for display.
+     * 
+     * @return string
+     */
+    public function getCaption()
+    {
+        return $this->validator->escapeForXss($this->caption);
+    }
+    
+    /**
      * Set the view/download counter for this object.
      * 
      * @param int $counter Counter value.
@@ -876,6 +886,16 @@ class TfContentObject
     }
     
     /**
+     * Return the counter value, XSS safe.
+     * 
+     * @return int Counter.
+     */
+    public function getCounter()
+    {
+        return (int) $this->counter;
+    }
+    
+    /**
      * Set the creator of this object.
      * 
      * @param string $creator Name of the creator.
@@ -884,6 +904,16 @@ class TfContentObject
     {
         $cleanCreator = (string) $this->validator->trimString($creator);
         $this->creator = $cleanCreator;
+    }
+    
+    /**
+     * Return the creator XSS escaped for display.
+     * 
+     * @return string Creator.
+     */
+    public function getCreator()
+    {
+        return $this->validator->escapeForXss($this->creator);
     }
     
     /**
@@ -909,6 +939,16 @@ class TfContentObject
     }
     
     /**
+     * Return the date XSS escaped for display.
+     * 
+     * @return string Date.
+     */
+    public function getDate()
+    {
+        return $this->validator->escapeForXss($this->date);
+    }
+    
+    /**
      * Set the description of this object (HTML field).
      * 
      * @param string $description Description in HTML.
@@ -920,7 +960,31 @@ class TfContentObject
     }
     
     /**
-     * Set the expirty time for this content object (timestamp).
+     * Return the description of this object (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing content; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Description of this machine as HTML.
+     */
+    public function getDescription($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->description;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->description, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Set the expiry time for this content object (timestamp).
      * 
      * @param int $expiresOn Timestamp.
      */
@@ -931,6 +995,18 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Return the formatted expiry date for this content, XSS escaped for display.
+     * 
+     * @return string Date of expiry.
+     */
+    public function getExpiresOn()
+    {
+        $date = date('j F Y', $this->$lastUpdated);
+        
+        return $this->validator->escapeForXss($date);
     }
     
     /**
@@ -945,6 +1021,16 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the file size in human readable format, XSS escaped for display.
+     * 
+     * @return string File size.
+     */
+    public function getFileSize()
+    {
+        return $this->convertBytesToHumanReadable($this->fileSize);
     }
     
     /**
@@ -965,6 +1051,18 @@ class TfContentObject
         }
         
         $this->format = $format;
+    }
+    
+    /**
+     * Returns the file extension associated with the media mimetype, XSS escaped for display.
+     * 
+     * @return string File extension.
+     */
+    public function getFormat()
+    {
+        $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
+        
+        return $this->validator->escapeForXss($mimetypeWhitelist[$this->format]);
     }
     
     /**
@@ -1000,6 +1098,18 @@ class TfContentObject
     }
     
     /**
+     * Returns the icon associated with this content object as a HTML FontAwesome tag.
+     * 
+     * XSS safe as icon is prevalidated by HTMLPurifier.
+     * 
+     * @return string Icon as HTML FontAwesome tag.
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+    
+    /**
      * Set the ID for this object.
      * 
      * @param int $id ID of this object.
@@ -1011,6 +1121,16 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the ID of the content object, XSS safe.
+     * 
+     * @return int ID of content object.
+     */
+    public function getId()
+    {
+        return (int) $this->id;
     }
     
     /**
@@ -1058,6 +1178,18 @@ class TfContentObject
     }
     
     /**
+     * Returns the language of this object XSS escaped for display.
+     * 
+     * @return string Language.
+     */
+    public function getLanguage()
+    {
+        $langageWhitelist = $this->getListOfLanguages();
+        
+        return $this->validator->escapeForXss($languageWhitelist[$this->language]);
+    }
+    
+    /**
      * Set the last updated time for this content object (timestamp).
      * 
      * @param int $lastUpdated Timestamp.
@@ -1069,6 +1201,18 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Return formatted date/time this content was last updated, XSS escaped for display.
+     * 
+     * @return string Date/time last updated.
+     */
+    public function getlastUpdated()
+    {
+        $date = date('j F Y', $this->$lastUpdated);
+        
+        return $this->validator->escapeForXss($date);
     }
     
     /**
@@ -1101,6 +1245,16 @@ class TfContentObject
     }
     
     /**
+     * Return the media file name XSS escaped for display.
+     * 
+     * @return string Media file name.
+     */
+    public function getMedia()
+    {
+        return $this->validator->escapeForXss($this->media);
+    }
+    
+    /**
      * Set the meta description for this content object.
      * 
      * @param string $metaDescription Meta description of this object.
@@ -1112,6 +1266,16 @@ class TfContentObject
     }
     
     /**
+     * Return the meta description XSS escaped for display.
+     * 
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->validator->escapeForXss($this->metaDescription);
+    }
+    
+    /**
      * Set the meta title for this object.
      * 
      * @param string $metaTitle Meta title for this object.
@@ -1120,6 +1284,16 @@ class TfContentObject
     {
         $cleanMetaTitle = (string) $this->validator->trimString($metaTitle);
         $this->metaTitle = $cleanMetaTitle;
+    }
+    
+    /**
+     * Returns the meta title of this object XSS escaped for display.
+     * 
+     * @return string Meta title of this object.
+     */
+    public function getMetaTitle()
+    {
+        return $this->validator->escapeForXss($this->metaTitle);
     }
     
     /**
@@ -1152,6 +1326,20 @@ class TfContentObject
     }
     
     /**
+     * Returns the online status of the content object as boolean value, XSS safe.
+     * 
+     * @return boolean True if online, false if offline.
+     */
+    public function getOnline()
+    {
+        if ($this->online === 1) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
      * Set the ID of the parent for this object (must be a collection).
      * 
      * Parent ID must be different to content ID (cannot declare self as parent).
@@ -1172,6 +1360,16 @@ class TfContentObject
     }
     
     /**
+     * Returns the ID of the parent object, XSS safe.
+     * 
+     * @return int ID of parent.
+     */
+    public function getParent()
+    {
+        return (int) $this->parent;
+    }
+    
+    /**
      * Set the publisher of this content object.
      * 
      * @param string $publisher Name of the publisher.
@@ -1180,6 +1378,16 @@ class TfContentObject
     {
         $cleanPublisher = (string) $this->validator->trimString($publisher);
         $this->publisher = $cleanPublisher;
+    }
+    
+    /**
+     * Returns the publisher, XSS escaped for display.
+     * 
+     * @return string Publisher.
+     */
+    public function getPublisher()
+    {
+        return $this->validator->escapeForXss($this->publisher);
     }
     
     /**
@@ -1196,6 +1404,18 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the intellectual property rights license for this content object XSS escaped for display.
+     * 
+     * @return string Name of intellectual property rights license for this content object.
+     */
+    public function getRights()
+    {
+        $rightsList = $this->getRights();
+        
+        return $this->validator->escapeForXss($rightsList[$this->rights]);
     }
     
     /**
@@ -1220,6 +1440,16 @@ class TfContentObject
     }
     
     /**
+     * Return the SEO string for this content XSS escaped for display.
+     * 
+     * @return string SEO-friendly URL string.
+     */
+    public function getSeo()
+    {
+        return $this->validator->escapeForXss($this->seo);
+    }
+    
+    /**
      * Set the submission time for this content object (timestamp).
      * 
      * @param int $submissionTime Timestamp.
@@ -1231,6 +1461,18 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Return formatted date that this content was submitted.
+     * 
+     * @return string Date/time of submission.
+     */
+    public function getSubmissionTime()
+    {
+        $date = date('j F Y', $this->$submissionTime);
+        
+        return $this->validator->escapeForXss($date);
     }
     
     /**
@@ -1272,6 +1514,30 @@ class TfContentObject
     }
     
     /**
+     * Return the teaser of this content (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing content; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Teaser (short form description) of this machine as HTML.
+     */
+    public function getTeaser($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->teaser;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->teaser, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
      * Set the template file for displaying this content object.
      * 
      * The equivalent HTML template file must be present in the active theme.
@@ -1301,6 +1567,16 @@ class TfContentObject
     }
     
     /**
+     * Returns the title of this content XSS escaped for display.
+     * 
+     * @return string Title.
+     */
+    public function getTitle()
+    {
+        return $this->validator->escapeForXss($this->title);
+    }
+    
+    /**
      * Set the content type for this object.
      * 
      * Type must be the name of a content subclass.
@@ -1316,6 +1592,16 @@ class TfContentObject
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the type (class name) of this content XSS escaped for display.
+     * 
+     * @return string Type (class name).
+     */
+    public function getType()
+    {
+        return $this->validator->escapeForXss($this->type);
     }
     
     /**

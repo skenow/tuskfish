@@ -405,6 +405,7 @@ class TfMachine
     public function getSubmissionTime()
     {
         $date = date('j F Y', $this->$submissionTime);
+        
         return $this->validator->escapeForXss($date);
     }
     
@@ -423,13 +424,14 @@ class TfMachine
     }
     
     /**
-     * Return formatted date/time this machine was last updated, escaped for display.
+     * Return formatted date/time this machine was last updated, XSS escaped for display.
      * 
      * @return string Date/time last updated.
      */
     public function getlastUpdated()
     {
         $date = date('j F Y', $this->$lastUpdated);
+        
         return $this->validator->escapeForXss($date);
     }
     
