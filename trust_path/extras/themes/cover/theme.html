@@ -1,7 +1,7 @@
 <?php declare(strict_types=1); ?>
 
 <!doctype html>
-<html lang="<?php echo $tfPreference->escapeForXss('defaultLanguage'); ?>">
+<html lang="<?php echo $tfPreference->getDefaultLanguage(); ?>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
@@ -46,7 +46,7 @@
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand"><a href="<?php echo TFISH_URL; ?>"><?php echo $tfPreference->escapeForXss('siteName'); ?></a></h3>
+          <h3 class="masthead-brand"><a href="<?php echo TFISH_URL; ?>"><?php echo $tfPreference->getSiteName(); ?></a></h3>
           <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link active" href="#">Home</a>
             <a class="nav-link" href="#">Features</a>
@@ -64,7 +64,7 @@
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p>Copyright &copy; <?php echo $tfPreference->escapeForXss('siteAuthor'); ?> 2018 | <?php echo TfSession::getLoginLink(); ?></p>
+          <p>Copyright &copy; <?php echo $tfPreference->getSiteAuthor(); ?> 2018 | <?php echo TfSession::getLoginLink(); ?></p>
         </div>
       </footer>
     </div>

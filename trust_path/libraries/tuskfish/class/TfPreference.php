@@ -199,6 +199,16 @@ class TfPreference
     }
     
     /**
+     * Returns the site author XSS escaped for display.
+     * 
+     * @return string Site author.
+     */
+    public function getSiteAuthor()
+    {
+        return $this->validator->escapeForXss($this->siteAuthor);
+    }
+    
+    /**
      * Set life of items in cache (seconds).
      * 
      * Items that expire will be rebuilt and re-written to the cache the next time the page is
@@ -265,6 +275,16 @@ class TfPreference
         } else {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the default site language as a two-letter code XSS escaped for display.
+     * 
+     * @return string Two letter ISO 639-1 language code.
+     */
+    public function getDefaultLanguage()
+    {
+        return $this->validator->escapeForXss($this->defaultLanguage);
     }
     
     /**
@@ -469,6 +489,16 @@ class TfPreference
     public function setSiteName(string $value)
     {
         $this->siteName = $this->validator->trimString($value);
+    }
+    
+    /**
+     * Returns the site name XSS escaped for display.
+     * 
+     * @return string Site name.
+     */
+    public function getSiteName()
+    {
+        return $this->validator->escapeForXss($this->siteName());
     }
     
     /**

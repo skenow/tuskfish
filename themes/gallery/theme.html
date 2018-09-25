@@ -1,7 +1,7 @@
 <?php declare(strict_types=1); ?>
 
 <!doctype html>
-<html lang="<?php echo $tfPreference->escapeForXss('defaultLanguage'); ?>">
+<html lang="<?php echo $tfPreference->getDefaultLanguage(); ?>">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
@@ -44,7 +44,7 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfPreference->escapeForXss('siteName'); ?></a>
+      <a class="navbar-brand" href="<?php echo TFISH_URL; ?>"><?php echo $tfPreference->getSiteName(); ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -86,7 +86,7 @@
           <div class="col">
             <hr>
             <footer class="clearfix">
-              <p class="copyright">Copyright &copy; <?php echo $tfPreference->escapeForXss('siteAuthor'); ?> 2018 | <?php echo TfSession::getLoginLink(); ?></p>
+              <p class="copyright">Copyright &copy; <?php echo $tfPreference->getSiteAuthor(); ?> 2018 | <?php echo TfSession::getLoginLink(); ?></p>
             </footer>
           </div>
         </div>
