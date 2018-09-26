@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
-    <meta name="description" content="<?php echo $tfMetadata->description; ?>">
-    <meta name="author" content="<?php echo $tfMetadata->author; ?>">
-    <meta name="dcterms.rights" content="<?php echo $tfMetadata->copyright; ?>">
-    <meta name="robots" content="<?php echo $tfMetadata->robots; ?>">
+    <meta name="description" content="<?php echo $tfMetadata->getDescription(); ?>">
+    <meta name="author" content="<?php echo $tfMetadata->getAuthor(); ?>">
+    <meta name="dcterms.rights" content="<?php echo $tfMetadata->getCopyright(); ?>">
+    <meta name="robots" content="<?php echo $tfMetadata->getRobots(); ?>">
     <link rel="schema.dcterms" href="http://purl.org/dc/terms/">
     
     <!-- Favicons -->
@@ -20,7 +20,7 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <title><?php echo $tfMetadata->title; ?></title>
+    <title><?php echo $tfMetadata->getTitle(); ?></title>
     
     <!-- jQuery -->
     <script src="<?php echo TFISH_JS_URL . 'jquery/jquery.min.js'; ?>"></script>

@@ -82,27 +82,6 @@ class TfMetadata
         $this->setSeo('');
         $this->setRobots('index,follow');
     }
-
-    /**
-     * Access an existing property and escape it for output to browser.
-     * 
-     * @param string $property Name of property.
-     * @return string|bool Value of preference escaped for display if set, otherwise false.
-     * 
-     * Note that the ENT_QUOTES flag must be set on htmlspecialchars() as these properties are
-     * used within attributes of meta tags, so a double quote would cause breakage.
-     */
-    public function __get(string $property)
-    {
-        $cleanProperty = $this->validator->trimString($property);
-        
-        if (isset($this->$cleanProperty)) {
-            return htmlspecialchars((string) $this->$cleanProperty, ENT_QUOTES, "UTF-8",
-                    false);
-        } else {
-            return null;
-        }
-    }
     
     /**
      * Sets the page meta title property.
@@ -111,7 +90,13 @@ class TfMetadata
      */
     public function setTitle(string $value)
     {
-        $this->setProperty('title', $value);
+        $this->title = $this->validator->trimString($value);
+    }
+    
+    
+    public function getTitle()
+    {
+        return $this->validator->escapeForXss($this->title);
     }
     
     /**
@@ -121,7 +106,12 @@ class TfMetadata
      */
     public function setDescription(string $value)
     {
-        $this->setProperty('description', $value);
+        $this->description = $this->validator->trimString($value);
+    }
+    
+    public function getDescription()
+    {
+        return $this->validator->escapeForXss($this->description);
     }
     
     /**
@@ -131,7 +121,12 @@ class TfMetadata
      */
     public function setAuthor(string $value)
     {
-        $this->setProperty('author', $value);
+        $this->author = $this->validator->trimString($value);
+    }
+    
+    public function getAuthor()
+    {
+        return $this->validator->escapeForXss($this->author);
     }
     
     /**
@@ -141,7 +136,12 @@ class TfMetadata
      */
     public function setCopyright(string $value)
     {
-        $this->setProperty('copyright', $value);
+        $this->copyright = $this->validator->trimString($value);
+    }
+    
+    public function getCopyright()
+    {
+        return $this->validator->escapeForXss($this->copyright);
     }
     
     /**
@@ -151,7 +151,12 @@ class TfMetadata
      */
     public function setGenerator(string $value)
     {
-        $this->setProperty('generator', $value);
+        $this->generator = $this->validator->trimString($value);
+    }
+    
+    public function getGenerator()
+    {
+        return $this->validator->escapeForXss($this->generator);
     }
     
     /**
@@ -161,7 +166,12 @@ class TfMetadata
      */
     public function setSeo(string $value)
     {
-        $this->setProperty('seo', $value);
+        $this->seo = $this->validator->trimString($value);
+    }
+    
+    public function getSeo()
+    {
+        return $this->validator->escapeForXss($this->seo);
     }
     
     /**
@@ -171,23 +181,12 @@ class TfMetadata
      */
     public function setRobots(string $value)
     {
-        $this->setProperty('robots', $value);
+        $this->robots = $this->validator->trimString($value);
     }
     
-    /**
-     * Set an existing property.
-     * 
-     * @param string $property Name of property.
-     * @param mixed $value Value to assign to property.
-     * 
-     * Note that htmlspecialchars() should use the ENT_QUOTES flag, as most of these values are
-     * used within attributes of meta tags, and a double quote would break them.
-     */
-    private function setProperty(string $property, string $value)
+    public function getRobots()
     {
-        $cleanProperty = $this->validator->trimString($property);
-        $cleanValue = $this->validator->trimString($value);
-        $this->$cleanProperty = htmlspecialchars($cleanValue, ENT_QUOTES, "UTF-8", false);
+        return $this->validator->escapeForXss($this->robots);
     }
        
 }

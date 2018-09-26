@@ -51,11 +51,11 @@ $tfDatabase->createTable('expert', $expertColumns, 'id');
 
 /** Override page template and metadata here (otherwise default site metadata will display). */
 $tfMetadata->setTitle('Set up experts database');
-// $tfMetadata->description = '';
-// $tfMetadata->author = '';
-// $tfMetadata->copyright = '';
-// $tfMetadata->generator = '';
-// $tfMetadata->seo = '';
+// $tfMetadata->setDescription();
+// $tfMetadata->setAuthor('');
+// $tfMetadata->setCopyright('');
+// $tfMetadata->setGenerator('');
+// $tfMetadata->setSeo('');
 $tfMetadata->setRobots('noindex,nofollow');
 // Include page template and flush buffer
 // Render page and shut down.
