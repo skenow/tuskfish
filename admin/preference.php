@@ -33,7 +33,7 @@ if (in_array($op, array('edit', 'update', false))) {
         case "edit":
             TfSession::validateToken($cleanToken); // CSRF check.
             $tfTemplate->pageTitle = TFISH_PREFERENCE_EDIT_PREFERENCES;
-            $tfTemplate->preferences = $tfPreference->getPreferencesAsArray();
+            $tfTemplate->preferences = $tfPreference;
             $tfTemplate->languages = $tfPreference->getListOfLanguages();
             $tfTemplate->timezones = TfUtils::getListOfTimezones();
             $tfTemplate->form = TFISH_FORM_PATH . "preferenceEdit.html";
@@ -70,15 +70,7 @@ if (in_array($op, array('edit', 'update', false))) {
         // Default: Display a table of existing preferences.
         default:
             $tfTemplate->pageTitle = TFISH_PREFERENCES;
-            $preferences = $tfPreference->getPreferencesAsArray();
-            $languages = $tfPreference->getListOfLanguages();
-            $preferences['defaultLanguage'] = $languages[$preferences['defaultLanguage']];
-            $timezones = TfUtils::getListOfTimezones();
-            $preferences['serverTimezone'] = $timezones[$preferences['serverTimezone']];
-            $preferences['siteTimezone'] = $timezones[$preferences['siteTimezone']];
-            $preferences['closeSite'] = empty($preferences['closeSite']) ? TFISH_NO : TFISH_YES;
-            $preferences['enableCache'] = empty($preferences['enableCache']) ? TFISH_NO : TFISH_YES;
-            $tfTemplate->preferences = $preferences;
+            $tfTemplate->preferences = $tfPreference;
             $tfTemplate->form = TFISH_FORM_PATH . "preferenceTable.html";
             $tfTemplate->tfMainContent = $tfTemplate->render('form');
             break;

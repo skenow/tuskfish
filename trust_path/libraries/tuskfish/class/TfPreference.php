@@ -122,6 +122,8 @@ class TfPreference
     /**
      * Converts the preference object to an array suitable for insert/update calls to the database.
      * 
+     * Note that the output is not XSS escaped and should not be sent to display.
+     * 
      * @return array Array of object property/values.
      */
     public function getPreferencesAsArray()
@@ -189,6 +191,16 @@ class TfPreference
     }
     
     /**
+     * Returns the number of objects to display in a single admin page view, XSS safe.
+     * 
+     * @return int Admin pagination.
+     */
+    public function getAdminPagination()
+    {
+        return (int) $this->adminPagination;
+    }
+    
+    /**
      * Set the name of the site author. Used to population page meta author tag.
      * 
      * @param string $value Name of the site author.
@@ -228,6 +240,16 @@ class TfPreference
     }
     
     /**
+     * Returns the cache life in seconds, XSS safe.
+     * 
+     * @return in Cache life in seconds.
+     */
+    public function getCacheLife()
+    {
+        return (int) $this->cacheLife;
+    }
+    
+    /**
      * Open our close the site.
      * 
      * @param int $value Site open (0) or closed (1).
@@ -244,6 +266,20 @@ class TfPreference
     }
     
     /**
+     * Return the human readable value of the site closed preference, XSS safe.
+     * 
+     * @return string Yes if site open, no if site closed.
+     */
+    public function getCloseSite()
+    {
+        if ($this->closeSite === 1) {
+            return TFISH_YES;
+        }
+        
+        return TFISH_NO;
+    }
+    
+    /**
      * Set the date format, used to convert timestamps to human readable form.
      * 
      * See the PHP manual for date formatting templates: http://php.net/manual/en/function.date.php
@@ -253,6 +289,16 @@ class TfPreference
     public function setDateFormat(string $value)
     {
         $this->dateFormat = $this->validator->trimString($value);
+    }
+    
+    /**
+     * Returns the data format used to convert timestamps to human readable form, XSS safe.
+     * 
+     * @return string Date format.
+     */
+    public function getDateFormat()
+    {
+        return $this->validator->escapeForXss($this->dateFormat);
     }
     
     /**
@@ -298,6 +344,16 @@ class TfPreference
     }
     
     /**
+     * Returns the site meta tag description, XSS safe.
+     * 
+     * @return string Site description.
+     */
+    public function getSiteDescription()
+    {
+        return $this->validator->escapeForXss($this->siteDescription);
+    }
+    
+    /**
      * Set the admin email address for the site.
      * 
      * Used in RSS feeds to populate the managingEditor and webmaster tags.
@@ -313,6 +369,16 @@ class TfPreference
         } else {
             trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the site administration email address, XSS safe. 
+     * 
+     * @return string Site email address.
+     */
+    public function getSiteEmail()
+    {
+        return $this->validator->escapeForXss($this->siteEmail);
     }
     
     /**
@@ -332,6 +398,20 @@ class TfPreference
     }
     
     /**
+     * Returns the human readable value of the enable cache preference, XSS safe.
+     * 
+     * @return string Yes if enabled, no if not.
+     */
+    public function getEnableCache()
+    {
+        if ($this->enableCache === 1) {
+            return TFISH_YES;
+        }
+        
+        return TFISH_NO;
+    }
+    
+    /**
      * Set number of objects to display on the gallery page.
      * 
      * @param int $value Number of objects to display on a single page view.
@@ -345,6 +425,16 @@ class TfPreference
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Return the number of objects to display on the gallery page, XSS safe.
+     * 
+     * @return int Gallery pagination.
+     */
+    public function getGalleryPagination()
+    {
+        return (int) $this->galleryPagination;
     }
     
     /**
@@ -368,6 +458,16 @@ class TfPreference
     }
     
     /**
+     * Returns the minimum allowed length of search terms, XSS safe.
+     * 
+     * @return int Minimum search length.
+     */
+    public function getMinSearchLength()
+    {
+        return (int) $this->minSearchLength;
+    }
+    
+    /**
      * Set the default number of page slots to display in pagination elements.
      * 
      * Can be overridden manually in TfishPaginationControl.
@@ -383,6 +483,16 @@ class TfPreference
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the number of slots to display in user-side pagination control, XSS safe.
+     * 
+     * @return int Number of pagination elements.
+     */
+    public function getPaginationElements()
+    {
+        return (int) $this->paginationElements;
     }
     
     /**
@@ -402,6 +512,16 @@ class TfPreference
     }
     
     /**
+     * Returns the number of content items to include in RSS feed, XSS safe.
+     * 
+     * @return int Number of posts in RSS. 
+     */
+    public function getRssPosts()
+    {
+        return (int) $this->rssPosts;
+    }
+    
+    /**
      * Set number of results to display on a search page view.
      * 
      * @param int $value Number of objects to display in a single page view.
@@ -418,6 +538,16 @@ class TfPreference
     }
     
     /**
+     * Returns the number of items to display in one page of search results, XSS safe.
+     * 
+     * @return Search pagination.
+     */
+    public function getSearchPagination()
+    {
+        return (int) $this->searchPagination;
+    }
+    
+    /**
      * Set the server timezone.
      * 
      * @param string $value Timezone.
@@ -425,6 +555,16 @@ class TfPreference
     public function setServerTimezone(string $value)
     {
         $this->serverTimezone = $this->validator->trimString($value);
+    }
+    
+    /**
+     * Returns the server timezone, XSS safe.
+     * 
+     * @return string Server timezone.
+     */
+    public function getServerTimezone()
+    {
+        return $this->validator->escapeForXss($this->serverTimezone);
     }
     
     /**
@@ -446,6 +586,16 @@ class TfPreference
     }
     
     /**
+     * Returns session lifetime in seconds, XSS safe.
+     * 
+     * @return int Session life.
+     */
+    public function getSessionLife()
+    {
+        return (int) $this->sessionLife;
+    }
+    
+    /**
      * Set the name (prefix) used to identify Tuskfish sessions.
      * 
      * If you change it, use something unpredictable.
@@ -464,9 +614,21 @@ class TfPreference
     }
     
     /**
+     * Returns the session name, XSS safe but should never be publicly displayed.
+     * 
+     * This method should only be used in the edit preferences form.
+     * 
+     * @return string Session name.
+     */
+    public function getSessionName()
+    {
+        return $this->validator->escapeForXss($this->sessionName);
+    }
+    
+    /**
      * Set the site meta copyright.
      * 
-     * Used to populate the dcterms.rights meta tag in the theme. Can be overriden in the
+     * Used to populate the dcterms.rights meta tag in the theme. Can be overridden in the
      * theme.html file.
      * 
      * @param string $value Copyright statement.
@@ -474,6 +636,16 @@ class TfPreference
     public function setSiteCopyright(string $value)
     {
         $this->siteCopyright = $this->validator->trimString($value);
+    }
+    
+    /**
+     * Returns the site copyright notice, XSS escaped for display.
+     * 
+     * @return string Site copyright notice.
+     */
+    public function getSiteCopyright()
+    {
+        return $this->validator->escapeForXss($this->siteCopyright);
     }
     
     /**
@@ -498,7 +670,7 @@ class TfPreference
      */
     public function getSiteName()
     {
-        return $this->validator->escapeForXss($this->siteName());
+        return $this->validator->escapeForXss($this->siteName);
     }
     
     /**
@@ -511,6 +683,16 @@ class TfPreference
     public function setSiteTimezone(string $value)
     {
         $this->siteTimezone = $this->validator->trimString($value);
+    }
+    
+    /**
+     * Returns the site timezone, XSS escaped for display.
+     * 
+     * @return string Site timezone.
+     */
+    public function getSiteTimezone()
+    {
+        return $this->validator->escapeForXss($this->siteTimezone);
     }
     
     /**
@@ -528,6 +710,17 @@ class TfPreference
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Returns the number of objects to display in a single page view on the public side of the
+     * site, XSS escaped for display.
+     * 
+     * @return User pagination.
+     */
+    public function getUserPagination()
+    {
+        return (int) $this->userPagination;
     }
     
 }

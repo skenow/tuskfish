@@ -87,7 +87,7 @@
         <!-- Publisher -->
         <div class="col-md-6 mb-3 text-left" id="publisherContainer">
             <label for="publisher"><strong><?php echo TFISH_PUBLISHER; ?></strong></label>
-            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfPreference; echo $tfValidator->escapeForXss($tfPreference->siteAuthor); ?>">
+            <input type="text" class="form-control" name="publisher" id="publisher" value="<?php global $tfPreference; echo $tfPreference->getSiteAuthor(); ?>">
         </div>
 
         <!-- Parent -->
