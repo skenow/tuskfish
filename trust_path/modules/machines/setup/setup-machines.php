@@ -23,6 +23,7 @@ $machineColumns = array(
     "online" => "INTEGER", 
     "submissionTime" => "INTEGER", 
     "lastUpdated" => "INTEGER",
+    "expiresOn" => "INTEGER",
     "counter" => "INTEGER", 
     "key" => "TEXT", 
     "metaTitle" => "TEXT", 
