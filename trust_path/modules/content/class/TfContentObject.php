@@ -39,7 +39,6 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @uses        trait TfMimetypes Access a list of known / acceptable file mimetypes.
  * @uses        trait TfRights A list of known / acceptable IP licenses.
  * @properties  TfValidator $validator Instance of the Tuskfish data validator class.
- * @properties  int $id Auto-increment, set by database.
  * @properties  string $type Content object type eg. TfArticle etc. [ALPHA]
  * @properties  string $title The name of this content.
  * @properties  string $teaser A short (one paragraph) summary or abstract for this content. [HTML]
@@ -56,20 +55,8 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @properties  int $rights Intellectual property rights scheme or license under which the work is distributed.
  * @properties  string $publisher The entity responsible for distributing this work.
  * @properties  array $tags Tag IDs associated with this object; not persistent (stored as taglinks in taglinks table).
- * @properties  int $online Toggle object on or offline.
- * @properties  int $submissionTime Timestamp representing submission time.
- * @properties  int $lastUpdated Timestamp representing last time this object was updated.
- * @properties  int $expiresOn Timestamp indicating the expiry date for this object.
- * @properties  int $counter Number of times this content was viewed or downloaded.
- * @properties  string $metaTitle Set a custom page title for this content.
- * @properties  string $metaDescription Set a custom page meta description for this content.
- * @properties  string $seo SEO-friendly string; it will be appended to the URL for this content.
- * @properties  string $handler Handler for this object (not persistent).
- * @properties  string $template The template that should be used to display this object (not persistent).
- * @properties  string $module The module that handles this content type (not persistent).
- * @properties  string $icon The vector icon that represents this object type (not persistent).
  */
-class TfContentObject
+class TfContentObject extends TfDataObject
 {
     
     use TfLanguage;
@@ -78,7 +65,6 @@ class TfContentObject
     use TfRights;
 
     protected $validator;
-    protected $id = '';
     protected $type = '';
     protected $title = '';
     protected $teaser = '';
@@ -95,18 +81,6 @@ class TfContentObject
     protected $rights = '';
     protected $publisher = '';
     protected $tags = '';
-    protected $online = '';
-    protected $submissionTime = '';
-    protected $lastUpdated = '';
-    protected $expiresOn = '';
-    protected $counter = '';
-    protected $metaTitle = '';
-    protected $metaDescription = '';
-    protected $seo = '';
-    protected $handler = '';
-    protected $template = '';
-    protected $module = '';
-    protected $icon = '';
     
     /**
      * Constructor.
@@ -461,40 +435,6 @@ class TfContentObject
         
         return $properties;
     }
-
-    /**
-     * Generates a URL to access this object in single view mode.
-     * 
-     * URL can point relative to either the home page (index.php, or other custom content stream
-     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
-     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
-     * for a landing page (this requires you to append the name of the new page to the 
-     * TFISH_PERMALINK_URL constant).
-     * 
-     * You can set up an articles.php page to display only TfArticle objects. The 
-     * subclass-specific pages are found in the trust_path/extras folder. Just drop
-     * them into your site root to use them.
-     * 
-     * @param string $customPage Use an arbitrary target page or the home page (index.php).
-     * @return string URL to view this object.
-     */
-    public function getUrl(string $customPage = '')
-    {
-        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
-        
-        if ($customPage) {
-            $url .= $this->validator->isAlnumUnderscore($customPage)
-                    ? $this->validator->trimString($customPage) . '.php' : '';
-        }
-        
-        $url .= '?id=' . (int) $this->id;
-        
-        if ($this->seo) {
-            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
-        }
-
-        return $url;
-    }
     
     /**
      * Determine if the media file (mime) type is valid for this content type.
@@ -635,29 +575,6 @@ class TfContentObject
     }
     
     /**
-     * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
-     * 
-     * This is a helper method for loadPropertiesFromArray(). Only useful on HTML fields. Basically
-     * it converts the base URL of your site to the TFISH_LINK constant for storage or vice versa
-     * for display. If you change the base URL of your site (eg. domain) all your internal links
-     * will automatically update when they are displayed.
-     * 
-     * @param string $html A HTML field that makes use of the TFISH_LINK constant.
-     * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
-     * @return string HTML field with converted URLs.
-     */
-    private function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
-    {
-        if ($liveUrls === true) {
-            $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
-        } else {
-                $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
-        }
-        
-        return $html;
-    }
-    
-    /**
      * Sets the image property from untrusted form data.
      * 
      * This is a helper method for loadPropertiesFromArray(). 
@@ -726,14 +643,6 @@ class TfContentObject
         $val = round($val, 2);
 
         return $val . ' ' . $unit;
-    }
-    
-    /**
-     * Reset the last updated time for this content object (timestamp).
-     */
-    public function updateLastUpdated()
-    {
-        $this->lastUpdated = time();
     }
     
     /**
@@ -870,32 +779,6 @@ class TfContentObject
     }
     
     /**
-     * Set the expiry time for this content object (timestamp).
-     * 
-     * @param int $expiresOn Timestamp.
-     */
-    public function setExpiresOn(int $expiresOn)
-    {
-        if ($this->validator->isInt($expiresOn, 0)) {
-            $this->expiresOn = $expiresOn;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return the formatted expiry date for this content, XSS escaped for display.
-     * 
-     * @return string Date of expiry.
-     */
-    public function getExpiresOn()
-    {
-        $date = date('j F Y', $this->$lastUpdated);
-        
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
      * Set the file size for the media attachment to this object.
      * 
      * @param int $fileSize Filesize in bytes.
@@ -949,74 +832,6 @@ class TfContentObject
         $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
         
         return $this->validator->escapeForXss($mimetypeWhitelist[$this->format]);
-    }
-    
-    /**
-     * Set the handler class for this content type.
-     * 
-     * For most content subclasses this will be the general TfishContentHandler. However, some
-     * subclasses use their own handler subclass (eg. TfishTagHandler and TfishCollection handler).
-     * 
-     * @param string $handler Handler name (alphabetical characters only).f
-     */
-    public function setHandler(string $handler)
-    {
-        $cleanHandler = (string) $this->validator->trimString($handler);
-
-        if ($this->validator->isAlpha($cleanHandler)) {
-            $this->handler = $cleanHandler;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the icon for this content object.
-     * 
-     * This is a HTML field.
-     * 
-     * @param string $icon Icon expressed as a FontAwesome tag, eg. '<i class="fas fa-file-alt"></i>'
-     */
-    public function setIcon(string $icon)
-    {
-        $icon = (string) $this->validator->trimString($icon);
-        $this->icon = $this->validator->filterHtml($icon);
-    }
-    
-    /**
-     * Returns the icon associated with this content object as a HTML FontAwesome tag.
-     * 
-     * XSS safe as icon is prevalidated by HTMLPurifier.
-     * 
-     * @return string Icon as HTML FontAwesome tag.
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-    
-    /**
-     * Set the ID for this object.
-     * 
-     * @param int $id ID of this object.
-     */
-    public function setId(int $id)
-    {
-        if ($this->validator->isInt($id, 0)) {
-            $this->id = $id;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the ID of the content object, XSS safe.
-     * 
-     * @return int ID of content object.
-     */
-    public function getId()
-    {
-        return (int) $this->id;
     }
     
     /**
@@ -1086,32 +901,6 @@ class TfContentObject
     }
     
     /**
-     * Set the last updated time for this content object (timestamp).
-     * 
-     * @param int $lastUpdated Timestamp.
-     */
-    public function setLastUpdated(int $lastUpdated)
-    {
-        if ($this->validator->isInt($lastUpdated, 0)) {
-            $this->lastUpdated = $lastUpdated;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date/time this content was last updated, XSS escaped for display.
-     * 
-     * @return string Date/time last updated.
-     */
-    public function getlastUpdated()
-    {
-        $date = date('j F Y', $this->$lastUpdated);
-        
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
      * Set the media attachment for this content object.
      * 
      * @param string $media Filename of the media attachment.
@@ -1148,91 +937,6 @@ class TfContentObject
     public function getMedia()
     {
         return $this->validator->escapeForXss($this->media);
-    }
-    
-    /**
-     * Set the meta description for this content object.
-     * 
-     * @param string $metaDescription Meta description of this object.
-     */
-    public function setMetaDescription(string $metaDescription)
-    {
-        $cleanMetaDescription = (string) $this->validator->trimString($metaDescription);
-        $this->metaDescription = $cleanMetaDescription;
-    }
-    
-    /**
-     * Return the meta description XSS escaped for display.
-     * 
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->validator->escapeForXss($this->metaDescription);
-    }
-    
-    /**
-     * Set the meta title for this object.
-     * 
-     * @param string $metaTitle Meta title for this object.
-     */
-    public function setMetaTitle(string $metaTitle)
-    {
-        $cleanMetaTitle = (string) $this->validator->trimString($metaTitle);
-        $this->metaTitle = $cleanMetaTitle;
-    }
-    
-    /**
-     * Returns the meta title of this object XSS escaped for display.
-     * 
-     * @return string Meta title of this object.
-     */
-    public function getMetaTitle()
-    {
-        return $this->validator->escapeForXss($this->metaTitle);
-    }
-    
-    /**
-     * Set the module for this content object.
-     * 
-     * Usually handled by the object's constructor.
-     * 
-     * @param string $module Module name.
-     */
-    public function setModule(string $module)
-    {
-        $cleanModule = (string) $this->validator->trimString($module);
-        $this->module = $cleanModule;
-    }
-    
-    /**
-     * Set this content object as online (1) or offline (0).
-     * 
-     * Offline objects are not displayed on the front end or returned in search results.
-     * 
-     * @param int $online Online (1) or offline (0).
-     */
-    public function setOnline(int $online)
-    {
-        if ($this->validator->isInt($online, 0, 1)) {
-            $this->online = $online;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the online status of the content object as boolean value, XSS safe.
-     * 
-     * @return boolean True if online, false if offline.
-     */
-    public function getOnline()
-    {
-        if ($this->online === 1) {
-            return true;
-        }
-        
-        return false;
     }
     
     /**
@@ -1315,63 +1019,6 @@ class TfContentObject
     }
     
     /**
-     * Set the SEO-friendly search string for this content object.
-     * 
-     * The SEO string will be appended to the URL for this object.
-     * 
-     * @param string $seo Dash-separated-title-of-this-object.
-     */
-    public function setSeo(string $seo)
-    {
-        $cleanSeo = (string) $this->validator->trimString($seo);
-
-        // Replace spaces with dashes.
-        if ($this->validator->isUtf8($cleanSeo)) {
-            $cleanSeo = str_replace(' ', '-', $cleanSeo);
-        } else {
-            trigger_error(TFISH_ERROR_NOT_UTF8, E_USER_ERROR);
-        }
-        
-        $this->seo = $cleanSeo;
-    }
-    
-    /**
-     * Return the SEO string for this content XSS escaped for display.
-     * 
-     * @return string SEO-friendly URL string.
-     */
-    public function getSeo()
-    {
-        return $this->validator->escapeForXss($this->seo);
-    }
-    
-    /**
-     * Set the submission time for this content object (timestamp).
-     * 
-     * @param int $submissionTime Timestamp.
-     */
-    public function setSubmissionTime(int $submissionTime)
-    {
-        if ($this->validator->isInt($submissionTime, 1)) {
-            $this->submissionTime = $submissionTime;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date that this content was submitted.
-     * 
-     * @return string Date/time of submission.
-     */
-    public function getSubmissionTime()
-    {
-        $date = date('j F Y', $this->$submissionTime);
-        
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
      * Set the tags associated with this content object.
      * 
      * @param array $tags IDs of associated tags.
@@ -1430,24 +1077,6 @@ class TfContentObject
         // Output for display in the TinyMCE editor (editing only).
         if ($escapeHtml === true) {    
             return htmlspecialchars($this->teaser, ENT_NOQUOTES, 'UTF-8', true);
-        }
-    }
-    
-    /**
-     * Set the template file for displaying this content object.
-     * 
-     * The equivalent HTML template file must be present in the active theme.
-     * 
-     * @param string $template Template filename without extension, eg. 'article'.
-     */
-    public function setTemplate(string $template)
-    {
-        $cleanTemplate = (string) $this->validator->trimString($template);
-
-        if ($this->validator->isAlnumUnderscore($cleanTemplate)) {
-            $this->template = $cleanTemplate;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
         }
     }
     

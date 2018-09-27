@@ -27,7 +27,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @package     experts
  */
 
-class TfExpert
+class TfExpert extends TfDataObject
 {
     
     use TfExpertTrait;
@@ -36,7 +36,6 @@ class TfExpert
     use TfMimetypes;
     
     protected $validator = 0;
-    protected $id = '';
     protected $type = '';
     protected $salutation = '';
     protected $firstName = '';
@@ -56,19 +55,7 @@ class TfExpert
     protected $mobile = '';
     protected $fax = '';
     protected $profileLink = '';
-    protected $submissionTime = '';
-    protected $lastUpdated = '';
-    protected $expiresOn = '';
     protected $image = '';
-    protected $online = 1;
-    protected $counter = 0;
-    protected $metaTitle = '';
-    protected $metaDescription = '';
-    protected $seo = '';
-    protected $handler = '';
-    protected $template = 'expert';
-    protected $module = 'experts';
-    protected $icon = '<i class="fas fa-user"></i>';
     
     /**
      * Constructor.
@@ -84,7 +71,12 @@ class TfExpert
         }
         
         $this->setType(get_class($this));
+        $this->counter = 0;
+        $this->online = 1;
         $this->setHandler($this->type . 'Handler');
+        $this->template = 'expert';
+        $this->module = 'experts';
+        $this->icon = '<i class="fas fa-user"></i>';
     }
     
     /**
@@ -364,36 +356,6 @@ class TfExpert
     }
     
     /**
-     * Generates a URL to access this object in single view mode.
-     * 
-     * URL can point relative to either the home page (index.php, or other custom content stream
-     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
-     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
-     * for a landing page (this requires you to append the name of the new page to the 
-     * TFISH_PERMALINK_URL constant).
-     * 
-     * @param string $customPage Use an arbitrary target page or the home page (index.php).
-     * @return string URL to view this object.
-     */
-    public function getUrl(string $customPage = '')
-    {
-        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
-        
-        if ($customPage) {
-            $url .= $this->validator->isAlnumUnderscore($customPage)
-                    ? $this->validator->trimString($customPage) . '.php' : '';
-        }
-        
-        $url .= '?id=' . (int) $this->id;
-        
-        if ($this->seo) {
-            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
-        }
-
-        return $url;
-    }
-    
-    /**
      * Populates the properties of the object from external (untrusted) data source.
      * 
      * Note that the supplied data is internally validated by the relevant setters.
@@ -518,61 +480,6 @@ class TfExpert
                 $this->setImage($cleanImageFilename);
             }
         }
-    }
-    
-    /**
-     * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
-     * 
-     * This is a helper method for loadPropertiesFromArray(). Only useful on HTML fields. Basically
-     * it converts the base URL of your site to the TFISH_LINK constant for storage or vice versa
-     * for display. If you change the base URL of your site (eg. domain) all your internal links
-     * will automatically update when they are displayed.
-     * 
-     * @param string $html A HTML field that makes use of the TFISH_LINK constant.
-     * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
-     * @return string HTML field with converted URLs.
-     */
-    private function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
-    {
-        if ($liveUrls === true) {
-            $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
-        } else {
-            $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
-        }
-        
-        return $html;
-    }
-    
-    /**
-     * Reset the last updated time for this content object (timestamp).
-     */
-    public function updateLastUpdated()
-    {
-        $this->lastUpdated = time();
-    }
-    
-    /**
-     * Set the ID of this expert.
-     * 
-     * @param int $id ID of this expert.
-     */
-    public function setId(int $id)
-    {
-        if ($this->validator->isInt($id, 0)) {
-            $this->id = $id;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return the ID of the expert escaped for display.
-     * 
-     * @return int ID of expert.
-     */
-    public function getId()
-    {
-        return (int) $this->id;
     }
     
     /**
@@ -1087,234 +994,9 @@ class TfExpert
         return $this->validator->escapeForXss($this->profileLink);
     }
     
-    /**
-     * Set the submission time for this expert.
-     * 
-     * @param int $submissionTime Timestamp.
-     */
-    public function setSubmissionTime(int $submissionTime)
-    {
-        if ($this->validator->isInt($submissionTime, 0)) {
-            $this->submissionTime = $submissionTime;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date that this expert was submitted.
-     * 
-     * @return string Date/time of submission.
-     */
-    public function getSubmissionTime()
-    {
-        $date = date('j F Y', $this->$submissionTime);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
-     * Set the time this expert was last updated.
-     * 
-     * @param int $lastUpdated Timestamp.
-     */
-    public function setLastUpdated(int $lastUpdated)
-    {
-        if ($this->validator->isInt($lastUpdated, 0)) {
-            $this->lastUpdated = $lastUpdated;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date/time this expert was last updated, escaped for display.
-     * 
-     * @return string Date/time last updated.
-     */
-    public function getLastUpdated()
-    {
-        $date = date('j F Y', $this->$lastUpdated);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
-     * Set the time this expert profile expires.
-     * 
-     * @param int $expiresOn Timestamp.
-     */
-    public function setExpiresOn(int $expiresOn)
-    {
-        if ($this->validator->isInt($expiresOn, 0)) {
-            $this->expiresOn = $expiresOn;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date/time this expert expires on.
-     * 
-     * The expert will not be displayed on the public side after the expiry date has passed.
-     * 
-     * @return string Date/time of expiry.
-     */
-    public function getExpiresOn()
-    {
-        $date = date('j F Y', $this->$expiresOn);
-        return $this->validator->escapeForXss($date);
-    }
-    
     // Image??
     
-    /**
-     * Set this profile as online or offline.
-     * 
-     * Offline profiles are not publicly accessible and are not returned in search results.
-     * 
-     * @param int $online Online (1) or offline (0).
-     */
-    public function setOnline(int $online)
-    {
-        if ($this->validator->isInt($online, 0, 1)) {
-            $this->online = $online;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the XSS-safe online status of this record.
-     * 
-     * @return boolean True if online, false otherwise.
-     */
-    public function getOnline()
-    {
-        if ($this->online === 1) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Set the view counter for this profile.
-     * 
-     * @param int $counter Number of times this profile has been viewed.
-     */
-    public function setCounter(int $counter)
-    {
-        if ($this->validator->isInt($counter, 0)) {
-            $this->counter = $counter;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the number of times this expert was viewed, XSS safe.
-     * 
-     * @return int View counter.
-     */
-    public function getCounter()
-    {
-        return (int) $this->counter;
-    }
-    
-    /**
-     * Set the meta title for this expert.
-     * 
-     * @param string $metaTitle Meta title.
-     */
-    public function setMetaTitle(string $metaTitle)
-    {
-        $this->metaTitle = $this->validator->trimString($metaTitle);
-    }
-    
-    /**
-     * Returns the meta title for this expert XSS escaped for display.
-     * 
-     * @return string Meta title.
-     */
-    public function getMetaTitle()
-    {
-        return $this->validator->escapeForXss($this->metaTitle);
-    }
-    
-    /**
-     * Set the meta description for this expert.
-     * 
-     * @param string $metaDescription Meta description.
-     */
-    public function setMetaDescription(string $metaDescription)
-    {
-        $this->metaDescription = $this->validator->trimString($metaDescription);
-    }
-    
-    /**
-     * Return the meta description of this expert XSS escaped for display.
-     * 
-     * @return string Meta description.
-     */
-    public function getMetaDescription()
-    {
-        return $this->validator->escapeForXss($this->metaDescription);
-    }
-    
-    /**
-     * Set the SEO-friendly search string for this expert.
-     * 
-     * Suggest to use the full salutation / name of the expert, eg. dr-joe-bloggs
-     * 
-     * @param string $seo Hyphen-delimited search string.
-     */
-    public function setSeo(string $seo)
-    {
-        $this->seo = $this->validator->trimString($seo);
-    }
-    
-    /**
-     * Return the SEO string for this expert XSS for display.
-     * 
-     * @return string SEO-friendly URL string.
-     */
-    public function getSeo()
-    {
-        return $this->validator->escapeForXss($this->seo);
-    }
-    
     // No need for getHandler, getTemplate or getModule as not publicly displayed.
-    
-    /**
-     * Set the handler for this expert object or subclass.
-     *  
-     * @param string $handler Name of the handler for this Expert or subclass.
-     */
-    public function setHandler(string $handler)
-    {
-        $cleanHandler = $this->validator->trimString($handler);
-        $this->handler = $cleanHandler;
-    }
-    
-    /**
-     * Set (override) the icon for this expert.
-     * 
-     * @param string $icon HTML for a FontAwesome icon.
-     */
-    public function setIcon(string $icon)
-    {
-        $icon = $this->validator->trimString($icon);
-        $this->icon = $this->validator->filterHtml($icon);
-    }
-
-    /**
-     * Returns the Font Awesome icon for this expert, XSS safe (prevalidated with HTMLPurifier).
-     * 
-     * @return string FontAwesome icon for this expert (HTML).
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
     
     /**
      * Returns the full name of an expert XSS escaped for display.

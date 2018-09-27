@@ -26,30 +26,18 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @since       1.0
  * @package     machines
  */
-class TfSensor
+class TfSensor extends TfDataObject
 {
     use TfOneTimePad;
     use TfMagicMethods;
     
     protected $validator;
-    protected $id = '';
     protected $type = '';
     protected $protocol = '';
     protected $title = '';
     protected $teaser = '';
     protected $description = '';
     protected $parent = '';
-    protected $online = '';
-    protected $submissionTime = '';
-    protected $lastUpdated = 0;
-    protected $counter = 0;
-    protected $metaTitle = '';
-    protected $metaDescription = '';
-    protected $seo = '';
-    protected $handler = 'TfSensorHandler';
-    protected $template = 'sensor';
-    protected $module = 'machines';
-    protected $icon = '<i class="fas fa-thermometer-empty"></i>';
     
     public function __construct(TfValidator $validator)
     {
@@ -58,6 +46,13 @@ class TfSensor
         } else {
             trigger_error(TFISH_ERROR_NOT_VALIDATOR, E_USER_ERROR);
         }
+        
+        $this->lastUpdated = 0;
+        $this->counter = 0;
+        $this->handler = 'TfSensorHandler';
+        $this->template = 'sensor';
+        $this->module = 'machines';
+        $this->icon = '<i class="fas fa-thermometer-empty"></i>';
     }
     
     /**
@@ -110,36 +105,6 @@ class TfSensor
     }
     
     /**
-     * Generates a URL to access this object in single view mode.
-     * 
-     * URL can point relative to either the home page (index.php, or other custom content stream
-     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
-     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
-     * for a landing page (this requires you to append the name of the new page to the 
-     * TFISH_PERMALINK_URL constant).
-     * 
-     * @param string $customPage Use an arbitrary target page or the home page (index.php).
-     * @return string URL to view this object.
-     */
-    public function getUrl(string $customPage = '')
-    {
-        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
-        
-        if ($customPage) {
-            $url .= $this->validator->isAlnumUnderscore($customPage)
-                    ? $this->validator->trimString($customPage) . '.php' : '';
-        }
-        
-        $url .= '?id=' . (int) $this->id;
-        
-        if ($this->seo) {
-            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
-        }
-
-        return $url;
-    }
-    
-    /**
      * Populates the properties of the object from external (untrusted) data source.
      * 
      * Note that the supplied data is internally validated by __set().
@@ -161,29 +126,6 @@ class TfSensor
             $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $liveUrls);            
             $this->setDescription($description);
         }
-    }
-    
-    /**
-     * Convert URLs back to TFISH_LINK and back for insertion or update, to aid portability.
-     * 
-     * This is a helper method for loadPropertiesFromArray(). Only useful on HTML fields. Basically
-     * it converts the base URL of your site to the TFISH_LINK constant for storage or vice versa
-     * for display. If you change the base URL of your site (eg. domain) all your internal links
-     * will automatically update when they are displayed.
-     * 
-     * @param string $html A HTML field that makes use of the TFISH_LINK constant.
-     * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
-     * @return string HTML field with converted URLs.
-     */
-    private function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
-    {
-        if ($liveUrls === true) {
-            $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
-        } else {
-                $html = str_replace('TFISH_LINK', TFISH_LINK, $html);
-        }
-        
-        return $html;
     }
     
     /**
@@ -224,38 +166,6 @@ class TfSensor
             $this->setMetaDescription((string) $dirtyInput['metaDescription']);
         if (isset($this->seo) && isset($dirtyInput['seo']))
             $this->setSeo((string) $dirtyInput['seo']);
-    }
-    
-    /**
-     * Reset the last updated time for this sensor object (timestamp).
-     */
-    public function updateLastUpdated()
-    {
-        $this->lastUpdated = time();
-    }
-    
-    /**
-     * Set the ID for this object.
-     * 
-     * @param int $id ID of this object.
-     */
-    public function setId(int $id)
-    {
-        if ($this->validator->isInt($id, 0)) {
-            $this->id = $id;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the ID of this sensor, XSS safe.
-     * 
-     * @return int ID of this sensor.
-     */
-    public function getId()
-    {
-        return (int) $this->id;
     }
     
     /**
@@ -425,247 +335,6 @@ class TfSensor
     public function getParent()
     {
         return (int) $this->parent;
-    }
-    
-    /**
-     * Set this sensor as online (1) or offline (0).
-     * 
-     * Offline objects are not displayed on the front end or returned in search results.
-     * 
-     * @param int $online Online (1) or offline (0).
-     */
-    public function setOnline(int $online)
-    {
-        if ($this->validator->isInt($online, 0, 1)) {
-            $this->online = $online;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the online status of a sensor as a boolean value, XSS safe.
-     * 
-     * @return boolean True if online, false if offline.
-     */
-    public function getOnline()
-    {
-        if ($this->online === 1) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Set the submission time for this sensor (timestamp).
-     * 
-     * @param int $submissionTime Timestamp.
-     */
-    public function setSubmissionTime(int $submissionTime)
-    {
-        if ($this->validator->isInt($submissionTime, 1)) {
-            $this->submissionTime = $submissionTime;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date that this sensor was submitted.
-     * 
-     * @return string Date/time of submission.
-     */
-    public function getSubmissionTime()
-    {
-        $date = date('j F Y', $this->$submissionTime);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
-     * Set the last updated time for this sensor (timestamp).
-     * 
-     * @param int $lastUpdated Timestamp.
-     */
-    public function setLastUpdated(int $lastUpdated)
-    {
-        if ($this->validator->isInt($lastUpdated, 0)) {
-            $this->lastUpdated = $lastUpdated;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Return formatted date/time this sensor was last updated, escaped for display.
-     * 
-     * @return string Date/time last updated.
-     */
-    public function getlastUpdated()
-    {
-        $date = date('j F Y', $this->$lastUpdated);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
-     * Set the view counter for this sensor.
-     * 
-     * @param int $counter Counter value.
-     */
-    public function setCounter(int $counter)
-    {
-        if ($this->validator->isInt($counter, 0)) {
-            $this->counter = $counter;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Returns the number of times this sensor was viewed, XSS safe.
-     * 
-     * @return int View counter.
-     */
-    public function getCounter()
-    {
-        return (int) $this->counter;
-    }
-    
-    /**
-     * Set the meta title for this object.
-     * 
-     * @param string $metaTitle Meta title for this object.
-     */
-    public function setMetaTitle(string $metaTitle)
-    {
-        $this->metaTitle = $this->validator->trimString($metaTitle);
-    }
-    
-    /**
-     * Returns the meta title for this sensor XSS escaped for display.
-     * 
-     * @return string Meta title.
-     */
-    public function getMetaTitle()
-    {
-        return $this->validator->escapeForXss($this->metaTitle);
-    }
-    
-    /**
-     * Set the meta description for this sensor.
-     * 
-     * @param string $metaDescription Meta description of this object.
-     */
-    public function setMetaDescription(string $metaDescription)
-    {
-        $this->metaDescription = $this->validator->trimString($metaDescription);
-    }
-    
-    /**
-     * Return the meta description of this sensor XSS escaped for display.
-     * 
-     * @return string Meta description.
-     */
-    public function getMetaDescription()
-    {
-        return $this->validator->escapeForXss($this->metaDescription);
-    }
-    
-    /**
-     * Set the SEO-friendly search string for this sensor.
-     * 
-     * The SEO string will be appended to the URL for this object.
-     * 
-     * @param string $seo Dash-separated-title-of-this-object.
-     */
-    public function setSeo(string $seo)
-    {
-        $cleanSeo = $this->validator->trimString($seo);
-        $cleanSeo = str_replace(' ', '-', $cleanSeo);        
-        $this->seo = $cleanSeo;
-    }
-    
-    /**
-     * Return the SEO string for this sensor XSS for display.
-     * 
-     * @return string SEO-friendly URL string.
-     */
-    public function getSeo()
-    {
-        return $this->validator->escapeForXss($this->seo);
-    }
-    
-    /**
-     * Set the handler class for this sensor type.
-     * 
-     * @param string $handler Handler name (alphabetical characters only).f
-     */
-    public function setHandler(string $handler)
-    {
-        $cleanHandler = $this->validator->trimString($handler);
-
-        if ($this->validator->isAlpha($cleanHandler)) {
-            $this->handler = $cleanHandler;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the template file for displaying this sensor.
-     * 
-     * The equivalent HTML template file must be present in the active theme.
-     * 
-     * @param string $template Template filename without extension, eg. 'camera'.
-     */
-    public function setTemplate(string $template)
-    {
-        $cleanTemplate = $this->validator->trimString($template);
-
-        if ($this->validator->isAlnumUnderscore($cleanTemplate)) {
-            $this->template = $cleanTemplate;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_ALNUMUNDER, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the module for this sensor.
-     * 
-     * Usually handled by the sensor's constructor.
-     * 
-     * @param string $module Module name (alphabetical characters only).
-     */
-    public function setModule(string $module)
-    {
-        $cleanModule = $this->validator->trimString($module);
-        
-        if ($this->validator->isAlpha($module)) {
-            $this->module = $cleanModule;
-        }
-    }
-    
-    /**
-     * Set the icon for this sensor.
-     * 
-     * This is a HTML field.
-     * 
-     * @param string $icon Icon expressed as a FontAwesome tag, eg. '<i class="fas fa-file-alt"></i>'
-     */
-    public function setIcon(string $icon) // HTML
-    {
-        $icon = $this->validator->trimString($icon);
-        $this->icon = $this->validator->filterHtml($icon);
-    }
-    
-    /**
-     * Returns the Font Awesome icon for this sensor, XSS safe (prevalidated with HTMLPurifier).
-     * 
-     * @return string FontAwesome icon for this expert (HTML).
-     */
-    public function getIcon()
-    {
-        return $this->icon;
     }
         
 }
