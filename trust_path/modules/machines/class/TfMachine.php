@@ -155,6 +155,8 @@ class TfMachine extends TfDataObject
             $this->setSubmissionTime((int) $dirtyInput['submissionTime']);
         if (isset($this->lastUpdated) && isset($dirtyInput['lastUpdated']))
             $this->setLastUpdated((int) $dirtyInput['lastUpdated']);
+        if (isset($this->expiresOn) && isset($dirtyInput['expiresOn']))
+            $this->setExpiresOn((int) $dirtyInput['expiresOn']);
         if (isset($this->counter) && isset($dirtyInput['counter']))
             $this->setCounter((int) $dirtyInput['counter']);
         if (isset($this->online) && isset($dirtyInput['online']))
