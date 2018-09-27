@@ -38,6 +38,7 @@ class TfSearchContent
 {
     protected $validator;
     protected $db;
+    protected $contentFactory;
     protected $preference;
     protected $searchTerms;
     protected $escapedSearchTerms;
@@ -53,7 +54,7 @@ class TfSearchContent
      * @param TfPreference $preference An instance of the Tuskfish site preferences class.
      */
     public function __construct(TfValidator $validator,
-            TfDatabase $db, TfPreference $preference)
+            TfDatabase $db, TfContentFactory $contentFactory, TfPreference $preference)
     {
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
@@ -65,6 +66,12 @@ class TfSearchContent
             $this->db = $db; 
         } else {
             trigger_error(TFISH_ERROR_NOT_DATABASE, E_USER_ERROR);
+        }
+        
+        if (is_a($contentFactory, 'TfContentFactory')) {
+            $this->contentFactory = $contentFactory;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_CONTENT_FACTORY, E_USER_ERROR);
         }
         
         if (is_a($preference, 'TfPreference')) {
@@ -185,7 +192,7 @@ class TfSearchContent
         $statement->execute();
 
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $object = new $row['type']($this->validator);
+            $object = $this->contentFactory->getContentObject($row['type']);
             $object->loadPropertiesFromArray($row, true);
             $result[$object->id] = $object;
             unset($object, $row);

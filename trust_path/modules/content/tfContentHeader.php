@@ -31,8 +31,9 @@ function tfContentModuleAutoload(string $classname) {
 }
 spl_autoload_register('tfContentModuleAutoload');
 
-// Make the content handler factory available.
-$contentHandlerFactory = new TfContentHandlerFactory($tfValidator, $tfDatabase,
-            $tfCriteriaFactory, $tfFileHandler);
+// Make the content factory available.
+$tfTaglinkHandler = new TfTaglinkHandler($tfValidator, $tfDatabase, $tfCriteriaFactory);
+$contentFactory = new TfContentFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
+        $tfFileHandler, $tfTaglinkHandler);
 
 

@@ -74,7 +74,7 @@ if ($cleanId) {
     $expertList = $expertHandler->getObjects($criteria);
     
     // Select filters.
-    $tagHandler = $contentHandlerFactory->getHandler('tag');
+    $tagHandler = $contentFactory->getContentHandler('tag');
     $tfTemplate->tagSelect = $tagHandler->getTagSelectBox($cleanTag, 'experts');
 
     // Country select filter.

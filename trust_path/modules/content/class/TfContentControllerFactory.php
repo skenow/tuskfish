@@ -24,7 +24,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
  * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
- * @var         TfContentHandlerFactory $contentHandlerFactory Instance of the Tuskfish content handler factory class.
+ * @var         TfContentFactory $contentFactory Instance of the Tuskfish content factory class.
  * @var         TfTemplate $template Instance of the Tuskfish template object class.
  * @var         TfPreference $preference Instance of the Tuskfish site preferences class.
  * @var         TfCache $cache Instance of the Tuskfish site cache class.
@@ -36,7 +36,7 @@ class TfContentControllerFactory
     protected $validator;
     protected $db;
     protected $criteriaFactory;
-    protected $contentHandlerFactory;
+    protected $contentFactory;
     protected $template;
     protected $preference;
     protected $cache;
@@ -47,13 +47,13 @@ class TfContentControllerFactory
      * @param TfValidator $validator Instance of the validator class.
      * @param TfDatabase $db Instance of the database class.
      * @param TfCriteriaFactory $criteriaFactory Instance of the criteria factory class.
-     * @param TfContentHandlerFactory $contentHandlerFactory Instance of the content handler class.
+     * @param TfContentFactory $contentFactory Instance of the content factory class.
      * @param TfTemplate $template Instance of the template class.
      * @param TfPreference $preference Instance of the site preferences class.
      * @param TfCache $cache Instance of the cache class.
      */
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfContentHandlerFactory $contentHandlerFactory,
+            TfCriteriaFactory $criteriaFactory, TfContentFactory $contentFactory,
             TfTemplate $template, TfPreference $preference, TfCache $cache)
     {
         if (is_a($validator, 'TfValidator')) {
@@ -74,10 +74,10 @@ class TfContentControllerFactory
             trigger_error(TFISH_ERROR_NOT_CRITERIA_FACTORY, E_USER_ERROR);
         }
         
-        if (is_a($contentHandlerFactory, 'TfContentHandlerFactory')) {
-            $this->contentHandlerFactory = $contentHandlerFactory;
+        if (is_a($contentFactory, 'TfContentFactory')) {
+            $this->contentFactory = $contentFactory;
         }  else {
-            trigger_error(TFISH_ERROR_NOT_CONTENT_HANDLER_FACTORY, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CONTENT_FACTORY, E_USER_ERROR);
         }
         
         if (is_a($template, 'TfTemplate')) {
@@ -112,7 +112,7 @@ class TfContentControllerFactory
         
         if ($cleanType === 'admin') {
             return new TfContentController($this->validator, $this->db, $this->criteriaFactory,
-                    $this->contentHandlerFactory, $this->template, $this->preference,
+                    $this->contentFactory, $this->template, $this->preference,
                     $this->cache);
         }
         

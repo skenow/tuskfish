@@ -22,11 +22,11 @@ require_once "mainfile.php";
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfHeader.php";
 
-// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+// 3. Content header sets module-specific paths and makes TfContentHandler available.
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to static pages.
-$contentHandler = $contentHandlerFactory->getHandler('content');
+$contentHandler = $contentFactory->getContentHandler('content');
 $criteria = $tfCriteriaFactory->getCriteria();
 $criteria->add($tfCriteriaFactory->getItem('type', 'TfStatic'));
 

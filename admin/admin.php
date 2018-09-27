@@ -20,7 +20,7 @@ require_once "../mainfile.php";
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_ADMIN_PATH . "tfAdminHeader.php";
 
-// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+// 3. Content header sets module-specific paths and makes TfContentHandler available.
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Validate input parameters.
@@ -67,9 +67,9 @@ if (in_array($op, $optionsWhitelist)) {
         TfSession::validateToken($cleanToken);
     }
     
-    $contentHandler = $contentHandlerFactory->getHandler('content');
+    $contentHandler = $contentFactory->getContentHandler('content');
     $controllerFactory = new TfContentControllerFactory($tfValidator, $tfDatabase, $tfCriteriaFactory,
-            $contentHandlerFactory, $tfTemplate, $tfPreference, $tfCache);
+            $contentFactory, $tfTemplate, $tfPreference, $tfCache);
     
     // Process actions.
     switch ($op) {
@@ -88,7 +88,7 @@ if (in_array($op, $optionsWhitelist)) {
         // Delete a content object. ID must be an integer and > 1.
         case "delete":
             $contentController = $controllerFactory->getController('admin');
-            $contentController->deleteContent($cleadId);
+            $contentController->deleteContent($cleanId);
             break;
             
         case "confirmFlush":
@@ -320,7 +320,7 @@ if (in_array($op, $optionsWhitelist)) {
             $tfTemplate->pagination = $tfPagination->renderPaginationControl();
 
             // Prepare select filters.
-            $tagHandler = $contentHandlerFactory->getHandler('tag');
+            $tagHandler = $contentFactory->getContentHandler('tag');
             $tagSelectBox = $tagHandler->getTagSelectBox($cleanTag, 'content');
             $typeSelectBox = $contentHandler->getTypeSelectBox($cleanType);
             $onlineSelectBox = $contentHandler->getOnlineSelectBox($cleanOnline);

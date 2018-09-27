@@ -26,7 +26,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
  * @var         TfCriteriaFactory $criteriaFactory Instance of the Tuskfish criteria factory class.
- * @var         TfContentHandlerFactory $contentHandlerFactory Instance of the Tuskfish content handler factory class.
+ * @var         TfContentFactory $contentFactory Instance of the Tuskfish content handler factory class.
  * @var         TfTemplate $template Instance of the Tuskfish template object class.
  * @var         TfPreference $preference Instance of the Tuskfish site preferences class.
  * @var         TfCache $cache Instance of the Tuskfish site cache class.
@@ -36,7 +36,7 @@ class TfContentController
     protected $validator;
     protected $db;
     protected $criteriaFactory;
-    protected $contentHandlerFactory;
+    protected $contentFactory;
     protected $template;
     protected $preference;
     protected $cache;
@@ -47,13 +47,13 @@ class TfContentController
      * @param TfValidator $validator Instance of the validator class.
      * @param TfDatabase $db Instance of the database class.
      * @param TfCriteriaFactory $criteriaFactory Instance of the criteria factory class.
-     * @param TfContentHandlerFactory $contentHandlerFactory Instance of the content handler class.
+     * @param TfContentFactory $contentFactory Instance of the content handler class.
      * @param TfTemplate $template Instance of the template class.
      * @param TfPreference $preference Instance of the site preferences class.
      * @param TfCache $cache Instance of the cache class.
      */
     public function __construct(TfValidator $validator, TfDatabase $db,
-            TfCriteriaFactory $criteriaFactory, TfContentHandlerFactory $contentHandlerFactory,
+            TfCriteriaFactory $criteriaFactory, TfContentFactory $contentFactory,
             TfTemplate $template, TfPreference $preference, TfCache $cache)
     {
         if (is_a($validator, 'TfValidator')) {
@@ -74,10 +74,10 @@ class TfContentController
             trigger_error(TFISH_ERROR_NOT_CRITERIA_FACTORY, E_USER_ERROR);
         }
         
-        if (is_a($contentHandlerFactory, 'TfContentHandlerFactory')) {
-            $this->contentHandlerFactory = $contentHandlerFactory;
+        if (is_a($contentFactory, 'TfContentFactory')) {
+            $this->contentFactory = $contentFactory;
         }  else {
-            trigger_error(TFISH_ERROR_NOT_CONTENT_HANDLER_FACTORY, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_CONTENT_FACTORY, E_USER_ERROR);
         }
         
         if (is_a($template, 'TfTemplate')) {
@@ -105,8 +105,8 @@ class TfContentController
     public function addContent()
     {
         $content = new TfContentObject($this->validator);
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
-        $collectionHandler = $this->contentHandlerFactory->getHandler('collection');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
+        $collectionHandler = $this->contentFactory->getContentHandler('collection');
         
         $this->template->pageTitle = TFISH_ADD_CONTENT;
         $this->template->op = 'submit'; // Critical to launch correct form submission action.
@@ -148,7 +148,7 @@ class TfContentController
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
         $this->template->pageTitle = TFISH_CONFIRM_DELETE;
         $this->template->content = $contentHandler->getObject($cleanId);
         $this->template->form = TFISH_CONTENT_MODULE_FORM_PATH . "confirmDelete.html";
@@ -168,7 +168,7 @@ class TfContentController
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
                 
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
         $result = $contentHandler->delete($cleanId);
                 
         if ($result) {
@@ -210,10 +210,10 @@ class TfContentController
         }
         // Build the content object.
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
         $content = $contentHandler->convertRowToObject($row, false);
         // Make a parent tree select box options.
-        $collectionHandler = $this->contentHandlerFactory->getHandler('collection');
+        $collectionHandler = $this->contentFactory->getContentHandler('collection');
         $collections = $collectionHandler->getObjects();
         $parentTree = new TfTree($collections, 'id', 'parent');            
         // Assign to template.
@@ -243,13 +243,13 @@ class TfContentController
             exit;
         }
         $cleanType = $this->validator->trimString($formData['type']);
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
         $typeWhitelist = $contentHandler->getTypes();
         if (!array_key_exists($cleanType, $typeWhitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
-        $content = new $cleanType($this->validator);
+        $content = $this->contentFactory->getContentObject($cleanType);
         $content->loadPropertiesFromArray($_REQUEST);
         $result = $contentHandler->insert($content);
         if ($result) {
@@ -284,7 +284,7 @@ class TfContentController
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
         
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
         $result = $contentHandler->toggleOnlineStatus($cleanId);
         if ($result) {
             $this->cache->flushCache();
@@ -313,13 +313,13 @@ class TfContentController
             exit;
         }
         $type = $this->validator->trimString($formData['type']);
-        $contentHandler = $this->contentHandlerFactory->getHandler('content');
+        $contentHandler = $this->contentFactory->getContentHandler('content');
         $typeWhitelist = $contentHandler->getTypes();
         if (!array_key_exists($type, $typeWhitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
-        $content = new $type($this->validator);
+        $content = $this->contentFactory->getContentObject($type);
         $content->loadPropertiesFromArray($formData);
         // As this object is being sent to storage, need to decode some entities that were encoded
         // for display.

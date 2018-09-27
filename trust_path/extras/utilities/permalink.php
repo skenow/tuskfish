@@ -24,7 +24,7 @@ $tfTemplate->setTheme('default');
 
 // Configure page.
 $tfTemplate->pageTitle = TFISH_TYPE_PERMALINKS;
-$contentHandler = $contentHandlerFactory->getHandler('content');
+$contentHandler = $contentFactory->getContentHandler('content');
 $targetFileName = 'permalink';
 $tfTemplate->targetFileName = $targetFileName;
 

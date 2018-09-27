@@ -20,7 +20,7 @@ require_once "mainfile.php";
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfHeader.php";
 
-// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+// 3. Content header sets module-specific paths and makes TfContentHandler available.
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
@@ -40,7 +40,7 @@ header('Content-Type: application/rss+xml');
 $rss = new TfRss($tfValidator, $tfPreference);
 
 // Get a generic content object handler.
-$contentHandler = $contentHandlerFactory->getHandler('content');
+$contentHandler = $contentFactory->getContentHandler('content');
 
 // Prepare a mimetype lookup buffer.
 $mimetypeList = $contentHandler->getListOfMimetypes();

@@ -20,11 +20,11 @@ require_once "mainfile.php";
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfHeader.php";
 
-// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+// 3. Content header sets module-specific paths and makes TfContentHandler available.
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Lock handler to videos.
-$contentHandler = $contentHandlerFactory->getHandler('content');
+$contentHandler = $contentFactory->getContentHandler('content');
 $criteria = $tfCriteriaFactory->getCriteria();
 $criteria->add($tfCriteriaFactory->getItem('type', 'TfVideo'));
 
@@ -134,7 +134,7 @@ if ($cleanId) {
     
     // Prepare tag select box.
     $tfTemplate->selectAction = $targetFileName . '.php';
-    $tagHandler = $contentHandlerFactory->getHandler('tag');
+    $tagHandler = $contentFactory->getContentHandler('tag');
     $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag, 'TfVideo');
     $tfTemplate->selectFiltersForm = $tfTemplate->render('selectFilters');
 }

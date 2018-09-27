@@ -85,4 +85,4 @@ define("TFISH_ERROR_NO_SUCH_HANDLER", "No such content handler.");
 define("TFISH_ERROR_NOT_CONTENT_OBJECT", "Not a content object.");
 define("TFISH_ERROR_NOT_COLLECTION_OBJECT", "Not a collection object");
 define("TFISH_ERROR_NOT_TAGLINK_HANDLER", "Not a taglink handler object.");
-define("TFISH_ERROR_NOT_CONTENT_HANDLER_FACTORY", "Not a content handler factory.");
+define("TFISH_ERROR_NOT_CONTENT_FACTORY", "Not a content factory object.");

@@ -57,7 +57,7 @@ if ($op === 'view') {
 }
 
 // Get handlers and controllers.
-$contentHandler = $contentHandlerFactory->getHandler('tag');
+$contentHandler = $contentFactory->getContentHandler('tag');
 $expertHandler = $expertFactory->getExpertHandler();
 $expertController = $expertFactory->getExpertController();
 
@@ -181,7 +181,7 @@ switch ($op) {
         $tfTemplate->pagination = $tfPagination->renderPaginationControl();
         
         // Tag select filter.
-        $tagHandler = $contentHandlerFactory->getHandler('tag');
+        $tagHandler = $contentFactory->getContentHandler('tag');
         $tfTemplate->tagSelect = $tagHandler->getTagSelectBox($cleanTag, 'experts');
         
         // Country select filter.

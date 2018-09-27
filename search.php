@@ -21,7 +21,7 @@ require_once "mainfile.php";
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfHeader.php";
 
-// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+// 3. Content header sets module-specific paths and makes TfContentHandler available.
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify theme set, otherwise 'default' will be used.
@@ -49,7 +49,7 @@ $start = (int) ($_REQUEST['start'] ?? 0);
 
 // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
 if ($cleanOp && $cleanTerms && $searchType) {
-    $searchEngine = new TfSearchContent($tfValidator, $tfDatabase, $tfPreference);
+    $searchEngine = new TfSearchContent($tfValidator, $tfDatabase, $contentFactory, $tfPreference);
     $searchEngine->setOperator($searchType);
     $searchEngine->setSearchTerms($cleanTerms);
     $searchEngine->setOffset($start);

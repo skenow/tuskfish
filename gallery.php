@@ -20,7 +20,7 @@ require_once "mainfile.php";
 // 2. Main Tuskfish header. This file bootstraps Tuskfish.
 require_once TFISH_PATH . "tfHeader.php";
 
-// 3. Content header sets module-specific paths and makes TfContentHandlerFactory available.
+// 3. Content header sets module-specific paths and makes TfContentHandler available.
 require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 
 // Specify theme, otherwise 'default' will be used.
@@ -28,7 +28,7 @@ $tfTemplate->setTheme('default');
 
 // Configure page.
 $tfTemplate->pageTitle = TFISH_IMAGE_GALLERY;
-$contentHandler = $contentHandlerFactory->getHandler('content');
+$contentHandler = $contentFactory->getContentHandler('content');
 $indexTemplate = 'gallery';
 $targetFileName = 'gallery';
 $tfTemplate->singleViewTargetFileName = 'index'; // Thumbnail link points to content object.
@@ -78,7 +78,7 @@ if ($cleanStart) $criteria->setOffset($cleanStart);
 $criteria->setLimit($tfPreference->galleryPagination);
 
 // Prepare select filters.
-$tagHandler = $contentHandlerFactory->getHandler('tag');
+$tagHandler = $contentFactory->getContentHandler('tag');
 $tagSelectBox = $tagHandler->getTagSelectBox($cleanTag, 'content', 'TfImage');
 $tfTemplate->selectAction = 'gallery.php';
 $tfTemplate->tagSelect = $tagSelectBox;
