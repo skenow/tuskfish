@@ -227,6 +227,14 @@ class TfSensor
     }
     
     /**
+     * Reset the last updated time for this sensor object (timestamp).
+     */
+    public function updateLastUpdated()
+    {
+        $this->lastUpdated = time();
+    }
+    
+    /**
      * Set the ID for this object.
      * 
      * @param int $id ID of this object.
@@ -658,14 +666,6 @@ class TfSensor
     public function getIcon()
     {
         return $this->icon;
-    }
-    
-    /**
-     * Reset the last updated time for this sensor object (timestamp).
-     */
-    public function updateLastUpdated()
-    {
-        $this->lastUpdated = time();
     }
         
 }

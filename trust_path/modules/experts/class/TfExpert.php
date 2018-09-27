@@ -341,457 +341,6 @@ class TfExpert
     }
     
     /**
-     * Return the ID of the expert escaped for display.
-     * 
-     * @return int ID of expert.
-     */
-    public function getId()
-    {
-        return (int) $this->id;
-    }
-    
-    /**
-     * Return the type of expert (class name) XSS escaped for display.
-     * 
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->validator->escapeForXss($this->type);
-    }
-    
-    /**
-     * Return the salutation of the expert escaped for display.
-     * 
-     * @return string Salutation
-     */
-    public function getSalutation()
-    {
-        $salutationList = $this->getSalutationList();
-        return $this->validator->escapeForXss($salutationList[$this->salutation]);
-    }
-    
-    /**
-     * Return the first name of the expert escaped for display.
-     * 
-     * @return string First name.
-     */
-    public function getFirstName()
-    {
-        return $this->validator->escapeForXss($this->firstName);
-    }
-    
-    /**
-     * Return the middle name(s) of the expert escaped for display.
-     * 
-     * @return string Middle name(s).
-     */
-    public function getMidName()
-    {
-        return $this->validator->escapeForXss($this->midName);
-    }
-    
-    /**
-     * Return the Last name of the expert escaped for display.
-     * 
-     * @return string Last name.
-     */
-    public function getLastName()
-    {
-        return $this->validator->escapeForXss($this->lastName);
-    }
-    
-    /**
-     * Return the gender of the expert escaped for display.
-     * 
-     * @return string Male or female.
-     */
-    public function getGender()
-    {
-        $genderList = $this->getGenderList();
-        return $this->validator->escapeForXss($genderList[$this->gender]);
-    }
-    
-    // getTags() ??
-    
-    /**
-     * Return the experience of this expert (prevalidated HTML).
-     * 
-     * Do not escape HTML for front end display, as HTML properties are input validated with
-     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
-     * because TinyMCE requires entities to be double escaped for storage (this is a specification
-     * requirement) or they will not display property.
-     * 
-     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
-     * @return string Experience of expert as HTML.
-     */
-    public function getExperience($escapeHtml = false)
-    {
-        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
-        if ($escapeHtml === false) {
-            return $this->experience;
-        }
-        
-        // Output for display in the TinyMCE editor (editing only).
-        if ($escapeHtml === true) {    
-            return htmlspecialchars($this->experience, ENT_NOQUOTES, 'UTF-8', true);
-        }
-    }
-    
-    /**
-     * Return the projects of this expert (prevalidated HTML).
-     * 
-     * Do not escape HTML for front end display, as HTML properties are input validated with
-     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
-     * because TinyMCE requires entities to be double escaped for storage (this is a specification
-     * requirement) or they will not display property.
-     * 
-     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
-     * @return string Projects of expert as HTML.
-     */
-    public function getProjects($escapeHtml = false)
-    {
-        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
-        if ($escapeHtml === false) {
-            return $this->projects;
-        }
-        
-        // Output for display in the TinyMCE editor (editing only).
-        if ($escapeHtml === true) {    
-            return htmlspecialchars($this->projects, ENT_NOQUOTES, 'UTF-8', true);
-        }
-    }
-    
-    /**
-     * Return the publications of this expert (prevalidated HTML).
-     * 
-     * Do not escape HTML for front end display, as HTML properties are input validated with
-     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
-     * because TinyMCE requires entities to be double escaped for storage (this is a specification
-     * requirement) or they will not display property.
-     * 
-     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
-     * @return string Publications of expert as HTML.
-     */
-    public function getPublications($escapeHtml = false)
-    {
-        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
-        if ($escapeHtml === false) {
-            return $this->publications;
-        }
-        
-        // Output for display in the TinyMCE editor (editing only).
-        if ($escapeHtml === true) {    
-            return htmlspecialchars($this->publications, ENT_NOQUOTES, 'UTF-8', true);
-        }
-    }
-    
-    /**
-     * Return the address XSS escaped for display.
-     * 
-     * @return string Address with linebreaks converted to HTML break tags.
-     */
-    public function getAddress()
-    {
-        $address = '';
-        
-        if ($this->address) {
-            $address = nl2br($this->address);
-        }
-        
-        return $this->validator->escapeForXss($address);
-    }
-    
-    /**
-     * Return the country of residence escaped for display.
-     * 
-     * @return string Country of residence.
-     */
-    public function getCountry()
-    {
-        $countryList = $this->getCountryList();
-        
-        return $this->validator->escapeForXss($countryList[$this->country]);
-    }
-    
-    /**
-     * Return the email address XSS escaped for display.
-     * 
-     * @return string Email address.
-     */
-    public function getEmail()
-    {
-        return $this->validator->escapeForXss($this->email);
-    }
-
-    /**
-     * Return the mobile phone number escaped for display.
-     * 
-     * @return string Mobile phone number.
-     */
-    public function getMobile()
-    {
-        return $this->validator->escapeForXss($this->mobile);
-    }
-    
-    /**
-     * Return fax number escaped for display.
-     * 
-     * @return string Fax number.
-     */
-    public function getFax()
-    {
-        return $this->validator->escapeForXss($this->fax);
-    }
-    
-    /**
-     * Return url to personal website escaped for display.
-     * 
-     * @return string URL to expert's personal website / profile.
-     */
-    public function getProfileLink()
-    {
-        return $this->validator->escapeForXss($this->profileLink);
-    }
-    
-    /**
-     * Return formatted date that this expert was submitted.
-     * 
-     * @return string Date/time of submission.
-     */
-    public function getSubmissionTime()
-    {
-        $date = date('j F Y', $this->$submissionTime);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
-     * Return formatted date/time this expert was last updated, escaped for display.
-     * 
-     * @return string Date/time last updated.
-     */
-    public function getlastUpdated()
-    {
-        $date = date('j F Y', $this->$lastUpdated);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    /**
-     * Return formatted date/time this expert expires on.
-     * 
-     * The expert will not be displayed on the public side after the expiry date has passed.
-     * 
-     * @return string Date/time of expiry.
-     */
-    public function getExpiresOn()
-    {
-        $date = date('j F Y', $this->$expiresOn);
-        return $this->validator->escapeForXss($date);
-    }
-    
-    // Image??
-    
-    /**
-     * Returns the XSS-safe online status of this record.
-     * 
-     * @return boolean True if online, false otherwise.
-     */
-    public function getOnline()
-    {
-        if ($this->online === 1) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Returns the number of times this expert was viewed, XSS safe.
-     * 
-     * @return int View counter.
-     */
-    public function getCounter()
-    {
-        return (int) $this->counter;
-    }
-    
-    /**
-     * Returns the meta title for this expert XSS escaped for display.
-     * 
-     * @return string Meta title.
-     */
-    public function getMetaTitle()
-    {
-        return $this->validator->escapeForXss($this->metaTitle);
-    }
-    
-    /**
-     * Return the meta description of this expert XSS escaped for display.
-     * 
-     * @return string Meta description.
-     */
-    public function getMetaDescription()
-    {
-        return $this->validator->escapeForXss($this->metaDescription);
-    }
-    
-    /**
-     * Return the SEO string for this expert XSS for display.
-     * 
-     * @return string SEO-friendly URL string.
-     */
-    public function getSeo()
-    {
-        return $this->validator->escapeForXss($this->seo);
-    }
-    
-    // No need for getHandler, getTemplate or getModule as not publicly displayed.
-
-    /**
-     * Returns the Font Awesome icon for this expert, XSS safe (prevalidated with HTMLPurifier).
-     * 
-     * @return string FontAwesome icon for this expert (HTML).
-     */
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-    
-    /**
-     * Returns the full name of an expert XSS escaped for display.
-     * 
-     * @return string Full name of expert.
-     */
-    public function getName()
-    {
-        $salutationList = $this->getSalutationList();
-        
-        $name = '';
-        
-        if ($this->salutation) $name .= $salutationList[$this->salutation] . ' ';
-        if ($this->firstName) $name .= $this->firstName . ' ';
-        if ($this->midName) $name .= $this->midName . ' ';
-        if ($this->lastName) $name .= $this->lastName;
-        
-        return $this->validator->escapeForXss($name);
-    }
-    
-    /**
-     * Returns the job title XSS escaped for display.
-     * 
-     * @return string Job title
-     */
-    public function getJob()
-    {        
-        return $this->validator->escapeForXss($this->job);
-    }
-    
-    /**
-     * returns the business unit XSS escaped for display.
-     * 
-     * @return string
-     */
-    public function getBusinessUnit()
-    {        
-        return $this->validator->escapeForXSS($this->businessUnit);
-    }
-    
-    /**
-     * Returns the organisation XSS escaped for display.
-     * 
-     * @return string
-     */
-    public function getOrganisation()
-    {        
-        return $this->validator->escapeForXss($this->organisation);
-    }
-    
-    /**
-     * Returns full name and job title, comma seperated, XSS escaped for display.
-     * 
-     * @return string Name and job title.
-     */
-    public function getNameAndJob()
-    {
-        $nameAndJob = '';
-        
-        $name = $this->getName();
-        $job = $this->getJob();
-        
-        $nameAndJob .= $name;
-        
-        if ($name && $job) {
-            $nameAndJob .= ', ';
-        }
-        
-        $nameAndJob .= $job;
-        
-        return $this->validator->escapeForXss($nameAndJob);
-    }
-    
-    /**
-     * Returns the affiliation of this expert (business unit and organisation) XSS escaped for display.
-     * 
-     * @return string Affiliation.
-     */
-    public function getAffiliation()
-    {
-        $affiliation = '';
-        
-        $businessUnit = $this->getBusinessUnit();
-        $organisation = $this->getOrganisation();
-        
-        $affiliation = $businessUnit;
-        
-        if ($businessUnit && $organisation) {
-            $affiliation .= ', ';
-        }
-        
-        $affiliation .= $organisation;
-        
-        return $this->validator->escapeForXSS($affiliation);
-    }
-    
-    /**
-     * Return the full contact details for this expert XSS escaped for display.
-     * 
-     * Includes address, phone, fax and email.
-     * 
-     * @return string Contact details.
-     */
-    public function getContactDetails()
-    {
-        $contactDetails = array();
-        
-        if ($this->address) {
-            $contactDetails[] = nl2br($this->address);
-        }
-        
-        $countryList = $this->getCountryList();
-        
-        if ($this->country) {
-            $contactDetails[] = mb_strtoupper($countryList[$this->country]);
-        }
-        
-        if ($this->mobile) {
-            $contactDetails[] = TFISH_EXPERTS_MOBILE . ': ' . $this->mobile; 
-        }
-        
-        if ($this->fax) {
-            $contactDetails[] = TFISH_EXPERTS_FAX . ': ' . $this->fax;
-        }
-        
-        if ($this->email) {
-            $contactDetails[] = TFISH_EXPERTS_EMAIL . ': ' . $this->email;
-        }
-        
-        $contactDetails = implode('<br />', $contactDetails);
-        $cleanContactDetails = $this->validator->escapeForXSS($contactDetails);
-        
-        return $contactDetails;
-    }
-    
-    /**
      * Returns a whitelist of object properties whose values are allowed be set.
      * 
      * This function is used to build a list of $allowedVars for a content object. Child classes
@@ -812,6 +361,36 @@ class TfExpert
                 $properties['module'], $properties['icon']);
         
         return $properties;
+    }
+    
+    /**
+     * Generates a URL to access this object in single view mode.
+     * 
+     * URL can point relative to either the home page (index.php, or other custom content stream
+     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
+     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
+     * for a landing page (this requires you to append the name of the new page to the 
+     * TFISH_PERMALINK_URL constant).
+     * 
+     * @param string $customPage Use an arbitrary target page or the home page (index.php).
+     * @return string URL to view this object.
+     */
+    public function getUrl(string $customPage = '')
+    {
+        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
+        
+        if ($customPage) {
+            $url .= $this->validator->isAlnumUnderscore($customPage)
+                    ? $this->validator->trimString($customPage) . '.php' : '';
+        }
+        
+        $url .= '?id=' . (int) $this->id;
+        
+        if ($this->seo) {
+            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
+        }
+
+        return $url;
     }
     
     /**
@@ -965,33 +544,11 @@ class TfExpert
     }
     
     /**
-     * Generates a URL to access this object in single view mode.
-     * 
-     * URL can point relative to either the home page (index.php, or other custom content stream
-     * page defined by modifying TFISH_PERMALINK_URL in config.php) or to an arbitrary page in the
-     * web root. For example, you could rename index.php to 'blog.php' to free up the index page
-     * for a landing page (this requires you to append the name of the new page to the 
-     * TFISH_PERMALINK_URL constant).
-     * 
-     * @param string $customPage Use an arbitrary target page or the home page (index.php).
-     * @return string URL to view this object.
+     * Reset the last updated time for this content object (timestamp).
      */
-    public function getUrl(string $customPage = '')
+    public function updateLastUpdated()
     {
-        $url = empty($customPage) ? TFISH_PERMALINK_URL : TFISH_URL;
-        
-        if ($customPage) {
-            $url .= $this->validator->isAlnumUnderscore($customPage)
-                    ? $this->validator->trimString($customPage) . '.php' : '';
-        }
-        
-        $url .= '?id=' . (int) $this->id;
-        
-        if ($this->seo) {
-            $url .= '&amp;title=' . $this->validator->encodeEscapeUrl($this->seo);
-        }
-
-        return $url;
+        $this->lastUpdated = time();
     }
     
     /**
@@ -1009,6 +566,16 @@ class TfExpert
     }
     
     /**
+     * Return the ID of the expert escaped for display.
+     * 
+     * @return int ID of expert.
+     */
+    public function getId()
+    {
+        return (int) $this->id;
+    }
+    
+    /**
      * Set the type of expert.
      * 
      * @param string $type Expert type.
@@ -1022,6 +589,16 @@ class TfExpert
         } else {
             trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
         }
+    }
+     
+    /**
+     * Return the type of expert (class name) XSS escaped for display.
+     * 
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->validator->escapeForXss($this->type);
     }
     
     /**
@@ -1039,6 +616,17 @@ class TfExpert
     }
     
     /**
+     * Return the salutation of the expert escaped for display.
+     * 
+     * @return string Salutation
+     */
+    public function getSalutation()
+    {
+        $salutationList = $this->getSalutationList();
+        return $this->validator->escapeForXss($salutationList[$this->salutation]);
+    }
+    
+    /**
      * Set the first name of this expert.
      * 
      * @param string $firstName First (given) name.
@@ -1046,6 +634,16 @@ class TfExpert
     public function setFirstName(string $firstName)
     {
         $this->firstName = $this->validator->trimString($firstName);
+    }
+    
+    /**
+     * Return the first name of the expert escaped for display.
+     * 
+     * @return string First name.
+     */
+    public function getFirstName()
+    {
+        return $this->validator->escapeForXss($this->firstName);
     }
     
     /**
@@ -1059,6 +657,16 @@ class TfExpert
     }
     
     /**
+     * Return the middle name(s) of the expert escaped for display.
+     * 
+     * @return string Middle name(s).
+     */
+    public function getMidName()
+    {
+        return $this->validator->escapeForXss($this->midName);
+    }
+    
+    /**
      * Set the last name of this expert.
      * 
      * @param string $lastName Last name (surname) of this expert.
@@ -1066,6 +674,76 @@ class TfExpert
     public function setLastName(string $lastName)
     {
         $this->lastName = $this->validator->trimString($lastName);
+    }
+    
+    /**
+     * Return the Last name of the expert escaped for display.
+     * 
+     * @return string Last name.
+     */
+    public function getLastName()
+    {
+        return $this->validator->escapeForXss($this->lastName);
+    }
+    
+    /**
+     * Set the job title of this expert.
+     * 
+     * @param string $job Job title.
+     */
+    public function setJob(string $job)
+    {
+        $this->job = $this->validator->trimString($job);
+    }
+    
+    /**
+     * Returns the job title XSS escaped for display.
+     * 
+     * @return string Job title
+     */
+    public function getJob()
+    {        
+        return $this->validator->escapeForXss($this->job);
+    }
+    
+    /**
+     * Set the business unit for this expert.
+     * 
+     * @param string $businessUnit The direct administrative unit this expert works for.
+     */
+    public function setBusinessUnit(string $businessUnit)
+    {
+        $this->businessUnit = $this->validator->trimString($businessUnit);
+    }
+    
+    /**
+     * returns the business unit XSS escaped for display.
+     * 
+     * @return string
+     */
+    public function getBusinessUnit()
+    {        
+        return $this->validator->escapeForXSS($this->businessUnit);
+    }
+    
+    /**
+     * Set the organisation this expert belongs to.
+     * 
+     * @param string $organisation The higher level (main) organisation this expert works form.
+     */
+    public function setOrganisation(string $organisation)
+    {
+        $this->organisation = $this->validator->trimString($organisation);
+    }
+    
+    /**
+     * Returns the organisation XSS escaped for display.
+     * 
+     * @return string
+     */
+    public function getOrganisation()
+    {        
+        return $this->validator->escapeForXss($this->organisation);
     }
     
     /**
@@ -1080,6 +758,243 @@ class TfExpert
         } else {
             trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
         }
+    }
+    
+    /**
+     * Return the gender of the expert escaped for display.
+     * 
+     * @return string Male or female.
+     */
+    public function getGender()
+    {
+        $genderList = $this->getGenderList();
+        return $this->validator->escapeForXss($genderList[$this->gender]);
+    }
+    
+    
+    // getTags() ??
+    
+    /**
+     * Set the experience description for this expert.
+     * 
+     * @param string $experience Summary description of experience (HTML).
+     */
+    public function setExperience(string $experience)
+    {
+        $experience = $this->validator->trimString($experience);
+        $this->experience = $this->validator->filterHtml($experience);
+    }
+    
+    /**
+     * Return the experience of this expert (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Experience of expert as HTML.
+     */
+    public function getExperience($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->experience;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->experience, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Set the projects description for this expert.
+     * 
+     * @param string $projects Description of recent projects (HTML).
+     */
+    public function setProjects(string $projects)
+    {
+        $projects = $this->validator->trimString($projects);
+        $this->projects = $this->validator->filterHtml($projects);
+    }
+    
+    /**
+     * Return the projects of this expert (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Projects of expert as HTML.
+     */
+    public function getProjects($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->projects;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->projects, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Set the publications description for this expert.
+     * 
+     * @param string $publications Description of key publications (HTML).
+     */
+    public function setPublications(string $publications)
+    {
+        $publications = $this->validator->trimString($publications);
+        $this->publications = $this->validator->filterHtml($publications);
+    }
+    
+    /**
+     * Return the publications of this expert (prevalidated HTML).
+     * 
+     * Do not escape HTML for front end display, as HTML properties are input validated with
+     * HTMLPurifier. However, you must escape HTML properties when editing an expert; this is
+     * because TinyMCE requires entities to be double escaped for storage (this is a specification
+     * requirement) or they will not display property.
+     * 
+     * @param bool $escapeHtml True to escape HTML, false to return unescaped HTML.
+     * @return string Publications of expert as HTML.
+     */
+    public function getPublications($escapeHtml = false)
+    {
+        // Output HTML for display: Do not escape as it has been input filtered with HTMLPurifier.        
+        if ($escapeHtml === false) {
+            return $this->publications;
+        }
+        
+        // Output for display in the TinyMCE editor (editing only).
+        if ($escapeHtml === true) {    
+            return htmlspecialchars($this->publications, ENT_NOQUOTES, 'UTF-8', true);
+        }
+    }
+    
+    /**
+     * Set the postal address of this expert (street, city, state, postcode).
+     * 
+     * @param string $address Address of this expert.
+     */
+    public function setAddress(string $address)
+    {
+        $this->address = $this->validator->trimString($address);
+    }
+    
+    /**
+     * Return the address XSS escaped for display.
+     * 
+     * @return string Address with linebreaks converted to HTML break tags.
+     */
+    public function getAddress()
+    {
+        $address = '';
+        
+        if ($this->address) {
+            $address = nl2br($this->address);
+        }
+        
+        return $this->validator->escapeForXss($address);
+    }
+    
+    /**
+     * Set the country of residence for this expert.
+     * 
+     * @param int $country Key of relevant country from list.
+     */
+    public function setCountry (int $country)
+    {
+        if ($this->validator->isInt($country, 0)) {
+            $this->country = $country;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Return the country of residence escaped for display.
+     * 
+     * @return string Country of residence.
+     */
+    public function getCountry()
+    {
+        $countryList = $this->getCountryList();
+        
+        return $this->validator->escapeForXss($countryList[$this->country]);
+    }
+    
+    /**
+     * Set the email address of this expert.
+     * 
+     * @param string $email Valid email address.
+     */
+    public function setEmail(string $email)
+    {
+        $cleanEmail = $this->validator->trimString($email);
+        
+        if ($cleanEmail === '' || $this->validator->isEmail($cleanEmail)) {
+            $this->email = $cleanEmail;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Return the email address XSS escaped for display.
+     * 
+     * @return string Email address.
+     */
+    public function getEmail()
+    {
+        return $this->validator->escapeForXss($this->email);
+    }
+    
+    /**
+     * Set the mobile phone number for this expert.
+     * 
+     * @param string $mobile Mobile phone number.
+     */
+    public function setMobile(string $mobile)
+    {
+        $this->mobile = $this->validator->trimString($mobile);
+    }
+
+    /**
+     * Return the mobile phone number escaped for display.
+     * 
+     * @return string Mobile phone number.
+     */
+    public function getMobile()
+    {
+        return $this->validator->escapeForXss($this->mobile);
+    }
+    
+    /**
+     * Set the fax number of this expert.
+     * 
+     * @param string $fax Fax number.
+     */
+    public function setFax(string $fax)
+    {
+        $this->fax = $this->validator->trimString($fax);
+    }
+    
+    /**
+     * Return fax number escaped for display.
+     * 
+     * @return string Fax number.
+     */
+    public function getFax()
+    {
+        return $this->validator->escapeForXss($this->fax);
     }
     
     /**
@@ -1110,187 +1025,6 @@ class TfExpert
     }
     
     /**
-     * Set the job title of this expert.
-     * 
-     * @param string $job Job title.
-     */
-    public function setJob(string $job)
-    {
-        $this->job = $this->validator->trimString($job);
-    }
-    
-    /**
-     * Set the experience description for this expert.
-     * 
-     * @param string $experience Summary description of experience (HTML).
-     */
-    public function setExperience(string $experience)
-    {
-        $experience = $this->validator->trimString($experience);
-        $this->experience = $this->validator->filterHtml($experience);
-    }
-    
-    /**
-     * Set the projects description for this expert.
-     * 
-     * @param string $projects Description of recent projects (HTML).
-     */
-    public function setProjects(string $projects)
-    {
-        $projects = $this->validator->trimString($projects);
-        $this->projects = $this->validator->filterHtml($projects);
-    }
-    
-    /**
-     * Set the publications description for this expert.
-     * 
-     * @param string $publications Description of key publications (HTML).
-     */
-    public function setPublications(string $publications)
-    {
-        $publications = $this->validator->trimString($publications);
-        $this->publications = $this->validator->filterHtml($publications);
-    }
-    
-    /**
-     * Set the business unit for this expert.
-     * 
-     * @param string $businessUnit The direct administrative unit this expert works for.
-     */
-    public function setBusinessUnit(string $businessUnit)
-    {
-        $this->businessUnit = $this->validator->trimString($businessUnit);
-    }
-    
-    /**
-     * Set the organisation this expert belongs to.
-     * 
-     * @param string $organisation The higher level (main) organisation this expert works form.
-     */
-    public function setOrganisation(string $organisation)
-    {
-        $this->organisation = $this->validator->trimString($organisation);
-    }
-    
-    /**
-     * Set the postal address of this expert (street, city, state, postcode).
-     * 
-     * @param string $address Address of this expert.
-     */
-    public function setAddress(string $address)
-    {
-        $this->address = $this->validator->trimString($address);
-    }
-    
-    /**
-     * Set the country of residence for this expert.
-     * 
-     * @param int $country Key of relevant country from list.
-     */
-    public function setCountry (int $country)
-    {
-        if ($this->validator->isInt($country, 0)) {
-            $this->country = $country;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the email address of this expert.
-     * 
-     * @param string $email Valid email address.
-     */
-    public function setEmail(string $email)
-    {
-        $cleanEmail = $this->validator->trimString($email);
-        
-        if ($cleanEmail === '' || $this->validator->isEmail($cleanEmail)) {
-            $this->email = $cleanEmail;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_EMAIL, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the mobile phone number for this expert.
-     * 
-     * @param string $mobile Mobile phone number.
-     */
-    public function setMobile(string $mobile)
-    {
-        $this->mobile = $this->validator->trimString($mobile);
-    }
-    
-    /**
-     * Set the fax number of this expert.
-     * 
-     * @param string $fax Fax number.
-     */
-    public function setFax(string $fax)
-    {
-        $this->fax = $this->validator->trimString($fax);
-    }
-    
-    /**
-     * Set the personal profile link of this expert (their blog or social media page).
-     * 
-     * @param string $url URL to the expert's personal website.
-     */
-    public function setProfileLink(string $url)
-    {
-        $cleanUrl = $this->validator->trimString($url);
-        
-        if ($cleanUrl === '' || $this->validator->isUrl($cleanUrl)) {
-            $this->profileLink = $cleanUrl;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the submission time for this expert.
-     * 
-     * @param int $submissionTime Timestamp.
-     */
-    public function setSubmissionTime(int $submissionTime)
-    {
-        if ($this->validator->isInt($submissionTime, 0)) {
-            $this->submissionTime = $submissionTime;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the time this expert was last updated.
-     * 
-     * @param int $lastUpdated Timestamp.
-     */
-    public function setLastUpdated(int $lastUpdated)
-    {
-        if ($this->validator->isInt($lastUpdated, 0)) {
-            $this->lastUpdated = $lastUpdated;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
-     * Set the time this expert profile expires.
-     * 
-     * @param int $expiresOn Timestamp.
-     */
-    public function setExpiresOn(int $expiresOn)
-    {
-        if ($this->validator->isInt($expiresOn, 0)) {
-            $this->expiresOn = $expiresOn;
-        } else {
-            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
-        }
-    }
-    
-    /**
      * Set the profile photo for this expert
      * 
      * @param string $image Filename of photo.
@@ -1317,10 +1051,120 @@ class TfExpert
         }
     }
     
+    /**
+     * Returns the image file name XSS escaped for display.
+     * 
+     * @return string Image file name.
+     */
     public function getImage()
     {
         return $this->validator->escapeForXss($this->image);
     }
+    
+    /**
+     * Set the personal profile link of this expert (their blog or social media page).
+     * 
+     * @param string $url URL to the expert's personal website.
+     */
+    public function setProfileLink(string $url)
+    {
+        $cleanUrl = $this->validator->trimString($url);
+        
+        if ($cleanUrl === '' || $this->validator->isUrl($cleanUrl)) {
+            $this->profileLink = $cleanUrl;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_URL, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Return url to personal website escaped for display.
+     * 
+     * @return string URL to expert's personal website / profile.
+     */
+    public function getProfileLink()
+    {
+        return $this->validator->escapeForXss($this->profileLink);
+    }
+    
+    /**
+     * Set the submission time for this expert.
+     * 
+     * @param int $submissionTime Timestamp.
+     */
+    public function setSubmissionTime(int $submissionTime)
+    {
+        if ($this->validator->isInt($submissionTime, 0)) {
+            $this->submissionTime = $submissionTime;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Return formatted date that this expert was submitted.
+     * 
+     * @return string Date/time of submission.
+     */
+    public function getSubmissionTime()
+    {
+        $date = date('j F Y', $this->$submissionTime);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    /**
+     * Set the time this expert was last updated.
+     * 
+     * @param int $lastUpdated Timestamp.
+     */
+    public function setLastUpdated(int $lastUpdated)
+    {
+        if ($this->validator->isInt($lastUpdated, 0)) {
+            $this->lastUpdated = $lastUpdated;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Return formatted date/time this expert was last updated, escaped for display.
+     * 
+     * @return string Date/time last updated.
+     */
+    public function getLastUpdated()
+    {
+        $date = date('j F Y', $this->$lastUpdated);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    /**
+     * Set the time this expert profile expires.
+     * 
+     * @param int $expiresOn Timestamp.
+     */
+    public function setExpiresOn(int $expiresOn)
+    {
+        if ($this->validator->isInt($expiresOn, 0)) {
+            $this->expiresOn = $expiresOn;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_INT, E_USER_ERROR);
+        }
+    }
+    
+    /**
+     * Return formatted date/time this expert expires on.
+     * 
+     * The expert will not be displayed on the public side after the expiry date has passed.
+     * 
+     * @return string Date/time of expiry.
+     */
+    public function getExpiresOn()
+    {
+        $date = date('j F Y', $this->$expiresOn);
+        return $this->validator->escapeForXss($date);
+    }
+    
+    // Image??
     
     /**
      * Set this profile as online or offline.
@@ -1339,6 +1183,20 @@ class TfExpert
     }
     
     /**
+     * Returns the XSS-safe online status of this record.
+     * 
+     * @return boolean True if online, false otherwise.
+     */
+    public function getOnline()
+    {
+        if ($this->online === 1) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
      * Set the view counter for this profile.
      * 
      * @param int $counter Number of times this profile has been viewed.
@@ -1353,14 +1211,13 @@ class TfExpert
     }
     
     /**
-     * Set the handler for this expert object or subclass.
-     *  
-     * @param string $handler Name of the handler for this Expert or subclass.
+     * Returns the number of times this expert was viewed, XSS safe.
+     * 
+     * @return int View counter.
      */
-    public function setHandler(string $handler)
+    public function getCounter()
     {
-        $cleanHandler = $this->validator->trimString($handler);
-        $this->handler = $cleanHandler;
+        return (int) $this->counter;
     }
     
     /**
@@ -1374,6 +1231,16 @@ class TfExpert
     }
     
     /**
+     * Returns the meta title for this expert XSS escaped for display.
+     * 
+     * @return string Meta title.
+     */
+    public function getMetaTitle()
+    {
+        return $this->validator->escapeForXss($this->metaTitle);
+    }
+    
+    /**
      * Set the meta description for this expert.
      * 
      * @param string $metaDescription Meta description.
@@ -1381,6 +1248,16 @@ class TfExpert
     public function setMetaDescription(string $metaDescription)
     {
         $this->metaDescription = $this->validator->trimString($metaDescription);
+    }
+    
+    /**
+     * Return the meta description of this expert XSS escaped for display.
+     * 
+     * @return string Meta description.
+     */
+    public function getMetaDescription()
+    {
+        return $this->validator->escapeForXss($this->metaDescription);
     }
     
     /**
@@ -1396,11 +1273,151 @@ class TfExpert
     }
     
     /**
-     * Reset the last updated time for this content object (timestamp).
+     * Return the SEO string for this expert XSS for display.
+     * 
+     * @return string SEO-friendly URL string.
      */
-    public function updateLastUpdated()
+    public function getSeo()
     {
-        $this->lastUpdated = time();
+        return $this->validator->escapeForXss($this->seo);
+    }
+    
+    // No need for getHandler, getTemplate or getModule as not publicly displayed.
+    
+    /**
+     * Set the handler for this expert object or subclass.
+     *  
+     * @param string $handler Name of the handler for this Expert or subclass.
+     */
+    public function setHandler(string $handler)
+    {
+        $cleanHandler = $this->validator->trimString($handler);
+        $this->handler = $cleanHandler;
+    }
+    
+    /**
+     * Set (override) the icon for this expert.
+     * 
+     * @param string $icon HTML for a FontAwesome icon.
+     */
+    public function setIcon(string $icon)
+    {
+        $icon = $this->validator->trimString($icon);
+        $this->icon = $this->validator->filterHtml($icon);
+    }
+
+    /**
+     * Returns the Font Awesome icon for this expert, XSS safe (prevalidated with HTMLPurifier).
+     * 
+     * @return string FontAwesome icon for this expert (HTML).
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+    
+    /**
+     * Returns the full name of an expert XSS escaped for display.
+     * 
+     * @return string Full name of expert.
+     */
+    public function getName()
+    {
+        $salutationList = $this->getSalutationList();
+        
+        $name = '';
+        
+        if ($this->salutation) $name .= $salutationList[$this->salutation] . ' ';
+        if ($this->firstName) $name .= $this->firstName . ' ';
+        if ($this->midName) $name .= $this->midName . ' ';
+        if ($this->lastName) $name .= $this->lastName;
+        
+        return $this->validator->escapeForXss($name);
+    }
+    
+    /**
+     * Returns full name and job title, comma seperated, XSS escaped for display.
+     * 
+     * @return string Name and job title.
+     */
+    public function getNameAndJob()
+    {
+        $nameAndJob = '';
+        
+        $name = $this->getName();
+        $job = $this->getJob();
+        
+        $nameAndJob .= $name;
+        
+        if ($name && $job) {
+            $nameAndJob .= ', ';
+        }
+        
+        $nameAndJob .= $job;
+        
+        return $this->validator->escapeForXss($nameAndJob);
+    }
+    
+    /**
+     * Returns the affiliation of this expert (business unit and organisation) XSS escaped for display.
+     * 
+     * @return string Affiliation.
+     */
+    public function getAffiliation()
+    {
+        $affiliation = '';
+        
+        $businessUnit = $this->getBusinessUnit();
+        $organisation = $this->getOrganisation();
+        
+        $affiliation = $businessUnit;
+        
+        if ($businessUnit && $organisation) {
+            $affiliation .= ', ';
+        }
+        
+        $affiliation .= $organisation;
+        
+        return $this->validator->escapeForXSS($affiliation);
+    }
+    
+    /**
+     * Return the full contact details for this expert XSS escaped for display.
+     * 
+     * Includes address, phone, fax and email.
+     * 
+     * @return string Contact details.
+     */
+    public function getContactDetails()
+    {
+        $contactDetails = array();
+        
+        if ($this->address) {
+            $contactDetails[] = nl2br($this->address);
+        }
+        
+        $countryList = $this->getCountryList();
+        
+        if ($this->country) {
+            $contactDetails[] = mb_strtoupper($countryList[$this->country]);
+        }
+        
+        if ($this->mobile) {
+            $contactDetails[] = TFISH_EXPERTS_MOBILE . ': ' . $this->mobile; 
+        }
+        
+        if ($this->fax) {
+            $contactDetails[] = TFISH_EXPERTS_FAX . ': ' . $this->fax;
+        }
+        
+        if ($this->email) {
+            $contactDetails[] = TFISH_EXPERTS_EMAIL . ': ' . $this->email;
+        }
+        
+        $contactDetails = implode('<br />', $contactDetails);
+        $cleanContactDetails = $this->validator->escapeForXSS($contactDetails);
+        
+        return $contactDetails;
     }
     
 }

@@ -699,80 +699,6 @@ class TfContentObject
     }
     
     /**
-     * Converts properties to human readable form in preparation for output.
-     * 
-     * This method is overridden in child subclasses, to allow for the possibility of handling
-     * additional properties. The overrides refer back to this parent method for handling base
-     * (standard) properties of this parent class.
-     * 
-     * @param string $property Name of property.
-     * @return string Property formatted to human readable form for output.
-     */
-    protected function makeDataHumanReadable(string $cleanProperty)
-    {        
-        switch ($cleanProperty) {
-            case "date": // Stored in format yyyy-mm-dd
-                $date = new DateTime($this->$cleanProperty);
-                
-                return $date->format('j F Y');
-                break;
-
-            case "fileSize": // Convert to human readable.
-                return $this->convertBytesToHumanReadable((int) $this->$cleanProperty);
-                break;
-
-            case "format": // Output the file extension as user-friendly "mimetype".
-                $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
-                $mimetype = array_search($this->$cleanProperty, $mimetypeWhitelist);
-
-                if (!empty($mimetype)) {
-                    return $mimetype;
-                }
-                break;
-
-            case "description":
-            case "teaser":
-                // Do a simple string replace to allow TFISH_URL to be used as a constant,
-                // making the site portable.
-                $tfUrlEnabled = str_replace('TFISH_LINK', TFISH_LINK,
-                        $this->$cleanProperty);
-
-                return $tfUrlEnabled; 
-                break;
-
-            case "rights":
-                $rights = $this->getListOfRights();
-
-                return $rights[$this->$cleanProperty];
-                break;
-
-            case "submissionTime":
-            case "lastUpdated":
-            case "expiresOn":
-                $date = date('j F Y', $this->$cleanProperty);
-
-                return $date;
-                break;
-
-            case "tags":
-                $tags = array();
-
-                foreach ($this->$cleanProperty as $value) {
-                    $tags[] = (int) $value;
-                    unset($value);
-                }
-
-                return $tags;
-                break;
-                
-            // No special handling required. Return unmodified value.
-            default:
-                return $this->$cleanProperty;
-                break;
-        }
-    }
-    
-    /**
      * Converts bytes to a human readable units (KB, MB, GB etc).
      * 
      * @param int $bytes File size in bytes.
@@ -800,6 +726,14 @@ class TfContentObject
         $val = round($val, 2);
 
         return $val . ' ' . $unit;
+    }
+    
+    /**
+     * Reset the last updated time for this content object (timestamp).
+     */
+    public function updateLastUpdated()
+    {
+        $this->lastUpdated = time();
     }
     
     /**
@@ -1564,14 +1498,6 @@ class TfContentObject
     public function getType()
     {
         return $this->validator->escapeForXss($this->type);
-    }
-    
-    /**
-     * Reset the last updated time for this content object (timestamp).
-     */
-    public function updateLastUpdated()
-    {
-        $this->lastUpdated = time();
     }
 
 }

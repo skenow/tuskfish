@@ -199,6 +199,14 @@ class TfMachine
         
         return $html;
     }
+    
+    /**
+     * Reset the last updated time for this sensor object (timestamp).
+     */
+    public function updateLastUpdated()
+    {
+        $this->lastUpdated = time();
+    }
 
     
     /**
@@ -630,11 +638,4 @@ class TfMachine
         $this->icon = $this->validator->filterHtml($icon);
     }
     
-    /**
-     * Reset the last updated time for this sensor object (timestamp).
-     */
-    public function updateLastUpdated()
-    {
-        $this->lastUpdated = time();
-    }
 }
