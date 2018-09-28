@@ -51,3 +51,4 @@ define("TFISH_EXPERTS_NO_EXPERTS_MATCH_YOUR_CRITERIA", "No experts matched these
 // Errors.
 define("TFISH_ERROR_NOT_EXPERT", "Not an expert");
 define("TFISH_ERROR_NOT_EXPERT_HANDLER", "Not an expert handler.");
+define("TFISH_ERROR_NOT_EXPERT_FACTORY", "Not an expert factory.");

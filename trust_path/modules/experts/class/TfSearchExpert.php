@@ -1,14 +1,14 @@
 <?php
 
 /**
- * TfSearchContent class file.
+ * TfSearchExpert class file.
  * 
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.1
- * @package     content
+ * @package     experts
  */
 
 // Enable strict type declaration.
@@ -17,17 +17,16 @@ declare(strict_types=1);
 if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 
 /**
- * Provides search functionality for the content module, returning mixed content objects.
+ * Provides free text search functionality for the experts.
  *
  * @copyright   Simon Wilkinson 2013+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
  * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.1
- * @package     content
+ * @package     experts
  * @var         TfValidator $validator Instance of the Tuskfish data validator class.
  * @var         TfDatabase $db Instance of the Tuskfish database class.
- * @var         TfContentFactory $contentFactory Instance of the Tuskfish content factory class.
  * @var         TfPreference $preference Instance of the Tuskfish site preferences class.
  * @var         array $searchTerms Search terms provided by user.
  * @var         array $escapedSearchTerms XSS escaped copies of the search terms, used for display.
@@ -35,11 +34,11 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * @var         int $offset Starting point for reading records from a result set.
  * @var         string $operator Type of search, options are 'AND', 'OR' and 'exact'.
  */
-class TfSearchContent
+class TfSearchExpert
 {
     protected $validator;
     protected $db;
-    protected $contentFactory;
+    protected $expertFactory;
     protected $preference;
     protected $searchTerms;
     protected $escapedSearchTerms;
@@ -55,7 +54,7 @@ class TfSearchContent
      * @param TfPreference $preference An instance of the Tuskfish site preferences class.
      */
     public function __construct(TfValidator $validator,
-            TfDatabase $db, TfContentFactory $contentFactory, TfPreference $preference)
+            TfDatabase $db, TfExpertFactory $expertFactory, TfPreference $preference)
     {
         if (is_a($validator, 'TfValidator')) {
             $this->validator = $validator; 
@@ -69,10 +68,10 @@ class TfSearchContent
             trigger_error(TFISH_ERROR_NOT_DATABASE, E_USER_ERROR);
         }
         
-        if (is_a($contentFactory, 'TfContentFactory')) {
-            $this->contentFactory = $contentFactory;
+        if (is_a($expertFactory, 'TfExpertFactory')) {
+            $this->expertFactory = $expertFactory;
         } else {
-            trigger_error(TFISH_ERROR_NOT_CONTENT_FACTORY, E_USER_ERROR);
+            trigger_error(TFISH_ERROR_NOT_EXPERT_FACTORY, E_USER_ERROR);
         }
         
         if (is_a($preference, 'TfPreference')) {
@@ -89,20 +88,21 @@ class TfSearchContent
     }
     
     /**
-     * Provides global search functionality for content objects.
+     * Provides global search functionality for Expert objects.
      * 
      * Escaping of search terms is handled through use of a PDO prepared statement with named 
      * placeholders; search terms are inserted indirectly by binding them to the placeholders.
      * Search terms must NEVER be inserted into a query directly (creates an SQL injection
      * vulnerability), otherwise do us all a favour and go shoot yourself now.
      * 
-     * Search terms have entity encoding (htmlspecialchars) applied on the teaser and description
-     * fields (only) to ensure consistency with the entity encoding treatment that these HTML fields
-     * have been subjected to, otherwise searches involving entities will not return results.
+     * Search terms have entity encoding (htmlspecialchars) applied on the experience, projects and
+     * publications fields (only) to ensure consistency with the entity encoding treatment that
+     * these HTML fields have been subjected to, otherwise searches involving entities will not
+     * return results.
      * 
-     * @return array|bool Array of content objects if results found, false if no results or on failure.
-     */
-    public function searchContent()
+     * @return array|bool Array of expert objects if results found, false if no results or on failure.
+     */    
+    public function searchExperts()
     {
         $sql = $count = '';
         $searchTermPlaceholders = $escapedTermPlaceholders = $results = array();
@@ -111,7 +111,7 @@ class TfSearchContent
         $sqlSearch = "SELECT * ";
         $result = array();
 
-        $sql = "FROM `content` ";
+        $sql = "FROM `expert` ";
         $count = count($this->searchTerms);
         
         if ($count) {
@@ -121,12 +121,16 @@ class TfSearchContent
                 $searchTermPlaceholders[$i] = ':searchTerm' . (string) $i;
                 $escapedTermPlaceholders[$i] = ':escapedSearchTerm' . (string) $i;
                 $sql .= "(";
-                $sql .= "`title` LIKE " . $searchTermPlaceholders[$i] . " OR ";
-                $sql .= "`teaser` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
-                $sql .= "`description` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
-                $sql .= "`caption` LIKE " . $searchTermPlaceholders[$i] . " OR ";
-                $sql .= "`creator` LIKE " . $searchTermPlaceholders[$i] . " OR ";
-                $sql .= "`publisher` LIKE " . $searchTermPlaceholders[$i];
+                $sql .= "`firstname` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`midname` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`lastname` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`job` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`businessUnit` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`organisation` LIKE " . $searchTermPlaceholders[$i] . " OR ";
+                $sql .= "`experience` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
+                $sql .= "`projects` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
+                $sql .= "`publications` LIKE " . $escapedTermPlaceholders[$i] . " OR ";
+                $sql .= "`address` LIKE " . $searchTermPlaceholders[$i];
                 $sql .= ")";
                 
                 if ($i != ($count - 1)) {
@@ -135,8 +139,8 @@ class TfSearchContent
             }
         }
         
-        $sql .= " AND `online` = 1 AND `type` != 'TfBlock' ";
-        $sql .= "ORDER BY `date` DESC, `submissionTime` DESC ";
+        $sql .= " AND `online` = 1  ";
+        $sql .= "ORDER BY `lastname` ASC, `firstname` ASC ";
         $sqlCount .= $sql;
 
         // Bind the search term values and execute the statement.
@@ -174,6 +178,7 @@ class TfSearchContent
 
         $sqlSearch .= $sql;
         $statement = $this->db->preparedStatement($sqlSearch);
+        
         if ($statement) {
             for ($i = 0; $i < $count; $i++) {
                 $statement->bindValue($searchTermPlaceholders[$i], "%" . $this->searchTerms[$i] . "%",
@@ -191,9 +196,9 @@ class TfSearchContent
         }
 
         $statement->execute();
-
+        
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $object = $this->contentFactory->getContentObject($row['type']);
+            $object = $this->expertFactory->getExpert();
             $object->loadPropertiesFromArray($row, true);
             $result[$object->id] = $object;
             unset($object, $row);
