@@ -34,7 +34,8 @@ $cleanState = (int) ($_GET['state'] ?? 0);
 
 // Set cache parameters.
 $basename = basename(__FILE__);
-$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag);
+$cacheParameters = array('id' => $cleanId, 'start' => $cleanStart, 'tagId' => $cleanTag,
+    'state' => $cleanState);
 
 $expertHandler = $expertFactory->getExpertHandler();
 
@@ -50,7 +51,7 @@ if ($cleanId) {
         $expertInfo = array();
 
         if ($expert->tags) {
-            $tags = $expertHandler->makeTagLinks($expert->tags);
+            $tags = $expertHandler->makeTagLinks($expert->tags, 'experts');
             $tags = TFISH_TAGS . ': ' . implode(', ', $tags);
             $expertInfo[] = $tags;
         }
@@ -61,8 +62,58 @@ if ($cleanId) {
         $tfTemplate->tfMainContent = $tfTemplate->render($expert->template);
     }
 } else {
+    // Validate data and separate the search terms.
+    $cleanOp = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : false;
+
+    // Search terms passed in from a pagination control link, in which case it has been previously
+    // i) encoded and ii) escaped. This process needs to be reversed.
+    if (isset($_REQUEST['query'])) {
+        $terms = $tfValidator->trimString($_REQUEST['query']);
+        $terms = rawurldecode($terms);
+        $cleanTerms = htmlspecialchars_decode($terms, ENT_QUOTES);
+    } else { // Search terms entered directly into the search form.
+        $cleanTerms = isset($_REQUEST['searchTerms'])
+                ? $tfValidator->trimString($_REQUEST['searchTerms']) : false;
+    }
+
+    $searchType = isset($_REQUEST['searchType']) ? $tfValidator->trimString($_REQUEST['searchType']) : false;
+    $start = (int) ($_REQUEST['start'] ?? 0);
+
+    // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
+    if ($cleanOp && $cleanTerms && $searchType) {
+        $searchEngine = new TfSearchExpert($tfValidator, $tfDatabase, $expertFactory, $tfPreference);
+        $searchEngine->setOperator($searchType);
+        $searchEngine->setSearchTerms($cleanTerms);
+        $searchEngine->setOffset($start);
+        $searchResults = $searchEngine->searchExperts();
+
+        if ($searchResults && $searchResults[0] > 0) {
+
+            // Get a count of search results; this is used to build the pagination control.
+            $resultsCount = (int) array_shift($searchResults);
+            $tfTemplate->resultsCount = $resultsCount;
+            $tfTemplate->searchResults = $searchResults;
+
+            // Prepare the pagination control, including parameters to be included in the link.
+            $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+            $tfPagination->setUrl('search');
+            $tfPagination->setCount($resultsCount);
+            $tfPagination->setLimit($tfPreference->searchPagination);
+            $tfPagination->setStart($start);
+            $tfPagination->setTag(0);
+            $queryParameters = array(
+                'op' => 'search',
+                'searchType' => $searchType,
+                'query' => $cleanTerms);
+            $tfPagination->setExtraParams($queryParameters);
+            $tfTemplate->pagination = $tfPagination->renderPaginationControl();
+        } else {
+            $tfTemplate->searchResults = false;
+        }
+    }
+
     // Get list of experts.
-    $criteria = $tfCriteriaFactory->getCriteria();
+    /**$criteria = $tfCriteriaFactory->getCriteria();
     if ($cleanStart) $criteria->setOffset($cleanStart);
     if ($cleanState) $criteria->add($tfCriteriaFactory->getItem('country', $cleanState));
     if ($cleanTag) $criteria->setTag(array($cleanTag));
@@ -90,7 +141,7 @@ if ($cleanId) {
     }
     
     if (isset($cleanState) && !empty($cleanState)) {
-        $extraParams['country'] = $cleanState;
+        $extraParams['state'] = $cleanState;
     }
     
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
@@ -105,7 +156,20 @@ if ($cleanId) {
     // Render index template.
     $tfTemplate->pageTitle = TFISH_EXPERTS;
     $tfTemplate->expertList = $expertList;
-    $tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);
+    $tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);*/
+    
+    // Assign template variables.
+    $tfTemplate->pageTitle = TFISH_EXPERTS;
+    $tfTemplate->terms = $cleanTerms;
+    $tfTemplate->type = $searchType;
+    $tfTemplate->form = TFISH_EXPERTS_MODULE_FORM_PATH . 'search.html';
+    $tfTemplate->tfMainContent = $tfTemplate->render('form');
+
+    /**
+     * Override page metadata here (otherwise default site metadata will display).
+     */
+    $tfMetadata->setTitle(TFISH_EXPERTS);
+    $tfMetadata->setDescription(TFISH_EXPERTS_DESCRIPTION);
 }
 
 /**

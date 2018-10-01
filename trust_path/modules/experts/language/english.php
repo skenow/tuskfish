@@ -11,7 +11,8 @@
  * @package     experts
  */
 
-define("TFISH_EXPERTS", "Experts");
+define("TFISH_EXPERTS", "Experts directory");
+define("TFISH_EXPERTS_DESCRIPTION", "Search for aquaculture experts");
 
 // Properties.
 define("TFISH_EXPERTS_SALUTATION", "Salutation");

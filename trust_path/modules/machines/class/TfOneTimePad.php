@@ -17,16 +17,14 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
 /**
  * Implement encryption and decryption of messages against a one time pad.
  * 
- * This class was written to provide casual security for internet of things (IOT) devices
- * transmitting data over the air. I needed a way to encrypt restricted length LoRaWAN transmissions
- * from remote monitoring stations (microcontrollers) to a collection point on the internet
- * (Tuskfish).
+ * This class was written to provide casual security for microcontrollers and internet of things
+ * (IOT) devices transmitting data over the air.
  * 
  * One time pads are considered too cumbersome for use in the era of public key cryptography
  * due to the problem of pad distribution. However, they do have some characteristics that may be of
  * interest to a private Internet of Things network, with a limited number of nodes. Namely, i) they
- * are ultra light weight in terms of computational and storage requirements, and ii) they are
- * highly efficient in terms of bandwidth, which makes them suitable for protocols that severely
+ * are ultra light weight in terms of computational and programme storage requirements, 
+ * and ii) they are highly efficient in terms of bandwidth, which makes them suitable for protocols that severely
  * restrict message length and transmission frequency, such as LoRaWAN.
  * 
  * The remote machine needs to have enough storage to hold a good sized pad, for example a micro SD
@@ -46,7 +44,7 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * one time pad consisting of random code points from the full ASCII range (0 - 127). The second,
  * encryptText(), uses printable ASCII characters only (code points 32 - 127) and performs mod 96
  * addition. The ciphertext output is also printable ASCII, so it is more convenient if you want 
- * all aspects of the system to be human readable. 
+ * all aspects of the system to be human readable.
  * 
  * Both are equally effective in obscuring communications over the air. So long as i) the pad is
  * truly random, ii) the pad is never re-used and iii) the pad is not captured by busybodies the
@@ -70,15 +68,15 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * 
  * If you seriously want your data to remain private then I suggest that you use a hardware random
  * number generator to prepare your one-time pads. Your computer cannot generate truly random
- * numbers; it can only provide you with psuedo-random numbers, which are not bulletproof. I got
+ * numbers; it can only provide you with psuedorandom numbers, which are not bulletproof. I got
  * myself a BitBabbler Black from http://www.bitbabbler but there are a reasonable number of
  * alternative options if you Google about.
  * 
  * For serious privacy, you should NOT decrypt incoming data on the server. Use Tuskfish as a dumb
  * capture point for incoming data, export it to your local machine and decode it there. As I said,
- * this trait is for casual over-the-air privacy, it provides zero end point security.
+ * this trait is for casual over-the-air privacy; it provides zero end point security.
  * 
- * WARNING: You must never re-use a one-time pad. Doing so *completely* breaks the security.
+ * NOTE: You must not re-use a one-time pad. Doing so *completely* breaks the security.
  *
  * @copyright   Simon Wilkinson 2018+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
