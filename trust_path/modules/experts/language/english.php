@@ -45,6 +45,7 @@ define("TFISH_EXPERTS_CONTACT_DETAILS", "Contact details");
 define("TFISH_EXPERTS_ADD", "Add");
 define("TFISH_EXPERTS_EDIT", "Edit");
 define("TFISH_EXPERTS_SELECT_STATE", "- Select state -");
+define("TFISH_EXPERTS_OR_ENTER_SEARCH_TERMS", "...or enter search terms");
 
 // Information.
 define("TFISH_EXPERTS_NO_EXPERTS_MATCH_YOUR_CRITERIA", "No experts matched these criteria.");
