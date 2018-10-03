@@ -28,10 +28,25 @@ $indexTemplate = 'experts';
 
 // Validate input parameters.
 $cleanId = (int) ($_REQUEST['id'] ?? 0);
-$cleanStart = (int) ($_GET['start'] ?? 0);
-$cleanTag = (int) ($_GET['tagId'] ?? 0);
-$cleanState = (int) ($_GET['state'] ?? 0);
-$cleanOp = isset($_REQUEST['op']) ? $tfValidator->trimString($_REQUEST['op']) : '';
+$cleanStart = (int) ($_REQUEST['start'] ?? 0);
+$cleanTag = (int) ($_REQUEST['tagId'] ?? 0);
+$cleanState = (int) ($_REQUEST['state'] ?? 0);
+
+if (isset($_REQUEST['alpha']) && $tfValidator->isAlpha($_REQUEST['alpha'])) {
+    $cleanAlpha = $tfValidator->trimString($_REQUEST['alpha']);
+} else {
+    $cleanAlpha = '';
+}
+
+// Search terms passed in from a pagination control link have been i) encoded and ii) escaped.
+if (isset($_REQUEST['query'])) {
+    $terms = $tfValidator->trimString($_REQUEST['query']);
+    $terms = rawurldecode($terms);
+    $cleanTerms = htmlspecialchars_decode($terms, ENT_QUOTES);
+} else { // Search terms entered directly into the search form.
+    $cleanTerms = isset($_REQUEST['searchTerms']) 
+            ? $tfValidator->trimString($_REQUEST['searchTerms']) : false;
+}
 
 // Set cache parameters.
 $basename = basename(__FILE__);
@@ -64,6 +79,36 @@ if ($cleanId) {
     }
 }
 
+if ($cleanAlpha) {
+    $searchEngine = new TfSearchExpert($tfValidator, $tfDatabase, $expertFactory, $tfPreference);
+    $searchEngine->setOffset($cleanStart);
+    $searchResults = $searchEngine->searchAlphabetically($cleanAlpha);
+
+    if ($searchResults && $searchResults[0] > 0) {
+
+        // Get a count of search results; this is used to build the pagination control.
+        $resultsCount = (int) array_shift($searchResults);
+        $tfTemplate->resultsCount = $resultsCount;
+        $tfTemplate->searchResults = $searchResults;
+
+        // Prepare the pagination control, including parameters to be included in the link.
+        $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $tfPagination->setUrl('experts');
+        $tfPagination->setCount($resultsCount);
+        $tfPagination->setLimit($tfPreference->searchPagination);
+        $tfPagination->setStart($cleanStart);
+        $tfPagination->setTag(0);
+        $queryParameters = array(
+            'alpha' => $cleanAlpha);
+        $tfPagination->setExtraParams($queryParameters);
+        $tfTemplate->pagination = $tfPagination->renderPaginationControl();
+    } else {
+        $tfTemplate->searchResults = false;
+    }
+
+    $indexTemplate = 'experts';
+}
+
 if (($cleanTag || $cleanState)) {
     $criteria = $tfCriteriaFactory->getCriteria();
     if ($cleanStart) $criteria->setOffset($cleanStart);
@@ -89,64 +134,50 @@ if (($cleanTag || $cleanState)) {
     $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
     $tfPagination->setUrl('experts');
     $tfPagination->setCount($resultsCount);
-    $tfPagination->setLimit($tfPreference->userPagination);
+    $tfPagination->setLimit($tfPreference->searchPagination);
     $tfPagination->setStart($cleanStart);
     $tfPagination->setTag($cleanTag);
     $tfPagination->setExtraParams($extraParams);
     $tfTemplate->experts_pagination = $tfPagination->renderPaginationControl();
 }
 
-// If search terms were submitted, return matching experts.
-/*if (isset($_REQUEST['query']) || $_REQUEST['searchTerms']) {
-    // Search terms passed in from a pagination control link, in which case it has been previously
-    // i) encoded and ii) escaped. This process needs to be reversed.
-    if (isset($_REQUEST['query'])) {
-        $terms = $tfValidator->trimString($_REQUEST['query']);
-        $terms = rawurldecode($terms);
-        $cleanTerms = htmlspecialchars_decode($terms, ENT_QUOTES);
-    } else { // Search terms entered directly into the search form.
-        $cleanTerms = isset($_REQUEST['searchTerms'])
-                ? $tfValidator->trimString($_REQUEST['searchTerms']) : false;
-    }
-
-    $start = (int) ($_REQUEST['start'] ?? 0);
+// Free text search.
+if ($cleanTerms) {
+    $searchEngine = new TfSearchExpert($tfValidator, $tfDatabase, $expertFactory, $tfPreference);
+    $searchEngine->setOperator('AND');
+    $searchEngine->setSearchTerms($cleanTerms);
+    $searchEngine->setOffset($cleanStart);
+    $searchResults = $searchEngine->searchExperts();
     $tfTemplate->terms = $cleanTerms;
 
-    // Proceed to search. Note that detailed validation of parameters is conducted by searchContent()
-    if ($cleanTerms) {
-        $searchEngine = new TfSearchExpert($tfValidator, $tfDatabase, $expertFactory, $tfPreference);
-        $searchEngine->setOperator('AND');
-        $searchEngine->setSearchTerms($cleanTerms);
-        $searchEngine->setOffset($start);
-        $searchResults = $searchEngine->searchExperts();
+    if ($searchResults && $searchResults[0] > 0) {
 
-        if ($searchResults && $searchResults[0] > 0) {
+        // Get a count of search results; this is used to build the pagination control.
+        $resultsCount = (int) array_shift($searchResults);
+        $tfTemplate->resultsCount = $resultsCount;
+        $tfTemplate->searchResults = $searchResults;
 
-            // Get a count of search results; this is used to build the pagination control.
-            $resultsCount = (int) array_shift($searchResults);
-            $tfTemplate->resultsCount = $resultsCount;
-            $tfTemplate->searchResults = $searchResults;
-
-            // Prepare the pagination control, including parameters to be included in the link.
-            $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
-            $tfPagination->setUrl('experts');
-            $tfPagination->setCount($resultsCount);
-            $tfPagination->setLimit($tfPreference->searchPagination);
-            $tfPagination->setStart($start);
-            $tfPagination->setTag(0);
-            $queryParameters = array(
-                'op' => 'search',
-                'searchType' => $searchType,
-                'query' => $cleanTerms);
-            $tfPagination->setExtraParams($queryParameters);
-            $tfTemplate->pagination = $tfPagination->renderPaginationControl();
-        } else {
-            $tfTemplate->searchResults = false;
-        }
-        
-        $indexTemplate = 'experts';
+        // Prepare the pagination control, including parameters to be included in the link.
+        $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+        $tfPagination->setUrl('experts');
+        $tfPagination->setCount($resultsCount);
+        $tfPagination->setLimit($tfPreference->searchPagination);
+        $tfPagination->setStart($cleanStart);
+        $tfPagination->setTag(0);
+        $queryParameters = array(
+            'op' => 'search',
+            'searchType' => $searchType,
+            'query' => $cleanTerms);
+        $tfPagination->setExtraParams($queryParameters);
+        $tfTemplate->pagination = $tfPagination->renderPaginationControl();
+    } else {
+        $tfTemplate->searchResults = false;
     }
-}*/
+
+    $indexTemplate = 'experts';
+}
+
+// Pagination control for tag/country/free text search.
 
 // Select filters.
 $tagHandler = $contentFactory->getContentHandler('tag');

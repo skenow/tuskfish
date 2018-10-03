@@ -208,6 +208,83 @@ class TfSearchExpert
     }
     
     /**
+     * Retrieve a list of experts whose last names start with a particular letter.
+     * 
+     * @param string $alpha Single letter of the alphabet.
+     * @return array|boolean Array of expert objects on success, false on failure.
+     */
+    public function searchAlphabetically(string $alpha)
+    {
+        $alpha = $this->validator->trimString($alpha);
+        
+        if ($this->validator->isAlpha($alpha) && (mb_strlen($alpha) === 1)) {
+            $cleanAlpha = $alpha;
+        } else {
+            trigger_error(TFISH_ERROR_NOT_ALPHA, E_USER_ERROR);
+        }
+        
+        $sql = $count = '';
+        $result = array();
+        
+        $sqlCount = "SELECT count(*) ";
+        $sqlSearch = "SELECT * ";
+        $sql = "FROM `expert` WHERE (`lastName` LIKE :placeholder AND `online` = 1)  ";
+        //$sql .= "ORDER BY `lastName` ASC, `firstName` ASC ";
+        $sqlCount .= $sql;
+
+        // Bind the search term values and execute the statement.
+        $statement = $this->db->preparedStatement($sqlCount);
+        if ($statement) {
+            $statement->bindValue(':placeholder', $cleanAlpha . "%", PDO::PARAM_STR);
+        } else {
+            return false;
+        }
+        
+        // Execute the statement.
+        $statement->execute();
+
+        $row = $statement->fetch(PDO::FETCH_NUM);
+        $result[0] = reset($row);
+        unset($statement, $row);
+
+        // Retrieve the subset of objects actually required.
+        if (!$this->limit) {
+            $limit = $this->preference->searchPagination;
+        }
+        
+        $sql .= "LIMIT :limit ";
+        
+        if ($this->offset) {
+            $sql .= "OFFSET :offset ";
+        }
+
+        $sqlSearch .= $sql;
+        $statement = $this->db->preparedStatement($sqlSearch);
+        
+        if ($statement) {
+            $statement->bindValue(':placeholder', $cleanAlpha . "%", PDO::PARAM_STR);
+            $statement->bindValue(":limit", (int) $this->limit, PDO::PARAM_INT);
+
+            if ($this->offset) {
+                $statement->bindValue(":offset", (int) $this->offset, PDO::PARAM_INT);
+            }
+        } else {
+            return false;
+        }
+
+        $statement->execute();
+        
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $object = $this->expertFactory->getExpert();
+            $object->loadPropertiesFromArray($row, true);
+            $result[$object->id] = $object;
+            unset($object, $row);
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Set a limit on the number of results to retrieve.
      * 
      * Usually this will be the number of objects you want to display in a single page view, as

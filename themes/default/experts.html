@@ -1,33 +1,33 @@
 <?php declare(strict_types=1); ?>
 <div class="container">
-  <form class="form-horizontal" name="selectFilters" action="<?php echo $selectAction; ?>" method="get">
+  <form class="form-horizontal" name="selectFilters" action="<?php echo $selectAction; ?>" method="post">
     <div class="text-center">
-      <p><a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=a'; ?>">[A]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=b'; ?>">[B]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=c'; ?>">[C]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=d'; ?>">[D]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=e'; ?>">[E]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=f'; ?>">[F]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=g'; ?>">[G]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=h'; ?>">[H]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=i'; ?>">[I]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=j'; ?>">[J]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=k'; ?>">[K]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=l'; ?>">[L]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=m'; ?>">[M]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=n'; ?>">[N]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=o'; ?>">[O]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=p'; ?>">[P]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=q'; ?>">[Q]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=r'; ?>">[R]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=s'; ?>">[S]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=t'; ?>">[T]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=u'; ?>">[U]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=v'; ?>">[V]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=w'; ?>">[W]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=x'; ?>">[X]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=y'; ?>">[Y]</a>
-        <a href="<?php echo TFISH_URL . 'experts?op=alpha&amp;letter=z'; ?>">[Z]</a>
+      <p><a href="<?php echo TFISH_URL . 'experts.php?alpha=a'; ?>">[A]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=b'; ?>">[B]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=c'; ?>">[C]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=d'; ?>">[D]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=e'; ?>">[E]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=f'; ?>">[F]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=g'; ?>">[G]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=h'; ?>">[H]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=i'; ?>">[I]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=j'; ?>">[J]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=k'; ?>">[K]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=l'; ?>">[L]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=m'; ?>">[M]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=n'; ?>">[N]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=o'; ?>">[O]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=p'; ?>">[P]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=q'; ?>">[Q]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=r'; ?>">[R]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=s'; ?>">[S]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=t'; ?>">[T]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=u'; ?>">[U]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=v'; ?>">[V]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=w'; ?>">[W]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=x'; ?>">[X]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=y'; ?>">[Y]</a>
+        <a href="<?php echo TFISH_URL . 'experts.php?alpha=z'; ?>">[Z]</a>
       </p>
      </div>
     <div class="row">
@@ -57,15 +57,6 @@
   <h2><?php echo $tfValidator->escapeForXss($resultsCount) . ' ' . TFISH_SEARCH_RESULTS . ':'; ?></h2><hr>
 </div>
 
-<!-- Top pagination control -->
-<!--<?php if (isset($experts_pagination)): ?>
-<div class="row">
-  <div class="col d-flex justify-content-end pagination-top clearfix">
-    <?php echo $experts_pagination; ?>
-  </div>
-</div>
-<?php endif; ?>-->
-
 <?php foreach ($searchResults as $key => $object): ?>
 <div class="clearfix">
   <h3><a href="<?php echo $object->getUrl($targetFileName); ?>"><?php echo $object->getIcon(); ?> <?php echo $object->getName(); ?></a></h3>
@@ -89,30 +80,6 @@
 </div>
 <?php endif; ?>
 
-<?php endif; ?>
-
-<!-- Display a list of experts in teaser view -->
-<?php if (isset($expertList) && !empty($expertList)): ?>
-  <?php foreach ($expertList as $expert): ?>
-  <div class="stream-item clearfix">
-    <div>
-      <h3 class="title"><a href="<?php echo $expert->getUrl($targetFileName); ?>"><?php echo $expert->getIcon(); ?> <?php echo $expert->getName(); ?></a></h3>
-    </div>
-    <?php if ($expert->image): ?>
-    <div class="float-left">
-      <figure class="figure-left">
-      <img class="image img-fluid" src="<?php echo $expert->getCachedImage(100); ?>" 
-        title="<?php echo $expert->getName(); ?>" alt="<?php echo $expert->getName(); ?>" />
-      </figure>
-    </div>
-    <?php endif; ?>
-    <?php if ($expert->experience): ?>
-      <div class="teaser"><?php echo $expert->getExperience(); ?></div>
-    <?php endif; ?>
-  </div>
-  <?php endforeach; ?>
-<?php elseif (isset($expertList) && empty($expertList)): ?>
-  <p><?php echo TFISH_EXPERTS_NO_EXPERTS_MATCH_YOUR_CRITERIA; ?></p>
 <?php endif; ?>
 
 <!-- Bottom pagination control -->
