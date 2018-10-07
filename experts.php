@@ -80,7 +80,7 @@ if ($cleanId) {
 }
 
 // List experts alphabetically by last name.
-if ($cleanAlpha) {
+if ($cleanAlpha && !$cleanId) {
     $searchEngine = new TfSearchExpert($tfValidator, $tfDatabase, $expertFactory, $tfPreference);
     $searchEngine->setOffset($cleanStart);
     $searchResults = $searchEngine->searchAlphabetically($cleanAlpha);
@@ -98,7 +98,7 @@ if ($cleanAlpha) {
 }
 
 // List experts by tag or country.
-if (($cleanTag || $cleanState)) {
+if (($cleanTag || $cleanState) && !$cleanId && !$cleanAlpha) {
     $criteria = $tfCriteriaFactory->getCriteria();
     if ($cleanStart) $criteria->setOffset($cleanStart);
     if ($cleanState) $criteria->add($tfCriteriaFactory->getItem('country', $cleanState));
@@ -120,7 +120,7 @@ if (($cleanTag || $cleanState)) {
 }
 
 // Free text search.
-if ($cleanTerms) {
+if ($cleanTerms && (!$cleanId && !$cleanAlpha && !$cleanTag && !$cleanState)) {
     $searchEngine = new TfSearchExpert($tfValidator, $tfDatabase, $expertFactory, $tfPreference);
     $searchEngine->setOperator('AND');
     $searchEngine->setSearchTerms($cleanTerms);
