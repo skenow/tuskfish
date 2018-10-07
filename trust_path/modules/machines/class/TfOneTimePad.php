@@ -18,19 +18,19 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * Implement encryption and decryption of messages against a one time pad.
  * 
  * This class was written to provide casual security for microcontrollers and internet of things
- * (IOT) devices transmitting data over the air.
+ * (IOT) devices transmitting data over the air, where hardware limitations make use of mainstream
+ * cryptography difficult.
  * 
  * One time pads are considered too cumbersome for use in the era of public key cryptography
  * due to the problem of pad distribution. However, they do have some characteristics that may be of
  * interest to a private Internet of Things network, with a limited number of nodes. Namely, i) they
  * are ultra light weight in terms of computational and programme storage requirements, 
- * and ii) they are highly efficient in terms of bandwidth, which makes them suitable for protocols that severely
- * restrict message length and transmission frequency, such as LoRaWAN.
+ * and ii) they are highly efficient in terms of bandwidth, which makes them suitable for protocols
+ * that severely restrict message length and transmission frequency.
  * 
  * The remote machine needs to have enough storage to hold a good sized pad, for example a micro SD
- * card slot will allow you to fit several gigs, which should be enough to handle years of
- * transmissions over a restricted bandwidth protocol. You will need to load the pad onto the remote
- * machine before you install it in the field.
+ * card slot. You will need to load the pad onto the remote machine before you install it in the
+ * field.
  * 
  * Sections of the pad used in encryption / decryption operations are deleted to prevent accidental
  * re-use. The remote machine should also implement this behaviour.
@@ -67,14 +67,13 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * can be encrypted with a single byte. 
  * 
  * If you seriously want your data to remain private then I suggest that you use a hardware random
- * number generator to prepare your one-time pads. Your computer cannot generate truly random
- * numbers; it can only provide you with psuedorandom numbers, which are not bulletproof. I got
- * myself a BitBabbler Black from http://www.bitbabbler but there are a reasonable number of
- * alternative options if you Google about.
+ * number generator to prepare your one-time pads. I got myself a BitBabbler Black from 
+ * http://www.bitbabbler but there are a reasonable number of alternative options if you Google
+ * about.
  * 
  * For serious privacy, you should NOT decrypt incoming data on the server. Use Tuskfish as a dumb
- * capture point for incoming data, export it to your local machine and decode it there. As I said,
- * this trait is for casual over-the-air privacy; it provides zero end point security.
+ * capture point for incoming data, export it to your local machine and decode it there. This trait
+ * is for casual over-the-air privacy; it provides ZERO end point security.
  * 
  * NOTE: You must not re-use a one-time pad. Doing so *completely* breaks the security.
  *
@@ -385,7 +384,7 @@ trait TfOneTimePad
         // Truncate the contents of the file, but this does not exclude forensic data recovery.
         $this->truncatePad(0);
         
-        // Unlink the file, but it will only be deleted if there are no remaining links left.       
+        // Unlink the file, but it will only be deleted if there are no remaining links left.
         if (unlink($path) === false) {
             trigger_error(TFISH_ERROR_BURN_PAD_FAILED, E_USER_NOTICE);
             
