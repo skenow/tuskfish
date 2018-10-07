@@ -84,21 +84,45 @@ class TfExpertFactory
         }
     }
     
+    /**
+     * Instantiates and returns a TfExpert object.
+     * 
+     * @return \TfExpert
+     */
     public function getExpert()
     {
         return new TfExpert($this->validator);
     }
     
+    /**
+     * Instantiates and returns a TfExpertHandler object.
+     * 
+     * @return \TfExpertHandler
+     */
     public function getExpertHandler()
     {
-        return new TfExpertHandler($this->validator, $this->db, $this->criteriaFactory, 
-                $this->fileHandler, $this->taglinkHandler);
+        return new TfExpertHandler(
+            $this->validator,
+            $this->db,
+            $this->criteriaFactory,
+            $this->fileHandler,
+            $this->taglinkHandler);
     }
     
+    /**
+     * Instantiates and returns a TfExpertController.
+     * 
+     * @return \TfExpertController
+     */
     public function getExpertController()
     {
-        return new TfExpertController($this->validator, $this->db, $this->criteriaFactory, 
-                $this->expertHandler, $this->cache, $this->template);
+        return new TfExpertController(
+            $this->validator,
+            $this->db,
+            $this->criteriaFactory,
+            $this->expertHandler,
+            $this->cache,
+            $this->template);
     }
     
 }

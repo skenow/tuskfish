@@ -79,6 +79,11 @@ class TfExpertController
         }
     }
     
+    /**
+     * Displays a data entry form to submit a new expert.
+     * 
+     * @param TfContentHandler $contentHandler
+     */
     public function addExpert(TfContentHandler $contentHandler)
     {
         $this->template->pageTitle = TFISH_EXPERTS;
@@ -89,6 +94,11 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');
     }
     
+    /**
+     * Submit a new expert to the databse.
+     * 
+     * @param array $formData Data to be written to the database.
+     */
     public function submitExpert(array $formData)
     {
         $expert = new TfExpert($this->validator);
@@ -113,6 +123,11 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');
     }
     
+    /**
+     * Displays a delete expert confirmation request.
+     * 
+     * @param int $id ID of the expert.
+     */
     public function confirmDelete(int $id)
     {
         $cleanId = (int) $id;
@@ -127,6 +142,11 @@ class TfExpertController
         }
     }
     
+    /**
+     * Deletes and expert.
+     * 
+     * @param int $id ID of the expert.
+     */
     public function deleteExpert(int $id)
     {
         $cleanId = (int) $id;
@@ -149,6 +169,14 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');        
     }
     
+    /**
+     * Edit an expert.
+     * 
+     * Retrieves the expert from the database and populates the edit form.
+     * 
+     * @param int $id ID of the expert.
+     * @param TfContentHandler $contentHandler
+     */
     public function editExpert(int $id, TfContentHandler $contentHandler)
     {        
         $cleanId = (int) $id;
@@ -181,6 +209,11 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');
     }
     
+    /**
+     * Update an expert in the database.
+     * 
+     * @param array $formData Updated expert data.
+     */
     public function updateExpert(array $formData)
     {
         $expert = new TfExpert($this->validator);
@@ -221,6 +254,11 @@ class TfExpertController
         $this->template->tfMainContent = $this->template->render('form');
     }
     
+    /**
+     * Toggles an object online or offline.
+     * 
+     * @param int $id ID of object to toggle.
+     */
     public function toggleOnlineStatus(int $id)
     {
         $cleanId = (int) $id;
