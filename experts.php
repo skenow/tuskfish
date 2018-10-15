@@ -141,18 +141,21 @@ if ($cleanTerms && (!$cleanId && !$cleanAlpha && !$cleanTag && !$cleanState)) {
 }
 
 // Unified pagination control.
-$tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
-$tfPagination->setUrl('experts');
-$tfPagination->setCount($resultsCount);
-$tfPagination->setLimit($tfPreference->searchPagination);
-$tfPagination->setStart($cleanStart);
-$tfPagination->setTag($cleanTag);
+if (isset($resultsCount)) {
+    $tfPagination = new TfPaginationControl($tfValidator, $tfPreference);
+    $tfPagination->setUrl('experts');
+    $tfPagination->setCount($resultsCount);
+    $tfPagination->setLimit($tfPreference->searchPagination);
+    $tfPagination->setStart($cleanStart);
+    $tfPagination->setTag($cleanTag);
 
-if (isset($queryParameters) && !empty($queryParameters)) {
-    $tfPagination->setExtraParams($queryParameters);
+
+    if (isset($queryParameters) && !empty($queryParameters)) {
+        $tfPagination->setExtraParams($queryParameters);
+    }
+
+    $tfTemplate->experts_pagination = $tfPagination->renderPaginationControl();
 }
-
-$tfTemplate->experts_pagination = $tfPagination->renderPaginationControl();
         
 // Select filters.
 $tagHandler = $contentFactory->getContentHandler('tag');
