@@ -27,7 +27,7 @@ require_once TFISH_MODULE_PATH . "content/tfContentHeader.php";
 $contentHandler = $contentFactory->getContentHandler('content');
 
 // Specify theme, otherwise 'default' will be used.
-$tfTemplate->setTheme('default');
+$tfTemplate->setTheme('marketing');
 $indexTemplate = 'singleStream';
 $targetFileName = 'index';
 $tfTemplate->targetFileName = $targetFileName;

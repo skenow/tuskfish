@@ -740,7 +740,9 @@ class TfContentObject extends TfDataObject
      */
     public function getDate()
     {
-        return $this->validator->escapeForXss($this->date);
+        $date = date_create($this->date);
+        $formatted_date = date_format($date, 'j F Y');
+        return $this->validator->escapeForXss($formatted_date);
     }
     
     /**
@@ -830,8 +832,7 @@ class TfContentObject extends TfDataObject
     public function getFormat()
     {
         $mimetypeWhitelist = $this->getListOfPermittedUploadMimetypes();
-        
-        return $this->validator->escapeForXss($mimetypeWhitelist[$this->format]);
+        return $this->validator->escapeForXss(array_search($this->format, $mimetypeWhitelist));
     }
     
     /**
