@@ -4,9 +4,9 @@
 <?php if ($contentObjects): ?>
   <?php foreach ($contentObjects as $content): ?>
     <div class="stream-item clearfix">
-	  <div>
-		<h3 class="title"><a href="<?php echo $content->getUrl($targetFileName); ?>"><?php echo $content->getIcon(); ?> <?php echo $content->getTitle(); ?></a></h3>
-	  </div>
+	<div>
+          <h3 class="title"><a href="<?php echo $content->getUrl($targetFileName); ?>"><?php echo $content->getIcon(); ?> <?php echo $content->getTitle(); ?></a></h3>
+        </div>
       <?php if ($content->image): ?>
       <div class="float-left">
         <figure class="figure-left">
