@@ -1078,12 +1078,6 @@ class TfExpert extends TfDataObject
             $contactDetails[] = nl2br($this->address);
         }
         
-        $countryList = $this->getCountryList();
-        
-        if ($this->country) {
-            $contactDetails[] = mb_strtoupper($countryList[$this->country]);
-        }
-        
         if ($this->mobile) {
             $contactDetails[] = TFISH_EXPERTS_MOBILE . ': ' . $this->mobile; 
         }
