@@ -5,7 +5,7 @@
  * 
  * @copyright   Simon Wilkinson 2018+(https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
- * @author      Simon Wilkinson <simon@tuskfish.biz>
+ * @author      Simon Wilkinson <simon@isengard.biz>
  * @version     Release: 1.0
  * @since       1.0
  * @package     experts

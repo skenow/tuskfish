@@ -4,9 +4,9 @@
  * 
  * Translate this file to convert the SOMEMODULE module to another language.
  *
- * @copyright   Your Name 2018+ (https://tuskfish.biz)
+ * @copyright   Simon Wilkinson 2018+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
- * @author      Your Name <you@email.com>
+ * @author      Simon Wilkinson <simon@isengard.biz>
  * @since       1.0
  * @package     language
  */
