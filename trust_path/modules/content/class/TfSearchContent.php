@@ -194,7 +194,7 @@ class TfSearchContent
 
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $object = $this->contentFactory->getContentObject($row['type']);
-            $object->loadPropertiesFromArray($row, true);
+            $object->loadPropertiesFromArray($row, false);
             $result[$object->id] = $object;
             unset($object, $row);
         }
