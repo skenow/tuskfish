@@ -277,7 +277,7 @@ class TfExpertHandler
 
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $object = new $row['type']($this->validator);
-                $object->loadPropertiesFromArray($row, true);
+                $object->loadPropertiesFromArray($row, false);
                 $objects[$object->id] = $object;
                 unset($object);
             }            
