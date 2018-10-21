@@ -98,7 +98,7 @@ class TfExpertHandler
         
         // Populate the object from the $row using whitelisted properties.
         if ($expertObject) {
-            $expertObject->loadPropertiesFromArray($row, true);
+            $expertObject->loadPropertiesFromArray($row, false);
 
             // Populate the tag property.
             if (isset($expertObject->tags) && !empty($expertObject->id)) {

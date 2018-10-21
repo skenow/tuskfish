@@ -199,7 +199,7 @@ class TfSearchExpert
         
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $object = $this->expertFactory->getExpert();
-            $object->loadPropertiesFromArray($row, true);
+            $object->loadPropertiesFromArray($row, false);
             $result[$object->id] = $object;
             unset($object, $row);
         }
@@ -276,7 +276,7 @@ class TfSearchExpert
         
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $object = $this->expertFactory->getExpert();
-            $object->loadPropertiesFromArray($row, true);
+            $object->loadPropertiesFromArray($row, false);
             $result[$object->id] = $object;
             unset($object, $row);
         }

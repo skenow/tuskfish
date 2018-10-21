@@ -102,7 +102,7 @@ class TfExpertController
     public function submitExpert(array $formData)
     {
         $expert = new TfExpert($this->validator);
-        $expert->loadPropertiesFromArray($formData);
+        $expert->loadPropertiesFromArray($formData, true);
         
         // Insert the object
         $result = $this->expertHandler->insert($expert);
@@ -217,7 +217,7 @@ class TfExpertController
     public function updateExpert(array $formData)
     {
         $expert = new TfExpert($this->validator);
-        $expert->loadPropertiesFromArray($formData);
+        $expert->loadPropertiesFromArray($formData, true);
 
         // As this object is being sent to storage, need to decode entities that got encoded for
         // display.

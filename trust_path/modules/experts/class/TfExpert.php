@@ -361,9 +361,9 @@ class TfExpert extends TfDataObject
      * Note that the supplied data is internally validated by the relevant setters.
      * 
      * @param array $dirtyInput Usually raw form $_REQUEST data.
-     * @param bool $liveUrls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
+     * @param bool $convertUrlToConstant Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
      */
-    public function loadPropertiesFromArray(array $dirtyInput, $liveUrls = true)
+    public function loadPropertiesFromArray(array $dirtyInput, $convertUrlToConstant = true)
     {
         $deleteImage = (isset($dirtyInput['deleteImage']) && !empty($dirtyInput['deleteImage']))
                 ? true : false;
@@ -374,17 +374,17 @@ class TfExpert extends TfDataObject
 
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.        
         if (isset($this->experience) && !empty($dirtyInput['experience'])) {
-            $experience = $this->convertBaseUrlToConstant($dirtyInput['experience'], $liveUrls);            
+            $experience = $this->convertBaseUrlToConstant($dirtyInput['experience'], $convertUrlToConstant);            
             $this->setExperience($experience);
         }
         
         if (isset($this->projects) && !empty($dirtyInput['projects'])) {
-            $projects = $this->convertBaseUrlToConstant($dirtyInput['projects'], $liveUrls);            
+            $projects = $this->convertBaseUrlToConstant($dirtyInput['projects'], $convertUrlToConstant);            
             $this->setProjects($projects);
         }
 
         if (isset($this->publications) && !empty($dirtyInput['publications'])) {
-            $publications = $this->convertBaseUrlToConstant($dirtyInput['publications'], $liveUrls);            
+            $publications = $this->convertBaseUrlToConstant($dirtyInput['publications'], $convertUrlToConstant);            
             $this->setPublications($publications);
         }
 
