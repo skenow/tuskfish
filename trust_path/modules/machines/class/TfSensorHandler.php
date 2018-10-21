@@ -87,7 +87,7 @@ class TfSensorHandler
         $sensor = $this->create($row['type']);        
         
         if ($sensor) {
-            $sensor->loadPropertiesFromArray($row, true);
+            $sensor->loadPropertiesFromArray($row, false);
 
             return $sensor;
         }
@@ -255,7 +255,7 @@ class TfSensorHandler
 
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $object = $this->create('TfSensor');
-                $object->loadPropertiesFromArray($row, true);
+                $object->loadPropertiesFromArray($row, false);
                 $objects[$object->id] = $object;
                 unset($object);
             }            

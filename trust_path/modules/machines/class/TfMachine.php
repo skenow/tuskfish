@@ -111,20 +111,20 @@ class TfMachine extends TfDataObject
      * Note that values are internally validated by the relevant setters.
      * 
      * @param array $dirtyInput Usually raw form $_REQUEST data.
-     * @param bool $liveUrls Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
+     * @param bool $convertUrlToConstant Convert base url to TFISH_LINK (true) or TFISH_LINK to base url (false).
      */
-    public function loadPropertiesFromArray(array $dirtyInput, $liveUrls = true)
+    public function loadPropertiesFromArray(array $dirtyInput, $convertUrlToConstant = true)
     {
         $this->loadProperties($dirtyInput);
         
         // Convert URLs back to TFISH_LINK for insertion or update, to aid portability.
         if (isset($this->teaser) && !empty($dirtyInput['teaser'])) {
-            $teaser = $this->convertBaseUrlToConstant($dirtyInput['teaser'], $liveUrls);            
+            $teaser = $this->convertBaseUrlToConstant($dirtyInput['teaser'], $convertUrlToConstant);            
             $this->setTeaser($teaser);
         }
         
         if (isset($this->description) && !empty($dirtyInput['description'])) {
-            $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $liveUrls);            
+            $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $convertUrlToConstant);            
             $this->setDescription($description);
         }
     }

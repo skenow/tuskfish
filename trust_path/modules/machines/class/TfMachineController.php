@@ -150,7 +150,7 @@ class TfMachineController
     public function submitMachine(array $formData)
     {
         $machine = new TfMachine($this->validator);
-        $machine->loadPropertiesFromArray($formData);
+        $machine->loadPropertiesFromArray($formData, true);
         
         // Insert the object
         $result = $this->machineHandler->insert($machine);
@@ -200,7 +200,7 @@ class TfMachineController
     public function updateMachine(array $formData)
     {
         $machine = new TfMachine($this->validator);
-        $machine->loadPropertiesFromArray($formData);
+        $machine->loadPropertiesFromArray($formData, true);
 
         // As this object is being sent to storage, need to decode entities that got encoded for
         // display.

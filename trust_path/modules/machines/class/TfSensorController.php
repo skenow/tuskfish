@@ -194,7 +194,7 @@ class TfSensorController
         }
 
         $sensor = new $cleanType($this->validator);
-        $sensor->loadPropertiesFromArray($formData);
+        $sensor->loadPropertiesFromArray($formData, true);
         
         // Insert the object
         $result = $this->sensorHandler->insert($sensor);
@@ -257,7 +257,7 @@ class TfSensorController
         }
 
         $sensor = new $type($this->validator);
-        $sensor->loadPropertiesFromArray($formData);
+        $sensor->loadPropertiesFromArray($formData, true);
 
         // As this object is being sent to storage, need to decode entities that got encoded for
         // display.

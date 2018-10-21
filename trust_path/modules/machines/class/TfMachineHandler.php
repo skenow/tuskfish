@@ -75,7 +75,7 @@ class TfMachineHandler
         $machine = new TfMachine($this->validator);
         
         if ($machine) {
-            $machine->loadPropertiesFromArray($row, true);
+            $machine->loadPropertiesFromArray($row, false);
 
             return $machine;
         }
@@ -225,7 +225,7 @@ class TfMachineHandler
 
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 $object = new $row['type']($this->validator);
-                $object->loadPropertiesFromArray($row, true);
+                $object->loadPropertiesFromArray($row, false);
                 $objects[$object->id] = $object;
                 unset($object);
             }            
