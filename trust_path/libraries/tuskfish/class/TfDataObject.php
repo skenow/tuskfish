@@ -76,9 +76,9 @@ class TfDataObject
      * @param bool $liveUrls Flag to convert urls to constants (true) or constants to urls (false).
      * @return string HTML field with converted URLs.
      */
-    protected function convertBaseUrlToConstant(string $html, bool $liveUrls = false)
+    protected function convertBaseUrlToConstant(string $html, bool $convertToConstant = false)
     {
-        if ($liveUrls === true) {
+        if ($convertToConstant === true) {
             $html = str_replace(TFISH_LINK, 'TFISH_LINK', $html);
         } else {
                 $html = str_replace('TFISH_LINK', TFISH_LINK, $html);

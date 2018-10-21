@@ -250,7 +250,7 @@ class TfContentController
             exit;
         }
         $content = $this->contentFactory->getContentObject($cleanType);
-        $content->loadPropertiesFromArray($_REQUEST);
+        $content->loadPropertiesFromArray($_REQUEST, true);
         $result = $contentHandler->insert($content);
         if ($result) {
             $this->cache->flushCache();
@@ -320,7 +320,7 @@ class TfContentController
             exit;
         }
         $content = $this->contentFactory->getContentObject($type);
-        $content->loadPropertiesFromArray($formData);
+        $content->loadPropertiesFromArray($formData, true);
         // As this object is being sent to storage, need to decode some entities that were encoded
         // for display.
         $fieldsToDecode = array('title', 'creator', 'publisher', 'caption');
