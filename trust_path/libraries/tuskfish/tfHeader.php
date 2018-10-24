@@ -33,6 +33,9 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
+// Set cache limiter to avoid 'Document expired' errors on forms when clicking the back button in a browser.
+session_cache_limiter('public');
+
 // Make core language files available.
 include TFISH_DEFAULT_LANGUAGE;
 /**
