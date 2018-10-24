@@ -121,7 +121,7 @@ class TfContentHandler
         
         // Populate the object from the $row using whitelisted properties.
         if ($contentObject) {
-            $contentObject->loadPropertiesFromArray($row, true);
+            $contentObject->loadPropertiesFromArray($row, false);
 
             // Populate the tag property.
             if (isset($contentObject->tags) && !empty($contentObject->id)) {
