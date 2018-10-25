@@ -12,6 +12,9 @@
 // Enable strict type declaration.
 declare(strict_types=1);
 
+// Allow browsers to cache the form so the back button doesn't cause 'document expired' errors.
+session_cache_limiter('private');
+
 // Boot! Set file paths, preferences and connect to database.
 require_once "mainfile.php";
 require_once TFISH_PATH . "tfHeader.php";
