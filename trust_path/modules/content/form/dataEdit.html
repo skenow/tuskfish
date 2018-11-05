@@ -257,7 +257,7 @@
 
         <!-- File size -->
         <?php if ($content->fileSize): ?>
-        <input type="hidden" id="fileSize" name="fileSize" value="<?php echo $content->getFileSize(); ?>" />
+        <input type="hidden" id="fileSize" name="fileSize" value="<?php echo $tfValidator->escapeForXss($content->fileSize); ?>" />
         <?php endif; ?>
         
         <div class="col-md-12" id="metaHeader">
