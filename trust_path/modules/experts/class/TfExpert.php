@@ -387,9 +387,6 @@ class TfExpert extends TfDataObject
             $publications = $this->convertBaseUrlToConstant($dirtyInput['publications'], $convertUrlToConstant);            
             $this->setPublications($publications);
         }
-
-        $propertyWhitelist = $this->getPropertyWhitelist();
-        $this->loadImage($propertyWhitelist);
     }
     
     /**
@@ -471,7 +468,7 @@ class TfExpert extends TfDataObject
      * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
-    private function loadImage(array $propertyWhitelist)
+    public function loadImage(array $propertyWhitelist)
     {
         if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
             $cleanImageFilename = $this->validator->trimString($_FILES['image']['name']);

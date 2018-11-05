@@ -103,6 +103,8 @@ class TfExpertController
     {
         $expert = new TfExpert($this->validator);
         $expert->loadPropertiesFromArray($formData, true);
+        $propertyWhitelist = $expert->getPropertyWhitelist();
+        $expert->loadImage($propertyWhitelist);
         
         // Insert the object
         $result = $this->expertHandler->insert($expert);
@@ -218,6 +220,8 @@ class TfExpertController
     {
         $expert = new TfExpert($this->validator);
         $expert->loadPropertiesFromArray($formData, true);
+        $propertyWhitelist = $expert->getPropertyWhitelist();
+        $expert->loadImage($propertyWhitelist);
 
         // As this object is being sent to storage, need to decode entities that got encoded for
         // display.

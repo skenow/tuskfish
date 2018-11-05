@@ -13,4 +13,4 @@
 declare(strict_types=1);
 
 $tfVersion = 'Tuskfish V1.1.3 test.';
-$tfReleased = '15 October 2018';
+$tfReleased = 'Updated 15 October 2018. No known bugs.';
