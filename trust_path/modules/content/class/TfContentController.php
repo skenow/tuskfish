@@ -114,6 +114,7 @@ class TfContentController
         $this->template->rights = $content->getListOfRights();
         $this->template->languages = $this->preference->getListOfLanguages();
         $this->template->tags = $contentHandler->getTagList(false);
+        
         // Make a parent tree select box options.
         $collections = $collectionHandler->getObjects();
         $parentTree = new TfTree($collections, 'id', 'parent');
@@ -212,10 +213,12 @@ class TfContentController
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $contentHandler = $this->contentFactory->getContentHandler('content');
         $content = $contentHandler->convertRowToObject($row);
+        
         // Make a parent tree select box options.
         $collectionHandler = $this->contentFactory->getContentHandler('collection');
         $collections = $collectionHandler->getObjects();
-        $parentTree = new TfTree($collections, 'id', 'parent');            
+        $parentTree = new TfTree($collections, 'id', 'parent');
+        
         // Assign to template.
         $this->template->pageTitle = TFISH_EDIT_CONTENT;
         $this->template->op = 'update'; // Critical to launch correct submission action.
@@ -242,16 +245,23 @@ class TfContentController
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
+        
         $cleanType = $this->validator->trimString($formData['type']);
         $contentHandler = $this->contentFactory->getContentHandler('content');
         $typeWhitelist = $contentHandler->getTypes();
+        
         if (!array_key_exists($cleanType, $typeWhitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
+        
         $content = $this->contentFactory->getContentObject($cleanType);
         $content->loadPropertiesFromArray($_REQUEST, true);
+        $content->loadImage($content->getPropertyWhitelist());        
+        $content->loadMedia($content->getPropertyWhitelist());
+        
         $result = $contentHandler->insert($content);
+        
         if ($result) {
             $this->cache->flushCache();
             $this->template->pageTitle = TFISH_SUCCESS;
@@ -262,6 +272,7 @@ class TfContentController
             $this->template->alertClass = 'alert-danger';
             $this->template->message = TFISH_OBJECT_INSERTION_FAILED;
         }
+        
         $this->template->backUrl = 'admin.php';
         $this->template->form = TFISH_FORM_PATH . "response.html";
         $this->template->tfMainContent = $this->template->render('form');
@@ -286,6 +297,7 @@ class TfContentController
         
         $contentHandler = $this->contentFactory->getContentHandler('content');
         $result = $contentHandler->toggleOnlineStatus($cleanId);
+        
         if ($result) {
             $this->cache->flushCache();
             $this->template->pageTitle = TFISH_SUCCESS;
@@ -296,6 +308,7 @@ class TfContentController
             $this->template->alertClass = 'alert-danger';
             $this->template->message = TFISH_OBJECT_UPDATE_FAILED;
         }
+        
         $this->template->backUrl = 'admin.php';
         $this->template->form = TFISH_FORM_PATH . "response.html";
         $this->template->tfMainContent = $this->template->render('form');
@@ -312,15 +325,21 @@ class TfContentController
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
+        
         $type = $this->validator->trimString($formData['type']);
         $contentHandler = $this->contentFactory->getContentHandler('content');
         $typeWhitelist = $contentHandler->getTypes();
+        
         if (!array_key_exists($type, $typeWhitelist)) {
             trigger_error(TFISH_ERROR_ILLEGAL_VALUE, E_USER_ERROR);
             exit;
         }
+        
         $content = $this->contentFactory->getContentObject($type);
         $content->loadPropertiesFromArray($formData, true);
+        $content->loadImage($content->getPropertyWhitelist());        
+        $content->loadMedia($content->getPropertyWhitelist());
+        
         // As this object is being sent to storage, need to decode some entities that were encoded
         // for display.
         $fieldsToDecode = array('title', 'creator', 'publisher', 'caption');
@@ -331,6 +350,7 @@ class TfContentController
         }
         // Properties that are used within attributes must have quotes encoded.
         $fieldsToDecode = array('metaTitle', 'seo', 'metaDescription');
+        
         foreach ($fieldsToDecode as $field) {
             if (isset($content->field)) {
                 $content->$field = htmlspecialchars_decode($content->field, ENT_QUOTES);
@@ -338,6 +358,7 @@ class TfContentController
         }
         // Update the database row and display a response.
         $result = $contentHandler->update($content);
+        
         if ($result) {
             $this->cache->flushCache();
             $this->template->pageTitle = TFISH_SUCCESS;
@@ -349,6 +370,7 @@ class TfContentController
             $this->template->alertClass = 'alert-danger';
             $this->template->message = TFISH_OBJECT_UPDATE_FAILED;
         }
+        
         $this->template->backUrl = 'admin.php';
         $this->template->form = TFISH_CONTENT_MODULE_FORM_PATH . "responseEdit.html";
         $this->template->tfMainContent = $this->template->render('form');

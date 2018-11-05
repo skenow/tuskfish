@@ -506,10 +506,6 @@ class TfContentObject extends TfDataObject
             $description = $this->convertBaseUrlToConstant($dirtyInput['description'], $convertUrlToConstant);            
             $this->setDescription($description);
         }
-
-        $propertyWhitelist = $this->getPropertyWhitelist();
-        $this->loadImage($propertyWhitelist);        
-        $this->loadMedia($propertyWhitelist);
     }
     
     /**
@@ -577,11 +573,13 @@ class TfContentObject extends TfDataObject
     /**
      * Sets the image property from untrusted form data.
      * 
-     * This is a helper method for loadPropertiesFromArray(). 
+     * This method should be called after loadPropertiesFromArray(), but only when form data is
+     * being sent (submit or update operations). Do not use it when retrieving an object from the
+     * database.
      * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
-    private function loadImage(array $propertyWhitelist)
+    public function loadImage(array $propertyWhitelist)
     {
         if (array_key_exists('image', $propertyWhitelist) && !empty($_FILES['image']['name'])) {
             $cleanImageFilename = $this->validator->trimString($_FILES['image']['name']);
@@ -593,13 +591,15 @@ class TfContentObject extends TfDataObject
     }
     
     /**
-     * Sets the media property from untrusted form data.
+     * Sets the media property from untrusted form data reading from $_FILES.
      * 
-     * This is a helper method for loadPropertiesFromArray(). 
+     * This method should be called after loadPropertiesFromArray(), but only when form data is
+     * being sent (submit or update operations). Do not use it when retrieving an object from the
+     * database.
      * 
      * @param array $propertyWhitelist List of permitted object properties.
      */
-    private function loadMedia(array $propertyWhitelist)
+    public function loadMedia(array $propertyWhitelist)
     {
         if (array_key_exists('media', $propertyWhitelist) && !empty($_FILES['media']['name'])) {
             $cleanMediaFilename = $this->validator->trimString($_FILES['media']['name']);
