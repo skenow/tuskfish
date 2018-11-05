@@ -161,7 +161,7 @@ class TfSensorController
         }
         
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-        $sensor = $this->sensorHandler->convertRowToObject($row, false);
+        $sensor = $this->sensorHandler->convertRowToObject($row);
         
         // Prepare parent select box.
         $parentSelectOptions = $this->getParentSelectOptions($machineHandler);

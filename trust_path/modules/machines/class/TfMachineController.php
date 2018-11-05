@@ -136,7 +136,7 @@ class TfMachineController
         }
         
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-        $machine = $this->machineHandler->convertRowToObject($row, false);
+        $machine = $this->machineHandler->convertRowToObject($row);
 
         // Assign to template.
         $this->template->pageTitle = TFISH_MACHINE_EDIT;

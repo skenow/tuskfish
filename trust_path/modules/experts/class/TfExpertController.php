@@ -195,7 +195,7 @@ class TfExpertController
         }
         
         $row = $statement->fetch(PDO::FETCH_ASSOC);
-        $expert = $this->expertHandler->convertRowToObject($row, false);
+        $expert = $this->expertHandler->convertRowToObject($row);
         
         // Assign to template.
         $this->template->pageTitle = TFISH_EXPERTS_EDIT;

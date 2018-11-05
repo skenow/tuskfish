@@ -211,7 +211,7 @@ class TfContentController
         // Build the content object.
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         $contentHandler = $this->contentFactory->getContentHandler('content');
-        $content = $contentHandler->convertRowToObject($row, false);
+        $content = $contentHandler->convertRowToObject($row);
         // Make a parent tree select box options.
         $collectionHandler = $this->contentFactory->getContentHandler('collection');
         $collections = $collectionHandler->getObjects();
