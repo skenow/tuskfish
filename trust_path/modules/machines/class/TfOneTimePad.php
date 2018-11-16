@@ -72,10 +72,10 @@ if (!defined("TFISH_ROOT_PATH")) die("TFISH_ERROR_ROOT_PATH_NOT_DEFINED");
  * about.
  * 
  * For serious privacy, you should NOT decrypt incoming data on the server. Use Tuskfish as a dumb
- * capture point for incoming data, export it to your local machine and decode it there. This trait
- * is for casual over-the-air privacy; it provides ZERO end point security.
+ * capture point for encrypted data, export it to your local machine and decrypt it there. This
+ * trait is for casual over-the-air privacy; it provides no end point security at all.
  * 
- * NOTE: You must not re-use a one-time pad. Doing so *completely* breaks the security.
+ * NOTE: You must not re-use a *one-time* pad. Doing so *completely* breaks the security.
  *
  * @copyright   Simon Wilkinson 2018+ (https://tuskfish.biz)
  * @license     https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html GNU General Public License (GPL) V2
