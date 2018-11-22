@@ -153,6 +153,9 @@ if ($cleanId) {
                 $tfTemplate->firstChildren = $firstChildren;
             }
         }
+        
+        // Set canonical url.
+    	$tfMetadata->setCanonicalUrl('?id=' . $cleanId);
 
         // Render template.
         $tfTemplate->tfMainContent = $tfTemplate->render($content->template);
@@ -203,6 +206,14 @@ if ($cleanId) {
     $tagHandler = $contentFactory->getContentHandler('tag');
     $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag, 'content');
     $tfTemplate->selectFiltersForm = $tfTemplate->render('selectFilters');
+    
+    // Set canonical url.
+    $canonicalUrl = '';
+    if ($cleanStart || $cleanTag) $canonicalUrl .= '?';
+    if ($cleanStart) $canonicalUrl .= 'start=' . $cleanStart;
+    if ($cleanStart && $cleanTag) $canonicalUrl .= '&amp;';
+    if ($cleanTag) $canonicalUrl .= 'tagId=' . $cleanTag;
+    $tfMetadata->setCanonicalUrl($canonicalUrl);
 }
 
 /**

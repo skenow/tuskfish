@@ -55,6 +55,7 @@ class TfMetadata
     protected $generator = '';
     protected $seo = '';
     protected $robots = '';
+    protected $canonicalUrl = '';
 
     /**
      * Constructor.
@@ -187,6 +188,28 @@ class TfMetadata
     public function getRobots()
     {
         return $this->validator->escapeForXss($this->robots);
+    }
+    
+    /**
+     * Set query string parameters for the canonical URL tag in theme.html files.
+     * 
+     * Do not pass in the base URL (domain) of the site, only the query string.
+     * 
+     * @param string $value Query string parameters for canonical URL of relevant page.
+     */
+    public function setCanonicalUrl(string $value)
+    {
+        $this->canonicalUrl = $this->validator->trimString($value);
+    }
+    
+    /**
+     * Returns the canonical URL for this page.
+     * 
+     * @return string Canonical URL.
+     */
+    public function getCanonicalUrl()
+    {
+        return TFISH_URL . $this->validator->escapeForXss($this->canonicalUrl);
     }
        
 }
