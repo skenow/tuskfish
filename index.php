@@ -202,7 +202,7 @@ if ($cleanId) {
     $tfTemplate->tfMainContent = $tfTemplate->render($indexTemplate);
 
     // Prepare tag select box.
-    $tfTemplate->selectAction = 'index.php';
+    $tfTemplate->selectAction = '';
     $tagHandler = $contentFactory->getContentHandler('tag');
     $tfTemplate->selectFilters = $tagHandler->getTagSelectBox($cleanTag, 'content');
     $tfTemplate->selectFiltersForm = $tfTemplate->render('selectFilters');
