@@ -29,7 +29,7 @@ $contentHandler = $contentFactory->getContentHandler('content');
 // Specify theme, otherwise 'default' will be used.
 $tfTemplate->setTheme('default');
 $indexTemplate = 'singleStream';
-$targetFileName = 'index';
+$targetFileName = '';
 $tfTemplate->targetFileName = $targetFileName;
 
 // Validate input parameters.
