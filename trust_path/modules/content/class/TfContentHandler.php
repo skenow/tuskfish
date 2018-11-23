@@ -1108,9 +1108,13 @@ class TfContentHandler
             $keyValues = $this->updateMedia($propertyWhitelist, $keyValues, $savedObject);
         }
 
-        // Update tags.
-        $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->module,
+        // Update taglinks (but not for tag objects unless their type has changed).
+        if ($obj->type !== 'TfTag' && $savedObject->type !== 'TfTag') {
+            $result = $this->taglinkHandler->updateTaglinks($cleanId, $obj->type, $obj->module,
                 $obj->tags);
+        } else {
+            $result = true;
+        }
         
         if (!$result) {
             trigger_error(TFISH_ERROR_TAGLINK_UPDATE_FAILED, E_USER_NOTICE);
