@@ -70,7 +70,7 @@ if ($cleanId) {
             $contentInfo[] = $content->getDate();
         
         if ($content->counter)
-            $contentInfo[] = $content->getDate() . ' ' . TFISH_VIEWS;
+            $contentInfo[] = $content->getCounter() . ' ' . TFISH_VIEWS;
         
         // For a content type-specific page use $content->tags, $content->template.
         if ($content->tags) {
