@@ -8,7 +8,7 @@ The project emphasis is on creating the simplest and most lightweight code base 
 * A small, simple code base is easy to understand and maintain as PHP evolves.
 * Security is a lot easier to manage in a small project.
 * Avoiding use of external libraries as far as possible to reduce attack surface, maintenance overhead
-  and code bloat. External libraries in use are: Boostrap 4, jQuery, popper.js, Bootstrap-datepicker,
+  and code bloat. External libraries in use are: Boostrap 4, jQuery, Bootstrap-datepicker,
   Bootstrap-fileinput and HTMLPurifier.
 
 Features include:
@@ -28,7 +28,7 @@ System requirements
 * SQLite3 extension.
 * PDO extension.
 * pdo_sqlite extension.
-* curl extension + a Yubikey hardware token are required for optional two-factor Yubikey authentication.
+* [Optional]: curl extension + a Yubikey hardware token are required if you want to use two-factor Yubikey authentication.
 * Apache webserver.
 
 INSTALLATION
